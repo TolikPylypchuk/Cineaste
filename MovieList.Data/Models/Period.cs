@@ -20,6 +20,9 @@ namespace MovieList.Data.Models
         [Range(1950, 2100)]
         public int EndYear { get; set; }
 
+        [Range(1, 50)]
+        public int NumberOfEpisodes { get; set; }
+
         public int SeasonId { get; set; }
 
         [ForeignKey(nameof(SeasonId))]
