@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,11 +26,11 @@ namespace MovieList.Data.Models
 
         public virtual MovieSeriesEntry? Entry { get; set; }
 
-        public virtual List<Title> Titles { get; set; } = new List<Title>();
+        public virtual IList<Title> Titles { get; set; } = new List<Title>();
 
-        public virtual List<Season> Seasons { get; set; } = new List<Season>();
+        public virtual IList<Season> Seasons { get; set; } = new List<Season>();
 
-        public virtual List<SpecialEpisode> SpecialEpisodes { get; set; } = new List<SpecialEpisode>();
+        public virtual IList<SpecialEpisode> SpecialEpisodes { get; set; } = new List<SpecialEpisode>();
     }
 }
 

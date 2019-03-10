@@ -15,8 +15,8 @@ namespace MovieList.Data.Models
         public int ColorForMovie { get; set; }
         public int ColorForSeries { get; set; }
 
-        public virtual List<Movie> Movies { get; set; } = new List<Movie>();
+        public virtual IList<Movie> Movies { get; set; } = new List<Movie>();
 
-        public virtual List<Series> Series { get; set; } = new List<Series>();
+        public virtual IList<Series> Series { get; set; } = new List<Series>();
     }
 }

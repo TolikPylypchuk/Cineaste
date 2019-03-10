@@ -31,7 +31,7 @@ namespace MovieList.Data.Models
 
         public virtual MovieSeriesEntry? Entry { get; set; }
 
-        public virtual List<Title> Titles { get; set; } = new List<Title>();
+        public virtual IList<Title> Titles { get; set; } = new List<Title>();
     }
 }
 

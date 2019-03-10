@@ -36,7 +36,7 @@ namespace MovieList.Data.Models
         [ForeignKey(nameof(SeriesId))]
         public virtual Series Series { get; set; }
 
-        public virtual List<Title> Titles { get; set; } = new List<Title>();
+        public virtual IList<Title> Titles { get; set; } = new List<Title>();
     }
 }
 

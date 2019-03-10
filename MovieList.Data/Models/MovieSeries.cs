@@ -15,10 +15,10 @@ namespace MovieList.Data.Models
         [ForeignKey(nameof(ParentSeriesId))]
         public MovieSeries? ParentSeries { get; set; }
 
-        public virtual List<MovieSeriesEntry> Entries { get; set; } = new List<MovieSeriesEntry>();
+        public virtual IList<MovieSeriesEntry> Entries { get; set; } = new List<MovieSeriesEntry>();
 
-        public virtual List<MovieSeries> Parts { get; set; } = new List<MovieSeries>();
+        public virtual IList<MovieSeries> Parts { get; set; } = new List<MovieSeries>();
 
-        public virtual List<Title> Titles { get; set; } = new List<Title>();
+        public virtual IList<Title> Titles { get; set; } = new List<Title>();
     }
 }
