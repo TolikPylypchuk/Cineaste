@@ -20,6 +20,8 @@ namespace MovieList.Data.Models
         [Range(1950, 2100)]
         public int EndYear { get; set; }
 
+        public bool IsSingleDayRelease { get; set; }
+
         [Range(1, 50)]
         public int NumberOfEpisodes { get; set; }
 

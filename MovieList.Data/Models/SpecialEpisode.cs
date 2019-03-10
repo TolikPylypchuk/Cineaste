@@ -19,6 +19,10 @@ namespace MovieList.Data.Models
         public bool IsWatched { get; set; }
         public bool IsReleased { get; set; }
 
+        [Required]
+        [StringLength(64)]
+        public string Channel { get; set; } = String.Empty;
+
         [Url]
         [StringLength(256)]
         public string? ImdbLink { get; set; }
