@@ -20,4 +20,10 @@
     <ProjectReference Include="..\MovieList.Services\MovieList.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

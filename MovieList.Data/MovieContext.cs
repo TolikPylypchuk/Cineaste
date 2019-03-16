@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 using MovieList.Data.Models;
 
@@ -10,6 +10,10 @@ namespace MovieList.Data
     {
         public MovieContext(DbContextOptions<MovieContext> options)
                : base(options)
+        { }
+
+        public MovieContext(string path)
+            : this(new DbContextOptionsBuilder<MovieContext>().UseSqlite($"Data Source={path}").Options)
         { }
 
         public DbSet<Movie> Movies { get; set; }
