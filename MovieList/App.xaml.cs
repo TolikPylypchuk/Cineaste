@@ -10,6 +10,7 @@ using MovieList.Config;
 using MovieList.Config.Logging;
 using MovieList.Data;
 using MovieList.Options;
+using MovieList.Views;
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized.
 
@@ -21,7 +22,13 @@ namespace MovieList
         public IConfigurationRoot Configuration { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
-            => this.ConfigureServices();
+        {
+            base.OnStartup(e);
+            this.ConfigureServices();
+
+            var mainWindow = this.ServiceProvider.GetRequiredService<MainWindow>();
+            mainWindow.Show();
+        }
 
         private void ConfigureServices()
         {
@@ -35,7 +42,9 @@ namespace MovieList
                 .AddLogging(loggingBuilder => loggingBuilder.AddFile(this.Configuration.GetSection("Logging")))
                 .ConfigureWritable<Configuration>(this.Configuration.GetSection("Config"))
                 .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
+                .ConfigureWritable<UIConfig>(this.Configuration.GetSection("UI"))
                 .AddSingleton(_ => this)
+                .AddSingleton<MainWindow>()
                 .BuildServiceProvider();
         }
     }
