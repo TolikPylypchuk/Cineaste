@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using MovieList.Data.Properties;
@@ -34,4 +34,4 @@ namespace MovieList.Data.Models
     }
 }
 
-#pragma warning enable CS8618 // Non-nullable field is uninitialized.
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.

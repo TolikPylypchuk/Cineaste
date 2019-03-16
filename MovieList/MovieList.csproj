@@ -13,7 +13,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview3.19153.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0-preview3.19153.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="NReco.Logging.File" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="settings.json">
+    <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
