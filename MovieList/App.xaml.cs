@@ -26,8 +26,8 @@ namespace MovieList
             base.OnStartup(e);
             this.ConfigureServices();
 
-            var mainWindow = this.ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            this.MainWindow = this.ServiceProvider.GetRequiredService<MainWindow>();
+            this.MainWindow.Show();
         }
 
         private void ConfigureServices()
