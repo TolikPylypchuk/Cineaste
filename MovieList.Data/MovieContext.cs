@@ -12,10 +12,6 @@ namespace MovieList.Data
                : base(options)
         { }
 
-        public MovieContext(string path)
-            : this(new DbContextOptionsBuilder<MovieContext>().UseSqlite($"Data Source={path}").Options)
-        { }
-
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieSeries> MovieSeries { get; set; }
         public DbSet<MovieSeriesEntry> MovieSeriesEntries { get; set; }
