@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MovieList
+namespace MovieList.Views
 {
     public partial class MainWindow : Window
     {
