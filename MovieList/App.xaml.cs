@@ -10,6 +10,7 @@ using MovieList.Config;
 using MovieList.Config.Logging;
 using MovieList.Data;
 using MovieList.Options;
+using MovieList.ViewModels;
 using MovieList.Views;
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized.
@@ -39,12 +40,19 @@ namespace MovieList
             this.ServiceProvider = new ServiceCollection()
                 .AddDbContext<MovieContext>((services, builder) =>
                     builder.UseSqlite($"Data Source={this.Configuration.GetSection("Config")["DatabasePath"]}"))
+
                 .AddLogging(loggingBuilder => loggingBuilder.AddFile(this.Configuration.GetSection("Logging")))
+
                 .ConfigureWritable<Configuration>(this.Configuration.GetSection("Config"))
                 .ConfigureWritable<UIConfig>(this.Configuration.GetSection("UI"))
                 .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
+
                 .AddSingleton(_ => this)
+
+                .AddSingleton<MainViewModel>()
+
                 .AddSingleton<MainWindow>()
+
                 .BuildServiceProvider();
         }
     }

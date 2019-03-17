@@ -1,34 +1,23 @@
 using System.Windows;
 
-using MovieList.Config;
-using MovieList.Options;
+using MovieList.ViewModels;
 
 namespace MovieList.Views
 {
     public partial class MainWindow : Window
     {
-        private readonly IWritableOptions<UIConfig> configOptions;
-
-        public MainWindow(IWritableOptions<UIConfig> config)
+        public MainWindow(MainViewModel viewModel)
         {
-            this.configOptions = config;
-            this.WindowState = config.Value.IsMaximized ? WindowState.Maximized : WindowState.Normal;
-            this.Height = config.Value.Height;
-            this.Width = config.Value.Width;
-            this.Top = config.Value.Top;
-            this.Left = config.Value.Left;
+            this.ViewModel = viewModel;
+            this.DataContext = viewModel;
 
             this.InitializeComponent();
+            this.ViewModel.RestoreWindowState(this);
         }
 
+        public MainViewModel ViewModel { get; }
+
         private void Window_Closing(object sender, System.EventArgs e)
-            => this.configOptions.Update(config =>
-            {
-                config.Height = this.Height;
-                config.Width = this.Width;
-                config.Top = this.Top;
-                config.Left = this.Left;
-                config.IsMaximized = this.WindowState == WindowState.Maximized;
-            });
+            => this.ViewModel.SaveWindowState(this);
     }
 }

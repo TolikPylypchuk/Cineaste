@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" Title="Movie List" MinWidth="1000" MinHeight="500"
+        xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vm:MainViewModel, IsDesignTimeCreatable=False}"
+        Title="Movie List" MinWidth="1000" MinHeight="500"
         Closing="Window_Closing">
     <Grid>
     </Grid>
