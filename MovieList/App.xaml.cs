@@ -41,8 +41,8 @@ namespace MovieList
                     builder.UseSqlite($"Data Source={this.Configuration.GetSection("Config")["DatabasePath"]}"))
                 .AddLogging(loggingBuilder => loggingBuilder.AddFile(this.Configuration.GetSection("Logging")))
                 .ConfigureWritable<Configuration>(this.Configuration.GetSection("Config"))
-                .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
                 .ConfigureWritable<UIConfig>(this.Configuration.GetSection("UI"))
+                .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
                 .AddSingleton(_ => this)
                 .AddSingleton<MainWindow>()
                 .BuildServiceProvider();
