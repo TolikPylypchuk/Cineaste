@@ -25,13 +25,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MovieList.Data\MovieList.Data.csproj" />
-    <ProjectReference Include="..\MovieList.Services\MovieList.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

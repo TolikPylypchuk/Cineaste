@@ -1,9 +1,6 @@
 using System.Windows;
 
-using Microsoft.Extensions.Logging;
-
 using MovieList.Config;
-using MovieList.Config.Logging;
 using MovieList.Options;
 
 namespace MovieList.Views
