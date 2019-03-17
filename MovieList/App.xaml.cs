@@ -47,11 +47,15 @@ namespace MovieList
                 .ConfigureWritable<UIConfig>(this.Configuration.GetSection("UI"))
                 .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
 
-                .AddSingleton(_ => this)
-
-                .AddSingleton<MainViewModel>()
+                .AddTransient<MainViewModel>()
+                .AddTransient<MovieListViewModel>()
+                .AddTransient<MovieFormViewModel>()
+                .AddTransient<SeriesViewModel>()
+                .AddTransient<MovieSeriesFormViewModel>()
+                .AddTransient<SettingsViewModel>()
 
                 .AddSingleton<MainWindow>()
+                .AddSingleton(_ => this)
 
                 .BuildServiceProvider();
         }
