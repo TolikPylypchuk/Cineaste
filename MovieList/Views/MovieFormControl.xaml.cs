@@ -1,5 +1,7 @@
 using System.Windows.Controls;
 
+using MovieList.ViewModels;
+
 namespace MovieList.Views
 {
     public partial class MovieFormControl : UserControl
@@ -8,5 +10,7 @@ namespace MovieList.Views
         {
             this.InitializeComponent();
         }
+
+        public MovieFormViewModel ViewModel { get; set; }
     }
 }
