@@ -50,7 +50,7 @@ namespace MovieList
                 .AddTransient<MainViewModel>()
                 .AddTransient<MovieListViewModel>()
                 .AddTransient<MovieFormViewModel>()
-                .AddTransient<SeriesViewModel>()
+                .AddTransient<SeriesFormViewModel>()
                 .AddTransient<MovieSeriesFormViewModel>()
                 .AddTransient<SettingsViewModel>()
 

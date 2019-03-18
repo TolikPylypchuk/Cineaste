@@ -1,5 +1,7 @@
 using System.Windows;
 
+using Microsoft.Extensions.DependencyInjection;
+
 using MovieList.ViewModels;
 
 namespace MovieList.Views
@@ -12,6 +14,7 @@ namespace MovieList.Views
             this.DataContext = viewModel;
 
             this.InitializeComponent();
+            this.ViewModel.SetComponentViewModels(this);
             this.ViewModel.RestoreWindowState(this);
         }
 

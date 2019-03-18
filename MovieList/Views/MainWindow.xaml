@@ -3,10 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MovieList.Views"
         xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:MainViewModel, IsDesignTimeCreatable=False}"
         Title="Movie List" MinWidth="1000" MinHeight="500"
         Closing="Window_Closing">
-    <Grid>
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <local:SettingsControl x:Name="SettingsControl" Grid.Column="0" />
+        <local:MovieListControl x:Name="ListControl" Grid.Column="1" />
     </Grid>
 </Window>
