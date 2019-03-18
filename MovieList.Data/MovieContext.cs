@@ -2,8 +2,6 @@ using Microsoft.EntityFrameworkCore;
 
 using MovieList.Data.Models;
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized.
-
 namespace MovieList.Data
 {
     public class MovieContext : DbContext
@@ -23,5 +21,3 @@ namespace MovieList.Data
         public DbSet<Kind> Kinds { get; set; }
     }
 }
-
-#pragma warning restore CS8618 // Non-nullable field is uninitialized.

@@ -13,8 +13,6 @@ using MovieList.Options;
 using MovieList.ViewModels;
 using MovieList.Views;
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized.
-
 namespace MovieList
 {
     public partial class App : Application
@@ -61,5 +59,3 @@ namespace MovieList
         }
     }
 }
-
-#pragma warning restore CS8618 // Non-nullable field is uninitialized.

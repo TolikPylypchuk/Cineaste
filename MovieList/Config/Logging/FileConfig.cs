@@ -1,5 +1,3 @@
-#pragma warning disable CS8618 // Non-nullable field is uninitialized.
-
 namespace MovieList.Config.Logging
 {
     public class FileConfig
@@ -10,5 +8,3 @@ namespace MovieList.Config.Logging
         public int MaxRollingFiles { get; set; }
     }
 }
-
-#pragma warning restore CS8618 // Non-nullable field is uninitialized.

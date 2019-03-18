@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-#pragma warning disable CS8618 // Non-nullable field is uninitialized.
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieList.Data.Models
 {
@@ -25,5 +23,3 @@ namespace MovieList.Data.Models
         public virtual MovieSeries MovieSeries { get; set; }
     }
 }
-
-#pragma warning restore CS8618 // Non-nullable field is uninitialized.

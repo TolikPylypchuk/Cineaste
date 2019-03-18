@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using MovieList.Data.Properties;
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized.
-
 namespace MovieList.Data.Models
 {
     [Table(nameof(MovieContext.Seasons))]
@@ -37,5 +35,3 @@ namespace MovieList.Data.Models
         public virtual IList<Period> Periods { get; set; } = new List<Period>();
     }
 }
-
-#pragma warning restore CS8618 // Non-nullable field is uninitialized.
