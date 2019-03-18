@@ -10,6 +10,7 @@ using MovieList.Config;
 using MovieList.Config.Logging;
 using MovieList.Data;
 using MovieList.Options;
+using MovieList.Services;
 using MovieList.ViewModels;
 using MovieList.Views;
 
@@ -44,6 +45,8 @@ namespace MovieList
                 .ConfigureWritable<Configuration>(this.Configuration.GetSection("Config"))
                 .ConfigureWritable<UIConfig>(this.Configuration.GetSection("UI"))
                 .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
+
+                .AddSingleton<IMovieListService, MovieListService>()
 
                 .AddTransient<MainViewModel>()
                 .AddTransient<MovieListViewModel>()
