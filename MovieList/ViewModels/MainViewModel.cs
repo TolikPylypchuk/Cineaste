@@ -19,29 +19,31 @@ namespace MovieList.ViewModels
             this.configOptions = configOptions;
         }
 
-        public void SetComponentViewModels(MainWindow window)
+        public MainWindow MainWindow { get; set; }
+
+        public void SetComponentViewModels()
         {
-            window.ListControl.ViewModel = this.app.ServiceProvider.GetRequiredService<MovieListViewModel>();
-            window.SettingsControl.ViewModel = this.app.ServiceProvider.GetRequiredService<SettingsViewModel>();
+            this.MainWindow.ListControl.ViewModel = this.app.ServiceProvider.GetRequiredService<MovieListViewModel>();
+            this.MainWindow.SettingsControl.ViewModel = this.app.ServiceProvider.GetRequiredService<SettingsViewModel>();
         }
 
-        public void RestoreWindowState(Window window)
+        public void RestoreWindowState()
         {
-            window.Width = this.configOptions.Value.Width;
-            window.Height = this.configOptions.Value.Height;
-            window.Left = this.configOptions.Value.Left;
-            window.Top = this.configOptions.Value.Top;
-            window.WindowState = this.configOptions.Value.IsMaximized ? WindowState.Maximized : WindowState.Normal;
+            this.MainWindow.Width = this.configOptions.Value.Width;
+            this.MainWindow.Height = this.configOptions.Value.Height;
+            this.MainWindow.Left = this.configOptions.Value.Left;
+            this.MainWindow.Top = this.configOptions.Value.Top;
+            this.MainWindow.WindowState = this.configOptions.Value.IsMaximized ? WindowState.Maximized : WindowState.Normal;
         }
 
-        public void SaveWindowState(Window window)
+        public void SaveWindowState()
             => this.configOptions.Update(config =>
             {
-                config.Width = window.Width;
-                config.Height = window.Height;
-                config.Top = window.Top;
-                config.Left = window.Left;
-                config.IsMaximized = window.WindowState == WindowState.Maximized;
+                config.Width = this.MainWindow.Width;
+                config.Height = this.MainWindow.Height;
+                config.Top = this.MainWindow.Top;
+                config.Left = this.MainWindow.Left;
+                config.IsMaximized = this.MainWindow.WindowState == WindowState.Maximized;
             });
     }
 }

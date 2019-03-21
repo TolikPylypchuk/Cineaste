@@ -11,14 +11,17 @@ namespace MovieList.Views
             this.ViewModel = viewModel;
             this.DataContext = viewModel;
 
+            this.ViewModel.MainWindow = this;
+
             this.InitializeComponent();
-            this.ViewModel.SetComponentViewModels(this);
-            this.ViewModel.RestoreWindowState(this);
+
+            this.ViewModel.SetComponentViewModels();
+            this.ViewModel.RestoreWindowState();
         }
 
         public MainViewModel ViewModel { get; }
 
         private void Window_Closing(object sender, System.EventArgs e)
-            => this.ViewModel.SaveWindowState(this);
+            => this.ViewModel.SaveWindowState();
     }
 }
