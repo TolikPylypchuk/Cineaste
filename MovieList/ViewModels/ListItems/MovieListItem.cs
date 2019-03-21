@@ -1,39 +1,47 @@
 using System.Linq;
-using System.Windows.Media;
 
 using MovieList.Data.Models;
-
-using static MovieList.Services.Util;
+using MovieList.Services;
 
 namespace MovieList.ViewModels.ListItems
 {
-    public class MovieListItem : ListItemBase
+    public class MovieListItem : ListItem
     {
-        private MovieListItem(Movie movie, MovieSeriesEntry? entry, string title, string originalTitle, string year, Color color)
-            : base(entry, title, originalTitle, year, color)
+        public MovieListItem(Movie movie)
+            : base(
+                  movie.Entry,
+                  movie.Title.Name,
+                  movie.OriginalTitle.Name,
+                  movie.Year.ToString(),
+                  Util.IntToColor(movie.Kind.ColorForMovie))
         {
             this.Movie = movie;
         }
 
         public Movie Movie { get; }
 
-        public static MovieListItem FromMovie(Movie movie)
+        public override string SelectTitleToCompare()
         {
-            string title = movie.Titles
-                .Where(title => !title.IsOriginal)
-                .OrderByDescending(title => title.Priority)
-                .First()
-                .Name;
+            Title result;
 
-            string originalTitle = movie.Titles
-                .Where(title => title.IsOriginal)
-                .OrderByDescending(title => title.Priority)
-                .First()
-                .Name;
+            if (this.Movie.Entry == null)
+            {
+                result = this.Movie.Title;
+            } else
+            {
+                var seriesTitle = this.Movie.Entry.MovieSeries.Title;
 
-            var color = IntToColor(movie.Kind.ColorForMovie);
+                if (seriesTitle != null)
+                {
+                    result = seriesTitle;
+                } else
+                {
+                    var firstEntry = this.Movie.Entry.MovieSeries.Entries.OrderBy(entry => entry.OrdinalNumber).First();
+                    result = firstEntry.Movie != null ? firstEntry.Movie.Title : firstEntry.Series!.Title;
+                }
+            }
 
-            return new MovieListItem(movie, movie.Entry, title, originalTitle, movie.Year.ToString(), color);
+            return result.Name;
         }
     }
 }

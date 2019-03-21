@@ -5,9 +5,9 @@ using MovieList.Data.Models;
 
 namespace MovieList.ViewModels.ListItems
 {
-    public abstract class ListItemBase
+    public abstract class ListItem : IComparable<ListItem>
     {
-        protected ListItemBase(MovieSeriesEntry? entry, string title, string originalTitle, string year, Color color)
+        protected ListItem(MovieSeriesEntry? entry, string title, string originalTitle, string year, Color color)
         {
             this.OrdinalNumber = entry != null ? GetOrdinalNumber(entry) : String.Empty;
             this.Title = title;
@@ -21,6 +21,11 @@ namespace MovieList.ViewModels.ListItems
         public string OriginalTitle { get; }
         public string Year { get; }
         public Color Color { get; }
+
+        public abstract string SelectTitleToCompare();
+
+        public int CompareTo(ListItem other)
+            => this.SelectTitleToCompare().CompareTo(other.SelectTitleToCompare());
 
         private static string GetOrdinalNumber(MovieSeriesEntry entry)
             => entry.MovieSeries.IsLooselyConnected

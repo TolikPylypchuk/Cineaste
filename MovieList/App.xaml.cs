@@ -37,8 +37,10 @@ namespace MovieList
                 .Build();
 
             this.ServiceProvider = new ServiceCollection()
-                .AddDbContext<MovieContext>((services, builder) =>
-                    builder.UseSqlite($"Data Source={this.Configuration.GetSection("Config")["DatabasePath"]}"))
+                .AddDbContext<MovieContext>(
+                    (services, builder) =>
+                        builder.UseSqlite($"Data Source={this.Configuration.GetSection("Config")["DatabasePath"]}"),
+                    ServiceLifetime.Scoped)
 
                 .AddLogging(loggingBuilder => loggingBuilder.AddFile(this.Configuration.GetSection("Logging")))
 
@@ -46,7 +48,7 @@ namespace MovieList
                 .ConfigureWritable<UIConfig>(this.Configuration.GetSection("UI"))
                 .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
 
-                .AddSingleton<IMovieListService, MovieListService>()
+                .AddScoped<IMovieListService, MovieListService>()
 
                 .AddTransient<MainViewModel>()
                 .AddTransient<MovieListViewModel>()

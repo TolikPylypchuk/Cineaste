@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace MovieList.Data.Models
 {
@@ -20,5 +21,19 @@ namespace MovieList.Data.Models
         public virtual IList<MovieSeries> Parts { get; set; } = new List<MovieSeries>();
 
         public virtual IList<Title> Titles { get; set; } = new List<Title>();
+
+        [NotMapped]
+        public Title? Title
+            => this.Titles
+                .Where(title => !title.IsOriginal)
+                .OrderByDescending(title => title.Priority)
+                .FirstOrDefault();
+
+        [NotMapped]
+        public Title? OriginalTitle
+            => this.Titles
+                .Where(title => title.IsOriginal)
+                .OrderByDescending(title => title.Priority)
+                .FirstOrDefault();
     }
 }

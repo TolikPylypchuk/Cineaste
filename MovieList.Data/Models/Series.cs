@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 using MovieList.Data.Properties;
 
@@ -31,5 +32,37 @@ namespace MovieList.Data.Models
         public virtual IList<Season> Seasons { get; set; } = new List<Season>();
 
         public virtual IList<SpecialEpisode> SpecialEpisodes { get; set; } = new List<SpecialEpisode>();
+
+        [NotMapped]
+        public Title Title
+            => this.Titles
+                .Where(title => !title.IsOriginal)
+                .OrderByDescending(title => title.Priority)
+                .First();
+
+        [NotMapped]
+        public Title OriginalTitle
+            => this.Titles
+                .Where(title => title.IsOriginal)
+                .OrderByDescending(title => title.Priority)
+                .First();
+
+        [NotMapped]
+        public int StartYear
+            => this.Seasons
+                .SelectMany(season => season.Periods)
+                .OrderBy(period => period.StartYear)
+                .ThenBy(period => period.StartMonth)
+                .First()
+                .StartYear;
+
+        [NotMapped]
+        public int EndYear
+            => this.Seasons
+                .SelectMany(season => season.Periods)
+                .OrderByDescending(period => period.EndYear)
+                .ThenByDescending(period => period.EndMonth)
+                .First()
+                .EndYear;
     }
 }

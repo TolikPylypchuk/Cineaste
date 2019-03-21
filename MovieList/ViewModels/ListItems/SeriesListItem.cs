@@ -1,55 +1,47 @@
 using System.Linq;
-using System.Windows.Media;
 
 using MovieList.Data.Models;
-
-using static MovieList.Services.Util;
+using MovieList.Services;
 
 namespace MovieList.ViewModels.ListItems
 {
-    public class SeriesListItem : ListItemBase
+    public class SeriesListItem : ListItem
     {
-        private SeriesListItem(Series series, MovieSeriesEntry? entry, string title, string originalTitle, string year, Color color)
-            : base(entry, title, originalTitle, year, color)
+        internal SeriesListItem(Series series)
+            : base(
+                  series.Entry,
+                  series.Title.Name,
+                  series.OriginalTitle.Name,
+                  $"{series.StartYear}-{series.EndYear}",
+                  Util.IntToColor(series.Kind.ColorForSeries))
         {
             this.Series = series;
         }
 
         public Series Series { get; }
 
-        public static SeriesListItem FromSeries(Series series)
+        public override string SelectTitleToCompare()
         {
-            string title = series.Titles
-                .Where(title => !title.IsOriginal)
-                .OrderByDescending(title => title.Priority)
-                .First()
-                .Name;
+            Title result;
 
-            string originalTitle = series.Titles
-                .Where(title => title.IsOriginal)
-                .OrderByDescending(title => title.Priority)
-                .First()
-                .Name;
+            if (this.Series.Entry == null)
+            {
+                result = this.Series.Title;
+            } else
+            {
+                var seriesTitle = this.Series.Entry.MovieSeries.Title;
 
-            string startYear = series.Seasons
-                .SelectMany(season => season.Periods)
-                .OrderBy(period => period.StartYear)
-                .ThenBy(period => period.StartMonth)
-                .First()
-                .StartYear
-                .ToString();
+                if (seriesTitle != null)
+                {
+                    result = seriesTitle;
+                } else
+                {
+                    var firstEntry = this.Series.Entry.MovieSeries.Entries.OrderBy(entry => entry.OrdinalNumber).First();
+                    result = firstEntry.Movie != null ? firstEntry.Movie.Title : firstEntry.Series!.Title;
+                }
+            }
 
-            string endYear = series.Seasons
-                .SelectMany(season => season.Periods)
-                .OrderByDescending(period => period.EndYear)
-                .ThenByDescending(period => period.EndMonth)
-                .First()
-                .EndYear
-                .ToString();
-
-            var color = IntToColor(series.Kind.ColorForSeries);
-
-            return new SeriesListItem(series, series.Entry, title, originalTitle, $"{startYear}-{endYear}", color);
+            return result.Name;
         }
     }
 }
