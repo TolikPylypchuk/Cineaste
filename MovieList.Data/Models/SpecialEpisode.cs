@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 using MovieList.Data.Properties;
 
@@ -37,5 +38,19 @@ namespace MovieList.Data.Models
         public virtual Series Series { get; set; }
 
         public virtual IList<Title> Titles { get; set; } = new List<Title>();
+
+        [NotMapped]
+        public Title Title
+            => this.Titles
+                .Where(title => !title.IsOriginal)
+                .OrderByDescending(title => title.Priority)
+                .First();
+
+        [NotMapped]
+        public Title OriginalTitle
+            => this.Titles
+                .Where(title => title.IsOriginal)
+                .OrderByDescending(title => title.Priority)
+                .First();
     }
 }

@@ -14,7 +14,7 @@ namespace MovieList.Data.Models
         public int? OrdinalNumber { get; set; }
 
         [ForeignKey(nameof(ParentSeriesId))]
-        public MovieSeries? ParentSeries { get; set; }
+        public virtual MovieSeries? ParentSeries { get; set; }
 
         public virtual IList<MovieSeriesEntry> Entries { get; set; } = new List<MovieSeriesEntry>();
 
@@ -35,5 +35,9 @@ namespace MovieList.Data.Models
                 .Where(title => title.IsOriginal)
                 .OrderByDescending(title => title.Priority)
                 .FirstOrDefault();
+
+        [NotMapped]
+        public MovieSeries RootSeries
+            => this.ParentSeries == null ? this : this.ParentSeries.RootSeries;
     }
 }

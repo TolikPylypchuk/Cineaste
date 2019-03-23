@@ -16,7 +16,7 @@ namespace MovieList.Data.Models
         [ForeignKey(nameof(MovieId))]
         public virtual Movie? Movie { get; set; }
 
-        [ForeignKey(nameof(MovieId))]
+        [ForeignKey(nameof(SeriesId))]
         public virtual Series? Series { get; set; }
 
         [ForeignKey(nameof(MovieSeriesId))]

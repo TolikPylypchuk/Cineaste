@@ -28,6 +28,6 @@ namespace MovieList.Data.Models
         public int SeasonId { get; set; }
 
         [ForeignKey(nameof(SeasonId))]
-        public Season Season { get; set; }
+        public virtual Season Season { get; set; }
     }
 }

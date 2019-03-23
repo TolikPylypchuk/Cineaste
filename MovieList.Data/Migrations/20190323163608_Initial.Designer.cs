@@ -9,7 +9,7 @@ using MovieList.Data;
 namespace MovieList.Data.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20190323111542_Initial")]
+    [Migration("20190323163608_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,9 +23,9 @@ namespace MovieList.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ColorForMovie");
+                    b.Property<string>("ColorForMovie");
 
-                    b.Property<int>("ColorForSeries");
+                    b.Property<string>("ColorForSeries");
 
                     b.Property<string>("Name")
                         .IsRequired()

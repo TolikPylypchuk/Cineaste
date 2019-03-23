@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,8 +14,8 @@ namespace MovieList.Data.Models
         [StringLength(128, ErrorMessageResourceName = "NameTooLong", ErrorMessageResourceType = typeof(Messages))]
         public string Name { get; set; } = String.Empty;
 
-        public int ColorForMovie { get; set; }
-        public int ColorForSeries { get; set; }
+        public string ColorForMovie { get; set; }
+        public string ColorForSeries { get; set; }
 
         public virtual IList<Movie> Movies { get; set; } = new List<Movie>();
 

@@ -1,7 +1,6 @@
-using System.Linq;
+using System.Windows.Media;
 
 using MovieList.Data.Models;
-using MovieList.Services;
 
 namespace MovieList.ViewModels.ListItems
 {
@@ -13,35 +12,22 @@ namespace MovieList.ViewModels.ListItems
                   movie.Title.Name,
                   movie.OriginalTitle.Name,
                   movie.Year.ToString(),
-                  Util.IntToColor(movie.Kind.ColorForMovie))
+                  (Color)ColorConverter.ConvertFromString(movie.Kind.ColorForMovie))
         {
             this.Movie = movie;
         }
 
         public Movie Movie { get; }
 
-        public override string SelectTitleToCompare()
-        {
-            Title result;
+        public override int CompareTo(MovieListItem other)
+            => this.Movie.Id == other.Movie.Id
+                ? 0
+                : this.CompareToEntry(other, this.Movie.Entry, other.Movie.Entry);
 
-            if (this.Movie.Entry == null)
-            {
-                result = this.Movie.Title;
-            } else
-            {
-                var seriesTitle = this.Movie.Entry.MovieSeries.Title;
+        public override int CompareTo(SeriesListItem other)
+            => this.CompareToEntry(other, this.Movie.Entry, other.Series.Entry);
 
-                if (seriesTitle != null)
-                {
-                    result = seriesTitle;
-                } else
-                {
-                    var firstEntry = this.Movie.Entry.MovieSeries.Entries.OrderBy(entry => entry.OrdinalNumber).First();
-                    result = firstEntry.Movie != null ? firstEntry.Movie.Title : firstEntry.Series!.Title;
-                }
-            }
-
-            return result.Name;
-        }
+        public override int CompareTo(MovieSeriesListItem other)
+            => other.CompareTo(this) * -1;
     }
 }

@@ -21,9 +21,9 @@ namespace MovieList.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ColorForMovie");
+                    b.Property<string>("ColorForMovie");
 
-                    b.Property<int>("ColorForSeries");
+                    b.Property<string>("ColorForSeries");
 
                     b.Property<string>("Name")
                         .IsRequired()

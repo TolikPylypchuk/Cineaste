@@ -28,7 +28,7 @@ namespace MovieList.Data.Models
         public int KindId { get; set; }
 
         [ForeignKey(nameof(KindId))]
-        public Kind Kind { get; set; }
+        public virtual Kind Kind { get; set; }
 
         public virtual MovieSeriesEntry? Entry { get; set; }
 
