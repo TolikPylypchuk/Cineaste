@@ -98,7 +98,7 @@ namespace MovieList.Data.Migrations
                     SeriesId = table.Column<int>(nullable: true),
                     MovieSeriesId = table.Column<int>(nullable: false),
                     OrdinalNumber = table.Column<int>(nullable: false),
-                    ShowOrdinalNumber = table.Column<bool>(nullable: false)
+                    DisplayNumber = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -131,6 +131,7 @@ namespace MovieList.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     IsWatched = table.Column<bool>(nullable: false),
                     IsReleased = table.Column<bool>(nullable: false),
+                    Channel = table.Column<string>(maxLength: 64, nullable: false),
                     ImdbLink = table.Column<string>(maxLength: 256, nullable: true),
                     PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
                     SeriesId = table.Column<int>(nullable: false)
@@ -156,6 +157,7 @@ namespace MovieList.Data.Migrations
                     Year = table.Column<int>(nullable: false),
                     IsWatched = table.Column<bool>(nullable: false),
                     IsReleased = table.Column<bool>(nullable: false),
+                    Channel = table.Column<string>(maxLength: 64, nullable: false),
                     ImdbLink = table.Column<string>(maxLength: 256, nullable: true),
                     PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
                     SeriesId = table.Column<int>(nullable: false)
@@ -181,6 +183,8 @@ namespace MovieList.Data.Migrations
                     StartYear = table.Column<int>(nullable: false),
                     EndMonth = table.Column<int>(nullable: false),
                     EndYear = table.Column<int>(nullable: false),
+                    IsSingleDayRelease = table.Column<bool>(nullable: false),
+                    NumberOfEpisodes = table.Column<int>(nullable: false),
                     SeasonId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

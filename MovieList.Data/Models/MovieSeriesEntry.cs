@@ -11,7 +11,7 @@ namespace MovieList.Data.Models
 
         public int OrdinalNumber { get; set; }
 
-        public bool ShowOrdinalNumber { get; set; }
+        public int? DisplayNumber { get; set; }
 
         [ForeignKey(nameof(MovieId))]
         public virtual Movie? Movie { get; set; }

@@ -9,14 +9,14 @@ using MovieList.Data;
 namespace MovieList.Data.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20190310104555_ExpandSeriesInfo")]
-    partial class ExpandSeriesInfo
+    [Migration("20190323111542_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0-preview.19074.3");
+                .HasAnnotation("ProductVersion", "3.0.0-preview3.19153.1");
 
             modelBuilder.Entity("MovieList.Data.Models.Kind", b =>
                 {
@@ -85,6 +85,8 @@ namespace MovieList.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("DisplayNumber");
+
                     b.Property<int?>("MovieId");
 
                     b.Property<int>("MovieSeriesId");
@@ -92,8 +94,6 @@ namespace MovieList.Data.Migrations
                     b.Property<int>("OrdinalNumber");
 
                     b.Property<int?>("SeriesId");
-
-                    b.Property<bool>("ShowOrdinalNumber");
 
                     b.HasKey("Id");
 

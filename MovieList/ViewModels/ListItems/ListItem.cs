@@ -30,6 +30,6 @@ namespace MovieList.ViewModels.ListItems
         private static string GetOrdinalNumber(MovieSeriesEntry entry)
             => entry.MovieSeries.IsLooselyConnected
                 ? $"({entry.OrdinalNumber})"
-                : entry.ShowOrdinalNumber ? entry.OrdinalNumber.ToString() : "-";
+                : entry.DisplayNumber?.ToString() ?? "-";
     }
 }
