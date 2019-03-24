@@ -56,6 +56,7 @@ namespace MovieList
                 .AddTransient<SeriesFormViewModel>()
                 .AddTransient<MovieSeriesFormViewModel>()
                 .AddTransient<SettingsViewModel>()
+                .AddTransient<SidePanelViewModel>()
 
                 .AddSingleton<MainWindow>()
                 .AddSingleton(_ => this)

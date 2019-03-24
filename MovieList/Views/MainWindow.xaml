@@ -8,7 +8,7 @@
         d:DataContext="{d:DesignInstance vm:MainViewModel, IsDesignTimeCreatable=False}"
         Title="Movie List" MinWidth="1000" MinHeight="500"
         Closing="Window_Closing">
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="3*" />
@@ -17,5 +17,6 @@
 
         <local:SettingsControl x:Name="SettingsControl" Grid.Column="0" />
         <local:MovieListControl x:Name="ListControl" Grid.Column="1" />
+        <local:SidePanelControl x:Name="SidePanelControl" Grid.Column="2" />
     </Grid>
 </Window>

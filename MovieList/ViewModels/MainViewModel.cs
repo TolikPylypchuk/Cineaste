@@ -25,6 +25,7 @@ namespace MovieList.ViewModels
         {
             this.MainWindow.ListControl.ViewModel = this.app.ServiceProvider.GetRequiredService<MovieListViewModel>();
             this.MainWindow.SettingsControl.ViewModel = this.app.ServiceProvider.GetRequiredService<SettingsViewModel>();
+            this.MainWindow.SidePanelControl.ViewModel = this.app.ServiceProvider.GetRequiredService<SidePanelViewModel>();
         }
 
         public void RestoreWindowState()

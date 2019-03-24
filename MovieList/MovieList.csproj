@@ -20,6 +20,7 @@
     <None Remove="Views\MovieSeriesFormControl.xaml" />
     <None Remove="Views\SeriesFormControl.xaml" />
     <None Remove="Views\SettingsControl.xaml" />
+    <None Remove="Views\SidePanelControl.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,6 +64,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\SettingsControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\SidePanelControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
