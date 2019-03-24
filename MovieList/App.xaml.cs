@@ -22,19 +22,21 @@ namespace MovieList
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            this.ConfigureServices();
+
+            this.Configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            var services = new ServiceCollection();
+            this.ConfigureServices(services);
+            this.ServiceProvider = services.BuildServiceProvider();
 
             this.MainWindow = this.ServiceProvider.GetRequiredService<MainWindow>();
             this.MainWindow.Show();
         }
 
-        private void ConfigureServices()
-        {
-            this.Configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-
-            this.ServiceProvider = new ServiceCollection()
+        private void ConfigureServices(IServiceCollection services)
+            => services
                 .AddDbContext<MovieContext>(
                     (services, builder) =>
                         builder.ConfigureMovieContext(this.Configuration.GetSection("Config")["DatabasePath"]),
@@ -59,9 +61,6 @@ namespace MovieList
                 .AddTransient<SidePanelViewModel>()
 
                 .AddSingleton<MainWindow>()
-                .AddSingleton(_ => this)
-
-                .BuildServiceProvider();
-        }
+                .AddSingleton(_ => this);
     }
 }
