@@ -1,4 +1,4 @@
-namespace MovieList.Config.Logging
+namespace MovieList.Config
 {
     public class FileConfig
     {

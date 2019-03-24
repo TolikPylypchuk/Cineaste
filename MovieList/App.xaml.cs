@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 using MovieList.Config;
-using MovieList.Config.Logging;
 using MovieList.Data;
 using MovieList.Options;
 using MovieList.Services;
@@ -39,9 +38,11 @@ namespace MovieList
                 .AddDbContext<MovieContext>(
                     (services, builder) =>
                         builder.ConfigureMovieContext(this.Configuration.GetSection("Config")["DatabasePath"]),
-                    ServiceLifetime.Transient)
+                    ServiceLifetime.Scoped)
 
-                .AddLogging(loggingBuilder => loggingBuilder.AddFile(this.Configuration.GetSection("Logging")))
+                .AddLogging(loggingBuilder => loggingBuilder
+                    .AddConfiguration(this.Configuration.GetSection("Logging"))
+                    .AddFile(this.Configuration.GetSection("Logging")))
 
                 .ConfigureWritable<Configuration>(this.Configuration.GetSection("Config"))
                 .ConfigureWritable<UIConfig>(this.Configuration.GetSection("UI"))
