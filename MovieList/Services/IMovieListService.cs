@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 using MovieList.ViewModels.ListItems;
 
@@ -6,6 +7,6 @@ namespace MovieList.Services
 {
     public interface IMovieListService
     {
-        ObservableCollection<ListItem> LoadAllItems();
+        Task<ObservableCollection<ListItem>> LoadAllItemsAsync();
     }
 }
