@@ -8,6 +8,9 @@ namespace MovieList.Services
 {
     public static class Util
     {
+        public static int GetHashCode(params object[] properties)
+            => properties.Select(p => p.GetHashCode()).Aggregate(17, (acc, hash) => unchecked(acc * 23 + hash));
+
         public static (MovieSeries, MovieSeries) GetDistinctAncestors(MovieSeries series1, MovieSeries series2)
             => GetAllAncestors(series1)
                 .Zip(GetAllAncestors(series2), (a, b) => (Series1: a, Series2: b))

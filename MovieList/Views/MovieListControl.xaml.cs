@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 using MovieList.ViewModels;
@@ -12,5 +14,8 @@ namespace MovieList.Views
         }
 
         public MovieListViewModel ViewModel { get; set; }
+
+        private void MovieListControl_Loaded(object sender, RoutedEventArgs e)
+            => Task.Factory.StartNew(async () => await this.ViewModel.LoadItems());
     }
 }

@@ -2,10 +2,12 @@ using System;
 using System.Windows.Media;
 
 using MovieList.Data.Models;
+using MovieList.Services;
 
 namespace MovieList.ViewModels.ListItems
 {
     public abstract class ListItem :
+        IEquatable<ListItem>,
         IComparable<ListItem>,
         IComparable<MovieListItem>,
         IComparable<SeriesListItem>,
@@ -25,6 +27,20 @@ namespace MovieList.ViewModels.ListItems
         public string OriginalTitle { get; }
         public string Year { get; }
         public Color Color { get; }
+
+        public override bool Equals(object obj)
+            => obj is ListItem item && this.Equals(item);
+
+        public bool Equals(ListItem other)
+            => other != null &&
+                this.DisplayNumber == other.DisplayNumber &&
+                this.Title == other.DisplayNumber &&
+                this.OriginalTitle == other.OriginalTitle &&
+                this.Year == other.Year &&
+                this.Color == other.Color;
+
+        public override int GetHashCode()
+            => Util.GetHashCode(this.DisplayNumber, this.Title, this.OriginalTitle, this.Year, this.Color);
 
         public int CompareTo(ListItem other)
             => other switch

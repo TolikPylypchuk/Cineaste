@@ -8,9 +8,7 @@ namespace MovieList.Views
     {
         public MainWindow(MainViewModel viewModel)
         {
-            this.ViewModel = viewModel;
-            this.DataContext = viewModel;
-
+            this.DataContext = this.ViewModel = viewModel;
             this.ViewModel.MainWindow = this;
 
             this.InitializeComponent();

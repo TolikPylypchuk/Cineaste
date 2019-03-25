@@ -23,9 +23,14 @@ namespace MovieList.ViewModels
 
         public void SetComponentViewModels()
         {
-            this.MainWindow.ListControl.ViewModel = this.app.ServiceProvider.GetRequiredService<MovieListViewModel>();
-            this.MainWindow.SettingsControl.ViewModel = this.app.ServiceProvider.GetRequiredService<SettingsViewModel>();
-            this.MainWindow.SidePanelControl.ViewModel = this.app.ServiceProvider.GetRequiredService<SidePanelViewModel>();
+            this.MainWindow.ListControl.DataContext = this.MainWindow.ListControl.ViewModel =
+                this.app.ServiceProvider.GetRequiredService<MovieListViewModel>();
+
+            this.MainWindow.SettingsControl.DataContext = this.MainWindow.SettingsControl.ViewModel =
+                this.app.ServiceProvider.GetRequiredService<SettingsViewModel>();
+
+            this.MainWindow.SidePanelControl.DataContext = this.MainWindow.SidePanelControl.ViewModel =
+                this.app.ServiceProvider.GetRequiredService<SidePanelViewModel>();
         }
 
         public void RestoreWindowState()
