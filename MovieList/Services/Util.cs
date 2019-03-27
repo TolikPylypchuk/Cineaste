@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 
+using MovieList.Config;
 using MovieList.Data.Models;
 
 namespace MovieList.Services
@@ -58,12 +59,24 @@ namespace MovieList.Services
             return firstEntry.Movie != null ? firstEntry.Movie.Year : firstEntry.Series!.StartYear;
         }
 
-        public static Color GetColor(MovieSeries movieSeries)
+        public static Color GetColor(MovieSeries movieSeries, UIConfig uiConfig)
         {
             var firstEntry = GetFirstEntry(movieSeries);
-            var color = firstEntry.Movie != null ? firstEntry.Movie.Kind.ColorForMovie : firstEntry.Series!.Kind.ColorForSeries;
-
-            return (Color)ColorConverter.ConvertFromString(color);
+            return firstEntry.Movie != null ? GetColor(firstEntry.Movie, uiConfig) : GetColor(firstEntry.Series!, uiConfig);
         }
+
+        public static Color GetColor(Movie movie, UIConfig uiConfig)
+            => movie.IsReleased
+                ? movie.IsWatched
+                    ? (Color)ColorConverter.ConvertFromString(movie.Kind.ColorForMovie)
+                    : uiConfig.NotWatchedColor
+                : uiConfig.NotReleasedColor;
+
+        public static Color GetColor(Series series, UIConfig uiConfig)
+            => series.Seasons.First().IsReleased
+                ? series.IsWatched
+                    ? (Color)ColorConverter.ConvertFromString(series.Kind.ColorForMovie)
+                    : uiConfig.NotWatchedColor
+                : uiConfig.NotReleasedColor;
     }
 }

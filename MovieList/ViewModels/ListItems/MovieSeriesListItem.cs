@@ -1,5 +1,7 @@
 using System;
+using System.Windows.Media;
 
+using MovieList.Config;
 using MovieList.Data.Models;
 
 using static MovieList.Services.Util;
@@ -9,12 +11,16 @@ namespace MovieList.ViewModels.ListItems
     public class MovieSeriesListItem : ListItem
     {
         public MovieSeriesListItem(MovieSeries movieSeries)
+            : this(movieSeries, null)
+        { }
+
+        public MovieSeriesListItem(MovieSeries movieSeries, UIConfig? uiConfig)
             : base(
                   null,
                   movieSeries.Title != null ? $"{movieSeries.Title.Name}:" : String.Empty,
                   movieSeries.OriginalTitle != null ? $"{movieSeries.OriginalTitle.Name}:" : String.Empty,
                   String.Empty,
-                  GetColor(movieSeries))
+                  uiConfig != null ? GetColor(movieSeries, uiConfig) : Colors.Black)
         {
             this.MovieSeries = movieSeries;
         }

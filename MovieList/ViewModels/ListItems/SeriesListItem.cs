@@ -1,18 +1,24 @@
 using System.Windows.Media;
 
+using MovieList.Config;
 using MovieList.Data.Models;
+using MovieList.Services;
 
 namespace MovieList.ViewModels.ListItems
 {
     public class SeriesListItem : ListItem
     {
         public SeriesListItem(Series series)
+            : this(series, null)
+        { }
+
+        public SeriesListItem(Series series, UIConfig? uiConfig)
             : base(
                   series.Entry,
                   series.Title.Name,
                   series.OriginalTitle.Name,
                   $"{series.StartYear}-{series.EndYear}",
-                  (Color)ColorConverter.ConvertFromString(series.Kind.ColorForSeries))
+                  uiConfig != null ? Util.GetColor(series, uiConfig) : Colors.Black)
         {
             this.Series = series;
         }

@@ -1,18 +1,24 @@
 using System.Windows.Media;
 
+using MovieList.Config;
 using MovieList.Data.Models;
+using MovieList.Services;
 
 namespace MovieList.ViewModels.ListItems
 {
     public class MovieListItem : ListItem
     {
         public MovieListItem(Movie movie)
+            : this(movie, null)
+        { }
+
+        public MovieListItem(Movie movie, UIConfig? uiConfig)
             : base(
                   movie.Entry,
                   movie.Title.Name,
                   movie.OriginalTitle.Name,
                   movie.Year.ToString(),
-                  (Color)ColorConverter.ConvertFromString(movie.Kind.ColorForMovie))
+                  uiConfig != null ? Util.GetColor(movie, uiConfig) : Colors.Black)
         {
             this.Movie = movie;
         }
