@@ -59,23 +59,23 @@ namespace MovieList.Services
             return firstEntry.Movie != null ? firstEntry.Movie.Year : firstEntry.Series!.StartYear;
         }
 
-        public static Color GetColor(MovieSeries movieSeries, UIConfig uiConfig)
+        public static Color GetColor(MovieSeries movieSeries, Configuration uiConfig)
         {
             var firstEntry = GetFirstEntry(movieSeries);
             return firstEntry.Movie != null ? GetColor(firstEntry.Movie, uiConfig) : GetColor(firstEntry.Series!, uiConfig);
         }
 
-        public static Color GetColor(Movie movie, UIConfig uiConfig)
+        public static Color GetColor(Movie movie, Configuration uiConfig)
             => movie.IsReleased
                 ? movie.IsWatched
                     ? (Color)ColorConverter.ConvertFromString(movie.Kind.ColorForMovie)
                     : uiConfig.NotWatchedColor
                 : uiConfig.NotReleasedColor;
 
-        public static Color GetColor(Series series, UIConfig uiConfig)
+        public static Color GetColor(Series series, Configuration uiConfig)
             => series.Seasons.First().IsReleased
                 ? series.IsWatched
-                    ? (Color)ColorConverter.ConvertFromString(series.Kind.ColorForMovie)
+                    ? (Color)ColorConverter.ConvertFromString(series.Kind.ColorForSeries)
                     : uiConfig.NotWatchedColor
                 : uiConfig.NotReleasedColor;
     }

@@ -14,12 +14,12 @@ namespace MovieList.Services
     public class MovieListService : IMovieListService
     {
         private readonly MovieContext context;
-        private readonly UIConfig uiConfig;
+        private readonly Configuration config;
 
-        public MovieListService(MovieContext context, IOptions<UIConfig> uiConfig)
+        public MovieListService(MovieContext context, IOptions<Configuration> config)
         {
             this.context = context;
-            this.uiConfig = uiConfig.Value;
+            this.config = config.Value;
         }
 
         public async Task<ObservableCollection<ListItem>> LoadAllItemsAsync()
@@ -30,12 +30,12 @@ namespace MovieList.Services
 
             return new ObservableCollection<ListItem>(
                 movies
-                    .Select(movie => new MovieListItem(movie, this.uiConfig))
+                    .Select(movie => new MovieListItem(movie, this.config))
                     .Cast<ListItem>()
-                    .Union(series.Select(series => new SeriesListItem(series, this.uiConfig)))
+                    .Union(series.Select(series => new SeriesListItem(series, this.config)))
                     .Union(movieSeries
                         .Where(series => series.Title != null)
-                        .Select(series => new MovieSeriesListItem(series, this.uiConfig)))
+                        .Select(series => new MovieSeriesListItem(series, this.config)))
                     .OrderBy(item => item));
         }
     }

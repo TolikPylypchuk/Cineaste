@@ -12,13 +12,13 @@ namespace MovieList.ViewModels.ListItems
             : this(movie, null)
         { }
 
-        public MovieListItem(Movie movie, UIConfig? uiConfig)
+        public MovieListItem(Movie movie, Configuration? config)
             : base(
                   movie.Entry,
                   movie.Title.Name,
                   movie.OriginalTitle.Name,
                   movie.Year.ToString(),
-                  uiConfig != null ? Util.GetColor(movie, uiConfig) : Colors.Black)
+                  config != null ? Util.GetColor(movie, config) : Colors.Black)
         {
             this.Movie = movie;
         }

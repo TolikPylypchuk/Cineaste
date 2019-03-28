@@ -12,13 +12,13 @@ namespace MovieList.ViewModels.ListItems
             : this(series, null)
         { }
 
-        public SeriesListItem(Series series, UIConfig? uiConfig)
+        public SeriesListItem(Series series, Configuration? config)
             : base(
                   series.Entry,
                   series.Title.Name,
                   series.OriginalTitle.Name,
                   $"{series.StartYear}-{series.EndYear}",
-                  uiConfig != null ? Util.GetColor(series, uiConfig) : Colors.Black)
+                  config != null ? Util.GetColor(series, config) : Colors.Black)
         {
             this.Series = series;
         }

@@ -1,5 +1,3 @@
-using System.Windows.Media;
-
 namespace MovieList.Config
 {
     public sealed class UIConfig
@@ -9,8 +7,5 @@ namespace MovieList.Config
         public double Top { get; set; }
         public double Left { get; set; }
         public bool IsMaximized { get; set; }
-
-        public Color NotWatchedColor { get; set; }
-        public Color NotReleasedColor { get; set; }
     }
 }
