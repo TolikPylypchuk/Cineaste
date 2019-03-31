@@ -129,6 +129,9 @@
   <data name="ListItemYear" xml:space="preserve">
     <value>Рік</value>
   </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
   <data name="Title" xml:space="preserve">
     <value>Фільми і серіали</value>
   </data>

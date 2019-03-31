@@ -3,9 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:SettingsViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
-    <Grid>
-    </Grid>
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Resources.SettingsTitle}" FontSize="24"
+                   TextAlignment="Center" HorizontalAlignment="Stretch" Margin="5" />
+    </DockPanel>
 </UserControl>

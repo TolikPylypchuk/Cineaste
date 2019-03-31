@@ -32,6 +32,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0-preview3.19153.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="3.0.0-preview3.19153.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0-preview3.19153.1" />
+    <PackageReference Include="MiqM.Xceed.Wpf.Toolkit.NETCore" Version="3.4.0.1" />
     <PackageReference Include="NReco.Logging.File" Version="1.0.4" />
   </ItemGroup>
 
