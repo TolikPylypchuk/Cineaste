@@ -117,6 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="ColorNotReleased" xml:space="preserve">
+    <value>Майбутні фільми/серіали</value>
+  </data>
+  <data name="ColorNotWatched" xml:space="preserve">
+    <value>Не переглянуті фільми/серіали</value>
+  </data>
+  <data name="ColorPickerAdvanced" xml:space="preserve">
+    <value>Розширені</value>
+  </data>
+  <data name="ColorPickerAvailableColors" xml:space="preserve">
+    <value>Доступні кольори</value>
+  </data>
+  <data name="ColorPickerRecentColors" xml:space="preserve">
+    <value>Недавно використані кольори</value>
+  </data>
+  <data name="ColorPickerStandard" xml:space="preserve">
+    <value>Стандартні</value>
+  </data>
+  <data name="ColorPickerStandardColors" xml:space="preserve">
+    <value>Стандартні кольори</value>
+  </data>
+  <data name="KindMovie" xml:space="preserve">
+    <value>{0} фільм</value>
+  </data>
+  <data name="KindSeries" xml:space="preserve">
+    <value>{0} серіал</value>
+  </data>
   <data name="ListItemNumber" xml:space="preserve">
     <value>№</value>
   </data>
@@ -128,6 +158,9 @@
   </data>
   <data name="ListItemYear" xml:space="preserve">
     <value>Рік</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Зберегти</value>
   </data>
   <data name="SettingsTitle" xml:space="preserve">
     <value>Налаштування</value>

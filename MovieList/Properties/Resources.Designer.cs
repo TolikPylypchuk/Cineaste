@@ -61,6 +61,96 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Скасувати.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Майбутні фільми/серіали.
+        /// </summary>
+        public static string ColorNotReleased {
+            get {
+                return ResourceManager.GetString("ColorNotReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не переглянуті фільми/серіали.
+        /// </summary>
+        public static string ColorNotWatched {
+            get {
+                return ResourceManager.GetString("ColorNotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Розширені.
+        /// </summary>
+        public static string ColorPickerAdvanced {
+            get {
+                return ResourceManager.GetString("ColorPickerAdvanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Доступні кольори.
+        /// </summary>
+        public static string ColorPickerAvailableColors {
+            get {
+                return ResourceManager.GetString("ColorPickerAvailableColors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Недавно використані кольори.
+        /// </summary>
+        public static string ColorPickerRecentColors {
+            get {
+                return ResourceManager.GetString("ColorPickerRecentColors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Стандартні.
+        /// </summary>
+        public static string ColorPickerStandard {
+            get {
+                return ResourceManager.GetString("ColorPickerStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Стандартні кольори.
+        /// </summary>
+        public static string ColorPickerStandardColors {
+            get {
+                return ResourceManager.GetString("ColorPickerStandardColors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} фільм.
+        /// </summary>
+        public static string KindMovie {
+            get {
+                return ResourceManager.GetString("KindMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} серіал.
+        /// </summary>
+        public static string KindSeries {
+            get {
+                return ResourceManager.GetString("KindSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to №.
         /// </summary>
         public static string ListItemNumber {
@@ -93,6 +183,15 @@ namespace MovieList.Properties {
         public static string ListItemYear {
             get {
                 return ResourceManager.GetString("ListItemYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Зберегти.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         
