@@ -26,7 +26,7 @@ namespace MovieList.ViewModels
             }
         }
 
-        public async Task LoadItems()
+        public async Task LoadItemsAsync()
         {
             using var scope = app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IMovieListService>();

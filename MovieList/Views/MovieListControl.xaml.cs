@@ -15,6 +15,6 @@ namespace MovieList.Views
         public MovieListViewModel ViewModel { get; set; }
 
         private void MovieListControl_Loaded(object sender, RoutedEventArgs e)
-            => Task.Factory.StartNew(this.ViewModel.LoadItems);
+            => Task.Factory.StartNew(this.ViewModel.LoadItemsAsync);
     }
 }

@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:conv="clr-namespace:MovieList.Converters"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:SettingsViewModel, IsDesignTimeCreatable=False}"
-             d:DesignHeight="800" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="300" Loaded="SettingsControl_Loaded">
     <UserControl.Resources>
         <Style TargetType="{x:Type tk:ColorPicker}">
             <Setter Property="AdvancedButtonHeader" Value="{x:Static resx:Resources.ColorPickerAdvanced}" />
@@ -17,6 +18,8 @@
             <Setter Property="StandardColorsHeader" Value="{x:Static resx:Resources.ColorPickerStandardColors}" />
             <Setter Property="DisplayColorAndName" Value="False" />
         </Style>
+
+        <conv:KindNameConverter x:Key="KindNameConverter" />
     </UserControl.Resources>
 
     <UserControl.CommandBindings>
@@ -42,19 +45,47 @@
         </StackPanel>
 
         <StackPanel Margin="10">
-            <StackPanel Margin="0,0,0,5">
-                <TextBlock Text="{x:Static resx:Resources.ColorNotWatched}" TextAlignment="Left"
+            <Expander Header="{x:Static resx:Resources.Colors}" IsExpanded="False">
+                <StackPanel>
+                    <StackPanel Margin="0,0,0,5">
+                        <TextBlock Text="{x:Static resx:Resources.ColorNotWatched}" TextAlignment="Left"
                        HorizontalAlignment="Stretch" />
 
-                <tk:ColorPicker SelectedColor="{Binding Path=NotWatchedColor}" HorizontalAlignment="Stretch" />
-            </StackPanel>
+                        <tk:ColorPicker SelectedColor="{Binding Path=NotWatchedColor}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
 
-            <StackPanel Margin="0,0,0,5">
-                <TextBlock Text="{x:Static resx:Resources.ColorNotReleased}" TextAlignment="Left"
+                    <StackPanel Margin="0,0,0,5">
+                        <TextBlock Text="{x:Static resx:Resources.ColorNotReleased}" TextAlignment="Left"
                        HorizontalAlignment="Stretch" />
 
-                <tk:ColorPicker SelectedColor="{Binding Path=NotReleasedColor}" HorizontalAlignment="Stretch" />
-            </StackPanel>
+                        <tk:ColorPicker SelectedColor="{Binding Path=NotReleasedColor}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Path=Kinds}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <StackPanel Margin="0,0,0,5">
+                                            <TextBlock Text="{Binding Path=Name, Converter={StaticResource KindNameConverter}, ConverterParameter={x:Static resx:Resources.KindMovie}}"
+                                               TextAlignment="Left" HorizontalAlignment="Stretch" />
+
+                                            <tk:ColorPicker SelectedColor="{Binding Path=ColorForMovie}" HorizontalAlignment="Stretch" />
+                                        </StackPanel>
+
+                                        <StackPanel Margin="0,0,0,5">
+                                            <TextBlock Text="{Binding Path=Name, Converter={StaticResource KindNameConverter}, ConverterParameter={x:Static resx:Resources.KindSeries}}"
+                                               TextAlignment="Left" HorizontalAlignment="Stretch" />
+
+                                            <tk:ColorPicker SelectedColor="{Binding Path=ColorForSeries}" HorizontalAlignment="Stretch" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </StackPanel>
+            </Expander>
         </StackPanel>
     </DockPanel>
 </UserControl>

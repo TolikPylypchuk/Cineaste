@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -14,21 +15,24 @@ namespace MovieList.Views
 
         public SettingsViewModel ViewModel { get; set; }
 
+        private void SettingsControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+            => Task.Factory.StartNew(this.ViewModel.LoadKindsAsync);
+
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
             => e.CanExecute = this.ViewModel?.CanSaveChanges() ?? false;
 
-        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.ViewModel.SaveChanges();
+            await this.ViewModel.SaveChangesAsync();
             CommandManager.InvalidateRequerySuggested();
         }
 
         private void Cancel_CanExecute(object sender, CanExecuteRoutedEventArgs e)
             => e.CanExecute = this.ViewModel?.CanSaveChanges() ?? false;
 
-        private void Cancel_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Cancel_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.ViewModel.CancelChanges();
+            await this.ViewModel.CancelChangesAsync();
             CommandManager.InvalidateRequerySuggested();
         }
     }

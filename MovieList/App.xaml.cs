@@ -51,6 +51,7 @@ namespace MovieList
                 .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
 
                 .AddScoped<IMovieListService, MovieListService>()
+                .AddScoped<IKindService, KindService>()
 
                 .AddTransient<MainViewModel>()
                 .AddTransient<MovieListViewModel>()

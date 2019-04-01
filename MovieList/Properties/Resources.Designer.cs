@@ -70,7 +70,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Майбутні фільми/серіали.
+        ///   Looks up a localized string similar to Майбутній фільм/серіал.
         /// </summary>
         public static string ColorNotReleased {
             get {
@@ -79,7 +79,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не переглянуті фільми/серіали.
+        ///   Looks up a localized string similar to Не переглянутий фільм/серіал.
         /// </summary>
         public static string ColorNotWatched {
             get {
@@ -129,6 +129,15 @@ namespace MovieList.Properties {
         public static string ColorPickerStandardColors {
             get {
                 return ResourceManager.GetString("ColorPickerStandardColors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Кольори.
+        /// </summary>
+        public static string Colors {
+            get {
+                return ResourceManager.GetString("Colors", resourceCulture);
             }
         }
         

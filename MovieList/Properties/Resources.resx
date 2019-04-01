@@ -121,10 +121,10 @@
     <value>Скасувати</value>
   </data>
   <data name="ColorNotReleased" xml:space="preserve">
-    <value>Майбутні фільми/серіали</value>
+    <value>Майбутній фільм/серіал</value>
   </data>
   <data name="ColorNotWatched" xml:space="preserve">
-    <value>Не переглянуті фільми/серіали</value>
+    <value>Не переглянутий фільм/серіал</value>
   </data>
   <data name="ColorPickerAdvanced" xml:space="preserve">
     <value>Розширені</value>
@@ -140,6 +140,9 @@
   </data>
   <data name="ColorPickerStandardColors" xml:space="preserve">
     <value>Стандартні кольори</value>
+  </data>
+  <data name="Colors" xml:space="preserve">
+    <value>Кольори</value>
   </data>
   <data name="KindMovie" xml:space="preserve">
     <value>{0} фільм</value>
