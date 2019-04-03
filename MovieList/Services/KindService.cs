@@ -18,26 +18,26 @@ namespace MovieList.Services
             => this.context = context;
 
         public async Task<ObservableCollection<Kind>> LoadAllKindsAsync()
-            => new ObservableCollection<Kind>(await this.context.Kinds.ToListAsync());
+            => new ObservableCollection<Kind>(await this.context.Kinds.OrderBy(k => k.Name).ToListAsync());
 
         public async Task SaveKindsAsync(IEnumerable<Kind> kinds)
         {
-            var dbKinds = await this.context.Kinds.ToListAsync();
+            var dbKinds = await this.context.Kinds.AsNoTracking().ToListAsync();
 
             foreach (var kind in kinds)
             {
-                if (!await this.context.Kinds.ContainsAsync(kind))
+                if (await this.context.Kinds.ContainsAsync(kind))
                 {
-                    this.context.Kinds.Add(kind);
+                    this.context.Attach(kind).State = EntityState.Modified;
                 } else
                 {
-                    this.context.Entry(kind).State = EntityState.Modified;
+                    this.context.Kinds.Add(kind);
                 }
             }
 
             foreach (var kind in dbKinds.Except(kinds, IdEqualityComparer<Kind>.Instance))
             {
-                this.context.Entry(kind).State = EntityState.Deleted;
+                this.context.Attach(kind).State = EntityState.Deleted;
             }
 
             await this.context.SaveChangesAsync();

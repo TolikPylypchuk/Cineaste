@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 using MovieList.ViewModels;
 
@@ -9,14 +11,15 @@ namespace MovieList.Views
     public partial class SettingsControl : UserControl
     {
         public SettingsControl()
-        {
-            this.InitializeComponent();
-        }
+            => this.InitializeComponent();
 
         public SettingsViewModel ViewModel { get; set; }
 
         private void SettingsControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
             => Task.Factory.StartNew(this.ViewModel.LoadKindsAsync);
+
+        private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+            => CommandManager.InvalidateRequerySuggested();
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
             => e.CanExecute = this.ViewModel?.CanSaveChanges() ?? false;

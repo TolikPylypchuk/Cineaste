@@ -17,6 +17,7 @@
             <Setter Property="StandardButtonHeader" Value="{x:Static resx:Resources.ColorPickerStandard}" />
             <Setter Property="StandardColorsHeader" Value="{x:Static resx:Resources.ColorPickerStandardColors}" />
             <Setter Property="DisplayColorAndName" Value="False" />
+            <EventSetter Event="SelectedColorChanged" Handler="ColorPicker_SelectedColorChanged" />
         </Style>
 
         <conv:KindNameConverter x:Key="KindNameConverter" />
@@ -49,14 +50,14 @@
                 <StackPanel>
                     <StackPanel Margin="0,0,0,5">
                         <TextBlock Text="{x:Static resx:Resources.ColorNotWatched}" TextAlignment="Left"
-                       HorizontalAlignment="Stretch" />
+                                   HorizontalAlignment="Stretch" />
 
                         <tk:ColorPicker SelectedColor="{Binding Path=NotWatchedColor}" HorizontalAlignment="Stretch" />
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,5">
                         <TextBlock Text="{x:Static resx:Resources.ColorNotReleased}" TextAlignment="Left"
-                       HorizontalAlignment="Stretch" />
+                                   HorizontalAlignment="Stretch" />
 
                         <tk:ColorPicker SelectedColor="{Binding Path=NotReleasedColor}" HorizontalAlignment="Stretch" />
                     </StackPanel>
@@ -67,15 +68,17 @@
                                 <DataTemplate>
                                     <StackPanel>
                                         <StackPanel Margin="0,0,0,5">
-                                            <TextBlock Text="{Binding Path=Name, Converter={StaticResource KindNameConverter}, ConverterParameter={x:Static resx:Resources.KindMovie}}"
-                                               TextAlignment="Left" HorizontalAlignment="Stretch" />
+                                            <TextBlock Text="{Binding Path=Name, Converter={StaticResource KindNameConverter},
+                                                                      ConverterParameter={x:Static resx:Resources.KindMovie}}"
+                                                       TextAlignment="Left" HorizontalAlignment="Stretch" />
 
                                             <tk:ColorPicker SelectedColor="{Binding Path=ColorForMovie}" HorizontalAlignment="Stretch" />
                                         </StackPanel>
 
                                         <StackPanel Margin="0,0,0,5">
-                                            <TextBlock Text="{Binding Path=Name, Converter={StaticResource KindNameConverter}, ConverterParameter={x:Static resx:Resources.KindSeries}}"
-                                               TextAlignment="Left" HorizontalAlignment="Stretch" />
+                                            <TextBlock Text="{Binding Path=Name, Converter={StaticResource KindNameConverter},
+                                                                      ConverterParameter={x:Static resx:Resources.KindSeries}}"
+                                                       TextAlignment="Left" HorizontalAlignment="Stretch" />
 
                                             <tk:ColorPicker SelectedColor="{Binding Path=ColorForSeries}" HorizontalAlignment="Stretch" />
                                         </StackPanel>
