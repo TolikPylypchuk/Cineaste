@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
@@ -18,7 +16,7 @@ namespace MovieList.ViewModels
         private Color notWatchedColor;
         private Color notReleasedColor;
         private ObservableCollection<Kind> kinds = new ObservableCollection<Kind>();
-        private List<string> originalColors = new List<string>();
+        private bool kindsChanged;
 
         private readonly App app;
         private readonly IWritableOptions<Configuration> config;
@@ -61,22 +59,28 @@ namespace MovieList.ViewModels
             }
         }
 
+        public bool KindsChanged
+        {
+            get => this.kindsChanged;
+            set
+            {
+                this.kindsChanged = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public async void LoadKindsAsync()
         {
-            using var scope = app.ServiceProvider.CreateScope();
+            using var scope = this.app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IKindService>();
 
             this.Kinds = await service.LoadAllKindsAsync();
-            this.InitOriginalColors();
         }
 
         public bool CanSaveChanges()
             => this.NotWatchedColor != this.config.Value.NotWatchedColor ||
                 this.NotReleasedColor != this.config.Value.NotReleasedColor ||
-                !this.Kinds
-                    .Select(k => k.ColorForMovie)
-                    .Concat(this.Kinds.Select(k => k.ColorForSeries))
-                    .SequenceEqual(this.originalColors);
+                this.KindsChanged;
 
         public async Task SaveChangesAsync()
         {
@@ -93,11 +97,11 @@ namespace MovieList.ViewModels
                 this.config.Value.NotReleasedColor = this.NotReleasedColor;
             }
 
-            using var scope = app.ServiceProvider.CreateScope();
+            using var scope = this.app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IKindService>();
 
             await service.SaveKindsAsync(kinds);
-            this.InitOriginalColors();
+            this.KindsChanged = false;
         }
 
         public async Task CancelChangesAsync()
@@ -105,16 +109,11 @@ namespace MovieList.ViewModels
             this.NotWatchedColor = this.config.Value.NotWatchedColor;
             this.NotReleasedColor = this.config.Value.NotReleasedColor;
 
-            using var scope = app.ServiceProvider.CreateScope();
+            using var scope = this.app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IKindService>();
 
             this.Kinds = await service.LoadAllKindsAsync();
+            this.KindsChanged = false;
         }
-
-        private void InitOriginalColors()
-            => this.originalColors = this.Kinds
-                .Select(k => k.ColorForMovie)
-                .Concat(this.Kinds.Select(k => k.ColorForSeries))
-                .ToList();
     }
 }

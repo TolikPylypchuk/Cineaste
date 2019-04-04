@@ -19,7 +19,13 @@ namespace MovieList.Views
             => Task.Factory.StartNew(this.ViewModel.LoadKindsAsync);
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
-            => CommandManager.InvalidateRequerySuggested();
+        {
+            if (e.OldValue != null)
+            {
+                this.ViewModel.KindsChanged = true;
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
             => e.CanExecute = this.ViewModel?.CanSaveChanges() ?? false;

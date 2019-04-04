@@ -72,7 +72,8 @@
                                                                       ConverterParameter={x:Static resx:Resources.KindMovie}}"
                                                        TextAlignment="Left" HorizontalAlignment="Stretch" />
 
-                                            <tk:ColorPicker SelectedColor="{Binding Path=ColorForMovie}" HorizontalAlignment="Stretch" />
+                                            <tk:ColorPicker SelectedColor="{Binding Path=ColorForMovie}" Tag="{Binding}"
+                                                            HorizontalAlignment="Stretch" />
                                         </StackPanel>
 
                                         <StackPanel Margin="0,0,0,5">
@@ -80,7 +81,8 @@
                                                                       ConverterParameter={x:Static resx:Resources.KindSeries}}"
                                                        TextAlignment="Left" HorizontalAlignment="Stretch" />
 
-                                            <tk:ColorPicker SelectedColor="{Binding Path=ColorForSeries}" HorizontalAlignment="Stretch" />
+                                            <tk:ColorPicker SelectedColor="{Binding Path=ColorForSeries}" Tag="{Binding}"
+                                                            HorizontalAlignment="Stretch" />
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
