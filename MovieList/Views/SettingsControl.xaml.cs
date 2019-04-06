@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
+using MovieList.Data.Models;
 using MovieList.ViewModels;
 
 namespace MovieList.Views
@@ -22,6 +23,35 @@ namespace MovieList.Views
         {
             if (e.OldValue != null)
             {
+                this.ViewModel.KindsChanged = true;
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            this.ViewModel.KindsChanged = true;
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void AddKind_Click(object sender, RoutedEventArgs e)
+        {
+            this.ViewModel.Kinds.Add(new Kind
+            {
+                Name = Properties.Resources.NewKind,
+                ColorForMovie = "Black",
+                ColorForSeries = "Black"
+            });
+
+            this.ViewModel.KindsChanged = true;
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void RemoveKind_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is Kind kind)
+            {
+                this.ViewModel.Kinds.Remove(kind);
                 this.ViewModel.KindsChanged = true;
                 CommandManager.InvalidateRequerySuggested();
             }

@@ -117,14 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Add" xml:space="preserve">
+    <value>Додати</value>
+  </data>
+  <data name="AddIcon" xml:space="preserve">
+    <value>+</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Скасувати</value>
-  </data>
-  <data name="ColorNotReleased" xml:space="preserve">
-    <value>Майбутній фільм/серіал</value>
-  </data>
-  <data name="ColorNotWatched" xml:space="preserve">
-    <value>Не переглянутий фільм/серіал</value>
   </data>
   <data name="ColorPickerAdvanced" xml:space="preserve">
     <value>Розширені</value>
@@ -141,14 +141,8 @@
   <data name="ColorPickerStandardColors" xml:space="preserve">
     <value>Стандартні кольори</value>
   </data>
-  <data name="Colors" xml:space="preserve">
-    <value>Кольори</value>
-  </data>
-  <data name="KindMovie" xml:space="preserve">
-    <value>{0} фільм</value>
-  </data>
-  <data name="KindSeries" xml:space="preserve">
-    <value>{0} серіал</value>
+  <data name="Kinds" xml:space="preserve">
+    <value>Види фільмів та серіалів</value>
   </data>
   <data name="ListItemNumber" xml:space="preserve">
     <value>№</value>
@@ -162,8 +156,29 @@
   <data name="ListItemYear" xml:space="preserve">
     <value>Рік</value>
   </data>
+  <data name="Movie" xml:space="preserve">
+    <value>Фільм</value>
+  </data>
+  <data name="NewKind" xml:space="preserve">
+    <value>Новий вид</value>
+  </data>
+  <data name="NotReleased" xml:space="preserve">
+    <value>Майбутній</value>
+  </data>
+  <data name="NotWatched" xml:space="preserve">
+    <value>Не переглянутий</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="RemoveIcon" xml:space="preserve">
+    <value>×</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Зберегти</value>
+  </data>
+  <data name="Series" xml:space="preserve">
+    <value>Серіал</value>
   </data>
   <data name="SettingsTitle" xml:space="preserve">
     <value>Налаштування</value>

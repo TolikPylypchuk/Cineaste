@@ -61,29 +61,29 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Додати.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to +.
+        /// </summary>
+        public static string AddIcon {
+            get {
+                return ResourceManager.GetString("AddIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Скасувати.
         /// </summary>
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Майбутній фільм/серіал.
-        /// </summary>
-        public static string ColorNotReleased {
-            get {
-                return ResourceManager.GetString("ColorNotReleased", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Не переглянутий фільм/серіал.
-        /// </summary>
-        public static string ColorNotWatched {
-            get {
-                return ResourceManager.GetString("ColorNotWatched", resourceCulture);
             }
         }
         
@@ -133,29 +133,11 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Кольори.
+        ///   Looks up a localized string similar to Види фільмів та серіалів.
         /// </summary>
-        public static string Colors {
+        public static string Kinds {
             get {
-                return ResourceManager.GetString("Colors", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} фільм.
-        /// </summary>
-        public static string KindMovie {
-            get {
-                return ResourceManager.GetString("KindMovie", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} серіал.
-        /// </summary>
-        public static string KindSeries {
-            get {
-                return ResourceManager.GetString("KindSeries", resourceCulture);
+                return ResourceManager.GetString("Kinds", resourceCulture);
             }
         }
         
@@ -196,11 +178,74 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Фільм.
+        /// </summary>
+        public static string Movie {
+            get {
+                return ResourceManager.GetString("Movie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Новий вид.
+        /// </summary>
+        public static string NewKind {
+            get {
+                return ResourceManager.GetString("NewKind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Майбутній.
+        /// </summary>
+        public static string NotReleased {
+            get {
+                return ResourceManager.GetString("NotReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не переглянутий.
+        /// </summary>
+        public static string NotWatched {
+            get {
+                return ResourceManager.GetString("NotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Видалити.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ×.
+        /// </summary>
+        public static string RemoveIcon {
+            get {
+                return ResourceManager.GetString("RemoveIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Зберегти.
         /// </summary>
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Серіал.
+        /// </summary>
+        public static string Series {
+            get {
+                return ResourceManager.GetString("Series", resourceCulture);
             }
         }
         
