@@ -29,5 +29,8 @@ namespace MovieList.Data.Models
 
         [ForeignKey(nameof(SeasonId))]
         public virtual Season Season { get; set; }
+
+        public override string ToString()
+            => $"Period: {this.Id}";
     }
 }

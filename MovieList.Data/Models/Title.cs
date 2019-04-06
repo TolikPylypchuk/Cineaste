@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -38,5 +38,8 @@ namespace MovieList.Data.Models
 
         [ForeignKey(nameof(SpecialEpisodeId))]
         public virtual SpecialEpisode? SpecialEpisode { get; set; }
+
+        public override string ToString()
+            => $"Title: {this.Id}";
     }
 }

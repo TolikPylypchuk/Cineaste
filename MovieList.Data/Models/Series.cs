@@ -64,5 +64,8 @@ namespace MovieList.Data.Models
                 .ThenByDescending(period => period.EndMonth)
                 .First()
                 .EndYear;
+
+        public override string ToString()
+            => $"Series: {this.Id}";
     }
 }

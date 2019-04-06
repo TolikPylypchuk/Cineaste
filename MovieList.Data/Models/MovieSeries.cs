@@ -39,5 +39,8 @@ namespace MovieList.Data.Models
         [NotMapped]
         public MovieSeries RootSeries
             => this.ParentSeries == null ? this : this.ParentSeries.RootSeries;
+
+        public override string ToString()
+            => $"Movie Series: {this.Id}";
     }
 }

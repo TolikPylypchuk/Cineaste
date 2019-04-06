@@ -52,5 +52,8 @@ namespace MovieList.Data.Models
                 .Where(title => title.IsOriginal)
                 .OrderByDescending(title => title.Priority)
                 .First();
+
+        public override string ToString()
+            => $"Special Episode: {this.Id}";
     }
 }

@@ -20,5 +20,8 @@ namespace MovieList.Data.Models
         public virtual IList<Movie> Movies { get; set; } = new List<Movie>();
 
         public virtual IList<Series> Series { get; set; } = new List<Series>();
+
+        public override string ToString()
+            => $"Kind: {this.Id}";
     }
 }

@@ -21,5 +21,8 @@ namespace MovieList.Data.Models
 
         [ForeignKey(nameof(MovieSeriesId))]
         public virtual MovieSeries MovieSeries { get; set; }
+
+        public override string ToString()
+            => $"Movie Series Entry: {this.Id}";
     }
 }

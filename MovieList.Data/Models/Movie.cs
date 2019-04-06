@@ -47,5 +47,8 @@ namespace MovieList.Data.Models
                 .Where(title => title.IsOriginal)
                 .OrderByDescending(title => title.Priority)
                 .First();
+
+        public override string ToString()
+            => $"Movie: {this.Id}";
     }
 }
