@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 using MovieList.Data;
 using MovieList.Data.Models;
+using MovieList.ViewModels;
 
 namespace MovieList.Services
 {
@@ -17,14 +19,24 @@ namespace MovieList.Services
         public KindService(MovieContext context)
             => this.context = context;
 
-        public async Task<ObservableCollection<Kind>> LoadAllKindsAsync()
-            => new ObservableCollection<Kind>(await this.context.Kinds.OrderBy(k => k.Name).ToListAsync());
+        public async Task<ObservableCollection<KindViewModel>> LoadAllKindsAsync()
+            => new ObservableCollection<KindViewModel>(
+                await this.context.Kinds
+                    .OrderBy(k => k.Name)
+                    .Select(k => new KindViewModel(k))
+                    .ToListAsync());
 
-        public async Task SaveKindsAsync(IEnumerable<Kind> kinds)
+        public async Task SaveKindsAsync(IEnumerable<KindViewModel> kinds)
         {
-            var dbKinds = await this.context.Kinds.AsNoTracking().ToListAsync();
+            if (kinds.Any(k => k.HasErrors))
+            {
+                throw new ArgumentException("Cannot save invalid kinds.", nameof(kinds));
+            }
 
-            foreach (var kind in kinds)
+            var dbKinds = await this.context.Kinds.AsNoTracking().ToListAsync();
+            var kindsToSave = kinds.Select(k => k.Kind).ToList();
+
+            foreach (var kind in kindsToSave)
             {
                 if (await this.context.Kinds.ContainsAsync(kind))
                 {
@@ -35,7 +47,7 @@ namespace MovieList.Services
                 }
             }
 
-            foreach (var kind in dbKinds.Except(kinds, IdEqualityComparer<Kind>.Instance))
+            foreach (var kind in dbKinds.Except(kindsToSave, IdEqualityComparer<Kind>.Instance))
             {
                 this.context.Attach(kind).State = EntityState.Deleted;
             }

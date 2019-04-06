@@ -36,12 +36,12 @@ namespace MovieList.Views
 
         private void AddKind_Click(object sender, RoutedEventArgs e)
         {
-            this.ViewModel.Kinds.Add(new Kind
+            this.ViewModel.Kinds.Add(new KindViewModel(new Kind
             {
                 Name = Properties.Resources.NewKind,
                 ColorForMovie = "Black",
                 ColorForSeries = "Black"
-            });
+            }));
 
             this.ViewModel.KindsChanged = true;
             CommandManager.InvalidateRequerySuggested();
@@ -49,7 +49,7 @@ namespace MovieList.Views
 
         private void RemoveKind_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is Kind kind)
+            if (sender is Button button && button.Tag is KindViewModel kind)
             {
                 this.ViewModel.Kinds.Remove(kind);
                 this.ViewModel.KindsChanged = true;
@@ -67,7 +67,7 @@ namespace MovieList.Views
         }
 
         private void Cancel_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-            => e.CanExecute = this.ViewModel?.CanSaveChanges() ?? false;
+            => e.CanExecute = this.ViewModel?.CanCancelChanges() ?? false;
 
         private async void Cancel_Executed(object sender, ExecutedRoutedEventArgs e)
         {

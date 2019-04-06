@@ -1,11 +1,11 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using MovieList.Config;
-using MovieList.Data.Models;
 using MovieList.Options;
 using MovieList.Services;
 
@@ -15,7 +15,7 @@ namespace MovieList.ViewModels
     {
         private Color notWatchedColor;
         private Color notReleasedColor;
-        private ObservableCollection<Kind> kinds = new ObservableCollection<Kind>();
+        private ObservableCollection<KindViewModel> kinds = new ObservableCollection<KindViewModel>();
         private bool kindsChanged;
 
         private readonly App app;
@@ -49,7 +49,7 @@ namespace MovieList.ViewModels
             }
         }
 
-        public ObservableCollection<Kind> Kinds
+        public ObservableCollection<KindViewModel> Kinds
         {
             get => this.kinds;
             set
@@ -78,9 +78,10 @@ namespace MovieList.ViewModels
         }
 
         public bool CanSaveChanges()
-            => this.NotWatchedColor != this.config.Value.NotWatchedColor ||
-                this.NotReleasedColor != this.config.Value.NotReleasedColor ||
-                this.KindsChanged;
+            => this.AreChangesPresent() && this.Kinds.All(k => !k.HasErrors);
+
+        public bool CanCancelChanges()
+            => this.AreChangesPresent();
 
         public async Task SaveChangesAsync()
         {
@@ -115,5 +116,10 @@ namespace MovieList.ViewModels
             this.Kinds = await service.LoadAllKindsAsync();
             this.KindsChanged = false;
         }
+
+        private bool AreChangesPresent()
+            => this.NotWatchedColor != this.config.Value.NotWatchedColor ||
+                this.NotReleasedColor != this.config.Value.NotReleasedColor ||
+                this.KindsChanged;
     }
 }

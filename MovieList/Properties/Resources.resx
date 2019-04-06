@@ -159,6 +159,9 @@
   <data name="Movie" xml:space="preserve">
     <value>Фільм</value>
   </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>Назва не може бути порожньою</value>
+  </data>
   <data name="NewKind" xml:space="preserve">
     <value>Новий вид</value>
   </data>
