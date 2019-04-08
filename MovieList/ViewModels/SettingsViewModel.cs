@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MovieList.Config;
 using MovieList.Options;
 using MovieList.Services;
+using MovieList.Validation;
 
 namespace MovieList.ViewModels
 {
@@ -18,6 +19,9 @@ namespace MovieList.ViewModels
         private ObservableCollection<KindViewModel> kinds = new ObservableCollection<KindViewModel>();
         private bool kindsChanged;
 
+        private string defaultSeasonTitle;
+        private string defaultSeasonOriginalTitle;
+
         private readonly App app;
         private readonly IWritableOptions<Configuration> config;
 
@@ -27,6 +31,8 @@ namespace MovieList.ViewModels
             this.config = config;
             this.notWatchedColor = config.Value.NotWatchedColor;
             this.notReleasedColor = config.Value.NotReleasedColor;
+            this.defaultSeasonTitle = config.Value.DefaultSeasonTitle;
+            this.defaultSeasonOriginalTitle = config.Value.DefaultSeasonOriginalTitle;
         }
 
         public Color NotWatchedColor
@@ -69,6 +75,30 @@ namespace MovieList.ViewModels
             }
         }
 
+        [DefaultSeasonTitle]
+        public string DefaultSeasonTitle
+        {
+            get => this.defaultSeasonTitle;
+            set
+            {
+                this.defaultSeasonTitle = value;
+                this.Validate();
+                this.OnPropertyChanged();
+            }
+        }
+
+        [DefaultSeasonTitle]
+        public string DefaultSeasonOriginalTitle
+        {
+            get => this.defaultSeasonOriginalTitle;
+            set
+            {
+                this.defaultSeasonOriginalTitle = value;
+                this.Validate();
+                this.OnPropertyChanged();
+            }
+        }
+
         public async void LoadKindsAsync()
         {
             using var scope = this.app.ServiceProvider.CreateScope();
@@ -78,24 +108,17 @@ namespace MovieList.ViewModels
         }
 
         public bool CanSaveChanges()
-            => this.AreChangesPresent() && this.Kinds.All(k => !k.HasErrors);
+            => this.AreChangesPresent() && !this.HasErrors && this.Kinds.All(k => !k.HasErrors);
 
         public bool CanCancelChanges()
             => this.AreChangesPresent();
 
         public async Task SaveChangesAsync()
         {
-            if (this.NotWatchedColor != this.config.Value.NotWatchedColor ||
-                this.NotReleasedColor != this.config.Value.NotReleasedColor)
+            if (this.IsConfigChanged())
             {
-                this.config.Update(config =>
-                {
-                    config.NotWatchedColor = this.NotWatchedColor;
-                    config.NotReleasedColor = this.NotReleasedColor;
-                });
-
-                this.config.Value.NotWatchedColor = this.NotWatchedColor;
-                this.config.Value.NotReleasedColor = this.NotReleasedColor;
+                this.config.Update(this.CopyConfig);
+                this.CopyConfig(this.config.Value);
             }
 
             using var scope = this.app.ServiceProvider.CreateScope();
@@ -110,6 +133,9 @@ namespace MovieList.ViewModels
             this.NotWatchedColor = this.config.Value.NotWatchedColor;
             this.NotReleasedColor = this.config.Value.NotReleasedColor;
 
+            this.DefaultSeasonTitle = this.config.Value.DefaultSeasonTitle;
+            this.DefaultSeasonOriginalTitle = this.config.Value.DefaultSeasonOriginalTitle;
+
             using var scope = this.app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IKindService>();
 
@@ -117,9 +143,21 @@ namespace MovieList.ViewModels
             this.KindsChanged = false;
         }
 
-        private bool AreChangesPresent()
+        private void CopyConfig(Configuration config)
+        {
+            config.NotWatchedColor = this.NotWatchedColor;
+            config.NotReleasedColor = this.NotReleasedColor;
+            config.DefaultSeasonTitle = this.DefaultSeasonTitle;
+            config.DefaultSeasonOriginalTitle = this.DefaultSeasonOriginalTitle;
+        }
+
+        private bool IsConfigChanged()
             => this.NotWatchedColor != this.config.Value.NotWatchedColor ||
                 this.NotReleasedColor != this.config.Value.NotReleasedColor ||
-                this.KindsChanged;
+                this.DefaultSeasonTitle != this.config.Value.DefaultSeasonTitle ||
+                this.DefaultSeasonOriginalTitle != this.config.Value.DefaultSeasonOriginalTitle;
+
+        private bool AreChangesPresent()
+            =>  this.IsConfigChanged() || this.KindsChanged;
     }
 }

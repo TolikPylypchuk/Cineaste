@@ -18,6 +18,12 @@
             <Setter Property="DisplayColorAndName" Value="False" />
             <EventSetter Event="SelectedColorChanged" Handler="ColorPicker_SelectedColorChanged" />
         </Style>
+
+        <Style TargetType="{x:Type Expander}">
+            <Setter Property="IsExpanded" Value="False" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+            <Setter Property="Padding" Value="0,0,0,5" />
+        </Style>
     </UserControl.Resources>
 
     <UserControl.CommandBindings>
@@ -43,7 +49,7 @@
         </StackPanel>
 
         <StackPanel Margin="10">
-            <Expander Header="{x:Static resx:Resources.Kinds}" IsExpanded="False">
+            <Expander Header="{x:Static resx:Resources.Kinds}" Margin="0">
                 <StackPanel>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -120,6 +126,26 @@
                     <Button Width="50" Margin="0,5,0,0" Padding="0" Content="{x:Static resx:Resources.AddIcon}"
                             Click="AddKind_Click" VerticalContentAlignment="Center" FontSize="20"
                             ToolTip="{x:Static resx:Resources.Add}" />
+                </StackPanel>
+            </Expander>
+
+            <Expander Header="{x:Static resx:Resources.OtherSettings}" Margin="0,5,0,0">
+                <StackPanel>
+                    <StackPanel Margin="0,0,2,5" Grid.Column="0">
+                        <TextBlock Text="{x:Static resx:Resources.DefaultSeasonTitle}" TextAlignment="Left"
+                                   HorizontalAlignment="Stretch" />
+
+                        <TextBox Text="{Binding Path=DefaultSeasonTitle, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                                 HorizontalAlignment="Stretch" TextChanged="TextBox_TextChanged" />
+                    </StackPanel>
+                    
+                    <StackPanel Margin="0,0,2,5" Grid.Column="0">
+                        <TextBlock Text="{x:Static resx:Resources.DefaultSeasonOriginalTitle}" TextAlignment="Left"
+                                   HorizontalAlignment="Stretch" />
+
+                        <TextBox Text="{Binding Path=DefaultSeasonOriginalTitle, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                                 HorizontalAlignment="Stretch" TextChanged="TextBox_TextChanged" />
+                    </StackPanel>
                 </StackPanel>
             </Expander>
         </StackPanel>

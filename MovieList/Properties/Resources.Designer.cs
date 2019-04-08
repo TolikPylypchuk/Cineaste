@@ -133,6 +133,42 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #.
+        /// </summary>
+        public static string DefaultSeasonNumberPlaceholder {
+            get {
+                return ResourceManager.GetString("DefaultSeasonNumberPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Стандартна оригінальна назва сезону.
+        /// </summary>
+        public static string DefaultSeasonOriginalTitle {
+            get {
+                return ResourceManager.GetString("DefaultSeasonOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Стандартна назва сезону.
+        /// </summary>
+        public static string DefaultSeasonTitle {
+            get {
+                return ResourceManager.GetString("DefaultSeasonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Стандартна назва сезону має містити знак #.
+        /// </summary>
+        public static string DefaultSeasonTitleInvalid {
+            get {
+                return ResourceManager.GetString("DefaultSeasonTitleInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Види фільмів та серіалів.
         /// </summary>
         public static string Kinds {
@@ -219,6 +255,15 @@ namespace MovieList.Properties {
         public static string NotWatched {
             get {
                 return ResourceManager.GetString("NotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Інші налаштування.
+        /// </summary>
+        public static string OtherSettings {
+            get {
+                return ResourceManager.GetString("OtherSettings", resourceCulture);
             }
         }
         

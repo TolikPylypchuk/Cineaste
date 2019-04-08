@@ -141,6 +141,18 @@
   <data name="ColorPickerStandardColors" xml:space="preserve">
     <value>Стандартні кольори</value>
   </data>
+  <data name="DefaultSeasonNumberPlaceholder" xml:space="preserve">
+    <value>#</value>
+  </data>
+  <data name="DefaultSeasonOriginalTitle" xml:space="preserve">
+    <value>Стандартна оригінальна назва сезону</value>
+  </data>
+  <data name="DefaultSeasonTitle" xml:space="preserve">
+    <value>Стандартна назва сезону</value>
+  </data>
+  <data name="DefaultSeasonTitleInvalid" xml:space="preserve">
+    <value>Стандартна назва сезону має містити знак #</value>
+  </data>
   <data name="Kinds" xml:space="preserve">
     <value>Види фільмів та серіалів</value>
   </data>
@@ -170,6 +182,9 @@
   </data>
   <data name="NotWatched" xml:space="preserve">
     <value>Не переглянутий</value>
+  </data>
+  <data name="OtherSettings" xml:space="preserve">
+    <value>Інші налаштування</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Видалити</value>

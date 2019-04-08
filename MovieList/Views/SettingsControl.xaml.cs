@@ -21,7 +21,7 @@ namespace MovieList.Views
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
-            if (e.OldValue != null)
+            if (this.IsLoaded)
             {
                 this.ViewModel.KindsChanged = true;
                 CommandManager.InvalidateRequerySuggested();
@@ -30,8 +30,11 @@ namespace MovieList.Views
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            this.ViewModel.KindsChanged = true;
-            CommandManager.InvalidateRequerySuggested();
+            if (this.IsLoaded)
+            {
+                this.ViewModel.KindsChanged = true;
+                CommandManager.InvalidateRequerySuggested();
+            }
         }
 
         private void AddKind_Click(object sender, RoutedEventArgs e)
