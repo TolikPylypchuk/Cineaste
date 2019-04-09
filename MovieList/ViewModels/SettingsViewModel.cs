@@ -184,7 +184,7 @@ namespace MovieList.ViewModels
         }
 
         public void ViewLog()
-            => Process.Start("explorer.exe", $"/select, {this.loggingConfig.File.Path}");
+            => Process.Start("notepad.exe", this.loggingConfig.File.Path);
 
         private void CopyConfig(Configuration config)
         {
