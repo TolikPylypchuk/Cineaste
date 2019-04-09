@@ -1,9 +1,11 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 using MovieList.Config;
 using MovieList.Options;
@@ -24,11 +26,14 @@ namespace MovieList.ViewModels
 
         private readonly App app;
         private readonly IWritableOptions<Configuration> config;
+        private readonly LoggingConfig loggingConfig;
 
-        public SettingsViewModel(App app, IWritableOptions<Configuration> config)
+        public SettingsViewModel(App app, IWritableOptions<Configuration> config, IOptions<LoggingConfig> loggingConfig)
         {
             this.app = app;
             this.config = config;
+            this.loggingConfig = loggingConfig.Value;
+
             this.notWatchedColor = config.Value.NotWatchedColor;
             this.notReleasedColor = config.Value.NotReleasedColor;
             this.defaultSeasonTitle = config.Value.DefaultSeasonTitle;
@@ -143,6 +148,9 @@ namespace MovieList.ViewModels
             this.KindsChanged = false;
         }
 
+        public void ViewLog()
+            => Process.Start("explorer.exe", $"/select, {this.loggingConfig.File.Path}");
+        
         private void CopyConfig(Configuration config)
         {
             config.NotWatchedColor = this.NotWatchedColor;

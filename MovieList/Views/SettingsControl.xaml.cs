@@ -60,6 +60,9 @@ namespace MovieList.Views
             }
         }
 
+        private void ViewLog_Click(object sender, RoutedEventArgs e)
+            => this.ViewModel.ViewLog();
+
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
             => e.CanExecute = this.ViewModel?.CanSaveChanges() ?? false;
 

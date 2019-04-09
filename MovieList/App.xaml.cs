@@ -31,6 +31,8 @@ namespace MovieList
             this.ConfigureServices(services);
             this.ServiceProvider = services.BuildServiceProvider();
 
+            AppDomain.CurrentDomain.UnhandledException += this.CatchException;
+
             this.MainWindow = this.ServiceProvider.GetRequiredService<MainWindow>();
             this.MainWindow.Show();
         }
@@ -63,5 +65,13 @@ namespace MovieList
 
                 .AddSingleton<MainWindow>()
                 .AddSingleton(_ => this);
+
+        private void CatchException(object sender, UnhandledExceptionEventArgs e)
+        {
+            using var loggerFactory = this.ServiceProvider.GetService<ILoggerFactory>();
+            var log = loggerFactory.CreateLogger("MovieList");
+
+            log.LogError(e.ExceptionObject.ToString());
+        }
     }
 }
