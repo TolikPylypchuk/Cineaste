@@ -144,6 +144,9 @@
   <data name="ColorPickerStandardColors" xml:space="preserve">
     <value>Стандартні кольори</value>
   </data>
+  <data name="DatabasePath" xml:space="preserve">
+    <value>Шлях до бази даних</value>
+  </data>
   <data name="DefaultSeasonNumberPlaceholder" xml:space="preserve">
     <value>#</value>
   </data>
@@ -155,6 +158,12 @@
   </data>
   <data name="DefaultSeasonTitleInvalid" xml:space="preserve">
     <value>Стандартна назва сезону має містити знак #</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Помилка</value>
+  </data>
+  <data name="InvalidPath" xml:space="preserve">
+    <value>Шлях не є назвою файлу</value>
   </data>
   <data name="Kinds" xml:space="preserve">
     <value>Види фільмів та серіалів</value>
@@ -197,6 +206,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Зберегти</value>
+  </data>
+  <data name="SavingSettingsFailed" xml:space="preserve">
+    <value>Не вдалося зберегти налаштування.</value>
   </data>
   <data name="Series" xml:space="preserve">
     <value>Серіал</value>

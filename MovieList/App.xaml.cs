@@ -54,6 +54,7 @@ namespace MovieList
 
                 .AddScoped<IMovieListService, MovieListService>()
                 .AddScoped<IKindService, KindService>()
+                .AddTransient<IFileService, FileService>()
 
                 .AddTransient<MainViewModel>()
                 .AddTransient<MovieListViewModel>()
@@ -69,7 +70,7 @@ namespace MovieList
         private void CatchException(object sender, UnhandledExceptionEventArgs e)
         {
             using var loggerFactory = this.ServiceProvider.GetService<ILoggerFactory>();
-            var log = loggerFactory.CreateLogger("MovieList");
+            var log = loggerFactory.CreateLogger(nameof(MovieList));
 
             log.LogError(e.ExceptionObject.ToString());
         }

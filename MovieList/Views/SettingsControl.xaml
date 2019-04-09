@@ -151,7 +151,13 @@
 
             <Expander Header="{x:Static resx:Resources.AdvancedSettings}">
                 <StackPanel>
-                    <Button Padding="5,2" Content="{x:Static resx:Resources.ViewLog}" Click="ViewLog_Click" />
+                    <StackPanel>
+                        <TextBlock Text="{x:Static resx:Resources.DatabasePath}" HorizontalAlignment="Stretch" TextAlignment="Left" />
+                        <TextBox Text="{Binding Path=DatabasePath, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                                 HorizontalAlignment="Stretch" TextChanged="TextBox_TextChanged" />
+                    </StackPanel>
+                    
+                    <Button Margin="0,5,0,0" Padding="5,2" Content="{x:Static resx:Resources.ViewLog}" Click="ViewLog_Click" />
                 </StackPanel>
             </Expander>
         </StackPanel>

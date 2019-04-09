@@ -1,10 +1,13 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using MovieList.Config;
@@ -24,6 +27,8 @@ namespace MovieList.ViewModels
         private string defaultSeasonTitle;
         private string defaultSeasonOriginalTitle;
 
+        private string databasePath;
+
         private readonly App app;
         private readonly IWritableOptions<Configuration> config;
         private readonly LoggingConfig loggingConfig;
@@ -38,6 +43,7 @@ namespace MovieList.ViewModels
             this.notReleasedColor = config.Value.NotReleasedColor;
             this.defaultSeasonTitle = config.Value.DefaultSeasonTitle;
             this.defaultSeasonOriginalTitle = config.Value.DefaultSeasonOriginalTitle;
+            this.databasePath = config.Value.DatabasePath;
         }
 
         public Color NotWatchedColor
@@ -104,6 +110,18 @@ namespace MovieList.ViewModels
             }
         }
 
+        [File]
+        public string DatabasePath
+        {
+            get => this.databasePath;
+            set
+            {
+                this.databasePath = value;
+                this.Validate();
+                this.OnPropertyChanged();
+            }
+        }
+
         public async void LoadKindsAsync()
         {
             using var scope = this.app.ServiceProvider.CreateScope();
@@ -118,19 +136,36 @@ namespace MovieList.ViewModels
         public bool CanCancelChanges()
             => this.AreChangesPresent();
 
-        public async Task SaveChangesAsync()
+        public async Task<bool> SaveChangesAsync()
         {
+            if (this.KindsChanged)
+            {
+                using var scope = this.app.ServiceProvider.CreateScope();
+                var service = scope.ServiceProvider.GetRequiredService<IKindService>();
+
+                await service.SaveKindsAsync(kinds);
+                this.KindsChanged = false;
+            }
+
             if (this.IsConfigChanged())
             {
                 this.config.Update(this.CopyConfig);
                 this.CopyConfig(this.config.Value);
             }
 
-            using var scope = this.app.ServiceProvider.CreateScope();
-            var service = scope.ServiceProvider.GetRequiredService<IKindService>();
+            var fileService = this.app.ServiceProvider.GetRequiredService<IFileService>();
 
-            await service.SaveKindsAsync(kinds);
-            this.KindsChanged = false;
+            bool success = await fileService.TryMoveFileAsync(this.config.Value.DatabasePath, this.DatabasePath);
+
+            if (!success)
+            {
+                return false;
+            }
+
+            this.config.Update(config => config.DatabasePath = this.DatabasePath);
+            this.config.Value.DatabasePath = this.DatabasePath;
+
+            return true;
         }
 
         public async Task CancelChangesAsync()
@@ -150,7 +185,7 @@ namespace MovieList.ViewModels
 
         public void ViewLog()
             => Process.Start("explorer.exe", $"/select, {this.loggingConfig.File.Path}");
-        
+
         private void CopyConfig(Configuration config)
         {
             config.NotWatchedColor = this.NotWatchedColor;
@@ -163,7 +198,8 @@ namespace MovieList.ViewModels
             => this.NotWatchedColor != this.config.Value.NotWatchedColor ||
                 this.NotReleasedColor != this.config.Value.NotReleasedColor ||
                 this.DefaultSeasonTitle != this.config.Value.DefaultSeasonTitle ||
-                this.DefaultSeasonOriginalTitle != this.config.Value.DefaultSeasonOriginalTitle;
+                this.DefaultSeasonOriginalTitle != this.config.Value.DefaultSeasonOriginalTitle ||
+                this.DatabasePath != this.config.Value.DatabasePath;
 
         private bool AreChangesPresent()
             =>  this.IsConfigChanged() || this.KindsChanged;

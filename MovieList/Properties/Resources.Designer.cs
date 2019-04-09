@@ -142,6 +142,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Шлях до бази даних.
+        /// </summary>
+        public static string DatabasePath {
+            get {
+                return ResourceManager.GetString("DatabasePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #.
         /// </summary>
         public static string DefaultSeasonNumberPlaceholder {
@@ -174,6 +183,24 @@ namespace MovieList.Properties {
         public static string DefaultSeasonTitleInvalid {
             get {
                 return ResourceManager.GetString("DefaultSeasonTitleInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Помилка.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Шлях не є назвою файлу.
+        /// </summary>
+        public static string InvalidPath {
+            get {
+                return ResourceManager.GetString("InvalidPath", resourceCulture);
             }
         }
         
@@ -300,6 +327,15 @@ namespace MovieList.Properties {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не вдалося зберегти налаштування..
+        /// </summary>
+        public static string SavingSettingsFailed {
+            get {
+                return ResourceManager.GetString("SavingSettingsFailed", resourceCulture);
             }
         }
         

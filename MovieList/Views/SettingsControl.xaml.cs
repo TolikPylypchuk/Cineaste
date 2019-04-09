@@ -66,10 +66,22 @@ namespace MovieList.Views
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
             => e.CanExecute = this.ViewModel?.CanSaveChanges() ?? false;
 
-        private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            await this.ViewModel.SaveChangesAsync();
-            CommandManager.InvalidateRequerySuggested();
+            this.ViewModel.SaveChangesAsync().ContinueWith(success =>
+            {
+                if (success.Result)
+                {
+                    CommandManager.InvalidateRequerySuggested();
+                } else
+                {
+                    MessageBox.Show(
+                        Properties.Resources.SavingSettingsFailed,
+                        Properties.Resources.Error,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            });
         }
 
         private void Cancel_CanExecute(object sender, CanExecuteRoutedEventArgs e)
