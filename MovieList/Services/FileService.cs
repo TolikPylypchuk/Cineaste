@@ -8,10 +8,10 @@ namespace MovieList.Services
 {
     public class FileService : IFileService
     {
-        private readonly ILogger log;
+        private readonly ILogger<FileService> log;
 
-        public FileService(ILoggerFactory loggerFactory)
-            => this.log = loggerFactory.CreateLogger(nameof(MovieList));
+        public FileService(ILogger<FileService> log)
+            => this.log = log;
 
         public async ValueTask<bool> TryMoveFileAsync(string source, string destination)
         {

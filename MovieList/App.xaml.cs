@@ -68,11 +68,6 @@ namespace MovieList
                 .AddSingleton(_ => this);
 
         private void CatchException(object sender, UnhandledExceptionEventArgs e)
-        {
-            using var loggerFactory = this.ServiceProvider.GetService<ILoggerFactory>();
-            var log = loggerFactory.CreateLogger(nameof(MovieList));
-
-            log.LogError(e.ExceptionObject.ToString());
-        }
+            => this.ServiceProvider.GetService<ILogger<App>>().LogError(e.ExceptionObject.ToString());
     }
 }
