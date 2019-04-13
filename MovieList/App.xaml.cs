@@ -9,6 +9,7 @@ using MovieList.Config;
 using MovieList.Data;
 using MovieList.Options;
 using MovieList.Services;
+using MovieList.Services.Implementations;
 using MovieList.ViewModels;
 using MovieList.Views;
 

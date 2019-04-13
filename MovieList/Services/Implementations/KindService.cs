@@ -10,7 +10,7 @@ using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.ViewModels;
 
-namespace MovieList.Services
+namespace MovieList.Services.Implementations
 {
     public class KindService : IKindService
     {

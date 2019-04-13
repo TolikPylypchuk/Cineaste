@@ -21,7 +21,7 @@ namespace MovieList.ViewModels
 
         public MainWindow MainWindow { get; set; }
 
-        public void SetComponentViewModels()
+        public void SetControlViewModels()
         {
             this.MainWindow.ListControl.DataContext = this.MainWindow.ListControl.ViewModel =
                 this.app.ServiceProvider.GetRequiredService<MovieListViewModel>();
@@ -39,7 +39,9 @@ namespace MovieList.ViewModels
             this.MainWindow.Height = this.configOptions.Value.Height;
             this.MainWindow.Left = this.configOptions.Value.Left;
             this.MainWindow.Top = this.configOptions.Value.Top;
-            this.MainWindow.WindowState = this.configOptions.Value.IsMaximized ? WindowState.Maximized : WindowState.Normal;
+            this.MainWindow.WindowState = this.configOptions.Value.IsMaximized
+                ? WindowState.Maximized
+                : WindowState.Normal;
         }
 
         public void SaveWindowState()

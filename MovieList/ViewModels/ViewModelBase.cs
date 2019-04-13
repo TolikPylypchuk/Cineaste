@@ -19,8 +19,17 @@ namespace MovieList.ViewModels
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        public IEnumerable GetErrors(string propertyName)
+        public IEnumerable GetErrors(string? propertyName)
             =>  this.ValidationErros.GetValueOrDefault(propertyName ?? String.Empty);
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            this.Validate(propertyName);
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected void OnErrorsChanged(string propertyName)
+            => this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 
         protected virtual void Validate([CallerMemberName] string propertyName = "")
         {
@@ -44,12 +53,6 @@ namespace MovieList.ViewModels
                 this.OnErrorsChanged(propertyName);
             }
         }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string name = "")
-            => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-        protected void OnErrorsChanged(string propertyName)
-            => this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 
         private object GetValue(string propertyName)
         {

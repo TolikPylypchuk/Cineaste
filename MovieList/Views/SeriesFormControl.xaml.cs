@@ -7,9 +7,7 @@ namespace MovieList.Views
     public partial class SeriesFormControl : UserControl
     {
         public SeriesFormControl()
-        {
-            this.InitializeComponent();
-        }
+            => this.InitializeComponent();
 
         public SeriesFormViewModel ViewModel { get; set; }
     }

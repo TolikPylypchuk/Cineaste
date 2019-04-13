@@ -9,7 +9,7 @@ using MovieList.Config;
 using MovieList.Data;
 using MovieList.ViewModels.ListItems;
 
-namespace MovieList.Services
+namespace MovieList.Services.Implementations
 {
     public class MovieListService : IMovieListService
     {

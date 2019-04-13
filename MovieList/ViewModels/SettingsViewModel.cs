@@ -91,7 +91,6 @@ namespace MovieList.ViewModels
             set
             {
                 this.defaultSeasonTitle = value;
-                this.Validate();
                 this.OnPropertyChanged();
             }
         }
@@ -103,7 +102,6 @@ namespace MovieList.ViewModels
             set
             {
                 this.defaultSeasonOriginalTitle = value;
-                this.Validate();
                 this.OnPropertyChanged();
             }
         }
@@ -115,7 +113,6 @@ namespace MovieList.ViewModels
             set
             {
                 this.databasePath = value;
-                this.Validate();
                 this.OnPropertyChanged();
             }
         }
@@ -173,6 +170,8 @@ namespace MovieList.ViewModels
 
             this.DefaultSeasonTitle = this.config.Value.DefaultSeasonTitle;
             this.DefaultSeasonOriginalTitle = this.config.Value.DefaultSeasonOriginalTitle;
+
+            this.DatabasePath = this.config.Value.DatabasePath;
 
             using var scope = this.app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IKindService>();

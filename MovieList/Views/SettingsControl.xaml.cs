@@ -16,7 +16,7 @@ namespace MovieList.Views
 
         public SettingsViewModel ViewModel { get; set; }
 
-        private void SettingsControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void SettingsControl_Loaded(object sender, RoutedEventArgs e)
             => Task.Factory.StartNew(this.ViewModel.LoadKindsAsync);
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
@@ -42,8 +42,8 @@ namespace MovieList.Views
             this.ViewModel.Kinds.Add(new KindViewModel(new Kind
             {
                 Name = Properties.Resources.NewKind,
-                ColorForMovie = "Black",
-                ColorForSeries = "Black"
+                ColorForMovie = Colors.Black.ToString(),
+                ColorForSeries = Colors.Black.ToString()
             }));
 
             this.ViewModel.KindsChanged = true;
@@ -64,7 +64,7 @@ namespace MovieList.Views
             => this.ViewModel.ViewLog();
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-            => e.CanExecute = this.ViewModel?.CanSaveChanges() ?? false;
+            => e.CanExecute = this.IsLoaded && this.ViewModel.CanSaveChanges();
 
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -85,7 +85,7 @@ namespace MovieList.Views
         }
 
         private void Cancel_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-            => e.CanExecute = this.ViewModel?.CanCancelChanges() ?? false;
+            => e.CanExecute = this.IsLoaded && this.ViewModel.CanCancelChanges();
 
         private async void Cancel_Executed(object sender, ExecutedRoutedEventArgs e)
         {

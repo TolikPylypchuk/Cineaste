@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Extensions.Logging;
 
-namespace MovieList.Services
+namespace MovieList.Services.Implementations
 {
     public class FileService : IFileService
     {

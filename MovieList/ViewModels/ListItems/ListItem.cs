@@ -2,7 +2,6 @@ using System;
 using System.Windows.Media;
 
 using MovieList.Data.Models;
-using MovieList.Services;
 
 namespace MovieList.ViewModels.ListItems
 {
@@ -15,7 +14,7 @@ namespace MovieList.ViewModels.ListItems
     {
         protected ListItem(MovieSeriesEntry? entry, string title, string originalTitle, string year, Color color)
         {
-            this.DisplayNumber = entry != null ? GetDisplayNumber(entry) : String.Empty;
+            this.DisplayNumber = entry.GetDisplayNumber();
             this.Title = title;
             this.OriginalTitle = originalTitle;
             this.Year = year;
@@ -66,11 +65,6 @@ namespace MovieList.ViewModels.ListItems
                 : new MovieSeriesListItem(entry1.MovieSeries)
                     .CompareTo(new MovieSeriesListItem(entry2.MovieSeries))
         };
-
-        private static string GetDisplayNumber(MovieSeriesEntry entry)
-            => entry.MovieSeries.IsLooselyConnected
-                ? $"({entry.OrdinalNumber})"
-                : entry.DisplayNumber?.ToString() ?? "-";
 
         private int CompareTitleOrYear(ListItem item)
         {

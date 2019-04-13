@@ -7,9 +7,7 @@ namespace MovieList.Views
     public partial class MovieFormControl : UserControl
     {
         public MovieFormControl()
-        {
-            this.InitializeComponent();
-        }
+            => this.InitializeComponent();
 
         public MovieFormViewModel ViewModel { get; set; }
     }

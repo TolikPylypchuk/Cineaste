@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+
 using MovieList.ViewModels;
 
 namespace MovieList.Views

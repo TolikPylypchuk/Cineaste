@@ -1,8 +1,5 @@
-using System.Windows.Media;
-
 using MovieList.Config;
 using MovieList.Data.Models;
-using MovieList.Services;
 
 namespace MovieList.ViewModels.ListItems
 {
@@ -18,7 +15,7 @@ namespace MovieList.ViewModels.ListItems
                   movie.Title.Name,
                   movie.OriginalTitle.Name,
                   movie.Year.ToString(),
-                  config != null ? Util.GetColor(movie, config) : Colors.Black)
+                  movie.GetColor(config))
         {
             this.Movie = movie;
         }

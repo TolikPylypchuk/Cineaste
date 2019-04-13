@@ -8,7 +8,7 @@
              d:DataContext="{d:DesignInstance vm:MovieListViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="500" d:DesignWidth="500" Loaded="MovieListControl_Loaded">
     <UserControl.Resources>
-        <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBox}">
+        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
             <Setter Property="FontSize" Value="18" />
             <Setter Property="Margin" Value="2,5" />
             <Setter Property="Background" Value="Transparent" />
@@ -19,14 +19,19 @@
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="ContextMenu">
+                <Setter.Value>
+                    <ContextMenu Width="0" Height="0" />
+                </Setter.Value>
+            </Setter>
         </Style>
 
-        <Style x:Key="NumberTextBlockStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBlockStyle}">
+        <Style x:Key="NumberTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxStyle}">
             <Setter Property="TextAlignment" Value="Left" />
             <Setter Property="Margin" Value="10,2,2,2" />
         </Style>
 
-        <Style x:Key="YearTextBlockStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBlockStyle}">
+        <Style x:Key="YearTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxStyle}">
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="Margin" Value="10,2,5,2" />
         </Style>
@@ -67,16 +72,16 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBox Grid.Column="0" Text="{x:Static resx:Resources.ListItemNumber}"
-                                         Style="{StaticResource NumberTextBlockStyle}" />
+                                         Style="{StaticResource NumberTextBoxStyle}" />
 
                                 <TextBox Grid.Column="1" Text="{x:Static resx:Resources.ListItemTitle}"
-                                         Style="{StaticResource TextBlockStyle}" />
+                                         Style="{StaticResource TextBoxStyle}" />
 
                                 <TextBox Grid.Column="2" Text="{x:Static resx:Resources.ListItemOriginalTitle}"
-                                         Style="{StaticResource TextBlockStyle}" />
+                                         Style="{StaticResource TextBoxStyle}" />
 
                                 <TextBox Grid.Column="3" Text="{x:Static resx:Resources.ListItemYear}"
-                                         Style="{StaticResource YearTextBlockStyle}" />
+                                         Style="{StaticResource YearTextBoxStyle}" />
                             </Grid>
                         </DataTemplate>
                     </HeaderedItemsControl.HeaderTemplate>
@@ -98,19 +103,19 @@
 
                                     <TextBox Grid.Column="0" Text="{Binding Path=DisplayNumber, Mode=OneWay}"
                                              Foreground="{DynamicResource ResourceKey=Color}"
-                                             Style="{StaticResource NumberTextBlockStyle}" />
+                                             Style="{StaticResource NumberTextBoxStyle}" />
 
                                     <TextBox Grid.Column="1" Text="{Binding Path=Title, Mode=OneWay}"
                                              Foreground="{DynamicResource ResourceKey=Color}"
-                                             Style="{StaticResource TextBlockStyle}" />
+                                             Style="{StaticResource TextBoxStyle}" />
 
                                     <TextBox Grid.Column="2" Text="{Binding Path=OriginalTitle, Mode=OneWay}"
                                              Foreground="{DynamicResource ResourceKey=Color}"
-                                             Style="{StaticResource TextBlockStyle}" />
+                                             Style="{StaticResource TextBoxStyle}" />
 
                                     <TextBox Grid.Column="3" Text="{Binding Path=Year, Mode=OneWay}"
                                              Foreground="{DynamicResource ResourceKey=Color}"
-                                             Style="{StaticResource YearTextBlockStyle}" />
+                                             Style="{StaticResource YearTextBoxStyle}" />
                                 </Grid>
                             </Border>
                         </DataTemplate>

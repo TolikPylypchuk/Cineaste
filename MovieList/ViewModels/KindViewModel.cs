@@ -19,7 +19,6 @@ namespace MovieList.ViewModels
             set
             {
                 this.Kind.Name = value;
-                this.Validate();
                 this.OnPropertyChanged();
             }
         }

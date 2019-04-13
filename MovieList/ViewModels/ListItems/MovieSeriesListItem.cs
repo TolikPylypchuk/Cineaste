@@ -1,10 +1,7 @@
 using System;
-using System.Windows.Media;
 
 using MovieList.Config;
 using MovieList.Data.Models;
-
-using static MovieList.Services.Util;
 
 namespace MovieList.ViewModels.ListItems
 {
@@ -20,7 +17,7 @@ namespace MovieList.ViewModels.ListItems
                   movieSeries.Title != null ? $"{movieSeries.Title.Name}:" : String.Empty,
                   movieSeries.OriginalTitle != null ? $"{movieSeries.OriginalTitle.Name}:" : String.Empty,
                   String.Empty,
-                  config != null ? GetColor(movieSeries, config) : Colors.Black)
+                  movieSeries.GetColor(config))
         {
             this.MovieSeries = movieSeries;
         }
@@ -40,23 +37,23 @@ namespace MovieList.ViewModels.ListItems
             if (this.MovieSeries.Id == other.MovieSeries.Id)
             {
                 result = 0;
-            } else if (IsAncestor(this.MovieSeries, other.MovieSeries))
+            } else if (this.MovieSeries.IsDescendantOf(other.MovieSeries))
             {
                 result = 1;
-            } else if (IsAncestor(other.MovieSeries, this.MovieSeries))
+            } else if (other.MovieSeries.IsDescendantOf(this.MovieSeries))
             {
                 result = -1;
             } else if (this.MovieSeries.RootSeries.Id == other.MovieSeries.RootSeries.Id)
             {
-                var (ancestor1, ancestor2) = GetDistinctAncestors(this.MovieSeries, other.MovieSeries);
+                var (ancestor1, ancestor2) = this.MovieSeries.GetDistinctAncestors(other.MovieSeries);
                 result = ancestor1.OrdinalNumber?.CompareTo(ancestor2.OrdinalNumber) ?? 0;
             } else
             {
-                result = GetTitleToCompare(this.MovieSeries).CompareTo(GetTitleToCompare(other.MovieSeries));
+                result = this.MovieSeries.GetTitleToCompare().CompareTo(other.MovieSeries.GetTitleToCompare());
 
                 if (result == 0)
                 {
-                    result = GetFirstYear(this.MovieSeries).CompareTo(GetFirstYear(other.MovieSeries));
+                    result = this.MovieSeries.GetFirstYear().CompareTo(other.MovieSeries.GetFirstYear());
                 }
             }
 
@@ -72,7 +69,7 @@ namespace MovieList.ViewModels.ListItems
 
         private int CompareTitleOrYear(ListItem item)
         {
-            int result = GetTitleToCompare(this.MovieSeries).CompareTo(item.Title);
+            int result = this.MovieSeries.GetTitleToCompare().CompareTo(item.Title);
             return result != 0 ? result : this.Year.CompareTo(item.Year);
         }
     }

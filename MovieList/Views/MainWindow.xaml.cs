@@ -13,7 +13,7 @@ namespace MovieList.Views
 
             this.InitializeComponent();
 
-            this.ViewModel.SetComponentViewModels();
+            this.ViewModel.SetControlViewModels();
             this.ViewModel.RestoreWindowState();
         }
 
