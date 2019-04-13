@@ -4,7 +4,7 @@ using MovieList.Data.Models;
 
 namespace MovieList.Data
 {
-    public class IdEqualityComparer<TEntity> : IEqualityComparer<TEntity> where TEntity : EntityBase
+    public class IdEqualityComparer<TEntity> : EqualityComparer<TEntity> where TEntity : EntityBase
     {
         private IdEqualityComparer() { }
 
@@ -13,12 +13,12 @@ namespace MovieList.Data
 
         public static IEqualityComparer<TEntity> Instance { get; }
 
-        public bool Equals(TEntity x, TEntity y)
+        public override bool Equals(TEntity x, TEntity y)
             => x == null
                 ? y == null ? true : false
                 : x.Id.Equals(y.Id);
 
-        public int GetHashCode(TEntity obj)
-            => obj == null ? 1 : obj.Id.GetHashCode();
+        public override int GetHashCode(TEntity e)
+            => e == null ? 1 : e.Id.GetHashCode();
     }
 }
