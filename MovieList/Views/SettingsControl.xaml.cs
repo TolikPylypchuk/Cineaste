@@ -41,7 +41,7 @@ namespace MovieList.Views
         {
             this.ViewModel.Kinds.Add(new KindViewModel(new Kind
             {
-                Name = Properties.Resources.NewKind,
+                Name = MovieList.Properties.Resources.NewKind,
                 ColorForMovie = Colors.Black.ToString(),
                 ColorForSeries = Colors.Black.ToString()
             }));
@@ -76,8 +76,8 @@ namespace MovieList.Views
                 } else
                 {
                     MessageBox.Show(
-                        Properties.Resources.SavingSettingsFailed,
-                        Properties.Resources.Error,
+                        MovieList.Properties.Resources.SavingSettingsFailed,
+                        MovieList.Properties.Resources.Error,
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
                 }

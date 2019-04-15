@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MovieList.Views"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:MovieListViewModel, IsDesignTimeCreatable=False}"
@@ -24,6 +25,7 @@
                     <ContextMenu Width="0" Height="0" />
                 </Setter.Value>
             </Setter>
+            <Setter Property="local:Properties.TripleClickSelectAll" Value="True" />
         </Style>
 
         <Style x:Key="NumberTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxStyle}">
