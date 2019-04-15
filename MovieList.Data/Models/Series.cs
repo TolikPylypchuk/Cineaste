@@ -3,8 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-using MovieList.Data.Properties;
-
 namespace MovieList.Data.Models
 {
     [Table(nameof(MovieContext.Series))]
@@ -12,12 +10,12 @@ namespace MovieList.Data.Models
     {
         public bool IsWatched { get; set; }
 
-        [Url(ErrorMessageResourceName = "ImdbLinkInvalid", ErrorMessageResourceType = typeof(Messages))]
-        [StringLength(256, ErrorMessageResourceName = "ImdbLinkTooLong", ErrorMessageResourceType = typeof(Messages))]
+        [Url]
+        [StringLength(256)]
         public string? ImdbLink { get; set; }
 
-        [Url(ErrorMessageResourceName = "Movie.PosterUrlInvalid", ErrorMessageResourceType = typeof(Messages))]
-        [StringLength(256, ErrorMessageResourceName = "Movie.PosterUrlTooLong", ErrorMessageResourceType = typeof(Messages))]
+        [Url]
+        [StringLength(256)]
         public string? PosterUrl { get; set; }
 
         public int KindId { get; set; }

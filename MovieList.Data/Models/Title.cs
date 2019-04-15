@@ -2,18 +2,16 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using MovieList.Data.Properties;
-
 namespace MovieList.Data.Models
 {
     [Table(nameof(MovieContext.Titles))]
     public class Title : EntityBase
     {
-        [Required(ErrorMessageResourceName = "NameRequired", ErrorMessageResourceType  = typeof(Messages))]
-        [StringLength(128, ErrorMessageResourceName = "NameTooLong", ErrorMessageResourceType = typeof(Messages))]
+        [Required]
+        [StringLength(128)]
         public string Name { get; set; } = String.Empty;
 
-        [Range(1, 10, ErrorMessageResourceName = "Title.InvalidPriority", ErrorMessageResourceType = typeof(Messages))]
+        [Range(1, 10)]
         public int Priority { get; set; }
 
         public bool IsOriginal { get; set; }
