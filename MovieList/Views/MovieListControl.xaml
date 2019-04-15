@@ -40,7 +40,7 @@
     </UserControl.Resources>
     
     <DockPanel>
-        <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Resources.Title}" FontSize="36"
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Messages.Title}" FontSize="36"
                    TextAlignment="Center" HorizontalAlignment="Stretch" Margin="5" />
 
         <Border BorderBrush="Black" BorderThickness="1" Margin="5" HorizontalAlignment="Stretch">
@@ -73,16 +73,16 @@
                                     <ColumnDefinition Width="110" SharedSizeGroup="Fourth" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBox Grid.Column="0" Text="{x:Static resx:Resources.ListItemNumber}"
+                                <TextBox Grid.Column="0" Text="{x:Static resx:Messages.ListItemNumber}"
                                          Style="{StaticResource NumberTextBoxStyle}" />
 
-                                <TextBox Grid.Column="1" Text="{x:Static resx:Resources.ListItemTitle}"
+                                <TextBox Grid.Column="1" Text="{x:Static resx:Messages.ListItemTitle}"
                                          Style="{StaticResource TextBoxStyle}" />
 
-                                <TextBox Grid.Column="2" Text="{x:Static resx:Resources.ListItemOriginalTitle}"
+                                <TextBox Grid.Column="2" Text="{x:Static resx:Messages.ListItemOriginalTitle}"
                                          Style="{StaticResource TextBoxStyle}" />
 
-                                <TextBox Grid.Column="3" Text="{x:Static resx:Resources.ListItemYear}"
+                                <TextBox Grid.Column="3" Text="{x:Static resx:Messages.ListItemYear}"
                                          Style="{StaticResource YearTextBoxStyle}" />
                             </Grid>
                         </DataTemplate>

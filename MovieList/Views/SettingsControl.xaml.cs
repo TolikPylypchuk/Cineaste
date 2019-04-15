@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 using MovieList.Data.Models;
+using MovieList.Properties;
 using MovieList.ViewModels;
 
 namespace MovieList.Views
@@ -41,7 +42,7 @@ namespace MovieList.Views
         {
             this.ViewModel.Kinds.Add(new KindViewModel(new Kind
             {
-                Name = MovieList.Properties.Resources.NewKind,
+                Name = Messages.NewKind,
                 ColorForMovie = Colors.Black.ToString(),
                 ColorForSeries = Colors.Black.ToString()
             }));
@@ -76,8 +77,8 @@ namespace MovieList.Views
                 } else
                 {
                     MessageBox.Show(
-                        MovieList.Properties.Resources.SavingSettingsFailed,
-                        MovieList.Properties.Resources.Error,
+                        Messages.SavingSettingsFailed,
+                        Messages.Error,
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
                 }

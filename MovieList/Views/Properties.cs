@@ -11,9 +11,8 @@ namespace MovieList.Views
 
         private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TextBox textBox)
+            if (d is TextBox textBox && e.NewValue is bool enable)
             {
-                var enable = (bool) e.NewValue;
                 if (enable)
                 {
                     textBox.PreviewMouseLeftButtonDown += OnTextBoxMouseDown;

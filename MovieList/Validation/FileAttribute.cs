@@ -10,7 +10,7 @@ namespace MovieList.Validation
         public FileAttribute()
         {
             this.ErrorMessageResourceName = "InvalidPath";
-            this.ErrorMessageResourceType = typeof(Resources);
+            this.ErrorMessageResourceType = typeof(Messages);
         }
 
         public override bool IsValid(object value)

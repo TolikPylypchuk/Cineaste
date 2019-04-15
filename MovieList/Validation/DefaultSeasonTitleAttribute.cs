@@ -9,10 +9,10 @@ namespace MovieList.Validation
         public DefaultSeasonTitleAttribute()
         {
             this.ErrorMessageResourceName = "DefaultSeasonTitleInvalid";
-            this.ErrorMessageResourceType = typeof(Resources);
+            this.ErrorMessageResourceType = typeof(Messages);
         }
 
         public override bool IsValid(object value)
-            => value is string title && title.Contains(Resources.DefaultSeasonNumberPlaceholder);
+            => value is string title && title.Contains(Messages.DefaultSeasonNumberPlaceholder);
     }
 }

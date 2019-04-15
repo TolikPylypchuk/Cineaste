@@ -10,11 +10,11 @@
              d:DesignHeight="800" d:DesignWidth="300" Loaded="SettingsControl_Loaded">
     <UserControl.Resources>
         <Style TargetType="{x:Type tk:ColorPicker}">
-            <Setter Property="AdvancedButtonHeader" Value="{x:Static resx:Resources.ColorPickerAdvanced}" />
-            <Setter Property="AvailableColorsHeader" Value="{x:Static resx:Resources.ColorPickerAvailableColors}" />
-            <Setter Property="RecentColorsHeader" Value="{x:Static resx:Resources.ColorPickerRecentColors}" />
-            <Setter Property="StandardButtonHeader" Value="{x:Static resx:Resources.ColorPickerStandard}" />
-            <Setter Property="StandardColorsHeader" Value="{x:Static resx:Resources.ColorPickerStandardColors}" />
+            <Setter Property="AdvancedButtonHeader" Value="{x:Static resx:Messages.ColorPickerAdvanced}" />
+            <Setter Property="AvailableColorsHeader" Value="{x:Static resx:Messages.ColorPickerAvailableColors}" />
+            <Setter Property="RecentColorsHeader" Value="{x:Static resx:Messages.ColorPickerRecentColors}" />
+            <Setter Property="StandardButtonHeader" Value="{x:Static resx:Messages.ColorPickerStandard}" />
+            <Setter Property="StandardColorsHeader" Value="{x:Static resx:Messages.ColorPickerStandardColors}" />
             <Setter Property="DisplayColorAndName" Value="False" />
             <EventSetter Event="SelectedColorChanged" Handler="ColorPicker_SelectedColorChanged" />
         </Style>
@@ -32,7 +32,7 @@
     </UserControl.CommandBindings>
     
     <DockPanel>
-        <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Resources.SettingsTitle}" FontSize="24"
+        <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Messages.SettingsTitle}" FontSize="24"
                    TextAlignment="Center" HorizontalAlignment="Stretch" Margin="5" />
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" DockPanel.Dock="Bottom">
@@ -44,12 +44,12 @@
                 </Style>
             </StackPanel.Resources>
             
-            <Button Content="{x:Static resx:Resources.Cancel}" Command="Stop" />
-            <Button Content="{x:Static resx:Resources.Save}" Command="Save" />
+            <Button Content="{x:Static resx:Messages.Cancel}" Command="Stop" />
+            <Button Content="{x:Static resx:Messages.Save}" Command="Save" />
         </StackPanel>
 
         <StackPanel Margin="10">
-            <Expander Header="{x:Static resx:Resources.Kinds}" Margin="0">
+            <Expander Header="{x:Static resx:Messages.Kinds}" Margin="0">
                 <StackPanel>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -58,14 +58,14 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Margin="0,0,2,5" Grid.Column="0">
-                            <TextBlock Text="{x:Static resx:Resources.NotWatched}" TextAlignment="Left"
+                            <TextBlock Text="{x:Static resx:Messages.NotWatched}" TextAlignment="Left"
                                        HorizontalAlignment="Stretch" />
 
                             <tk:ColorPicker SelectedColor="{Binding Path=NotWatchedColor}" HorizontalAlignment="Stretch" />
                         </StackPanel>
 
                         <StackPanel Margin="2,0,0,5" Grid.Column="1">
-                            <TextBlock Text="{x:Static resx:Resources.NotReleased}" TextAlignment="Left"
+                            <TextBlock Text="{x:Static resx:Messages.NotReleased}" TextAlignment="Left"
                                        HorizontalAlignment="Stretch" />
 
                             <tk:ColorPicker SelectedColor="{Binding Path=NotReleasedColor}" HorizontalAlignment="Stretch" />
@@ -89,9 +89,9 @@
                                                      Margin="0,5" TextAlignment="Left" Grid.Column="0" HorizontalAlignment="Stretch"
                                                      TextChanged="TextBox_TextChanged" />
 
-                                            <Button Grid.Column="1" Margin="2,0,0,0" Content="{x:Static resx:Resources.RemoveIcon}"
+                                            <Button Grid.Column="1" Margin="2,0,0,0" Content="{x:Static resx:Messages.RemoveIcon}"
                                                     HorizontalAlignment="Stretch" Height="18" VerticalContentAlignment="Center"
-                                                    Padding="0" ToolTip="{x:Static resx:Resources.Remove}" Click="RemoveKind_Click"
+                                                    Padding="0" ToolTip="{x:Static resx:Messages.Remove}" Click="RemoveKind_Click"
                                                     Tag="{Binding}" />
                                         </Grid>
 
@@ -102,7 +102,7 @@
                                             </Grid.ColumnDefinitions>
 
                                             <StackPanel Margin="0,0,2,5" Grid.Column="0">
-                                                <TextBlock Text="{x:Static resx:Resources.Movie}" TextAlignment="Left"
+                                                <TextBlock Text="{x:Static resx:Messages.Movie}" TextAlignment="Left"
                                                            HorizontalAlignment="Stretch" />
 
                                                 <tk:ColorPicker SelectedColor="{Binding Path=ColorForMovie}"
@@ -110,7 +110,7 @@
                                             </StackPanel>
 
                                             <StackPanel Margin="2,0,0,5" Grid.Column="1">
-                                                <TextBlock Text="{x:Static resx:Resources.Series}" TextAlignment="Left"
+                                                <TextBlock Text="{x:Static resx:Messages.Series}" TextAlignment="Left"
                                                            HorizontalAlignment="Stretch" />
 
                                                 <tk:ColorPicker SelectedColor="{Binding Path=ColorForSeries}"
@@ -123,16 +123,16 @@
                         </ItemsControl>
                     </ScrollViewer>
 
-                    <Button Width="50" Margin="0,5,0,0" Padding="0" Content="{x:Static resx:Resources.AddIcon}"
+                    <Button Width="50" Margin="0,5,0,0" Padding="0" Content="{x:Static resx:Messages.AddIcon}"
                             Click="AddKind_Click" VerticalContentAlignment="Center" FontSize="20"
-                            ToolTip="{x:Static resx:Resources.Add}" />
+                            ToolTip="{x:Static resx:Messages.Add}" />
                 </StackPanel>
             </Expander>
 
-            <Expander Header="{x:Static resx:Resources.OtherSettings}">
+            <Expander Header="{x:Static resx:Messages.OtherSettings}">
                 <StackPanel>
                     <StackPanel Margin="0,0,2,5" Grid.Column="0">
-                        <TextBlock Text="{x:Static resx:Resources.DefaultSeasonTitle}" TextAlignment="Left"
+                        <TextBlock Text="{x:Static resx:Messages.DefaultSeasonTitle}" TextAlignment="Left"
                                    HorizontalAlignment="Stretch" />
 
                         <TextBox Text="{Binding Path=DefaultSeasonTitle, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
@@ -140,7 +140,7 @@
                     </StackPanel>
                     
                     <StackPanel Margin="0,0,2,5" Grid.Column="0">
-                        <TextBlock Text="{x:Static resx:Resources.DefaultSeasonOriginalTitle}" TextAlignment="Left"
+                        <TextBlock Text="{x:Static resx:Messages.DefaultSeasonOriginalTitle}" TextAlignment="Left"
                                    HorizontalAlignment="Stretch" />
 
                         <TextBox Text="{Binding Path=DefaultSeasonOriginalTitle, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
@@ -149,15 +149,15 @@
                 </StackPanel>
             </Expander>
 
-            <Expander Header="{x:Static resx:Resources.AdvancedSettings}">
+            <Expander Header="{x:Static resx:Messages.AdvancedSettings}">
                 <StackPanel>
                     <StackPanel>
-                        <TextBlock Text="{x:Static resx:Resources.DatabasePath}" HorizontalAlignment="Stretch" TextAlignment="Left" />
+                        <TextBlock Text="{x:Static resx:Messages.DatabasePath}" HorizontalAlignment="Stretch" TextAlignment="Left" />
                         <TextBox Text="{Binding Path=DatabasePath, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                                  HorizontalAlignment="Stretch" TextChanged="TextBox_TextChanged" />
                     </StackPanel>
                     
-                    <Button Margin="0,5,0,0" Padding="5,2" Content="{x:Static resx:Resources.ViewLog}" Click="ViewLog_Click" />
+                    <Button Margin="0,5,0,0" Padding="5,2" Content="{x:Static resx:Messages.ViewLog}" Click="ViewLog_Click" />
                 </StackPanel>
             </Expander>
         </StackPanel>
