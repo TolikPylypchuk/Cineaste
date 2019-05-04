@@ -1,11 +1,8 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 
-using MovieList.Data.Models;
-using MovieList.Properties;
 using MovieList.ViewModels;
 
 namespace MovieList.Views
@@ -21,77 +18,9 @@ namespace MovieList.Views
             => Task.Factory.StartNew(this.ViewModel.LoadKindsAsync);
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
-        {
-            if (this.IsLoaded)
-            {
-                this.ViewModel.KindsChanged = true;
-                CommandManager.InvalidateRequerySuggested();
-            }
-        }
+            => this.ViewModel.OnKindsChanged();
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (this.IsLoaded)
-            {
-                this.ViewModel.KindsChanged = true;
-                CommandManager.InvalidateRequerySuggested();
-            }
-        }
-
-        private void AddKind_Click(object sender, RoutedEventArgs e)
-        {
-            this.ViewModel.Kinds.Add(new KindViewModel(new Kind
-            {
-                Name = Messages.NewKind,
-                ColorForMovie = Colors.Black.ToString(),
-                ColorForSeries = Colors.Black.ToString()
-            }));
-
-            this.ViewModel.KindsChanged = true;
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void RemoveKind_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.Tag is KindViewModel kind)
-            {
-                this.ViewModel.Kinds.Remove(kind);
-                this.ViewModel.KindsChanged = true;
-                CommandManager.InvalidateRequerySuggested();
-            }
-        }
-
-        private void ViewLog_Click(object sender, RoutedEventArgs e)
-            => this.ViewModel.ViewLog();
-
-        private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-            => e.CanExecute = this.IsLoaded && this.ViewModel.CanSaveChanges();
-
-        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            this.ViewModel.SaveChangesAsync().ContinueWith(success =>
-            {
-                if (success.Result)
-                {
-                    CommandManager.InvalidateRequerySuggested();
-                } else
-                {
-                    MessageBox.Show(
-                        Messages.SavingSettingsFailed,
-                        Messages.Error,
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
-            });
-        }
-
-        private void Cancel_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-            => e.CanExecute = this.IsLoaded && this.ViewModel.CanCancelChanges();
-
-        private async void Cancel_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            await this.ViewModel.CancelChangesAsync();
-            CommandManager.InvalidateRequerySuggested();
-        }
+            => this.ViewModel.OnKindsChanged();
     }
 }

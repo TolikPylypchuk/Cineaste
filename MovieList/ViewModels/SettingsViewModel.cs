@@ -3,13 +3,17 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 using MovieList.Config;
+using MovieList.Data.Models;
 using MovieList.Options;
+using MovieList.Properties;
 using MovieList.Services;
 using MovieList.Validation;
 
@@ -42,7 +46,21 @@ namespace MovieList.ViewModels
             this.defaultSeasonTitle = config.Value.DefaultSeasonTitle;
             this.defaultSeasonOriginalTitle = config.Value.DefaultSeasonOriginalTitle;
             this.databasePath = config.Value.DatabasePath;
+
+            this.AddKind = new RelayCommand(_ => this.OnAddKind());
+            this.RemoveKind = new RelayCommand(this.OnRemoveKind);
+            this.Save = new RelayCommand(async _ => await this.SaveChangesAsync(), _ => this.CanSaveChanges);
+            this.Cancel = new RelayCommand(async _ => await this.CancelChangesAsync(), _ => this.CanCancelChanges);
+            this.ViewLog = new RelayCommand(_ => this.OnViewLog());
         }
+
+        public bool IsLoaded { get; private set; }
+
+        public RelayCommand AddKind { get; }
+        public RelayCommand RemoveKind { get; }
+        public RelayCommand Save { get; }
+        public RelayCommand Cancel { get; }
+        public RelayCommand ViewLog { get; }
 
         public Color NotWatchedColor
         {
@@ -117,21 +135,67 @@ namespace MovieList.ViewModels
             }
         }
 
+        public bool CanSaveChanges
+            => this.IsLoaded && this.AreChangesPresent() && !this.HasErrors && this.Kinds.All(k => !k.HasErrors);
+
+        public bool CanCancelChanges
+            => this.IsLoaded && this.AreChangesPresent();
+
         public async void LoadKindsAsync()
         {
             using var scope = this.app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IKindService>();
 
             this.Kinds = await service.LoadAllKindsAsync();
+            this.IsLoaded = true;
         }
 
-        public bool CanSaveChanges()
-            => this.AreChangesPresent() && !this.HasErrors && this.Kinds.All(k => !k.HasErrors);
+        public void OnKindsChanged()
+        {
+            if (this.IsLoaded)
+            {
+                this.KindsChanged = true;
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
 
-        public bool CanCancelChanges()
-            => this.AreChangesPresent();
+        private void OnAddKind()
+        {
+            this.Kinds.Add(new KindViewModel(new Kind
+            {
+                Name = Messages.NewKind,
+                ColorForMovie = Colors.Black.ToString(),
+                ColorForSeries = Colors.Black.ToString()
+            }));
 
-        public async Task<bool> SaveChangesAsync()
+            this.KindsChanged = true;
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private async void OnRemoveKind(object obj)
+        {
+            if (obj is KindViewModel kind)
+            {
+                using var scope = this.app.ServiceProvider.CreateScope();
+                var service = scope.ServiceProvider.GetRequiredService<IKindService>();
+
+                if (await service.CanRemoveKindAsync(kind))
+                {
+                    this.Kinds.Remove(kind);
+                    this.KindsChanged = true;
+                    CommandManager.InvalidateRequerySuggested();
+                } else
+                {
+                    MessageBox.Show(
+                           Messages.KindIsInUse,
+                           Messages.Error,
+                           MessageBoxButton.OK,
+                           MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private async Task SaveChangesAsync()
         {
             if (this.KindsChanged)
             {
@@ -154,16 +218,22 @@ namespace MovieList.ViewModels
 
             if (!success)
             {
-                return false;
+                MessageBox.Show(
+                       Messages.SavingSettingsFailed,
+                       Messages.Error,
+                       MessageBoxButton.OK,
+                       MessageBoxImage.Error);
+
+                return;
             }
 
             this.config.Update(config => config.DatabasePath = this.DatabasePath);
             this.config.Value.DatabasePath = this.DatabasePath;
 
-            return true;
+            CommandManager.InvalidateRequerySuggested();
         }
 
-        public async Task CancelChangesAsync()
+        private async Task CancelChangesAsync()
         {
             this.NotWatchedColor = this.config.Value.NotWatchedColor;
             this.NotReleasedColor = this.config.Value.NotReleasedColor;
@@ -178,9 +248,11 @@ namespace MovieList.ViewModels
 
             this.Kinds = await service.LoadAllKindsAsync();
             this.KindsChanged = false;
+
+            CommandManager.InvalidateRequerySuggested();
         }
 
-        public void ViewLog()
+        public void OnViewLog()
             => Process.Start("notepad.exe", this.loggingConfig.File.Path);
 
         private void CopyConfig(Configuration config)

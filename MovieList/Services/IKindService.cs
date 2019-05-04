@@ -10,5 +10,6 @@ namespace MovieList.Services
     {
         Task<ObservableCollection<KindViewModel>> LoadAllKindsAsync();
         Task SaveKindsAsync(IEnumerable<KindViewModel> kinds);
+        Task<bool> CanRemoveKindAsync(KindViewModel kind);
     }
 }

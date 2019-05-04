@@ -214,6 +214,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Не можна видалити вид, оскільки є фільми чи серіали цього виду..
+        /// </summary>
+        public static string KindIsInUse {
+            get {
+                return ResourceManager.GetString("KindIsInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Види фільмів та серіалів.
         /// </summary>
         public static string Kinds {

@@ -54,5 +54,9 @@ namespace MovieList.Services.Implementations
 
             await this.context.SaveChangesAsync();
         }
+
+        public async Task<bool> CanRemoveKindAsync(KindViewModel kind)
+            => (await this.context.Movies.Where(m => m.KindId == kind.Kind.Id).CountAsync()) == 0 &&
+                (await this.context.Series.Where(s => s.KindId == kind.Kind.Id).CountAsync()) == 0;
     }
 }
