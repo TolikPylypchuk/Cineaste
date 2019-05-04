@@ -159,6 +159,9 @@
   <data name="DefaultSeasonTitleInvalid" xml:space="preserve">
     <value>Стандартна назва сезону має містити знак #</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редагувати</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Помилка</value>
   </data>

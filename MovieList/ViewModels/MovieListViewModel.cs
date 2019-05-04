@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +15,10 @@ namespace MovieList.ViewModels
         private ObservableCollection<ListItem> items = new ObservableCollection<ListItem>();
 
         public MovieListViewModel(App app)
-            => this.app = app;
+        {
+            this.app = app;
+            this.SelectItem = new RelayCommand(this.OnItemSelected);
+        }
 
         public ObservableCollection<ListItem> Items
         {
@@ -26,12 +30,22 @@ namespace MovieList.ViewModels
             }
         }
 
+        public RelayCommand SelectItem { get; }
+
         public async Task LoadItemsAsync()
         {
             using var scope = app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IMovieListService>();
 
             this.Items = await service.LoadAllItemsAsync();
+        }
+
+        public void OnItemSelected(object item)
+        {
+            if (item is ListItem i)
+            {
+                MessageBox.Show(i.Title);
+            }
         }
     }
 }

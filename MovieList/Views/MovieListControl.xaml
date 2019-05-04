@@ -37,8 +37,10 @@
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="Margin" Value="10,2,5,2" />
         </Style>
+
+        <local:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>
-    
+
     <DockPanel>
         <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Messages.Title}" FontSize="36"
                    TextAlignment="Center" HorizontalAlignment="Stretch" Margin="5" />
@@ -71,6 +73,7 @@
                                     <ColumnDefinition Width="*" SharedSizeGroup="Second" />
                                     <ColumnDefinition Width="*" SharedSizeGroup="Third" />
                                     <ColumnDefinition Width="110" SharedSizeGroup="Fourth" />
+                                    <ColumnDefinition Width="20" SharedSizeGroup="Fifth" />
                                 </Grid.ColumnDefinitions>
 
                                 <TextBox Grid.Column="0" Text="{x:Static resx:Messages.ListItemNumber}"
@@ -90,10 +93,11 @@
 
                     <HeaderedItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="LightGray" BorderThickness="0,1,0,0">
+                            <Border Name="ListItem" BorderBrush="LightGray" BorderThickness="0,1,0,0">
                                 <Grid HorizontalAlignment="Stretch">
                                     <Grid.Resources>
                                         <SolidColorBrush x:Key="Color" Color="{Binding Path=Color}" />
+                                        <local:BindingProxy x:Key="ListItemProxy" Data="{Binding ElementName=ListItem}"/>
                                     </Grid.Resources>
                                     
                                     <Grid.ColumnDefinitions>
@@ -101,6 +105,7 @@
                                         <ColumnDefinition Width="*" SharedSizeGroup="Second" />
                                         <ColumnDefinition Width="*" SharedSizeGroup="Third" />
                                         <ColumnDefinition Width="110" SharedSizeGroup="Fourth" />
+                                        <ColumnDefinition Width="20" SharedSizeGroup="Fifth" />
                                     </Grid.ColumnDefinitions>
 
                                     <TextBox Grid.Column="0" Text="{Binding Path=DisplayNumber, Mode=OneWay}"
@@ -118,6 +123,33 @@
                                     <TextBox Grid.Column="3" Text="{Binding Path=Year, Mode=OneWay}"
                                              Foreground="{DynamicResource ResourceKey=Color}"
                                              Style="{StaticResource YearTextBoxStyle}" />
+
+                                    <Button Grid.Column="4" Background="Transparent" BorderThickness="0" Content="⋮">
+                                        <Button.ContextMenu>
+                                            <ContextMenu DataContext="{Binding Path=Data.DataContext, Source={StaticResource ListItemProxy}}">
+                                                <MenuItem Header="{x:Static resx:Messages.Edit}" Command="{Binding Path=Data.SelectItem, Source={StaticResource ViewModel}}"
+                                                          CommandParameter="{Binding}" />
+                                            </ContextMenu>
+                                        </Button.ContextMenu>
+                                        
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Style.Triggers>
+                                                    <EventTrigger RoutedEvent="Click">
+                                                        <EventTrigger.Actions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="ContextMenu.IsOpen">
+                                                                        <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
+                                                                    </BooleanAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </EventTrigger.Actions>
+                                                    </EventTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                 </Grid>
                             </Border>
                         </DataTemplate>
