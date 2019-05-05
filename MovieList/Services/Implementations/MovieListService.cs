@@ -38,5 +38,29 @@ namespace MovieList.Services.Implementations
                         .Select(series => new MovieSeriesListItem(series, this.config)))
                     .OrderBy(item => item));
         }
+
+        public async Task ToggleWatchedAsync(ListItem item)
+        {
+            switch (item)
+            {
+                case MovieListItem movieItem:
+                    movieItem.Movie.IsWatched = !movieItem.Movie.IsWatched;
+                    this.context.Attach(movieItem.Movie).State = EntityState.Modified;
+                    await this.context.SaveChangesAsync();
+                    break;
+                case SeriesListItem seriesItem:
+                    seriesItem.Series.IsWatched = !seriesItem.Series.IsWatched;
+                    this.context.Attach(seriesItem.Series).State = EntityState.Modified;
+                    await this.context.SaveChangesAsync();
+                    break;
+            }
+        }
+
+        public async Task ToggleReleasedAsync(MovieListItem item)
+        {
+            item.Movie.IsReleased = !item.Movie.IsReleased;
+            this.context.Attach(item.Movie).State = EntityState.Modified;
+            await this.context.SaveChangesAsync();
+        }
     }
 }

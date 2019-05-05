@@ -268,6 +268,42 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Позначити як майбутній.
+        /// </summary>
+        public static string MarkAsNotReleased {
+            get {
+                return ResourceManager.GetString("MarkAsNotReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Позначити як не переглянутий.
+        /// </summary>
+        public static string MarkAsNotWatched {
+            get {
+                return ResourceManager.GetString("MarkAsNotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Позначити як не майбутній.
+        /// </summary>
+        public static string MarkAsReleased {
+            get {
+                return ResourceManager.GetString("MarkAsReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Позначити як переглянутий.
+        /// </summary>
+        public static string MarkAsWatched {
+            get {
+                return ResourceManager.GetString("MarkAsWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Фільм.
         /// </summary>
         public static string Movie {

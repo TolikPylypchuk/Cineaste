@@ -32,5 +32,8 @@ namespace MovieList.ViewModels.ListItems
 
         public override int CompareTo(MovieSeriesListItem other)
             => other.CompareTo(this) * -1;
+
+        public override void UpdateColor(Configuration? config)
+            => this.Color = this.Series.GetColor(config);
     }
 }

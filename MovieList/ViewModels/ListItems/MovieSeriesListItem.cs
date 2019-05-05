@@ -60,6 +60,9 @@ namespace MovieList.ViewModels.ListItems
             return result;
         }
 
+        public override void UpdateColor(Configuration? config)
+            => this.Color = this.MovieSeries.GetColor(config);
+
         private int CompareToEntry(ListItem item, MovieSeriesEntry? entry)
             => entry == null
                 ? CompareTitleOrYear(item)

@@ -38,6 +38,8 @@
             <Setter Property="Margin" Value="10,2,5,2" />
         </Style>
 
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+
         <local:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>
 
@@ -126,9 +128,21 @@
 
                                     <Button Grid.Column="4" Background="Transparent" BorderThickness="0" Content="⋮">
                                         <Button.ContextMenu>
-                                            <ContextMenu DataContext="{Binding Path=Data.DataContext, Source={StaticResource ListItemProxy}}">
-                                                <MenuItem Header="{x:Static resx:Messages.Edit}" Command="{Binding Path=Data.SelectItem, Source={StaticResource ViewModel}}"
-                                                          CommandParameter="{Binding}" />
+                                            <ContextMenu DataContext="{Binding Path=Data, Source={StaticResource ViewModel}}">
+                                                <ContextMenu.Resources>
+                                                    <Style TargetType="{x:Type MenuItem}">
+                                                        <Setter Property="CommandParameter" Value="{Binding Path=Data.DataContext, Source={StaticResource ListItemProxy}}" />
+                                                        <Setter Property="Visibility" Value="{Binding
+                                                                    Path=IsEnabled,
+                                                                    RelativeSource={RelativeSource Self},
+                                                                    Converter={StaticResource BoolToVisibility}}" />
+                                                    </Style>
+                                                </ContextMenu.Resources>
+                                                <MenuItem Header="{x:Static resx:Messages.Edit}" Command="{Binding SelectItem}" />
+                                                <MenuItem Header="{x:Static resx:Messages.MarkAsWatched}" Command="{Binding MarkAsWatched}" />
+                                                <MenuItem Header="{x:Static resx:Messages.MarkAsNotWatched}" Command="{Binding MarkAsNotWatched}" />
+                                                <MenuItem Header="{x:Static resx:Messages.MarkAsReleased}" Command="{Binding MarkAsReleased}" />
+                                                <MenuItem Header="{x:Static resx:Messages.MarkAsNotReleased}" Command="{Binding MarkAsNotReleased}" />
                                             </ContextMenu>
                                         </Button.ContextMenu>
                                         

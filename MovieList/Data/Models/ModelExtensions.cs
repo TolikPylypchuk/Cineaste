@@ -82,5 +82,10 @@ namespace MovieList.Data.Models
             var firstEntry = GetFirstEntry(movieSeries);
             return firstEntry.Movie != null ? firstEntry.Movie.GetColor(config) : firstEntry.Series!.GetColor(config);
         }
+
+        public static IEnumerable<Season> GetOrderedSeasons(this Series series)
+            => series.Seasons
+                .OrderBy(season => season.Periods.OrderBy(period => period.StartYear).ThenBy(period => period.StartMonth).First().StartYear)
+                .OrderBy(season => season.Periods.OrderBy(period => period.StartYear).ThenBy(period => period.StartMonth).First().StartMonth);
     }
 }

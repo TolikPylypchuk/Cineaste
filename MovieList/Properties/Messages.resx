@@ -186,6 +186,18 @@
   <data name="ListItemYear" xml:space="preserve">
     <value>Рік</value>
   </data>
+  <data name="MarkAsNotReleased" xml:space="preserve">
+    <value>Позначити як майбутній</value>
+  </data>
+  <data name="MarkAsNotWatched" xml:space="preserve">
+    <value>Позначити як не переглянутий</value>
+  </data>
+  <data name="MarkAsReleased" xml:space="preserve">
+    <value>Позначити як не майбутній</value>
+  </data>
+  <data name="MarkAsWatched" xml:space="preserve">
+    <value>Позначити як переглянутий</value>
+  </data>
   <data name="Movie" xml:space="preserve">
     <value>Фільм</value>
   </data>
