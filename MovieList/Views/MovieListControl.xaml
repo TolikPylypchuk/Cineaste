@@ -97,75 +97,84 @@
                     <HeaderedItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Name="ListItem" BorderBrush="LightGray" BorderThickness="0,1,0,0">
-                                <Grid HorizontalAlignment="Stretch">
-                                    <Grid.Resources>
-                                        <SolidColorBrush x:Key="Color" Color="{Binding Path=Color}" />
-                                        <local:BindingProxy x:Key="ListItemProxy" Data="{Binding ElementName=ListItem}"/>
-                                    </Grid.Resources>
+                                <ContentControl>
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="PreviewMouseDoubleClick">
+                                            <b:InvokeCommandAction Command="{Binding Path=Data.SelectItem, Source={StaticResource ViewModel}}"
+                                                                   CommandParameter="{Binding}" />
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
                                     
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40" SharedSizeGroup="First" />
-                                        <ColumnDefinition Width="*" SharedSizeGroup="Second" />
-                                        <ColumnDefinition Width="*" SharedSizeGroup="Third" />
-                                        <ColumnDefinition Width="110" SharedSizeGroup="Fourth" />
-                                        <ColumnDefinition Width="20" SharedSizeGroup="Fifth" />
-                                    </Grid.ColumnDefinitions>
+                                    <Grid HorizontalAlignment="Stretch" IsHitTestVisible="True">
+                                        <Grid.Resources>
+                                            <SolidColorBrush x:Key="Color" Color="{Binding Path=Color}" />
+                                            <local:BindingProxy x:Key="ListItemProxy" Data="{Binding ElementName=ListItem}"/>
+                                        </Grid.Resources>
+                                        
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40" SharedSizeGroup="First" />
+                                            <ColumnDefinition Width="*" SharedSizeGroup="Second" />
+                                            <ColumnDefinition Width="*" SharedSizeGroup="Third" />
+                                            <ColumnDefinition Width="110" SharedSizeGroup="Fourth" />
+                                            <ColumnDefinition Width="20" SharedSizeGroup="Fifth" />
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBox Grid.Column="0" Text="{Binding Path=DisplayNumber, Mode=OneWay}"
+                                        <TextBox Grid.Column="0" Text="{Binding Path=DisplayNumber, Mode=OneWay}"
                                              Foreground="{DynamicResource ResourceKey=Color}"
                                              Style="{StaticResource NumberTextBoxStyle}" />
 
-                                    <TextBox Grid.Column="1" Text="{Binding Path=Title, Mode=OneWay}"
+                                        <TextBox Grid.Column="1" Text="{Binding Path=Title, Mode=OneWay}"
                                              Foreground="{DynamicResource ResourceKey=Color}"
                                              Style="{StaticResource TextBoxStyle}" />
 
-                                    <TextBox Grid.Column="2" Text="{Binding Path=OriginalTitle, Mode=OneWay}"
+                                        <TextBox Grid.Column="2" Text="{Binding Path=OriginalTitle, Mode=OneWay}"
                                              Foreground="{DynamicResource ResourceKey=Color}"
                                              Style="{StaticResource TextBoxStyle}" />
 
-                                    <TextBox Grid.Column="3" Text="{Binding Path=Year, Mode=OneWay}"
+                                        <TextBox Grid.Column="3" Text="{Binding Path=Year, Mode=OneWay}"
                                              Foreground="{DynamicResource ResourceKey=Color}"
                                              Style="{StaticResource YearTextBoxStyle}" />
 
-                                    <Button Grid.Column="4" Background="Transparent" BorderThickness="0" Content="⋮">
-                                        <Button.ContextMenu>
-                                            <ContextMenu DataContext="{Binding Path=Data, Source={StaticResource ViewModel}}">
-                                                <ContextMenu.Resources>
-                                                    <Style TargetType="{x:Type MenuItem}">
-                                                        <Setter Property="CommandParameter" Value="{Binding Path=Data.DataContext, Source={StaticResource ListItemProxy}}" />
-                                                        <Setter Property="Visibility" Value="{Binding
+                                        <Button Grid.Column="4" Background="Transparent" BorderThickness="0" Content="⋮">
+                                            <Button.ContextMenu>
+                                                <ContextMenu DataContext="{Binding Path=Data, Source={StaticResource ViewModel}}">
+                                                    <ContextMenu.Resources>
+                                                        <Style TargetType="{x:Type MenuItem}">
+                                                            <Setter Property="CommandParameter" Value="{Binding Path=Data.DataContext, Source={StaticResource ListItemProxy}}" />
+                                                            <Setter Property="Visibility" Value="{Binding
                                                                     Path=IsEnabled,
                                                                     RelativeSource={RelativeSource Self},
                                                                     Converter={StaticResource BoolToVisibility}}" />
-                                                    </Style>
-                                                </ContextMenu.Resources>
-                                                <MenuItem Header="{x:Static resx:Messages.Edit}" Command="{Binding SelectItem}" />
-                                                <MenuItem Header="{x:Static resx:Messages.MarkAsWatched}" Command="{Binding MarkAsWatched}" />
-                                                <MenuItem Header="{x:Static resx:Messages.MarkAsNotWatched}" Command="{Binding MarkAsNotWatched}" />
-                                                <MenuItem Header="{x:Static resx:Messages.MarkAsReleased}" Command="{Binding MarkAsReleased}" />
-                                                <MenuItem Header="{x:Static resx:Messages.MarkAsNotReleased}" Command="{Binding MarkAsNotReleased}" />
-                                            </ContextMenu>
-                                        </Button.ContextMenu>
-                                        
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
-                                                <Style.Triggers>
-                                                    <EventTrigger RoutedEvent="Click">
-                                                        <EventTrigger.Actions>
-                                                            <BeginStoryboard>
-                                                                <Storyboard>
-                                                                    <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="ContextMenu.IsOpen">
-                                                                        <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
-                                                                    </BooleanAnimationUsingKeyFrames>
-                                                                </Storyboard>
-                                                            </BeginStoryboard>
-                                                        </EventTrigger.Actions>
-                                                    </EventTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
-                                </Grid>
+                                                        </Style>
+                                                    </ContextMenu.Resources>
+                                                    <MenuItem Header="{x:Static resx:Messages.Edit}" Command="{Binding SelectItem}" />
+                                                    <MenuItem Header="{x:Static resx:Messages.MarkAsWatched}" Command="{Binding MarkAsWatched}" />
+                                                    <MenuItem Header="{x:Static resx:Messages.MarkAsNotWatched}" Command="{Binding MarkAsNotWatched}" />
+                                                    <MenuItem Header="{x:Static resx:Messages.MarkAsReleased}" Command="{Binding MarkAsReleased}" />
+                                                    <MenuItem Header="{x:Static resx:Messages.MarkAsNotReleased}" Command="{Binding MarkAsNotReleased}" />
+                                                </ContextMenu>
+                                            </Button.ContextMenu>
+
+                                            <Button.Style>
+                                                <Style TargetType="{x:Type Button}">
+                                                    <Style.Triggers>
+                                                        <EventTrigger RoutedEvent="Click">
+                                                            <EventTrigger.Actions>
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="ContextMenu.IsOpen">
+                                                                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
+                                                                        </BooleanAnimationUsingKeyFrames>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger.Actions>
+                                                        </EventTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </Grid>
+                                </ContentControl>
                             </Border>
                         </DataTemplate>
                     </HeaderedItemsControl.ItemTemplate>

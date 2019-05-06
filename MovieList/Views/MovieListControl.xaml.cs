@@ -9,9 +9,7 @@ namespace MovieList.Views
     public partial class MovieListControl : UserControl
     {
         public MovieListControl()
-        {
-            this.InitializeComponent();
-        }
+            => this.InitializeComponent();
 
         public MovieListViewModel ViewModel { get; set; }
 
