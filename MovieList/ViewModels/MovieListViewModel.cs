@@ -67,7 +67,7 @@ namespace MovieList.ViewModels
                 using var scope = app.ServiceProvider.CreateScope();
                 var service = scope.ServiceProvider.GetRequiredService<IMovieListService>();
                 await service.ToggleWatchedAsync(item);
-                this.UpdateColor(item);
+                this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
             }
         }
 
@@ -94,7 +94,7 @@ namespace MovieList.ViewModels
                 using var scope = app.ServiceProvider.CreateScope();
                 var service = scope.ServiceProvider.GetRequiredService<IMovieListService>();
                 await service.ToggleReleasedAsync(item);
-                this.UpdateColor(item);
+                this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
             }
         }
 
@@ -104,27 +104,30 @@ namespace MovieList.ViewModels
         public bool CanMarkAsNotReleased(object obj)
             => obj is MovieListItem item ? item.Movie.IsReleased && item.Movie.Year >= DateTime.Now.Year : false;
 
-        public void UpdateColor(ListItem item)
+        public void UpdateColor(ListItem item, Configuration? config)
         {
-            item.UpdateColor(app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
+            item.UpdateColor(config);
 
-            switch (item)
+            var parentItem = item switch
             {
-                case MovieListItem movieItem when movieItem.Movie.Entry != null:
-                    this.UpdateColor(this.Items.First(i =>
+                MovieListItem movieItem when movieItem.Movie.Entry != null =>
+                    this.Items.FirstOrDefault(i =>
                         i is MovieSeriesListItem movieSeriesItem &&
-                        movieSeriesItem.MovieSeries.Id == movieItem.Movie.Entry!.MovieSeriesId));
-                    break;
-                case SeriesListItem seriesItem when seriesItem.Series.Entry != null:
-                    this.UpdateColor(this.Items.First(i =>
+                        movieSeriesItem.MovieSeries.Id == movieItem.Movie.Entry.MovieSeriesId),
+                SeriesListItem seriesItem when seriesItem.Series.Entry != null =>
+                    this.Items.FirstOrDefault(i =>
+                            i is MovieSeriesListItem movieSeriesItem &&
+                            movieSeriesItem.MovieSeries.Id == seriesItem.Series.Entry.MovieSeriesId),
+                MovieSeriesListItem movieSeriesItem when movieSeriesItem.MovieSeries.ParentSeries != null =>
+                    this.Items.FirstOrDefault(i =>
                         i is MovieSeriesListItem movieSeriesItem &&
-                        movieSeriesItem.MovieSeries.Id == seriesItem.Series.Entry!.MovieSeriesId));
-                    break;
-                case MovieSeriesListItem movieSeriesItem when movieSeriesItem.MovieSeries.ParentSeries != null:
-                    this.UpdateColor(this.Items.First(i =>
-                        i is MovieSeriesListItem movieSeriesItem &&
-                        movieSeriesItem.MovieSeries.Id == movieSeriesItem.MovieSeries.ParentSeriesId));
-                    break;
+                        movieSeriesItem.MovieSeries.Id == movieSeriesItem.MovieSeries.ParentSeriesId),
+                _ => null
+            };
+
+            if (parentItem != null)
+            {
+                this.UpdateColor(parentItem, config);
             }
         }
     }
