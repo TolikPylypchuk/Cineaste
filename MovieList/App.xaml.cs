@@ -57,13 +57,13 @@ namespace MovieList
                 .AddScoped<IKindService, KindService>()
                 .AddTransient<IFileService, FileService>()
 
-                .AddTransient<MainViewModel>()
-                .AddTransient<MovieListViewModel>()
+                .AddSingleton<MainViewModel>()
+                .AddSingleton<MovieListViewModel>()
+                .AddSingleton<SettingsViewModel>()
+                .AddSingleton<SidePanelViewModel>()
                 .AddTransient<MovieFormViewModel>()
                 .AddTransient<SeriesFormViewModel>()
                 .AddTransient<MovieSeriesFormViewModel>()
-                .AddTransient<SettingsViewModel>()
-                .AddTransient<SidePanelViewModel>()
 
                 .AddSingleton<MainWindow>()
                 .AddSingleton(_ => this);

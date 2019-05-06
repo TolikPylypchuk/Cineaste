@@ -32,12 +32,18 @@ namespace MovieList.ViewModels
         private string databasePath;
 
         private readonly App app;
+        private readonly MovieListViewModel movieListViewModel;
         private readonly IWritableOptions<Configuration> config;
         private readonly LoggingConfig loggingConfig;
 
-        public SettingsViewModel(App app, IWritableOptions<Configuration> config, IOptions<LoggingConfig> loggingConfig)
+        public SettingsViewModel(
+            App app,
+            MovieListViewModel movieListViewModel,
+            IWritableOptions<Configuration> config,
+            IOptions<LoggingConfig> loggingConfig)
         {
             this.app = app;
+            this.movieListViewModel = movieListViewModel;
             this.config = config;
             this.loggingConfig = loggingConfig.Value;
 
@@ -203,6 +209,8 @@ namespace MovieList.ViewModels
                 var service = scope.ServiceProvider.GetRequiredService<IKindService>();
 
                 await service.SaveKindsAsync(kinds);
+                await this.movieListViewModel.LoadItemsAsync();
+
                 this.KindsChanged = false;
             }
 
