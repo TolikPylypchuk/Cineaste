@@ -3,16 +3,16 @@ using System.Windows.Input;
 
 namespace MovieList
 {
-    public class RelayCommand : ICommand
+    public class DelegateCommand : ICommand
     {
         private readonly Action<object> execute;
         private readonly Func<object, bool> canExecute;
 
-        public RelayCommand(Action<object> execute)
+        public DelegateCommand(Action<object> execute)
             : this (execute, _ => true)
         { }
 
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
+        public DelegateCommand(Action<object> execute, Func<object, bool> canExecute)
         {
             this.execute = execute;
             this.canExecute = canExecute;

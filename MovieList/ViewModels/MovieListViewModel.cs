@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -21,18 +22,18 @@ namespace MovieList.ViewModels
         public MovieListViewModel(App app)
         {
             this.app = app;
-            this.SelectItem = new RelayCommand(this.OnSelectItem);
-            this.MarkAsWatched = new RelayCommand(this.ToggleWatched, this.CanMarkAsWatched);
-            this.MarkAsNotWatched = new RelayCommand(this.ToggleWatched, this.CanMarkAsNotWatched);
-            this.MarkAsReleased = new RelayCommand(this.ToggleReleased, this.CanMarkAsReleased);
-            this.MarkAsNotReleased = new RelayCommand(this.ToggleReleased, this.CanMarkAsNotReleased);
+            this.SelectItem = new DelegateCommand(this.OnSelectItem);
+            this.MarkAsWatched = new DelegateCommand(this.ToggleWatched, this.CanMarkAsWatched);
+            this.MarkAsNotWatched = new DelegateCommand(this.ToggleWatched, this.CanMarkAsNotWatched);
+            this.MarkAsReleased = new DelegateCommand(this.ToggleReleased, this.CanMarkAsReleased);
+            this.MarkAsNotReleased = new DelegateCommand(this.ToggleReleased, this.CanMarkAsNotReleased);
         }
 
-        public RelayCommand SelectItem { get; }
-        public RelayCommand MarkAsWatched { get; }
-        public RelayCommand MarkAsNotWatched { get; }
-        public RelayCommand MarkAsReleased { get; }
-        public RelayCommand MarkAsNotReleased { get; }
+        public ICommand SelectItem { get; }
+        public ICommand MarkAsWatched { get; }
+        public ICommand MarkAsNotWatched { get; }
+        public ICommand MarkAsReleased { get; }
+        public ICommand MarkAsNotReleased { get; }
 
         public ObservableCollection<ListItem> Items
         {

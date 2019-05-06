@@ -47,20 +47,20 @@ namespace MovieList.ViewModels
             this.defaultSeasonOriginalTitle = config.Value.DefaultSeasonOriginalTitle;
             this.databasePath = config.Value.DatabasePath;
 
-            this.AddKind = new RelayCommand(_ => this.OnAddKind());
-            this.RemoveKind = new RelayCommand(this.OnRemoveKind);
-            this.Save = new RelayCommand(async _ => await this.SaveChangesAsync(), _ => this.CanSaveChanges);
-            this.Cancel = new RelayCommand(async _ => await this.CancelChangesAsync(), _ => this.CanCancelChanges);
-            this.ViewLog = new RelayCommand(_ => this.OnViewLog());
+            this.AddKind = new DelegateCommand(_ => this.OnAddKind());
+            this.RemoveKind = new DelegateCommand(this.OnRemoveKind);
+            this.Save = new DelegateCommand(async _ => await this.SaveChangesAsync(), _ => this.CanSaveChanges);
+            this.Cancel = new DelegateCommand(async _ => await this.CancelChangesAsync(), _ => this.CanCancelChanges);
+            this.ViewLog = new DelegateCommand(_ => this.OnViewLog());
         }
 
         public bool IsLoaded { get; private set; }
 
-        public RelayCommand AddKind { get; }
-        public RelayCommand RemoveKind { get; }
-        public RelayCommand Save { get; }
-        public RelayCommand Cancel { get; }
-        public RelayCommand ViewLog { get; }
+        public ICommand AddKind { get; }
+        public ICommand RemoveKind { get; }
+        public ICommand Save { get; }
+        public ICommand Cancel { get; }
+        public ICommand ViewLog { get; }
 
         public Color NotWatchedColor
         {
