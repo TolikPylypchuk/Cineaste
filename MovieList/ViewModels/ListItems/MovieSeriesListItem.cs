@@ -75,5 +75,13 @@ namespace MovieList.ViewModels.ListItems
             int result = this.MovieSeries.GetTitleToCompare().CompareTo(item.Title);
             return result != 0 ? result : this.Year.CompareTo(item.Year);
         }
+
+        public override void OpenSidePanel(SidePanelViewModel sidePanelViewModel)
+        {
+            if (sidePanelViewModel.OpenMovieSeries.CanExecute(this.MovieSeries))
+            {
+                sidePanelViewModel.OpenMovieSeries.Execute(this.MovieSeries);
+            }
+        }
     }
 }

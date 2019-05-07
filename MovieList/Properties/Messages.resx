@@ -123,6 +123,12 @@
   <data name="AddIcon" xml:space="preserve">
     <value>+</value>
   </data>
+  <data name="AddNewMovie" xml:space="preserve">
+    <value>Додати фільм</value>
+  </data>
+  <data name="AddNewSeries" xml:space="preserve">
+    <value>Додати серіал</value>
+  </data>
   <data name="AdvancedSettings" xml:space="preserve">
     <value>Розширені налаштування</value>
   </data>

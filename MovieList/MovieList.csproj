@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\AddNewControl.xaml" />
     <None Remove="Views\MovieFormControl.xaml" />
     <None Remove="Views\MovieListControl.xaml" />
     <None Remove="Views\MovieSeriesFormControl.xaml" />
@@ -54,6 +55,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\AddNewControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\MovieFormControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -79,6 +83,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\AddNewControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

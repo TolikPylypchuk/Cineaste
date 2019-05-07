@@ -106,6 +106,7 @@ namespace MovieList.ViewModels.ListItems
         public abstract int CompareTo(MovieSeriesListItem other);
 
         public abstract void UpdateColor(Configuration? config);
+        public abstract void OpenSidePanel(SidePanelViewModel sidePanelViewModel);
 
         protected int CompareToEntry(ListItem item, MovieSeriesEntry? thisEntry, MovieSeriesEntry? otherEntry)
             => (thisEntry, otherEntry) switch

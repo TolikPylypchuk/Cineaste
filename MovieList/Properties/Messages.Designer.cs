@@ -79,6 +79,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Додати фільм.
+        /// </summary>
+        public static string AddNewMovie {
+            get {
+                return ResourceManager.GetString("AddNewMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Додати серіал.
+        /// </summary>
+        public static string AddNewSeries {
+            get {
+                return ResourceManager.GetString("AddNewSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Розширені налаштування.
         /// </summary>
         public static string AdvancedSettings {

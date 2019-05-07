@@ -59,11 +59,12 @@ namespace MovieList
 
                 .AddSingleton<MainViewModel>()
                 .AddSingleton<MovieListViewModel>()
-                .AddSingleton<SettingsViewModel>()
                 .AddSingleton<SidePanelViewModel>()
-                .AddTransient<MovieFormViewModel>()
-                .AddTransient<SeriesFormViewModel>()
-                .AddTransient<MovieSeriesFormViewModel>()
+                .AddSingleton<AddNewViewModel>()
+                .AddSingleton<MovieFormViewModel>()
+                .AddSingleton<SeriesFormViewModel>()
+                .AddSingleton<MovieSeriesFormViewModel>()
+                .AddSingleton<SettingsViewModel>()
 
                 .AddSingleton<MainWindow>()
                 .AddSingleton(_ => this);

@@ -17,11 +17,14 @@ namespace MovieList.ViewModels
     public class MovieListViewModel : ViewModelBase
     {
         private readonly App app;
+        private readonly SidePanelViewModel sidePanelViewModel;
         private ObservableCollection<ListItem> items = new ObservableCollection<ListItem>();
 
-        public MovieListViewModel(App app)
+        public MovieListViewModel(App app, SidePanelViewModel sidePanelViewModel)
         {
             this.app = app;
+            this.sidePanelViewModel = sidePanelViewModel;
+
             this.SelectItem = new DelegateCommand(this.OnSelectItem);
             this.MarkAsWatched = new DelegateCommand(this.ToggleWatched, this.CanMarkAsWatched);
             this.MarkAsNotWatched = new DelegateCommand(this.ToggleWatched, this.CanMarkAsNotWatched);
@@ -56,7 +59,7 @@ namespace MovieList.ViewModels
         {
             if (obj is ListItem item)
             {
-                MessageBox.Show(item.Title);
+                item.OpenSidePanel(this.sidePanelViewModel);
             }
         }
 

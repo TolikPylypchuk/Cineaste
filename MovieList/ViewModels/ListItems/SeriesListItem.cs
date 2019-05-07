@@ -35,5 +35,13 @@ namespace MovieList.ViewModels.ListItems
 
         public override void UpdateColor(Configuration? config)
             => this.Color = this.Series.GetColor(config);
+
+        public override void OpenSidePanel(SidePanelViewModel sidePanelViewModel)
+        {
+            if (sidePanelViewModel.OpenSeries.CanExecute(this.Series))
+            {
+                sidePanelViewModel.OpenSeries.Execute(this.Series);
+            }
+        }
     }
 }

@@ -29,8 +29,17 @@ namespace MovieList.ViewModels
             this.MainWindow.SettingsControl.DataContext = this.MainWindow.SettingsControl.ViewModel =
                 this.app.ServiceProvider.GetRequiredService<SettingsViewModel>();
 
+            var sidePanelViewModel = this.app.ServiceProvider.GetRequiredService<SidePanelViewModel>();
+            sidePanelViewModel.SidePanelControl = this.MainWindow.SidePanelControl;
+
             this.MainWindow.SidePanelControl.DataContext = this.MainWindow.SidePanelControl.ViewModel =
-                this.app.ServiceProvider.GetRequiredService<SidePanelViewModel>();
+                sidePanelViewModel;
+
+            if (this.MainWindow.SidePanelControl.ContentContainer.Content is AddNewControl control)
+            {
+                control.DataContext = control.ViewModel =
+                    this.app.ServiceProvider.GetRequiredService<AddNewViewModel>();
+            }
         }
 
         public void RestoreWindowState()
