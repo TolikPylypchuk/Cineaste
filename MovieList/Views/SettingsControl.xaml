@@ -25,7 +25,9 @@
             <Setter Property="Margin" Value="0,5,0,0" />
             <Setter Property="Padding" Value="0,0,0,5" />
         </Style>
-
+        
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+        
         <local:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>
 
@@ -33,7 +35,8 @@
         <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Messages.SettingsTitle}" FontSize="24"
                    TextAlignment="Center" HorizontalAlignment="Stretch" Margin="5" />
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" DockPanel.Dock="Bottom">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" DockPanel.Dock="Bottom"
+                    Visibility="{Binding CanSaveOrCancelChanges, Converter={StaticResource BoolToVisibility}}">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Margin" Value="2" />

@@ -147,6 +147,9 @@ namespace MovieList.ViewModels
         public bool CanCancelChanges
             => this.IsLoaded && this.AreChangesPresent();
 
+        public bool CanSaveOrCancelChanges
+            => this.CanSaveChanges || this.CanCancelChanges;
+
         public async void LoadKindsAsync()
         {
             using var scope = this.app.ServiceProvider.CreateScope();
@@ -161,7 +164,7 @@ namespace MovieList.ViewModels
             if (this.IsLoaded)
             {
                 this.KindsChanged = true;
-                CommandManager.InvalidateRequerySuggested();
+                this.OnCanSaveOrCancelChangesChanged();
             }
         }
 
@@ -175,7 +178,7 @@ namespace MovieList.ViewModels
             }));
 
             this.KindsChanged = true;
-            CommandManager.InvalidateRequerySuggested();
+            this.OnCanSaveOrCancelChangesChanged();
         }
 
         private async void OnRemoveKind(object obj)
@@ -189,7 +192,7 @@ namespace MovieList.ViewModels
                 {
                     this.Kinds.Remove(kind);
                     this.KindsChanged = true;
-                    CommandManager.InvalidateRequerySuggested();
+                    this.OnCanSaveOrCancelChangesChanged();
                 } else
                 {
                     MessageBox.Show(
@@ -238,7 +241,7 @@ namespace MovieList.ViewModels
             this.config.Update(config => config.DatabasePath = this.DatabasePath);
             this.config.Value.DatabasePath = this.DatabasePath;
 
-            CommandManager.InvalidateRequerySuggested();
+            this.OnCanSaveOrCancelChangesChanged();
         }
 
         private async Task CancelChangesAsync()
@@ -257,11 +260,16 @@ namespace MovieList.ViewModels
             this.Kinds = await service.LoadAllKindsAsync();
             this.KindsChanged = false;
 
-            CommandManager.InvalidateRequerySuggested();
+            this.OnCanSaveOrCancelChangesChanged();
         }
 
-        public void OnViewLog()
-            => Process.Start("notepad.exe", this.loggingConfig.File.Path);
+        private void OnCanSaveOrCancelChangesChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
+            this.OnPropertyChanged(nameof(this.CanSaveChanges));
+            this.OnPropertyChanged(nameof(this.CanCancelChanges));
+            this.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
+        }
 
         private void CopyConfig(Configuration config)
         {
@@ -271,6 +279,9 @@ namespace MovieList.ViewModels
             config.DefaultSeasonOriginalTitle = this.DefaultSeasonOriginalTitle;
         }
 
+        private bool AreChangesPresent()
+            => this.IsConfigChanged() || this.KindsChanged;
+
         private bool IsConfigChanged()
             => this.NotWatchedColor != this.config.Value.NotWatchedColor ||
                 this.NotReleasedColor != this.config.Value.NotReleasedColor ||
@@ -278,7 +289,7 @@ namespace MovieList.ViewModels
                 this.DefaultSeasonOriginalTitle != this.config.Value.DefaultSeasonOriginalTitle ||
                 this.DatabasePath != this.config.Value.DatabasePath;
 
-        private bool AreChangesPresent()
-            =>  this.IsConfigChanged() || this.KindsChanged;
+        private void OnViewLog()
+            => Process.Start("notepad.exe", this.loggingConfig.File.Path);
     }
 }
