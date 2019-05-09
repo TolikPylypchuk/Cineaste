@@ -1,6 +1,6 @@
 using System.Windows;
 using System.Windows.Input;
-
+using Microsoft.Extensions.DependencyInjection;
 using MovieList.Data.Models;
 using MovieList.Views;
 
@@ -8,8 +8,12 @@ namespace MovieList.ViewModels
 {
     public class SidePanelViewModel : ViewModelBase
     {
-        public SidePanelViewModel()
+        private readonly App app;
+
+        public SidePanelViewModel(App app)
         {
+            this.app = app;
+
             this.OpenMovie = new DelegateCommand(this.OnOpenMovie);
             this.OpenSeries = new DelegateCommand(this.OnOpenSeries);
             this.OpenMovieSeries = new DelegateCommand(this.OnOpenMovieSeries);
@@ -27,7 +31,10 @@ namespace MovieList.ViewModels
         {
             if (obj is Movie movie)
             {
-                MessageBox.Show(movie.Titles.Count != 0 ? movie.Title.Name : "Movie");
+                var control = new MovieFormControl();
+                control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<MovieFormViewModel>();
+                control.ViewModel.Movie = movie;
+                this.SidePanelControl.ContentContainer.Content = control;
             }
         }
 
@@ -49,6 +56,9 @@ namespace MovieList.ViewModels
 
         public void OnClose()
         {
+            var control = new AddNewControl();
+            control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<AddNewViewModel>();
+            this.SidePanelControl.ContentContainer.Content = control;
         }
     }
 }

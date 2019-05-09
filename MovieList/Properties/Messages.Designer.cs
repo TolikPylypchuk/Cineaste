@@ -349,6 +349,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Новий фільм.
+        /// </summary>
+        public static string NewMovie {
+            get {
+                return ResourceManager.GetString("NewMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Новий серіал.
+        /// </summary>
+        public static string NewSeries {
+            get {
+                return ResourceManager.GetString("NewSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Майбутній.
         /// </summary>
         public static string NotReleased {

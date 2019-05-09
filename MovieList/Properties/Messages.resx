@@ -213,6 +213,12 @@
   <data name="NewKind" xml:space="preserve">
     <value>Новий вид</value>
   </data>
+  <data name="NewMovie" xml:space="preserve">
+    <value>Новий фільм</value>
+  </data>
+  <data name="NewSeries" xml:space="preserve">
+    <value>Новий серіал</value>
+  </data>
   <data name="NotReleased" xml:space="preserve">
     <value>Майбутній</value>
   </data>
