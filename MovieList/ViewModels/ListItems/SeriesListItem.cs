@@ -11,11 +11,13 @@ namespace MovieList.ViewModels.ListItems
 
         public SeriesListItem(Series series, Configuration? config)
             : base(
-                  series.Entry,
-                  series.Title.Name,
-                  series.OriginalTitle.Name,
-                  $"{series.StartYear}-{series.EndYear}",
-                  series.GetColor(config))
+                series.Entry,
+                series.Title.Name,
+                series.OriginalTitle.Name,
+                series.StartYear != series.EndYear
+                    ? $"{series.StartYear}-{series.EndYear}"
+                    : series.StartYear.ToString(),
+                series.GetColor(config))
         {
             this.Series = series;
         }

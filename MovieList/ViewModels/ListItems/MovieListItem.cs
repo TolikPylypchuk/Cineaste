@@ -11,11 +11,11 @@ namespace MovieList.ViewModels.ListItems
 
         public MovieListItem(Movie movie, Configuration? config)
             : base(
-                  movie.Entry,
-                  movie.Title.Name,
-                  movie.OriginalTitle.Name,
-                  movie.Year.ToString(),
-                  movie.GetColor(config))
+                movie.Entry,
+                movie.Title.Name,
+                movie.OriginalTitle.Name,
+                movie.Year.ToString(),
+                movie.GetColor(config))
         {
             this.Movie = movie;
         }

@@ -13,11 +13,11 @@ namespace MovieList.ViewModels.ListItems
 
         public MovieSeriesListItem(MovieSeries movieSeries, Configuration? config)
             : base(
-                  null,
-                  movieSeries.Title != null ? $"{movieSeries.Title.Name}:" : String.Empty,
-                  movieSeries.OriginalTitle != null ? $"{movieSeries.OriginalTitle.Name}:" : String.Empty,
-                  String.Empty,
-                  movieSeries.GetColor(config))
+                null,
+                movieSeries.Title != null ? $"{movieSeries.Title.Name}:" : String.Empty,
+                movieSeries.OriginalTitle != null ? $"{movieSeries.OriginalTitle.Name}:" : String.Empty,
+                String.Empty,
+                movieSeries.GetColor(config))
         {
             this.MovieSeries = movieSeries;
         }

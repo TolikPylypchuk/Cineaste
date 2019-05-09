@@ -1,17 +1,21 @@
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using MovieList.Data.Models;
 using MovieList.Properties;
+using MovieList.ViewModels.FormItems;
 
 namespace MovieList.ViewModels
 {
     public class MovieFormViewModel : ViewModelBase
     {
-        private Movie movie;
+        private MovieFormItem movie;
 
-        public MovieFormViewModel()
+        public MovieFormViewModel(SidePanelViewModel sidePanel)
         {
+            this.SidePanel = sidePanel;
+
             this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(async _ => await this.CancelAsync(), _ => this.CanCancelChanges);
         }
@@ -19,7 +23,7 @@ namespace MovieList.ViewModels
         public ICommand Save { get; }
         public ICommand Cancel { get; }
 
-        public Movie Movie
+        public MovieFormItem Movie
         {
             get => this.movie;
             set
@@ -30,11 +34,19 @@ namespace MovieList.ViewModels
             }
         }
 
-        public string FormTitle
-            => this.movie.Id != default ? this.movie.Title.Name : Messages.NewMovie;
+        public SidePanelViewModel SidePanel { get; set; }
 
-        public bool CanSaveChanges => true;
-        public bool CanCancelChanges => true;
+        public string FormTitle
+            => this.movie.Movie.Id != default ? this.movie.Movie.Title.Name : Messages.NewMovie;
+
+        public bool CanSaveChanges
+            => this.Movie.AreChangesPresent &&
+                !this.Movie.HasErrors &&
+                !this.Movie.Titles.Any(t => t.HasErrors) &&
+                !this.Movie.OriginalTitles.Any(t => t.HasErrors);
+
+        public bool CanCancelChanges
+            => this.Movie.AreChangesPresent;
 
         public bool CanSaveOrCancelChanges
             => this.CanSaveChanges || this.CanCancelChanges;
@@ -47,6 +59,14 @@ namespace MovieList.ViewModels
         public Task CancelAsync()
         {
             return Task.CompletedTask;
+        }
+
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            base.OnPropertyChanged(propertyName);
+            base.OnPropertyChanged(nameof(CanSaveChanges));
+            base.OnPropertyChanged(nameof(CanCancelChanges));
+            base.OnPropertyChanged(nameof(CanSaveOrCancelChanges));
         }
     }
 }

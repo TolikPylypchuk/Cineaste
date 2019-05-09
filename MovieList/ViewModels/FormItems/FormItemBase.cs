@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -27,7 +26,11 @@ namespace MovieList.ViewModels.FormItems
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             base.OnPropertyChanged(propertyName);
-            this.CheckIfValuesChanged();
+
+            if (propertyName != nameof(AreChangesPresent))
+            {
+                this.CheckIfValuesChanged();
+            }
         }
 
         private void CheckIfValuesChanged()

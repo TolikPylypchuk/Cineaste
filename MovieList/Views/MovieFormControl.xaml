@@ -12,8 +12,14 @@
     </UserControl.Resources>
     
     <DockPanel>
-        <TextBlock Text="{Binding FormTitle}" FontSize="24" Margin="5" HorizontalAlignment="Stretch"
-                   TextWrapping="Wrap" DockPanel.Dock="Top" />
+        <DockPanel DockPanel.Dock="Top">
+            <Button DockPanel.Dock="Right" Background="Transparent" BorderThickness="0" Margin="5"
+                    Command="{Binding SidePanel.Close}" FontSize="24" Content="X" Width="30" Height="30"
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                    VerticalAlignment="Top" />
+            
+            <TextBlock Text="{Binding FormTitle}" FontSize="24" Margin="5" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
+        </DockPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" DockPanel.Dock="Bottom"
                     Visibility="{Binding CanSaveOrCancelChanges, Converter={StaticResource BoolToVisibility}}">
@@ -30,8 +36,10 @@
             <Button Content="{x:Static resx:Messages.Save}" Command="{Binding Save}" />
         </StackPanel>
 
-        <StackPanel>
-            
-        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel DataContext="{Binding Movie}" Margin="10">
+                <Image Source="{Binding Poster}" />
+            </StackPanel>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>

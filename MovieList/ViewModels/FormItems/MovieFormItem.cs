@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-
+using System.Windows.Media.Imaging;
 using MovieList.Data.Models;
 
 namespace MovieList.ViewModels.FormItems
@@ -18,6 +18,7 @@ namespace MovieList.ViewModels.FormItems
         private string? imdbLink;
         private string? posterUrl;
         private Kind kind;
+        private BitmapImage poster;
 
         public MovieFormItem(Movie movie)
         {
@@ -39,6 +40,16 @@ namespace MovieList.ViewModels.FormItems
             this.imdbLink = movie.ImdbLink;
             this.posterUrl = movie.PosterUrl;
             this.kind = movie.Kind;
+
+            if (this.posterUrl != null)
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(this.posterUrl, UriKind.Absolute);
+                bitmap.EndInit();
+
+                this.Poster = bitmap;
+            }
         }
 
         public Movie Movie { get; }
@@ -119,6 +130,16 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.kind = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public BitmapImage Poster
+        {
+            get => this.poster;
+            set
+            {
+                this.poster = value;
                 this.OnPropertyChanged();
             }
         }

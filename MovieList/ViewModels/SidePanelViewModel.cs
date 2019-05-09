@@ -1,7 +1,10 @@
 using System.Windows;
 using System.Windows.Input;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using MovieList.Data.Models;
+using MovieList.ViewModels.FormItems;
 using MovieList.Views;
 
 namespace MovieList.ViewModels
@@ -33,7 +36,7 @@ namespace MovieList.ViewModels
             {
                 var control = new MovieFormControl();
                 control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<MovieFormViewModel>();
-                control.ViewModel.Movie = movie;
+                control.ViewModel.Movie = new MovieFormItem(movie);
                 this.SidePanelControl.ContentContainer.Content = control;
             }
         }
