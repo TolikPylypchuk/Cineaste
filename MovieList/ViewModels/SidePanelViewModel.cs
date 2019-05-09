@@ -43,18 +43,10 @@ namespace MovieList.ViewModels
 
         private void OnOpenSeries(object obj)
         {
-            if (obj is Series series)
-            {
-                MessageBox.Show(series.Titles.Count != 0 ? series.Title.Name : "Series");
-            }
         }
 
         public void OnOpenMovieSeries(object obj)
         {
-            if (obj is MovieSeries movieSeries)
-            {
-                MessageBox.Show(movieSeries.Titles.Count != 0 ? movieSeries.Title?.Name : "Movie Series");
-            }
         }
 
         public void OnClose()
