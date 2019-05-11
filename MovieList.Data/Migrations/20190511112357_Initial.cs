@@ -73,6 +73,7 @@ namespace MovieList.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     IsWatched = table.Column<bool>(nullable: false),
+                    IsMiniseries = table.Column<bool>(nullable: false),
                     ImdbLink = table.Column<string>(maxLength: 256, nullable: true),
                     PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
                     KindId = table.Column<int>(nullable: false)
@@ -110,17 +111,17 @@ namespace MovieList.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_MovieSeriesEntries_Series_MovieId",
-                        column: x => x.MovieId,
-                        principalTable: "Series",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_MovieSeriesEntries_MovieSeries_MovieSeriesId",
                         column: x => x.MovieSeriesId,
                         principalTable: "MovieSeries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieSeriesEntries_Series_SeriesId",
+                        column: x => x.SeriesId,
+                        principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,6 +269,12 @@ namespace MovieList.Data.Migrations
                 name: "IX_MovieSeriesEntries_MovieSeriesId",
                 table: "MovieSeriesEntries",
                 column: "MovieSeriesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MovieSeriesEntries_SeriesId",
+                table: "MovieSeriesEntries",
+                column: "SeriesId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Periods_SeasonId",

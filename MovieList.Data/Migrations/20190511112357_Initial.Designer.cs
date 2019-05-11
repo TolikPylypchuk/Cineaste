@@ -9,14 +9,14 @@ using MovieList.Data;
 namespace MovieList.Data.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20190323163608_Initial")]
+    [Migration("20190511112357_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0-preview3.19153.1");
+                .HasAnnotation("ProductVersion", "3.0.0-preview5.19227.1");
 
             modelBuilder.Entity("MovieList.Data.Models.Kind", b =>
                 {
@@ -102,6 +102,9 @@ namespace MovieList.Data.Migrations
 
                     b.HasIndex("MovieSeriesId");
 
+                    b.HasIndex("SeriesId")
+                        .IsUnique();
+
                     b.ToTable("MovieSeriesEntries");
                 });
 
@@ -166,6 +169,8 @@ namespace MovieList.Data.Migrations
 
                     b.Property<string>("ImdbLink")
                         .HasMaxLength(256);
+
+                    b.Property<bool>("IsMiniseries");
 
                     b.Property<bool>("IsWatched");
 
@@ -256,7 +261,8 @@ namespace MovieList.Data.Migrations
                     b.HasOne("MovieList.Data.Models.Kind", "Kind")
                         .WithMany("Movies")
                         .HasForeignKey("KindId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieList.Data.Models.MovieSeries", b =>
@@ -272,14 +278,15 @@ namespace MovieList.Data.Migrations
                         .WithOne("Entry")
                         .HasForeignKey("MovieList.Data.Models.MovieSeriesEntry", "MovieId");
 
-                    b.HasOne("MovieList.Data.Models.Series", "Series")
-                        .WithOne("Entry")
-                        .HasForeignKey("MovieList.Data.Models.MovieSeriesEntry", "MovieId");
-
                     b.HasOne("MovieList.Data.Models.MovieSeries", "MovieSeries")
                         .WithMany("Entries")
                         .HasForeignKey("MovieSeriesId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieList.Data.Models.Series", "Series")
+                        .WithOne("Entry")
+                        .HasForeignKey("MovieList.Data.Models.MovieSeriesEntry", "SeriesId");
                 });
 
             modelBuilder.Entity("MovieList.Data.Models.Period", b =>
@@ -287,7 +294,8 @@ namespace MovieList.Data.Migrations
                     b.HasOne("MovieList.Data.Models.Season", "Season")
                         .WithMany("Periods")
                         .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieList.Data.Models.Season", b =>
@@ -295,7 +303,8 @@ namespace MovieList.Data.Migrations
                     b.HasOne("MovieList.Data.Models.Series", "Series")
                         .WithMany("Seasons")
                         .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieList.Data.Models.Series", b =>
@@ -303,7 +312,8 @@ namespace MovieList.Data.Migrations
                     b.HasOne("MovieList.Data.Models.Kind", "Kind")
                         .WithMany("Series")
                         .HasForeignKey("KindId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieList.Data.Models.SpecialEpisode", b =>
@@ -311,7 +321,8 @@ namespace MovieList.Data.Migrations
                     b.HasOne("MovieList.Data.Models.Series", "Series")
                         .WithMany("SpecialEpisodes")
                         .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieList.Data.Models.Title", b =>
