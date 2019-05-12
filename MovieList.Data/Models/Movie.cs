@@ -13,7 +13,7 @@ namespace MovieList.Data.Models
         public int Year { get; set; }
 
         public bool IsWatched { get; set; }
-        public bool IsReleased { get; set; }
+        public bool IsReleased { get; set; } = true;
 
         [Url]
         [StringLength(256)]

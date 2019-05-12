@@ -464,5 +464,14 @@ namespace MovieList.Properties {
                 return ResourceManager.GetString("ViewLog", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Переглянутий.
+        /// </summary>
+        public static string Watched {
+            get {
+                return ResourceManager.GetString("Watched", resourceCulture);
+            }
+        }
     }
 }

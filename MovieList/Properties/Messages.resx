@@ -252,4 +252,7 @@
   <data name="ViewLog" xml:space="preserve">
     <value>Переглянути лог</value>
   </data>
+  <data name="Watched" xml:space="preserve">
+    <value>Переглянутий</value>
+  </data>
 </root>

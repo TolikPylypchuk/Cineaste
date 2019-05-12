@@ -85,7 +85,10 @@ namespace MovieList.Data.Models
 
         public static IEnumerable<Season> GetOrderedSeasons(this Series series)
             => series.Seasons
-                .OrderBy(season => season.Periods.OrderBy(period => period.StartYear).ThenBy(period => period.StartMonth).First().StartYear)
-                .OrderBy(season => season.Periods.OrderBy(period => period.StartYear).ThenBy(period => period.StartMonth).First().StartMonth);
+                .OrderBy(season => season.GetOrderedPeriods().First().StartYear)
+                .ThenBy(season => season.GetOrderedPeriods().First().StartMonth);
+
+        public static IEnumerable<Period> GetOrderedPeriods(this Season season)
+            => season.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth);
     }
 }

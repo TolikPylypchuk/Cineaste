@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:MovieList.Views"
+             xmlns:conv="clr-namespace:MovieList.Converters"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
@@ -10,6 +11,9 @@
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+        <conv:InverseBoolConverter x:Key="InverseBool" />
+        <conv:CanBeWatchedConverter x:Key="CanBeWatched" />
+        <conv:CanBeNotReleasedConverter x:Key="CanBeNotReleased" />
     </UserControl.Resources>
     
     <DockPanel>
@@ -44,6 +48,7 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel DataContext="{Binding Movie}" Margin="10">
                 <Image Source="{Binding Poster}" />
+                
                 <TextBlock Margin="5" HorizontalAlignment="Center">
                     <Hyperlink NavigateUri="{Binding ImdbLink}" local:Properties.IsExternal="True">
                         <Hyperlink.Inlines>
@@ -51,6 +56,14 @@
                         </Hyperlink.Inlines>
                     </Hyperlink>
                 </TextBlock>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <CheckBox Content="{x:Static resx:Messages.Watched}" IsChecked="{Binding IsWatched}"
+                              IsEnabled="{Binding Path=Movie, Converter={StaticResource CanBeWatched}}" />
+                    <CheckBox Content="{x:Static resx:Messages.NotReleased}" Margin="10,0,0,0"
+                              IsChecked="{Binding Path=IsReleased, Converter={StaticResource InverseBool}}"
+                              IsEnabled="{Binding Path=Movie, Converter={StaticResource CanBeNotReleased}}" />
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </DockPanel>
