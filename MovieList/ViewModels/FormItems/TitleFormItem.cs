@@ -39,7 +39,7 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        protected override List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
+        protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
                 (() => this.Name, () => this.Title.Name),

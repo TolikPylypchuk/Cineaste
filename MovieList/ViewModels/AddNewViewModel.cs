@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 
 using MovieList.Data.Models;
@@ -20,7 +22,14 @@ namespace MovieList.ViewModels
 
         public void OnAddNewMovie()
         {
-            var newMovie = new Movie();
+            var newMovie = new Movie
+            {
+                Titles = new List<Title>
+                {
+                    new Title { Name = String.Empty, IsOriginal = false, Priority = 1 },
+                    new Title { Name = String.Empty, IsOriginal = true, Priority = 1 }
+                }
+            };
 
             if (this.sidePanelViewModel.OpenMovie.CanExecute(newMovie))
             {

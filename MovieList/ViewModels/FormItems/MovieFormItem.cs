@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
+
 using MovieList.Data.Models;
 
 namespace MovieList.ViewModels.FormItems
@@ -29,10 +32,24 @@ namespace MovieList.ViewModels.FormItems
                 where !title.IsOriginal
                 select new TitleFormItem(title));
 
+            this.titles.CollectionChanged += this.OnTitlesChanged;
+
             this.originalTitles = new ObservableCollection<TitleFormItem>(
                 from title in movie.Titles
                 where title.IsOriginal
                 select new TitleFormItem(title));
+
+            this.originalTitles.CollectionChanged += this.OnTitlesChanged;
+
+            foreach (var title in this.titles)
+            {
+                title.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Titles));
+            }
+
+            foreach (var title in this.originalTitles)
+            {
+                title.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.OriginalTitles));
+            }
 
             this.year = movie.Year;
             this.isWatched = movie.IsWatched;
@@ -41,16 +58,25 @@ namespace MovieList.ViewModels.FormItems
             this.posterUrl = movie.PosterUrl;
             this.kind = movie.Kind;
 
-            if (this.posterUrl != null)
-            {
-                var bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(this.posterUrl, UriKind.Absolute);
-                bitmap.EndInit();
+            this.SetPoster();
 
-                this.Poster = bitmap;
-            }
+            this.AddTitle = new DelegateCommand(
+                _ => this.OnAddTitle(), _ => this.CanAddTitle());
+
+            this.AddOriginalTitle = new DelegateCommand(
+                _ => this.OnAddOriginalTitle(), _ => this.CanAddOriginalTitle());
+
+            this.RemoveTitle = new DelegateCommand(
+                this.OnRemoveTitle, _ => this.CanRemoveTitle());
+
+            this.RemoveOriginalTitle = new DelegateCommand(
+                this.OnRemoveOriginalTitle, _ => this.CanRemoveOriginalTitle());
         }
+
+        public ICommand AddTitle { get; }
+        public ICommand RemoveTitle { get; }
+        public ICommand AddOriginalTitle { get; }
+        public ICommand RemoveOriginalTitle { get; }
 
         public Movie Movie { get; }
 
@@ -60,6 +86,7 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.titles = value;
+                this.titles.CollectionChanged += this.OnTitlesChanged;
                 this.OnPropertyChanged();
             }
         }
@@ -70,6 +97,7 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.originalTitles = value;
+                this.originalTitles.CollectionChanged += this.OnTitlesChanged;
                 this.OnPropertyChanged();
             }
         }
@@ -144,13 +172,13 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        protected override List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
+        protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
-                (() => this.Titles.OrderBy(t => t.Name),
-                 () => this.Movie.Titles.Where(t => !t.IsOriginal).OrderBy(t => t.Name)),
-                (() => this.OriginalTitles.OrderBy(t => t.Name),
-                 () => this.Movie.Titles.Where(t => t.IsOriginal).OrderBy(t => t.Name)),
+                (() => this.Titles.OrderBy(t => t.Priority).Select(t => t.Name),
+                 () => this.Movie.Titles.Where(t => !t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
+                (() => this.OriginalTitles.OrderBy(t => t.Priority).Select(t => t.Name),
+                 () => this.Movie.Titles.Where(t => t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
                 (() => this.Year, () => this.Movie.Year),
                 (() => this.IsWatched, () => this.Movie.IsWatched),
                 (() => this.IsReleased, () => this.Movie.IsReleased),
@@ -173,12 +201,96 @@ namespace MovieList.ViewModels.FormItems
                 }
             }
 
+            if (this.Movie.PosterUrl != this.PosterUrl)
+            {
+                this.SetPoster();
+            }
+
             this.Movie.Year = this.Year;
             this.Movie.IsWatched = this.IsWatched;
             this.Movie.IsReleased = this.IsReleased;
             this.Movie.ImdbLink = this.ImdbLink;
             this.Movie.PosterUrl = this.PosterUrl;
             this.Movie.Kind = this.Kind;
+        }
+
+        private void OnAddTitle()
+        {
+            this.Titles.Add(new TitleFormItem(
+                new Title { IsOriginal = false, Priority = this.Titles.Count }));
+            this.OnPropertyChanged(nameof(this.Titles));
+        }
+
+        private bool CanAddTitle()
+            => this.Titles.Count < 10;
+
+        private void OnAddOriginalTitle()
+        {
+            this.OriginalTitles.Add(new TitleFormItem(
+                new Title { IsOriginal = true, Priority = this.OriginalTitles.Count }));
+            this.OnPropertyChanged(nameof(this.OriginalTitles));
+        }
+
+        private bool CanAddOriginalTitle()
+            => this.OriginalTitles.Count < 10;
+
+        private void OnRemoveTitle(object obj)
+        {
+            if (obj is TitleFormItem title)
+            {
+                this.Titles.Remove(title);
+
+                foreach (var t in this.Titles.Where(t => t.Priority > title.Priority))
+                {
+                    t.Priority--;
+                }
+            }
+        }
+
+        private bool CanRemoveTitle()
+            => this.Titles.Count != 1;
+
+        private void OnRemoveOriginalTitle(object obj)
+        {
+            if (obj is TitleFormItem title)
+            {
+                this.OriginalTitles.Remove(title);
+
+                foreach (var t in this.OriginalTitles.Where(t => t.Priority > title.Priority))
+                {
+                    t.Priority--;
+                }
+            }
+        }
+
+        private bool CanRemoveOriginalTitle()
+            => this.OriginalTitles.Count != 1;
+
+        private void OnTitlesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (var title in e.NewItems.OfType<TitleFormItem>())
+                {
+                    title.PropertyChanged += (s, e) => this.OnPropertyChanged(
+                        sender == this.titles ? nameof(this.Titles) : nameof(this.OriginalTitles));
+                }
+            }
+
+            this.OnPropertyChanged(sender == this.titles ? nameof(this.Titles) : nameof(this.OriginalTitles));
+        }
+
+        private void SetPoster()
+        {
+            if (this.posterUrl != null)
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(this.posterUrl, UriKind.Absolute);
+                bitmap.EndInit();
+
+                this.Poster = bitmap;
+            }
         }
     }
 }

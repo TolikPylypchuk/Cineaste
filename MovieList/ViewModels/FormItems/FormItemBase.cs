@@ -19,7 +19,7 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        protected abstract List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values { get; }
+        protected abstract IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values { get; }
 
         public abstract void WriteChanges();
 
@@ -38,9 +38,10 @@ namespace MovieList.ViewModels.FormItems
                 !this.AreValuesEqual(v.CurrentValueProvider(), v.OriginalValueProvider()));
 
         private bool AreValuesEqual(object? a, object? b)
-            => (a == null && b == null) ||
-                !((a == null && b != null) || (a != null && b == null)) ||
-                (a is IEnumerable<object> e1 && b is IEnumerable<object> e2 && e1.SequenceEqual(e2)) ||
-                a!.Equals(b);
+            => !(a == null && b != null) &&
+                !(a != null && b == null) &&
+                ((a == null && b == null) ||
+                 (a is IEnumerable<object> e1 && b is IEnumerable<object> e2 && e1.SequenceEqual(e2)) ||
+                 a!.Equals(b));
     }
 }

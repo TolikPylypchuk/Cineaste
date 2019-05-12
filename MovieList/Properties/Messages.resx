@@ -207,6 +207,9 @@
   <data name="Movie" xml:space="preserve">
     <value>Фільм</value>
   </data>
+  <data name="Name" xml:space="preserve">
+    <value>Назва</value>
+  </data>
   <data name="NameRequired" xml:space="preserve">
     <value>Назва не може бути порожньою</value>
   </data>
@@ -224,6 +227,9 @@
   </data>
   <data name="NotWatched" xml:space="preserve">
     <value>Не переглянутий</value>
+  </data>
+  <data name="OriginalName" xml:space="preserve">
+    <value>Оригінальна назва</value>
   </data>
   <data name="OtherSettings" xml:space="preserve">
     <value>Інші налаштування</value>

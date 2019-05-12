@@ -6,10 +6,47 @@
              xmlns:conv="clr-namespace:MovieList.Converters"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
+             xmlns:vm="clr-namespace:MovieList.ViewModels"
+             xmlns:vmf="clr-namespace:MovieList.ViewModels.FormItems" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:MovieFormViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>
+        <Style x:Key="TitleTextBlockStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="DockPanel.Dock" Value="Left" />
+            <Setter Property="Margin" Value="0,2" />
+        </Style>
+
+        <Style x:Key="ActionButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Width" Value="21" />
+            <Setter Property="Height" Value="21" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="DockPanel.Dock" Value="Right" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+
+        <Style x:Key="AddButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButtonStyle}">
+            <Setter Property="Content" Value="{x:Static resx:Messages.AddIcon}" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+
+        <Style x:Key="RemoveButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButtonStyle}">
+            <Setter Property="Content" Value="{x:Static resx:Messages.RemoveIcon}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="2,2,0,2" />
+        </Style>
+
+        <Style x:Key="TitleTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="MaxLines" Value="15" />
+            <Setter Property="local:Properties.TripleClickSelectAll" Value="True" />
+        </Style>
+
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <conv:InverseBoolConverter x:Key="InverseBool" />
         <conv:CanBeWatchedConverter x:Key="CanBeWatched" />
@@ -47,6 +84,10 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel DataContext="{Binding Movie}" Margin="10">
+                <StackPanel.Resources>
+                    <local:BindingProxy x:Key="MovieFormItem" Data="{Binding}" />
+                </StackPanel.Resources>
+                
                 <Image Source="{Binding Poster}" />
                 
                 <TextBlock Margin="5" HorizontalAlignment="Center">
@@ -64,6 +105,42 @@
                               IsChecked="{Binding Path=IsReleased, Converter={StaticResource InverseBool}}"
                               IsEnabled="{Binding Path=Movie, Converter={StaticResource CanBeNotReleased}}" />
                 </StackPanel>
+
+                <DockPanel>
+                    <TextBlock Text="{x:Static resx:Messages.Name}" Style="{StaticResource TitleTextBlockStyle}" />
+                    <Button Command="{Binding AddTitle}" Style="{StaticResource AddButtonStyle}" />
+                </DockPanel>
+
+                <ItemsControl ItemsSource="{Binding Titles}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vmf:TitleFormItem}">
+                            <DockPanel>
+                                <Button Command="{Binding Path=Data.RemoveTitle, Source={StaticResource MovieFormItem}}"
+                                        CommandParameter="{Binding}" Style="{StaticResource RemoveButtonStyle}" />
+                                <TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource TitleTextBoxStyle}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <DockPanel>
+                    <TextBlock Text="{x:Static resx:Messages.OriginalName}" Style="{StaticResource TitleTextBlockStyle}" />
+                    <Button Command="{Binding AddOriginalTitle}" Style="{StaticResource AddButtonStyle}" />
+                </DockPanel>
+
+                <ItemsControl ItemsSource="{Binding OriginalTitles}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vmf:TitleFormItem}">
+                            <DockPanel>
+                                <Button Command="{Binding Path=Data.RemoveOriginalTitle, Source={StaticResource MovieFormItem}}"
+                                        CommandParameter="{Binding}" Style="{StaticResource RemoveButtonStyle}" />
+                                <TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource TitleTextBoxStyle}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

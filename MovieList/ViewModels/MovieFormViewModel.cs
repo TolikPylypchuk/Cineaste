@@ -29,6 +29,7 @@ namespace MovieList.ViewModels
             set
             {
                 this.movie = value;
+                this.movie.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(Movie));
                 this.OnPropertyChanged();
                 this.OnPropertyChanged(nameof(FormTitle));
             }

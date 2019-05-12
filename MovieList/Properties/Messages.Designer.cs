@@ -331,6 +331,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Назва.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Назва не може бути порожньою.
         /// </summary>
         public static string NameRequired {
@@ -381,6 +390,15 @@ namespace MovieList.Properties {
         public static string NotWatched {
             get {
                 return ResourceManager.GetString("NotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Оригінальна назва.
+        /// </summary>
+        public static string OriginalName {
+            get {
+                return ResourceManager.GetString("OriginalName", resourceCulture);
             }
         }
         
