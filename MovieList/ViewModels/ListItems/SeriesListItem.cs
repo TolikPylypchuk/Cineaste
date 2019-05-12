@@ -18,9 +18,7 @@ namespace MovieList.ViewModels.ListItems
                     ? $"{series.StartYear}-{series.EndYear}"
                     : series.StartYear.ToString(),
                 series.GetColor(config))
-        {
-            this.Series = series;
-        }
+            => this.Series = series;
 
         public Series Series { get; }
 
@@ -39,11 +37,6 @@ namespace MovieList.ViewModels.ListItems
             => this.Color = this.Series.GetColor(config);
 
         public override void OpenSidePanel(SidePanelViewModel sidePanelViewModel)
-        {
-            if (sidePanelViewModel.OpenSeries.CanExecute(this.Series))
-            {
-                sidePanelViewModel.OpenSeries.Execute(this.Series);
-            }
-        }
+            => sidePanelViewModel.OpenSeries.ExecuteIfCan(this.Series);
     }
 }

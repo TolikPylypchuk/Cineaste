@@ -18,9 +18,7 @@ namespace MovieList.ViewModels.ListItems
                 movieSeries.OriginalTitle != null ? $"{movieSeries.OriginalTitle.Name}:" : String.Empty,
                 String.Empty,
                 movieSeries.GetColor(config))
-        {
-            this.MovieSeries = movieSeries;
-        }
+            => this.MovieSeries = movieSeries;
 
         public MovieSeries MovieSeries { get; }
 
@@ -77,11 +75,6 @@ namespace MovieList.ViewModels.ListItems
         }
 
         public override void OpenSidePanel(SidePanelViewModel sidePanelViewModel)
-        {
-            if (sidePanelViewModel.OpenMovieSeries.CanExecute(this.MovieSeries))
-            {
-                sidePanelViewModel.OpenMovieSeries.Execute(this.MovieSeries);
-            }
-        }
+            => sidePanelViewModel.OpenMovieSeries.ExecuteIfCan(this.MovieSeries);
     }
 }

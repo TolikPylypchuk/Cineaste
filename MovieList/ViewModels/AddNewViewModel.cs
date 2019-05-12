@@ -21,30 +21,16 @@ namespace MovieList.ViewModels
         public ICommand AddNewSeries { get; }
 
         public void OnAddNewMovie()
-        {
-            var newMovie = new Movie
+            => this.sidePanelViewModel.OpenMovie.ExecuteIfCan(new Movie
             {
                 Titles = new List<Title>
                 {
                     new Title { Name = String.Empty, IsOriginal = false, Priority = 1 },
                     new Title { Name = String.Empty, IsOriginal = true, Priority = 1 }
                 }
-            };
-
-            if (this.sidePanelViewModel.OpenMovie.CanExecute(newMovie))
-            {
-                this.sidePanelViewModel.OpenMovie.Execute(newMovie);
-            }
-        }
+            });
 
         public void OnAddNewSeries()
-        {
-            var newSeries = new Series();
-
-            if (this.sidePanelViewModel.OpenSeries.CanExecute(newSeries))
-            {
-                this.sidePanelViewModel.OpenSeries.Execute(newSeries);
-            }
-        }
+            => this.sidePanelViewModel.OpenSeries.ExecuteIfCan(new Series());
     }
 }

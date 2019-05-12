@@ -16,9 +16,7 @@ namespace MovieList.ViewModels.ListItems
                 movie.OriginalTitle.Name,
                 movie.Year.ToString(),
                 movie.GetColor(config))
-        {
-            this.Movie = movie;
-        }
+            => this.Movie = movie;
 
         public Movie Movie { get; }
 
@@ -37,11 +35,6 @@ namespace MovieList.ViewModels.ListItems
             => this.Color = this.Movie.GetColor(config);
 
         public override void OpenSidePanel(SidePanelViewModel sidePanelViewModel)
-        {
-            if (sidePanelViewModel.OpenMovie.CanExecute(this.Movie))
-            {
-                sidePanelViewModel.OpenMovie.Execute(this.Movie);
-            }
-        }
+            => sidePanelViewModel.OpenMovie.ExecuteIfCan(this.Movie);
     }
 }
