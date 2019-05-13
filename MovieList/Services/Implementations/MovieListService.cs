@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 
 using MovieList.Config;
 using MovieList.Data;
+using MovieList.Data.Models;
 using MovieList.ViewModels.ListItems;
 
 namespace MovieList.Services.Implementations
@@ -24,9 +25,17 @@ namespace MovieList.Services.Implementations
 
         public async Task<ObservableCollection<ListItem>> LoadAllItemsAsync()
         {
-            var movies = await context.Movies.ToListAsync();
-            var series = await context.Series.ToListAsync();
-            var movieSeries = await context.MovieSeries.ToListAsync();
+            var movies = await context.Movies
+                .Include(context.GetIncludePaths(typeof(Movie)))
+                .ToListAsync();
+
+            var series = await context.Series
+                .Include(context.GetIncludePaths(typeof(Series)))
+                .ToListAsync();
+
+            var movieSeries = await context.MovieSeries
+                .Include(context.GetIncludePaths(typeof(MovieSeries)))
+                .ToListAsync();
 
             return new ObservableCollection<ListItem>(
                 movies

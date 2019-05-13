@@ -22,6 +22,7 @@ namespace MovieList.Services.Implementations
         public async Task<ObservableCollection<KindViewModel>> LoadAllKindsAsync()
             => new ObservableCollection<KindViewModel>(
                 await this.context.Kinds
+                    .Include(context.GetIncludePaths(typeof(Kind)))
                     .OrderBy(k => k.Name)
                     .Select(k => new KindViewModel(k))
                     .ToListAsync());
@@ -33,7 +34,11 @@ namespace MovieList.Services.Implementations
                 throw new ArgumentException("Cannot save invalid kinds.", nameof(kinds));
             }
 
-            var dbKinds = await this.context.Kinds.AsNoTracking().ToListAsync();
+            var dbKinds = await this.context.Kinds
+                .Include(context.GetIncludePaths(typeof(Kind)))
+                .AsNoTracking()
+                .ToListAsync();
+
             var kindsToSave = kinds.Select(k => k.Kind).ToList();
 
             foreach (var kind in kindsToSave)
