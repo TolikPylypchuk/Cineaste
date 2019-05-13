@@ -3,8 +3,10 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using MovieList.Events;
 using MovieList.Properties;
 using MovieList.ViewModels.FormItems;
+using MovieList.ViewModels.ListItems;
 
 namespace MovieList.ViewModels
 {
@@ -12,9 +14,11 @@ namespace MovieList.ViewModels
     {
         private MovieFormItem movie;
 
-        public MovieFormViewModel(SidePanelViewModel sidePanel)
+        public MovieFormViewModel(MovieListViewModel movieList, SidePanelViewModel sidePanel)
         {
             this.SidePanel = sidePanel;
+
+            movieList.ListItemUpdated += this.OnListItemUpdated;
 
             this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(async _ => await this.CancelAsync(), _ => this.CanCancelChanges);
@@ -35,7 +39,7 @@ namespace MovieList.ViewModels
             }
         }
 
-        public SidePanelViewModel SidePanel { get; set; }
+        public SidePanelViewModel SidePanel { get; }
 
         public string FormTitle
             => this.movie.Movie.Id != default ? this.movie.Movie.Title.Name : Messages.NewMovie;
@@ -68,6 +72,15 @@ namespace MovieList.ViewModels
             base.OnPropertyChanged(nameof(CanSaveChanges));
             base.OnPropertyChanged(nameof(CanCancelChanges));
             base.OnPropertyChanged(nameof(CanSaveOrCancelChanges));
+        }
+
+        private void OnListItemUpdated(object sender, ListItemUpdatedEventArgs e)
+        {
+            if (e.Item is MovieListItem item)
+            {
+                this.Movie.IsWatched = item.Movie.IsWatched;
+                this.Movie.IsReleased = item.Movie.IsReleased;
+            }
         }
     }
 }

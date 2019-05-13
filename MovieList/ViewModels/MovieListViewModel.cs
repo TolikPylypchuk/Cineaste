@@ -2,13 +2,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 using MovieList.Config;
+using MovieList.Events;
 using MovieList.Services;
 using MovieList.ViewModels.ListItems;
 
@@ -48,12 +48,17 @@ namespace MovieList.ViewModels
             }
         }
 
+        public event EventHandler<ListItemUpdatedEventArgs> ListItemUpdated;
+
         public async Task LoadItemsAsync()
         {
             using var scope = app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IMovieListService>();
             this.Items = await service.LoadAllItemsAsync();
         }
+
+        protected virtual void OnListItemUpdated(ListItem item)
+            => this.ListItemUpdated?.Invoke(this, new ListItemUpdatedEventArgs(item));
 
         private void OnSelectItem(object obj)
         {
@@ -71,6 +76,7 @@ namespace MovieList.ViewModels
                 var service = scope.ServiceProvider.GetRequiredService<IMovieListService>();
                 await service.ToggleWatchedAsync(item);
                 this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
+                this.OnListItemUpdated(item);
             }
         }
 
@@ -82,7 +88,7 @@ namespace MovieList.ViewModels
                 _ => false
             };
 
-        public bool CanMarkAsNotWatched(object obj)
+        private bool CanMarkAsNotWatched(object obj)
             => obj switch
             {
                 MovieListItem movieItem => movieItem.Movie.IsWatched,
@@ -98,16 +104,17 @@ namespace MovieList.ViewModels
                 var service = scope.ServiceProvider.GetRequiredService<IMovieListService>();
                 await service.ToggleReleasedAsync(item);
                 this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
+                this.OnListItemUpdated(item);
             }
         }
 
         private bool CanMarkAsReleased(object obj)
             => obj is MovieListItem item ? !item.Movie.IsReleased && item.Movie.Year <= DateTime.Now.Year : false;
 
-        public bool CanMarkAsNotReleased(object obj)
+        private bool CanMarkAsNotReleased(object obj)
             => obj is MovieListItem item ? item.Movie.IsReleased && item.Movie.Year >= DateTime.Now.Year : false;
 
-        public void UpdateColor(ListItem item, Configuration? config)
+        private void UpdateColor(ListItem item, Configuration? config)
         {
             item.UpdateColor(config);
 
