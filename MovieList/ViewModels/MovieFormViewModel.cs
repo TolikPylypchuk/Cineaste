@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -13,15 +14,17 @@ namespace MovieList.ViewModels
     public class MovieFormViewModel : ViewModelBase
     {
         private MovieFormItem movie;
+        private ObservableCollection<KindViewModel> allKinds;
 
-        public MovieFormViewModel(MovieListViewModel movieList, SidePanelViewModel sidePanel)
+        public MovieFormViewModel(MovieListViewModel movieList, SidePanelViewModel sidePanel, SettingsViewModel settings)
         {
             this.SidePanel = sidePanel;
 
-            movieList.ListItemUpdated += this.OnListItemUpdated;
-
             this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(async _ => await this.CancelAsync(), _ => this.CanCancelChanges);
+
+            movieList.ListItemUpdated += this.OnListItemUpdated;
+            settings.SettingsUpdated += this.OnSettingsUpdated;
         }
 
         public ICommand Save { get; }
@@ -36,6 +39,16 @@ namespace MovieList.ViewModels
                 this.movie.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(Movie));
                 this.OnPropertyChanged();
                 this.OnPropertyChanged(nameof(FormTitle));
+            }
+        }
+
+        public ObservableCollection<KindViewModel> AllKinds
+        {
+            get => this.allKinds;
+            set
+            {
+                this.allKinds = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -69,9 +82,13 @@ namespace MovieList.ViewModels
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             base.OnPropertyChanged(propertyName);
-            base.OnPropertyChanged(nameof(CanSaveChanges));
-            base.OnPropertyChanged(nameof(CanCancelChanges));
-            base.OnPropertyChanged(nameof(CanSaveOrCancelChanges));
+
+            if (propertyName != nameof(this.AllKinds))
+            {
+                base.OnPropertyChanged(nameof(CanSaveChanges));
+                base.OnPropertyChanged(nameof(CanCancelChanges));
+                base.OnPropertyChanged(nameof(CanSaveOrCancelChanges));
+            }
         }
 
         private void OnListItemUpdated(object sender, ListItemUpdatedEventArgs e)
@@ -81,6 +98,12 @@ namespace MovieList.ViewModels
                 this.Movie.IsWatched = item.Movie.IsWatched;
                 this.Movie.IsReleased = item.Movie.IsReleased;
             }
+        }
+
+        private void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
+        {
+            this.AllKinds = new ObservableCollection<KindViewModel>(e.Kinds);
+            this.Movie.Kind = this.AllKinds.First(k => k.Kind.Id == this.Movie.Kind.Kind.Id);
         }
     }
 }

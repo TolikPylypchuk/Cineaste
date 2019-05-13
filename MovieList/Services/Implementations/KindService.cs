@@ -23,7 +23,7 @@ namespace MovieList.Services.Implementations
             => new ObservableCollection<KindViewModel>(
                 await this.context.Kinds
                     .Include(context.GetIncludePaths(typeof(Kind)))
-                    .OrderBy(k => k.Name)
+                    .OrderBy(k => k.Id)
                     .Select(k => new KindViewModel(k))
                     .ToListAsync());
 

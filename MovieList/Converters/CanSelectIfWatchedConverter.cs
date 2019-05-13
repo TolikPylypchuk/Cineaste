@@ -4,21 +4,21 @@ using System.Linq;
 using System.Windows.Data;
 
 using MovieList.Data.Models;
+using MovieList.ViewModels.FormItems;
 
 namespace MovieList.Converters
 {
-    [ValueConversion(typeof(Movie), typeof(bool))]
+    [ValueConversion(typeof(MovieFormItem), typeof(bool))]
     [ValueConversion(typeof(Season), typeof(bool))]
-    public class CanBeNotReleasedConverter : IValueConverter
+    public class CanSelectIfWatchedConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             => value switch
             {
-                Movie movie => movie.Year >= DateTime.Now.Year,
+                MovieFormItem movie => movie.Year <= DateTime.Now.Year,
                 Season season =>
-                    season.GetOrderedPeriods().First().StartYear >= DateTime.Now.Year ||
-                    (season.GetOrderedPeriods().First().StartYear == DateTime.Now.Year &&
-                     season.GetOrderedPeriods().First().StartMonth >= DateTime.Now.Month),
+                    season.GetOrderedPeriods().First().StartYear <= DateTime.Now.Year &&
+                    season.GetOrderedPeriods().First().StartMonth <= DateTime.Now.Month,
                 _ => throw new NotSupportedException($"Cannot convert {value}")
             };
 

@@ -27,7 +27,8 @@ namespace MovieList.ViewModels
                 {
                     new Title { Name = String.Empty, IsOriginal = false, Priority = 1 },
                     new Title { Name = String.Empty, IsOriginal = true, Priority = 1 }
-                }
+                },
+                Year = 2000
             });
 
         public void OnAddNewSeries()

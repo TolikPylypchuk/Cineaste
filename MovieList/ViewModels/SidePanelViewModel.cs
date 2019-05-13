@@ -1,9 +1,9 @@
-using System.Windows;
 using System.Windows.Input;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using MovieList.Data.Models;
+using MovieList.Services;
 using MovieList.ViewModels.FormItems;
 using MovieList.Views;
 
@@ -30,13 +30,18 @@ namespace MovieList.ViewModels
 
         public SidePanelControl SidePanelControl { get; set; }
 
-        private void OnOpenMovie(object obj)
+        private async void OnOpenMovie(object obj)
         {
             if (obj is Movie movie)
             {
                 var control = new MovieFormControl();
                 control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<MovieFormViewModel>();
-                control.ViewModel.Movie = new MovieFormItem(movie);
+
+                using var scope = this.app.ServiceProvider.CreateScope();
+                var service = scope.ServiceProvider.GetRequiredService<IKindService>();
+
+                control.ViewModel.AllKinds = await service.LoadAllKindsAsync();
+                control.ViewModel.Movie = new MovieFormItem(movie, control.ViewModel.AllKinds);
                 this.SidePanelControl.ContentContainer.Content = control;
             }
         }

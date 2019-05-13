@@ -20,10 +20,10 @@ namespace MovieList.ViewModels.FormItems
         private bool isReleased;
         private string? imdbLink;
         private string? posterUrl;
-        private Kind kind;
+        private KindViewModel kind;
         private BitmapImage poster;
 
-        public MovieFormItem(Movie movie)
+        public MovieFormItem(Movie movie, IEnumerable<KindViewModel> allKinds)
         {
             this.Movie = movie;
 
@@ -56,7 +56,12 @@ namespace MovieList.ViewModels.FormItems
             this.isReleased = movie.IsReleased;
             this.imdbLink = movie.ImdbLink;
             this.posterUrl = movie.PosterUrl;
-            this.kind = movie.Kind;
+            this.kind = allKinds.FirstOrDefault(k => k.Kind.Id == movie.KindId);
+
+            if (this.kind == null)
+            {
+                this.kind = allKinds.First();
+            }
 
             this.SetPoster();
 
@@ -152,7 +157,7 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        public Kind Kind
+        public KindViewModel Kind
         {
             get => this.kind;
             set
@@ -184,7 +189,7 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.IsReleased, () => this.Movie.IsReleased),
                 (() => this.ImdbLink, () => this.Movie.ImdbLink),
                 (() => this.Movie.PosterUrl, () => this.Movie.PosterUrl),
-                (() => this.Kind.Id, () => this.Movie.Kind.Id)
+                (() => this.Kind.Kind.Id, () => this.Movie.KindId)
             };
 
         public override void WriteChanges()
@@ -211,7 +216,7 @@ namespace MovieList.ViewModels.FormItems
             this.Movie.IsReleased = this.IsReleased;
             this.Movie.ImdbLink = this.ImdbLink;
             this.Movie.PosterUrl = this.PosterUrl;
-            this.Movie.Kind = this.Kind;
+            this.Movie.Kind = this.Kind.Kind;
         }
 
         private void OnAddTitle()

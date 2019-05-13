@@ -11,9 +11,10 @@
              d:DataContext="{d:DesignInstance vm:MovieFormViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>
-        <Style x:Key="TitleTextBlockStyle" TargetType="{x:Type TextBlock}">
+        <Style x:Key="InputTitleStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="DockPanel.Dock" Value="Left" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="Margin" Value="0,2" />
         </Style>
 
@@ -38,7 +39,7 @@
             <Setter Property="Margin" Value="2,2,0,2" />
         </Style>
 
-        <Style x:Key="TitleTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Style x:Key="InputTextBoxStyle" TargetType="{x:Type TextBox}">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Margin" Value="0,2" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -47,10 +48,16 @@
             <Setter Property="local:Properties.TripleClickSelectAll" Value="True" />
         </Style>
 
+        <Style x:Key="UrlInputTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource InputTextBoxStyle}">
+            <Setter Property="TextWrapping" Value="NoWrap" />
+            <Setter Property="MaxLines" Value="1" />
+        </Style>
+
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <conv:InverseBoolConverter x:Key="InverseBool" />
-        <conv:CanBeWatchedConverter x:Key="CanBeWatched" />
-        <conv:CanBeNotReleasedConverter x:Key="CanBeNotReleased" />
+        <conv:CanSelectIfWatchedConverter x:Key="CanSelectIfWatched" />
+        <conv:CanSelectIfReleasedConverter x:Key="CanSelectIfReleased" />
+        <local:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>
     
     <DockPanel>
@@ -99,15 +106,15 @@
                 </TextBlock>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <CheckBox Content="{x:Static resx:Messages.Watched}" IsChecked="{Binding IsWatched}"
-                              IsEnabled="{Binding Path=Movie, Converter={StaticResource CanBeWatched}}" />
-                    <CheckBox Content="{x:Static resx:Messages.NotReleased}" Margin="10,0,0,0"
+                    <CheckBox x:Name="IsWatchedCheckBox" Content="{x:Static resx:Messages.Watched}" IsChecked="{Binding IsWatched}"
+                              IsEnabled="{Binding Converter={StaticResource CanSelectIfWatched}}" />
+                    <CheckBox x:Name="IsNotReleasedCheckBox" Content="{x:Static resx:Messages.NotReleased}" Margin="10,0,0,0"
                               IsChecked="{Binding Path=IsReleased, Converter={StaticResource InverseBool}}"
-                              IsEnabled="{Binding Path=Movie, Converter={StaticResource CanBeNotReleased}}" />
+                              IsEnabled="{Binding Converter={StaticResource CanSelectIfReleased}}" />
                 </StackPanel>
 
                 <DockPanel>
-                    <TextBlock Text="{x:Static resx:Messages.Name}" Style="{StaticResource TitleTextBlockStyle}" />
+                    <TextBlock Text="{x:Static resx:Messages.Name}" Style="{StaticResource InputTitleStyle}" />
                     <Button Command="{Binding AddTitle}" Style="{StaticResource AddButtonStyle}" />
                 </DockPanel>
 
@@ -118,14 +125,14 @@
                                 <Button Command="{Binding Path=Data.RemoveTitle, Source={StaticResource MovieFormItem}}"
                                         CommandParameter="{Binding}" Style="{StaticResource RemoveButtonStyle}" />
                                 <TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
-                                         Style="{StaticResource TitleTextBoxStyle}" />
+                                         Style="{StaticResource InputTextBoxStyle}" />
                             </DockPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
                 <DockPanel>
-                    <TextBlock Text="{x:Static resx:Messages.OriginalName}" Style="{StaticResource TitleTextBlockStyle}" />
+                    <TextBlock Text="{x:Static resx:Messages.OriginalName}" Style="{StaticResource InputTitleStyle}" />
                     <Button Command="{Binding AddOriginalTitle}" Style="{StaticResource AddButtonStyle}" />
                 </DockPanel>
 
@@ -136,11 +143,43 @@
                                 <Button Command="{Binding Path=Data.RemoveOriginalTitle, Source={StaticResource MovieFormItem}}"
                                         CommandParameter="{Binding}" Style="{StaticResource RemoveButtonStyle}" />
                                 <TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
-                                         Style="{StaticResource TitleTextBoxStyle}" />
+                                         Style="{StaticResource InputTextBoxStyle}" />
                             </DockPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,1,0">
+                        <TextBlock Text="{x:Static resx:Messages.Year}" Style="{StaticResource InputTitleStyle}" />
+                        <TextBox Text="{Binding Path=Year, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"
+                                 TextChanged="Year_TextChanged" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="1,0,0,0">
+                        <TextBlock Text="{x:Static resx:Messages.Kind}" Style="{StaticResource InputTitleStyle}" />
+
+                        <ComboBox ItemsSource="{Binding Path=Data.AllKinds, Source={StaticResource ViewModel}}" FontSize="11"
+                                  SelectedItem="{Binding Path=Kind, UpdateSourceTrigger=PropertyChanged}" Margin="0,2">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:KindViewModel}">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="{x:Static resx:Messages.Imdb}" Style="{StaticResource InputTitleStyle}" />
+                <TextBox Text="{Binding Path=ImdbLink, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource UrlInputTextBoxStyle}" />
+
+                <TextBlock Text="{x:Static resx:Messages.PosterUrl}" Style="{StaticResource InputTitleStyle}" />
+                <TextBox Text="{Binding Path=PosterUrl, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource UrlInputTextBoxStyle}" />
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Options;
 
 using MovieList.Config;
 using MovieList.Data.Models;
+using MovieList.Events;
 using MovieList.Options;
 using MovieList.Properties;
 using MovieList.Services;
@@ -150,6 +152,8 @@ namespace MovieList.ViewModels
         public bool CanSaveOrCancelChanges
             => this.CanSaveChanges || this.CanCancelChanges;
 
+        public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
+
         public async void LoadKindsAsync()
         {
             using var scope = this.app.ServiceProvider.CreateScope();
@@ -167,6 +171,18 @@ namespace MovieList.ViewModels
                 this.OnCanSaveOrCancelChangesChanged();
             }
         }
+
+        protected virtual void OnSettingsUpdated()
+            => this.SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(
+                new Configuration
+                {
+                    NotWatchedColor = this.NotWatchedColor,
+                    NotReleasedColor = this.NotReleasedColor,
+                    DefaultSeasonTitle = this.DefaultSeasonTitle,
+                    DefaultSeasonOriginalTitle = this.DefaultSeasonOriginalTitle,
+                    DatabasePath = this.DatabasePath
+                },
+                this.Kinds));
 
         private void OnAddKind()
         {
@@ -242,6 +258,7 @@ namespace MovieList.ViewModels
             this.config.Value.DatabasePath = this.DatabasePath;
 
             this.OnCanSaveOrCancelChangesChanged();
+            this.OnSettingsUpdated();
         }
 
         private async Task CancelChangesAsync()
