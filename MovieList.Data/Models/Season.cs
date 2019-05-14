@@ -16,14 +16,6 @@ namespace MovieList.Data.Models
         [StringLength(64)]
         public string Channel { get; set; } = String.Empty;
 
-        [Url]
-        [StringLength(256)]
-        public string? ImdbLink { get; set; }
-
-        [Url]
-        [StringLength(256)]
-        public string? PosterUrl { get; set; }
-
         public int SeriesId { get; set; }
 
         [ForeignKey(nameof(SeriesId))]

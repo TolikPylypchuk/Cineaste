@@ -23,6 +23,10 @@ namespace MovieList.Data.Models
         [Range(1, 50)]
         public int NumberOfEpisodes { get; set; }
 
+        [Url]
+        [StringLength(256)]
+        public string? PosterUrl { get; set; }
+
         public int SeasonId { get; set; }
 
         [ForeignKey(nameof(SeasonId))]

@@ -119,6 +119,9 @@ namespace MovieList.Data.Migrations
 
                     b.Property<int>("NumberOfEpisodes");
 
+                    b.Property<string>("PosterUrl")
+                        .HasMaxLength(256);
+
                     b.Property<int>("SeasonId");
 
                     b.Property<int>("StartMonth");
@@ -141,15 +144,9 @@ namespace MovieList.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(64);
 
-                    b.Property<string>("ImdbLink")
-                        .HasMaxLength(256);
-
                     b.Property<bool>("IsReleased");
 
                     b.Property<bool>("IsWatched");
-
-                    b.Property<string>("PosterUrl")
-                        .HasMaxLength(256);
 
                     b.Property<int>("SeriesId");
 

@@ -133,8 +133,6 @@ namespace MovieList.Data.Migrations
                     IsWatched = table.Column<bool>(nullable: false),
                     IsReleased = table.Column<bool>(nullable: false),
                     Channel = table.Column<string>(maxLength: 64, nullable: false),
-                    ImdbLink = table.Column<string>(maxLength: 256, nullable: true),
-                    PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
                     SeriesId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -186,6 +184,7 @@ namespace MovieList.Data.Migrations
                     EndYear = table.Column<int>(nullable: false),
                     IsSingleDayRelease = table.Column<bool>(nullable: false),
                     NumberOfEpisodes = table.Column<int>(nullable: false),
+                    PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
                     SeasonId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
