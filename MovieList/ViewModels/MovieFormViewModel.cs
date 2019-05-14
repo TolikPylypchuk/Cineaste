@@ -1,4 +1,6 @@
+using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -36,7 +38,8 @@ namespace MovieList.ViewModels
             set
             {
                 this.movie = value;
-                this.movie.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(Movie));
+                this.movie.PropertyChanged += this.OnMoviePropertyChanged;
+
                 this.OnPropertyChanged();
                 this.OnPropertyChanged(nameof(FormTitle));
             }
@@ -97,6 +100,22 @@ namespace MovieList.ViewModels
             {
                 this.Movie.IsWatched = item.Movie.IsWatched;
                 this.Movie.IsReleased = item.Movie.IsReleased;
+            }
+        }
+
+        private void OnMoviePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            this.OnPropertyChanged(nameof(Movie));
+
+            if (e.PropertyName == nameof(movie.Year))
+            {
+                if (movie.Year > DateTime.Now.Year)
+                {
+                    this.Movie.IsReleased = false;
+                } else if (movie.Year < DateTime.Now.Year)
+                {
+                    this.Movie.IsReleased = true;
+                }
             }
         }
 

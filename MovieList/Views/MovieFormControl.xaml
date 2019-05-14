@@ -157,8 +157,7 @@
 
                     <StackPanel Grid.Column="0" Margin="0,0,1,0">
                         <TextBlock Text="{x:Static resx:Messages.Year}" Style="{StaticResource InputTitleStyle}" />
-                        <TextBox Text="{Binding Path=Year, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"
-                                 TextChanged="Year_TextChanged" />
+                        <TextBox Text="{Binding Path=Year, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"  />
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Margin="1,0,0,0">
