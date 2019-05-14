@@ -24,7 +24,11 @@ namespace MovieList.ViewModels
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            this.Validate(propertyName);
+            if (!String.IsNullOrEmpty(propertyName))
+            {
+                this.Validate(propertyName);
+            }
+
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
@@ -33,11 +37,6 @@ namespace MovieList.ViewModels
 
         protected virtual void Validate([CallerMemberName] string propertyName = "")
         {
-            if (String.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentOutOfRangeException(nameof(propertyName), "Property name cannot be empty.");
-            }
-
             string error = String.Empty;
             var value = this.GetValue(propertyName);
             var results = new List<ValidationResult>();

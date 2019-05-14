@@ -21,49 +21,14 @@ namespace MovieList.ViewModels.FormItems
         private string? imdbLink;
         private string? posterUrl;
         private KindViewModel kind;
-        private BitmapImage poster;
+        private BitmapImage? poster;
 
         public MovieFormItem(Movie movie, IEnumerable<KindViewModel> allKinds)
         {
             this.Movie = movie;
+            this.AllKinds = allKinds;
 
-            this.titles = new ObservableCollection<TitleFormItem>(
-                from title in movie.Titles
-                where !title.IsOriginal
-                select new TitleFormItem(title));
-
-            this.titles.CollectionChanged += this.OnTitlesChanged;
-
-            this.originalTitles = new ObservableCollection<TitleFormItem>(
-                from title in movie.Titles
-                where title.IsOriginal
-                select new TitleFormItem(title));
-
-            this.originalTitles.CollectionChanged += this.OnTitlesChanged;
-
-            foreach (var title in this.titles)
-            {
-                title.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Titles));
-            }
-
-            foreach (var title in this.originalTitles)
-            {
-                title.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.OriginalTitles));
-            }
-
-            this.year = movie.Year;
-            this.isWatched = movie.IsWatched;
-            this.isReleased = movie.IsReleased;
-            this.imdbLink = movie.ImdbLink;
-            this.posterUrl = movie.PosterUrl;
-            this.kind = allKinds.FirstOrDefault(k => k.Kind.Id == movie.KindId);
-
-            if (this.kind == null)
-            {
-                this.kind = allKinds.First();
-            }
-
-            this.SetPoster();
+            this.CopyMovieProperties();
 
             this.AddTitle = new DelegateCommand(
                 _ => this.OnAddTitle(), _ => this.CanAddTitle());
@@ -76,6 +41,8 @@ namespace MovieList.ViewModels.FormItems
 
             this.RemoveOriginalTitle = new DelegateCommand(
                 this.OnRemoveOriginalTitle, _ => this.CanRemoveOriginalTitle());
+
+            this.IsInitialized = true;
         }
 
         public ICommand AddTitle { get; }
@@ -84,6 +51,7 @@ namespace MovieList.ViewModels.FormItems
         public ICommand RemoveOriginalTitle { get; }
 
         public Movie Movie { get; }
+        public IEnumerable<KindViewModel> AllKinds { get; }
 
         public ObservableCollection<TitleFormItem> Titles
         {
@@ -167,7 +135,7 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        public BitmapImage Poster
+        public BitmapImage? Poster
         {
             get => this.poster;
             set
@@ -217,6 +185,63 @@ namespace MovieList.ViewModels.FormItems
             this.Movie.ImdbLink = this.ImdbLink;
             this.Movie.PosterUrl = this.PosterUrl;
             this.Movie.Kind = this.Kind.Kind;
+
+            this.AreChangesPresent = false;
+        }
+
+        public override void RevertChanges()
+        {
+            this.CopyMovieProperties();
+            this.AreChangesPresent = false;
+        }
+
+        private void CopyMovieProperties()
+        {
+            this.Titles = new ObservableCollection<TitleFormItem>(
+                from title in this.Movie.Titles
+                where !title.IsOriginal
+                select new TitleFormItem(title));
+
+            this.Titles.CollectionChanged += this.OnTitlesChanged;
+
+            this.OriginalTitles = new ObservableCollection<TitleFormItem>(
+                from title in this.Movie.Titles
+                where title.IsOriginal
+                select new TitleFormItem(title));
+
+            this.OriginalTitles.CollectionChanged += this.OnTitlesChanged;
+
+            foreach (var title in this.Titles)
+            {
+                title.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Titles));
+            }
+
+            foreach (var title in this.OriginalTitles)
+            {
+                title.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.OriginalTitles));
+            }
+
+            this.Year = this.Movie.Year;
+            this.IsWatched = this.Movie.IsWatched;
+            this.IsReleased = this.Movie.IsReleased;
+            this.ImdbLink = this.Movie.ImdbLink;
+            this.PosterUrl = this.Movie.PosterUrl;
+            this.Kind = this.AllKinds.FirstOrDefault(k => k.Kind.Id == this.Movie.KindId) ?? this.AllKinds.First();
+
+            this.SetPoster();
+        }
+
+        private void SetPoster()
+        {
+            if (this.PosterUrl != null)
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(this.posterUrl, UriKind.Absolute);
+                bitmap.EndInit();
+
+                this.Poster = bitmap;
+            }
         }
 
         private void OnAddTitle()
@@ -283,19 +308,6 @@ namespace MovieList.ViewModels.FormItems
             }
 
             this.OnPropertyChanged(sender == this.titles ? nameof(this.Titles) : nameof(this.OriginalTitles));
-        }
-
-        private void SetPoster()
-        {
-            if (this.posterUrl != null)
-            {
-                var bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(this.posterUrl, UriKind.Absolute);
-                bitmap.EndInit();
-
-                this.Poster = bitmap;
-            }
         }
     }
 }

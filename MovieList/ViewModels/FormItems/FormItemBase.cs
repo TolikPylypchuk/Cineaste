@@ -12,24 +12,30 @@ namespace MovieList.ViewModels.FormItems
         public bool AreChangesPresent
         {
             get => this.areChangesPresent;
-            set
+            protected set
             {
                 this.areChangesPresent = value;
                 this.OnPropertyChanged();
             }
         }
 
+        protected bool IsInitialized { get; set; }
+
         protected abstract IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values { get; }
 
         public abstract void WriteChanges();
+        public abstract void RevertChanges();
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            base.OnPropertyChanged(propertyName);
-
-            if (propertyName != nameof(AreChangesPresent))
+            if (this.IsInitialized)
             {
-                this.CheckIfValuesChanged();
+                base.OnPropertyChanged(propertyName);
+
+                if (propertyName != nameof(AreChangesPresent))
+                {
+                    this.CheckIfValuesChanged();
+                }
             }
         }
 

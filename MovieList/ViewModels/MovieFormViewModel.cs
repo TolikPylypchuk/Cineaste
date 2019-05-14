@@ -23,7 +23,7 @@ namespace MovieList.ViewModels
             this.SidePanel = sidePanel;
 
             this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
-            this.Cancel = new DelegateCommand(async _ => await this.CancelAsync(), _ => this.CanCancelChanges);
+            this.Cancel = new DelegateCommand(_ => this.Movie.RevertChanges(), _ => this.CanCancelChanges);
 
             movieList.ListItemUpdated += this.OnListItemUpdated;
             settings.SettingsUpdated += this.OnSettingsUpdated;
@@ -77,20 +77,15 @@ namespace MovieList.ViewModels
             return Task.CompletedTask;
         }
 
-        public Task CancelAsync()
-        {
-            return Task.CompletedTask;
-        }
-
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             base.OnPropertyChanged(propertyName);
 
             if (propertyName != nameof(this.AllKinds))
             {
-                base.OnPropertyChanged(nameof(CanSaveChanges));
-                base.OnPropertyChanged(nameof(CanCancelChanges));
-                base.OnPropertyChanged(nameof(CanSaveOrCancelChanges));
+                base.OnPropertyChanged(nameof(this.CanSaveChanges));
+                base.OnPropertyChanged(nameof(this.CanCancelChanges));
+                base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
             }
         }
 
@@ -105,9 +100,9 @@ namespace MovieList.ViewModels
 
         private void OnMoviePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            this.OnPropertyChanged(nameof(Movie));
+            this.OnPropertyChanged(nameof(this.Movie));
 
-            if (e.PropertyName == nameof(movie.Year))
+            if (e.PropertyName == nameof(this.movie.Year))
             {
                 if (movie.Year > DateTime.Now.Year)
                 {

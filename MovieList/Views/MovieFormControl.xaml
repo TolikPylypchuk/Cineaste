@@ -57,7 +57,6 @@
         <conv:InverseBoolConverter x:Key="InverseBool" />
         <conv:CanSelectIfWatchedConverter x:Key="CanSelectIfWatched" />
         <conv:CanSelectIfReleasedConverter x:Key="CanSelectIfReleased" />
-        <local:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>
     
     <DockPanel>
@@ -163,7 +162,7 @@
                     <StackPanel Grid.Column="1" Margin="1,0,0,0">
                         <TextBlock Text="{x:Static resx:Messages.Kind}" Style="{StaticResource InputTitleStyle}" />
 
-                        <ComboBox ItemsSource="{Binding Path=Data.AllKinds, Source={StaticResource ViewModel}}" FontSize="11"
+                        <ComboBox ItemsSource="{Binding Path=AllKinds}" FontSize="11"
                                   SelectedItem="{Binding Path=Kind, UpdateSourceTrigger=PropertyChanged}" Margin="0,2">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type vm:KindViewModel}">

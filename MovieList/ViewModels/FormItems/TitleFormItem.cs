@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using MovieList.Data.Models;
 
 namespace MovieList.ViewModels.FormItems
@@ -15,6 +16,8 @@ namespace MovieList.ViewModels.FormItems
 
             this.name = title.Name;
             this.priority = title.Priority;
+
+            this.IsInitialized = true;
         }
 
         public Title Title { get; }
@@ -50,6 +53,14 @@ namespace MovieList.ViewModels.FormItems
         {
             this.Title.Name = this.Name;
             this.Title.Priority = this.Priority;
+            this.AreChangesPresent = false;
+        }
+
+        public override void RevertChanges()
+        {
+            this.Name = this.Title.Name;
+            this.Priority = this.Title.Priority;
+            this.AreChangesPresent = false;
         }
     }
 }
