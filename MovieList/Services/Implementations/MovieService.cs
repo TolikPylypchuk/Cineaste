@@ -12,18 +12,18 @@ using MovieList.ViewModels.ListItems;
 
 namespace MovieList.Services.Implementations
 {
-    public class MovieListService : IMovieListService
+    public class MovieService : IMovieService
     {
         private readonly MovieContext context;
         private readonly Configuration config;
 
-        public MovieListService(MovieContext context, IOptions<Configuration> config)
+        public MovieService(MovieContext context, IOptions<Configuration> config)
         {
             this.context = context;
             this.config = config.Value;
         }
 
-        public async Task<ObservableCollection<ListItem>> LoadAllItemsAsync()
+        public async Task<ObservableCollection<ListItem>> LoadListAsync()
         {
             var movies = await context.Movies
                 .Include(context.GetIncludePaths(typeof(Movie)))
@@ -46,6 +46,31 @@ namespace MovieList.Services.Implementations
                         .Where(series => series.Title != null)
                         .Select(series => new MovieSeriesListItem(series, this.config)))
                     .OrderBy(item => item));
+        }
+
+        public async Task SaveMovieAsync(Movie movie)
+        {
+            if (movie.Id == default)
+            {
+                this.context.Attach(movie.Kind);
+                this.context.Add(movie);
+            } else
+            {
+                this.context.Entry(movie).State = EntityState.Modified;
+
+                foreach (var title in movie.Titles)
+                {
+                    if (title.Id == default)
+                    {
+                        this.context.Add(title);
+                    } else
+                    {
+                        this.context.Entry(title).State = EntityState.Modified;
+                    }
+                }
+            }
+
+            await this.context.SaveChangesAsync();
         }
 
         public async Task ToggleWatchedAsync(ListItem item)

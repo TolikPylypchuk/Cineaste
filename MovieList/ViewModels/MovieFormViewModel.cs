@@ -6,8 +6,11 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using Microsoft.Extensions.DependencyInjection;
+
 using MovieList.Events;
 using MovieList.Properties;
+using MovieList.Services;
 using MovieList.ViewModels.FormItems;
 using MovieList.ViewModels.ListItems;
 
@@ -15,11 +18,16 @@ namespace MovieList.ViewModels
 {
     public class MovieFormViewModel : ViewModelBase
     {
+        private readonly App app;
+
         private MovieFormItem movie;
         private ObservableCollection<KindViewModel> allKinds;
 
-        public MovieFormViewModel(MovieListViewModel movieList, SidePanelViewModel sidePanel, SettingsViewModel settings)
+        public MovieFormViewModel(App app, MovieListViewModel movieList, SidePanelViewModel sidePanel, SettingsViewModel settings)
         {
+            this.app = app;
+
+            this.MovieList = movieList;
             this.SidePanel = sidePanel;
 
             this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
@@ -55,6 +63,7 @@ namespace MovieList.ViewModels
             }
         }
 
+        public MovieListViewModel MovieList { get; }
         public SidePanelViewModel SidePanel { get; }
 
         public string FormTitle
@@ -72,9 +81,18 @@ namespace MovieList.ViewModels
         public bool CanSaveOrCancelChanges
             => this.CanSaveChanges || this.CanCancelChanges;
 
-        public Task SaveAsync()
+        public async Task SaveAsync()
         {
-            return Task.CompletedTask;
+            this.Movie.WriteChanges();
+
+            using var scope = this.app.ServiceProvider.CreateScope();
+            var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
+
+            bool shouldAddToList = this.Movie.Movie.Id == default;
+
+            await service.SaveMovieAsync(this.Movie.Movie);
+
+            (shouldAddToList ? this.MovieList.AddItem : this.MovieList.UpdateItem).ExecuteIfCan(this.Movie.Movie);
         }
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -107,6 +125,7 @@ namespace MovieList.ViewModels
                 if (movie.Year > DateTime.Now.Year)
                 {
                     this.Movie.IsReleased = false;
+                    this.Movie.IsWatched = false;
                 } else if (movie.Year < DateTime.Now.Year)
                 {
                     this.Movie.IsReleased = true;

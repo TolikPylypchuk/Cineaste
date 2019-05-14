@@ -53,7 +53,7 @@ namespace MovieList
                 .ConfigureWritable<UIConfig>(this.Configuration.GetSection("UI"))
                 .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
 
-                .AddScoped<IMovieListService, MovieListService>()
+                .AddScoped<IMovieService, MovieService>()
                 .AddScoped<IKindService, KindService>()
                 .AddTransient<IFileService, FileService>()
 
