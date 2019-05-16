@@ -3,37 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:AddNewViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="Transparent" />
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Margin" Value="10" />
             <Setter Property="Padding" Value="10,5" />
-        </Style>
-
-        <Style TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Height" Value="75" />
+            <Setter Property="controls:IconElement.Geometry" Value="{StaticResource AddGeometry}" />
+            <Setter Property="controls:IconElement.Width" Value="25" />
+            <Setter Property="controls:IconElement.Height" Value="25" />
         </Style>
     </UserControl.Resources>
     
     <StackPanel Margin="10" VerticalAlignment="Center">
-        <Button Command="{Binding AddNewMovie}">
-            <StackPanel>
-                <TextBlock Text="{x:Static resx:Messages.AddNewMovie}" FontSize="16" />
-                <TextBlock Text="+" FontSize="32" />
-            </StackPanel>
-        </Button>
-        
-        <Button Command="{Binding AddNewSeries}">
-            <StackPanel>
-                <TextBlock Text="{x:Static resx:Messages.AddNewSeries}" FontSize="16" />
-                <TextBlock Text="+" FontSize="32" />
-            </StackPanel>
-        </Button>
+        <Button Command="{Binding AddNewMovie}" Content="{x:Static resx:Messages.AddNewMovie}" />
+        <Button Command="{Binding AddNewSeries}" Content="{x:Static resx:Messages.AddNewSeries}" />
     </StackPanel>
 </UserControl>
