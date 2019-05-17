@@ -1,4 +1,7 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+
+using HandyControl.Data;
 
 using MovieList.Data.Models;
 using MovieList.Properties;
@@ -42,5 +45,8 @@ namespace MovieList.ViewModels
                 this.OnPropertyChanged();
             }
         }
+
+        public Func<string, OperationResult<bool>> VerifyName
+            => this.Verify(nameof(Name));
     }
 }

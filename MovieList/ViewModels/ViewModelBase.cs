@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using HandyControl.Data;
 
 namespace MovieList.ViewModels
 {
@@ -35,10 +36,10 @@ namespace MovieList.ViewModels
         protected void OnErrorsChanged(string propertyName)
             => this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 
-        protected virtual void Validate([CallerMemberName] string propertyName = "")
+        protected virtual void Validate([CallerMemberName] string propertyName = "", object? value = null)
         {
             string error = String.Empty;
-            var value = this.GetValue(propertyName);
+            value ??= this.GetValue(propertyName);
             var results = new List<ValidationResult>();
 
             var result = Validator.TryValidateProperty(
@@ -52,6 +53,20 @@ namespace MovieList.ViewModels
                 this.OnErrorsChanged(propertyName);
             }
         }
+
+        protected virtual Func<string, OperationResult<bool>> Verify(string property)
+            => value =>
+            {
+                this.Validate(property, value);
+                return this.ValidationErros.Count != 0
+                    ? new OperationResult<bool>
+                    {
+                        Data = false,
+                        Message = this.ValidationErros[property].First(),
+                        ResultType = ResultType.Failed
+                    }
+                    : new OperationResult<bool> { Data = true, ResultType = ResultType.Success };
+            };
 
         private object GetValue(string propertyName)
         {

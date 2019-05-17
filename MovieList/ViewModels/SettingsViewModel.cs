@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-
+using HandyControl.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -142,6 +142,15 @@ namespace MovieList.ViewModels
                 this.OnPropertyChanged();
             }
         }
+
+        public Func<string, OperationResult<bool>> VerifyDefaultSeasonTitle
+            => this.Verify(nameof(DefaultSeasonTitle));
+
+        public Func<string, OperationResult<bool>> VerifyDefaultSeasonOriginalTitle
+            => this.Verify(nameof(DefaultSeasonOriginalTitle));
+
+        public Func<string, OperationResult<bool>> VerifyDatabasePath
+            => this.Verify(nameof(DatabasePath));
 
         public bool CanSaveChanges
             => this.IsLoaded && this.AreChangesPresent() && !this.HasErrors && this.Kinds.All(k => !k.HasErrors);
