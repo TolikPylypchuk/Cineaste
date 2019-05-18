@@ -14,11 +14,6 @@
             <Setter Property="Margin" Value="0,10" />
         </Style>
         
-        <Style TargetType="{x:Type controls:ColorPicker}">
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <EventSetter Event="SelectedColorChanged" Handler="ColorPicker_SelectedColorChanged" />
-        </Style>
-
         <EllipseGeometry x:Key="Circle" Center="0,0" RadiusX="1" RadiusY="1" />
         
         <Style x:Key="ColorButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
@@ -40,7 +35,6 @@
             <Setter Property="local:Properties.TripleClickSelectAll" Value="True" />
             <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
             <Setter Property="Margin" Value="0,0,5,0" />
-            <EventSetter Event="TextChanged" Handler="TextBox_TextChanged" />
         </Style>
 
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -58,94 +52,103 @@
             <Button Content="{x:Static resx:Messages.Save}" Command="{Binding Save}" Style="{StaticResource ButtonPrimary}" />
         </StackPanel>
 
-        <StackPanel>
-            <Expander Header="{x:Static resx:Messages.Kinds}" HorizontalAlignment="Stretch">
-                <StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
+        <ScrollViewer>
+            <StackPanel>
+                <Expander Header="{x:Static resx:Messages.Kinds}" HorizontalAlignment="Stretch">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
 
-                        <Grid.Resources>
-                            <SolidColorBrush x:Key="NotWatched" Color="{Binding NotWatchedColor}" />
-                            <SolidColorBrush x:Key="NotReleased" Color="{Binding NotReleasedColor}" />
-                        </Grid.Resources>
-                        
-                        <Button Content="{x:Static resx:Messages.NotWatched}" Style="{StaticResource ColorButtonLeft}"
-                                Grid.Column="0" Foreground="{DynamicResource NotWatched}" />
+                            <Grid.Resources>
+                                <SolidColorBrush x:Key="NotWatched" Color="{Binding NotWatchedColor}" />
+                                <SolidColorBrush x:Key="NotReleased" Color="{Binding NotReleasedColor}" />
+                            </Grid.Resources>
 
-                        <Button Content="{x:Static resx:Messages.NotReleased}" Style="{StaticResource ColorButtonRight}"
-                                Grid.Column="1" Foreground="{DynamicResource NotReleased}" />
-                    </Grid>
+                            <Button Name="NotWatchedButton" Content="{x:Static resx:Messages.NotWatched}" Style="{StaticResource ColorButtonLeft}"
+                                Grid.Column="0" Foreground="{DynamicResource NotWatched}" Command="{Binding ChangeNotWatchedColor}"
+                                CommandParameter="{Binding ElementName=NotWatchedButton}" />
 
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding Path=Kinds}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
+                            <Button Name="NotReleasedButton" Content="{x:Static resx:Messages.NotReleased}" Style="{StaticResource ColorButtonRight}"
+                                Grid.Column="1" Foreground="{DynamicResource NotReleased}" Command="{Binding ChangeNotReleasedColor}"
+                                CommandParameter="{Binding ElementName=NotReleasedButton}" />
+                        </Grid>
 
-                                            <controls:TextBox Text="{Binding Path=Name}" VerifyFunc="{Binding VerifyName}"
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Path=Kinds}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <controls:TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" VerifyFunc="{Binding VerifyName}"
                                                               Margin="0,5" Grid.Column="0" HorizontalAlignment="Stretch" />
 
-                                            <Button Grid.Column="1" Margin="5,5,0,0" controls:IconElement.Geometry="{StaticResource DeleteGeometry}"
+                                                <Button Grid.Column="1" Margin="5,5,0,0" controls:IconElement.Geometry="{StaticResource DeleteGeometry}"
                                                     controls:IconElement.Width="7.5" controls:IconElement.Height="7.5"
                                                     Command="{Binding Path=Data.RemoveKind, Source={StaticResource ViewModel}}"
                                                     CommandParameter="{Binding}" VerticalAlignment="Top" />
-                                        </Grid>
+                                            </Grid>
 
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition />
-                                                <ColumnDefinition />
-                                            </Grid.ColumnDefinitions>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
 
-                                            <Grid.Resources>
-                                                <SolidColorBrush x:Key="MovieBrush" Color="{Binding ColorForMovie}" />
-                                                <SolidColorBrush x:Key="SeriesBrush" Color="{Binding ColorForSeries}" />
-                                            </Grid.Resources>
+                                                <Grid.Resources>
+                                                    <SolidColorBrush x:Key="MovieBrush" Color="{Binding ColorForMovie}" />
+                                                    <SolidColorBrush x:Key="SeriesBrush" Color="{Binding ColorForSeries}" />
+                                                </Grid.Resources>
 
-                                            <Button Content="{x:Static resx:Messages.Movie}" Style="{StaticResource ColorButtonLeft}"
-                                                    Grid.Column="0" Foreground="{DynamicResource MovieBrush}" />
+                                                <Button Name="ChangeColorForMovieButton" Content="{x:Static resx:Messages.Movie}" Grid.Column="0"
+                                                    Style="{StaticResource ColorButtonLeft}" Foreground="{DynamicResource MovieBrush}"
+                                                    Command="{Binding ChangeColorForMovie}" CommandParameter="{Binding ElementName=ChangeColorForMovieButton}" />
 
-                                            <Button Content="{x:Static resx:Messages.Series}" Style="{StaticResource ColorButtonRight}"
-                                                    Grid.Column="1" Foreground="{DynamicResource SeriesBrush}" />
-                                        </Grid>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
+                                                <Button Name="ChangeColorForSeriesButton" Content="{x:Static resx:Messages.Series}" Grid.Column="1"
+                                                    Style="{StaticResource ColorButtonRight}" Foreground="{DynamicResource SeriesBrush}"
+                                                    Command="{Binding ChangeColorForSeries}" CommandParameter="{Binding ElementName=ChangeColorForSeriesButton}" />
+                                            </Grid>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
 
-                    <Button Width="50" Margin="0,5,0,0" controls:IconElement.Geometry="{StaticResource AddGeometry}"
+                        <Button Width="50" Margin="0,5,0,0" controls:IconElement.Geometry="{StaticResource AddGeometry}"
                             controls:IconElement.Width="10" controls:IconElement.Height="10"
                             Command="{Binding AddKind}" Style="{StaticResource ButtonPrimary}" />
-                </StackPanel>
-            </Expander>
+                    </StackPanel>
+                </Expander>
 
-            <Expander Header="{x:Static resx:Messages.OtherSettings}">
-                <StackPanel>
-                    <controls:TextBox Text="{Binding Path=DefaultSeasonTitle}" VerifyFunc="{Binding VerifyDefaultSeasonTitle}"
-                                      controls:InfoElement.Title="{x:Static resx:Messages.DefaultSeasonTitle}" Margin="0,0,2,5" />
+                <Expander Header="{x:Static resx:Messages.OtherSettings}">
+                    <StackPanel>
+                        <controls:TextBox Text="{Binding Path=DefaultSeasonTitle, UpdateSourceTrigger=PropertyChanged}"
+                                      controls:InfoElement.Title="{x:Static resx:Messages.DefaultSeasonTitle}" Margin="0,0,2,5"
+                                      VerifyFunc="{Binding VerifyDefaultSeasonTitle}" />
 
-                    <controls:TextBox Text="{Binding Path=DefaultSeasonOriginalTitle}" VerifyFunc="{Binding VerifyDefaultSeasonOriginalTitle}"
-                                      controls:InfoElement.Title="{x:Static resx:Messages.DefaultSeasonOriginalTitle}" Margin="0,0,2,5" />
-                </StackPanel>
-            </Expander>
+                        <controls:TextBox Text="{Binding Path=DefaultSeasonOriginalTitle, UpdateSourceTrigger=PropertyChanged}"
+                                      controls:InfoElement.Title="{x:Static resx:Messages.DefaultSeasonOriginalTitle}" Margin="0,0,2,5"
+                                      VerifyFunc="{Binding VerifyDefaultSeasonOriginalTitle}" />
+                    </StackPanel>
+                </Expander>
 
-            <Expander Header="{x:Static resx:Messages.AdvancedSettings}">
-                <StackPanel>
-                    <controls:TextBox Text="{Binding Path=DatabasePath}" VerifyFunc="{Binding VerifyDatabasePath}"
-                                      controls:InfoElement.Title="{x:Static resx:Messages.DatabasePath}" />
+                <Expander Header="{x:Static resx:Messages.AdvancedSettings}">
+                    <StackPanel>
+                        <controls:TextBox Text="{Binding Path=DatabasePath, UpdateSourceTrigger=PropertyChanged}"
+                                      controls:InfoElement.Title="{x:Static resx:Messages.DatabasePath}"
+                                      VerifyFunc="{Binding VerifyDatabasePath}" />
 
-                    <Button Margin="0,5,0,0" Content="{x:Static resx:Messages.ViewLog}" Command="{Binding ViewLog}" />
-                </StackPanel>
-            </Expander>
-        </StackPanel>
+                        <Button Margin="0,5,0,0" Content="{x:Static resx:Messages.ViewLog}" Command="{Binding ViewLog}" />
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>

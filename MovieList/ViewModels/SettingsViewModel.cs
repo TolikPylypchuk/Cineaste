@@ -3,11 +3,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+
 using HandyControl.Data;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -55,19 +58,32 @@ namespace MovieList.ViewModels
             this.defaultSeasonOriginalTitle = config.Value.DefaultSeasonOriginalTitle;
             this.databasePath = config.Value.DatabasePath;
 
+            this.ChangeNotWatchedColor = new DelegateCommand(control => Util.OpenColorPickerPopup(
+                control as FrameworkElement, this.NotWatchedColor.ToString(), color => this.NotWatchedColor = color));
+
+            this.ChangeNotReleasedColor = new DelegateCommand(control => Util.OpenColorPickerPopup(
+                control as FrameworkElement, this.NotReleasedColor.ToString(), color => this.NotReleasedColor = color));
+
             this.AddKind = new DelegateCommand(_ => this.OnAddKind());
             this.RemoveKind = new DelegateCommand(this.OnRemoveKind);
+
             this.Save = new DelegateCommand(async _ => await this.SaveChangesAsync(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(async _ => await this.CancelChangesAsync(), _ => this.CanCancelChanges);
+
             this.ViewLog = new DelegateCommand(_ => this.OnViewLog());
         }
 
         public bool IsLoaded { get; private set; }
 
+        public ICommand ChangeNotWatchedColor { get; }
+        public ICommand ChangeNotReleasedColor { get; }
+
         public ICommand AddKind { get; }
         public ICommand RemoveKind { get; }
+
         public ICommand Save { get; }
         public ICommand Cancel { get; }
+
         public ICommand ViewLog { get; }
 
         public Color NotWatchedColor
@@ -163,25 +179,41 @@ namespace MovieList.ViewModels
 
         public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
 
-        public async void LoadKindsAsync()
+        public async Task LoadKindsAsync()
         {
             using var scope = this.app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IKindService>();
 
             this.Kinds = await service.LoadAllKindsAsync();
+            this.Kinds.CollectionChanged += (sender, e) => this.OnPropertyChanged(nameof(Kinds));
+
+            foreach (var kind in Kinds)
+            {
+                kind.PropertyChanged += (sender, e) =>
+                    this.OnPropertyChanged(nameof(Kinds));
+            }
+
             this.IsLoaded = true;
         }
 
-        public void OnKindsChanged()
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if (this.IsLoaded)
+            base.OnPropertyChanged(propertyName);
+
+            if (propertyName == nameof(Kinds) && this.IsLoaded)
             {
                 this.KindsChanged = true;
+            }
+
+            if (propertyName != nameof(CanSaveChanges) &&
+                propertyName != nameof(CanCancelChanges) &&
+                propertyName != nameof(CanSaveOrCancelChanges))
+            {
                 this.OnCanSaveOrCancelChangesChanged();
             }
         }
 
-        protected virtual void OnSettingsUpdated()
+        private void OnSettingsUpdated()
             => this.SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(
                 new Configuration
                 {
@@ -195,15 +227,15 @@ namespace MovieList.ViewModels
 
         private void OnAddKind()
         {
-            this.Kinds.Add(new KindViewModel(new Kind
+            var kind = new KindViewModel(new Kind
             {
                 Name = Messages.NewKind,
                 ColorForMovie = Colors.Black.ToString(),
                 ColorForSeries = Colors.Black.ToString()
-            }));
+            });
 
-            this.KindsChanged = true;
-            this.OnCanSaveOrCancelChangesChanged();
+            kind.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(Kinds));
+            this.Kinds.Add(kind);
         }
 
         private async void OnRemoveKind(object obj)
@@ -216,8 +248,6 @@ namespace MovieList.ViewModels
                 if (await service.CanRemoveKindAsync(kind))
                 {
                     this.Kinds.Remove(kind);
-                    this.KindsChanged = true;
-                    this.OnCanSaveOrCancelChangesChanged();
                 } else
                 {
                     MessageBox.Show(
@@ -280,10 +310,7 @@ namespace MovieList.ViewModels
 
             this.DatabasePath = this.config.Value.DatabasePath;
 
-            using var scope = this.app.ServiceProvider.CreateScope();
-            var service = scope.ServiceProvider.GetRequiredService<IKindService>();
-
-            this.Kinds = await service.LoadAllKindsAsync();
+            await this.LoadKindsAsync();
             this.KindsChanged = false;
 
             this.OnCanSaveOrCancelChangesChanged();

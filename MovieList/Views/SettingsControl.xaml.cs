@@ -1,9 +1,6 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-
-using HandyControl.Data;
 
 using MovieList.ViewModels;
 
@@ -18,11 +15,5 @@ namespace MovieList.Views
 
         private void SettingsControl_Loaded(object sender, RoutedEventArgs e)
             => Task.Factory.StartNew(this.ViewModel.LoadKindsAsync);
-
-        private void ColorPicker_SelectedColorChanged(object sender, FunctionEventArgs<Color> e)
-            => this.ViewModel.OnKindsChanged();
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-            => this.ViewModel.OnKindsChanged();
     }
 }

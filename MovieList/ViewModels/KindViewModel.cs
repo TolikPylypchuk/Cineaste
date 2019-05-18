@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Windows;
+using System.Windows.Input;
 
 using HandyControl.Data;
 
@@ -11,7 +13,18 @@ namespace MovieList.ViewModels
     public class KindViewModel : ViewModelBase
     {
         public KindViewModel(Kind kind)
-            => this.Kind = kind;
+        {
+            this.Kind = kind;
+
+            this.ChangeColorForMovie = new DelegateCommand(control => Util.OpenColorPickerPopup(
+                control as FrameworkElement, this.ColorForMovie, color => this.ColorForMovie = color.ToString()));
+
+            this.ChangeColorForSeries = new DelegateCommand(control => Util.OpenColorPickerPopup(
+                control as FrameworkElement, this.ColorForSeries, color => this.ColorForSeries = color.ToString()));
+        }
+
+        public ICommand ChangeColorForMovie { get; }
+        public ICommand ChangeColorForSeries { get; }
 
         public Kind Kind { get; }
 

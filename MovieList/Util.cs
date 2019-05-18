@@ -1,5 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Media;
+
+using HandyControl.Controls;
+using HandyControl.Tools;
 
 namespace MovieList
 {
@@ -33,6 +39,29 @@ namespace MovieList
             }
 
             return ~lower;
+        }
+
+        public static void OpenColorPickerPopup(FrameworkElement? parent, string color, Action<Color> setColor)
+        {
+            var picker = SingleOpenHelper.CreateControl<ColorPicker>();
+
+            picker.Loaded += (sender, e) =>
+                picker.SelectedBrush = (SolidColorBrush)new BrushConverter().ConvertFromString(color);
+
+            var window = new PopupWindow
+            {
+                PopupElement = picker
+            };
+
+            picker.SelectedColorChanged += (sender, e) =>
+            {
+                setColor(e.Info);
+                window.Close();
+            };
+
+            picker.Canceled += (sender, e) => window.Close();
+
+            window.Show(parent, false);
         }
     }
 }
