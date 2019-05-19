@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MovieList.Views"
         xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:MainViewModel, IsDesignTimeCreatable=False}"
-        Title="Movie List" MinWidth="1000" MinHeight="500"
+        Title="Movie List" MinWidth="1000" MinHeight="500" Background="{StaticResource SecondaryRegionBrush}"
         Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>

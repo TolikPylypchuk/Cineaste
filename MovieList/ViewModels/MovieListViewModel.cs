@@ -12,6 +12,7 @@ using MovieList.Data.Models;
 using MovieList.Events;
 using MovieList.Services;
 using MovieList.ViewModels.ListItems;
+using MovieList.Views;
 
 namespace MovieList.ViewModels
 {
@@ -27,6 +28,9 @@ namespace MovieList.ViewModels
             this.app = app;
             this.config = config;
             this.SidePanel = sidePanel;
+
+            sidePanel.Closed += (sender, e) =>
+                this.MovieListControl.List.UnselectAll();
 
             this.SelectItem = new DelegateCommand(this.OnSelectItem);
             this.AddItem = new DelegateCommand(this.OnAddItem);
@@ -49,7 +53,7 @@ namespace MovieList.ViewModels
         public ICommand MarkAsReleased { get; }
         public ICommand MarkAsNotReleased { get; }
 
-        private SidePanelViewModel SidePanel { get; }
+        public MovieListControl MovieListControl { get; set; }
 
         public ObservableCollection<ListItem> Items
         {
@@ -60,6 +64,8 @@ namespace MovieList.ViewModels
                 this.OnPropertyChanged();
             }
         }
+
+        private SidePanelViewModel SidePanel { get; }
 
         public event EventHandler<ListItemUpdatedEventArgs> ListItemUpdated;
 

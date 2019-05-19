@@ -10,36 +10,6 @@
              d:DataContext="{d:DesignInstance vm:MovieListViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="500" d:DesignWidth="500" Loaded="MovieListControl_Loaded">
     <UserControl.Resources>
-        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="Margin" Value="2,5" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="IsTabStop" Value="False" />
-            <Setter Property="IsReadOnly" Value="True" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="Cursor" Value="Arrow" />
-            <Setter Property="ContextMenu">
-                <Setter.Value>
-                    <ContextMenu Width="0" Height="0" />
-                </Setter.Value>
-            </Setter>
-            <Setter Property="local:Properties.TripleClickSelectAll" Value="True" />
-        </Style>
-
-        <Style x:Key="NumberTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxStyle}">
-            <Setter Property="TextAlignment" Value="Left" />
-            <Setter Property="Margin" Value="10,2,2,2" />
-        </Style>
-
-        <Style x:Key="YearTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxStyle}">
-            <Setter Property="TextAlignment" Value="Right" />
-            <Setter Property="Margin" Value="10,2,5,2" />
-        </Style>
-
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
         <local:BindingProxy x:Key="ViewModel" Data="{Binding}" />
@@ -47,149 +17,116 @@
 
     <DockPanel>
         <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Messages.Title}" FontSize="36"
-                   TextAlignment="Center" HorizontalAlignment="Stretch" Margin="5" />
+                   TextAlignment="Center" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
 
-        <Border BorderBrush="Black" BorderThickness="1" Margin="5" HorizontalAlignment="Stretch">
-            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible">
-                <HeaderedItemsControl ItemsSource="{Binding Path=Items}" HorizontalContentAlignment="Stretch"
-                                      HorizontalAlignment="Stretch" Margin="0,0,5,0">
-                    <HeaderedItemsControl.Template>
-                        <ControlTemplate TargetType="HeaderedItemsControl">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}"
-                                    SnapsToDevicePixels="True">
-                                <DockPanel>
-                                    <ContentPresenter DockPanel.Dock="Top" ContentSource="Header"
-                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                </DockPanel>
-                            </Border>
-                        </ControlTemplate>
-                    </HeaderedItemsControl.Template>
+        <DataGrid x:Name="List" HeadersVisibility="All" AutoGenerateColumns="False" ItemsSource="{Binding Items}">
+            <DataGrid.Resources>
+                <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                </Style>
 
-                    <HeaderedItemsControl.HeaderTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40" SharedSizeGroup="First" />
-                                    <ColumnDefinition Width="*" SharedSizeGroup="Second" />
-                                    <ColumnDefinition Width="*" SharedSizeGroup="Third" />
-                                    <ColumnDefinition Width="110" SharedSizeGroup="Fourth" />
-                                    <ColumnDefinition Width="20" SharedSizeGroup="Fifth" />
-                                </Grid.ColumnDefinitions>
+                <Style x:Key="DataGridColumnHeaderDefaultStyle" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
+                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                </Style>
+            </DataGrid.Resources>
 
-                                <TextBox Grid.Column="0" Text="{x:Static resx:Messages.ListItemNumber}"
-                                         Style="{StaticResource NumberTextBoxStyle}" />
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:InvokeCommandAction Command="{Binding SelectItem}" CommandParameter="{Binding Path=SelectedItem, ElementName=List}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
 
-                                <TextBox Grid.Column="1" Text="{x:Static resx:Messages.ListItemTitle}"
-                                         Style="{StaticResource TextBoxStyle}" />
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </DataGrid.CellStyle>
 
-                                <TextBox Grid.Column="2" Text="{x:Static resx:Messages.ListItemOriginalTitle}"
-                                         Style="{StaticResource TextBoxStyle}" />
+            <DataGrid.Columns>
+                <DataGridTemplateColumn IsReadOnly="True" Width="50" CanUserResize="False" Header="{x:Static resx:Messages.ListItemNumber}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type DataGridCell}">
+                            <TextBlock Name="DisplayNumberTextBlock" Text="{Binding DisplayNumber}" Style="{StaticResource TextBlockStyle}" TextAlignment="Left">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{Binding Color}" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
 
-                                <TextBox Grid.Column="3" Text="{x:Static resx:Messages.ListItemYear}"
-                                         Style="{StaticResource YearTextBoxStyle}" />
-                            </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="White" TargetName="DisplayNumberTextBlock" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
-                    </HeaderedItemsControl.HeaderTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                    <HeaderedItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Name="ListItem" BorderBrush="LightGray" BorderThickness="0,1,0,0">
-                                <Grid>
-                                    <Grid.Resources>
-                                        <local:BindingProxy x:Key="ListItemProxy" Data="{Binding ElementName=ListItem}"/>
-                                    </Grid.Resources>
-                                    
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="20" />
-                                    </Grid.ColumnDefinitions>
+                <DataGridTemplateColumn IsReadOnly="True" Width="*" CanUserResize="False" Header="{x:Static resx:Messages.ListItemTitle}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type DataGridCell}">
+                            <TextBlock Name="TitleTextBlock" Text="{Binding Title}" Style="{StaticResource TextBlockStyle}" TextAlignment="Center">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{Binding Color}" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
 
-                                    <ContentControl Background="White" IsHitTestVisible="True">
-                                        <b:Interaction.Triggers>
-                                            <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                                <b:InvokeCommandAction Command="{Binding Path=Data.SelectItem, Source={StaticResource ViewModel}}"
-                                                                       CommandParameter="{Binding}" />
-                                            </b:EventTrigger>
-                                        </b:Interaction.Triggers>
-
-                                        <Grid HorizontalAlignment="Stretch" Background="White" IsHitTestVisible="True">
-                                            <Grid.Resources>
-                                                <SolidColorBrush x:Key="Color" Color="{Binding Path=Color}" />
-                                            </Grid.Resources>
-
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="40" SharedSizeGroup="First" />
-                                                <ColumnDefinition Width="*" SharedSizeGroup="Second" />
-                                                <ColumnDefinition Width="*" SharedSizeGroup="Third" />
-                                                <ColumnDefinition Width="110" SharedSizeGroup="Fourth" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <TextBox Grid.Column="0" Text="{Binding Path=DisplayNumber, Mode=OneWay}"
-                                             Foreground="{DynamicResource ResourceKey=Color}"
-                                             Style="{StaticResource NumberTextBoxStyle}" />
-
-                                            <TextBox Grid.Column="1" Text="{Binding Path=Title, Mode=OneWay}"
-                                             Foreground="{DynamicResource ResourceKey=Color}"
-                                             Style="{StaticResource TextBoxStyle}" />
-
-                                            <TextBox Grid.Column="2" Text="{Binding Path=OriginalTitle, Mode=OneWay}"
-                                             Foreground="{DynamicResource ResourceKey=Color}"
-                                             Style="{StaticResource TextBoxStyle}" />
-
-                                            <TextBox Grid.Column="3" Text="{Binding Path=Year, Mode=OneWay}"
-                                             Foreground="{DynamicResource ResourceKey=Color}"
-                                             Style="{StaticResource YearTextBoxStyle}" />
-                                        </Grid>
-                                    </ContentControl>
-
-                                    <Button Grid.Column="1" Background="Transparent" BorderThickness="0" Content="⋮">
-                                        <Button.ContextMenu>
-                                            <ContextMenu DataContext="{Binding Path=Data, Source={StaticResource ViewModel}}">
-                                                <ContextMenu.Resources>
-                                                    <Style TargetType="{x:Type MenuItem}">
-                                                        <Setter Property="CommandParameter" Value="{Binding Path=Data.DataContext, Source={StaticResource ListItemProxy}}" />
-                                                        <Setter Property="Visibility" Value="{Binding
-                                                                    Path=IsEnabled,
-                                                                    RelativeSource={RelativeSource Self},
-                                                                    Converter={StaticResource BoolToVisibility}}" />
-                                                    </Style>
-                                                </ContextMenu.Resources>
-                                                <MenuItem Header="{x:Static resx:Messages.Edit}" Command="{Binding SelectItem}" />
-                                                <MenuItem Header="{x:Static resx:Messages.MarkAsWatched}" Command="{Binding MarkAsWatched}" />
-                                                <MenuItem Header="{x:Static resx:Messages.MarkAsNotWatched}" Command="{Binding MarkAsNotWatched}" />
-                                                <MenuItem Header="{x:Static resx:Messages.MarkAsReleased}" Command="{Binding MarkAsReleased}" />
-                                                <MenuItem Header="{x:Static resx:Messages.MarkAsNotReleased}" Command="{Binding MarkAsNotReleased}" />
-                                            </ContextMenu>
-                                        </Button.ContextMenu>
-                                        
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
-                                                <Style.Triggers>
-                                                    <EventTrigger RoutedEvent="Click">
-                                                        <EventTrigger.Actions>
-                                                            <BeginStoryboard>
-                                                                <Storyboard>
-                                                                    <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="ContextMenu.IsOpen">
-                                                                        <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
-                                                                    </BooleanAnimationUsingKeyFrames>
-                                                                </Storyboard>
-                                                            </BeginStoryboard>
-                                                        </EventTrigger.Actions>
-                                                    </EventTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
-                                </Grid>
-                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="White" TargetName="TitleTextBlock" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
-                    </HeaderedItemsControl.ItemTemplate>
-                </HeaderedItemsControl>
-            </ScrollViewer>
-        </Border>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn IsReadOnly="True" Width="*" CanUserResize="False" Header="{x:Static resx:Messages.ListItemOriginalTitle}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type DataGridCell}">
+                            <TextBlock Name="OriginalTitleTextBlock" Text="{Binding OriginalTitle}" Style="{StaticResource TextBlockStyle}" TextAlignment="Center">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{Binding Color}" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
+
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="White" TargetName="OriginalTitleTextBlock" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn IsReadOnly="True" Width="100" CanUserResize="False" Header="{x:Static resx:Messages.ListItemYear}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type DataGridCell}">
+                            <TextBlock Name="YearTextBlock" Text="{Binding Year}" Style="{StaticResource TextBlockStyle}" TextAlignment="Right">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{Binding Color}" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
+
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                             Value="True">
+                                    <Setter Property="Foreground" Value="White" TargetName="YearTextBlock" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </DockPanel>
 </UserControl>

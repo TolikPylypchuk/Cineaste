@@ -23,8 +23,10 @@ namespace MovieList.ViewModels
 
         public void SetControlViewModels()
         {
-            this.MainWindow.ListControl.DataContext = this.MainWindow.ListControl.ViewModel =
-                this.app.ServiceProvider.GetRequiredService<MovieListViewModel>();
+            var movieListViewModel = this.app.ServiceProvider.GetRequiredService<MovieListViewModel>();
+            movieListViewModel.MovieListControl = this.MainWindow.ListControl;
+
+            this.MainWindow.ListControl.DataContext = this.MainWindow.ListControl.ViewModel = movieListViewModel;
 
             this.MainWindow.SettingsControl.DataContext = this.MainWindow.SettingsControl.ViewModel =
                 this.app.ServiceProvider.GetRequiredService<SettingsViewModel>();

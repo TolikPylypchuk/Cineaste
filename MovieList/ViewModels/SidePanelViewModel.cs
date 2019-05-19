@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Input;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,8 @@ namespace MovieList.ViewModels
 
         public SidePanelControl SidePanelControl { get; set; }
 
+        public event EventHandler Closed;
+
         private async void OnOpenMovie(object obj)
         {
             if (obj is Movie movie)
@@ -59,6 +62,8 @@ namespace MovieList.ViewModels
             var control = new AddNewControl();
             control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<AddNewViewModel>();
             this.SidePanelControl.ContentContainer.Content = control;
+
+            this.Closed?.Invoke(this, EventArgs.Empty);
         }
     }
 }
