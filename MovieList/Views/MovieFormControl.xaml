@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:MovieList.Views"
+             xmlns:data="clr-namespace:MovieList.Data"
              xmlns:conv="clr-namespace:MovieList.Converters"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -91,7 +92,7 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel DataContext="{Binding Movie}" Margin="10">
                 <StackPanel.Resources>
-                    <local:BindingProxy x:Key="MovieFormItem" Data="{Binding}" />
+                    <data:BindingProxy x:Key="MovieFormItem" Data="{Binding}" />
                 </StackPanel.Resources>
                 
                 <Image Source="{Binding Poster}" />

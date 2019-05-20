@@ -4,22 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:MovieList.Views"
+             xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
+             xmlns:data="clr-namespace:MovieList.Data"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:MovieListViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="500" d:DesignWidth="500" Loaded="MovieListControl_Loaded">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-
-        <local:BindingProxy x:Key="ViewModel" Data="{Binding}" />
+        <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>
 
     <DockPanel>
         <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Messages.Title}" FontSize="36"
                    TextAlignment="Center" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
 
-        <DataGrid x:Name="List" HeadersVisibility="All" AutoGenerateColumns="False" ItemsSource="{Binding Items}">
+        <DataGrid x:Name="List" HeadersVisibility="All" AutoGenerateColumns="False" ItemsSource="{Binding Items}" Visibility="Collapsed">
             <DataGrid.Resources>
                 <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="FontSize" Value="18" />
@@ -47,8 +47,14 @@
             </DataGrid.CellStyle>
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn IsReadOnly="True" Width="50" CanUserResize="False" Header="{x:Static resx:Messages.ListItemNumber}"
-                                        HeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}">
+                <DataGridTemplateColumn IsReadOnly="True" Width="50" CanUserResize="False" Header="{x:Static resx:Messages.ListItemNumber}">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderDefaultStyle}">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+                    
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="{x:Type DataGridCell}">
                             <TextBlock Name="DisplayNumberTextBlock" Text="{Binding DisplayNumber}" Style="{StaticResource TextBlockStyle}" TextAlignment="Left">
@@ -58,10 +64,15 @@
                             </TextBlock>
 
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
-                                             Value="True">
-                                    <Setter Property="Foreground" Value="White" TargetName="DisplayNumberTextBlock" />
-                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                        <Condition Binding="{Binding Path=(Selector.IsSelectionActive), RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" TargetName="DisplayNumberTextBlock" />
+                                </MultiDataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -78,10 +89,15 @@
                             </TextBlock>
 
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
-                                             Value="True">
-                                    <Setter Property="Foreground" Value="White" TargetName="TitleTextBlock" />
-                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                        <Condition Binding="{Binding Path=(Selector.IsSelectionActive), RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" TargetName="TitleTextBlock" />
+                                </MultiDataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -98,17 +114,28 @@
                             </TextBlock>
 
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
-                                             Value="True">
-                                    <Setter Property="Foreground" Value="White" TargetName="OriginalTitleTextBlock" />
-                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                        <Condition Binding="{Binding Path=(Selector.IsSelectionActive), RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" TargetName="OriginalTitleTextBlock" />
+                                </MultiDataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn IsReadOnly="True" Width="100" CanUserResize="False" Header="{x:Static resx:Messages.ListItemYear}"
-                                        HeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}">
+                <DataGridTemplateColumn IsReadOnly="True" Width="125" CanUserResize="False" Header="{x:Static resx:Messages.ListItemYear}">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderDefaultStyle}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="HorizontalContentAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="{x:Type DataGridCell}">
                             <TextBlock Name="YearTextBlock" Text="{Binding Year}" Style="{StaticResource TextBlockStyle}" TextAlignment="Right">
@@ -118,15 +145,82 @@
                             </TextBlock>
 
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
-                                             Value="True">
-                                    <Setter Property="Foreground" Value="White" TargetName="YearTextBlock" />
-                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                        <Condition Binding="{Binding Path=(Selector.IsSelectionActive), RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" TargetName="YearTextBlock" />
+                                </MultiDataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="25" CanUserResize="False" Header="">
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                            <Setter Property="Padding" Value="0" />
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type DataGridCell}">
+                            <Button Name="MoreButton" Style="{StaticResource ButtonCustom}" HorizontalAlignment="Stretch" Cursor="Hand"
+                                    VerticalAlignment="Stretch" BorderThickness="0" Content="⋮" FontSize="18" Background="Transparent"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0"
+                                    PreviewMouseDown="MoreButton_PreviewMouseDown">
+                                <Button.Foreground>
+                                    <SolidColorBrush Color="{Binding Color}" />
+                                </Button.Foreground>
+
+                                <Button.Resources>
+                                    <data:BindingProxy x:Key="ListItemProxy" Data="{Binding}" />
+                                </Button.Resources>
+
+                                <Button.ContextMenu>
+                                    <ContextMenu DataContext="{Binding Path=Data, Source={StaticResource ViewModel}}">
+                                        <ContextMenu.Resources>
+                                            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                <Setter Property="CommandParameter" Value="{Binding Path=Data, Source={StaticResource ListItemProxy}}" />
+                                                <Setter Property="Visibility" Value="{Binding
+                                                            Path=IsEnabled,
+                                                            RelativeSource={RelativeSource Self},
+                                                            Converter={StaticResource BoolToVisibility}}" />
+                                            </Style>
+                                        </ContextMenu.Resources>
+                                        
+                                        <MenuItem Header="{x:Static resx:Messages.Edit}" Command="{Binding SelectItem}" />
+                                        <MenuItem Header="{x:Static resx:Messages.MarkAsWatched}" Command="{Binding MarkAsWatched}" />
+                                        <MenuItem Header="{x:Static resx:Messages.MarkAsNotWatched}" Command="{Binding MarkAsNotWatched}" />
+                                        <MenuItem Header="{x:Static resx:Messages.MarkAsReleased}" Command="{Binding MarkAsReleased}" />
+                                        <MenuItem Header="{x:Static resx:Messages.MarkAsNotReleased}" Command="{Binding MarkAsNotReleased}" />
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+
+                            <DataTemplate.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                        <Condition Binding="{Binding Path=(Selector.IsSelectionActive), RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}}}"
+                                                   Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" TargetName="MoreButton" />
+                                </MultiDataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <controls:WaveProgressBar x:Name="LoadingProgressBar" Value="50" ShowText="False" Width="200" Height="200"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center" />
     </DockPanel>
 </UserControl>

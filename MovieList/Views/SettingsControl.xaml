@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
              xmlns:local="clr-namespace:MovieList.Views"
+             xmlns:data="clr-namespace:MovieList.Data"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:SettingsViewModel, IsDesignTimeCreatable=False}"
@@ -38,8 +39,8 @@
         </Style>
 
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-        
-        <local:BindingProxy x:Key="ViewModel" Data="{Binding}" />
+
+        <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>
 
     <DockPanel Margin="5,0,0,0">

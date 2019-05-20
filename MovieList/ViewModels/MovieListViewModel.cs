@@ -84,6 +84,8 @@ namespace MovieList.ViewModels
             if (obj is ListItem item)
             {
                 item.OpenSidePanel(this.SidePanel);
+                this.MovieListControl.List.SelectedIndex = Util.BinarySearchIndexOf(this.Items, item);
+                this.MovieListControl.List.Focus();
             }
         }
 

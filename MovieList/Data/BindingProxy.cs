@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace MovieList.Views
+namespace MovieList.Data
 {
     public class BindingProxy : Freezable
     {
