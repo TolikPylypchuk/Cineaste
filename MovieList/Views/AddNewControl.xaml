@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance vm:AddNewViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonPrimary}">
             <Setter Property="Margin" Value="10" />
             <Setter Property="Padding" Value="10,5" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />

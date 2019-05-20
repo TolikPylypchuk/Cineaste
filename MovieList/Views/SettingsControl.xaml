@@ -53,7 +53,7 @@
             <Button Content="{x:Static resx:Messages.Save}" Command="{Binding Save}" Style="{StaticResource ButtonPrimary}" />
         </StackPanel>
 
-        <ScrollViewer>
+        <ScrollViewer Padding="0,0,8,0">
             <StackPanel>
                 <Expander Header="{x:Static resx:Messages.Kinds}" HorizontalAlignment="Stretch">
                     <StackPanel>
