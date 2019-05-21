@@ -27,7 +27,6 @@ namespace MovieList.Views
         {
             if (sender is Button button)
             {
-                button.ContextMenu.PlacementTarget = this;
                 button.ContextMenu.IsOpen = true;
             }
 

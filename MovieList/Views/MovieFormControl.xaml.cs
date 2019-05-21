@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Controls;
 
 using MovieList.ViewModels;
@@ -24,5 +25,17 @@ namespace MovieList.Views
                 };
             }
         }
+
+        private void IsWatchedCheckBox_Checked(object sender, RoutedEventArgs e)
+            => this.IsNotReleasedCheckBox.IsChecked = false;
+
+        private void IsWatchedCheckBox_Unchecked(object sender, RoutedEventArgs e)
+            => this.IsNotReleasedCheckBox.IsChecked = true;
+
+        private void IsNotReleasedCheckBox_Checked(object sender, RoutedEventArgs e)
+            => this.IsWatchedCheckBox.IsChecked = false;
+
+        private void IsNotReleasedCheckBox_Unchecked(object sender, RoutedEventArgs e)
+            => this.IsWatchedCheckBox.IsChecked = true;
     }
 }

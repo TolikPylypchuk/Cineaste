@@ -171,9 +171,9 @@
 
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="{x:Type DataGridCell}">
-                            <Button Name="MoreButton" Style="{StaticResource ButtonCustom}" HorizontalAlignment="Stretch" Cursor="Hand"
+                            <Button Name="MoreButton" Style="{StaticResource ButtonCustom}" Padding="0" HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch" BorderThickness="0" Content="⋮" FontSize="18" Background="Transparent"
-                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                     PreviewMouseDown="MoreButton_PreviewMouseDown">
                                 <Button.Foreground>
                                     <SolidColorBrush Color="{Binding Color}" />

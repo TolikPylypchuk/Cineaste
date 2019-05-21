@@ -19,10 +19,20 @@
             <Setter Property="controls:IconElement.Width" Value="25" />
             <Setter Property="controls:IconElement.Height" Value="25" />
         </Style>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="4,0,0,0" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
     </UserControl.Resources>
     
-    <StackPanel Margin="10" VerticalAlignment="Center">
-        <Button Command="{Binding AddNewMovie}" Content="{x:Static resx:Messages.AddNewMovie}" />
-        <Button Command="{Binding AddNewSeries}" Content="{x:Static resx:Messages.AddNewSeries}" />
+    <StackPanel VerticalAlignment="Center">
+        <Button Command="{Binding AddNewMovie}">
+            <TextBlock Text="{x:Static resx:Messages.AddNewMovie}" />
+        </Button>
+
+        <Button Command="{Binding AddNewSeries}">
+            <TextBlock Text="{x:Static resx:Messages.AddNewSeries}" />
+        </Button>
     </StackPanel>
 </UserControl>
