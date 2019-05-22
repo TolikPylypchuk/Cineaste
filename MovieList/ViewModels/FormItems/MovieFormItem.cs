@@ -92,6 +92,11 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.isWatched = value;
                 this.OnPropertyChanged();
+
+                if (this.IsWatched && !this.IsReleased)
+                {
+                    this.IsReleased = true;
+                }
             }
         }
 
@@ -102,6 +107,11 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.isReleased = value;
                 this.OnPropertyChanged();
+
+                if (this.IsWatched && !this.IsReleased)
+                {
+                    this.IsWatched = false;
+                }
             }
         }
 
@@ -165,12 +175,9 @@ namespace MovieList.ViewModels.FormItems
             foreach (var title in this.Titles.Union(this.OriginalTitles))
             {
                 title.WriteChanges();
-                if (title.Title.Id == default)
+                if (title.Title.Id == default && this.Movie.Id != default)
                 {
                     this.Movie.Titles.Add(title.Title);
-                } else
-                {
-                    this.Movie.Titles.First(t => t.Id == title.Title.Id);
                 }
             }
 

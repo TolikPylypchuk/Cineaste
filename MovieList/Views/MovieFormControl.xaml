@@ -94,12 +94,10 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <CheckBox x:Name="IsWatchedCheckBox" Content="{x:Static resx:Messages.Watched}" IsChecked="{Binding IsWatched}"
-                              IsEnabled="{Binding Converter={StaticResource CanSelectIfWatched}}" Checked="IsWatchedCheckBox_Checked"
-                              Unchecked="IsWatchedCheckBox_Unchecked" />
+                              IsEnabled="{Binding Converter={StaticResource CanSelectIfWatched}}" />
                     <CheckBox x:Name="IsNotReleasedCheckBox" Content="{x:Static resx:Messages.NotReleased}" Margin="10,0,0,0"
                               IsChecked="{Binding Path=IsReleased, Converter={StaticResource InverseBool}}"
-                              IsEnabled="{Binding Converter={StaticResource CanSelectIfReleased}}" Checked="IsNotReleasedCheckBox_Checked"
-                              Unchecked="IsNotReleasedCheckBox_Unchecked" />
+                              IsEnabled="{Binding Converter={StaticResource CanSelectIfReleased}}" />
                 </StackPanel>
 
                 <DockPanel>
