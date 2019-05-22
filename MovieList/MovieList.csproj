@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HandyControl" Version="1.5.5.9" />
+    <PackageReference Include="HandyControl" Version="1.5.5.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview5.19227.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0-preview5.19227.9" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.0-preview5.19227.9" />
@@ -56,30 +56,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
-    <Compile Update="Views\AddNewControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\MainWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\MovieFormControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\MovieListControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\MovieSeriesFormControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\SeriesFormControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\SettingsControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\SidePanelControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Update="Views\AddNewControl.xaml.cs" />
+    <Compile Update="Views\MainWindow.xaml.cs" />
+    <Compile Update="Views\MovieFormControl.xaml.cs" />
+    <Compile Update="Views\MovieListControl.xaml.cs" />
+    <Compile Update="Views\MovieSeriesFormControl.xaml.cs" />
+    <Compile Update="Views\SeriesFormControl.xaml.cs" />
+    <Compile Update="Views\SettingsControl.xaml.cs" />
+    <Compile Update="Views\SidePanelControl.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>

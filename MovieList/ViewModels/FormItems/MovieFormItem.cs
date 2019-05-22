@@ -156,7 +156,7 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.IsWatched, () => this.Movie.IsWatched),
                 (() => this.IsReleased, () => this.Movie.IsReleased),
                 (() => this.ImdbLink, () => this.Movie.ImdbLink),
-                (() => this.Movie.PosterUrl, () => this.Movie.PosterUrl),
+                (() => this.PosterUrl, () => this.Movie.PosterUrl),
                 (() => this.Kind.Kind.Id, () => this.Movie.KindId)
             };
 
