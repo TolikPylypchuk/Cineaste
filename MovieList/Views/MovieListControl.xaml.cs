@@ -38,14 +38,22 @@ namespace MovieList.Views
                 {
                     this.List.SelectedIndex = (this.List.SelectedIndex + this.ViewModel.Items.Count + 1) % this.ViewModel.Items.Count;
                     e.Handled = true;
-                }
-            } else
-            {
-                if (e.Key == Key.Up)
+                } else if (e.Key == Key.Home)
+                {
+                    this.List.SelectedIndex = 0;
+                    e.Handled = true;
+                } else if (e.Key == Key.End)
                 {
                     this.List.SelectedIndex = this.ViewModel.Items.Count - 1;
                     e.Handled = true;
-                } else if (e.Key == Key.Down)
+                }
+            } else
+            {
+                if (e.Key == Key.Up || e.Key == Key.Home)
+                {
+                    this.List.SelectedIndex = this.ViewModel.Items.Count - 1;
+                    e.Handled = true;
+                } else if (e.Key == Key.Down || e.Key == Key.End)
                 {
                     this.List.SelectedIndex = 0;
                     e.Handled = true;

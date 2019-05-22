@@ -172,10 +172,16 @@ namespace MovieList.ViewModels.FormItems
 
         public override void WriteChanges()
         {
+            if (this.Movie.Id == default)
+            {
+                this.Movie.Titles.Clear();
+            }
+
             foreach (var title in this.Titles.Union(this.OriginalTitles))
             {
                 title.WriteChanges();
-                if (title.Title.Id == default && this.Movie.Id != default)
+
+                if (title.Title.Id == default)
                 {
                     this.Movie.Titles.Add(title.Title);
                 }
