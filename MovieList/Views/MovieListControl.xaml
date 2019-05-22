@@ -9,7 +9,8 @@
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:MovieListViewModel, IsDesignTimeCreatable=False}"
-             d:DesignHeight="500" d:DesignWidth="500" Loaded="MovieListControl_Loaded">
+             d:DesignHeight="500" d:DesignWidth="500" Loaded="MovieListControl_Loaded"
+             PreviewKeyDown="MovieListControl_PreviewKeyDown" PreviewKeyUp="MovieListControl_PreviewKeyUp">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
@@ -19,7 +20,7 @@
         <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Messages.Title}" FontSize="36"
                    TextAlignment="Center" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
 
-        <DataGrid x:Name="List" HeadersVisibility="All" AutoGenerateColumns="False" ItemsSource="{Binding Items}" Visibility="Collapsed">
+        <DataGrid x:Name="List" HeadersVisibility="All" AutoGenerateColumns="False" ItemsSource="{Binding Items}" Visibility="Collapsed" FocusVisualStyle="{x:Null}">
             <DataGrid.Resources>
                 <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="FontSize" Value="18" />
