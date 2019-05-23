@@ -191,14 +191,20 @@ namespace MovieList.ViewModels.FormItems
 
         public void ClearEmptyTitles()
         {
-            while (this.Titles.Count != 1)
+            bool shouldContinue = true;
+
+            while (this.Titles.Count != 1 && shouldContinue)
             {
-                this.Titles.Remove(this.Titles.FirstOrDefault(t => String.IsNullOrEmpty(t.Name)));
+                var title = this.Titles.FirstOrDefault(t => String.IsNullOrEmpty(t.Name));
+                this.Titles.Remove(title);
+                shouldContinue = title != null;
             }
 
-            while (this.OriginalTitles.Count != 1)
+            while (this.OriginalTitles.Count != 1 && shouldContinue)
             {
-                this.OriginalTitles.Remove(this.OriginalTitles.FirstOrDefault(t => String.IsNullOrEmpty(t.Name)));
+                var title = this.OriginalTitles.FirstOrDefault(t => String.IsNullOrEmpty(t.Name));
+                this.OriginalTitles.Remove(title);
+                shouldContinue = title != null;
             }
         }
 
