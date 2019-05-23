@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,7 @@ using MovieList.Options;
 using MovieList.Properties;
 using MovieList.Services;
 using MovieList.Validation;
+using Newtonsoft.Json;
 
 namespace MovieList.ViewModels
 {
@@ -149,6 +151,7 @@ namespace MovieList.ViewModels
         }
 
         [File]
+        [Required(ErrorMessageResourceName = "DatabasePathRequired", ErrorMessageResourceType = typeof(Messages))]
         public string DatabasePath
         {
             get => this.databasePath;

@@ -15,7 +15,8 @@ namespace MovieList.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             => value switch
             {
-                MovieFormItem movie => movie.Year == DateTime.Now.Year,
+                MovieFormItem movie when Int32.TryParse(movie.Year, out int year) => year == DateTime.Now.Year,
+                MovieFormItem movie when String.IsNullOrEmpty(movie.Year) => true,
                 Season season =>
                     season.GetOrderedPeriods().First().StartYear >= DateTime.Now.Year ||
                     (season.GetOrderedPeriods().First().StartYear == DateTime.Now.Year &&

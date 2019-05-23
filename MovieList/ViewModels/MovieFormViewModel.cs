@@ -6,6 +6,8 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using HandyControl.Controls;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using MovieList.Events;
@@ -13,6 +15,7 @@ using MovieList.Properties;
 using MovieList.Services;
 using MovieList.ViewModels.FormItems;
 using MovieList.ViewModels.ListItems;
+using MovieList.Views;
 
 namespace MovieList.ViewModels
 {
@@ -39,6 +42,8 @@ namespace MovieList.ViewModels
 
         public ICommand Save { get; }
         public ICommand Cancel { get; }
+
+        public MovieFormControl MovieFormControl { get; set; }
 
         public MovieFormItem Movie
         {
@@ -83,6 +88,16 @@ namespace MovieList.ViewModels
 
         public async Task SaveAsync()
         {
+            this.Movie.ClearEmptyTitles();
+
+            if (!this.MovieFormControl
+                .FindVisualChildren<TextBox>()
+                .Select(textBox => textBox.VerifyData())
+                .Aggregate(true, (a, b) => a && b))
+            {
+                return;
+            }
+
             this.Movie.WriteChanges();
 
             using var scope = this.app.ServiceProvider.CreateScope();
@@ -120,13 +135,13 @@ namespace MovieList.ViewModels
         {
             this.OnPropertyChanged(nameof(this.Movie));
 
-            if (e.PropertyName == nameof(this.movie.Year))
+            if (e.PropertyName == nameof(this.movie.Year) && Int32.TryParse(movie.Year, out int year))
             {
-                if (movie.Year > DateTime.Now.Year)
+                if (year > DateTime.Now.Year)
                 {
                     this.Movie.IsReleased = false;
                     this.Movie.IsWatched = false;
-                } else if (movie.Year < DateTime.Now.Year)
+                } else if (year < DateTime.Now.Year)
                 {
                     this.Movie.IsReleased = true;
                 }

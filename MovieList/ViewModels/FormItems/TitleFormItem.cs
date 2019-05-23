@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+using HandyControl.Data;
 
 using MovieList.Data.Models;
+using MovieList.Properties;
 
 namespace MovieList.ViewModels.FormItems
 {
@@ -22,6 +26,7 @@ namespace MovieList.ViewModels.FormItems
 
         public Title Title { get; }
 
+        [Required(ErrorMessageResourceName = "NameRequired", ErrorMessageResourceType = typeof(Messages))]
         public string Name
         {
             get => this.name;
@@ -41,6 +46,9 @@ namespace MovieList.ViewModels.FormItems
                 this.OnPropertyChanged();
             }
         }
+
+        public Func<string, OperationResult<bool>> VerifyName
+            => this.Verify(nameof(this.Name));
 
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>

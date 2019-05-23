@@ -14,6 +14,9 @@ namespace MovieList.Validation
         }
 
         public override bool IsValid(object value)
-            => value is string path && path.Length != 0 && path.IndexOfAny(Path.GetInvalidPathChars()) == -1;
+            => value == null ||
+                (value is string path &&
+                 path.Length != 0 &&
+                 path.IndexOfAny(Path.GetInvalidPathChars()) == -1);
     }
 }

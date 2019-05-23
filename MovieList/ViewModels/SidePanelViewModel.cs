@@ -39,6 +39,7 @@ namespace MovieList.ViewModels
             {
                 var control = new MovieFormControl();
                 control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<MovieFormViewModel>();
+                control.ViewModel.MovieFormControl = control;
 
                 using var scope = this.app.ServiceProvider.CreateScope();
                 var service = scope.ServiceProvider.GetRequiredService<IKindService>();

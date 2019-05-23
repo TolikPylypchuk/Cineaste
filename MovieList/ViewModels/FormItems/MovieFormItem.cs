@@ -2,11 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Policy;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
+using HandyControl.Data;
+
 using MovieList.Data.Models;
+using MovieList.Properties;
+using MovieList.Validation;
 
 namespace MovieList.ViewModels.FormItems
 {
@@ -15,7 +21,7 @@ namespace MovieList.ViewModels.FormItems
         private ObservableCollection<TitleFormItem> titles;
         private ObservableCollection<TitleFormItem> originalTitles;
 
-        private int year;
+        private string year;
         private bool isWatched;
         private bool isReleased;
         private string? imdbLink;
@@ -75,7 +81,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        public int Year
+        [Year(Min = 1850, Max = 2100)]
+        [Required(ErrorMessageResourceName = "YearRequired", ErrorMessageResourceType = typeof(Messages))]
+        public string Year
         {
             get => this.year;
             set
@@ -115,6 +123,7 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [Url(ErrorMessageResourceName = "InvalidImdbLink", ErrorMessageResourceType = typeof(Messages))]
         public string? ImdbLink
         {
             get => this.imdbLink;
@@ -125,6 +134,7 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [Url(ErrorMessageResourceName = "InvalidPosterUrl", ErrorMessageResourceType = typeof(Messages))]
         public string? PosterUrl
         {
             get => this.posterUrl;
@@ -155,6 +165,15 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public Func<string, OperationResult<bool>> VerifyYear
+            => this.Verify(nameof(this.Year));
+
+        public Func<string, OperationResult<bool>> VerifyImdbLink
+            => this.Verify(nameof(this.ImdbLink));
+
+        public Func<string, OperationResult<bool>> VerifyPosterUrl
+            => this.Verify(nameof(this.PosterUrl));
+
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
@@ -169,6 +188,19 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.PosterUrl, () => this.Movie.PosterUrl),
                 (() => this.Kind.Kind.Id, () => this.Movie.KindId)
             };
+
+        public void ClearEmptyTitles()
+        {
+            while (this.Titles.Count != 1)
+            {
+                this.Titles.Remove(this.Titles.FirstOrDefault(t => String.IsNullOrEmpty(t.Name)));
+            }
+
+            while (this.OriginalTitles.Count != 1)
+            {
+                this.OriginalTitles.Remove(this.OriginalTitles.FirstOrDefault(t => String.IsNullOrEmpty(t.Name)));
+            }
+        }
 
         public override void WriteChanges()
         {
@@ -192,7 +224,7 @@ namespace MovieList.ViewModels.FormItems
                 this.SetPoster();
             }
 
-            this.Movie.Year = this.Year;
+            this.Movie.Year = Int32.Parse(this.Year);
             this.Movie.IsWatched = this.IsWatched;
             this.Movie.IsReleased = this.IsReleased;
             this.Movie.ImdbLink = this.ImdbLink;
@@ -234,7 +266,7 @@ namespace MovieList.ViewModels.FormItems
                 title.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.OriginalTitles));
             }
 
-            this.Year = this.Movie.Year;
+            this.Year = this.Movie.Year.ToString();
             this.IsWatched = this.Movie.IsWatched;
             this.IsReleased = this.Movie.IsReleased;
             this.ImdbLink = this.Movie.ImdbLink;

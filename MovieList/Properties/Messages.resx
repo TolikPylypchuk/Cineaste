@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Add" xml:space="preserve">
-    <value>Додати</value>
-  </data>
-  <data name="AddIcon" xml:space="preserve">
-    <value>+</value>
-  </data>
   <data name="AddNewMovie" xml:space="preserve">
     <value>Додати фільм</value>
   </data>
@@ -153,6 +147,9 @@
   <data name="DatabasePath" xml:space="preserve">
     <value>Шлях до бази даних</value>
   </data>
+  <data name="DatabasePathRequired" xml:space="preserve">
+    <value>Шлях до бази даних є обов'язковим</value>
+  </data>
   <data name="DefaultSeasonNumberPlaceholder" xml:space="preserve">
     <value>#</value>
   </data>
@@ -174,8 +171,17 @@
   <data name="Imdb" xml:space="preserve">
     <value>IMDb</value>
   </data>
+  <data name="InvalidImdbLink" xml:space="preserve">
+    <value>Посилання на IMDb має бути URL</value>
+  </data>
   <data name="InvalidPath" xml:space="preserve">
     <value>Шлях не є назвою файлу</value>
+  </data>
+  <data name="InvalidPosterUrl" xml:space="preserve">
+    <value>Посилання на постер має бути URL</value>
+  </data>
+  <data name="InvalidYear" xml:space="preserve">
+    <value>Неправильний рік</value>
   </data>
   <data name="Kind" xml:space="preserve">
     <value>Вид</value>
@@ -217,7 +223,7 @@
     <value>Назва</value>
   </data>
   <data name="NameRequired" xml:space="preserve">
-    <value>Назва не може бути порожньою</value>
+    <value>Назва є обов'язковою</value>
   </data>
   <data name="NewKind" xml:space="preserve">
     <value>Новий вид</value>
@@ -246,9 +252,6 @@
   <data name="Remove" xml:space="preserve">
     <value>Видалити</value>
   </data>
-  <data name="RemoveIcon" xml:space="preserve">
-    <value>×</value>
-  </data>
   <data name="Save" xml:space="preserve">
     <value>Зберегти</value>
   </data>
@@ -272,5 +275,8 @@
   </data>
   <data name="Year" xml:space="preserve">
     <value>Рік</value>
+  </data>
+  <data name="YearRequired" xml:space="preserve">
+    <value>Рік є обов'язковим</value>
   </data>
 </root>

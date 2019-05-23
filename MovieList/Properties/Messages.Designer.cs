@@ -61,24 +61,6 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Додати.
-        /// </summary>
-        public static string Add {
-            get {
-                return ResourceManager.GetString("Add", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to +.
-        /// </summary>
-        public static string AddIcon {
-            get {
-                return ResourceManager.GetString("AddIcon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Додати фільм.
         /// </summary>
         public static string AddNewMovie {
@@ -169,6 +151,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Шлях до бази даних є обов&apos;язковим.
+        /// </summary>
+        public static string DatabasePathRequired {
+            get {
+                return ResourceManager.GetString("DatabasePathRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #.
         /// </summary>
         public static string DefaultSeasonNumberPlaceholder {
@@ -232,11 +223,38 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Посилання на IMDb має бути URL.
+        /// </summary>
+        public static string InvalidImdbLink {
+            get {
+                return ResourceManager.GetString("InvalidImdbLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Шлях не є назвою файлу.
         /// </summary>
         public static string InvalidPath {
             get {
                 return ResourceManager.GetString("InvalidPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Посилання на постер має бути URL.
+        /// </summary>
+        public static string InvalidPosterUrl {
+            get {
+                return ResourceManager.GetString("InvalidPosterUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Неправильний рік.
+        /// </summary>
+        public static string InvalidYear {
+            get {
+                return ResourceManager.GetString("InvalidYear", resourceCulture);
             }
         }
         
@@ -358,7 +376,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Назва не може бути порожньою.
+        ///   Looks up a localized string similar to Назва є обов&apos;язковою.
         /// </summary>
         public static string NameRequired {
             get {
@@ -448,15 +466,6 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ×.
-        /// </summary>
-        public static string RemoveIcon {
-            get {
-                return ResourceManager.GetString("RemoveIcon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Зберегти.
         /// </summary>
         public static string Save {
@@ -525,6 +534,15 @@ namespace MovieList.Properties {
         public static string Year {
             get {
                 return ResourceManager.GetString("Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Рік є обов&apos;язковим.
+        /// </summary>
+        public static string YearRequired {
+            get {
+                return ResourceManager.GetString("YearRequired", resourceCulture);
             }
         }
     }

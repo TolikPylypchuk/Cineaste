@@ -35,15 +35,16 @@
 
         <Style x:Key="RemoveButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButtonStyle}">
             <Setter Property="controls:IconElement.Geometry" Value="{StaticResource DeleteGeometry}" />
-            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="Margin" Value="5,2,0,2" />
         </Style>
 
-        <Style x:Key="InputTextBoxStyle" TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource TextBoxExtend}">
+        <Style x:Key="InputTextBoxStyle" TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource {x:Type controls:TextBox}}">
             <Setter Property="Margin" Value="0,2" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="MaxLines" Value="15" />
+            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
             <Setter Property="local:Properties.TripleClickSelectAll" Value="True" />
         </Style>
 
@@ -112,7 +113,7 @@
                                 <Button Command="{Binding Path=Data.RemoveTitle, Source={StaticResource MovieFormItem}}"
                                         CommandParameter="{Binding}" Style="{StaticResource RemoveButtonStyle}" />
                                 <controls:TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
-                                                  Style="{StaticResource InputTextBoxStyle}" />
+                                                  Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyName}" />
                             </DockPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -130,7 +131,7 @@
                                 <Button Command="{Binding Path=Data.RemoveOriginalTitle, Source={StaticResource MovieFormItem}}"
                                         CommandParameter="{Binding}" Style="{StaticResource RemoveButtonStyle}" />
                                 <controls:TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
-                                                  Style="{StaticResource InputTextBoxStyle}" />
+                                                  Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyName}" />
                             </DockPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -144,11 +145,12 @@
 
                     <controls:TextBox Grid.Column="0" Text="{Binding Path=Year, UpdateSourceTrigger=PropertyChanged}"
                                       controls:InfoElement.Title="{x:Static resx:Messages.Year}" Margin="0,0,2.5,0"
-                                      Style="{StaticResource InputTextBoxStyle}"  />
+                                      Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyYear}" />
 
                     <controls:ComboBox Grid.Column="1" ItemsSource="{Binding Path=AllKinds}" Margin="2.5,0,0,0"
                                        SelectedItem="{Binding Path=Kind, UpdateSourceTrigger=PropertyChanged}"
-                                       controls:InfoElement.Title="{x:Static resx:Messages.Kind}">
+                                       controls:InfoElement.Title="{x:Static resx:Messages.Kind}"
+                                       VerticalAlignment="Top">
                         <controls:ComboBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type vm:KindViewModel}">
                                 <TextBlock Text="{Binding Name}" />
@@ -159,11 +161,13 @@
 
                 <controls:TextBox Text="{Binding Path=ImdbLink, UpdateSourceTrigger=PropertyChanged}"
                                   controls:InfoElement.Title="{x:Static resx:Messages.Imdb}"
-                                  Style="{StaticResource UrlInputTextBoxStyle}" />
+                                  Style="{StaticResource UrlInputTextBoxStyle}"
+                                  VerifyFunc="{Binding VerifyImdbLink}" />
 
                 <controls:TextBox Text="{Binding Path=PosterUrl, UpdateSourceTrigger=PropertyChanged}"
                                   controls:InfoElement.Title="{x:Static resx:Messages.PosterUrl}"
-                                  Style="{StaticResource UrlInputTextBoxStyle}" />
+                                  Style="{StaticResource UrlInputTextBoxStyle}"
+                                  VerifyFunc="{Binding VerifyPosterUrl}" />
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

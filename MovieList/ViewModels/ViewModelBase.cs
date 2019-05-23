@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using HandyControl.Data;
 
 namespace MovieList.ViewModels
@@ -40,6 +41,12 @@ namespace MovieList.ViewModels
         {
             string error = String.Empty;
             value ??= this.GetValue(propertyName);
+
+            if (value == null || value.Equals(String.Empty))
+            {
+                value = null;
+            }
+
             var results = new List<ValidationResult>();
 
             var result = Validator.TryValidateProperty(
@@ -68,7 +75,7 @@ namespace MovieList.ViewModels
                     : new OperationResult<bool> { Data = true, ResultType = ResultType.Success };
             };
 
-        private object GetValue(string propertyName)
+        private object? GetValue(string propertyName)
         {
             var propInfo = this.GetType().GetProperty(propertyName);
             return propInfo.GetValue(this);
