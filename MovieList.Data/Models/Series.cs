@@ -11,6 +11,8 @@ namespace MovieList.Data.Models
         public bool IsWatched { get; set; }
         public bool IsMiniseries { get; set; }
 
+        public SeriesStatus Status { get; set; }
+
         [Url]
         [StringLength(256)]
         public string? ImdbLink { get; set; }

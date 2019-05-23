@@ -174,6 +174,8 @@ namespace MovieList.Data.Migrations
                     b.Property<string>("PosterUrl")
                         .HasMaxLength(256);
 
+                    b.Property<int>("Status");
+
                     b.HasKey("Id");
 
                     b.HasIndex("KindId");

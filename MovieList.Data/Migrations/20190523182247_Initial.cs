@@ -74,6 +74,7 @@ namespace MovieList.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     IsWatched = table.Column<bool>(nullable: false),
                     IsMiniseries = table.Column<bool>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
                     ImdbLink = table.Column<string>(maxLength: 256, nullable: true),
                     PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
                     KindId = table.Column<int>(nullable: false)
