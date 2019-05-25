@@ -103,6 +103,9 @@ namespace MovieList.ViewModels
 
                     this.Items.Insert(index, item);
                     this.MovieListControl.List.SelectedIndex = index;
+
+                    this.MovieListControl.List.UpdateLayout();
+                    this.MovieListControl.List.ScrollIntoView(this.MovieListControl.List.SelectedItem);
                     break;
             }
         }

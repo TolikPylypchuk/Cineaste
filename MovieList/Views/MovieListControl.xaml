@@ -20,7 +20,8 @@
         <TextBlock DockPanel.Dock="Top" Text="{x:Static resx:Messages.Title}" FontSize="36"
                    TextAlignment="Center" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
 
-        <DataGrid x:Name="List" HeadersVisibility="All" AutoGenerateColumns="False" ItemsSource="{Binding Items}" Visibility="Collapsed" FocusVisualStyle="{x:Null}">
+        <DataGrid x:Name="List" ItemsSource="{Binding Items}" HeadersVisibility="All" AutoGenerateColumns="False" Visibility="Collapsed"
+                  FocusVisualStyle="{x:Null}" EnableRowVirtualization="False">
             <DataGrid.Resources>
                 <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="FontSize" Value="18" />

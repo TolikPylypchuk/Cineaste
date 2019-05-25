@@ -32,32 +32,31 @@ namespace MovieList.Views
             {
                 if (e.Key == Key.Up)
                 {
-                    this.List.SelectedIndex = (this.List.SelectedIndex + this.ViewModel.Items.Count - 1) % this.ViewModel.Items.Count;
+                    this.SelectAndScroll(
+                        (this.List.SelectedIndex + this.ViewModel.Items.Count - 1) % this.ViewModel.Items.Count);
                     e.Handled = true;
                 } else if (e.Key == Key.Down)
                 {
-                    this.List.SelectedIndex = (this.List.SelectedIndex + this.ViewModel.Items.Count + 1) % this.ViewModel.Items.Count;
+                    this.SelectAndScroll(
+                        (this.List.SelectedIndex + this.ViewModel.Items.Count + 1) % this.ViewModel.Items.Count);
                     e.Handled = true;
                 } else if (e.Key == Key.Home)
                 {
-                    this.List.SelectedIndex = 0;
+                    this.SelectAndScroll(0);
                     e.Handled = true;
                 } else if (e.Key == Key.End)
                 {
-                    this.List.SelectedIndex = this.ViewModel.Items.Count - 1;
+                    this.SelectAndScroll(this.ViewModel.Items.Count - 1);
                     e.Handled = true;
                 }
-            } else
+            } else if (e.Key == Key.Up || e.Key == Key.Home)
             {
-                if (e.Key == Key.Up || e.Key == Key.Home)
-                {
-                    this.List.SelectedIndex = this.ViewModel.Items.Count - 1;
-                    e.Handled = true;
-                } else if (e.Key == Key.Down || e.Key == Key.End)
-                {
-                    this.List.SelectedIndex = 0;
-                    e.Handled = true;
-                }
+                this.SelectAndScroll(this.ViewModel.Items.Count - 1);
+                e.Handled = true;
+            } else if (e.Key == Key.Down || e.Key == Key.End)
+            {
+                this.SelectAndScroll(0);
+                e.Handled = true;
             }
         }
 
@@ -69,6 +68,14 @@ namespace MovieList.Views
             }
 
             e.Handled = true;
+        }
+
+        private void SelectAndScroll(int index)
+        {
+            this.List.SelectedIndex = index;
+
+            this.List.UpdateLayout();
+            this.List.ScrollIntoView(this.List.SelectedItem);
         }
     }
 }
