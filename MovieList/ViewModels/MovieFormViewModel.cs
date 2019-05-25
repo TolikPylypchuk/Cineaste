@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 using HandyControl.Controls;
@@ -16,6 +17,8 @@ using MovieList.Services;
 using MovieList.ViewModels.FormItems;
 using MovieList.ViewModels.ListItems;
 using MovieList.Views;
+
+using MessageBox = System.Windows.MessageBox;
 
 namespace MovieList.ViewModels
 {
@@ -35,6 +38,7 @@ namespace MovieList.ViewModels
 
             this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(_ => this.Movie.RevertChanges(), _ => this.CanCancelChanges);
+            this.Delete = new DelegateCommand(async _ => await this.DeleteAsync(), _ => this.CanDelete());
 
             movieList.ListItemUpdated += this.OnListItemUpdated;
             settings.SettingsUpdated += this.OnSettingsUpdated;
@@ -42,6 +46,7 @@ namespace MovieList.ViewModels
 
         public ICommand Save { get; }
         public ICommand Cancel { get; }
+        public ICommand Delete { get; }
 
         public MovieFormControl MovieFormControl { get; set; }
 
@@ -109,6 +114,25 @@ namespace MovieList.ViewModels
 
             (shouldAddToList ? this.MovieList.AddItem : this.MovieList.UpdateItem).ExecuteIfCan(this.Movie.Movie);
         }
+
+        public async Task DeleteAsync()
+        {
+            var result = MessageBox.Show(Messages.DeleteMoviePrompt, Messages.Delete, MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                using var scope = this.app.ServiceProvider.CreateScope();
+                var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
+
+                await service.DeleteMovieAsync(this.Movie.Movie);
+
+                this.SidePanel.Close.ExecuteIfCan(null);
+                this.MovieList.DeleteItem.ExecuteIfCan(this.Movie.Movie);
+            }
+        }
+
+        public bool CanDelete()
+            => this.Movie.Movie.Id != default;
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {

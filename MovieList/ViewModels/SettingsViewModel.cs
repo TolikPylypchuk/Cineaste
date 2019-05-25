@@ -67,7 +67,7 @@ namespace MovieList.ViewModels
                 control as FrameworkElement, this.NotReleasedColor.ToString(), color => this.NotReleasedColor = color));
 
             this.AddKind = new DelegateCommand(_ => this.OnAddKind());
-            this.RemoveKind = new DelegateCommand(this.OnRemoveKind);
+            this.RemoveKind = new DelegateCommand(async obj => await this.RemoveKindAsync(obj));
 
             this.Save = new DelegateCommand(async _ => await this.SaveChangesAsync(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(async _ => await this.CancelChangesAsync(), _ => this.CanCancelChanges);
@@ -241,7 +241,7 @@ namespace MovieList.ViewModels
             this.Kinds.Add(kind);
         }
 
-        private async void OnRemoveKind(object obj)
+        private async Task RemoveKindAsync(object obj)
         {
             if (obj is KindViewModel kind)
             {

@@ -118,7 +118,7 @@ namespace MovieList.ViewModels
             switch (obj)
             {
                 case Movie movie:
-                    this.Items.RemoveAt(Util.BinarySearchIndexOf(this.items, new MovieListItem(movie, config.Value)));
+                    this.Items.RemoveAt(Util.BinarySearchIndexOf(this.items, new MovieListItem(movie, this.config.Value)));
                     break;
             }
         }

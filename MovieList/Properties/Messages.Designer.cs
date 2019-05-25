@@ -196,6 +196,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Видалити.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ви дійсно хочете видалити цей фільм?.
+        /// </summary>
+        public static string DeleteMoviePrompt {
+            get {
+                return ResourceManager.GetString("DeleteMoviePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Редагувати.
         /// </summary>
         public static string Edit {

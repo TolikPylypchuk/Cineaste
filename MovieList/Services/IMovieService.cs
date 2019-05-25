@@ -13,5 +13,7 @@ namespace MovieList.Services
         Task SaveMovieAsync(Movie movie);
         Task ToggleWatchedAsync(ListItem item);
         Task ToggleReleasedAsync(MovieListItem item);
+
+        Task DeleteMovieAsync(Movie movie);
     }
 }

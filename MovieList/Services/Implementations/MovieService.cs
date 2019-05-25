@@ -96,5 +96,11 @@ namespace MovieList.Services.Implementations
             this.context.Attach(item.Movie).State = EntityState.Modified;
             await this.context.SaveChangesAsync();
         }
+
+        public async Task DeleteMovieAsync(Movie movie)
+        {
+            this.context.Attach(movie).State = EntityState.Deleted;
+            await this.context.SaveChangesAsync();
+        }
     }
 }
