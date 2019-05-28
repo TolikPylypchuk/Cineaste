@@ -11,9 +11,12 @@ namespace MovieList.Services
         Task<ObservableCollection<ListItem>> LoadListAsync();
 
         Task SaveMovieAsync(Movie movie);
+        Task SaveSeriesAsync(Series series);
+
         Task ToggleWatchedAsync(ListItem item);
         Task ToggleReleasedAsync(MovieListItem item);
 
-        Task DeleteMovieAsync(Movie movie);
+        Task DeleteAsync<TEntity>(TEntity entity)
+            where TEntity : EntityBase;
     }
 }

@@ -168,6 +168,9 @@
   <data name="DeleteMoviePrompt" xml:space="preserve">
     <value>Ви дійсно хочете видалити цей фільм?</value>
   </data>
+  <data name="DeleteSeriesPrompt" xml:space="preserve">
+    <value>Ви дійсно хочете видалити цей серіал?</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Редагувати</value>
   </data>

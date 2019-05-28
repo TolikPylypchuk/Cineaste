@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Policy;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 using HandyControl.Data;
@@ -16,11 +13,8 @@ using MovieList.Validation;
 
 namespace MovieList.ViewModels.FormItems
 {
-    public class MovieFormItem : FormItemBase
+    public class MovieFormItem : TitledFormItemBase
     {
-        private ObservableCollection<TitleFormItem> titles;
-        private ObservableCollection<TitleFormItem> originalTitles;
-
         private string year;
         private bool isWatched;
         private bool isReleased;
@@ -35,51 +29,11 @@ namespace MovieList.ViewModels.FormItems
             this.AllKinds = allKinds;
 
             this.CopyMovieProperties();
-
-            this.AddTitle = new DelegateCommand(
-                _ => this.OnAddTitle(), _ => this.CanAddTitle());
-
-            this.AddOriginalTitle = new DelegateCommand(
-                _ => this.OnAddOriginalTitle(), _ => this.CanAddOriginalTitle());
-
-            this.RemoveTitle = new DelegateCommand(
-                this.OnRemoveTitle, _ => this.CanRemoveTitle());
-
-            this.RemoveOriginalTitle = new DelegateCommand(
-                this.OnRemoveOriginalTitle, _ => this.CanRemoveOriginalTitle());
-
             this.IsInitialized = true;
         }
 
-        public ICommand AddTitle { get; }
-        public ICommand RemoveTitle { get; }
-        public ICommand AddOriginalTitle { get; }
-        public ICommand RemoveOriginalTitle { get; }
-
         public Movie Movie { get; }
         public IEnumerable<KindViewModel> AllKinds { get; }
-
-        public ObservableCollection<TitleFormItem> Titles
-        {
-            get => this.titles;
-            set
-            {
-                this.titles = value;
-                this.titles.CollectionChanged += this.OnTitlesChanged;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<TitleFormItem> OriginalTitles
-        {
-            get => this.originalTitles;
-            set
-            {
-                this.originalTitles = value;
-                this.originalTitles.CollectionChanged += this.OnTitlesChanged;
-                this.OnPropertyChanged();
-            }
-        }
 
         [Year(Min = 1850, Max = 2100)]
         [Required(ErrorMessageResourceName = "YearRequired", ErrorMessageResourceType = typeof(Messages))]
@@ -189,25 +143,6 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.Kind.Kind.Id, () => this.Movie.KindId)
             };
 
-        public void ClearEmptyTitles()
-        {
-            bool shouldContinue = true;
-
-            while (this.Titles.Count != 1 && shouldContinue)
-            {
-                var title = this.Titles.FirstOrDefault(t => String.IsNullOrEmpty(t.Name));
-                this.Titles.Remove(title);
-                shouldContinue = title != null;
-            }
-
-            while (this.OriginalTitles.Count != 1 && shouldContinue)
-            {
-                var title = this.OriginalTitles.FirstOrDefault(t => String.IsNullOrEmpty(t.Name));
-                this.OriginalTitles.Remove(title);
-                shouldContinue = title != null;
-            }
-        }
-
         public override void WriteChanges()
         {
             if (this.Movie.Id == default)
@@ -248,29 +183,7 @@ namespace MovieList.ViewModels.FormItems
 
         private void CopyMovieProperties()
         {
-            this.Titles = new ObservableCollection<TitleFormItem>(
-                from title in this.Movie.Titles
-                where !title.IsOriginal
-                select new TitleFormItem(title));
-
-            this.Titles.CollectionChanged += this.OnTitlesChanged;
-
-            this.OriginalTitles = new ObservableCollection<TitleFormItem>(
-                from title in this.Movie.Titles
-                where title.IsOriginal
-                select new TitleFormItem(title));
-
-            this.OriginalTitles.CollectionChanged += this.OnTitlesChanged;
-
-            foreach (var title in this.Titles)
-            {
-                title.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Titles));
-            }
-
-            foreach (var title in this.OriginalTitles)
-            {
-                title.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.OriginalTitles));
-            }
+            this.CopyTitles(this.Movie.Titles);
 
             this.Year = this.Movie.Year.ToString();
             this.IsWatched = this.Movie.IsWatched;
@@ -293,72 +206,6 @@ namespace MovieList.ViewModels.FormItems
 
                 this.Poster = bitmap;
             }
-        }
-
-        private void OnAddTitle()
-        {
-            this.Titles.Add(new TitleFormItem(
-                new Title { IsOriginal = false, Priority = this.Titles.Count }));
-            this.OnPropertyChanged(nameof(this.Titles));
-        }
-
-        private bool CanAddTitle()
-            => this.Titles.Count < 10;
-
-        private void OnAddOriginalTitle()
-        {
-            this.OriginalTitles.Add(new TitleFormItem(
-                new Title { IsOriginal = true, Priority = this.OriginalTitles.Count }));
-            this.OnPropertyChanged(nameof(this.OriginalTitles));
-        }
-
-        private bool CanAddOriginalTitle()
-            => this.OriginalTitles.Count < 10;
-
-        private void OnRemoveTitle(object obj)
-        {
-            if (obj is TitleFormItem title)
-            {
-                this.Titles.Remove(title);
-
-                foreach (var t in this.Titles.Where(t => t.Priority > title.Priority))
-                {
-                    t.Priority--;
-                }
-            }
-        }
-
-        private bool CanRemoveTitle()
-            => this.Titles.Count != 1;
-
-        private void OnRemoveOriginalTitle(object obj)
-        {
-            if (obj is TitleFormItem title)
-            {
-                this.OriginalTitles.Remove(title);
-
-                foreach (var t in this.OriginalTitles.Where(t => t.Priority > title.Priority))
-                {
-                    t.Priority--;
-                }
-            }
-        }
-
-        private bool CanRemoveOriginalTitle()
-            => this.OriginalTitles.Count != 1;
-
-        private void OnTitlesChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-            {
-                foreach (var title in e.NewItems.OfType<TitleFormItem>())
-                {
-                    title.PropertyChanged += (s, e) => this.OnPropertyChanged(
-                        sender == this.titles ? nameof(this.Titles) : nameof(this.OriginalTitles));
-                }
-            }
-
-            this.OnPropertyChanged(sender == this.titles ? nameof(this.Titles) : nameof(this.OriginalTitles));
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,6 +74,11 @@ namespace MovieList.Services.Implementations
             await this.context.SaveChangesAsync();
         }
 
+        public Task SaveSeriesAsync(Series series)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task ToggleWatchedAsync(ListItem item)
         {
             switch (item)
@@ -97,9 +103,10 @@ namespace MovieList.Services.Implementations
             await this.context.SaveChangesAsync();
         }
 
-        public async Task DeleteMovieAsync(Movie movie)
+        public async Task DeleteAsync<TEntity>(TEntity entity)
+            where TEntity : EntityBase
         {
-            this.context.Attach(movie).State = EntityState.Deleted;
+            this.context.Attach(entity).State = EntityState.Deleted;
             await this.context.SaveChangesAsync();
         }
     }

@@ -214,6 +214,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ви дійсно хочете видалити цей серіал?.
+        /// </summary>
+        public static string DeleteSeriesPrompt {
+            get {
+                return ResourceManager.GetString("DeleteSeriesPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Редагувати.
         /// </summary>
         public static string Edit {

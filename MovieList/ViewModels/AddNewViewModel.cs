@@ -8,11 +8,11 @@ namespace MovieList.ViewModels
 {
     public class AddNewViewModel : ViewModelBase
     {
-        private readonly SidePanelViewModel sidePanelViewModel;
+        private readonly SidePanelViewModel sidePanel;
 
         public AddNewViewModel(SidePanelViewModel sidePanelViewModel)
         {
-            this.sidePanelViewModel = sidePanelViewModel;
+            this.sidePanel = sidePanelViewModel;
             this.AddNewMovie = new DelegateCommand(_ => this.OnAddNewMovie());
             this.AddNewSeries = new DelegateCommand(_ => this.OnAddNewSeries());
         }
@@ -21,7 +21,7 @@ namespace MovieList.ViewModels
         public ICommand AddNewSeries { get; }
 
         public void OnAddNewMovie()
-            => this.sidePanelViewModel.OpenMovie.ExecuteIfCan(new Movie
+            => this.sidePanel.OpenMovie.ExecuteIfCan(new Movie
             {
                 Titles = new List<Title>
                 {
@@ -32,6 +32,13 @@ namespace MovieList.ViewModels
             });
 
         public void OnAddNewSeries()
-            => this.sidePanelViewModel.OpenSeries.ExecuteIfCan(new Series());
+            => this.sidePanel.OpenSeries.ExecuteIfCan(new Series
+            {
+                Titles = new List<Title>
+                {
+                    new Title { Name = String.Empty, IsOriginal = false, Priority = 1 },
+                    new Title { Name = String.Empty, IsOriginal = true, Priority = 1 }
+                },
+            });
     }
 }

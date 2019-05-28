@@ -24,13 +24,13 @@
                   FocusVisualStyle="{x:Null}" EnableRowVirtualization="False">
             <DataGrid.Resources>
                 <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="FontSize" Value="16" />
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="TextWrapping" Value="Wrap" />
                 </Style>
 
                 <Style x:Key="DataGridColumnHeaderDefaultStyle" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
-                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="FontSize" Value="16" />
                     <Setter Property="HorizontalAlignment" Value="Center" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                 </Style>

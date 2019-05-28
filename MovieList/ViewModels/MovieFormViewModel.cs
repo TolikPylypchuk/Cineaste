@@ -124,7 +124,7 @@ namespace MovieList.ViewModels
                 using var scope = this.app.ServiceProvider.CreateScope();
                 var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
 
-                await service.DeleteMovieAsync(this.Movie.Movie);
+                await service.DeleteAsync(this.Movie.Movie);
 
                 this.SidePanel.Close.ExecuteIfCan(null);
                 this.MovieList.DeleteItem.ExecuteIfCan(this.Movie.Movie);
