@@ -385,6 +385,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Мінісеріал.
+        /// </summary>
+        public static string Miniseries {
+            get {
+                return ResourceManager.GetString("Miniseries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Фільм.
         /// </summary>
         public static string Movie {
@@ -516,6 +525,51 @@ namespace MovieList.Properties {
         public static string Series {
             get {
                 return ResourceManager.GetString("Series", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Скасований.
+        /// </summary>
+        public static string SeriesCancelled {
+            get {
+                return ResourceManager.GetString("SeriesCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Завершений.
+        /// </summary>
+        public static string SeriesFinished {
+            get {
+                return ResourceManager.GetString("SeriesFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не розпочатий.
+        /// </summary>
+        public static string SeriesNotStarted {
+            get {
+                return ResourceManager.GetString("SeriesNotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не завершений.
+        /// </summary>
+        public static string SeriesRunning {
+            get {
+                return ResourceManager.GetString("SeriesRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Статус.
+        /// </summary>
+        public static string SeriesStatus {
+            get {
+                return ResourceManager.GetString("SeriesStatus", resourceCulture);
             }
         }
         

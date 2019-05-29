@@ -13,6 +13,9 @@ namespace MovieList.ViewModels.FormItems
 {
     public class SeriesFormItem : TitledFormItemBase
     {
+        private bool isWatched;
+        private bool isMiniseries;
+        private SeriesStatus status;
         private string? imdbLink;
         private string? posterUrl;
         private KindViewModel kind;
@@ -29,6 +32,39 @@ namespace MovieList.ViewModels.FormItems
 
         public Series Series { get; }
         public IEnumerable<KindViewModel> AllKinds { get; }
+
+        public IEnumerable<SeriesStatus> AllStatuses { get; } =
+            Enum.GetValues(typeof(SeriesStatus)).Cast<SeriesStatus>().ToList();
+
+        public bool IsWatched
+        {
+            get => this.isWatched;
+            set
+            {
+                this.isWatched = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public bool IsMiniseries
+        {
+            get => this.isMiniseries;
+            set
+            {
+                this.isMiniseries = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public SeriesStatus Status
+        {
+            get => this.status;
+            set
+            {
+                this.status = value;
+                this.OnPropertyChanged();
+            }
+        }
 
         [Url(ErrorMessageResourceName = "InvalidImdbLink", ErrorMessageResourceType = typeof(Messages))]
         public string? ImdbLink
@@ -85,6 +121,9 @@ namespace MovieList.ViewModels.FormItems
                  () => this.Series.Titles.Where(t => !t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
                 (() => this.OriginalTitles.OrderBy(t => t.Priority).Select(t => t.Name),
                  () => this.Series.Titles.Where(t => t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
+                (() => this.IsWatched, () => this.Series.IsWatched),
+                (() => this.IsMiniseries, () => this.Series.IsMiniseries),
+                (() => this.Status, () => this.Series.Status),
                 (() => this.ImdbLink, () => this.Series.ImdbLink),
                 (() => this.PosterUrl, () => this.Series.PosterUrl),
                 (() => this.Kind.Kind.Id, () => this.Series.KindId)
@@ -94,6 +133,9 @@ namespace MovieList.ViewModels.FormItems
         {
             this.CopyTitles(this.Series.Titles);
 
+            this.IsWatched = this.Series.IsWatched;
+            this.isMiniseries = this.Series.IsMiniseries;
+            this.Status = this.Series.Status;
             this.ImdbLink = this.Series.ImdbLink;
             this.PosterUrl = this.Series.PosterUrl;
             this.Kind = this.AllKinds.FirstOrDefault(k => k.Kind.Id == this.Series.KindId) ?? this.AllKinds.First();

@@ -9,6 +9,7 @@ using MovieList.ViewModels.FormItems;
 namespace MovieList.Converters
 {
     [ValueConversion(typeof(MovieFormItem), typeof(bool))]
+    [ValueConversion(typeof(SeriesFormItem), typeof(bool))]
     [ValueConversion(typeof(Season), typeof(bool))]
     public class CanSelectIfWatchedConverter : IValueConverter
     {
@@ -17,9 +18,10 @@ namespace MovieList.Converters
             {
                 MovieFormItem movie when Int32.TryParse(movie.Year, out int year) => year <= DateTime.Now.Year,
                 MovieFormItem movie when String.IsNullOrEmpty(movie.Year) => true,
-                    Season season =>
-                        season.GetOrderedPeriods().First().StartYear <= DateTime.Now.Year &&
-                        season.GetOrderedPeriods().First().StartMonth <= DateTime.Now.Month,
+                SeriesFormItem series => series.Status != SeriesStatus.NotStarted,
+                Season season =>
+                    season.GetOrderedPeriods().First().StartYear <= DateTime.Now.Year &&
+                    season.GetOrderedPeriods().First().StartMonth <= DateTime.Now.Month,
                 _ => throw new NotSupportedException($"Cannot convert {value}")
             };
 

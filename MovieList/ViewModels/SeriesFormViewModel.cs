@@ -53,8 +53,14 @@ namespace MovieList.ViewModels
             {
                 this.series = value;
                 this.OnPropertyChanged();
+
+                this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(FormTitle));
             }
         }
+
+        public string FormTitle
+            => this.series.Series.Id != default ? this.series.Series.Title.Name : Messages.NewSeries;
 
         public ObservableCollection<KindViewModel> AllKinds
         {

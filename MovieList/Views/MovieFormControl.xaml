@@ -7,9 +7,9 @@
              xmlns:data="clr-namespace:MovieList.Data"
              xmlns:conv="clr-namespace:MovieList.Converters"
              xmlns:resx="clr-namespace:MovieList.Properties"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:MovieList.ViewModels"
-             xmlns:vmf="clr-namespace:MovieList.ViewModels.FormItems" mc:Ignorable="d"
+             xmlns:vmf="clr-namespace:MovieList.ViewModels.FormItems"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:MovieFormViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>

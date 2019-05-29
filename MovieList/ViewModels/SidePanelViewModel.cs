@@ -50,8 +50,21 @@ namespace MovieList.ViewModels
             }
         }
 
-        private void OnOpenSeries(object obj)
+        private async void OnOpenSeries(object obj)
         {
+            if (obj is Series series)
+            {
+                var control = new SeriesFormControl();
+                control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<SeriesFormViewModel>();
+                control.ViewModel.SeriesFormControl = control;
+
+                using var scope = this.app.ServiceProvider.CreateScope();
+                var service = scope.ServiceProvider.GetRequiredService<IKindService>();
+
+                control.ViewModel.AllKinds = await service.LoadAllKindsAsync();
+                control.ViewModel.Series = new SeriesFormItem(series, control.ViewModel.AllKinds);
+                this.SidePanelControl.ContentContainer.Content = control;
+            }
         }
 
         public void OnOpenMovieSeries(object obj)

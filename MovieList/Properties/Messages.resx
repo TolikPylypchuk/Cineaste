@@ -225,6 +225,9 @@
   <data name="MarkAsWatched" xml:space="preserve">
     <value>Позначити як переглянутий</value>
   </data>
+  <data name="Miniseries" xml:space="preserve">
+    <value>Мінісеріал</value>
+  </data>
   <data name="Movie" xml:space="preserve">
     <value>Фільм</value>
   </data>
@@ -269,6 +272,21 @@
   </data>
   <data name="Series" xml:space="preserve">
     <value>Серіал</value>
+  </data>
+  <data name="SeriesCancelled" xml:space="preserve">
+    <value>Скасований</value>
+  </data>
+  <data name="SeriesFinished" xml:space="preserve">
+    <value>Завершений</value>
+  </data>
+  <data name="SeriesNotStarted" xml:space="preserve">
+    <value>Не розпочатий</value>
+  </data>
+  <data name="SeriesRunning" xml:space="preserve">
+    <value>Не завершений</value>
+  </data>
+  <data name="SeriesStatus" xml:space="preserve">
+    <value>Статус</value>
   </data>
   <data name="SettingsTitle" xml:space="preserve">
     <value>Налаштування</value>
