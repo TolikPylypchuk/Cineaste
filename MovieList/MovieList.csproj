@@ -15,6 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Themes\Converters.xaml" />
+    <None Remove="Themes\Styles.xaml" />
     <None Remove="Views\AddNewControl.xaml" />
     <None Remove="Views\MainWindow.xaml" />
     <None Remove="Views\MovieFormControl.xaml" />
@@ -23,6 +25,7 @@
     <None Remove="Views\SeriesFormControl.xaml" />
     <None Remove="Views\SettingsControl.xaml" />
     <None Remove="Views\SidePanelControl.xaml" />
+    <None Remove="Views\TitleListControl.xaml" />
   </ItemGroup>
 
   <ItemGroup>

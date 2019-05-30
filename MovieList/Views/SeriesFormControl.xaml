@@ -5,60 +5,21 @@
              xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
              xmlns:local="clr-namespace:MovieList.Views"
              xmlns:data="clr-namespace:MovieList.Data"
-             xmlns:conv="clr-namespace:MovieList.Converters"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:m="clr-namespace:MovieList.Data.Models;assembly=MovieList.Data"
              xmlns:vm="clr-namespace:MovieList.ViewModels"
-             xmlns:vmf="clr-namespace:MovieList.ViewModels.FormItems"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:SeriesFormViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>
-        <Style x:Key="InputTitleTextBlock" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
-            <Setter Property="Margin" Value="1,0,0,0" />
-            <Setter Property="VerticalAlignment" Value="Bottom" />
-            <Setter Property="Padding" Value="{DynamicResource DefaultInputPadding}" />
-        </Style>
-
-        <Style x:Key="ActionButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="controls:IconElement.Width" Value="7.5" />
-            <Setter Property="controls:IconElement.Height" Value="7.5" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="DockPanel.Dock" Value="Right" />
-            <Setter Property="Margin" Value="0,2" />
-        </Style>
-
-        <Style x:Key="AddButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButtonStyle}">
-            <Setter Property="controls:IconElement.Geometry" Value="{StaticResource AddGeometry}" />
-            <Setter Property="VerticalAlignment" Value="Bottom" />
-        </Style>
-
-        <Style x:Key="RemoveButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButtonStyle}">
-            <Setter Property="controls:IconElement.Geometry" Value="{StaticResource DeleteGeometry}" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="Margin" Value="5,2,0,2" />
-        </Style>
-
-        <Style x:Key="InputTextBoxStyle" TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource {x:Type controls:TextBox}}">
-            <Setter Property="Margin" Value="0,2" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="MaxLines" Value="15" />
-            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
-            <Setter Property="local:Properties.TripleClickSelectAll" Value="True" />
-        </Style>
-
-        <Style x:Key="UrlInputTextBoxStyle" TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource InputTextBoxStyle}">
-            <Setter Property="TextWrapping" Value="NoWrap" />
-            <Setter Property="MaxLines" Value="1" />
-        </Style>
-
-        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-        <conv:CanSelectIfWatchedConverter x:Key="CanSelectIfWatched" />
-        <conv:CanSelectIfMiniseriesConverter x:Key="CanSelectIfMiniseries" />
-        <conv:SeriesStatusConverter x:Key="SeriesStatus" />
-        <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Styles.xaml" />
+                <ResourceDictionary Source="../Themes/Converters.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <DockPanel>
@@ -81,10 +42,6 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
             <StackPanel DataContext="{Binding Series}" Margin="0,0,0,10">
-                <StackPanel.Resources>
-                    <data:BindingProxy x:Key="SeriesFormItem" Data="{Binding}" />
-                </StackPanel.Resources>
-
                 <Image Source="{Binding Poster}" Margin="5,0" />
 
                 <TextBlock Margin="5" HorizontalAlignment="Center">
@@ -102,41 +59,7 @@
                               IsChecked="{Binding Path=IsMiniseries}" IsEnabled="{Binding Converter={StaticResource CanSelectIfMiniseries}}" />
                 </StackPanel>
 
-                <DockPanel>
-                    <TextBlock Text="{x:Static resx:Messages.Name}" Style="{StaticResource InputTitleTextBlock}" />
-                    <Button Command="{Binding AddTitle}" Style="{StaticResource AddButtonStyle}" />
-                </DockPanel>
-
-                <ItemsControl ItemsSource="{Binding Titles}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type vmf:TitleFormItem}">
-                            <DockPanel>
-                                <Button Command="{Binding Path=Data.RemoveTitle, Source={StaticResource SeriesFormItem}}"
-                                        CommandParameter="{Binding}" Style="{StaticResource RemoveButtonStyle}" />
-                                <controls:TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
-                                                  Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyName}" />
-                            </DockPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <DockPanel>
-                    <TextBlock Text="{x:Static resx:Messages.OriginalName}" Style="{StaticResource InputTitleTextBlock}" />
-                    <Button Command="{Binding AddOriginalTitle}" Style="{StaticResource AddButtonStyle}" />
-                </DockPanel>
-
-                <ItemsControl ItemsSource="{Binding OriginalTitles}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type vmf:TitleFormItem}">
-                            <DockPanel>
-                                <Button Command="{Binding Path=Data.RemoveOriginalTitle, Source={StaticResource SeriesFormItem}}"
-                                        CommandParameter="{Binding}" Style="{StaticResource RemoveButtonStyle}" />
-                                <controls:TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
-                                                  Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyName}" />
-                            </DockPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <local:TitleListControl />
 
                 <Grid>
                     <Grid.ColumnDefinitions>

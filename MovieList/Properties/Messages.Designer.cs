@@ -556,7 +556,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не завершений.
+        ///   Looks up a localized string similar to Триває.
         /// </summary>
         public static string SeriesRunning {
             get {

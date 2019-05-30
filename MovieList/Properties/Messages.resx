@@ -283,7 +283,7 @@
     <value>Не розпочатий</value>
   </data>
   <data name="SeriesRunning" xml:space="preserve">
-    <value>Не завершений</value>
+    <value>Триває</value>
   </data>
   <data name="SeriesStatus" xml:space="preserve">
     <value>Статус</value>
