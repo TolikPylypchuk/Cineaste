@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using MovieList.Data.Models;
@@ -8,7 +8,7 @@ namespace MovieList.Services
 {
     public interface IMovieService
     {
-        Task<ObservableCollection<ListItem>> LoadListAsync();
+        Task<List<ListItem>> LoadListAsync();
 
         Task SaveMovieAsync(Movie movie);
         Task SaveSeriesAsync(Series series);

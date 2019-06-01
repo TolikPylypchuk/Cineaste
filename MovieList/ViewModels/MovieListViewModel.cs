@@ -1,7 +1,9 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -73,11 +75,79 @@ namespace MovieList.ViewModels
         {
             using var scope = app.ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
-            this.Items = await service.LoadListAsync();
+            var items = await service.LoadListAsync();
+
+            const int count = 20;
+
+            for (int i = 0; i < items.Count; i += count)
+            {
+                this.app.Dispatcher.Invoke(() =>
+                {
+                    foreach (var item in items.GetRange(i, Math.Min(count, items.Count - i)))
+                    {
+                        this.Items.Add(item);
+                    }
+
+                    this.MovieListControl.LoadingProgressBar.Visibility = Visibility.Collapsed;
+                });
+
+                await Task.Delay(100);
+            }
+        }
+
+        public bool MoveSelectedItem(Key key)
+        {
+            bool result = false;
+
+            if (this.MovieListControl.List.SelectedItem != null)
+            {
+                if (key == Key.Up)
+                {
+                    this.SelectAndScroll(
+                        (this.MovieListControl.List.SelectedIndex + this.Items.Count - 1) % this.Items.Count);
+                    result = true;
+                }
+                else if (key == Key.Down)
+                {
+                    this.SelectAndScroll(
+                        (this.MovieListControl.List.SelectedIndex + this.Items.Count + 1) % this.Items.Count);
+                    result = true;
+                }
+                else if (key == Key.Home)
+                {
+                    this.SelectAndScroll(0);
+                    result = true;
+                }
+                else if (key == Key.End)
+                {
+                    this.SelectAndScroll(this.Items.Count - 1);
+                    result = true;
+                }
+            }
+            else if (key == Key.Up || key == Key.Home)
+            {
+                this.SelectAndScroll(this.Items.Count - 1);
+                result = true;
+            }
+            else if (key == Key.Down || key == Key.End)
+            {
+                this.SelectAndScroll(0);
+                result = true;
+            }
+
+            return result;
         }
 
         protected virtual void OnListItemUpdated(ListItem item)
             => this.ListItemUpdated?.Invoke(this, new ListItemUpdatedEventArgs(item));
+
+        private void SelectAndScroll(int index)
+        {
+            this.MovieListControl.List.SelectedIndex = index;
+
+            this.MovieListControl.List.UpdateLayout();
+            this.MovieListControl.List.ScrollIntoView(this.MovieListControl.List.SelectedItem);
+        }
 
         private void OnSelectItem(object obj)
         {

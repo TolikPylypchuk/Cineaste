@@ -26,6 +26,7 @@
     <None Remove="Views\SeriesFormControl.xaml" />
     <None Remove="Views\SettingsControl.xaml" />
     <None Remove="Views\SidePanelControl.xaml" />
+    <None Remove="Views\SpecialEpisodeFormControl.xaml" />
     <None Remove="Views\TitleListControl.xaml" />
   </ItemGroup>
 

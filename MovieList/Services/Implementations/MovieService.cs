@@ -1,5 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,7 +24,7 @@ namespace MovieList.Services.Implementations
             this.config = config.Value;
         }
 
-        public async Task<ObservableCollection<ListItem>> LoadListAsync()
+        public async Task<List<ListItem>> LoadListAsync()
         {
             var movies = await context.Movies
                 .Include(context.GetIncludePaths(typeof(Movie)))
@@ -38,15 +38,15 @@ namespace MovieList.Services.Implementations
                 .Include(context.GetIncludePaths(typeof(MovieSeries)))
                 .ToListAsync();
 
-            return new ObservableCollection<ListItem>(
-                movies
-                    .Select(movie => new MovieListItem(movie, this.config))
-                    .Cast<ListItem>()
-                    .Union(series.Select(series => new SeriesListItem(series, this.config)))
-                    .Union(movieSeries
-                        .Where(series => series.Title != null)
-                        .Select(series => new MovieSeriesListItem(series, this.config)))
-                    .OrderBy(item => item));
+            return movies
+                .Select(movie => new MovieListItem(movie, this.config))
+                .Cast<ListItem>()
+                .Union(series.Select(series => new SeriesListItem(series, this.config)))
+                .Union(movieSeries
+                    .Where(series => series.Title != null)
+                    .Select(series => new MovieSeriesListItem(series, this.config)))
+                .OrderBy(item => item)
+                .ToList();
         }
 
         public async Task SaveMovieAsync(Movie movie)
