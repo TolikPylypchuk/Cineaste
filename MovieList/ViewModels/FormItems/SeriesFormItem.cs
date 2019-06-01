@@ -129,20 +129,6 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.Kind.Kind.Id, () => this.Series.KindId)
             };
 
-        private void CopySeriesProperties()
-        {
-            this.CopyTitles(this.Series.Titles);
-
-            this.IsWatched = this.Series.IsWatched;
-            this.isMiniseries = this.Series.IsMiniseries;
-            this.Status = this.Series.Status;
-            this.ImdbLink = this.Series.ImdbLink;
-            this.PosterUrl = this.Series.PosterUrl;
-            this.Kind = this.AllKinds.FirstOrDefault(k => k.Kind.Id == this.Series.KindId) ?? this.AllKinds.First();
-
-            this.SetPoster();
-        }
-
         public override void WriteChanges()
         {
             throw new NotImplementedException();
@@ -150,7 +136,22 @@ namespace MovieList.ViewModels.FormItems
 
         public override void RevertChanges()
         {
-            throw new NotImplementedException();
+            this.CopySeriesProperties();
+            this.AreChangesPresent = false;
+        }
+
+        private void CopySeriesProperties()
+        {
+            this.CopyTitles(this.Series.Titles);
+
+            this.IsWatched = this.Series.IsWatched;
+            this.IsMiniseries = this.Series.IsMiniseries;
+            this.Status = this.Series.Status;
+            this.ImdbLink = this.Series.ImdbLink;
+            this.PosterUrl = this.Series.PosterUrl;
+            this.Kind = this.AllKinds.FirstOrDefault(k => k.Kind.Id == this.Series.KindId) ?? this.AllKinds.First();
+
+            this.SetPoster();
         }
 
         private void SetPoster()

@@ -21,12 +21,16 @@ namespace MovieList.ViewModels
             this.OpenMovie = new DelegateCommand(this.OnOpenMovie);
             this.OpenSeries = new DelegateCommand(this.OnOpenSeries);
             this.OpenMovieSeries = new DelegateCommand(this.OnOpenMovieSeries);
+            this.OpenSeason = new DelegateCommand(this.OnOpenSeason);
+            this.OpenSpecialEpisode = new DelegateCommand(this.OnOpenSpecialEpisode);
             this.Close = new DelegateCommand(_ => this.OnClose());
         }
 
         public ICommand OpenMovie { get; }
         public ICommand OpenSeries { get; }
         public ICommand OpenMovieSeries { get; }
+        public ICommand OpenSeason { get; }
+        public ICommand OpenSpecialEpisode { get; }
         public ICommand Close { get; }
 
         public SidePanelControl SidePanelControl { get; set; }
@@ -68,6 +72,14 @@ namespace MovieList.ViewModels
         }
 
         public void OnOpenMovieSeries(object obj)
+        {
+        }
+
+        public void OnOpenSeason(object obj)
+        {
+        }
+
+        public void OnOpenSpecialEpisode(object obj)
         {
         }
 

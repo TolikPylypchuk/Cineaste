@@ -34,7 +34,7 @@ namespace MovieList.ViewModels.ListItems
         public override void UpdateColor(Configuration? config)
             => this.Color = this.Movie.GetColor(config);
 
-        public override void OpenSidePanel(SidePanelViewModel sidePanelViewModel)
-            => sidePanelViewModel.OpenMovie.ExecuteIfCan(this.Movie);
+        public override void OpenSidePanel(SidePanelViewModel sidePanel)
+            => sidePanel.OpenMovie.ExecuteIfCan(this.Movie);
     }
 }

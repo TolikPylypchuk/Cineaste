@@ -90,6 +90,10 @@
                     </controls:ComboBox>
                 </Grid>
 
+                <ItemsControl ItemsSource="{Binding Seasons}">
+                    
+                </ItemsControl>
+
                 <controls:TextBox Text="{Binding Path=ImdbLink, UpdateSourceTrigger=PropertyChanged}"
                                   controls:InfoElement.Title="{x:Static resx:Messages.Imdb}"
                                   Style="{StaticResource UrlInputTextBoxStyle}"

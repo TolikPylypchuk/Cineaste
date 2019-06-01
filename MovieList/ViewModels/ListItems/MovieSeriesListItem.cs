@@ -74,7 +74,7 @@ namespace MovieList.ViewModels.ListItems
             return result != 0 ? result : this.Year.CompareTo(item.Year);
         }
 
-        public override void OpenSidePanel(SidePanelViewModel sidePanelViewModel)
-            => sidePanelViewModel.OpenMovieSeries.ExecuteIfCan(this.MovieSeries);
+        public override void OpenSidePanel(SidePanelViewModel sidePanel)
+            => sidePanel.OpenMovieSeries.ExecuteIfCan(this.MovieSeries);
     }
 }
