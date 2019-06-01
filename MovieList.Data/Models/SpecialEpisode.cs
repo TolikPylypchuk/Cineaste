@@ -24,10 +24,6 @@ namespace MovieList.Data.Models
 
         [Url]
         [StringLength(256)]
-        public string? ImdbLink { get; set; }
-
-        [Url]
-        [StringLength(256)]
         public string? PosterUrl { get; set; }
 
         public int SeriesId { get; set; }
