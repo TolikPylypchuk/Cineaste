@@ -22,6 +22,7 @@
     <None Remove="Views\MovieFormControl.xaml" />
     <None Remove="Views\MovieListControl.xaml" />
     <None Remove="Views\MovieSeriesFormControl.xaml" />
+    <None Remove="Views\SeasonFormControl.xaml" />
     <None Remove="Views\SeriesFormControl.xaml" />
     <None Remove="Views\SettingsControl.xaml" />
     <None Remove="Views\SidePanelControl.xaml" />
