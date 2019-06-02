@@ -105,7 +105,7 @@ namespace MovieList.ViewModels.FormItems
         private void OnAddTitle()
         {
             this.Titles.Add(new TitleFormItem(
-                new Title { IsOriginal = false, Priority = this.Titles.Count }));
+                new Title { IsOriginal = false, Priority = this.Titles.Count + 1 }));
             this.OnPropertyChanged(nameof(this.Titles));
         }
 
@@ -115,7 +115,7 @@ namespace MovieList.ViewModels.FormItems
         private void OnAddOriginalTitle()
         {
             this.OriginalTitles.Add(new TitleFormItem(
-                new Title { IsOriginal = true, Priority = this.OriginalTitles.Count }));
+                new Title { IsOriginal = true, Priority = this.OriginalTitles.Count + 1 }));
             this.OnPropertyChanged(nameof(this.OriginalTitles));
         }
 

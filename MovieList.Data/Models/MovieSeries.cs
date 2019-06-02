@@ -26,14 +26,14 @@ namespace MovieList.Data.Models
         public Title? Title
             => this.Titles
                 .Where(title => !title.IsOriginal)
-                .OrderByDescending(title => title.Priority)
+                .OrderBy(title => title.Priority)
                 .FirstOrDefault();
 
         [NotMapped]
         public Title? OriginalTitle
             => this.Titles
                 .Where(title => title.IsOriginal)
-                .OrderByDescending(title => title.Priority)
+                .OrderBy(title => title.Priority)
                 .FirstOrDefault();
 
         [NotMapped]
