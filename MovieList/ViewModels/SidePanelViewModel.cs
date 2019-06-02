@@ -12,11 +12,13 @@ namespace MovieList.ViewModels
 {
     public class SidePanelViewModel : ViewModelBase
     {
-        private readonly App app;
+        private readonly IServiceProvider serviceProvider;
+        private readonly IDbService dbService;
 
-        public SidePanelViewModel(App app)
+        public SidePanelViewModel(IServiceProvider serviceProvider, IDbService dbService)
         {
-            this.app = app;
+            this.serviceProvider = serviceProvider;
+            this.dbService = dbService;
 
             this.OpenMovie = new DelegateCommand(this.OnOpenMovie);
             this.OpenSeries = new DelegateCommand(this.OnOpenSeries);
@@ -42,13 +44,11 @@ namespace MovieList.ViewModels
             if (obj is Movie movie)
             {
                 var control = new MovieFormControl();
-                control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<MovieFormViewModel>();
+                control.DataContext = control.ViewModel =
+                    this.serviceProvider.GetRequiredService<MovieFormViewModel>();
                 control.ViewModel.MovieFormControl = control;
 
-                using var scope = this.app.ServiceProvider.CreateScope();
-                var service = scope.ServiceProvider.GetRequiredService<IKindService>();
-
-                control.ViewModel.AllKinds = await service.LoadAllKindsAsync();
+                control.ViewModel.AllKinds = await this.dbService.LoadAllKindsAsync();
                 control.ViewModel.Movie = new MovieFormItem(movie, control.ViewModel.AllKinds);
                 this.SidePanelControl.ContentContainer.Content = control;
             }
@@ -59,13 +59,11 @@ namespace MovieList.ViewModels
             if (obj is Series series)
             {
                 var control = new SeriesFormControl();
-                control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<SeriesFormViewModel>();
+                control.DataContext = control.ViewModel =
+                    this.serviceProvider.GetRequiredService<SeriesFormViewModel>();
                 control.ViewModel.SeriesFormControl = control;
 
-                using var scope = this.app.ServiceProvider.CreateScope();
-                var service = scope.ServiceProvider.GetRequiredService<IKindService>();
-
-                control.ViewModel.AllKinds = await service.LoadAllKindsAsync();
+                control.ViewModel.AllKinds = await this.dbService.LoadAllKindsAsync();
                 control.ViewModel.Series = new SeriesFormItem(series, control.ViewModel.AllKinds);
                 this.SidePanelControl.ContentContainer.Content = control;
             }
@@ -86,7 +84,7 @@ namespace MovieList.ViewModels
         public void OnClose()
         {
             var control = new AddNewControl();
-            control.DataContext = control.ViewModel = this.app.ServiceProvider.GetRequiredService<AddNewViewModel>();
+            control.DataContext = control.ViewModel = this.serviceProvider.GetRequiredService<AddNewViewModel>();
             this.SidePanelControl.ContentContainer.Content = control;
 
             this.Closed?.Invoke(this, EventArgs.Empty);

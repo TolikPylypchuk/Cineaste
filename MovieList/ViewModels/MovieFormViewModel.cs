@@ -9,8 +9,6 @@ using System.Windows.Input;
 
 using HandyControl.Controls;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using MovieList.Events;
 using MovieList.Properties;
 using MovieList.Services;
@@ -24,14 +22,18 @@ namespace MovieList.ViewModels
 {
     public class MovieFormViewModel : ViewModelBase
     {
-        private readonly App app;
+        private readonly IDbService dbService;
 
         private MovieFormItem movie;
         private ObservableCollection<KindViewModel> allKinds;
 
-        public MovieFormViewModel(App app, MovieListViewModel movieList, SidePanelViewModel sidePanel, SettingsViewModel settings)
+        public MovieFormViewModel(
+            IDbService dbService,
+            MovieListViewModel movieList,
+            SidePanelViewModel sidePanel,
+            SettingsViewModel settings)
         {
-            this.app = app;
+            this.dbService = dbService;
 
             this.MovieList = movieList;
             this.SidePanel = sidePanel;
@@ -105,12 +107,9 @@ namespace MovieList.ViewModels
 
             this.Movie.WriteChanges();
 
-            using var scope = this.app.ServiceProvider.CreateScope();
-            var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
-
             bool shouldAddToList = this.Movie.Movie.Id == default;
 
-            await service.SaveMovieAsync(this.Movie.Movie);
+            await this.dbService.SaveMovieAsync(this.Movie.Movie);
 
             (shouldAddToList ? this.MovieList.AddItem : this.MovieList.UpdateItem).ExecuteIfCan(this.Movie.Movie);
         }
@@ -121,10 +120,7 @@ namespace MovieList.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
-                using var scope = this.app.ServiceProvider.CreateScope();
-                var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
-
-                await service.DeleteAsync(this.Movie.Movie);
+                await this.dbService.DeleteAsync(this.Movie.Movie);
 
                 this.SidePanel.Close.ExecuteIfCan(null);
                 this.MovieList.DeleteItem.ExecuteIfCan(this.Movie.Movie);
@@ -148,10 +144,9 @@ namespace MovieList.ViewModels
 
         private void OnListItemUpdated(object sender, ListItemUpdatedEventArgs e)
         {
-            if (e.Item is MovieListItem item)
+            if (e.Item is MovieListItem item && item.Movie.Id == this.Movie.Movie.Id)
             {
-                this.Movie.IsWatched = item.Movie.IsWatched;
-                this.Movie.IsReleased = item.Movie.IsReleased;
+                this.Movie.OnListItemUpdated();
             }
         }
 

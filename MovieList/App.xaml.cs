@@ -43,7 +43,7 @@ namespace MovieList
                 .AddDbContext<MovieContext>(
                     (services, builder) =>
                         builder.ConfigureMovieContext(this.Configuration.GetSection("Config")["DatabasePath"]),
-                    ServiceLifetime.Scoped)
+                    ServiceLifetime.Transient)
 
                 .AddLogging(loggingBuilder => loggingBuilder
                     .AddConfiguration(this.Configuration.GetSection("Logging"))
@@ -53,9 +53,8 @@ namespace MovieList
                 .ConfigureWritable<UIConfig>(this.Configuration.GetSection("UI"))
                 .ConfigureWritable<LoggingConfig>(this.Configuration.GetSection("Logging"))
 
-                .AddScoped<IMovieService, MovieService>()
-                .AddScoped<IKindService, KindService>()
-                .AddTransient<IFileService, FileService>()
+                .AddSingleton<IDbService, DbService>()
+                .AddSingleton<IFileService, FileService>()
 
                 .AddSingleton<MainViewModel>()
                 .AddSingleton<MovieListViewModel>()
@@ -64,9 +63,12 @@ namespace MovieList
                 .AddSingleton<MovieFormViewModel>()
                 .AddSingleton<SeriesFormViewModel>()
                 .AddSingleton<MovieSeriesFormViewModel>()
+                .AddSingleton<SeasonFormViewModel>()
+                .AddSingleton<SpecialEpisodeFormViewModel>()
                 .AddSingleton<SettingsViewModel>()
 
                 .AddSingleton<MainWindow>()
+                .AddSingleton(_ => this.ServiceProvider)
                 .AddSingleton(_ => this);
 
         private void CatchException(object sender, UnhandledExceptionEventArgs e)

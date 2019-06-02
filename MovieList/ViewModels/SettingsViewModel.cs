@@ -12,7 +12,6 @@ using System.Windows.Media;
 
 using HandyControl.Data;
 
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 using MovieList.Config;
@@ -22,7 +21,6 @@ using MovieList.Options;
 using MovieList.Properties;
 using MovieList.Services;
 using MovieList.Validation;
-using Newtonsoft.Json;
 
 namespace MovieList.ViewModels
 {
@@ -38,18 +36,21 @@ namespace MovieList.ViewModels
 
         private string databasePath;
 
-        private readonly App app;
+        private readonly IDbService dbService;
+        private readonly IFileService fileService;
         private readonly MovieListViewModel movieListViewModel;
         private readonly IWritableOptions<Configuration> config;
         private readonly LoggingConfig loggingConfig;
 
         public SettingsViewModel(
-            App app,
+            IDbService dbService,
+            IFileService fileService,
             MovieListViewModel movieListViewModel,
             IWritableOptions<Configuration> config,
             IOptions<LoggingConfig> loggingConfig)
         {
-            this.app = app;
+            this.dbService = dbService;
+            this.fileService = fileService;
             this.movieListViewModel = movieListViewModel;
             this.config = config;
             this.loggingConfig = loggingConfig.Value;
@@ -184,10 +185,7 @@ namespace MovieList.ViewModels
 
         public async Task LoadKindsAsync()
         {
-            using var scope = this.app.ServiceProvider.CreateScope();
-            var service = scope.ServiceProvider.GetRequiredService<IKindService>();
-
-            this.Kinds = await service.LoadAllKindsAsync();
+            this.Kinds = await this.dbService.LoadAllKindsAsync();
             this.Kinds.CollectionChanged += (sender, e) => this.OnPropertyChanged(nameof(Kinds));
 
             foreach (var kind in Kinds)
@@ -245,10 +243,7 @@ namespace MovieList.ViewModels
         {
             if (obj is KindViewModel kind)
             {
-                using var scope = this.app.ServiceProvider.CreateScope();
-                var service = scope.ServiceProvider.GetRequiredService<IKindService>();
-
-                if (await service.CanRemoveKindAsync(kind))
+                if (await this.dbService.CanDeleteKindAsync(kind))
                 {
                     this.Kinds.Remove(kind);
                 } else
@@ -266,10 +261,7 @@ namespace MovieList.ViewModels
         {
             if (this.KindsChanged)
             {
-                using var scope = this.app.ServiceProvider.CreateScope();
-                var service = scope.ServiceProvider.GetRequiredService<IKindService>();
-
-                await service.SaveKindsAsync(kinds);
+                await this.dbService.SaveKindsAsync(kinds);
                 await this.movieListViewModel.LoadItemsAsync();
 
                 this.KindsChanged = false;
@@ -281,9 +273,7 @@ namespace MovieList.ViewModels
                 this.CopyConfig(this.config.Value);
             }
 
-            var fileService = this.app.ServiceProvider.GetRequiredService<IFileService>();
-
-            bool success = await fileService.TryMoveFileAsync(this.config.Value.DatabasePath, this.DatabasePath);
+            bool success = await this.fileService.TryMoveFileAsync(this.config.Value.DatabasePath, this.DatabasePath);
 
             if (!success)
             {

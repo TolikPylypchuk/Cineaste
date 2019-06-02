@@ -7,8 +7,6 @@ using System.Windows.Input;
 
 using HandyControl.Controls;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using MovieList.Events;
 using MovieList.Properties;
 using MovieList.Services;
@@ -21,14 +19,18 @@ namespace MovieList.ViewModels
 {
     public class SeriesFormViewModel : ViewModelBase
     {
-        private readonly App app;
+        private readonly IDbService dbService;
 
         private SeriesFormItem series;
         private ObservableCollection<KindViewModel> allKinds;
 
-        public SeriesFormViewModel(App app, MovieListViewModel movieList, SidePanelViewModel sidePanel, SettingsViewModel settings)
+        public SeriesFormViewModel(
+            IDbService dbService,
+            MovieListViewModel movieList,
+            SidePanelViewModel sidePanel,
+            SettingsViewModel settings)
         {
-            this.app = app;
+            this.dbService = dbService;
 
             this.MovieList = movieList;
             this.SidePanel = sidePanel;
@@ -101,12 +103,9 @@ namespace MovieList.ViewModels
 
             this.Series.WriteChanges();
 
-            using var scope = this.app.ServiceProvider.CreateScope();
-            var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
-
             bool shouldAddToList = this.Series.Series.Id == default;
 
-            await service.SaveSeriesAsync(this.Series.Series);
+            await this.dbService.SaveSeriesAsync(this.Series.Series);
 
             (shouldAddToList ? this.MovieList.AddItem : this.MovieList.UpdateItem).ExecuteIfCan(this.Series.Series);
         }
@@ -117,10 +116,7 @@ namespace MovieList.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
-                using var scope = this.app.ServiceProvider.CreateScope();
-                var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
-
-                await service.DeleteAsync(this.Series.Series);
+                await this.dbService.DeleteAsync(this.Series.Series);
 
                 this.SidePanel.Close.ExecuteIfCan(null);
                 this.MovieList.DeleteItem.ExecuteIfCan(this.Series.Series);

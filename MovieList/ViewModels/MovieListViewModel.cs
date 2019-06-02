@@ -1,6 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,13 +20,19 @@ namespace MovieList.ViewModels
     public class MovieListViewModel : ViewModelBase
     {
         private readonly App app;
+        private readonly IDbService dbService;
         private readonly IOptions<Configuration> config;
 
         private ObservableCollection<ListItem> items = new ObservableCollection<ListItem>();
 
-        public MovieListViewModel(App app, IOptions<Configuration> config, SidePanelViewModel sidePanel)
+        public MovieListViewModel(
+            App app,
+            IDbService dbService,
+            IOptions<Configuration> config,
+            SidePanelViewModel sidePanel)
         {
             this.app = app;
+            this.dbService = dbService;
             this.config = config;
             this.SidePanel = sidePanel;
 
@@ -73,9 +78,7 @@ namespace MovieList.ViewModels
 
         public async Task LoadItemsAsync()
         {
-            using var scope = app.ServiceProvider.CreateScope();
-            var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
-            var items = await service.LoadListAsync();
+            var items = await this.dbService.LoadListAsync();
 
             const int count = 20;
 
@@ -101,35 +104,32 @@ namespace MovieList.ViewModels
 
             if (this.MovieListControl.List.SelectedItem != null)
             {
-                if (key == Key.Up)
+                switch (key)
                 {
-                    this.SelectAndScroll(
-                        (this.MovieListControl.List.SelectedIndex + this.Items.Count - 1) % this.Items.Count);
-                    result = true;
+                    case Key.Up:
+                        this.SelectAndScroll(
+                            (this.MovieListControl.List.SelectedIndex + this.Items.Count - 1) % this.Items.Count);
+                        result = true;
+                        break;
+                    case Key.Down:
+                        this.SelectAndScroll(
+                            (this.MovieListControl.List.SelectedIndex + this.Items.Count + 1) % this.Items.Count);
+                        result = true;
+                        break;
+                    case Key.Home:
+                        this.SelectAndScroll(0);
+                        result = true;
+                        break;
+                    case Key.End:
+                        this.SelectAndScroll(this.Items.Count - 1);
+                        result = true;
+                        break;
                 }
-                else if (key == Key.Down)
-                {
-                    this.SelectAndScroll(
-                        (this.MovieListControl.List.SelectedIndex + this.Items.Count + 1) % this.Items.Count);
-                    result = true;
-                }
-                else if (key == Key.Home)
-                {
-                    this.SelectAndScroll(0);
-                    result = true;
-                }
-                else if (key == Key.End)
-                {
-                    this.SelectAndScroll(this.Items.Count - 1);
-                    result = true;
-                }
-            }
-            else if (key == Key.Up || key == Key.Home)
+            } else if (key == Key.Up || key == Key.Home)
             {
                 this.SelectAndScroll(this.Items.Count - 1);
                 result = true;
-            }
-            else if (key == Key.Down || key == Key.End)
+            } else if (key == Key.Down || key == Key.End)
             {
                 this.SelectAndScroll(0);
                 result = true;
@@ -200,9 +200,7 @@ namespace MovieList.ViewModels
         {
             if (obj is ListItem item)
             {
-                using var scope = app.ServiceProvider.CreateScope();
-                var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
-                await service.ToggleWatchedAsync(item);
+                await this.dbService.ToggleWatchedAsync(item);
                 this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
                 this.OnListItemUpdated(item);
             }
@@ -228,9 +226,7 @@ namespace MovieList.ViewModels
         {
             if (obj is MovieListItem item)
             {
-                using var scope = app.ServiceProvider.CreateScope();
-                var service = scope.ServiceProvider.GetRequiredService<IMovieService>();
-                await service.ToggleReleasedAsync(item);
+                await this.dbService.ToggleReleasedAsync(item);
                 this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
                 this.OnListItemUpdated(item);
             }

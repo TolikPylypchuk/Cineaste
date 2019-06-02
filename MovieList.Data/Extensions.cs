@@ -37,7 +37,7 @@ namespace MovieList.Data
                 {
                     if (stack.Count > 0)
                     {
-                        yield return string.Join(".", stack.Reverse().Select(e => e.Current.Name));
+                        yield return String.Join(".", stack.Reverse().Select(e => e.Current.Name));
                     }
                 } else
                 {

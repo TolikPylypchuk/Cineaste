@@ -181,6 +181,13 @@ namespace MovieList.ViewModels.FormItems
             this.AreChangesPresent = false;
         }
 
+        public void OnListItemUpdated()
+        {
+            this.IsWatched = this.Movie.IsWatched;
+            this.IsReleased = this.Movie.IsReleased;
+            this.AreChangesPresent = false;
+        }
+
         private void CopyMovieProperties()
         {
             this.CopyTitles(this.Movie.Titles);

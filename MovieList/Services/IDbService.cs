@@ -1,22 +1,28 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 using MovieList.Data.Models;
+using MovieList.ViewModels;
 using MovieList.ViewModels.ListItems;
 
 namespace MovieList.Services
 {
-    public interface IMovieService
+    public interface IDbService
     {
         Task<List<ListItem>> LoadListAsync();
+        Task<ObservableCollection<KindViewModel>> LoadAllKindsAsync();
 
         Task SaveMovieAsync(Movie movie);
         Task SaveSeriesAsync(Series series);
+        Task SaveKindsAsync(IEnumerable<KindViewModel> kinds);
 
         Task ToggleWatchedAsync(ListItem item);
         Task ToggleReleasedAsync(MovieListItem item);
 
         Task DeleteAsync<TEntity>(TEntity entity)
             where TEntity : EntityBase;
+
+        Task<bool> CanDeleteKindAsync(KindViewModel kind);
     }
 }
