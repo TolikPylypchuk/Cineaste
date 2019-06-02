@@ -170,6 +170,19 @@ namespace MovieList.Services.Implementations
             await context.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync<TEntity>(IEnumerable<TEntity> entities)
+            where TEntity : EntityBase
+        {
+            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+
+            foreach (var entity in entities)
+            {
+                context.Attach(entity).State = EntityState.Deleted;
+            }
+
+            await context.SaveChangesAsync();
+        }
+
         public async Task<bool> CanDeleteKindAsync(KindViewModel kind)
         {
             using var context = this.serviceProvider.GetRequiredService<MovieContext>();

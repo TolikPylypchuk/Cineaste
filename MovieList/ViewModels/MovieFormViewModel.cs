@@ -116,14 +116,26 @@ namespace MovieList.ViewModels
 
         public async Task DeleteAsync()
         {
-            var result = MessageBox.Show(Messages.DeleteMoviePrompt, Messages.Delete, MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var result = MessageBox.Show(
+                Messages.DeleteMoviePrompt,
+                Messages.Delete,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
+                this.MovieList.DeleteItem.ExecuteIfCan(this.Movie.Movie);
+
+                await this.dbService.DeleteAsync(this.Movie.Movie.Titles);
+
+                if (this.Movie.Movie.Entry != null)
+                {
+                    await this.dbService.DeleteAsync(this.Movie.Movie.Entry);
+                }
+
                 await this.dbService.DeleteAsync(this.Movie.Movie);
 
                 this.SidePanel.Close.ExecuteIfCan(null);
-                this.MovieList.DeleteItem.ExecuteIfCan(this.Movie.Movie);
             }
         }
 

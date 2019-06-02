@@ -23,6 +23,9 @@ namespace MovieList.Services
         Task DeleteAsync<TEntity>(TEntity entity)
             where TEntity : EntityBase;
 
+        Task DeleteAsync<TEntity>(IEnumerable<TEntity> entity)
+            where TEntity : EntityBase;
+
         Task<bool> CanDeleteKindAsync(KindViewModel kind);
     }
 }
