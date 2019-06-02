@@ -9,7 +9,7 @@ using MovieList.Data;
 namespace MovieList.Data.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20190601171738_Initial")]
+    [Migration("20190602190526_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -150,6 +150,8 @@ namespace MovieList.Data.Migrations
 
                     b.Property<bool>("IsWatched");
 
+                    b.Property<int>("OrdinalNumber");
+
                     b.Property<int>("SeriesId");
 
                     b.HasKey("Id");
@@ -199,6 +201,8 @@ namespace MovieList.Data.Migrations
                     b.Property<bool>("IsWatched");
 
                     b.Property<int>("Month");
+
+                    b.Property<int>("OrdinalNumber");
 
                     b.Property<string>("PosterUrl")
                         .HasMaxLength(256);

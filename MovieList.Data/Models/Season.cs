@@ -16,6 +16,8 @@ namespace MovieList.Data.Models
         [StringLength(64)]
         public string Channel { get; set; } = String.Empty;
 
+        public int OrdinalNumber { get; set; }
+
         public int SeriesId { get; set; }
 
         [ForeignKey(nameof(SeriesId))]

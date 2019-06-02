@@ -148,6 +148,8 @@ namespace MovieList.Data.Migrations
 
                     b.Property<bool>("IsWatched");
 
+                    b.Property<int>("OrdinalNumber");
+
                     b.Property<int>("SeriesId");
 
                     b.HasKey("Id");
@@ -197,6 +199,8 @@ namespace MovieList.Data.Migrations
                     b.Property<bool>("IsWatched");
 
                     b.Property<int>("Month");
+
+                    b.Property<int>("OrdinalNumber");
 
                     b.Property<string>("PosterUrl")
                         .HasMaxLength(256);
