@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
-             xmlns:local="clr-namespace:MovieList.Views"
              xmlns:data="clr-namespace:MovieList.Data"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
@@ -35,12 +34,8 @@
         </Style>
 
         <Style TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource {x:Type controls:TextBox}}">
-            <Setter Property="local:Properties.TripleClickSelectAll" Value="True" />
-            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
             <Setter Property="Margin" Value="0,0,5,0" />
         </Style>
-
-        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
         <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>

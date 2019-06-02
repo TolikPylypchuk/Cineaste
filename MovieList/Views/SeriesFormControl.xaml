@@ -12,14 +12,7 @@
              d:DataContext="{d:DesignInstance vm:SeriesFormViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Themes/Styles.xaml" />
-                <ResourceDictionary Source="../Themes/Converters.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            
-            <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
-        </ResourceDictionary>
+        <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>
 
     <DockPanel>

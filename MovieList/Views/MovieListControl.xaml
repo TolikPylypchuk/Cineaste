@@ -12,7 +12,6 @@
              d:DesignHeight="500" d:DesignWidth="500" Loaded="MovieListControl_Loaded"
              PreviewKeyDown="MovieListControl_PreviewKeyDown" PreviewKeyUp="MovieListControl_PreviewKeyUp">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
     </UserControl.Resources>
 

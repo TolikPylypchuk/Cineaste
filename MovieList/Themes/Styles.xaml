@@ -2,13 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
                     xmlns:views="clr-namespace:MovieList.Views">
+    <Style TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource {x:Type controls:TextBox}}">
+        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
+        <Setter Property="views:Properties.TripleClickSelectAll" Value="True" />
+    </Style>
+    
     <Style x:Key="InputTextBoxStyle" TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource {x:Type controls:TextBox}}">
         <Setter Property="Margin" Value="0,2" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="MaxLines" Value="15" />
-        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
-        <Setter Property="views:Properties.TripleClickSelectAll" Value="True" />
     </Style>
 
     <Style x:Key="UrlInputTextBoxStyle" TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource InputTextBoxStyle}">
