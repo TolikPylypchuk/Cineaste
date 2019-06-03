@@ -28,7 +28,9 @@ namespace MovieList.ViewModels
 
         public Kind Kind { get; }
 
-        [Required(ErrorMessageResourceName = "NameRequired", ErrorMessageResourceType = typeof(Messages))]
+        [Required(
+            ErrorMessageResourceName = nameof(Messages.NameRequired),
+            ErrorMessageResourceType = typeof(Messages))]
         public string Name
         {
             get => this.Kind.Name;

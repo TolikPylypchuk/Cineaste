@@ -88,11 +88,47 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Квітень.
+        /// </summary>
+        public static string April {
+            get {
+                return ResourceManager.GetString("April", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Серпень.
+        /// </summary>
+        public static string August {
+            get {
+                return ResourceManager.GetString("August", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Скасувати.
         /// </summary>
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Канал.
+        /// </summary>
+        public static string Channel {
+            get {
+                return ResourceManager.GetString("Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Канал є обов&apos;язковим.
+        /// </summary>
+        public static string ChannelRequired {
+            get {
+                return ResourceManager.GetString("ChannelRequired", resourceCulture);
             }
         }
         
@@ -156,6 +192,15 @@ namespace MovieList.Properties {
         public static string DatabasePathRequired {
             get {
                 return ResourceManager.GetString("DatabasePathRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Грудень.
+        /// </summary>
+        public static string December {
+            get {
+                return ResourceManager.GetString("December", resourceCulture);
             }
         }
         
@@ -232,11 +277,38 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Місяць кінця.
+        /// </summary>
+        public static string EndMonth {
+            get {
+                return ResourceManager.GetString("EndMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Рік кінця.
+        /// </summary>
+        public static string EndYear {
+            get {
+                return ResourceManager.GetString("EndYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Помилка.
         /// </summary>
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Лютий.
+        /// </summary>
+        public static string February {
+            get {
+                return ResourceManager.GetString("February", resourceCulture);
             }
         }
         
@@ -255,6 +327,15 @@ namespace MovieList.Properties {
         public static string InvalidImdbLink {
             get {
                 return ResourceManager.GetString("InvalidImdbLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Неправильна кількість серій.
+        /// </summary>
+        public static string InvalidNumberOfEpisodes {
+            get {
+                return ResourceManager.GetString("InvalidNumberOfEpisodes", resourceCulture);
             }
         }
         
@@ -282,6 +363,33 @@ namespace MovieList.Properties {
         public static string InvalidYear {
             get {
                 return ResourceManager.GetString("InvalidYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Січень.
+        /// </summary>
+        public static string January {
+            get {
+                return ResourceManager.GetString("January", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Липень.
+        /// </summary>
+        public static string July {
+            get {
+                return ResourceManager.GetString("July", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Червень.
+        /// </summary>
+        public static string June {
+            get {
+                return ResourceManager.GetString("June", resourceCulture);
             }
         }
         
@@ -349,6 +457,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Березень.
+        /// </summary>
+        public static string March {
+            get {
+                return ResourceManager.GetString("March", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Позначити як майбутній.
         /// </summary>
         public static string MarkAsNotReleased {
@@ -381,6 +498,15 @@ namespace MovieList.Properties {
         public static string MarkAsWatched {
             get {
                 return ResourceManager.GetString("MarkAsWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Травень.
+        /// </summary>
+        public static string May {
+            get {
+                return ResourceManager.GetString("May", resourceCulture);
             }
         }
         
@@ -466,6 +592,33 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Листопад.
+        /// </summary>
+        public static string November {
+            get {
+                return ResourceManager.GetString("November", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Кількість серій.
+        /// </summary>
+        public static string NumberOfEpisodes {
+            get {
+                return ResourceManager.GetString("NumberOfEpisodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Жовтень.
+        /// </summary>
+        public static string October {
+            get {
+                return ResourceManager.GetString("October", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Оригінальна назва.
         /// </summary>
         public static string OriginalName {
@@ -516,6 +669,15 @@ namespace MovieList.Properties {
         public static string SavingSettingsFailed {
             get {
                 return ResourceManager.GetString("SavingSettingsFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вересень.
+        /// </summary>
+        public static string September {
+            get {
+                return ResourceManager.GetString("September", resourceCulture);
             }
         }
         
@@ -579,6 +741,33 @@ namespace MovieList.Properties {
         public static string SettingsTitle {
             get {
                 return ResourceManager.GetString("SettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Реліз в один день.
+        /// </summary>
+        public static string SingleDayRelease {
+            get {
+                return ResourceManager.GetString("SingleDayRelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Місяць початку.
+        /// </summary>
+        public static string StartMonth {
+            get {
+                return ResourceManager.GetString("StartMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Рік початку.
+        /// </summary>
+        public static string StartYear {
+            get {
+                return ResourceManager.GetString("StartYear", resourceCulture);
             }
         }
         

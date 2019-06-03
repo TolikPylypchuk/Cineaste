@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 using MovieList.Data.Models;
 using MovieList.Properties;
+using MovieList.Validation;
 
 namespace MovieList.ViewModels.FormItems
 {
@@ -14,7 +15,7 @@ namespace MovieList.ViewModels.FormItems
         private int endMonth;
         private string endYear;
         private bool isSingleDayRelease;
-        private int numberOfEpisodes;
+        private string numberOfEpisodes;
         private string? posterUrl;
 
         public PeriodFormItem(Period period)
@@ -36,6 +37,11 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [StringRange(
+            Min = 1950,
+            Max = 2100,
+            ErrorMessageResourceName = nameof(Messages.InvalidYear),
+            ErrorMessageResourceType = typeof(Messages))]
         public string StartYear
         {
             get => this.startYear;
@@ -56,6 +62,11 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [StringRange(
+            Min = 1950,
+            Max = 2100,
+            ErrorMessageResourceName = nameof(Messages.InvalidYear),
+            ErrorMessageResourceType = typeof(Messages))]
         public string EndYear
         {
             get => this.endYear;
@@ -76,7 +87,12 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        public int NumberOfEpisodes
+        [StringRange(
+            Min = 1950,
+            Max = 2100,
+            ErrorMessageResourceName = nameof(Messages.InvalidNumberOfEpisodes),
+            ErrorMessageResourceType = typeof(Messages))]
+        public string NumberOfEpisodes
         {
             get => this.numberOfEpisodes;
             set
@@ -86,7 +102,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        [Url(ErrorMessageResourceName = "InvalidPosterUrl", ErrorMessageResourceType = typeof(Messages))]
+        [Url(
+            ErrorMessageResourceName = nameof(Messages.InvalidPosterUrl),
+            ErrorMessageResourceType = typeof(Messages))]
         public string? PosterUrl
         {
             get => this.posterUrl;
@@ -105,7 +123,8 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.EndMonth, () => this.Period.EndMonth),
                 (() => this.EndYear, () => this.Period.EndYear),
                 (() => this.IsSingleDayRelease, () => this.Period.IsSingleDayRelease),
-                (() => this.NumberOfEpisodes, () => this.Period.NumberOfEpisodes)
+                (() => this.NumberOfEpisodes, () => this.Period.NumberOfEpisodes),
+                (() => this.PosterUrl, () => this.Period.PosterUrl)
             };
 
         public override void WriteChanges()
@@ -115,8 +134,9 @@ namespace MovieList.ViewModels.FormItems
             this.Period.EndMonth = this.EndMonth;
             this.Period.EndYear = Int32.Parse(this.EndYear);
             this.Period.IsSingleDayRelease = this.IsSingleDayRelease;
-            this.Period.NumberOfEpisodes = this.NumberOfEpisodes;
+            this.Period.NumberOfEpisodes = Int32.Parse(this.NumberOfEpisodes);
             this.Period.PosterUrl = this.PosterUrl;
+            this.AreChangesPresent = false;
         }
 
         public override void RevertChanges()
@@ -132,7 +152,7 @@ namespace MovieList.ViewModels.FormItems
             this.EndMonth = this.Period.EndMonth;
             this.EndYear = this.Period.EndYear.ToString();
             this.IsSingleDayRelease = this.Period.IsSingleDayRelease;
-            this.NumberOfEpisodes = this.Period.NumberOfEpisodes;
+            this.NumberOfEpisodes = this.Period.NumberOfEpisodes.ToString();
             this.PosterUrl = this.Period.PosterUrl;
         }
     }

@@ -35,8 +35,14 @@ namespace MovieList.ViewModels.FormItems
         public Movie Movie { get; }
         public IEnumerable<KindViewModel> AllKinds { get; }
 
-        [Year(Min = 1850, Max = 2100)]
-        [Required(ErrorMessageResourceName = "YearRequired", ErrorMessageResourceType = typeof(Messages))]
+        [StringRange(
+            Min = 1850,
+            Max = 2100,
+            ErrorMessageResourceName = nameof(Messages.InvalidYear),
+            ErrorMessageResourceType = typeof(Messages))]
+        [Required(
+            ErrorMessageResourceName = nameof(Messages.YearRequired),
+            ErrorMessageResourceType = typeof(Messages))]
         public string Year
         {
             get => this.year;
@@ -77,7 +83,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        [Url(ErrorMessageResourceName = "InvalidImdbLink", ErrorMessageResourceType = typeof(Messages))]
+        [Url(
+            ErrorMessageResourceName = nameof(Messages.InvalidImdbLink),
+            ErrorMessageResourceType = typeof(Messages))]
         public string? ImdbLink
         {
             get => this.imdbLink;
@@ -88,7 +96,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        [Url(ErrorMessageResourceName = "InvalidPosterUrl", ErrorMessageResourceType = typeof(Messages))]
+        [Url(
+            ErrorMessageResourceName = nameof(Messages.InvalidPosterUrl),
+            ErrorMessageResourceType = typeof(Messages))]
         public string? PosterUrl
         {
             get => this.posterUrl;

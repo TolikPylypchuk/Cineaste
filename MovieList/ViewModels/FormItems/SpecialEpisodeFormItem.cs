@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Media.Imaging;
 
 using MovieList.Data.Models;
+using MovieList.Properties;
+using MovieList.Validation;
 
 namespace MovieList.ViewModels.FormItems
 {
@@ -37,6 +40,11 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [StringRange(
+            Min = 1950,
+            Max = 2100,
+            ErrorMessageResourceName = nameof(Messages.InvalidYear),
+            ErrorMessageResourceType = typeof(Messages))]
         public string Year
         {
             get => this.year;
@@ -67,6 +75,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [Required(
+            ErrorMessageResourceName = nameof(Messages.ChannelRequired),
+            ErrorMessageResourceType = typeof(Messages))]
         public string Channel
         {
             get => this.channel;
@@ -77,6 +88,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [Url(
+            ErrorMessageResourceName = nameof(Messages.InvalidPosterUrl),
+            ErrorMessageResourceType = typeof(Messages))]
         public string? PosterUrl
         {
             get => this.posterUrl;
@@ -114,7 +128,34 @@ namespace MovieList.ViewModels.FormItems
 
         public override void WriteChanges()
         {
-            throw new NotImplementedException();
+            if (this.SpecialEpisode.Id == default)
+            {
+                this.SpecialEpisode.Titles.Clear();
+            }
+
+            foreach (var title in this.Titles.Union(this.OriginalTitles))
+            {
+                title.WriteChanges();
+
+                if (title.Title.Id == default)
+                {
+                    this.SpecialEpisode.Titles.Add(title.Title);
+                }
+            }
+
+            if (this.PosterUrl != this.SpecialEpisode.PosterUrl)
+            {
+                this.SetPoster();
+            }
+
+            this.SpecialEpisode.Month = this.Month;
+            this.SpecialEpisode.Year = Int32.Parse(this.Year);
+            this.SpecialEpisode.IsWatched = this.IsWatched;
+            this.SpecialEpisode.IsReleased = this.IsReleased;
+            this.SpecialEpisode.Channel = this.Channel;
+            this.SpecialEpisode.PosterUrl = this.PosterUrl;
+
+            this.AreChangesPresent = false;
         }
 
         public override void RevertChanges()

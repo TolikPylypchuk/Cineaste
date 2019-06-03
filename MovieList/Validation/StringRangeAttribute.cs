@@ -5,14 +5,8 @@ using MovieList.Properties;
 
 namespace MovieList.Validation
 {
-    public class YearAttribute : ValidationAttribute
+    public class StringRangeAttribute : ValidationAttribute
     {
-        public YearAttribute()
-        {
-            this.ErrorMessageResourceName = "InvalidYear";
-            this.ErrorMessageResourceType = typeof(Messages);
-        }
-
         public int Min { get; set; } = Int32.MinValue;
         public int Max { get; set; } = Int32.MaxValue;
 

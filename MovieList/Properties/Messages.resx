@@ -126,8 +126,20 @@
   <data name="AdvancedSettings" xml:space="preserve">
     <value>Розширені налаштування</value>
   </data>
+  <data name="April" xml:space="preserve">
+    <value>Квітень</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Серпень</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Скасувати</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>Канал</value>
+  </data>
+  <data name="ChannelRequired" xml:space="preserve">
+    <value>Канал є обов'язковим</value>
   </data>
   <data name="ColorPickerAdvanced" xml:space="preserve">
     <value>Розширені</value>
@@ -149,6 +161,9 @@
   </data>
   <data name="DatabasePathRequired" xml:space="preserve">
     <value>Шлях до бази даних є обов'язковим</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Грудень</value>
   </data>
   <data name="DefaultSeasonNumberPlaceholder" xml:space="preserve">
     <value>#</value>
@@ -174,14 +189,26 @@
   <data name="Edit" xml:space="preserve">
     <value>Редагувати</value>
   </data>
+  <data name="EndMonth" xml:space="preserve">
+    <value>Місяць кінця</value>
+  </data>
+  <data name="EndYear" xml:space="preserve">
+    <value>Рік кінця</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Помилка</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Лютий</value>
   </data>
   <data name="Imdb" xml:space="preserve">
     <value>IMDb</value>
   </data>
   <data name="InvalidImdbLink" xml:space="preserve">
     <value>Посилання на IMDb має бути URL</value>
+  </data>
+  <data name="InvalidNumberOfEpisodes" xml:space="preserve">
+    <value>Неправильна кількість серій</value>
   </data>
   <data name="InvalidPath" xml:space="preserve">
     <value>Шлях не є назвою файлу</value>
@@ -191,6 +218,15 @@
   </data>
   <data name="InvalidYear" xml:space="preserve">
     <value>Неправильний рік</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Січень</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Липень</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Червень</value>
   </data>
   <data name="Kind" xml:space="preserve">
     <value>Вид</value>
@@ -213,6 +249,9 @@
   <data name="ListItemYear" xml:space="preserve">
     <value>Рік</value>
   </data>
+  <data name="March" xml:space="preserve">
+    <value>Березень</value>
+  </data>
   <data name="MarkAsNotReleased" xml:space="preserve">
     <value>Позначити як майбутній</value>
   </data>
@@ -224,6 +263,9 @@
   </data>
   <data name="MarkAsWatched" xml:space="preserve">
     <value>Позначити як переглянутий</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Травень</value>
   </data>
   <data name="Miniseries" xml:space="preserve">
     <value>Мінісеріал</value>
@@ -252,6 +294,15 @@
   <data name="NotWatched" xml:space="preserve">
     <value>Не переглянутий</value>
   </data>
+  <data name="November" xml:space="preserve">
+    <value>Листопад</value>
+  </data>
+  <data name="NumberOfEpisodes" xml:space="preserve">
+    <value>Кількість серій</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Жовтень</value>
+  </data>
   <data name="OriginalName" xml:space="preserve">
     <value>Оригінальна назва</value>
   </data>
@@ -269,6 +320,9 @@
   </data>
   <data name="SavingSettingsFailed" xml:space="preserve">
     <value>Не вдалося зберегти налаштування.</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Вересень</value>
   </data>
   <data name="Series" xml:space="preserve">
     <value>Серіал</value>
@@ -290,6 +344,15 @@
   </data>
   <data name="SettingsTitle" xml:space="preserve">
     <value>Налаштування</value>
+  </data>
+  <data name="SingleDayRelease" xml:space="preserve">
+    <value>Реліз в один день</value>
+  </data>
+  <data name="StartMonth" xml:space="preserve">
+    <value>Місяць початку</value>
+  </data>
+  <data name="StartYear" xml:space="preserve">
+    <value>Рік початку</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Фільми і серіали</value>

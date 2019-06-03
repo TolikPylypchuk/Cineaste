@@ -129,7 +129,9 @@ namespace MovieList.ViewModels
             }
         }
 
-        [DefaultSeasonTitle]
+        [DefaultSeasonTitle(
+            ErrorMessageResourceName = nameof(Messages.DefaultSeasonTitleInvalid),
+            ErrorMessageResourceType = typeof(Messages))]
         public string DefaultSeasonTitle
         {
             get => this.defaultSeasonTitle;
@@ -140,7 +142,9 @@ namespace MovieList.ViewModels
             }
         }
 
-        [DefaultSeasonTitle]
+        [DefaultSeasonTitle(
+            ErrorMessageResourceName = nameof(Messages.DefaultSeasonTitleInvalid),
+            ErrorMessageResourceType = typeof(Messages))]
         public string DefaultSeasonOriginalTitle
         {
             get => this.defaultSeasonOriginalTitle;
@@ -151,8 +155,12 @@ namespace MovieList.ViewModels
             }
         }
 
-        [File]
-        [Required(ErrorMessageResourceName = "DatabasePathRequired", ErrorMessageResourceType = typeof(Messages))]
+        [File(
+            ErrorMessageResourceName = nameof(Messages.InvalidPath),
+            ErrorMessageResourceType = typeof(Messages))]
+        [Required(
+            ErrorMessageResourceName = nameof(Messages.DatabasePathRequired),
+            ErrorMessageResourceType = typeof(Messages))]
         public string DatabasePath
         {
             get => this.databasePath;

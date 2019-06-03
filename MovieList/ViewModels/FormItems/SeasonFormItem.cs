@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Media.Imaging;
 
 using MovieList.Data.Models;
+using MovieList.Properties;
 
 namespace MovieList.ViewModels.FormItems
 {
@@ -45,6 +47,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [Required(
+            ErrorMessageResourceName = nameof(Messages.ChannelRequired),
+            ErrorMessageResourceType = typeof(Messages))]
         public string Channel
         {
             get => this.channel;
@@ -81,18 +86,54 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.Titles.OrderBy(t => t.Priority).Select(t => t.Name),
                  () => this.Season.Titles.Where(t => !t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
                 (() => this.OriginalTitles.OrderBy(t => t.Priority).Select(t => t.Name),
-                 () => this.Season.Titles.Where(t => t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name))
+                 () => this.Season.Titles.Where(t => t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
+                (() => this.IsWatched, () => this.Season.IsWatched),
+                (() => this.IsReleased, () => this.Season.IsReleased),
+                (() => this.Channel, () => this.Season.Channel),
+                (() => this.Periods.Select(p => p.Period).OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth),
+                 () => this.Season.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth))
             };
+
+        public override void WriteChanges()
+        {
+            if (this.Season.Id == default)
+            {
+                this.Season.Periods.Clear();
+            }
+
+            foreach (var title in this.Titles.Union(this.OriginalTitles))
+            {
+                title.WriteChanges();
+
+                if (title.Title.Id == default)
+                {
+                    this.Season.Titles.Add(title.Title);
+                }
+            }
+
+            foreach (var period in this.Periods)
+            {
+                period.WriteChanges();
+
+                if (period.Period.Id == default)
+                {
+                    this.Season.Periods.Add(period.Period);
+                }
+            }
+
+            this.SetPosters();
+
+            this.Season.IsWatched = this.IsWatched;
+            this.Season.IsReleased = this.IsReleased;
+            this.Season.Channel = this.Channel;
+
+            this.AreChangesPresent = false;
+        }
 
         public override void RevertChanges()
         {
             this.CopySeasonProperties();
             this.AreChangesPresent = false;
-        }
-
-        public override void WriteChanges()
-        {
-            throw new NotImplementedException();
         }
 
         public override void OpenForm(SidePanelViewModel sidePanel)

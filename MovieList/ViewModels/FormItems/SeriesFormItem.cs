@@ -66,7 +66,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        [Url(ErrorMessageResourceName = "InvalidImdbLink", ErrorMessageResourceType = typeof(Messages))]
+        [Url(
+            ErrorMessageResourceName = nameof(Messages.InvalidImdbLink),
+            ErrorMessageResourceType = typeof(Messages))]
         public string? ImdbLink
         {
             get => this.imdbLink;
@@ -77,7 +79,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        [Url(ErrorMessageResourceName = "InvalidPosterUrl", ErrorMessageResourceType = typeof(Messages))]
+        [Url(
+            ErrorMessageResourceName = nameof(Messages.InvalidPosterUrl),
+            ErrorMessageResourceType = typeof(Messages))]
         public string? PosterUrl
         {
             get => this.posterUrl;
