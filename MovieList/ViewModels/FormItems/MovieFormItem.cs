@@ -181,6 +181,7 @@ namespace MovieList.ViewModels.FormItems
             this.Movie.ImdbLink = this.ImdbLink;
             this.Movie.PosterUrl = this.PosterUrl;
             this.Movie.Kind = this.Kind.Kind;
+            this.Movie.KindId = this.Kind.Kind.Id;
 
             this.AreChangesPresent = false;
         }

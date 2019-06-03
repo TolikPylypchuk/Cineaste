@@ -135,7 +135,30 @@ namespace MovieList.ViewModels.FormItems
 
         public override void WriteChanges()
         {
-            throw new NotImplementedException();
+            if (this.Series.Id == default)
+            {
+                this.Series.Titles.Clear();
+            }
+
+            foreach (var title in this.Titles.Union(this.OriginalTitles))
+            {
+                title.WriteChanges();
+
+                if (title.Title.Id == default)
+                {
+                    this.Series.Titles.Add(title.Title);
+                }
+            }
+
+            this.Series.IsWatched = this.IsWatched;
+            this.Series.IsMiniseries = this.IsMiniseries;
+            this.Series.Status = this.Status;
+            this.Series.ImdbLink = this.ImdbLink;
+            this.Series.PosterUrl = this.PosterUrl;
+            this.Series.Kind = this.Kind.Kind;
+            this.Series.KindId = this.Kind.Kind.Id;
+
+            this.AreChangesPresent = false;
         }
 
         public override void RevertChanges()

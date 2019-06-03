@@ -98,6 +98,7 @@ namespace MovieList.ViewModels.FormItems
         {
             if (this.Season.Id == default)
             {
+                this.Season.Titles.Clear();
                 this.Season.Periods.Clear();
             }
 
