@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Media.Imaging;
@@ -20,6 +21,8 @@ namespace MovieList.ViewModels.FormItems
         private string? posterUrl;
         private KindViewModel kind;
         private BitmapImage? poster;
+
+        private ObservableCollection<SeriesComponentFormItemBase> components;
 
         public SeriesFormItem(Series series, IEnumerable<KindViewModel> allKinds)
         {
@@ -112,6 +115,16 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public ObservableCollection<SeriesComponentFormItemBase> Components
+        {
+            get => this.components;
+            set
+            {
+                this.components = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public Func<string, OperationResult<bool>> VerifyImdbLink
             => this.Verify(nameof(this.ImdbLink));
 
@@ -177,6 +190,12 @@ namespace MovieList.ViewModels.FormItems
             this.ImdbLink = this.Series.ImdbLink;
             this.PosterUrl = this.Series.PosterUrl;
             this.Kind = this.AllKinds.FirstOrDefault(k => k.Kind.Id == this.Series.KindId) ?? this.AllKinds.First();
+            this.Components = new ObservableCollection<SeriesComponentFormItemBase>(
+                this.Series.Seasons
+                    .Select(season => new SeasonFormItem(season))
+                    .Cast<SeriesComponentFormItemBase>()
+                    .Union(this.Series.SpecialEpisodes.Select(episode => new SpecialEpisodeFormItem(episode)))
+                    .OrderBy(item => item.OrdinalNumber));
 
             this.SetPoster();
         }

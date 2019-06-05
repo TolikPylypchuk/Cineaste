@@ -673,6 +673,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Сезони.
+        /// </summary>
+        public static string Seasons {
+            get {
+                return ResourceManager.GetString("Seasons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Вересень.
         /// </summary>
         public static string September {

@@ -8,6 +8,7 @@
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:m="clr-namespace:MovieList.Data.Models;assembly=MovieList.Data"
              xmlns:vm="clr-namespace:MovieList.ViewModels"
+             xmlns:vmf="clr-namespace:MovieList.ViewModels.FormItems"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:SeriesFormViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
@@ -83,8 +84,14 @@
                     </controls:ComboBox>
                 </Grid>
 
-                <ItemsControl ItemsSource="{Binding Seasons}">
-                    
+                <TextBlock Text="{x:Static resx:Messages.Seasons}" Style="{StaticResource InputTitleTextBlock}" />
+
+                <ItemsControl ItemsSource="{Binding Components}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vmf:SeriesComponentFormItemBase}">
+                            <Button HorizontalAlignment="Stretch" Margin="2,5" Content="{Binding Title}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
                 <controls:TextBox Text="{Binding Path=ImdbLink, UpdateSourceTrigger=PropertyChanged}"

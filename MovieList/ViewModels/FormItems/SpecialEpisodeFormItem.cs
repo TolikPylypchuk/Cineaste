@@ -111,6 +111,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public override string Title
+            => this.SpecialEpisode.Title.Name;
+
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
@@ -177,6 +180,7 @@ namespace MovieList.ViewModels.FormItems
             this.IsReleased = this.SpecialEpisode.IsReleased;
             this.Channel = this.SpecialEpisode.Channel;
             this.PosterUrl = this.SpecialEpisode.PosterUrl;
+            this.OrdinalNumber = this.SpecialEpisode.OrdinalNumber;
 
             this.SetPoster();
         }

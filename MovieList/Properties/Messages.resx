@@ -321,6 +321,9 @@
   <data name="SavingSettingsFailed" xml:space="preserve">
     <value>Не вдалося зберегти налаштування.</value>
   </data>
+  <data name="Seasons" xml:space="preserve">
+    <value>Сезони</value>
+  </data>
   <data name="September" xml:space="preserve">
     <value>Вересень</value>
   </data>

@@ -80,6 +80,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public override string Title
+            => this.Season.Title.Name;
+
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
@@ -147,6 +150,9 @@ namespace MovieList.ViewModels.FormItems
             this.IsWatched = this.Season.IsWatched;
             this.isReleased = this.Season.IsReleased;
             this.Channel = this.Season.Channel;
+            this.OrdinalNumber = this.Season.OrdinalNumber;
+            this.Periods = new ObservableCollection<PeriodFormItem>(
+                this.Season.Periods.Select(period => new PeriodFormItem(period)));
 
             this.SetPosters();
         }
