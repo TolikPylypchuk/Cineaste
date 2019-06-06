@@ -15,6 +15,8 @@ namespace MovieList.ViewModels
         private readonly IServiceProvider serviceProvider;
         private readonly IDbService dbService;
 
+        private SeriesFormControl? parentFormControl;
+
         public SidePanelViewModel(IServiceProvider serviceProvider, IDbService dbService)
         {
             this.serviceProvider = serviceProvider;
@@ -26,6 +28,7 @@ namespace MovieList.ViewModels
             this.OpenSeason = new DelegateCommand(this.OnOpenSeason);
             this.OpenSpecialEpisode = new DelegateCommand(this.OnOpenSpecialEpisode);
             this.Close = new DelegateCommand(_ => this.OnClose());
+            this.GoUpToSeries = new DelegateCommand(_ => this.OnGoUpToSeries(), _ => this.CanGoUpToSeries());
         }
 
         public ICommand OpenMovie { get; }
@@ -34,6 +37,7 @@ namespace MovieList.ViewModels
         public ICommand OpenSeason { get; }
         public ICommand OpenSpecialEpisode { get; }
         public ICommand Close { get; }
+        public ICommand GoUpToSeries { get; }
 
         public SidePanelControl SidePanelControl { get; set; }
 
@@ -75,6 +79,18 @@ namespace MovieList.ViewModels
 
         public void OnOpenSeason(object obj)
         {
+            if (obj is SeasonFormItem season)
+            {
+                this.parentFormControl = this.SidePanelControl.ContentContainer.Content as SeriesFormControl;
+
+                var control = new SeasonFormControl();
+                control.DataContext = control.ViewModel =
+                    this.serviceProvider.GetRequiredService<SeasonFormViewModel>();
+                control.ViewModel.SeasonFormControl = control;
+
+                control.ViewModel.Season = season;
+                this.SidePanelControl.ContentContainer.Content = control;
+            }
         }
 
         public void OnOpenSpecialEpisode(object obj)
@@ -89,5 +105,14 @@ namespace MovieList.ViewModels
 
             this.Closed?.Invoke(this, EventArgs.Empty);
         }
+
+        public void OnGoUpToSeries()
+        {
+            this.SidePanelControl.ContentContainer.Content = this.parentFormControl;
+            this.parentFormControl = null;
+        }
+
+        public bool CanGoUpToSeries()
+            => this.parentFormControl != null;
     }
 }

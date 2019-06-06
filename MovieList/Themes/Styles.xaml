@@ -25,4 +25,38 @@
         <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="Padding" Value="{DynamicResource DefaultInputPadding}" />
     </Style>
+
+    <Style x:Key="SidePanelActionButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="controls:IconElement.Width" Value="10" />
+        <Setter Property="controls:IconElement.Height" Value="10" />
+    </Style>
+
+    <Style x:Key="SidePanelCloseButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SidePanelActionButton}">
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="DockPanel.Dock" Value="Right" />
+        <Setter Property="controls:IconElement.Geometry" Value="{StaticResource DeleteGeometry}" />
+    </Style>
+
+    <Style x:Key="SidePanelUpButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SidePanelActionButton}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="DockPanel.Dock" Value="Left" />
+        <Setter Property="controls:IconElement.Geometry" Value="{StaticResource UpGeometry}" />
+    </Style>
+
+    <Style x:Key="SidePanelTitle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="Margin" Value="5,0,5,5" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <Style x:Key="SidePanelSaveCancelPanel" TargetType="{x:Type StackPanel}">
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="DockPanel.Dock" Value="Bottom" />
+        <Setter Property="Margin" Value="10,5,10,10" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
 </ResourceDictionary>

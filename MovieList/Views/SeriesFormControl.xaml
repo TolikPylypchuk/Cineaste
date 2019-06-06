@@ -19,17 +19,14 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top">
             <DockPanel Margin="5,5,10,0">
-                <Button DockPanel.Dock="Right" controls:IconElement.Geometry="{StaticResource DeleteGeometry}"
-                        controls:IconElement.Width="10" controls:IconElement.Height="10" Command="{Binding SidePanel.Close}"
-                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                        HorizontalAlignment="Right" VerticalAlignment="Top" />
+                <Button Command="{Binding SidePanel.Close}" Style="{StaticResource SidePanelCloseButton}" />
             </DockPanel>
 
-            <TextBlock Text="{Binding FormTitle}" FontSize="24" Margin="5,0,5,5" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding FormTitle}" Style="{StaticResource SidePanelTitle}" />
         </StackPanel>
 
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,5,10,10"
-                    Visibility="{Binding CanSaveOrCancelChanges, Converter={StaticResource BoolToVisibility}}">
+        <StackPanel Visibility="{Binding CanSaveOrCancelChanges, Converter={StaticResource BoolToVisibility}}"
+                    Style="{StaticResource SidePanelSaveCancelPanel}">
             <Button Content="{x:Static resx:Messages.Cancel}" Command="{Binding Cancel}" Margin="0,0,10,0" />
             <Button Content="{x:Static resx:Messages.Save}" Command="{Binding Save}" Style="{StaticResource ButtonPrimary}"  />
         </StackPanel>
@@ -89,7 +86,9 @@
                 <ItemsControl ItemsSource="{Binding Components}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type vmf:SeriesComponentFormItemBase}">
-                            <Button HorizontalAlignment="Stretch" Margin="2,5" Content="{Binding Title}" />
+                            <Button Content="{Binding Title}" CommandParameter="{Binding}"
+                                    Command="{Binding Path=Data.SidePanel.OpenSeason, Source={StaticResource ViewModel}}"
+                                    HorizontalAlignment="Stretch" Margin="2,5" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

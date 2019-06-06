@@ -259,11 +259,29 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ви дійсно хочете видалити цей сезон?.
+        /// </summary>
+        public static string DeleteSeasonPrompt {
+            get {
+                return ResourceManager.GetString("DeleteSeasonPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ви дійсно хочете видалити цей серіал?.
         /// </summary>
         public static string DeleteSeriesPrompt {
             get {
                 return ResourceManager.GetString("DeleteSeriesPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ви дійсно хочете видалити цю серію?.
+        /// </summary>
+        public static string DeleteSpecialEpisodePrompt {
+            get {
+                return ResourceManager.GetString("DeleteSpecialEpisodePrompt", resourceCulture);
             }
         }
         
