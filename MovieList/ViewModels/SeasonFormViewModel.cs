@@ -24,19 +24,11 @@ namespace MovieList.ViewModels
             this.Save = new DelegateCommand(_ => this.OnSave(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(_ => this.Season.RevertChanges(), _ => this.CanCancelChanges);
             this.Delete = new DelegateCommand(_ => this.OnDelete(), _ => this.CanDelete());
-
-            this.ShowNextPoster = new DelegateCommand(
-                _ => this.Season.PosterIndex++, _ => this.Season.PosterIndex != this.Season.Posters.Count - 1);
-
-            this.ShowPreviousPoster = new DelegateCommand(
-                _ => this.Season.PosterIndex--, _ => this.Season.PosterIndex != 0);
         }
 
         public ICommand Save { get; }
         public ICommand Cancel { get; }
         public ICommand Delete { get; }
-        public ICommand ShowNextPoster { get; }
-        public ICommand ShowPreviousPoster { get; }
 
         public SeasonFormControl SeasonFormControl { get; set; }
 

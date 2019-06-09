@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using HandyControl.Data;
+
 using MovieList.Data.Models;
 using MovieList.Properties;
 using MovieList.Validation;
@@ -37,6 +39,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [Required(
+            ErrorMessageResourceName = nameof(Messages.YearRequired),
+            ErrorMessageResourceType = typeof(Messages))]
         [StringRange(
             Min = 1950,
             Max = 2100,
@@ -62,6 +67,9 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [Required(
+            ErrorMessageResourceName = nameof(Messages.YearRequired),
+            ErrorMessageResourceType = typeof(Messages))]
         [StringRange(
             Min = 1950,
             Max = 2100,
@@ -84,12 +92,13 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.isSingleDayRelease = value;
                 this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.StartCaption));
             }
         }
 
         [StringRange(
-            Min = 1950,
-            Max = 2100,
+            Min = 0,
+            Max = 50,
             ErrorMessageResourceName = nameof(Messages.InvalidNumberOfEpisodes),
             ErrorMessageResourceType = typeof(Messages))]
         public string NumberOfEpisodes
@@ -115,6 +124,21 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public Func<string, OperationResult<bool>> VerifyStartYear
+            => this.Verify(nameof(this.StartYear));
+
+        public Func<string, OperationResult<bool>> VerifyEndYear
+            => this.Verify(nameof(this.EndYear));
+
+        public Func<string, OperationResult<bool>> VerifyNumberOfEpisodes
+            => this.Verify(nameof(this.NumberOfEpisodes));
+
+        public Func<string, OperationResult<bool>> VerifyPosterUrl
+            => this.Verify(nameof(this.PosterUrl));
+
+        public string StartCaption
+            => this.IsSingleDayRelease ? Messages.Release : Messages.Start;
+
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
@@ -131,8 +155,8 @@ namespace MovieList.ViewModels.FormItems
         {
             this.Period.StartMonth = this.StartMonth;
             this.Period.StartYear = Int32.Parse(this.StartYear);
-            this.Period.EndMonth = this.EndMonth;
-            this.Period.EndYear = Int32.Parse(this.EndYear);
+            this.Period.EndMonth = this.IsSingleDayRelease ? this.StartMonth : this.EndMonth;
+            this.Period.EndYear = Int32.Parse(this.IsSingleDayRelease ? this.StartYear : this.EndYear);
             this.Period.IsSingleDayRelease = this.IsSingleDayRelease;
             this.Period.NumberOfEpisodes = Int32.Parse(this.NumberOfEpisodes);
             this.Period.PosterUrl = this.PosterUrl;

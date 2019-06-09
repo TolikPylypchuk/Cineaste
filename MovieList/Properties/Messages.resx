@@ -195,6 +195,9 @@
   <data name="Edit" xml:space="preserve">
     <value>Редагувати</value>
   </data>
+  <data name="End" xml:space="preserve">
+    <value>Кінець</value>
+  </data>
   <data name="EndMonth" xml:space="preserve">
     <value>Місяць кінця</value>
   </data>
@@ -315,8 +318,14 @@
   <data name="OtherSettings" xml:space="preserve">
     <value>Інші налаштування</value>
   </data>
+  <data name="Periods" xml:space="preserve">
+    <value>Періоди</value>
+  </data>
   <data name="PosterUrl" xml:space="preserve">
     <value>Посилання на постер</value>
+  </data>
+  <data name="Release" xml:space="preserve">
+    <value>Реліз</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Видалити</value>
@@ -356,6 +365,9 @@
   </data>
   <data name="SingleDayRelease" xml:space="preserve">
     <value>Реліз в один день</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Початок</value>
   </data>
   <data name="StartMonth" xml:space="preserve">
     <value>Місяць початку</value>

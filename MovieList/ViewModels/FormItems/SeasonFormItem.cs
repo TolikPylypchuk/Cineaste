@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 using HandyControl.Data;
@@ -27,8 +28,24 @@ namespace MovieList.ViewModels.FormItems
         {
             this.Season = season;
             this.CopySeasonProperties();
+
+            this.ShowNextPoster = new DelegateCommand(
+                _ => this.PosterIndex++, _ => this.PosterIndex != this.Posters.Count - 1);
+
+            this.ShowPreviousPoster = new DelegateCommand(
+                _ => this.PosterIndex--, _ => this.PosterIndex != 0);
+
+            this.AddPeriod = new DelegateCommand(_ => this.OnAddPeriod());
+            this.RemovePeriod = new DelegateCommand(this.OnRemovePeriod, _ => this.CanRemovePeriod());
+
             this.IsInitialized = true;
         }
+
+        public ICommand ShowNextPoster { get; }
+        public ICommand ShowPreviousPoster { get; }
+
+        public ICommand AddPeriod { get; }
+        public ICommand RemovePeriod { get; }
 
         public Season Season { get; }
 
@@ -205,5 +222,22 @@ namespace MovieList.ViewModels.FormItems
                     return bitmap;
                 }));
         }
+
+        private void OnAddPeriod()
+        {
+            this.Periods.Add(new PeriodFormItem(new Period()));
+            this.OnPropertyChanged(nameof(this.Periods));
+        }
+
+        private void OnRemovePeriod(object obj)
+        {
+            if (obj is PeriodFormItem period)
+            {
+                this.Periods.Remove(period);
+            }
+        }
+
+        private bool CanRemovePeriod()
+            => this.Periods.Count != 1;
     }
 }

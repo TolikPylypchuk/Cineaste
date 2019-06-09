@@ -295,6 +295,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Кінець.
+        /// </summary>
+        public static string End {
+            get {
+                return ResourceManager.GetString("End", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Місяць кінця.
         /// </summary>
         public static string EndMonth {
@@ -655,11 +664,29 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Періоди.
+        /// </summary>
+        public static string Periods {
+            get {
+                return ResourceManager.GetString("Periods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Посилання на постер.
         /// </summary>
         public static string PosterUrl {
             get {
                 return ResourceManager.GetString("PosterUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Реліз.
+        /// </summary>
+        public static string Release {
+            get {
+                return ResourceManager.GetString("Release", resourceCulture);
             }
         }
         
@@ -777,6 +804,15 @@ namespace MovieList.Properties {
         public static string SingleDayRelease {
             get {
                 return ResourceManager.GetString("SingleDayRelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Початок.
+        /// </summary>
+        public static string Start {
+            get {
+                return ResourceManager.GetString("Start", resourceCulture);
             }
         }
         

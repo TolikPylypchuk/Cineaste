@@ -9,27 +9,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
              d:DesignHeight="150" d:DesignWidth="100"
              d:DataContext="{d:DesignInstance vmf:TitledFormItemBase, IsDesignTimeCreatable=False}">
-    <UserControl.Resources>
-        <Style x:Key="ActionButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="controls:IconElement.Width" Value="7.5" />
-            <Setter Property="controls:IconElement.Height" Value="7.5" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="DockPanel.Dock" Value="Right" />
-            <Setter Property="Margin" Value="0,2" />
-        </Style>
-
-        <Style x:Key="AddButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButtonStyle}">
-            <Setter Property="controls:IconElement.Geometry" Value="{StaticResource AddGeometry}" />
-            <Setter Property="VerticalAlignment" Value="Bottom" />
-        </Style>
-
-        <Style x:Key="RemoveButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButtonStyle}">
-            <Setter Property="controls:IconElement.Geometry" Value="{StaticResource DeleteGeometry}" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="Margin" Value="5,2,0,2" />
-        </Style>
-    </UserControl.Resources>
-
     <StackPanel>
         <StackPanel.Resources>
             <data:BindingProxy x:Key="FormItem" Data="{Binding}" />

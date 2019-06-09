@@ -7,4 +7,9 @@
     <conv:CanSelectIfReleasedConverter x:Key="CanSelectIfReleased" />
     <conv:CanSelectIfMiniseriesConverter x:Key="CanSelectIfMiniseries" />
     <conv:SeriesStatusConverter x:Key="SeriesStatus" />
+    <conv:MonthNameConverter x:Key="MonthName" />
+    <conv:ValueConverterGroup x:Key="InverseBoolToVisibility">
+        <conv:InverseBoolConverter />
+        <BooleanToVisibilityConverter />
+    </conv:ValueConverterGroup>
 </ResourceDictionary>

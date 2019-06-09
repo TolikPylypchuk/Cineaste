@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace MovieList.ViewModels.FormItems
 {
     public abstract class SeriesComponentFormItemBase : TitledFormItemBase
@@ -15,6 +18,9 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public abstract string Title { get; }
+
+        public IEnumerable<int> AllMonths
+            => Enumerable.Range(1, 12);
 
         public abstract void OpenForm(SidePanelViewModel sidePanel);
     }
