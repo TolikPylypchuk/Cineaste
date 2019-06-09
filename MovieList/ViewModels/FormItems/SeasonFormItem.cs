@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Media.Imaging;
 
+using HandyControl.Data;
+
 using MovieList.Data.Models;
 using MovieList.Properties;
 
@@ -15,7 +17,10 @@ namespace MovieList.ViewModels.FormItems
         private bool isWatched;
         private bool isReleased;
         private string channel;
+
         private ObservableCollection<PeriodFormItem> periods;
+
+        private int posterIndex;
         private ObservableCollection<BitmapImage> posters;
 
         public SeasonFormItem(Season season)
@@ -34,6 +39,11 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.isWatched = value;
                 this.OnPropertyChanged();
+
+                if (this.IsWatched && !this.IsReleased)
+                {
+                    this.IsReleased = true;
+                }
             }
         }
 
@@ -44,6 +54,11 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.isReleased = value;
                 this.OnPropertyChanged();
+
+                if (this.IsWatched && !this.IsReleased)
+                {
+                    this.IsWatched = false;
+                }
             }
         }
 
@@ -76,12 +91,30 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.posters = value;
+                this.PosterIndex = 0;
                 this.OnPropertyChanged();
             }
         }
 
+        public int PosterIndex
+        {
+            get => this.posterIndex;
+            set
+            {
+                this.posterIndex = value;
+                this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(Poster));
+            }
+        }
+
+        public BitmapImage? Poster
+            => this.Posters.Count != 0 ? this.Posters[this.posterIndex] : null;
+
         public override string Title
             => this.Season.Title.Name;
+
+        public Func<string, OperationResult<bool>> VerifyChannel
+            => this.Verify(nameof(this.Channel));
 
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
@@ -162,11 +195,11 @@ namespace MovieList.ViewModels.FormItems
             this.Posters = new ObservableCollection<BitmapImage>(this.Periods
                 .Select(p => p.PosterUrl)
                 .Where(url => url != null)
-                .Select(posterUrl =>
+                .Select(url =>
                 {
                     var bitmap = new BitmapImage();
                     bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(posterUrl, UriKind.Absolute);
+                    bitmap.UriSource = new Uri(url, UriKind.Absolute);
                     bitmap.EndInit();
 
                     return bitmap;

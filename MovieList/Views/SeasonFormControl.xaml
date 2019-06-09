@@ -32,6 +32,44 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
             <StackPanel DataContext="{Binding Season}" Margin="0,0,0,10">
+                <Image Source="{Binding Poster}" Margin="5,0"  />
+
+                <DockPanel Margin="0,5,0,0">
+                    <DockPanel.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonPrimary}">
+                            <Setter Property="Height" Value="19" />
+                            <Setter Property="Width" Value="19" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="controls:IconElement.Width" Value="7.5" />
+                            <Setter Property="controls:IconElement.Height" Value="7.5" />
+                            <Setter Property="Visibility" Value="{Binding
+                                        Path=IsEnabled,
+                                        RelativeSource={RelativeSource Self},
+                                        Converter={StaticResource BoolToVisibility}}" />
+                        </Style>
+                    </DockPanel.Resources>
+
+                    <Button DockPanel.Dock="Left" HorizontalAlignment="Left" controls:IconElement.Geometry="{StaticResource LeftGeometry}"
+                            Command="{Binding Path=Data.ShowPreviousPoster, Source={StaticResource ViewModel}}" />
+
+                    <Button DockPanel.Dock="Right" HorizontalAlignment="Right" controls:IconElement.Geometry="{StaticResource RightGeometry}"
+                            Command="{Binding Path=Data.ShowNextPoster, Source={StaticResource ViewModel}}" />
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <CheckBox x:Name="IsWatchedCheckBox" Content="{x:Static resx:Messages.Watched}" IsChecked="{Binding IsWatched}"
+                                  IsEnabled="{Binding Converter={StaticResource CanSelectIfWatched}}" />
+                        <CheckBox x:Name="IsNotReleasedCheckBox" Content="{x:Static resx:Messages.NotReleased}" Margin="10,0,0,0"
+                                  IsChecked="{Binding Path=IsReleased, Converter={StaticResource InverseBool}}"
+                                  IsEnabled="{Binding Converter={StaticResource CanSelectIfReleased}}" />
+                    </StackPanel>
+                </DockPanel>
+
+                <local:TitleListControl />
+
+                <controls:TextBox Text="{Binding Path=Channel, UpdateSourceTrigger=PropertyChanged}"
+                                  controls:InfoElement.Title="{x:Static resx:Messages.Channel}"
+                                  Style="{StaticResource InputTextBoxStyle}"
+                                  VerifyFunc="{Binding VerifyChannel}" />
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

@@ -24,11 +24,19 @@ namespace MovieList.ViewModels
             this.Save = new DelegateCommand(_ => this.OnSave(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(_ => this.Season.RevertChanges(), _ => this.CanCancelChanges);
             this.Delete = new DelegateCommand(_ => this.OnDelete(), _ => this.CanDelete());
+
+            this.ShowNextPoster = new DelegateCommand(
+                _ => this.Season.PosterIndex++, _ => this.Season.PosterIndex != this.Season.Posters.Count - 1);
+
+            this.ShowPreviousPoster = new DelegateCommand(
+                _ => this.Season.PosterIndex--, _ => this.Season.PosterIndex != 0);
         }
 
         public ICommand Save { get; }
         public ICommand Cancel { get; }
         public ICommand Delete { get; }
+        public ICommand ShowNextPoster { get; }
+        public ICommand ShowPreviousPoster { get; }
 
         public SeasonFormControl SeasonFormControl { get; set; }
 
@@ -60,7 +68,16 @@ namespace MovieList.ViewModels
 
         public SidePanelViewModel SidePanel { get; }
 
-        public void OnSave()
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            base.OnPropertyChanged(propertyName);
+
+            base.OnPropertyChanged(nameof(this.CanSaveChanges));
+            base.OnPropertyChanged(nameof(this.CanCancelChanges));
+            base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
+        }
+
+        private void OnSave()
         {
             this.Season.ClearEmptyTitles();
 
@@ -75,7 +92,7 @@ namespace MovieList.ViewModels
             this.Season.WriteChanges();
         }
 
-        public void OnDelete()
+        private void OnDelete()
         {
             var result = MessageBox.Show(
                 Messages.DeleteSeasonPrompt,
@@ -103,16 +120,7 @@ namespace MovieList.ViewModels
             }
         }
 
-        public bool CanDelete()
+        private bool CanDelete()
             => this.Season.Season.Id != default;
-
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            base.OnPropertyChanged(propertyName);
-
-            base.OnPropertyChanged(nameof(this.CanSaveChanges));
-            base.OnPropertyChanged(nameof(this.CanCancelChanges));
-            base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
-        }
     }
 }

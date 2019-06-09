@@ -47,7 +47,7 @@
                         <Button Command="{Binding Path=Data.RemoveTitle, Source={StaticResource FormItem}}"
                                 CommandParameter="{Binding}" Style="{StaticResource RemoveButtonStyle}" />
                         <controls:TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
-                                                  Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyName}" />
+                                          Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyName}" />
                     </DockPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
