@@ -93,6 +93,14 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
+                <Button Content="{x:Static resx:Messages.AddNewSeason}" Margin="2,5" HorizontalAlignment="Stretch" 
+                        Command="{Binding Path=Data.AddSeason, Source={StaticResource ViewModel}}"
+                        Style="{StaticResource ButtonPrimary}" />
+
+                <Button Content="{x:Static resx:Messages.AddNewSpecialEpisode}" Margin="2,5" HorizontalAlignment="Stretch" 
+                        Command="{Binding Path=Data.AddSpecialEpisode, Source={StaticResource ViewModel}}"
+                        Style="{StaticResource ButtonPrimary}" />
+
                 <controls:TextBox Text="{Binding Path=ImdbLink, UpdateSourceTrigger=PropertyChanged}"
                                   controls:InfoElement.Title="{x:Static resx:Messages.Imdb}"
                                   Style="{StaticResource UrlInputTextBoxStyle}"

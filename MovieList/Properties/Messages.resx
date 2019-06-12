@@ -120,8 +120,14 @@
   <data name="AddNewMovie" xml:space="preserve">
     <value>Додати фільм</value>
   </data>
+  <data name="AddNewSeason" xml:space="preserve">
+    <value>Додати сезон</value>
+  </data>
   <data name="AddNewSeries" xml:space="preserve">
     <value>Додати серіал</value>
+  </data>
+  <data name="AddNewSpecialEpisode" xml:space="preserve">
+    <value>Додати спеціальну серію</value>
   </data>
   <data name="AdvancedSettings" xml:space="preserve">
     <value>Розширені налаштування</value>
@@ -308,6 +314,9 @@
   </data>
   <data name="NumberOfEpisodes" xml:space="preserve">
     <value>Кількість серій</value>
+  </data>
+  <data name="NumberOfEpisodesRequired" xml:space="preserve">
+    <value>Кількість серій обов'язкова</value>
   </data>
   <data name="October" xml:space="preserve">
     <value>Жовтень</value>

@@ -70,11 +70,29 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Додати сезон.
+        /// </summary>
+        public static string AddNewSeason {
+            get {
+                return ResourceManager.GetString("AddNewSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Додати серіал.
         /// </summary>
         public static string AddNewSeries {
             get {
                 return ResourceManager.GetString("AddNewSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Додати спеціальну серію.
+        /// </summary>
+        public static string AddNewSpecialEpisode {
+            get {
+                return ResourceManager.GetString("AddNewSpecialEpisode", resourceCulture);
             }
         }
         
@@ -633,6 +651,15 @@ namespace MovieList.Properties {
         public static string NumberOfEpisodes {
             get {
                 return ResourceManager.GetString("NumberOfEpisodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Кількість серій обов&apos;язкова.
+        /// </summary>
+        public static string NumberOfEpisodesRequired {
+            get {
+                return ResourceManager.GetString("NumberOfEpisodesRequired", resourceCulture);
             }
         }
         

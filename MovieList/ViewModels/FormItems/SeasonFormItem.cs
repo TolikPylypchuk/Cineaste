@@ -30,10 +30,10 @@ namespace MovieList.ViewModels.FormItems
             this.CopySeasonProperties();
 
             this.ShowNextPoster = new DelegateCommand(
-                _ => this.PosterIndex++, _ => this.PosterIndex != this.Posters.Count - 1);
+                _ => this.PosterIndex++, _ => this.Posters.Count > 0 && this.PosterIndex != this.Posters.Count - 1);
 
             this.ShowPreviousPoster = new DelegateCommand(
-                _ => this.PosterIndex--, _ => this.PosterIndex != 0);
+                _ => this.PosterIndex--, _ => this.Posters.Count > 0 && this.PosterIndex != 0);
 
             this.AddPeriod = new DelegateCommand(_ => this.OnAddPeriod());
             this.RemovePeriod = new DelegateCommand(this.OnRemovePeriod, _ => this.CanRemovePeriod());

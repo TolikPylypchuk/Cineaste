@@ -96,8 +96,11 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [Required(
+            ErrorMessageResourceName = nameof(Messages.NumberOfEpisodesRequired),
+            ErrorMessageResourceType = typeof(Messages))]
         [StringRange(
-            Min = 0,
+            Min = 1,
             Max = 50,
             ErrorMessageResourceName = nameof(Messages.InvalidNumberOfEpisodes),
             ErrorMessageResourceType = typeof(Messages))]
