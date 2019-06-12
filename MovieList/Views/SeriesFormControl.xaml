@@ -25,7 +25,7 @@
             <TextBlock Text="{Binding FormTitle}" Style="{StaticResource SidePanelTitle}" />
         </StackPanel>
 
-        <StackPanel Visibility="{Binding CanSaveOrCancelChanges, Converter={StaticResource BoolToVisibility}}"
+        <StackPanel Visibility="{Binding Path=CanSaveOrCancelChanges, Converter={StaticResource BoolToVisibility}}"
                     Style="{StaticResource SidePanelSaveCancelPanel}">
             <Button Content="{x:Static resx:Messages.Cancel}" Command="{Binding Cancel}" Margin="0,0,10,0" />
             <Button Content="{x:Static resx:Messages.Save}" Command="{Binding Save}" Style="{StaticResource ButtonPrimary}"  />
@@ -93,14 +93,26 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <Button Content="{x:Static resx:Messages.AddNewSeason}" Margin="2,5" HorizontalAlignment="Stretch" 
-                        Command="{Binding Path=Data.AddSeason, Source={StaticResource ViewModel}}"
-                        Style="{StaticResource ButtonPrimary}" />
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonPrimary}">
+                            <Setter Property="Margin" Value="2,5" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        </Style>
+                    </Grid.Resources>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
 
-                <Button Content="{x:Static resx:Messages.AddNewSpecialEpisode}" Margin="2,5" HorizontalAlignment="Stretch" 
-                        Command="{Binding Path=Data.AddSpecialEpisode, Source={StaticResource ViewModel}}"
-                        Style="{StaticResource ButtonPrimary}" />
+                    <Button Grid.Column="0" Content="{x:Static resx:Messages.AddNewSeason}"
+                            Command="{Binding Path=Data.AddSeason, Source={StaticResource ViewModel}}" />
 
+                    <Button Grid.Column="1" Content="{x:Static resx:Messages.AddNewSpecialEpisode}"
+                            Command="{Binding Path=Data.AddSpecialEpisode, Source={StaticResource ViewModel}}" />
+                </Grid>
+                
                 <controls:TextBox Text="{Binding Path=ImdbLink, UpdateSourceTrigger=PropertyChanged}"
                                   controls:InfoElement.Title="{x:Static resx:Messages.Imdb}"
                                   Style="{StaticResource UrlInputTextBoxStyle}"

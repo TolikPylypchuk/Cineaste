@@ -17,8 +17,9 @@ namespace MovieList.ViewModels
     {
         private SeasonFormItem season;
 
-        public SeasonFormViewModel(SidePanelViewModel sidePanel)
+        public SeasonFormViewModel(SeriesFormViewModel parentForm, SidePanelViewModel sidePanel)
         {
+            this.ParentForm = parentForm;
             this.SidePanel = sidePanel;
 
             this.Save = new DelegateCommand(_ => this.OnSave(), _ => this.CanSaveChanges);
@@ -38,7 +39,10 @@ namespace MovieList.ViewModels
             set
             {
                 this.season = value;
+                this.season.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Season));
+
                 this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(FormTitle));
             }
         }
 
@@ -58,6 +62,7 @@ namespace MovieList.ViewModels
         public bool CanSaveOrCancelChanges
             => this.CanSaveChanges || this.CanCancelChanges;
 
+        public SeriesFormViewModel ParentForm { get; }
         public SidePanelViewModel SidePanel { get; }
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -82,6 +87,7 @@ namespace MovieList.ViewModels
             }
 
             this.Season.WriteChanges();
+            this.ParentForm.AreComponentsChanged = true;
         }
 
         private void OnDelete()

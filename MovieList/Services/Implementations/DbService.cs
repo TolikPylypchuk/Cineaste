@@ -93,9 +93,64 @@ namespace MovieList.Services.Implementations
             await context.SaveChangesAsync();
         }
 
-        public Task SaveSeriesAsync(Series series)
+        public async Task SaveSeriesAsync(Series series)
         {
-            throw new NotImplementedException();
+            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+
+            if (series.Id == default)
+            {
+                context.Attach(series.Kind);
+                context.Add(series);
+            } else
+            {
+                context.Entry(series).State = EntityState.Modified;
+
+                foreach (var title in series.Titles)
+                {
+                    if (title.Id == default)
+                    {
+                        context.Add(title);
+                    } else
+                    {
+                        context.Entry(title).State = EntityState.Modified;
+                    }
+                }
+
+                foreach (var season in series.Seasons)
+                {
+                    if (season.Id == default)
+                    {
+                        context.Add(season);
+                    } else
+                    {
+                        context.Entry(season).State = EntityState.Modified;
+                    }
+
+                    foreach (var period in season.Periods)
+                    {
+                        if (period.Id == default)
+                        {
+                            context.Add(period);
+                        } else
+                        {
+                            context.Entry(period).State = EntityState.Modified;
+                        }
+                    }
+                }
+
+                foreach (var episode in series.SpecialEpisodes)
+                {
+                    if (episode.Id == default)
+                    {
+                        context.Add(episode);
+                    } else
+                    {
+                        context.Entry(episode).State = EntityState.Modified;
+                    }
+                }
+            }
+
+            await context.SaveChangesAsync();
         }
 
         public async Task SaveKindsAsync(IEnumerable<KindViewModel> kinds)

@@ -66,6 +66,11 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.status = value;
                 this.OnPropertyChanged();
+
+                if (this.status == SeriesStatus.NotStarted)
+                {
+                    this.IsWatched = false;
+                }
             }
         }
 
@@ -161,6 +166,27 @@ namespace MovieList.ViewModels.FormItems
                 {
                     this.Series.Titles.Add(title.Title);
                 }
+            }
+
+            foreach (var season in this.Components.OfType<SeasonFormItem>())
+            {
+                if (season.Season.Id == default)
+                {
+                    this.Series.Seasons.Add(season.Season);
+                }
+            }
+
+            foreach (var episode in this.Components.OfType<SpecialEpisodeFormItem>())
+            {
+                if (episode.SpecialEpisode.Id == default)
+                {
+                    this.Series.SpecialEpisodes.Add(episode.SpecialEpisode);
+                }
+            }
+
+            if (this.Series.PosterUrl != this.PosterUrl)
+            {
+                this.SetPoster();
             }
 
             this.Series.IsWatched = this.IsWatched;

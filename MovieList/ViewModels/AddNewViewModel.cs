@@ -39,7 +39,7 @@ namespace MovieList.ViewModels
                     new Title { Name = String.Empty, IsOriginal = false, Priority = 1 },
                     new Title { Name = String.Empty, IsOriginal = true, Priority = 1 }
                 },
-                Status = SeriesStatus.NotStarted
+                Status = SeriesStatus.Running
             });
     }
 }

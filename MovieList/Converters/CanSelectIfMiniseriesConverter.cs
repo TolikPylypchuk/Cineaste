@@ -11,7 +11,7 @@ namespace MovieList.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             => value is SeriesFormItem series
-                ? series.Series.Seasons.Count == 0
+                ? series.Series.IsMiniseries || series.Components.Count == 0
                 : throw new NotSupportedException($"Cannot convert {value}.");
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

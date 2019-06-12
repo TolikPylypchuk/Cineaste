@@ -65,7 +65,7 @@ namespace MovieList.ViewModels
             => value =>
             {
                 this.Validate(property, value);
-                return this.ValidationErros.Count != 0
+                return this.ValidationErros.ContainsKey(property) && this.ValidationErros[property].Count != 0
                     ? new OperationResult<bool>
                     {
                         Data = false,

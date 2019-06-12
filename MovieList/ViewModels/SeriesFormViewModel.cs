@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace MovieList.ViewModels
 
         private SeriesFormItem series;
         private ObservableCollection<KindViewModel> allKinds;
+        private bool areComponentsChanged;
 
         public SeriesFormViewModel(
             IDbService dbService,
@@ -45,7 +47,7 @@ namespace MovieList.ViewModels
             this.SidePanel = sidePanel;
 
             this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
-            this.Cancel = new DelegateCommand(_ => this.Series.RevertChanges(), _ => this.CanCancelChanges);
+            this.Cancel = new DelegateCommand(_ => this.OnCancel(), _ => this.CanCancelChanges);
             this.Delete = new DelegateCommand(async _ => await this.DeleteAsync(), _ => this.CanDelete());
             this.AddSeason = new DelegateCommand(_ => this.OnAddSeason());
             this.AddSpecialEpisode = new DelegateCommand(_ => this.OnAddSpecialEpisode());
@@ -67,7 +69,7 @@ namespace MovieList.ViewModels
             set
             {
                 this.series = value;
-                this.OnPropertyChanged();
+                this.series.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Series));
 
                 this.OnPropertyChanged();
                 this.OnPropertyChanged(nameof(FormTitle));
@@ -87,17 +89,29 @@ namespace MovieList.ViewModels
             }
         }
 
+        public bool AreComponentsChanged
+        {
+            get => this.areComponentsChanged;
+            set
+            {
+                this.areComponentsChanged = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public MovieListViewModel MovieList { get; }
         public SidePanelViewModel SidePanel { get; }
 
         public bool CanSaveChanges
-            => this.Series.AreChangesPresent &&
+            => (this.Series.AreChangesPresent || this.AreComponentsChanged) &&
                 !this.Series.HasErrors &&
                 !this.Series.Titles.Any(t => t.HasErrors) &&
-                !this.Series.OriginalTitles.Any(t => t.HasErrors);
+                !this.Series.OriginalTitles.Any(t => t.HasErrors) &&
+                this.Series.Components.Any() &&
+                !this.Series.Components.Any(c => c.HasErrors);
 
         public bool CanCancelChanges
-            => this.Series.AreChangesPresent;
+            => this.Series.AreChangesPresent || this.AreComponentsChanged;
 
         public bool CanSaveOrCancelChanges
             => this.CanSaveChanges || this.CanCancelChanges;
@@ -133,6 +147,14 @@ namespace MovieList.ViewModels
             await this.dbService.SaveSeriesAsync(this.Series.Series);
 
             (shouldAddToList ? this.MovieList.AddItem : this.MovieList.UpdateItem).ExecuteIfCan(this.Series.Series);
+
+            this.AreComponentsChanged = false;
+        }
+
+        private void OnCancel()
+        {
+            this.Series.RevertChanges();
+            this.AreComponentsChanged = false;
         }
 
         private async Task DeleteAsync()
@@ -156,12 +178,20 @@ namespace MovieList.ViewModels
             var newSeason = new Season
             {
                 Series = this.Series.Series,
-                OrdinalNumber = this.Series.Components.Count + 1
+                OrdinalNumber = this.Series.Components.Count + 1,
+                IsReleased = true
             };
 
             newSeason.Periods = new List<Period>
             {
-                new Period { Season = newSeason }
+                new Period
+                {
+                    Season = newSeason,
+                    StartMonth = 1,
+                    StartYear = 2000,
+                    EndMonth = 1,
+                    EndYear = 2000
+                }
             };
 
             var seasonNumber = this.Series.Components.OfType<SeasonFormItem>().Count() + 1;
@@ -221,7 +251,7 @@ namespace MovieList.ViewModels
             this.Series.Components.Add(formItem);
             this.SidePanel.OpenSpecialEpisode.ExecuteIfCan(formItem);
         }
-
+        
         private void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
         {
             this.AllKinds = new ObservableCollection<KindViewModel>(e.Kinds);

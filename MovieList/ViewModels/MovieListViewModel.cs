@@ -164,15 +164,29 @@ namespace MovieList.ViewModels
             switch (obj)
             {
                 case Movie movie:
-                    var item = new MovieListItem(movie, this.config.Value);
-                    int index = Util.BinarySearchIndexOf(this.items, item);
-                    if (index < 0)
+                    var movieItem = new MovieListItem(movie, this.config.Value);
+                    int movieIndex = Util.BinarySearchIndexOf(this.items, movieItem);
+                    if (movieIndex < 0)
                     {
-                        index = ~index;
+                        movieIndex = ~movieIndex;
                     }
 
-                    this.Items.Insert(index, item);
-                    this.MovieListControl.List.SelectedIndex = index;
+                    this.Items.Insert(movieIndex, movieItem);
+                    this.MovieListControl.List.SelectedIndex = movieIndex;
+
+                    this.MovieListControl.List.UpdateLayout();
+                    this.MovieListControl.List.ScrollIntoView(this.MovieListControl.List.SelectedItem);
+                    break;
+                case Series series:
+                    var seriesItem = new SeriesListItem(series, this.config.Value);
+                    int seriesIndex = Util.BinarySearchIndexOf(this.items, seriesItem);
+                    if (seriesIndex < 0)
+                    {
+                        seriesIndex = ~seriesIndex;
+                    }
+
+                    this.Items.Insert(seriesIndex, seriesItem);
+                    this.MovieListControl.List.SelectedIndex = seriesIndex;
 
                     this.MovieListControl.List.UpdateLayout();
                     this.MovieListControl.List.ScrollIntoView(this.MovieListControl.List.SelectedItem);
@@ -192,6 +206,9 @@ namespace MovieList.ViewModels
             {
                 case Movie movie:
                     this.Items.RemoveAt(Util.BinarySearchIndexOf(this.items, new MovieListItem(movie, this.config.Value)));
+                    break;
+                case Series series:
+                    this.Items.RemoveAt(Util.BinarySearchIndexOf(this.items, new SeriesListItem(series, this.config.Value)));
                     break;
             }
         }
