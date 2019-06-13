@@ -13,8 +13,8 @@ namespace MovieList.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
-                    ColorForMovie = table.Column<string>(nullable: true),
-                    ColorForSeries = table.Column<string>(nullable: true)
+                    ColorForMovie = table.Column<string>(nullable: false),
+                    ColorForSeries = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

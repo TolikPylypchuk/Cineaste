@@ -9,23 +9,25 @@ using MovieList.Data;
 namespace MovieList.Data.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20190602190526_Initial")]
+    [Migration("20190613171441_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0-preview5.19227.1");
+                .HasAnnotation("ProductVersion", "3.0.0-preview6.19304.10");
 
             modelBuilder.Entity("MovieList.Data.Models.Kind", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ColorForMovie");
+                    b.Property<string>("ColorForMovie")
+                        .IsRequired();
 
-                    b.Property<string>("ColorForSeries");
+                    b.Property<string>("ColorForSeries")
+                        .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired()
