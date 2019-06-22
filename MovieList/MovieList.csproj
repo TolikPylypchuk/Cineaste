@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HandyControl" Version="1.5.5.15" />
+    <PackageReference Include="HandyControl" Version="1.5.5.19" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview5.19227.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0-preview6.19304.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.0-preview6.19304.6" />

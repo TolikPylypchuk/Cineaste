@@ -223,7 +223,7 @@
     <value>Посилання на IMDb має бути URL</value>
   </data>
   <data name="InvalidNumberOfEpisodes" xml:space="preserve">
-    <value>Неправильна кількість серій</value>
+    <value>Неправильне число</value>
   </data>
   <data name="InvalidPath" xml:space="preserve">
     <value>Шлях не є назвою файлу</value>
@@ -316,7 +316,7 @@
     <value>Кількість серій</value>
   </data>
   <data name="NumberOfEpisodesRequired" xml:space="preserve">
-    <value>Кількість серій обов'язкова</value>
+    <value>Поле обов'язкове</value>
   </data>
   <data name="October" xml:space="preserve">
     <value>Жовтень</value>

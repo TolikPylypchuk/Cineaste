@@ -35,7 +35,7 @@ namespace MovieList.ViewModels.FormItems
             this.ShowPreviousPoster = new DelegateCommand(
                 _ => this.PosterIndex--, _ => this.Posters.Count > 0 && this.PosterIndex != 0);
 
-            this.AddPeriod = new DelegateCommand(_ => this.OnAddPeriod());
+            this.AddPeriod = new DelegateCommand(_ => this.Periods.Add(this.NewPeriod(new Period())));
             this.RemovePeriod = new DelegateCommand(this.OnRemovePeriod, _ => this.CanRemovePeriod());
 
             this.IsInitialized = true;
@@ -98,6 +98,7 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.periods = value;
+                this.periods.CollectionChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Periods));
                 this.OnPropertyChanged();
             }
         }
@@ -143,8 +144,8 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.IsWatched, () => this.Season.IsWatched),
                 (() => this.IsReleased, () => this.Season.IsReleased),
                 (() => this.Channel, () => this.Season.Channel),
-                (() => this.Periods.Select(p => p.Period).OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth),
-                 () => this.Season.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth))
+                (() => this.Periods.Select(p => p.ToString()).OrderBy(p => p),
+                 () => this.Season.Periods.Select(p => new PeriodFormItem(p).ToString()).OrderBy(p => p))
             };
 
         public override void WriteChanges()
@@ -202,7 +203,7 @@ namespace MovieList.ViewModels.FormItems
             this.Channel = this.Season.Channel;
             this.OrdinalNumber = this.Season.OrdinalNumber;
             this.Periods = new ObservableCollection<PeriodFormItem>(
-                this.Season.Periods.Select(period => new PeriodFormItem(period)));
+                this.Season.Periods.Select(period => this.NewPeriod(period)));
 
             this.SetPosters();
         }
@@ -223,10 +224,11 @@ namespace MovieList.ViewModels.FormItems
                 }));
         }
 
-        private void OnAddPeriod()
+        private PeriodFormItem NewPeriod(Period period)
         {
-            this.Periods.Add(new PeriodFormItem(new Period()));
-            this.OnPropertyChanged(nameof(this.Periods));
+            var result = new PeriodFormItem(period);
+            result.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Periods));
+            return result;
         }
 
         private void OnRemovePeriod(object obj)

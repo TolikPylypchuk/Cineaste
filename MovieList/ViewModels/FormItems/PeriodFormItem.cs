@@ -172,6 +172,10 @@ namespace MovieList.ViewModels.FormItems
             this.AreChangesPresent = false;
         }
 
+        public override string ToString()
+            => $"{this.StartMonth} {this.StartYear} - {this.EndMonth} {this.EndYear}; " +
+            $"{this.NumberOfEpisodes}; {this.IsSingleDayRelease}; {this.PosterUrl}";
+
         private void CopyPeriodProperties()
         {
             this.StartMonth = this.Period.StartMonth;

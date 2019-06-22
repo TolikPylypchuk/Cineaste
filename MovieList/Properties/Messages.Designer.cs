@@ -376,7 +376,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Неправильна кількість серій.
+        ///   Looks up a localized string similar to Неправильне число.
         /// </summary>
         public static string InvalidNumberOfEpisodes {
             get {
@@ -655,7 +655,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Кількість серій обов&apos;язкова.
+        ///   Looks up a localized string similar to Поле обов&apos;язкове.
         /// </summary>
         public static string NumberOfEpisodesRequired {
             get {
