@@ -93,7 +93,10 @@ namespace MovieList.Services.Implementations
             await context.SaveChangesAsync();
         }
 
-        public async Task SaveSeriesAsync(Series series)
+        public async Task SaveSeriesAsync(
+            Series series,
+            IEnumerable<Season> seasonsToDelete,
+            IEnumerable<SpecialEpisode> episodesToDelete)
         {
             using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
@@ -147,6 +150,26 @@ namespace MovieList.Services.Implementations
                     {
                         context.Entry(episode).State = EntityState.Modified;
                     }
+                }
+            }
+
+            foreach (var season in seasonsToDelete)
+            {
+                context.Attach(season).State = EntityState.Deleted;
+
+                foreach (var title in season.Titles)
+                {
+                    context.Entry(title).State = EntityState.Deleted;
+                }
+            }
+
+            foreach (var episode in episodesToDelete)
+            {
+                context.Attach(episode).State = EntityState.Deleted;
+
+                foreach (var title in episode.Titles)
+                {
+                    context.Entry(title).State = EntityState.Deleted;
                 }
             }
 

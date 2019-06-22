@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:s="clr-namespace:System;assembly=System.ComponentModel.TypeConverter"
              xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
              xmlns:local="clr-namespace:MovieList.Views"
              xmlns:data="clr-namespace:MovieList.Data"
@@ -149,7 +148,8 @@
                                                       controls:InfoElement.TitleAlignment="Left" controls:InfoElement.TitleWidth="85" />
 
                                     <CheckBox Grid.Column="1" Content="{x:Static resx:Messages.SingleDayRelease}" Margin="2.5,0,0,0"
-                                              IsChecked="{Binding IsSingleDayRelease}" HorizontalAlignment="Left" />
+                                              IsChecked="{Binding IsSingleDayRelease}" HorizontalAlignment="Left"
+                                              IsEnabled="{Binding CanBeSingleDayRelease}" />
                                 </Grid>
 
                                 <DockPanel Margin="0,0,0,5">

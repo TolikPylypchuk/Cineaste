@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -116,6 +115,9 @@ namespace MovieList.ViewModels
         public bool CanSaveOrCancelChanges
             => this.CanSaveChanges || this.CanCancelChanges;
 
+        public List<Season> SeasonsToDelete { get; } = new List<Season>();
+        public List<SpecialEpisode> EpisodesToDelete { get; } = new List<SpecialEpisode>();
+
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             base.OnPropertyChanged(propertyName);
@@ -144,7 +146,10 @@ namespace MovieList.ViewModels
 
             bool shouldAddToList = this.Series.Series.Id == default;
 
-            await this.dbService.SaveSeriesAsync(this.Series.Series);
+            await this.dbService.SaveSeriesAsync(this.Series.Series, this.SeasonsToDelete, this.EpisodesToDelete);
+
+            this.SeasonsToDelete.Clear();
+            this.EpisodesToDelete.Clear();
 
             (shouldAddToList ? this.MovieList.AddItem : this.MovieList.UpdateItem).ExecuteIfCan(this.Series.Series);
 
@@ -159,14 +164,27 @@ namespace MovieList.ViewModels
 
         private async Task DeleteAsync()
         {
-            var result = MessageBox.Show(Messages.DeleteSeriesPrompt, Messages.Delete, MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var result = MessageBox.Show(
+                Messages.DeleteSeriesPrompt,
+                Messages.Delete,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
+                this.MovieList.DeleteItem.ExecuteIfCan(this.Series.Series);
+
+                await this.dbService.DeleteAsync(this.Series.Series.Titles);
+                await this.dbService.DeleteAsync(this.Series.Series.Seasons.SelectMany(s => s.Titles));
+
+                if (this.Series.Series.Entry != null)
+                {
+                    await this.dbService.DeleteAsync(this.Series.Series.Entry);
+                }
+
                 await this.dbService.DeleteAsync(this.Series.Series);
 
                 this.SidePanel.Close.ExecuteIfCan(null);
-                this.MovieList.DeleteItem.ExecuteIfCan(this.Series.Series);
             }
         }
 

@@ -36,6 +36,7 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.startMonth = value;
                 this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.CanBeSingleDayRelease));
             }
         }
 
@@ -54,6 +55,7 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.startYear = value;
                 this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.CanBeSingleDayRelease));
             }
         }
 
@@ -64,6 +66,7 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.endMonth = value;
                 this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.CanBeSingleDayRelease));
             }
         }
 
@@ -82,6 +85,7 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.endYear = value;
                 this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.CanBeSingleDayRelease));
             }
         }
 
@@ -127,6 +131,12 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public string StartCaption
+            => this.IsSingleDayRelease ? Messages.Release : Messages.Start;
+
+        public bool CanBeSingleDayRelease
+            => this.StartMonth == this.EndMonth && this.StartYear == this.EndYear;
+
         public Func<string, OperationResult<bool>> VerifyStartYear
             => this.Verify(nameof(this.StartYear));
 
@@ -138,9 +148,6 @@ namespace MovieList.ViewModels.FormItems
 
         public Func<string, OperationResult<bool>> VerifyPosterUrl
             => this.Verify(nameof(this.PosterUrl));
-
-        public string StartCaption
-            => this.IsSingleDayRelease ? Messages.Release : Messages.Start;
 
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
@@ -174,7 +181,7 @@ namespace MovieList.ViewModels.FormItems
 
         public override string ToString()
             => $"{this.StartMonth} {this.StartYear} - {this.EndMonth} {this.EndYear}; " +
-            $"{this.NumberOfEpisodes}; {this.IsSingleDayRelease}; {this.PosterUrl}";
+                $"{this.NumberOfEpisodes}; {this.IsSingleDayRelease}; {this.PosterUrl}";
 
         private void CopyPeriodProperties()
         {

@@ -126,6 +126,8 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.components = value;
+                this.components.CollectionChanged +=
+                    (sender, e) => this.OnPropertyChanged(nameof(this.Components));
                 this.OnPropertyChanged();
             }
         }
@@ -148,7 +150,12 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.Status, () => this.Series.Status),
                 (() => this.ImdbLink, () => this.Series.ImdbLink),
                 (() => this.PosterUrl, () => this.Series.PosterUrl),
-                (() => this.Kind.Kind.Id, () => this.Series.KindId)
+                (() => this.Kind.Kind.Id, () => this.Series.KindId),
+                (() => this.Components.Select(c => c.ToString()).OrderBy(c => c),
+                 () => this.Series.Seasons
+                    .Select(s => new SeasonFormItem(s).ToString())
+                    .Union(this.Series.SpecialEpisodes.Select(e => new SpecialEpisodeFormItem(e).ToString()))
+                    .OrderBy(c => c))
             };
 
         public override void WriteChanges()
@@ -218,9 +225,9 @@ namespace MovieList.ViewModels.FormItems
             this.Kind = this.AllKinds.FirstOrDefault(k => k.Kind.Id == this.Series.KindId) ?? this.AllKinds.First();
             this.Components = new ObservableCollection<SeriesComponentFormItemBase>(
                 this.Series.Seasons
-                    .Select(season => new SeasonFormItem(season))
+                    .Select(season => this.NewSeason(season))
                     .Cast<SeriesComponentFormItemBase>()
-                    .Union(this.Series.SpecialEpisodes.Select(episode => new SpecialEpisodeFormItem(episode)))
+                    .Union(this.Series.SpecialEpisodes.Select(episode => this.NewSpecialEpisode(episode)))
                     .OrderBy(item => item.OrdinalNumber));
 
             this.SetPoster();
@@ -237,6 +244,20 @@ namespace MovieList.ViewModels.FormItems
 
                 this.Poster = bitmap;
             }
+        }
+
+        private SeasonFormItem NewSeason(Season season)
+        {
+            var result = new SeasonFormItem(season);
+            result.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Components));
+            return result;
+        }
+
+        private SpecialEpisodeFormItem NewSpecialEpisode(SpecialEpisode episode)
+        {
+            var result = new SpecialEpisodeFormItem(episode);
+            result.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Components));
+            return result;
         }
     }
 }

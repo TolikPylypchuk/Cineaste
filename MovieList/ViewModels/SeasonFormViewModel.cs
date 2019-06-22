@@ -100,7 +100,8 @@ namespace MovieList.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
-                this.Season.Season.Series.Seasons.Remove(this.Season.Season);
+                this.ParentForm.Series.Components.Remove(this.Season);
+                this.ParentForm.SeasonsToDelete.Add(this.Season.Season);
 
                 foreach (var season in this.Season.Season.Series.Seasons
                     .Where(s => s.OrdinalNumber > this.Season.OrdinalNumber))
