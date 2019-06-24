@@ -13,11 +13,12 @@ namespace MovieList.Services
         Task<List<ListItem>> LoadListAsync();
         Task<ObservableCollection<KindViewModel>> LoadAllKindsAsync();
 
-        Task SaveMovieAsync(Movie movie);
+        Task SaveMovieAsync(Movie movie, IEnumerable<Title> titlesToDelete);
         Task SaveSeriesAsync(
             Series series,
             IEnumerable<Season> seasonsToDelete,
-            IEnumerable<SpecialEpisode> episodesToDelete);
+            IEnumerable<SpecialEpisode> episodesToDelete,
+            IEnumerable<Title> titlesToDelete);
 
         Task SaveKindsAsync(IEnumerable<KindViewModel> kinds);
 

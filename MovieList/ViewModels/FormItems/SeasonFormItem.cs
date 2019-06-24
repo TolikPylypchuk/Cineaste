@@ -160,6 +160,11 @@ namespace MovieList.ViewModels.FormItems
                 }
             }
 
+            foreach (var title in this.RemovedTitles)
+            {
+                this.Season.Titles.Remove(title.Title);
+            }
+
             this.SetPosters();
 
             this.Season.IsWatched = this.IsWatched;

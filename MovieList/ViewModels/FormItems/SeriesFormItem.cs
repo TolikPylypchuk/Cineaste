@@ -174,6 +174,18 @@ namespace MovieList.ViewModels.FormItems
                     this.Series.Titles.Add(title.Title);
                 }
             }
+            
+            foreach (var title in this.RemovedTitles)
+            {
+                this.Series.Titles.Remove(title.Title);
+            }
+
+            this.RemovedTitles.Clear();
+
+            foreach (var component in this.Components)
+            {
+                component.RemovedTitles.Clear();
+            }
 
             foreach (var season in this.Components.OfType<SeasonFormItem>())
             {

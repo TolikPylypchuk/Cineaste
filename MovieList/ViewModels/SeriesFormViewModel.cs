@@ -107,7 +107,8 @@ namespace MovieList.ViewModels
                 !this.Series.Titles.Any(t => t.HasErrors) &&
                 !this.Series.OriginalTitles.Any(t => t.HasErrors) &&
                 this.Series.Components.Any() &&
-                !this.Series.Components.Any(c => c.HasErrors);
+                !this.Series.Components.Any(c => c.HasErrors) &&
+                !this.Series.Components.Any(c => c.AreChangesPresent);
 
         public bool CanCancelChanges
             => this.Series.AreChangesPresent || this.AreComponentsChanged;
@@ -142,11 +143,17 @@ namespace MovieList.ViewModels
                 return;
             }
 
+            var titlesToDelete = this.Series.RemovedTitles
+                .Union(this.Series.Components.SelectMany(c => c.RemovedTitles))
+                .Select(t => t.Title)
+                .ToList();
+
             this.Series.WriteChanges();
 
             bool shouldAddToList = this.Series.Series.Id == default;
 
-            await this.dbService.SaveSeriesAsync(this.Series.Series, this.SeasonsToDelete, this.EpisodesToDelete);
+            await this.dbService.SaveSeriesAsync(
+                this.Series.Series, this.SeasonsToDelete, this.EpisodesToDelete, titlesToDelete);
 
             this.SeasonsToDelete.Clear();
             this.EpisodesToDelete.Clear();

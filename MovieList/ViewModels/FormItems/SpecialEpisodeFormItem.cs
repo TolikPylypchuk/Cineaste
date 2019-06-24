@@ -132,6 +132,11 @@ namespace MovieList.ViewModels.FormItems
                 }
             }
 
+            foreach (var title in this.RemovedTitles)
+            {
+                this.SpecialEpisode.Titles.Remove(title.Title);
+            }
+
             if (this.PosterUrl != this.SpecialEpisode.PosterUrl)
             {
                 this.SetPoster();

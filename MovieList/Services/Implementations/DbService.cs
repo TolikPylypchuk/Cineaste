@@ -70,7 +70,7 @@ namespace MovieList.Services.Implementations
                     .ToListAsync());
         }
 
-        public async Task SaveMovieAsync(Movie movie)
+        public async Task SaveMovieAsync(Movie movie, IEnumerable<Title> titlesToDelete)
         {
             using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
@@ -94,13 +94,19 @@ namespace MovieList.Services.Implementations
                 }
             }
 
+            foreach (var title in titlesToDelete)
+            {
+                context.Attach(title).State = EntityState.Deleted;
+            }
+
             await context.SaveChangesAsync();
         }
 
         public async Task SaveSeriesAsync(
             Series series,
             IEnumerable<Season> seasonsToDelete,
-            IEnumerable<SpecialEpisode> episodesToDelete)
+            IEnumerable<SpecialEpisode> episodesToDelete,
+            IEnumerable<Title> titlesToDelete)
         {
             using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
@@ -143,6 +149,17 @@ namespace MovieList.Services.Implementations
                             context.Entry(period).State = EntityState.Modified;
                         }
                     }
+
+                    foreach (var title in season.Titles)
+                    {
+                        if (title.Id == default)
+                        {
+                            context.Add(title);
+                        } else
+                        {
+                            context.Entry(title).State = EntityState.Modified;
+                        }
+                    }
                 }
 
                 foreach (var episode in series.SpecialEpisodes)
@@ -153,6 +170,17 @@ namespace MovieList.Services.Implementations
                     } else
                     {
                         context.Entry(episode).State = EntityState.Modified;
+                    }
+
+                    foreach (var title in episode.Titles)
+                    {
+                        if (title.Id == default)
+                        {
+                            context.Add(title);
+                        } else
+                        {
+                            context.Entry(title).State = EntityState.Modified;
+                        }
                     }
                 }
             }
@@ -180,6 +208,11 @@ namespace MovieList.Services.Implementations
                 {
                     context.Entry(title).State = EntityState.Deleted;
                 }
+            }
+
+            foreach (var title in titlesToDelete)
+            {
+                context.Attach(title).State = EntityState.Deleted;
             }
 
             await context.SaveChangesAsync();
@@ -252,7 +285,7 @@ namespace MovieList.Services.Implementations
         {
             using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
-            context.Attach(movie).State = EntityState.Deleted;
+            context.Entry(movie).State = EntityState.Deleted;
 
             if (movie.Entry != null)
             {
@@ -278,7 +311,7 @@ namespace MovieList.Services.Implementations
         {
             using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
-            context.Attach(series).State = EntityState.Deleted;
+            context.Entry(series).State = EntityState.Deleted;
 
             if (series.Entry != null)
             {

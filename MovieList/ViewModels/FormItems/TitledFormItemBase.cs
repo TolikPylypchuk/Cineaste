@@ -13,6 +13,7 @@ namespace MovieList.ViewModels.FormItems
     {
         private ObservableCollection<TitleFormItem> titles;
         private ObservableCollection<TitleFormItem> originalTitles;
+        private ObservableCollection<TitleFormItem> removedTitles = new ObservableCollection<TitleFormItem>();
 
         public TitledFormItemBase()
         {
@@ -52,6 +53,16 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.originalTitles = value;
                 this.originalTitles.CollectionChanged += this.OnTitlesChanged;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<TitleFormItem> RemovedTitles
+        {
+            get => this.removedTitles;
+            set
+            {
+                this.removedTitles = value;
                 this.OnPropertyChanged();
             }
         }
@@ -127,6 +138,7 @@ namespace MovieList.ViewModels.FormItems
             if (obj is TitleFormItem title)
             {
                 this.Titles.Remove(title);
+                this.RemovedTitles.Add(title);
 
                 foreach (var t in this.Titles.Where(t => t.Priority > title.Priority))
                 {
@@ -143,6 +155,7 @@ namespace MovieList.ViewModels.FormItems
             if (obj is TitleFormItem title)
             {
                 this.OriginalTitles.Remove(title);
+                this.RemovedTitles.Add(title);
 
                 foreach (var t in this.OriginalTitles.Where(t => t.Priority > title.Priority))
                 {

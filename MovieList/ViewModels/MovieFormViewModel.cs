@@ -105,11 +105,13 @@ namespace MovieList.ViewModels
                 return;
             }
 
+            var titlesToDelete = this.Movie.RemovedTitles.Select(t => t.Title).ToList();
+
             this.Movie.WriteChanges();
 
             bool shouldAddToList = this.Movie.Movie.Id == default;
 
-            await this.dbService.SaveMovieAsync(this.Movie.Movie);
+            await this.dbService.SaveMovieAsync(this.Movie.Movie, titlesToDelete);
 
             (shouldAddToList ? this.MovieList.AddItem : this.MovieList.UpdateItem).ExecuteIfCan(this.Movie.Movie);
         }
