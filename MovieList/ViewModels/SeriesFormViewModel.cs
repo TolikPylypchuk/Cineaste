@@ -197,7 +197,12 @@ namespace MovieList.ViewModels
             {
                 Series = this.Series.Series,
                 OrdinalNumber = this.Series.Components.Count + 1,
-                IsReleased = true
+                IsReleased = true,
+                Channel = this.Series.Components
+                    .OrderByDescending(c => c.OrdinalNumber)
+                    .FirstOrDefault()
+                    ?.Channel
+                    ?? String.Empty
             };
 
             newSeason.Periods = new List<Period>

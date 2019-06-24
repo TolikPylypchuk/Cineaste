@@ -16,7 +16,6 @@ namespace MovieList.ViewModels.FormItems
         private string year;
         private bool isWatched;
         private bool isReleased;
-        private string channel;
         private string? posterUrl;
 
         private BitmapImage? poster;
@@ -71,19 +70,6 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.isReleased = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        [Required(
-            ErrorMessageResourceName = nameof(Messages.ChannelRequired),
-            ErrorMessageResourceType = typeof(Messages))]
-        public string Channel
-        {
-            get => this.channel;
-            set
-            {
-                this.channel = value;
                 this.OnPropertyChanged();
             }
         }

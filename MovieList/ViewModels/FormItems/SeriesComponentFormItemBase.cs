@@ -1,11 +1,15 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+
+using MovieList.Properties;
 
 namespace MovieList.ViewModels.FormItems
 {
     public abstract class SeriesComponentFormItemBase : TitledFormItemBase
     {
         private int ordinalNumber;
+        private string channel;
 
         public int OrdinalNumber
         {
@@ -13,6 +17,19 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.ordinalNumber = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        [Required(
+            ErrorMessageResourceName = nameof(Messages.ChannelRequired),
+            ErrorMessageResourceType = typeof(Messages))]
+        public string Channel
+        {
+            get => this.channel;
+            set
+            {
+                this.channel = value;
                 this.OnPropertyChanged();
             }
         }

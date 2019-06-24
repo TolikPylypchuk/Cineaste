@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -9,7 +8,6 @@ using System.Windows.Media.Imaging;
 using HandyControl.Data;
 
 using MovieList.Data.Models;
-using MovieList.Properties;
 
 namespace MovieList.ViewModels.FormItems
 {
@@ -17,7 +15,6 @@ namespace MovieList.ViewModels.FormItems
     {
         private bool isWatched;
         private bool isReleased;
-        private string channel;
 
         private ObservableCollection<PeriodFormItem> periods;
 
@@ -76,19 +73,6 @@ namespace MovieList.ViewModels.FormItems
                 {
                     this.IsWatched = false;
                 }
-            }
-        }
-
-        [Required(
-            ErrorMessageResourceName = nameof(Messages.ChannelRequired),
-            ErrorMessageResourceType = typeof(Messages))]
-        public string Channel
-        {
-            get => this.channel;
-            set
-            {
-                this.channel = value;
-                this.OnPropertyChanged();
             }
         }
 

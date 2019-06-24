@@ -37,6 +37,11 @@ namespace MovieList.ViewModels.FormItems
                 this.startMonth = value;
                 this.OnPropertyChanged();
                 this.OnPropertyChanged(nameof(this.CanBeSingleDayRelease));
+
+                if (this.IsSingleDayRelease)
+                {
+                    this.EndMonth = this.startMonth;
+                }
             }
         }
 
@@ -56,6 +61,11 @@ namespace MovieList.ViewModels.FormItems
                 this.startYear = value;
                 this.OnPropertyChanged();
                 this.OnPropertyChanged(nameof(this.CanBeSingleDayRelease));
+
+                if (this.IsSingleDayRelease)
+                {
+                    this.EndYear = this.startYear;
+                }
             }
         }
 
