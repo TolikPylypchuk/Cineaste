@@ -80,7 +80,10 @@ namespace MovieList.ViewModels
             switch (obj)
             {
                 case SeasonFormItem season:
-                    this.parentFormControl = this.SidePanelControl.ContentContainer.Content as SeriesFormControl;
+                    if (this.SidePanelControl.ContentContainer.Content is SeriesFormControl seriesFormControl1)
+                    {
+                        this.parentFormControl = seriesFormControl1;
+                    }
 
                     var seasonFormControl = new SeasonFormControl();
                     seasonFormControl.DataContext = seasonFormControl.ViewModel =
@@ -91,7 +94,10 @@ namespace MovieList.ViewModels
                     this.SidePanelControl.ContentContainer.Content = seasonFormControl;
                     break;
                 case SpecialEpisodeFormItem episode:
-                    this.parentFormControl = this.SidePanelControl.ContentContainer.Content as SeriesFormControl;
+                    if (this.SidePanelControl.ContentContainer.Content is SeriesFormControl seriesFormControl2)
+                    {
+                        this.parentFormControl = seriesFormControl2;
+                    }
 
                     var specialEpisodeFormControl = new SpecialEpisodeFormControl();
                     specialEpisodeFormControl.DataContext = specialEpisodeFormControl.ViewModel =

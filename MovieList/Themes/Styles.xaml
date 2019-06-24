@@ -46,6 +46,14 @@
         <Setter Property="controls:IconElement.Geometry" Value="{StaticResource UpGeometry}" />
     </Style>
 
+    <Style x:Key="SidePanelNextButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SidePanelActionButton}">
+        <Setter Property="controls:IconElement.Geometry" Value="{StaticResource RightGeometry}" />
+    </Style>
+
+    <Style x:Key="SidePanelPreviousButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SidePanelActionButton}">
+        <Setter Property="controls:IconElement.Geometry" Value="{StaticResource LeftGeometry}" />
+    </Style>
+
     <Style x:Key="SidePanelTitle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
         <Setter Property="FontSize" Value="24" />
         <Setter Property="Margin" Value="5,0,5,5" />

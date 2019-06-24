@@ -48,8 +48,14 @@ namespace MovieList.ViewModels
             this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(_ => this.OnCancel(), _ => this.CanCancelChanges);
             this.Delete = new DelegateCommand(async _ => await this.DeleteAsync(), _ => this.CanDelete());
+
             this.AddSeason = new DelegateCommand(_ => this.OnAddSeason());
             this.AddSpecialEpisode = new DelegateCommand(_ => this.OnAddSpecialEpisode());
+
+            this.SelectNextComponent = new DelegateCommand(
+                this.OnSelectNextComponent, this.CanSelectNextComponent);
+            this.SelectPreviousComponent = new DelegateCommand(
+                this.OnSelectPreviousComponent, this.CanSelectPreviousComponent);
 
             settings.SettingsUpdated += this.OnSettingsUpdated;
         }
@@ -59,6 +65,8 @@ namespace MovieList.ViewModels
         public ICommand Delete { get; }
         public ICommand AddSeason { get; }
         public ICommand AddSpecialEpisode { get; }
+        public ICommand SelectNextComponent { get; }
+        public ICommand SelectPreviousComponent { get; }
 
         public SeriesFormControl SeriesFormControl { get; set; }
 
@@ -279,7 +287,37 @@ namespace MovieList.ViewModels
             this.Series.Components.Add(formItem);
             this.SidePanel.OpenSeriesComponent.ExecuteIfCan(formItem);
         }
-        
+
+        private void OnSelectNextComponent(object obj)
+        {
+            if (obj is SeriesComponentFormItemBase component)
+            {
+                this.SidePanel.OpenSeriesComponent.ExecuteIfCan(this.Series.Components
+                    .Where(c => c.OrdinalNumber > component.OrdinalNumber)
+                    .OrderBy(c => c.OrdinalNumber)
+                    .First());
+            }
+        }
+
+        private bool CanSelectNextComponent(object obj)
+            => obj is SeriesComponentFormItemBase component &&
+                component.OrdinalNumber != this.Series.Components.Count;
+
+        private void OnSelectPreviousComponent(object obj)
+        {
+            if (obj is SeriesComponentFormItemBase component)
+            {
+                this.SidePanel.OpenSeriesComponent.ExecuteIfCan(this.Series.Components
+                    .Where(c => c.OrdinalNumber < component.OrdinalNumber)
+                    .OrderByDescending(c => c.OrdinalNumber)
+                    .First());
+            }
+        }
+
+        private bool CanSelectPreviousComponent(object obj)
+            => obj is SeriesComponentFormItemBase component &&
+                component.OrdinalNumber != 1;
+
         private void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
         {
             this.AllKinds = new ObservableCollection<KindViewModel>(e.Kinds);

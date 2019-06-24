@@ -20,6 +20,15 @@
             <DockPanel Margin="5,5,10,0">
                 <Button Command="{Binding SidePanel.GoUpToSeries}" Style="{StaticResource SidePanelUpButton}" />
                 <Button Command="{Binding SidePanel.Close}" Style="{StaticResource SidePanelCloseButton}" />
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Command="{Binding ParentForm.SelectPreviousComponent}" CommandParameter="{Binding Season}"
+                            Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVisibilityHidden}}"
+                            Style="{StaticResource SidePanelPreviousButton}" />
+                    <Button Command="{Binding ParentForm.SelectNextComponent}" CommandParameter="{Binding Season}"
+                            Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVisibilityHidden}}"
+                            Style="{StaticResource SidePanelNextButton}" />
+                </StackPanel>
             </DockPanel>
 
             <TextBlock Text="{Binding FormTitle}" Style="{StaticResource SidePanelTitle}" />
@@ -50,7 +59,7 @@
                             <Setter Property="Visibility" Value="{Binding
                                         Path=IsEnabled,
                                         RelativeSource={RelativeSource Self},
-                                        Converter={StaticResource BoolToVisibility}}" />
+                                        Converter={StaticResource BoolToVisibilityHidden}}" />
                         </Style>
                     </DockPanel.Resources>
 
