@@ -210,6 +210,12 @@
   <data name="EndYear" xml:space="preserve">
     <value>Рік кінця</value>
   </data>
+  <data name="EpisodeNotReleased" xml:space="preserve">
+    <value>Майбутня</value>
+  </data>
+  <data name="EpisodeWatched" xml:space="preserve">
+    <value>Переглянута</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Помилка</value>
   </data>
@@ -285,6 +291,9 @@
   <data name="Miniseries" xml:space="preserve">
     <value>Мінісеріал</value>
   </data>
+  <data name="Month" xml:space="preserve">
+    <value>Місяць</value>
+  </data>
   <data name="Movie" xml:space="preserve">
     <value>Фільм</value>
   </data>
@@ -302,6 +311,9 @@
   </data>
   <data name="NewSeries" xml:space="preserve">
     <value>Новий серіал</value>
+  </data>
+  <data name="NewSpecialEpisode" xml:space="preserve">
+    <value>Нова спеціальна серія</value>
   </data>
   <data name="NotReleased" xml:space="preserve">
     <value>Майбутній</value>

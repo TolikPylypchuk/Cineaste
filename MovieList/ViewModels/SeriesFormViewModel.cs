@@ -173,17 +173,7 @@ namespace MovieList.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 this.MovieList.DeleteItem.ExecuteIfCan(this.Series.Series);
-
-                await this.dbService.DeleteAsync(this.Series.Series.Titles);
-                await this.dbService.DeleteAsync(this.Series.Series.Seasons.SelectMany(s => s.Titles));
-
-                if (this.Series.Series.Entry != null)
-                {
-                    await this.dbService.DeleteAsync(this.Series.Series.Entry);
-                }
-
                 await this.dbService.DeleteAsync(this.Series.Series);
-
                 this.SidePanel.Close.ExecuteIfCan(null);
             }
         }
@@ -241,7 +231,7 @@ namespace MovieList.ViewModels
 
             var formItem = new SeasonFormItem(newSeason);
             this.Series.Components.Add(formItem);
-            this.SidePanel.OpenSeason.ExecuteIfCan(formItem);
+            this.SidePanel.OpenSeriesComponent.ExecuteIfCan(formItem);
         }
 
         private void OnAddSpecialEpisode()
@@ -249,7 +239,15 @@ namespace MovieList.ViewModels
             var newEpisode = new SpecialEpisode
             {
                 Series = this.Series.Series,
-                OrdinalNumber = this.Series.Components.Count + 1
+                Month = 1,
+                Year = 2000,
+                IsReleased = true,
+                OrdinalNumber = this.Series.Components.Count + 1,
+                Channel = this.Series.Components
+                    .OrderByDescending(c => c.OrdinalNumber)
+                    .FirstOrDefault()
+                    ?.Channel
+                    ?? String.Empty
             };
 
             newEpisode.Titles = new List<Title>
@@ -272,7 +270,7 @@ namespace MovieList.ViewModels
 
             var formItem = new SpecialEpisodeFormItem(newEpisode);
             this.Series.Components.Add(formItem);
-            this.SidePanel.OpenSpecialEpisode.ExecuteIfCan(formItem);
+            this.SidePanel.OpenSeriesComponent.ExecuteIfCan(formItem);
         }
         
         private void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)

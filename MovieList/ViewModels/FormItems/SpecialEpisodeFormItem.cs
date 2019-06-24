@@ -154,7 +154,7 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public override void OpenForm(SidePanelViewModel sidePanel)
-            => sidePanel.OpenSpecialEpisode.ExecuteIfCan(this);
+            => sidePanel.OpenSeriesComponent.ExecuteIfCan(this);
 
         private void CopySpecialEpisodeProperties()
         {

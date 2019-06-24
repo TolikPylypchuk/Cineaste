@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -50,21 +51,35 @@ namespace MovieList.Data.Models
 
         [NotMapped]
         public int StartYear
-            => this.Seasons
-                .SelectMany(season => season.Periods)
-                .OrderBy(period => period.StartYear)
-                .ThenBy(period => period.StartMonth)
-                .First()
-                .StartYear;
+            => Math.Min(
+                this.Seasons
+                    .SelectMany(season => season.Periods)
+                    .OrderBy(period => period.StartYear)
+                    .ThenBy(period => period.StartMonth)
+                    .First()
+                    .StartYear,
+                this.SpecialEpisodes
+                    .OrderBy(episode => episode.Year)
+                    .ThenBy(episode => episode.Month)
+                    .FirstOrDefault()
+                    ?.Year
+                    ?? Int32.MaxValue);
 
         [NotMapped]
         public int EndYear
-            => this.Seasons
-                .SelectMany(season => season.Periods)
-                .OrderByDescending(period => period.EndYear)
-                .ThenByDescending(period => period.EndMonth)
-                .First()
-                .EndYear;
+            => Math.Max(
+                this.Seasons
+                    .SelectMany(season => season.Periods)
+                    .OrderByDescending(period => period.EndYear)
+                    .ThenByDescending(period => period.EndMonth)
+                    .First()
+                    .EndYear,
+                this.SpecialEpisodes
+                    .OrderByDescending(episode => episode.Year)
+                    .ThenByDescending(episode => episode.Month)
+                    .FirstOrDefault()
+                    ?.Year
+                    ?? Int32.MinValue);
 
         public override string ToString()
             => $"Series: {this.Id}";

@@ -24,6 +24,9 @@ namespace MovieList.Services
         Task ToggleWatchedAsync(ListItem item);
         Task ToggleReleasedAsync(MovieListItem item);
 
+        public Task DeleteAsync(Movie movie);
+        public Task DeleteAsync(Series series);
+
         Task DeleteAsync<TEntity>(TEntity entity)
             where TEntity : EntityBase;
 

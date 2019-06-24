@@ -25,8 +25,7 @@ namespace MovieList.ViewModels
             this.OpenMovie = new DelegateCommand(this.OnOpenMovie);
             this.OpenSeries = new DelegateCommand(this.OnOpenSeries);
             this.OpenMovieSeries = new DelegateCommand(this.OnOpenMovieSeries);
-            this.OpenSeason = new DelegateCommand(this.OnOpenSeason);
-            this.OpenSpecialEpisode = new DelegateCommand(this.OnOpenSpecialEpisode);
+            this.OpenSeriesComponent = new DelegateCommand(this.OnOpenSeriesComponent);
             this.Close = new DelegateCommand(_ => this.OnClose());
             this.GoUpToSeries = new DelegateCommand(_ => this.OnGoUpToSeries(), _ => this.CanGoUpToSeries());
         }
@@ -34,8 +33,7 @@ namespace MovieList.ViewModels
         public ICommand OpenMovie { get; }
         public ICommand OpenSeries { get; }
         public ICommand OpenMovieSeries { get; }
-        public ICommand OpenSeason { get; }
-        public ICommand OpenSpecialEpisode { get; }
+        public ICommand OpenSeriesComponent { get; }
         public ICommand Close { get; }
         public ICommand GoUpToSeries { get; }
 
@@ -51,9 +49,9 @@ namespace MovieList.ViewModels
                 control.DataContext = control.ViewModel =
                     this.serviceProvider.GetRequiredService<MovieFormViewModel>();
                 control.ViewModel.MovieFormControl = control;
-
                 control.ViewModel.AllKinds = await this.dbService.LoadAllKindsAsync();
                 control.ViewModel.Movie = new MovieFormItem(movie, control.ViewModel.AllKinds);
+
                 this.SidePanelControl.ContentContainer.Content = control;
             }
         }
@@ -66,9 +64,9 @@ namespace MovieList.ViewModels
                 control.DataContext = control.ViewModel =
                     this.serviceProvider.GetRequiredService<SeriesFormViewModel>();
                 control.ViewModel.SeriesFormControl = control;
-
                 control.ViewModel.AllKinds = await this.dbService.LoadAllKindsAsync();
                 control.ViewModel.Series = new SeriesFormItem(series, control.ViewModel.AllKinds);
+
                 this.SidePanelControl.ContentContainer.Content = control;
             }
         }
@@ -77,24 +75,33 @@ namespace MovieList.ViewModels
         {
         }
 
-        public void OnOpenSeason(object obj)
+        public void OnOpenSeriesComponent(object obj)
         {
-            if (obj is SeasonFormItem season)
+            switch (obj)
             {
-                this.parentFormControl = this.SidePanelControl.ContentContainer.Content as SeriesFormControl;
+                case SeasonFormItem season:
+                    this.parentFormControl = this.SidePanelControl.ContentContainer.Content as SeriesFormControl;
 
-                var control = new SeasonFormControl();
-                control.DataContext = control.ViewModel =
-                    this.serviceProvider.GetRequiredService<SeasonFormViewModel>();
-                control.ViewModel.SeasonFormControl = control;
+                    var seasonFormControl = new SeasonFormControl();
+                    seasonFormControl.DataContext = seasonFormControl.ViewModel =
+                        this.serviceProvider.GetRequiredService<SeasonFormViewModel>();
+                    seasonFormControl.ViewModel.SeasonFormControl = seasonFormControl;
+                    seasonFormControl.ViewModel.Season = season;
 
-                control.ViewModel.Season = season;
-                this.SidePanelControl.ContentContainer.Content = control;
+                    this.SidePanelControl.ContentContainer.Content = seasonFormControl;
+                    break;
+                case SpecialEpisodeFormItem episode:
+                    this.parentFormControl = this.SidePanelControl.ContentContainer.Content as SeriesFormControl;
+
+                    var specialEpisodeFormControl = new SpecialEpisodeFormControl();
+                    specialEpisodeFormControl.DataContext = specialEpisodeFormControl.ViewModel =
+                        this.serviceProvider.GetRequiredService<SpecialEpisodeFormViewModel>();
+                    specialEpisodeFormControl.ViewModel.SpecialEpisodeFormControl = specialEpisodeFormControl;
+                    specialEpisodeFormControl.ViewModel.SpecialEpisode = episode;
+
+                    this.SidePanelControl.ContentContainer.Content = specialEpisodeFormControl;
+                    break;
             }
-        }
-
-        public void OnOpenSpecialEpisode(object obj)
-        {
         }
 
         public void OnClose()

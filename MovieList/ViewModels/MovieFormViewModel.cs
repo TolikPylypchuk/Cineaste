@@ -125,16 +125,7 @@ namespace MovieList.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 this.MovieList.DeleteItem.ExecuteIfCan(this.Movie.Movie);
-
-                await this.dbService.DeleteAsync(this.Movie.Movie.Titles);
-
-                if (this.Movie.Movie.Entry != null)
-                {
-                    await this.dbService.DeleteAsync(this.Movie.Movie.Entry);
-                }
-
                 await this.dbService.DeleteAsync(this.Movie.Movie);
-
                 this.SidePanel.Close.ExecuteIfCan(null);
             }
         }

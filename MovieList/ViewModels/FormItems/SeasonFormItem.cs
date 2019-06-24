@@ -176,7 +176,7 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public override void OpenForm(SidePanelViewModel sidePanel)
-            => sidePanel.OpenSeason.ExecuteIfCan(this);
+            => sidePanel.OpenSeriesComponent.ExecuteIfCan(this);
 
         public override string ToString()
             => $"{String.Join("; ", this.Titles.Select(t => t.Name))}; " +

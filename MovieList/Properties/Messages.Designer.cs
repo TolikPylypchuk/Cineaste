@@ -340,6 +340,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Майбутня.
+        /// </summary>
+        public static string EpisodeNotReleased {
+            get {
+                return ResourceManager.GetString("EpisodeNotReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Переглянута.
+        /// </summary>
+        public static string EpisodeWatched {
+            get {
+                return ResourceManager.GetString("EpisodeWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Помилка.
         /// </summary>
         public static string Error {
@@ -565,6 +583,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Місяць.
+        /// </summary>
+        public static string Month {
+            get {
+                return ResourceManager.GetString("Month", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Фільм.
         /// </summary>
         public static string Movie {
@@ -615,6 +642,15 @@ namespace MovieList.Properties {
         public static string NewSeries {
             get {
                 return ResourceManager.GetString("NewSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Нова спеціальна серія.
+        /// </summary>
+        public static string NewSpecialEpisode {
+            get {
+                return ResourceManager.GetString("NewSpecialEpisode", resourceCulture);
             }
         }
         

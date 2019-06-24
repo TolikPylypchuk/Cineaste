@@ -37,6 +37,10 @@ namespace MovieList.Services.Implementations
 
             var series = await context.Series
                 .Include(context.GetIncludePaths(typeof(Series)))
+                .Include(series => series.Seasons)
+                    .ThenInclude(season => season.Titles)
+                .Include(series => series.SpecialEpisodes)
+                    .ThenInclude(episode => episode.Titles)
                 .ToListAsync();
 
             var movieSeries = await context.MovieSeries
@@ -157,6 +161,11 @@ namespace MovieList.Services.Implementations
             {
                 context.Attach(season).State = EntityState.Deleted;
 
+                foreach (var period in season.Periods)
+                {
+                    context.Entry(period).State = EntityState.Deleted;
+                }
+
                 foreach (var title in season.Titles)
                 {
                     context.Entry(title).State = EntityState.Deleted;
@@ -236,6 +245,83 @@ namespace MovieList.Services.Implementations
 
             item.Movie.IsReleased = !item.Movie.IsReleased;
             context.Attach(item.Movie).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Movie movie)
+        {
+            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+
+            context.Attach(movie).State = EntityState.Deleted;
+
+            if (movie.Entry != null)
+            {
+                context.Entry(movie.Entry).State = EntityState.Deleted;
+
+                movie.Entry.MovieSeries.Entries.Remove(movie.Entry);
+
+                if (movie.Entry.MovieSeries.Entries.Count == 0)
+                {
+                    context.Entry(movie.Entry.MovieSeries).State = EntityState.Deleted;
+                }
+            }
+
+            foreach (var title in movie.Titles)
+            {
+                context.Entry(title).State = EntityState.Deleted;
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Series series)
+        {
+            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+
+            context.Attach(series).State = EntityState.Deleted;
+
+            if (series.Entry != null)
+            {
+                context.Entry(series.Entry).State = EntityState.Deleted;
+
+                series.Entry.MovieSeries.Entries.Remove(series.Entry);
+
+                if (series.Entry.MovieSeries.Entries.Count == 0)
+                {
+                    context.Entry(series.Entry.MovieSeries).State = EntityState.Deleted;
+                }
+            }
+
+            foreach (var title in series.Titles)
+            {
+                context.Entry(title).State = EntityState.Deleted;
+            }
+
+            foreach (var season in series.Seasons)
+            {
+                context.Entry(season).State = EntityState.Deleted;
+
+                foreach (var period in season.Periods)
+                {
+                    context.Entry(period).State = EntityState.Deleted;
+                }
+
+                foreach (var title in season.Titles)
+                {
+                    context.Entry(title).State = EntityState.Deleted;
+                }
+            }
+
+            foreach (var episode in series.SpecialEpisodes)
+            {
+                context.Attach(episode).State = EntityState.Deleted;
+
+                foreach (var title in episode.Titles)
+                {
+                    context.Entry(title).State = EntityState.Deleted;
+                }
+            }
+
             await context.SaveChangesAsync();
         }
 

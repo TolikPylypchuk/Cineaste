@@ -87,7 +87,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type vmf:SeriesComponentFormItemBase}">
                             <Button Content="{Binding Title}" CommandParameter="{Binding}"
-                                    Command="{Binding Path=Data.SidePanel.OpenSeason, Source={StaticResource ViewModel}}"
+                                    Command="{Binding Path=Data.SidePanel.OpenSeriesComponent, Source={StaticResource ViewModel}}"
                                     HorizontalAlignment="Stretch" Margin="2,5" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
