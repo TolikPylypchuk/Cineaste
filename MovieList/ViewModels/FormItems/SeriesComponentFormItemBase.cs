@@ -40,5 +40,6 @@ namespace MovieList.ViewModels.FormItems
             => Enumerable.Range(1, 12);
 
         public abstract void OpenForm(SidePanelViewModel sidePanel);
+        public abstract void WriteOrdinalNumber();
     }
 }

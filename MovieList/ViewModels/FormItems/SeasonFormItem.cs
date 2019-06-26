@@ -183,8 +183,12 @@ namespace MovieList.ViewModels.FormItems
         public override void OpenForm(SidePanelViewModel sidePanel)
             => sidePanel.OpenSeriesComponent.ExecuteIfCan(this);
 
+        public override void WriteOrdinalNumber()
+            => this.Season.OrdinalNumber = this.OrdinalNumber;
+
         public override string ToString()
-            => $"{String.Join("; ", this.Titles.Select(t => t.Name))}; " +
+            => $"{this.OrdinalNumber}; " +
+                $"{String.Join("; ", this.Titles.Select(t => t.Name))}; " +
                 $"{String.Join("; ", this.OriginalTitles.Select(t => t.Name))}" +
                 $"{this.Channel}; {String.Join("; ", this.Periods.Select(p => p.ToString()))}; " +
                 $"{this.IsWatched}; {this.IsReleased}";

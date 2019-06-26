@@ -294,6 +294,12 @@
   <data name="Month" xml:space="preserve">
     <value>Місяць</value>
   </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Перемістити вниз</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Перемістити вгору</value>
+  </data>
   <data name="Movie" xml:space="preserve">
     <value>Фільм</value>
   </data>

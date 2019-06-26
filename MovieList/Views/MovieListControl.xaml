@@ -190,9 +190,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type DataGridCell}">
                                 <Button Name="MoreButton" Style="{StaticResource ButtonCustom}" Padding="0" HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch" BorderThickness="0" Content="⋮" FontSize="18" Background="Transparent"
-                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                    PreviewMouseDown="MoreButton_PreviewMouseDown">
+                                        VerticalAlignment="Stretch" BorderThickness="0" Content="⋮" FontSize="18" Background="Transparent"
+                                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                        PreviewMouseDown="MoreButton_PreviewMouseDown">
                                     <Button.Foreground>
                                         <SolidColorBrush Color="{Binding Color}" />
                                     </Button.Foreground>
@@ -207,9 +207,9 @@
                                                 <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
                                                     <Setter Property="CommandParameter" Value="{Binding Path=Data, Source={StaticResource ListItemProxy}}" />
                                                     <Setter Property="Visibility" Value="{Binding
-                                                            Path=IsEnabled,
-                                                            RelativeSource={RelativeSource Self},
-                                                            Converter={StaticResource BoolToVisibility}}" />
+                                                                Path=IsEnabled,
+                                                                RelativeSource={RelativeSource Self},
+                                                                Converter={StaticResource BoolToVisibility}}" />
                                                 </Style>
                                             </ContextMenu.Resources>
 

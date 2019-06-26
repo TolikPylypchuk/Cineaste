@@ -185,6 +185,7 @@ namespace MovieList.ViewModels.FormItems
             foreach (var component in this.Components)
             {
                 component.RemovedTitles.Clear();
+                component.WriteOrdinalNumber();
             }
 
             foreach (var season in this.Components.OfType<SeasonFormItem>())

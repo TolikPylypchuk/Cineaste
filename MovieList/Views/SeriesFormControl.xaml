@@ -86,9 +86,42 @@
                 <ItemsControl ItemsSource="{Binding Components}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type vmf:SeriesComponentFormItemBase}">
-                            <Button Content="{Binding Title}" CommandParameter="{Binding}"
-                                    Command="{Binding Path=Data.SidePanel.OpenSeriesComponent, Source={StaticResource ViewModel}}"
-                                    HorizontalAlignment="Stretch" Margin="2,5" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <Button Grid.Column="0" Content="{Binding Title}" CommandParameter="{Binding}"
+                                        Command="{Binding Path=Data.SidePanel.OpenSeriesComponent, Source={StaticResource ViewModel}}"
+                                        HorizontalAlignment="Stretch" Margin="2,5" />
+
+                                <Button Grid.Column="1" CommandParameter="{Binding}" Width="30" Height="30"
+                                        HorizontalAlignment="Stretch" Margin="2,5" Content="⋮"
+                                        PreviewMouseDown="MoreButton_PreviewMouseDown">
+
+                                    <Button.Resources>
+                                        <data:BindingProxy x:Key="ComponentProxy" Data="{Binding}" />
+                                    </Button.Resources>
+
+                                    <Button.ContextMenu>
+                                        <ContextMenu DataContext="{Binding Path=Data, Source={StaticResource ViewModel}}">
+                                            <ContextMenu.Resources>
+                                                <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                    <Setter Property="CommandParameter" Value="{Binding Path=Data, Source={StaticResource ComponentProxy}}" />
+                                                    <Setter Property="Visibility" Value="{Binding
+                                                                Path=IsEnabled,
+                                                                RelativeSource={RelativeSource Self},
+                                                                Converter={StaticResource BoolToVisibility}}" />
+                                                </Style>
+                                            </ContextMenu.Resources>
+
+                                            <MenuItem Header="{x:Static resx:Messages.MoveUp}" Command="{Binding MoveComponentUp}" />
+                                            <MenuItem Header="{x:Static resx:Messages.MoveDown}" Command="{Binding MoveComponentDown}" />
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
+                                </Button>
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

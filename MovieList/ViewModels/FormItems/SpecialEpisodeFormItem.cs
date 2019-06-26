@@ -161,6 +161,9 @@ namespace MovieList.ViewModels.FormItems
         public override void OpenForm(SidePanelViewModel sidePanel)
             => sidePanel.OpenSeriesComponent.ExecuteIfCan(this);
 
+        public override void WriteOrdinalNumber()
+            => this.SpecialEpisode.OrdinalNumber = this.OrdinalNumber;
+
         private void CopySpecialEpisodeProperties()
         {
             this.CopyTitles(this.SpecialEpisode.Titles);
