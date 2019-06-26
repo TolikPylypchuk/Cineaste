@@ -35,6 +35,7 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public abstract string Title { get; }
+        public abstract string Years { get; }
 
         public IEnumerable<int> AllMonths
             => Enumerable.Range(1, 12);

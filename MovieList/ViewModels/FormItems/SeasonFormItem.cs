@@ -115,6 +115,17 @@ namespace MovieList.ViewModels.FormItems
         public override string Title
             => this.Season.Title.Name;
 
+        public override string Years
+        {
+            get
+            {
+                var startYear = this.Periods.OrderBy(p => p.StartYear).First().StartYear;
+                var endYear = this.Periods.OrderByDescending(p => p.EndYear).First().EndYear;
+
+                return startYear == endYear ? startYear : $"{startYear}-{endYear}";
+            }
+        }
+
         public Func<string, OperationResult<bool>> VerifyChannel
             => this.Verify(nameof(this.Channel));
 

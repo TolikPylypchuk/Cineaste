@@ -100,6 +100,9 @@ namespace MovieList.ViewModels.FormItems
         public override string Title
             => this.SpecialEpisode.Title.Name;
 
+        public override string Years
+            => this.Year;
+
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
