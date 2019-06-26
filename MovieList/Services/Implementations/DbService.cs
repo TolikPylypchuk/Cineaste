@@ -39,6 +39,8 @@ namespace MovieList.Services.Implementations
                 .Include(context.GetIncludePaths(typeof(Series)))
                 .Include(series => series.Seasons)
                     .ThenInclude(season => season.Titles)
+                .Include(series => series.Seasons)
+                    .ThenInclude(season => season.Periods)
                 .Include(series => series.SpecialEpisodes)
                     .ThenInclude(episode => episode.Titles)
                 .ToListAsync();
