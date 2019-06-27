@@ -6,7 +6,6 @@
     <conv:InverseBoolConverter x:Key="InverseBool" />
     <conv:CanSelectIfWatchedConverter x:Key="CanSelectIfWatched" />
     <conv:CanSelectIfReleasedConverter x:Key="CanSelectIfReleased" />
-    <conv:CanSelectIfMiniseriesConverter x:Key="CanSelectIfMiniseries" />
     <conv:SeriesStatusConverter x:Key="SeriesStatus" />
     <conv:MonthNameConverter x:Key="MonthName" />
     <conv:ValueConverterGroup x:Key="InverseBoolToVisibility">

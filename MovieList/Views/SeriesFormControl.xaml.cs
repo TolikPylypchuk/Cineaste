@@ -22,6 +22,7 @@ namespace MovieList.Views
                 {
                     this.IsWatchedCheckBox.GetBindingExpression(IsEnabledProperty).UpdateTarget();
                     this.IsMiniseriesCheckBox.GetBindingExpression(IsEnabledProperty).UpdateTarget();
+                    this.IsReleasedCheckBox.GetBindingExpression(IsEnabledProperty).UpdateTarget();
                 };
             }
         }

@@ -29,6 +29,8 @@ namespace MovieList.ViewModels
         private readonly IOptions<Configuration> config;
 
         private SeriesFormItem series;
+        private SeasonFormItem? season;
+        private PeriodFormItem? period;
         private ObservableCollection<KindViewModel> allKinds;
         private bool areComponentsChanged;
 
@@ -59,6 +61,8 @@ namespace MovieList.ViewModels
 
             this.MoveComponentUp = new DelegateCommand(this.OnMoveComponentUp, this.CanMoveComponentUp);
             this.MoveComponentDown = new DelegateCommand(this.OnMoveComponentDown, this.CanMoveComponentDown);
+            this.ConvertMiniseries = new DelegateCommand(
+                _ => this.OnConvertMiniseries(), _ => this.Series.CanSelectIfMiniseries);
 
             settings.SettingsUpdated += this.OnSettingsUpdated;
         }
@@ -72,6 +76,7 @@ namespace MovieList.ViewModels
         public ICommand SelectPreviousComponent { get; }
         public ICommand MoveComponentUp { get; }
         public ICommand MoveComponentDown { get; }
+        public ICommand ConvertMiniseries { get; }
 
         public SeriesFormControl SeriesFormControl { get; set; }
 
@@ -85,6 +90,38 @@ namespace MovieList.ViewModels
 
                 this.OnPropertyChanged();
                 this.OnPropertyChanged(nameof(FormTitle));
+            }
+        }
+
+        public SeasonFormItem? Season
+        {
+            get => this.season;
+            set
+            {
+                this.season = value;
+
+                if (this.season != null)
+                {
+                    this.season.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Season));
+                }
+
+                this.OnPropertyChanged();
+            }
+        }
+
+        public PeriodFormItem? Period
+        {
+            get => this.period;
+            set
+            {
+                this.period = value;
+
+                if (this.period != null)
+                {
+                    this.period.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Period));
+                }
+
+                this.OnPropertyChanged();
             }
         }
 
@@ -121,7 +158,7 @@ namespace MovieList.ViewModels
                 !this.Series.OriginalTitles.Any(t => t.HasErrors) &&
                 this.Series.Components.Any() &&
                 !this.Series.Components.Any(c => c.HasErrors) &&
-                !this.Series.Components.Any(c => c.AreChangesPresent);
+                (this.Series.IsMiniseries || !this.Series.Components.Any(c => c.AreChangesPresent));
 
         public bool CanCancelChanges
             => this.Series.AreChangesPresent || this.AreComponentsChanged;
@@ -160,6 +197,13 @@ namespace MovieList.ViewModels
                 .Union(this.Series.Components.SelectMany(c => c.RemovedTitles))
                 .Select(t => t.Title)
                 .ToList();
+
+            if (this.Series.IsMiniseries && this.Season != null && this.Period != null)
+            {
+                this.Season.IsWatched = this.Series.IsWatched;
+                this.Season.WriteChanges();
+                this.Period.WriteChanges();
+            }
 
             this.Series.WriteChanges();
 
@@ -203,54 +247,7 @@ namespace MovieList.ViewModels
 
         private void OnAddSeason()
         {
-            var newSeason = new Season
-            {
-                Series = this.Series.Series,
-                OrdinalNumber = this.Series.Components.Count + 1,
-                IsReleased = true,
-                Channel = this.Series.Components
-                    .OrderByDescending(c => c.OrdinalNumber)
-                    .FirstOrDefault()
-                    ?.Channel
-                    ?? String.Empty
-            };
-
-            newSeason.Periods = new List<Period>
-            {
-                new Period
-                {
-                    Season = newSeason,
-                    StartMonth = 1,
-                    StartYear = 2000,
-                    EndMonth = 1,
-                    EndYear = 2000
-                }
-            };
-
-            var seasonNumber = this.Series.Components.OfType<SeasonFormItem>().Count() + 1;
-
-            newSeason.Titles = new List<Title>
-            {
-                new Title
-                {
-                    Season = newSeason,
-                    Name = this.config.Value.DefaultSeasonTitle
-                        .Replace(Messages.DefaultSeasonNumberPlaceholder, seasonNumber.ToString()),
-                    IsOriginal = false,
-                    Priority = 1
-                },
-                new Title
-                {
-                    Season = newSeason,
-                    Name = this.config.Value.DefaultSeasonOriginalTitle
-                        .Replace(Messages.DefaultSeasonNumberPlaceholder, seasonNumber.ToString()),
-                    IsOriginal = true,
-                    Priority = 1
-                }
-            };
-
-            var formItem = new SeasonFormItem(newSeason);
-            this.Series.Components.Add(formItem);
+            var formItem = this.AddSeasonToSeries();
             this.SidePanel.OpenSeriesComponent.ExecuteIfCan(formItem);
         }
 
@@ -368,6 +365,75 @@ namespace MovieList.ViewModels
         private bool CanMoveComponentDown(object obj)
             => obj is SeriesComponentFormItemBase component &&
                 component.OrdinalNumber != this.Series.Components.Count;
+
+        private void OnConvertMiniseries()
+        {
+            if (this.Series.Components.Count == 0)
+            {
+                this.Season = this.AddSeasonToSeries();
+                this.Period = this.Season.Periods[0];
+            }
+
+            if (!this.Series.IsMiniseries)
+            {
+                this.Season = null;
+                this.Period = null;
+            }
+        }
+
+        private SeasonFormItem AddSeasonToSeries()
+        {
+            var newSeason = new Season
+            {
+                Series = this.Series.Series,
+                OrdinalNumber = this.Series.Components.Count + 1,
+                IsReleased = true,
+                Channel = this.Series.Components
+                    .OrderByDescending(c => c.OrdinalNumber)
+                    .FirstOrDefault()
+                    ?.Channel
+                    ?? String.Empty
+            };
+
+            newSeason.Periods = new List<Period>
+            {
+                new Period
+                {
+                    Season = newSeason,
+                    StartMonth = 1,
+                    StartYear = 2000,
+                    EndMonth = 1,
+                    EndYear = 2000
+                }
+            };
+
+            var seasonNumber = this.Series.Components.OfType<SeasonFormItem>().Count() + 1;
+
+            newSeason.Titles = new List<Title>
+            {
+                new Title
+                {
+                    Season = newSeason,
+                    Name = this.config.Value.DefaultSeasonTitle
+                        .Replace(Messages.DefaultSeasonNumberPlaceholder, seasonNumber.ToString()),
+                    IsOriginal = false,
+                    Priority = 1
+                },
+                new Title
+                {
+                    Season = newSeason,
+                    Name = this.config.Value.DefaultSeasonOriginalTitle
+                        .Replace(Messages.DefaultSeasonNumberPlaceholder, seasonNumber.ToString()),
+                    IsOriginal = true,
+                    Priority = 1
+                }
+            };
+
+            var formItem = new SeasonFormItem(newSeason);
+            this.Series.Components.Add(formItem);
+
+            return formItem;
+        }
 
         private void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
         {

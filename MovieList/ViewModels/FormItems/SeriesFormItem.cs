@@ -132,6 +132,12 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public bool CanSelectIfMiniseries
+            => this.Components.Count == 0 ||
+                (this.Components.Count == 1 &&
+                 this.Components[0] is SeasonFormItem season &&
+                 season.Periods.Count == 1);
+
         public Func<string, OperationResult<bool>> VerifyImdbLink
             => this.Verify(nameof(this.ImdbLink));
 

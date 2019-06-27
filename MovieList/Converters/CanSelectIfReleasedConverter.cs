@@ -27,6 +27,8 @@ namespace MovieList.Converters
                     (year == DateTime.Now.Year && episode.Month >= DateTime.Now.Month),
                 SpecialEpisodeFormItem episode when String.IsNullOrEmpty(episode.Year) => true,
 
+                null => false,
+
                 _ => throw new NotSupportedException($"Cannot convert {value}")
             };
 

@@ -24,7 +24,7 @@ namespace MovieList.ViewModels
 
             this.Save = new DelegateCommand(_ => this.OnSave(), _ => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(_ => this.Season.RevertChanges(), _ => this.CanCancelChanges);
-            this.Delete = new DelegateCommand(_ => this.OnDelete(), _ => this.CanDelete());
+            this.Delete = new DelegateCommand(_ => this.OnDelete());
         }
 
         public ICommand Save { get; }
@@ -118,8 +118,5 @@ namespace MovieList.ViewModels
                 this.SidePanel.GoUpToSeries.ExecuteIfCan(null);
             }
         }
-
-        private bool CanDelete()
-            => this.Season.Season.Id != default;
     }
 }

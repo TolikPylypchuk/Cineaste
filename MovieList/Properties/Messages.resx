@@ -345,6 +345,9 @@
   <data name="OtherSettings" xml:space="preserve">
     <value>Інші налаштування</value>
   </data>
+  <data name="Period" xml:space="preserve">
+    <value>Період</value>
+  </data>
   <data name="Periods" xml:space="preserve">
     <value>Періоди</value>
   </data>
