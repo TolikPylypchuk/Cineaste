@@ -32,7 +32,7 @@ namespace MovieList.ViewModels.FormItems
             this.ShowPreviousPoster = new DelegateCommand(
                 _ => this.PosterIndex--, _ => this.Posters.Count > 0 && this.PosterIndex != 0);
 
-            this.AddPeriod = new DelegateCommand(_ => this.Periods.Add(this.NewPeriod(new Period())));
+            this.AddPeriod = new DelegateCommand(_ => this.OnAddPeriod());
             this.RemovePeriod = new DelegateCommand(this.OnRemovePeriod, _ => this.CanRemovePeriod());
 
             this.IsInitialized = true;
@@ -234,12 +234,14 @@ namespace MovieList.ViewModels.FormItems
                 }));
         }
 
-        private PeriodFormItem NewPeriod(Period period)
-        {
-            var result = new PeriodFormItem(period);
-            result.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Periods));
-            return result;
-        }
+        private void OnAddPeriod()
+            => this.Periods.Add(this.NewPeriod(new Period
+            {
+                StartMonth = 1,
+                StartYear = 2000,
+                EndMonth = 1,
+                EndYear = 2000
+            }));
 
         private void OnRemovePeriod(object obj)
         {
@@ -251,5 +253,12 @@ namespace MovieList.ViewModels.FormItems
 
         private bool CanRemovePeriod()
             => this.Periods.Count != 1;
+
+        private PeriodFormItem NewPeriod(Period period)
+        {
+            var result = new PeriodFormItem(period);
+            result.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Periods));
+            return result;
+        }
     }
 }
