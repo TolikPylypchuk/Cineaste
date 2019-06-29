@@ -61,8 +61,9 @@ namespace MovieList.ViewModels
 
             this.MoveComponentUp = new DelegateCommand(this.OnMoveComponentUp, this.CanMoveComponentUp);
             this.MoveComponentDown = new DelegateCommand(this.OnMoveComponentDown, this.CanMoveComponentDown);
-            this.ConvertMiniseries = new DelegateCommand(
-                _ => this.OnConvertMiniseries(), _ => this.Series.CanSelectIfMiniseries);
+            this.ConvertToMiniseries = new DelegateCommand(
+                _ => this.OnConvertToMiniseries(), _ => this.Series.CanSelectIfMiniseries);
+            this.ConvertFromMiniseries = new DelegateCommand(_ => this.OnConvertFromMiniseries());
 
             settings.SettingsUpdated += this.OnSettingsUpdated;
         }
@@ -76,7 +77,8 @@ namespace MovieList.ViewModels
         public ICommand SelectPreviousComponent { get; }
         public ICommand MoveComponentUp { get; }
         public ICommand MoveComponentDown { get; }
-        public ICommand ConvertMiniseries { get; }
+        public ICommand ConvertToMiniseries { get; }
+        public ICommand ConvertFromMiniseries { get; }
 
         public SeriesFormControl SeriesFormControl { get; set; }
 
@@ -366,19 +368,30 @@ namespace MovieList.ViewModels
             => obj is SeriesComponentFormItemBase component &&
                 component.OrdinalNumber != this.Series.Components.Count;
 
-        private void OnConvertMiniseries()
+        private void OnConvertToMiniseries()
         {
             if (this.Series.Components.Count == 0)
             {
-                this.Season = this.AddSeasonToSeries();
-                this.Period = this.Season.Periods[0];
+                this.AddSeasonToSeries();
             }
 
-            if (!this.Series.IsMiniseries)
+            this.Season = this.Series.Components[0] as SeasonFormItem;
+            this.Period = this.Season?.Periods[0];
+
+            if (this.Season != null)
             {
-                this.Season = null;
-                this.Period = null;
+                this.Season.Titles[0].Name = this.config.Value.DefaultSeasonTitle.Replace(
+                        Messages.DefaultSeasonNumberPlaceholder, "1");
+
+                this.Season.OriginalTitles[0].Name = this.config.Value.DefaultSeasonOriginalTitle.Replace(
+                        Messages.DefaultSeasonNumberPlaceholder, "1");
             }
+        }
+
+        private void OnConvertFromMiniseries()
+        {
+            this.Season = null;
+            this.Period = null;
         }
 
         private SeasonFormItem AddSeasonToSeries()

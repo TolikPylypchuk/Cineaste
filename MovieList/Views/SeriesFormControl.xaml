@@ -53,10 +53,10 @@
                               IsChecked="{Binding Path=IsMiniseries}" IsEnabled="{Binding CanSelectIfMiniseries}">
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="Checked">
-                                <b:InvokeCommandAction Command="{Binding Path=Data.ConvertMiniseries, Source={StaticResource ViewModel}}" />
+                                <b:InvokeCommandAction Command="{Binding Path=Data.ConvertToMiniseries, Source={StaticResource ViewModel}}" />
                             </b:EventTrigger>
                             <b:EventTrigger EventName="Unchecked">
-                                <b:InvokeCommandAction Command="{Binding Path=Data.ConvertMiniseries, Source={StaticResource ViewModel}}" />
+                                <b:InvokeCommandAction Command="{Binding Path=Data.ConvertFromMiniseries, Source={StaticResource ViewModel}}" />
                             </b:EventTrigger>
                         </b:Interaction.Triggers>
                     </CheckBox>
