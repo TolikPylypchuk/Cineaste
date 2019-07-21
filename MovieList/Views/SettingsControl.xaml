@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:controls="clr-namespace:MovieList.Controls"
              xmlns:data="clr-namespace:MovieList.Data"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
@@ -15,13 +16,13 @@
         </Style>
         
         <Style x:Key="ColorButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="controls:IconElement.Geometry">
+            <Setter Property="hc:IconElement.Geometry">
                 <Setter.Value>
                     <EllipseGeometry Center="0,0" RadiusX="1" RadiusY="1" />
                 </Setter.Value>
             </Setter>
-            <Setter Property="controls:IconElement.Width" Value="10" />
-            <Setter Property="controls:IconElement.Height" Value="10" />
+            <Setter Property="hc:IconElement.Width" Value="10" />
+            <Setter Property="hc:IconElement.Height" Value="10" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
         </Style>
 
@@ -88,8 +89,8 @@
                                                 <controls:TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" VerifyFunc="{Binding VerifyName}"
                                                                   Margin="0,5" Grid.Column="0" HorizontalAlignment="Stretch" />
 
-                                                <Button Grid.Column="1" Margin="5,5,0,0" controls:IconElement.Geometry="{StaticResource DeleteGeometry}"
-                                                        controls:IconElement.Width="7.5" controls:IconElement.Height="7.5"
+                                                <Button Grid.Column="1" Margin="5,5,0,0" hc:IconElement.Geometry="{StaticResource DeleteGeometry}"
+                                                        hc:IconElement.Width="7.5" hc:IconElement.Height="7.5"
                                                         Command="{Binding Path=Data.RemoveKind, Source={StaticResource ViewModel}}"
                                                         CommandParameter="{Binding}" VerticalAlignment="Top" />
                                             </Grid>
@@ -119,8 +120,8 @@
                             </ItemsControl>
                         </ScrollViewer>
 
-                        <Button Width="50" Margin="0,5,0,0" controls:IconElement.Geometry="{StaticResource AddGeometry}"
-                                controls:IconElement.Width="10" controls:IconElement.Height="10"
+                        <Button Width="50" Margin="0,5,0,0" hc:IconElement.Geometry="{StaticResource AddGeometry}"
+                                hc:IconElement.Width="10" hc:IconElement.Height="10"
                                 Command="{Binding AddKind}" Style="{StaticResource ButtonPrimary}" />
                     </StackPanel>
                 </Expander>
@@ -128,11 +129,11 @@
                 <Expander Header="{x:Static resx:Messages.OtherSettings}">
                     <StackPanel>
                         <controls:TextBox Text="{Binding Path=DefaultSeasonTitle, UpdateSourceTrigger=PropertyChanged}"
-                                          controls:InfoElement.Title="{x:Static resx:Messages.DefaultSeasonTitle}" Margin="0,0,2,5"
+                                          hc:InfoElement.Title="{x:Static resx:Messages.DefaultSeasonTitle}" Margin="0,0,2,5"
                                           VerifyFunc="{Binding VerifyDefaultSeasonTitle}" />
 
                         <controls:TextBox Text="{Binding Path=DefaultSeasonOriginalTitle, UpdateSourceTrigger=PropertyChanged}"
-                                          controls:InfoElement.Title="{x:Static resx:Messages.DefaultSeasonOriginalTitle}" Margin="0,0,2,5"
+                                          hc:InfoElement.Title="{x:Static resx:Messages.DefaultSeasonOriginalTitle}" Margin="0,0,2,5"
                                           VerifyFunc="{Binding VerifyDefaultSeasonOriginalTitle}" />
                     </StackPanel>
                 </Expander>
@@ -140,7 +141,7 @@
                 <Expander Header="{x:Static resx:Messages.AdvancedSettings}">
                     <StackPanel>
                         <controls:TextBox Text="{Binding Path=DatabasePath, UpdateSourceTrigger=PropertyChanged}"
-                                          controls:InfoElement.Title="{x:Static resx:Messages.DatabasePath}"
+                                          hc:InfoElement.Title="{x:Static resx:Messages.DatabasePath}"
                                           VerifyFunc="{Binding VerifyDatabasePath}" />
 
                         <Button Margin="0,5,0,0" Content="{x:Static resx:Messages.ViewLog}" Command="{Binding ViewLog}" />

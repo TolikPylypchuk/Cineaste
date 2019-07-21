@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:data="clr-namespace:MovieList.Data"
              xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels"
@@ -239,8 +239,8 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <controls:WaveProgressBar x:Name="LoadingProgressBar" Value="50" ShowText="False" Width="200" Height="200"
-                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <hc:WaveProgressBar x:Name="LoadingProgressBar" Value="50" ShowText="False" Width="200" Height="200"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" />
         </Grid>
     </DockPanel>
 </UserControl>

@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:controls="clr-namespace:MovieList.Controls"
              xmlns:local="clr-namespace:MovieList.Views"
              xmlns:data="clr-namespace:MovieList.Data"
              xmlns:resx="clr-namespace:MovieList.Properties"
-             xmlns:m="clr-namespace:MovieList.Data.Models;assembly=MovieList.Data"
              xmlns:vm="clr-namespace:MovieList.ViewModels"
              xmlns:vmf="clr-namespace:MovieList.ViewModels.FormItems"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
@@ -38,7 +38,7 @@
                 <Image Source="{Binding Poster}" Margin="5,0" />
 
                 <TextBlock Margin="5" HorizontalAlignment="Center">
-                    <Hyperlink NavigateUri="{Binding ImdbLink}" local:Properties.IsExternal="True">
+                    <Hyperlink NavigateUri="{Binding ImdbLink}" controls:Properties.IsExternal="True">
                         <Hyperlink.Inlines>
                             <Run Text="{Binding ImdbLink}" />
                         </Hyperlink.Inlines>
@@ -77,27 +77,27 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <controls:ComboBox Grid.Column="0" ItemsSource="{Binding Path=AllStatuses}" Margin="0,0,2.5,0"
-                                       SelectedItem="{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
-                                       controls:InfoElement.Title="{x:Static resx:Messages.SeriesStatus}"
-                                       VerticalAlignment="Top">
-                        <controls:ComboBox.ItemTemplate>
-                            <DataTemplate DataType="{x:Type m:SeriesStatus}">
+                    <hc:ComboBox Grid.Column="0" ItemsSource="{Binding Path=AllStatuses}" Margin="0,0,2.5,0"
+                                 SelectedItem="{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
+                                 hc:InfoElement.Title="{x:Static resx:Messages.SeriesStatus}"
+                                 VerticalAlignment="Top">
+                        <hc:ComboBox.ItemTemplate>
+                            <DataTemplate>
                                 <TextBlock Text="{Binding Converter={StaticResource SeriesStatus}}" />
                             </DataTemplate>
-                        </controls:ComboBox.ItemTemplate>
-                    </controls:ComboBox>
+                        </hc:ComboBox.ItemTemplate>
+                    </hc:ComboBox>
                     
-                    <controls:ComboBox Grid.Column="1" ItemsSource="{Binding Path=AllKinds}" Margin="2.5,0,0,0"
-                                       SelectedItem="{Binding Path=Kind, UpdateSourceTrigger=PropertyChanged}"
-                                       controls:InfoElement.Title="{x:Static resx:Messages.Kind}"
-                                       VerticalAlignment="Top">
-                        <controls:ComboBox.ItemTemplate>
+                    <hc:ComboBox Grid.Column="1" ItemsSource="{Binding Path=AllKinds}" Margin="2.5,0,0,0"
+                                 SelectedItem="{Binding Path=Kind, UpdateSourceTrigger=PropertyChanged}"
+                                 hc:InfoElement.Title="{x:Static resx:Messages.Kind}"
+                                 VerticalAlignment="Top">
+                        <hc:ComboBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type vm:KindViewModel}">
                                 <TextBlock Text="{Binding Name}" />
                             </DataTemplate>
-                        </controls:ComboBox.ItemTemplate>
-                    </controls:ComboBox>
+                        </hc:ComboBox.ItemTemplate>
+                    </hc:ComboBox>
                 </Grid>
 
                 <TextBlock Text="{x:Static resx:Messages.Seasons}" Style="{StaticResource InputTitleTextBlock}"
@@ -174,19 +174,19 @@
                 <StackPanel Visibility="{Binding Path=IsMiniseries, Converter={StaticResource BoolToVisibility}}">
                     <controls:TextBox DataContext="{Binding Path=Data.Season, Source={StaticResource ViewModel}}"
                                       Text="{Binding Path=Channel, UpdateSourceTrigger=PropertyChanged}"
-                                      controls:InfoElement.Title="{x:Static resx:Messages.Channel}" Style="{StaticResource InputTextBoxStyle}"
+                                      hc:InfoElement.Title="{x:Static resx:Messages.Channel}" Style="{StaticResource InputTextBoxStyle}"
                                       VerifyFunc="{Binding VerifyChannel}" />
 
                     <TextBlock Text="{x:Static resx:Messages.Period}" Style="{StaticResource InputTitleTextBlock}" />
 
                     <StackPanel DataContext="{Binding Path=Data.Period, Source={StaticResource ViewModel}}">
                         <StackPanel.Resources>
-                            <Style TargetType="{x:Type controls:ComboBox}" BasedOn="{StaticResource {x:Type controls:ComboBox}}">
+                            <Style TargetType="{x:Type hc:ComboBox}" BasedOn="{StaticResource {x:Type hc:ComboBox}}">
                                 <Setter Property="Grid.Column" Value="0" />
                                 <Setter Property="ItemsSource" Value="{Binding Path=Data.AllMonths, Source={StaticResource Season}}" />
                                 <Setter Property="Margin" Value="0,0,2.5,0" />
-                                <Setter Property="controls:InfoElement.TitleAlignment" Value="Left" />
-                                <Setter Property="controls:InfoElement.TitleWidth" Value="85" />
+                                <Setter Property="hc:InfoElement.TitleAlignment" Value="Left" />
+                                <Setter Property="hc:InfoElement.TitleWidth" Value="85" />
                                 <Setter Property="MaxDropDownHeight" Value="500" />
                                 <Setter Property="VerticalAlignment" Value="Top" />
                             </Style>
@@ -198,14 +198,14 @@
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
 
-                            <controls:ComboBox SelectedItem="{Binding Path=StartMonth, UpdateSourceTrigger=PropertyChanged}"
-                                               controls:InfoElement.Title="{Binding StartCaption, UpdateSourceTrigger=PropertyChanged}">
-                                <controls:ComboBox.ItemTemplate>
+                            <hc:ComboBox SelectedItem="{Binding Path=StartMonth, UpdateSourceTrigger=PropertyChanged}"
+                                         hc:InfoElement.Title="{Binding StartCaption, UpdateSourceTrigger=PropertyChanged}">
+                                <hc:ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource MonthName}}" />
                                     </DataTemplate>
-                                </controls:ComboBox.ItemTemplate>
-                            </controls:ComboBox>
+                                </hc:ComboBox.ItemTemplate>
+                            </hc:ComboBox>
 
                             <controls:TextBox Grid.Column="1" Text="{Binding Path=StartYear, UpdateSourceTrigger=PropertyChanged}" Margin="2.5,0,0,0"
                                               Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyStartYear}" />
@@ -218,14 +218,14 @@
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
 
-                            <controls:ComboBox SelectedItem="{Binding Path=EndMonth, UpdateSourceTrigger=PropertyChanged}"
-                                               controls:InfoElement.Title="{x:Static resx:Messages.End}">
-                                <controls:ComboBox.ItemTemplate>
+                            <hc:ComboBox SelectedItem="{Binding Path=EndMonth, UpdateSourceTrigger=PropertyChanged}"
+                                         hc:InfoElement.Title="{x:Static resx:Messages.End}">
+                                <hc:ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource MonthName}}" />
                                     </DataTemplate>
-                                </controls:ComboBox.ItemTemplate>
-                            </controls:ComboBox>
+                                </hc:ComboBox.ItemTemplate>
+                            </hc:ComboBox>
 
                             <controls:TextBox Grid.Column="1" Text="{Binding Path=EndYear, UpdateSourceTrigger=PropertyChanged}" Margin="2.5,0,0,0"
                                               Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyEndYear}" />
@@ -238,9 +238,9 @@
                             </Grid.ColumnDefinitions>
 
                             <controls:TextBox Grid.Column="0" Text="{Binding Path=NumberOfEpisodes, UpdateSourceTrigger=PropertyChanged}"
-                                              controls:InfoElement.Title="{x:Static resx:Messages.NumberOfEpisodes}" Margin="0,0,2.5,0"
-                                              Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyNumberOfEpisodes}"
-                                              controls:InfoElement.TitleAlignment="Left" controls:InfoElement.TitleWidth="85" />
+                                              Margin="0,0,2.5,0" hc:InfoElement.Title="{x:Static resx:Messages.NumberOfEpisodes}"
+                                              hc:InfoElement.TitleAlignment="Left" hc:InfoElement.TitleWidth="85"
+                                              Style="{StaticResource InputTextBoxStyle}" VerifyFunc="{Binding VerifyNumberOfEpisodes}" />
 
                             <CheckBox Grid.Column="1" Content="{x:Static resx:Messages.SingleDayRelease}" Margin="2.5,0,0,0"
                                       IsChecked="{Binding IsSingleDayRelease}" HorizontalAlignment="Left"
@@ -250,12 +250,12 @@
                 </StackPanel>
 
                 <controls:TextBox Text="{Binding Path=ImdbLink, UpdateSourceTrigger=PropertyChanged}"
-                                  controls:InfoElement.Title="{x:Static resx:Messages.Imdb}"
+                                  hc:InfoElement.Title="{x:Static resx:Messages.Imdb}"
                                   Style="{StaticResource UrlInputTextBoxStyle}"
                                   VerifyFunc="{Binding VerifyImdbLink}" />
 
                 <controls:TextBox Text="{Binding Path=PosterUrl, UpdateSourceTrigger=PropertyChanged}"
-                                  controls:InfoElement.Title="{x:Static resx:Messages.PosterUrl}"
+                                  hc:InfoElement.Title="{x:Static resx:Messages.PosterUrl}"
                                   Style="{StaticResource UrlInputTextBoxStyle}"
                                   VerifyFunc="{Binding VerifyPosterUrl}" />
 

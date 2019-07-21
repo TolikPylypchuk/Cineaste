@@ -1,0 +1,31 @@
+using System;
+using System.Windows;
+
+using HandyControl.Data;
+
+namespace MovieList.Controls
+{
+    public class TextBox : HandyControl.Controls.TextBox
+    {
+        public static DependencyProperty VerifyFuncProperty = DependencyProperty.Register(
+            nameof(VerifyFunc),
+            typeof(Func<string, OperationResult<bool>>),
+            typeof(TextBox),
+            new PropertyMetadata { PropertyChangedCallback = VerifyFuncChanged });
+
+        public new Func<string, OperationResult<bool>> VerifyFunc
+        {
+            get => (Func<string, OperationResult<bool>>)this.GetValue(VerifyFuncProperty);
+            set => this.SetValue(VerifyFuncProperty, value);
+        }
+
+        private static void VerifyFuncChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is HandyControl.Controls.TextBox textBox &&
+                e.NewValue is Func<string, OperationResult<bool>> func)
+            {
+                textBox.VerifyFunc = func;
+            }
+        }
+    }
+}

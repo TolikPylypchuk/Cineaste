@@ -1,11 +1,10 @@
 using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
-namespace MovieList.Views
+namespace MovieList.Controls
 {
     public static class Properties
     {
