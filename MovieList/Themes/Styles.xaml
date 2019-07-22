@@ -5,6 +5,24 @@
     <Style TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource {x:Type hc:TextBox}}">
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
         <Setter Property="controls:Properties.TripleClickSelectAll" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="IsError" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ThicknessAnimation Storyboard.TargetProperty="Margin" By="0,0,0,15" Duration="0:0:0.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ThicknessAnimation Storyboard.TargetProperty="Margin" Duration="0:0:0.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="InputTextBoxStyle" TargetType="{x:Type controls:TextBox}" BasedOn="{StaticResource {x:Type controls:TextBox}}">
