@@ -448,9 +448,9 @@ namespace MovieList.ViewModels
             return formItem;
         }
 
-        private void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
+        private void OnSettingsUpdated(object? sender, SettingsUpdatedEventArgs? e)
         {
-            this.AllKinds = new ObservableCollection<KindViewModel>(e.Kinds);
+            this.AllKinds = new ObservableCollection<KindViewModel>(e?.Kinds);
             this.Series.Kind = this.AllKinds.First(k => k.Kind.Id == this.Series.Kind.Kind.Id);
         }
     }

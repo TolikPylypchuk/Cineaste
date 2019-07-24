@@ -78,7 +78,7 @@ namespace MovieList.ViewModels.ListItems
             }
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is ListItem item && this.Equals(item);
 
         public bool Equals(ListItem other)

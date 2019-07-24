@@ -227,7 +227,7 @@ namespace MovieList.ViewModels.FormItems
                 {
                     var bitmap = new BitmapImage();
                     bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(url, UriKind.Absolute);
+                    bitmap.UriSource = new Uri(url!, UriKind.Absolute);
                     bitmap.EndInit();
 
                     return bitmap;

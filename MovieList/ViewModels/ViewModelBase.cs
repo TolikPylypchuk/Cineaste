@@ -21,7 +21,7 @@ namespace MovieList.ViewModels
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        public IEnumerable GetErrors(string? propertyName)
+        public IEnumerable? GetErrors(string? propertyName)
             =>  this.ValidationErros.GetValueOrDefault(propertyName ?? String.Empty);
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -76,9 +76,6 @@ namespace MovieList.ViewModels
             };
 
         private object? GetValue(string propertyName)
-        {
-            var propInfo = this.GetType().GetProperty(propertyName);
-            return propInfo.GetValue(this);
-        }
+            => this.GetType().GetProperty(propertyName)?.GetValue(this);
     }
 }

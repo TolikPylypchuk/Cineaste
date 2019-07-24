@@ -147,9 +147,9 @@ namespace MovieList.ViewModels
             }
         }
 
-        private void OnListItemUpdated(object sender, ListItemUpdatedEventArgs e)
+        private void OnListItemUpdated(object? sender, ListItemUpdatedEventArgs? e)
         {
-            if (e.Item is MovieListItem item && item.Movie.Id == this.Movie.Movie.Id)
+            if (e?.Item is MovieListItem item && item.Movie.Id == this.Movie.Movie.Id)
             {
                 this.Movie.OnListItemUpdated();
             }
@@ -172,9 +172,9 @@ namespace MovieList.ViewModels
             }
         }
 
-        private void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
+        private void OnSettingsUpdated(object? sender, SettingsUpdatedEventArgs? e)
         {
-            this.AllKinds = new ObservableCollection<KindViewModel>(e.Kinds);
+            this.AllKinds = new ObservableCollection<KindViewModel>(e?.Kinds);
             this.Movie.Kind = this.AllKinds.First(k => k.Kind.Id == this.Movie.Kind.Kind.Id);
         }
     }
