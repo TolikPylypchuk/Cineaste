@@ -21,7 +21,7 @@
 
         <Grid>
             <DataGrid x:Name="List" ItemsSource="{Binding Items}" HeadersVisibility="All" AutoGenerateColumns="False"
-                  FocusVisualStyle="{x:Null}" EnableRowVirtualization="False" HorizontalAlignment="Stretch">
+                      FocusVisualStyle="{x:Null}" HorizontalAlignment="Stretch">
                 <DataGrid.Resources>
                     <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                         <Setter Property="FontSize" Value="16" />

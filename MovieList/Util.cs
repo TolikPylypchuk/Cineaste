@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 using HandyControl.Controls;
 using HandyControl.Tools;
+
+using MovieList.Properties;
 
 namespace MovieList
 {
@@ -62,6 +65,22 @@ namespace MovieList
             picker.Canceled += (sender, e) => window.Close();
 
             window.Show(parent, false);
+
+            var buttons = picker.FindVisualChildren<Button>()
+                .Where(b => b.Content != null)
+                .ToList();
+
+            var confirm = buttons.FirstOrDefault(b => b.Content.Equals("Confirm"));
+            if (confirm != null)
+            {
+                confirm.Content = Messages.Save;
+            }
+
+            var cancel = buttons.FirstOrDefault(b => b.Content.Equals("Cancel"));
+            if (cancel != null)
+            {
+                cancel.Content = Messages.Cancel;
+            }
         }
 
         public static IEnumerable<T> FindVisualChildren<T>(this DependencyObject? depObj) where T : DependencyObject

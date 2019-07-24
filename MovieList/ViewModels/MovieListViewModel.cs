@@ -23,7 +23,7 @@ namespace MovieList.ViewModels
         private readonly IDbService dbService;
         private readonly IOptions<Configuration> config;
 
-        private ObservableCollection<ListItem> items = new ObservableCollection<ListItem>();
+        private ObservableCollection<ListItem> items;
 
         public MovieListViewModel(
             App app,
@@ -78,24 +78,8 @@ namespace MovieList.ViewModels
 
         public async Task LoadItemsAsync()
         {
-            var items = await this.dbService.LoadListAsync();
-
-            const int count = 20;
-
-            for (int i = 0; i < items.Count; i += count)
-            {
-                this.app.Dispatcher.Invoke(() =>
-                {
-                    foreach (var item in items.GetRange(i, Math.Min(count, items.Count - i)))
-                    {
-                        this.Items.Add(item);
-                    }
-
-                    this.MovieListControl.LoadingProgressBar.Visibility = Visibility.Collapsed;
-                });
-
-                await Task.Delay(100);
-            }
+            this.Items = new ObservableCollection<ListItem>(await this.dbService.LoadListAsync());
+            app.Dispatcher.Invoke(() => this.MovieListControl.LoadingProgressBar.Visibility = Visibility.Collapsed);
         }
 
         public bool MoveSelectedItem(Key key)
