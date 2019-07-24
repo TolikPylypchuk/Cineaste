@@ -46,7 +46,10 @@ namespace MovieList.Services.Implementations
                 .ToListAsync();
 
             var movieSeries = await context.MovieSeries
-                .Include(context.GetIncludePaths(typeof(MovieSeries)))
+                .Include(ms => ms.Entries)
+                    .ThenInclude(e => e.Movie)
+                .Include(ms => ms.Entries)
+                    .ThenInclude(e => e.Series)
                 .ToListAsync();
 
             return movies
