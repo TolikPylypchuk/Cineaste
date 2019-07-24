@@ -10,7 +10,7 @@
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>
         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonPrimary}">
-            <Setter Property="Margin" Value="0,10,10,10" />
+            <Setter Property="Margin" Value="10" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Height" Value="75" />
