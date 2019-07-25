@@ -11,6 +11,7 @@ using HandyControl.Controls;
 
 using Microsoft.Extensions.Options;
 
+using MovieList.Commands;
 using MovieList.Config;
 using MovieList.Data.Models;
 using MovieList.Events;
@@ -47,23 +48,26 @@ namespace MovieList.ViewModels
             this.MovieList = movieList;
             this.SidePanel = sidePanel;
 
-            this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
-            this.Cancel = new DelegateCommand(_ => this.OnCancel(), _ => this.CanCancelChanges);
-            this.Delete = new DelegateCommand(async _ => await this.DeleteAsync(), _ => this.CanDelete());
+            this.Save = new DelegateCommand(async () => await this.SaveAsync(), () => this.CanSaveChanges);
+            this.Cancel = new DelegateCommand(this.OnCancel, () => this.CanCancelChanges);
+            this.Delete = new DelegateCommand(async () => await this.DeleteAsync(), this.CanDelete);
 
-            this.AddSeason = new DelegateCommand(_ => this.OnAddSeason());
-            this.AddSpecialEpisode = new DelegateCommand(_ => this.OnAddSpecialEpisode());
+            this.AddSeason = new DelegateCommand(this.OnAddSeason);
+            this.AddSpecialEpisode = new DelegateCommand(this.OnAddSpecialEpisode);
 
-            this.SelectNextComponent = new DelegateCommand(
+            this.SelectNextComponent = new DelegateCommand<SeriesComponentFormItemBase>(
                 this.OnSelectNextComponent, this.CanSelectNextComponent);
-            this.SelectPreviousComponent = new DelegateCommand(
+            this.SelectPreviousComponent = new DelegateCommand<SeriesComponentFormItemBase>(
                 this.OnSelectPreviousComponent, this.CanSelectPreviousComponent);
 
-            this.MoveComponentUp = new DelegateCommand(this.OnMoveComponentUp, this.CanMoveComponentUp);
-            this.MoveComponentDown = new DelegateCommand(this.OnMoveComponentDown, this.CanMoveComponentDown);
+            this.MoveComponentUp = new DelegateCommand<SeriesComponentFormItemBase>(
+                this.OnMoveComponentUp, this.CanMoveComponentUp);
+            this.MoveComponentDown = new DelegateCommand<SeriesComponentFormItemBase>(
+                this.OnMoveComponentDown, this.CanMoveComponentDown);
+
             this.ConvertToMiniseries = new DelegateCommand(
-                _ => this.OnConvertToMiniseries(), _ => this.Series.CanSelectIfMiniseries);
-            this.ConvertFromMiniseries = new DelegateCommand(_ => this.OnConvertFromMiniseries());
+                this.OnConvertToMiniseries, () => this.Series.CanSelectIfMiniseries);
+            this.ConvertFromMiniseries = new DelegateCommand(this.OnConvertFromMiniseries);
 
             settings.SettingsUpdated += this.OnSettingsUpdated;
         }
@@ -292,81 +296,61 @@ namespace MovieList.ViewModels
             this.SidePanel.OpenSeriesComponent.ExecuteIfCan(formItem);
         }
 
-        private void OnSelectNextComponent(object obj)
+        private void OnSelectNextComponent(SeriesComponentFormItemBase component)
+            => this.SidePanel.OpenSeriesComponent.ExecuteIfCan(this.Series.Components
+                .Where(c => c.OrdinalNumber > component.OrdinalNumber)
+                .OrderBy(c => c.OrdinalNumber)
+                .First());
+
+        private bool CanSelectNextComponent(SeriesComponentFormItemBase component)
+            => component.OrdinalNumber != this.Series.Components.Count;
+
+        private void OnSelectPreviousComponent(SeriesComponentFormItemBase component)
+            => this.SidePanel.OpenSeriesComponent.ExecuteIfCan(this.Series.Components
+                .Where(c => c.OrdinalNumber < component.OrdinalNumber)
+                .OrderByDescending(c => c.OrdinalNumber)
+                .First());
+
+        private bool CanSelectPreviousComponent(SeriesComponentFormItemBase component)
+            => component.OrdinalNumber != 1;
+
+        private void OnMoveComponentUp(SeriesComponentFormItemBase component)
         {
-            if (obj is SeriesComponentFormItemBase component)
-            {
-                this.SidePanel.OpenSeriesComponent.ExecuteIfCan(this.Series.Components
-                    .Where(c => c.OrdinalNumber > component.OrdinalNumber)
-                    .OrderBy(c => c.OrdinalNumber)
-                    .First());
-            }
+            this.Series.Components
+                .Where(c => c.OrdinalNumber < component.OrdinalNumber)
+                .OrderByDescending(c => c.OrdinalNumber)
+                .First()
+                .OrdinalNumber++;
+            component.OrdinalNumber--;
+
+            var index = this.Series.Components.IndexOf(component);
+            this.Series.Components.Remove(component);
+            this.Series.Components.Insert(index - 1, component);
+
+            this.OnPropertyChanged(nameof(this.Series));
         }
 
-        private bool CanSelectNextComponent(object obj)
-            => obj is SeriesComponentFormItemBase component &&
-                component.OrdinalNumber != this.Series.Components.Count;
+        private bool CanMoveComponentUp(SeriesComponentFormItemBase component)
+            => component.OrdinalNumber != 1;
 
-        private void OnSelectPreviousComponent(object obj)
+        private void OnMoveComponentDown(SeriesComponentFormItemBase component)
         {
-            if (obj is SeriesComponentFormItemBase component)
-            {
-                this.SidePanel.OpenSeriesComponent.ExecuteIfCan(this.Series.Components
-                    .Where(c => c.OrdinalNumber < component.OrdinalNumber)
-                    .OrderByDescending(c => c.OrdinalNumber)
-                    .First());
-            }
+            this.Series.Components
+                .Where(c => c.OrdinalNumber > component.OrdinalNumber)
+                .OrderBy(c => c.OrdinalNumber)
+                .First()
+                .OrdinalNumber--;
+            component.OrdinalNumber++;
+
+            var index = this.Series.Components.IndexOf(component);
+            this.Series.Components.Remove(component);
+            this.Series.Components.Insert(index + 1, component);
+
+            this.OnPropertyChanged(nameof(this.Series));
         }
 
-        private bool CanSelectPreviousComponent(object obj)
-            => obj is SeriesComponentFormItemBase component &&
-                component.OrdinalNumber != 1;
-
-        private void OnMoveComponentUp(object obj)
-        {
-            if (obj is SeriesComponentFormItemBase component)
-            {
-                this.Series.Components
-                    .Where(c => c.OrdinalNumber < component.OrdinalNumber)
-                    .OrderByDescending(c => c.OrdinalNumber)
-                    .First()
-                    .OrdinalNumber++;
-                component.OrdinalNumber--;
-
-                var index = this.Series.Components.IndexOf(component);
-                this.Series.Components.Remove(component);
-                this.Series.Components.Insert(index - 1, component);
-
-                this.OnPropertyChanged(nameof(this.Series));
-            }
-        }
-
-        private bool CanMoveComponentUp(object obj)
-            => obj is SeriesComponentFormItemBase component &&
-                component.OrdinalNumber != 1;
-
-        private void OnMoveComponentDown(object obj)
-        {
-            if (obj is SeriesComponentFormItemBase component)
-            {
-                this.Series.Components
-                    .Where(c => c.OrdinalNumber > component.OrdinalNumber)
-                    .OrderBy(c => c.OrdinalNumber)
-                    .First()
-                    .OrdinalNumber--;
-                component.OrdinalNumber++;
-
-                var index = this.Series.Components.IndexOf(component);
-                this.Series.Components.Remove(component);
-                this.Series.Components.Insert(index + 1, component);
-
-                this.OnPropertyChanged(nameof(this.Series));
-            }
-        }
-
-        private bool CanMoveComponentDown(object obj)
-            => obj is SeriesComponentFormItemBase component &&
-                component.OrdinalNumber != this.Series.Components.Count;
+        private bool CanMoveComponentDown(SeriesComponentFormItemBase component)
+            => component.OrdinalNumber != this.Series.Components.Count;
 
         private void OnConvertToMiniseries()
         {

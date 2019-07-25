@@ -3,6 +3,7 @@ using System.Windows.Input;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using MovieList.Commands;
 using MovieList.Data.Models;
 using MovieList.Services;
 using MovieList.ViewModels.FormItems;
@@ -22,12 +23,12 @@ namespace MovieList.ViewModels
             this.serviceProvider = serviceProvider;
             this.dbService = dbService;
 
-            this.OpenMovie = new DelegateCommand(this.OnOpenMovie);
-            this.OpenSeries = new DelegateCommand(this.OnOpenSeries);
-            this.OpenMovieSeries = new DelegateCommand(this.OnOpenMovieSeries);
-            this.OpenSeriesComponent = new DelegateCommand(this.OnOpenSeriesComponent);
-            this.Close = new DelegateCommand(_ => this.OnClose());
-            this.GoUpToSeries = new DelegateCommand(_ => this.OnGoUpToSeries(), _ => this.CanGoUpToSeries());
+            this.OpenMovie = new DelegateCommand<Movie>(this.OnOpenMovie);
+            this.OpenSeries = new DelegateCommand<Series>(this.OnOpenSeries);
+            this.OpenMovieSeries = new DelegateCommand<MovieSeries>(this.OnOpenMovieSeries);
+            this.OpenSeriesComponent = new DelegateCommand<SeriesComponentFormItemBase>(this.OnOpenSeriesComponent);
+            this.Close = new DelegateCommand(this.OnClose);
+            this.GoUpToSeries = new DelegateCommand(this.OnGoUpToSeries, this.CanGoUpToSeries);
         }
 
         public ICommand OpenMovie { get; }
@@ -41,43 +42,37 @@ namespace MovieList.ViewModels
 
         public event EventHandler Closed;
 
-        private async void OnOpenMovie(object obj)
+        private async void OnOpenMovie(Movie movie)
         {
-            if (obj is Movie movie)
-            {
-                var control = new MovieFormControl();
-                control.DataContext = control.ViewModel =
-                    this.serviceProvider.GetRequiredService<MovieFormViewModel>();
-                control.ViewModel.MovieFormControl = control;
-                control.ViewModel.AllKinds = await this.dbService.LoadAllKindsAsync();
-                control.ViewModel.Movie = new MovieFormItem(movie, control.ViewModel.AllKinds);
+            var control = new MovieFormControl();
+            control.DataContext = control.ViewModel =
+                this.serviceProvider.GetRequiredService<MovieFormViewModel>();
+            control.ViewModel.MovieFormControl = control;
+            control.ViewModel.AllKinds = await this.dbService.LoadAllKindsAsync();
+            control.ViewModel.Movie = new MovieFormItem(movie, control.ViewModel.AllKinds);
 
-                this.SidePanelControl.ContentContainer.Content = control;
-            }
+            this.SidePanelControl.ContentContainer.Content = control;
         }
 
-        private async void OnOpenSeries(object obj)
+        private async void OnOpenSeries(Series series)
         {
-            if (obj is Series series)
-            {
-                var control = new SeriesFormControl();
-                control.DataContext = control.ViewModel =
-                    this.serviceProvider.GetRequiredService<SeriesFormViewModel>();
-                control.ViewModel.SeriesFormControl = control;
-                control.ViewModel.AllKinds = await this.dbService.LoadAllKindsAsync();
-                control.ViewModel.Series = new SeriesFormItem(series, control.ViewModel.AllKinds);
+            var control = new SeriesFormControl();
+            control.DataContext = control.ViewModel =
+                this.serviceProvider.GetRequiredService<SeriesFormViewModel>();
+            control.ViewModel.SeriesFormControl = control;
+            control.ViewModel.AllKinds = await this.dbService.LoadAllKindsAsync();
+            control.ViewModel.Series = new SeriesFormItem(series, control.ViewModel.AllKinds);
 
-                this.SidePanelControl.ContentContainer.Content = control;
-            }
+            this.SidePanelControl.ContentContainer.Content = control;
         }
 
-        public void OnOpenMovieSeries(object obj)
+        public void OnOpenMovieSeries(MovieSeries movieSeries)
         {
         }
 
-        public void OnOpenSeriesComponent(object obj)
+        public void OnOpenSeriesComponent(SeriesComponentFormItemBase component)
         {
-            switch (obj)
+            switch (component)
             {
                 case SeasonFormItem season:
                     if (this.SidePanelControl.ContentContainer.Content is SeriesFormControl seriesFormControl1)

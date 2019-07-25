@@ -14,6 +14,7 @@ using HandyControl.Data;
 
 using Microsoft.Extensions.Options;
 
+using MovieList.Commands;
 using MovieList.Config;
 using MovieList.Data.Models;
 using MovieList.Events;
@@ -61,19 +62,19 @@ namespace MovieList.ViewModels
             this.defaultSeasonOriginalTitle = config.Value.DefaultSeasonOriginalTitle;
             this.databasePath = config.Value.DatabasePath;
 
-            this.ChangeNotWatchedColor = new DelegateCommand(control => Util.OpenColorPickerPopup(
-                control as FrameworkElement, this.NotWatchedColor.ToString(), color => this.NotWatchedColor = color));
+            this.ChangeNotWatchedColor = new DelegateCommand<FrameworkElement>(element => Util.OpenColorPickerPopup(
+                element, this.NotWatchedColor.ToString(), color => this.NotWatchedColor = color));
 
-            this.ChangeNotReleasedColor = new DelegateCommand(control => Util.OpenColorPickerPopup(
-                control as FrameworkElement, this.NotReleasedColor.ToString(), color => this.NotReleasedColor = color));
+            this.ChangeNotReleasedColor = new DelegateCommand<FrameworkElement>(element => Util.OpenColorPickerPopup(
+                element, this.NotReleasedColor.ToString(), color => this.NotReleasedColor = color));
 
-            this.AddKind = new DelegateCommand(_ => this.OnAddKind());
-            this.RemoveKind = new DelegateCommand(async obj => await this.RemoveKindAsync(obj));
+            this.AddKind = new DelegateCommand(this.OnAddKind);
+            this.RemoveKind = new DelegateCommand<KindViewModel>(async kind => await this.RemoveKindAsync(kind));
 
-            this.Save = new DelegateCommand(async _ => await this.SaveChangesAsync(), _ => this.CanSaveChanges);
-            this.Cancel = new DelegateCommand(async _ => await this.CancelChangesAsync(), _ => this.CanCancelChanges);
+            this.Save = new DelegateCommand(async () => await this.SaveChangesAsync(), () => this.CanSaveChanges);
+            this.Cancel = new DelegateCommand(async () => await this.CancelChangesAsync(), () => this.CanCancelChanges);
 
-            this.ViewLog = new DelegateCommand(_ => this.OnViewLog());
+            this.ViewLog = new DelegateCommand(this.OnViewLog);
         }
 
         public bool IsLoaded { get; private set; }
@@ -247,21 +248,18 @@ namespace MovieList.ViewModels
             this.Kinds.Add(kind);
         }
 
-        private async Task RemoveKindAsync(object obj)
+        private async Task RemoveKindAsync(KindViewModel kind)
         {
-            if (obj is KindViewModel kind)
+            if (await this.dbService.CanDeleteKindAsync(kind))
             {
-                if (await this.dbService.CanDeleteKindAsync(kind))
-                {
-                    this.Kinds.Remove(kind);
-                } else
-                {
-                    MessageBox.Show(
-                           Messages.KindIsInUse,
-                           Messages.Error,
-                           MessageBoxButton.OK,
-                           MessageBoxImage.Error);
-                }
+                this.Kinds.Remove(kind);
+            } else
+            {
+                MessageBox.Show(
+                        Messages.KindIsInUse,
+                        Messages.Error,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
             }
         }
 

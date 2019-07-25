@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Media.Imaging;
 
+using MovieList.Commands;
 using MovieList.Data.Models;
 using MovieList.Properties;
 using MovieList.Validation;

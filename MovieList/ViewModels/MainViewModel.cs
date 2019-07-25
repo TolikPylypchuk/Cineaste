@@ -22,7 +22,7 @@ namespace MovieList.ViewModels
 
         public MainWindow MainWindow { get; set; }
 
-        public void SetControlViewModels()
+        public void InitializeViewModels()
         {
             var movieListViewModel = this.serviceProvider.GetRequiredService<MovieListViewModel>();
             movieListViewModel.MovieListControl = this.MainWindow.ListControl;

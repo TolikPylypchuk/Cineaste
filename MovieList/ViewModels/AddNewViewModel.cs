@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
+using MovieList.Commands;
 using MovieList.Data.Models;
 
 namespace MovieList.ViewModels
@@ -13,8 +14,9 @@ namespace MovieList.ViewModels
         public AddNewViewModel(SidePanelViewModel sidePanelViewModel)
         {
             this.sidePanel = sidePanelViewModel;
-            this.AddNewMovie = new DelegateCommand(_ => this.OnAddNewMovie());
-            this.AddNewSeries = new DelegateCommand(_ => this.OnAddNewSeries());
+
+            this.AddNewMovie = new DelegateCommand(this.OnAddNewMovie);
+            this.AddNewSeries = new DelegateCommand(this.OnAddNewSeries);
         }
 
         public ICommand AddNewMovie { get; }

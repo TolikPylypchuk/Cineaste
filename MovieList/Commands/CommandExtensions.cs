@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace MovieList
+namespace MovieList.Commands
 {
     public static class CommandExtensions
     {

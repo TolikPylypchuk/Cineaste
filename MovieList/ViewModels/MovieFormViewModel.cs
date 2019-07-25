@@ -9,6 +9,7 @@ using System.Windows.Input;
 
 using HandyControl.Controls;
 
+using MovieList.Commands;
 using MovieList.Events;
 using MovieList.Properties;
 using MovieList.Services;
@@ -38,9 +39,9 @@ namespace MovieList.ViewModels
             this.MovieList = movieList;
             this.SidePanel = sidePanel;
 
-            this.Save = new DelegateCommand(async _ => await this.SaveAsync(), _ => this.CanSaveChanges);
-            this.Cancel = new DelegateCommand(_ => this.Movie.RevertChanges(), _ => this.CanCancelChanges);
-            this.Delete = new DelegateCommand(async _ => await this.DeleteAsync(), _ => this.CanDelete());
+            this.Save = new DelegateCommand(async () => await this.SaveAsync(), () => this.CanSaveChanges);
+            this.Cancel = new DelegateCommand(this.Movie.RevertChanges, () => this.CanCancelChanges);
+            this.Delete = new DelegateCommand(async () => await this.DeleteAsync(), this.CanDelete);
 
             movieList.ListItemUpdated += this.OnListItemUpdated;
             settings.SettingsUpdated += this.OnSettingsUpdated;

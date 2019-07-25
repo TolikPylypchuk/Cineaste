@@ -5,6 +5,7 @@ using System.Windows.Input;
 
 using HandyControl.Controls;
 
+using MovieList.Commands;
 using MovieList.Properties;
 using MovieList.ViewModels.FormItems;
 using MovieList.Views;
@@ -22,9 +23,9 @@ namespace MovieList.ViewModels
             this.ParentForm = parentForm;
             this.SidePanel = sidePanel;
 
-            this.Save = new DelegateCommand(_ => this.OnSave(), _ => this.CanSaveChanges);
-            this.Cancel = new DelegateCommand(_ => this.Season.RevertChanges(), _ => this.CanCancelChanges);
-            this.Delete = new DelegateCommand(_ => this.OnDelete());
+            this.Save = new DelegateCommand(this.OnSave, () => this.CanSaveChanges);
+            this.Cancel = new DelegateCommand(this.Season.RevertChanges, () => this.CanCancelChanges);
+            this.Delete = new DelegateCommand(this.OnDelete);
         }
 
         public ICommand Save { get; }

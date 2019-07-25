@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
+using MovieList.Commands;
 using MovieList.Config;
 using MovieList.Data.Models;
 using MovieList.Events;
@@ -39,15 +40,15 @@ namespace MovieList.ViewModels
             sidePanel.Closed += (sender, e) =>
                 this.MovieListControl.List.UnselectAll();
 
-            this.SelectItem = new DelegateCommand(this.OnSelectItem);
-            this.AddItem = new DelegateCommand(this.OnAddItem);
-            this.UpdateItem = new DelegateCommand(this.OnUpdateItem);
-            this.DeleteItem = new DelegateCommand(this.OnDeleteItem);
+            this.SelectItem = new DelegateCommand<ListItem>(this.OnSelectItem);
+            this.AddItem = new DelegateCommand<EntityBase>(this.OnAddItem);
+            this.UpdateItem = new DelegateCommand<EntityBase>(this.OnUpdateItem);
+            this.DeleteItem = new DelegateCommand<EntityBase>(this.OnDeleteItem);
 
-            this.MarkAsWatched = new DelegateCommand(this.ToggleWatched, this.CanMarkAsWatched);
-            this.MarkAsNotWatched = new DelegateCommand(this.ToggleWatched, this.CanMarkAsNotWatched);
-            this.MarkAsReleased = new DelegateCommand(this.ToggleReleased, this.CanMarkAsReleased);
-            this.MarkAsNotReleased = new DelegateCommand(this.ToggleReleased, this.CanMarkAsNotReleased);
+            this.MarkAsWatched = new DelegateCommand<ListItem>(this.ToggleWatched, this.CanMarkAsWatched);
+            this.MarkAsNotWatched = new DelegateCommand<ListItem>(this.ToggleWatched, this.CanMarkAsNotWatched);
+            this.MarkAsReleased = new DelegateCommand<MovieListItem>(this.ToggleReleased, this.CanMarkAsReleased);
+            this.MarkAsNotReleased = new DelegateCommand<MovieListItem>(this.ToggleReleased, this.CanMarkAsNotReleased);
         }
 
         public ICommand SelectItem { get; }
@@ -133,19 +134,16 @@ namespace MovieList.ViewModels
             this.MovieListControl.List.ScrollIntoView(this.MovieListControl.List.SelectedItem);
         }
 
-        private void OnSelectItem(object obj)
+        private void OnSelectItem(ListItem item)
         {
-            if (obj is ListItem item)
-            {
-                item.OpenSidePanel(this.SidePanel);
-                this.MovieListControl.List.SelectedIndex = Util.BinarySearchIndexOf(this.Items, item);
-                this.MovieListControl.List.Focus();
-            }
+            item.OpenSidePanel(this.SidePanel);
+            this.MovieListControl.List.SelectedIndex = Util.BinarySearchIndexOf(this.Items, item);
+            this.MovieListControl.List.Focus();
         }
 
-        private void OnAddItem(object obj)
+        private void OnAddItem(EntityBase entity)
         {
-            switch (obj)
+            switch (entity)
             {
                 case Movie movie:
                     var movieItem = new MovieListItem(movie, this.config.Value);
@@ -178,15 +176,15 @@ namespace MovieList.ViewModels
             }
         }
 
-        private void OnUpdateItem(object obj)
+        private void OnUpdateItem(EntityBase entity)
         {
-            this.OnDeleteItem(obj);
-            this.OnAddItem(obj);
+            this.OnDeleteItem(entity);
+            this.OnAddItem(entity);
         }
 
-        private void OnDeleteItem(object obj)
+        private void OnDeleteItem(EntityBase entity)
         {
-            switch (obj)
+            switch (entity)
             {
                 case Movie movie:
                     this.Items.RemoveAt(Util.BinarySearchIndexOf(this.items, new MovieListItem(movie, this.config.Value)));
@@ -197,47 +195,41 @@ namespace MovieList.ViewModels
             }
         }
 
-        private async void ToggleWatched(object obj)
+        private async void ToggleWatched(ListItem item)
         {
-            if (obj is ListItem item)
-            {
-                await this.dbService.ToggleWatchedAsync(item);
-                this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
-                this.OnListItemUpdated(item);
-            }
+            await this.dbService.ToggleWatchedAsync(item);
+            this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
+            this.OnListItemUpdated(item);
         }
 
-        private bool CanMarkAsWatched(object obj)
-            => obj switch
+        private bool CanMarkAsWatched(ListItem item)
+            => item switch
             {
                 MovieListItem movieItem => !movieItem.Movie.IsWatched,
                 SeriesListItem seriesItem => !seriesItem.Series.IsWatched,
                 _ => false
             };
 
-        private bool CanMarkAsNotWatched(object obj)
-            => obj switch
+        private bool CanMarkAsNotWatched(ListItem item)
+            => item switch
             {
                 MovieListItem movieItem => movieItem.Movie.IsWatched,
                 SeriesListItem seriesItem => seriesItem.Series.IsWatched,
                 _ => false
             };
 
-        private async void ToggleReleased(object obj)
+        private async void ToggleReleased(MovieListItem item)
         {
-            if (obj is MovieListItem item)
-            {
-                await this.dbService.ToggleReleasedAsync(item);
-                this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
-                this.OnListItemUpdated(item);
-            }
+            await this.dbService.ToggleReleasedAsync(item);
+            this.UpdateColor(item, app.ServiceProvider.GetService<IOptions<Configuration>>().Value);
+            this.OnListItemUpdated(item);
         }
 
-        private bool CanMarkAsReleased(object obj)
-            => obj is MovieListItem item ? !item.Movie.IsReleased && item.Movie.Year <= DateTime.Now.Year : false;
+        private bool CanMarkAsReleased(MovieListItem item)
+            => !item.Movie.IsReleased && item.Movie.Year <= DateTime.Now.Year;
 
-        private bool CanMarkAsNotReleased(object obj)
-            => obj is MovieListItem item ? item.Movie.IsReleased && item.Movie.Year >= DateTime.Now.Year : false;
+        private bool CanMarkAsNotReleased(MovieListItem item)
+            => item.Movie.IsReleased && item.Movie.Year >= DateTime.Now.Year;
 
         private void UpdateColor(ListItem item, Configuration? config)
         {

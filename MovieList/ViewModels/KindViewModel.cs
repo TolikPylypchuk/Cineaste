@@ -5,6 +5,7 @@ using System.Windows.Input;
 
 using HandyControl.Data;
 
+using MovieList.Commands;
 using MovieList.Data.Models;
 using MovieList.Properties;
 
@@ -16,11 +17,11 @@ namespace MovieList.ViewModels
         {
             this.Kind = kind;
 
-            this.ChangeColorForMovie = new DelegateCommand(control => Util.OpenColorPickerPopup(
-                control as FrameworkElement, this.ColorForMovie, color => this.ColorForMovie = color.ToString()));
+            this.ChangeColorForMovie = new DelegateCommand<FrameworkElement>(element => Util.OpenColorPickerPopup(
+                element, this.ColorForMovie, color => this.ColorForMovie = color.ToString()));
 
-            this.ChangeColorForSeries = new DelegateCommand(control => Util.OpenColorPickerPopup(
-                control as FrameworkElement, this.ColorForSeries, color => this.ColorForSeries = color.ToString()));
+            this.ChangeColorForSeries = new DelegateCommand<FrameworkElement>(element => Util.OpenColorPickerPopup(
+                element as FrameworkElement, this.ColorForSeries, color => this.ColorForSeries = color.ToString()));
         }
 
         public ICommand ChangeColorForMovie { get; }

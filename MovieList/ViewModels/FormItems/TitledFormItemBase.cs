@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
 
+using MovieList.Commands;
 using MovieList.Data.Models;
 
 namespace MovieList.ViewModels.FormItems
@@ -17,16 +18,14 @@ namespace MovieList.ViewModels.FormItems
 
         public TitledFormItemBase()
         {
-            this.AddTitle = new DelegateCommand(
-                _ => this.OnAddTitle(), _ => this.CanAddTitle());
+            this.AddTitle = new DelegateCommand(this.OnAddTitle, this.CanAddTitle);
 
-            this.AddOriginalTitle = new DelegateCommand(
-                _ => this.OnAddOriginalTitle(), _ => this.CanAddOriginalTitle());
+            this.AddOriginalTitle = new DelegateCommand(this.OnAddOriginalTitle, this.CanAddOriginalTitle);
 
-            this.RemoveTitle = new DelegateCommand(
+            this.RemoveTitle = new DelegateCommand<TitleFormItem>(
                 this.OnRemoveTitle, _ => this.CanRemoveTitle());
 
-            this.RemoveOriginalTitle = new DelegateCommand(
+            this.RemoveOriginalTitle = new DelegateCommand<TitleFormItem>(
                 this.OnRemoveOriginalTitle, _ => this.CanRemoveOriginalTitle());
         }
 
@@ -133,34 +132,28 @@ namespace MovieList.ViewModels.FormItems
         private bool CanAddOriginalTitle()
             => this.OriginalTitles.Count < 10;
 
-        private void OnRemoveTitle(object obj)
+        private void OnRemoveTitle(TitleFormItem title)
         {
-            if (obj is TitleFormItem title)
-            {
-                this.Titles.Remove(title);
-                this.RemovedTitles.Add(title);
+            this.Titles.Remove(title);
+            this.RemovedTitles.Add(title);
 
-                foreach (var t in this.Titles.Where(t => t.Priority > title.Priority))
-                {
-                    t.Priority--;
-                }
+            foreach (var t in this.Titles.Where(t => t.Priority > title.Priority))
+            {
+                t.Priority--;
             }
         }
 
         private bool CanRemoveTitle()
             => this.Titles.Count != 1;
 
-        private void OnRemoveOriginalTitle(object obj)
+        private void OnRemoveOriginalTitle(TitleFormItem title)
         {
-            if (obj is TitleFormItem title)
-            {
-                this.OriginalTitles.Remove(title);
-                this.RemovedTitles.Add(title);
+            this.OriginalTitles.Remove(title);
+            this.RemovedTitles.Add(title);
 
-                foreach (var t in this.OriginalTitles.Where(t => t.Priority > title.Priority))
-                {
-                    t.Priority--;
-                }
+            foreach (var t in this.OriginalTitles.Where(t => t.Priority > title.Priority))
+            {
+                t.Priority--;
             }
         }
 

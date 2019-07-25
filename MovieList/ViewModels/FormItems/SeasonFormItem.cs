@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 
 using HandyControl.Data;
 
+using MovieList.Commands;
 using MovieList.Data.Models;
 
 namespace MovieList.ViewModels.FormItems
@@ -27,13 +28,17 @@ namespace MovieList.ViewModels.FormItems
             this.CopySeasonProperties();
 
             this.ShowNextPoster = new DelegateCommand(
-                _ => this.PosterIndex++, _ => this.Posters.Count > 0 && this.PosterIndex != this.Posters.Count - 1);
+                () => this.PosterIndex++,
+                () => this.Posters.Count > 0 && this.PosterIndex != this.Posters.Count - 1);
 
             this.ShowPreviousPoster = new DelegateCommand(
-                _ => this.PosterIndex--, _ => this.Posters.Count > 0 && this.PosterIndex != 0);
+                () => this.PosterIndex--,
+                () => this.Posters.Count > 0 && this.PosterIndex != 0);
 
-            this.AddPeriod = new DelegateCommand(_ => this.OnAddPeriod());
-            this.RemovePeriod = new DelegateCommand(this.OnRemovePeriod, _ => this.CanRemovePeriod());
+            this.AddPeriod = new DelegateCommand(this.OnAddPeriod);
+            this.RemovePeriod = new DelegateCommand<PeriodFormItem>(
+                period => this.Periods.Remove(period),
+                _ => this.Periods.Count != 1);
 
             this.IsInitialized = true;
         }
@@ -242,17 +247,6 @@ namespace MovieList.ViewModels.FormItems
                 EndMonth = 1,
                 EndYear = 2000
             }));
-
-        private void OnRemovePeriod(object obj)
-        {
-            if (obj is PeriodFormItem period)
-            {
-                this.Periods.Remove(period);
-            }
-        }
-
-        private bool CanRemovePeriod()
-            => this.Periods.Count != 1;
 
         private PeriodFormItem NewPeriod(Period period)
         {
