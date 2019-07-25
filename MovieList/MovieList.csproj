@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <None Remove="Themes\Converters.xaml" />
-    <None Remove="Themes\Styles.xaml" />
     <None Remove="Views\AddNewControl.xaml" />
     <None Remove="Views\MainWindow.xaml" />
     <None Remove="Views\MovieFormControl.xaml" />

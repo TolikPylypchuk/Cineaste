@@ -48,6 +48,7 @@
     </Style>
 
     <Style x:Key="SidePanelActionButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Visibility" Value="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVisibilityHidden}}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />

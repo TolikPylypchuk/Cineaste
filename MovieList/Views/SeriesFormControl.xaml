@@ -21,7 +21,16 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top">
             <DockPanel Margin="5,5,10,0">
+                <Button Command="{Binding SidePanel.GoUpToMovieSeries}" CommandParameter="{Binding Path=Series.Series.Entry}"
+                        Style="{StaticResource SidePanelUpButton}" />
                 <Button Command="{Binding SidePanel.Close}" Style="{StaticResource SidePanelCloseButton}" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Command="{Binding SidePanel.SelectPreviousEntry}" CommandParameter="{Binding Path=Series.Series.Entry}"
+                            Style="{StaticResource SidePanelPreviousButton}" />
+                    <Button Command="{Binding SidePanel.SelectNextEntry}" CommandParameter="{Binding Path=Series.Series.Entry}"
+                            Style="{StaticResource SidePanelNextButton}" />
+                </StackPanel>
             </DockPanel>
 
             <TextBlock Text="{Binding FormTitle}" Style="{StaticResource SidePanelTitle}" />

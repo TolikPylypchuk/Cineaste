@@ -33,9 +33,24 @@ namespace MovieList.Data.Models
                 (series.Id == potentialAncestor.Id || series.ParentSeries.IsDescendantOf(potentialAncestor));
 
         public static MovieSeriesEntry GetFirstEntry(this MovieSeries movieSeries)
-            => movieSeries.Entries.Count != 0
-                ? movieSeries.Entries.OrderBy(entry => entry.OrdinalNumber).First()
-                : movieSeries.Parts.OrderBy(part => part.OrdinalNumber).First().GetFirstEntry();
+        {
+            var firstEntry = movieSeries.Entries.OrderBy(entry => entry.OrdinalNumber).FirstOrDefault();
+            var firstPart = movieSeries.Parts.OrderBy(part => part.OrdinalNumber).FirstOrDefault();
+
+            return firstEntry != null && (firstPart == null || firstEntry.OrdinalNumber < firstPart.OrdinalNumber)
+                ? firstEntry
+                : firstPart.GetFirstEntry();
+        }
+
+        public static MovieSeriesEntry GetLastEntry(this MovieSeries movieSeries)
+        {
+            var lastEntry = movieSeries.Entries.OrderByDescending(entry => entry.OrdinalNumber).FirstOrDefault();
+            var lastPart = movieSeries.Parts.OrderByDescending(part => part.OrdinalNumber).FirstOrDefault();
+
+            return lastEntry != null && (lastPart == null || lastEntry.OrdinalNumber > lastPart.OrdinalNumber)
+                ? lastEntry
+                : lastPart.GetFirstEntry();
+        }
 
         public static string GetTitleToCompare(this MovieSeries movieSeries)
         {

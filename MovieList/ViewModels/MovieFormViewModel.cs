@@ -40,7 +40,7 @@ namespace MovieList.ViewModels
             this.SidePanel = sidePanel;
 
             this.Save = new DelegateCommand(async () => await this.SaveAsync(), () => this.CanSaveChanges);
-            this.Cancel = new DelegateCommand(this.Movie.RevertChanges, () => this.CanCancelChanges);
+            this.Cancel = new DelegateCommand(() => this.Movie.RevertChanges(), () => this.CanCancelChanges);
             this.Delete = new DelegateCommand(async () => await this.DeleteAsync(), this.CanDelete);
 
             movieList.ListItemUpdated += this.OnListItemUpdated;
