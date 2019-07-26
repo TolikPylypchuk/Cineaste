@@ -24,7 +24,7 @@ namespace MovieList.ViewModels
             this.SidePanel = sidePanel;
 
             this.Save = new DelegateCommand(this.OnSave, () => this.CanSaveChanges);
-            this.Cancel = new DelegateCommand(this.Season.RevertChanges, () => this.CanCancelChanges);
+            this.Cancel = new DelegateCommand(() => this.Season.RevertChanges(), () => this.CanCancelChanges);
             this.Delete = new DelegateCommand(this.OnDelete);
         }
 
