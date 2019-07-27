@@ -1,6 +1,5 @@
 using System;
 
-using MovieList.Commands;
 using MovieList.Config;
 using MovieList.Data.Models;
 

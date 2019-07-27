@@ -24,11 +24,13 @@ namespace MovieList.Commands
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public void Execute(T parameter)
-            => (this as ICommand).Execute(parameter);
-
-        public bool CanExecute(T parameter)
-            => (this as ICommand).CanExecute(parameter);
+        public void ExecuteIfCan(T parameter)
+        {
+            if (this.canExecute(parameter))
+            {
+                this.execute(parameter);
+            }
+        }
 
         void ICommand.Execute(object parameter)
         {

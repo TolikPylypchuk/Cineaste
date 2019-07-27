@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Windows.Input;
 
 using MovieList.Commands;
 using MovieList.Data.Models;
@@ -29,10 +28,11 @@ namespace MovieList.ViewModels.FormItems
                 this.OnRemoveOriginalTitle, _ => this.CanRemoveOriginalTitle());
         }
 
-        public ICommand AddTitle { get; }
-        public ICommand RemoveTitle { get; }
-        public ICommand AddOriginalTitle { get; }
-        public ICommand RemoveOriginalTitle { get; }
+        public DelegateCommand AddTitle { get; }
+        public DelegateCommand<TitleFormItem> RemoveTitle { get; }
+
+        public DelegateCommand AddOriginalTitle { get; }
+        public DelegateCommand<TitleFormItem> RemoveOriginalTitle { get; }
 
         public ObservableCollection<TitleFormItem> Titles
         {

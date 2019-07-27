@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
-using System.Windows.Input;
 
 using HandyControl.Data;
 
@@ -24,8 +23,8 @@ namespace MovieList.ViewModels
                 element as FrameworkElement, this.ColorForSeries, color => this.ColorForSeries = color.ToString()));
         }
 
-        public ICommand ChangeColorForMovie { get; }
-        public ICommand ChangeColorForSeries { get; }
+        public DelegateCommand<FrameworkElement> ChangeColorForMovie { get; }
+        public DelegateCommand<FrameworkElement> ChangeColorForSeries { get; }
 
         public Kind Kind { get; }
 

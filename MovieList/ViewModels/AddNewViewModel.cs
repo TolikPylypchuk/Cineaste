@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Input;
 
 using MovieList.Commands;
 using MovieList.Data.Models;
@@ -19,8 +18,8 @@ namespace MovieList.ViewModels
             this.AddNewSeries = new DelegateCommand(this.OnAddNewSeries);
         }
 
-        public ICommand AddNewMovie { get; }
-        public ICommand AddNewSeries { get; }
+        public DelegateCommand AddNewMovie { get; }
+        public DelegateCommand AddNewSeries { get; }
 
         public void OnAddNewMovie()
             => this.sidePanel.OpenMovie.ExecuteIfCan(new Movie

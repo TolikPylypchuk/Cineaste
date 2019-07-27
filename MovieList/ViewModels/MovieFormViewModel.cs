@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 
 using MovieList.Commands;
 using MovieList.Controls;
@@ -46,9 +45,9 @@ namespace MovieList.ViewModels
             settings.SettingsUpdated += this.OnSettingsUpdated;
         }
 
-        public ICommand Save { get; }
-        public ICommand Cancel { get; }
-        public ICommand Delete { get; }
+        public DelegateCommand Save { get; }
+        public DelegateCommand Cancel { get; }
+        public DelegateCommand Delete { get; }
 
         public MovieFormControl MovieFormControl { get; set; }
 
@@ -128,7 +127,7 @@ namespace MovieList.ViewModels
             {
                 this.MovieList.DeleteItem.ExecuteIfCan(this.Movie.Movie);
                 await this.dbService.DeleteAsync(this.Movie.Movie);
-                this.SidePanel.Close.ExecuteIfCan(null);
+                this.SidePanel.Close.ExecuteIfCan();
             }
         }
 

@@ -79,16 +79,16 @@ namespace MovieList.ViewModels
 
         public bool IsLoaded { get; private set; }
 
-        public ICommand ChangeNotWatchedColor { get; }
-        public ICommand ChangeNotReleasedColor { get; }
+        public DelegateCommand<FrameworkElement> ChangeNotWatchedColor { get; }
+        public DelegateCommand<FrameworkElement> ChangeNotReleasedColor { get; }
 
-        public ICommand AddKind { get; }
-        public ICommand RemoveKind { get; }
+        public DelegateCommand AddKind { get; }
+        public DelegateCommand<KindViewModel> RemoveKind { get; }
 
-        public ICommand Save { get; }
-        public ICommand Cancel { get; }
+        public DelegateCommand Save { get; }
+        public DelegateCommand Cancel { get; }
 
-        public ICommand ViewLog { get; }
+        public DelegateCommand ViewLog { get; }
 
         public Color NotWatchedColor
         {

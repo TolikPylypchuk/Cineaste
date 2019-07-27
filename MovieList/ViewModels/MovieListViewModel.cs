@@ -51,15 +51,15 @@ namespace MovieList.ViewModels
             this.MarkAsNotReleased = new DelegateCommand<MovieListItem>(this.ToggleReleased, this.CanMarkAsNotReleased);
         }
 
-        public ICommand SelectItem { get; }
-        public ICommand AddItem { get; }
-        public ICommand UpdateItem { get; }
-        public ICommand DeleteItem { get; }
+        public DelegateCommand<ListItem> SelectItem { get; }
+        public DelegateCommand<EntityBase> AddItem { get; }
+        public DelegateCommand<EntityBase> UpdateItem { get; }
+        public DelegateCommand<EntityBase> DeleteItem { get; }
 
-        public ICommand MarkAsWatched { get; }
-        public ICommand MarkAsNotWatched { get; }
-        public ICommand MarkAsReleased { get; }
-        public ICommand MarkAsNotReleased { get; }
+        public DelegateCommand<ListItem> MarkAsWatched { get; }
+        public DelegateCommand<ListItem> MarkAsNotWatched { get; }
+        public DelegateCommand<MovieListItem> MarkAsReleased { get; }
+        public DelegateCommand<MovieListItem> MarkAsNotReleased { get; }
 
         public MovieListControl MovieListControl { get; set; }
 

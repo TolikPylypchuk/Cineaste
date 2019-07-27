@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 using MovieList.Commands;
 using MovieList.Controls;
@@ -44,8 +43,8 @@ namespace MovieList.ViewModels
             }
         }
 
-        public ICommand Save { get; }
-        public ICommand Cancel { get; }
+        public DelegateCommand Save { get; }
+        public DelegateCommand Cancel { get; }
 
         public MovieSeriesFormControl MovieSeriesFormControl { get; set; }
 

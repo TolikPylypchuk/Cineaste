@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Windows.Input;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -41,15 +40,18 @@ namespace MovieList.ViewModels
                 this.OnSelectPreviousEntry, this.CanSelectPreviousEntry);
         }
 
-        public ICommand OpenMovie { get; }
-        public ICommand OpenSeries { get; }
-        public ICommand OpenMovieSeries { get; }
-        public ICommand OpenSeriesComponent { get; }
-        public ICommand Close { get; }
-        public ICommand GoUpToSeries { get; }
-        public ICommand GoUpToMovieSeries { get; }
-        public ICommand SelectNextEntry { get; }
-        public ICommand SelectPreviousEntry { get; }
+        public DelegateCommand<Movie> OpenMovie { get; }
+        public DelegateCommand<Series> OpenSeries { get; }
+        public DelegateCommand<MovieSeries> OpenMovieSeries { get; }
+        public DelegateCommand<SeriesComponentFormItemBase> OpenSeriesComponent { get; }
+
+        public DelegateCommand Close { get; }
+
+        public DelegateCommand GoUpToSeries { get; }
+        public DelegateCommand<EntityBase?> GoUpToMovieSeries { get; }
+
+        public DelegateCommand<EntityBase?> SelectNextEntry { get; }
+        public DelegateCommand<EntityBase?> SelectPreviousEntry { get; }
 
         public SidePanelControl SidePanelControl { get; set; }
 

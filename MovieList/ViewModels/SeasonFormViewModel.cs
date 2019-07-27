@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Input;
 
 using MovieList.Commands;
 using MovieList.Controls;
@@ -27,9 +26,9 @@ namespace MovieList.ViewModels
             this.Delete = new DelegateCommand(this.OnDelete);
         }
 
-        public ICommand Save { get; }
-        public ICommand Cancel { get; }
-        public ICommand Delete { get; }
+        public DelegateCommand Save { get; }
+        public DelegateCommand Cancel { get; }
+        public DelegateCommand Delete { get; }
 
         public SeasonFormControl SeasonFormControl { get; set; }
 
@@ -115,7 +114,7 @@ namespace MovieList.ViewModels
                     episode.OrdinalNumber--;
                 }
 
-                this.SidePanel.GoUpToSeries.ExecuteIfCan(null);
+                this.SidePanel.GoUpToSeries.ExecuteIfCan();
             }
         }
     }

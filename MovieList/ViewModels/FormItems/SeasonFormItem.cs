@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 using HandyControl.Data;
@@ -43,11 +42,11 @@ namespace MovieList.ViewModels.FormItems
             this.IsInitialized = true;
         }
 
-        public ICommand ShowNextPoster { get; }
-        public ICommand ShowPreviousPoster { get; }
+        public DelegateCommand ShowNextPoster { get; }
+        public DelegateCommand ShowPreviousPoster { get; }
 
-        public ICommand AddPeriod { get; }
-        public ICommand RemovePeriod { get; }
+        public DelegateCommand AddPeriod { get; }
+        public DelegateCommand<PeriodFormItem> RemovePeriod { get; }
 
         public Season Season { get; }
 

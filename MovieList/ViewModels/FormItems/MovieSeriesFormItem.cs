@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-using MovieList.Commands;
 using MovieList.Data.Models;
 
 namespace MovieList.ViewModels.FormItems
@@ -35,8 +34,8 @@ namespace MovieList.ViewModels.FormItems
                 {
                     if (this.Titles.Count == 0)
                     {
-                        this.AddTitle.ExecuteIfCan(null);
-                        this.AddOriginalTitle.ExecuteIfCan(null);
+                        this.AddTitle.ExecuteIfCan();
+                        this.AddOriginalTitle.ExecuteIfCan();
                     }
                 } else
                 {

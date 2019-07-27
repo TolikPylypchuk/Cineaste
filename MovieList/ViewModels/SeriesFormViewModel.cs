@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 
 using Microsoft.Extensions.Options;
 
@@ -71,17 +70,21 @@ namespace MovieList.ViewModels
             settings.SettingsUpdated += this.OnSettingsUpdated;
         }
 
-        public ICommand Save { get; }
-        public ICommand Cancel { get; }
-        public ICommand Delete { get; }
-        public ICommand AddSeason { get; }
-        public ICommand AddSpecialEpisode { get; }
-        public ICommand SelectNextComponent { get; }
-        public ICommand SelectPreviousComponent { get; }
-        public ICommand MoveComponentUp { get; }
-        public ICommand MoveComponentDown { get; }
-        public ICommand ConvertToMiniseries { get; }
-        public ICommand ConvertFromMiniseries { get; }
+        public DelegateCommand Save { get; }
+        public DelegateCommand Cancel { get; }
+        public DelegateCommand Delete { get; }
+
+        public DelegateCommand AddSeason { get; }
+        public DelegateCommand AddSpecialEpisode { get; }
+
+        public DelegateCommand<SeriesComponentFormItemBase> SelectNextComponent { get; }
+        public DelegateCommand<SeriesComponentFormItemBase> SelectPreviousComponent { get; }
+
+        public DelegateCommand<SeriesComponentFormItemBase> MoveComponentUp { get; }
+        public DelegateCommand<SeriesComponentFormItemBase> MoveComponentDown { get; }
+
+        public DelegateCommand ConvertToMiniseries { get; }
+        public DelegateCommand ConvertFromMiniseries { get; }
 
         public SeriesFormControl SeriesFormControl { get; set; }
 
@@ -243,7 +246,7 @@ namespace MovieList.ViewModels
             {
                 this.MovieList.DeleteItem.ExecuteIfCan(this.Series.Series);
                 await this.dbService.DeleteAsync(this.Series.Series);
-                this.SidePanel.Close.ExecuteIfCan(null);
+                this.SidePanel.Close.ExecuteIfCan();
             }
         }
 
