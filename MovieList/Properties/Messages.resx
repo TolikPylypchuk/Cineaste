@@ -303,6 +303,12 @@
   <data name="Movie" xml:space="preserve">
     <value>Фільм</value>
   </data>
+  <data name="MovieSeriesHasName" xml:space="preserve">
+    <value>Має власну назву</value>
+  </data>
+  <data name="MovieSeriesLooselyConnected" xml:space="preserve">
+    <value>Не сильно пов'язані частини</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Назва</value>
   </data>

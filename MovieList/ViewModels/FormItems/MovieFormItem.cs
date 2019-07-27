@@ -13,7 +13,7 @@ using MovieList.Validation;
 
 namespace MovieList.ViewModels.FormItems
 {
-    public class MovieFormItem : TitledFormItemBase
+    public class MovieFormItem : MovieSeriesEntryFormItemBase
     {
         private string year;
         private bool isWatched;
@@ -24,6 +24,7 @@ namespace MovieList.ViewModels.FormItems
         private BitmapImage? poster;
 
         public MovieFormItem(Movie movie, IEnumerable<KindViewModel> allKinds)
+            : base(movie.Entry)
         {
             this.Movie = movie;
             this.AllKinds = allKinds;

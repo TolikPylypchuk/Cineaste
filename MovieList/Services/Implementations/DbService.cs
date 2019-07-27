@@ -223,6 +223,11 @@ namespace MovieList.Services.Implementations
             await context.SaveChangesAsync();
         }
 
+        public Task SaveMovieSeriesAsync(MovieSeries movieSeries, IEnumerable<Title> titlesToDelete)
+        {
+            return Task.CompletedTask;
+        }
+
         public async Task SaveKindsAsync(IEnumerable<KindViewModel> kinds)
         {
             if (kinds.Any(k => k.HasErrors))

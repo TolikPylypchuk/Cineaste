@@ -85,7 +85,7 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        public void CopyTitles(IEnumerable<Title> titles)
+        protected void CopyTitles(IEnumerable<Title> titles)
         {
             this.Titles = new ObservableCollection<TitleFormItem>(
                 from title in titles

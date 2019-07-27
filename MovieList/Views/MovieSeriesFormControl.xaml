@@ -5,9 +5,54 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:controls="clr-namespace:MovieList.Controls"
+             xmlns:local="clr-namespace:MovieList.Views"
+             xmlns:data="clr-namespace:MovieList.Data"
+             xmlns:resx="clr-namespace:MovieList.Properties"
              xmlns:vm="clr-namespace:MovieList.ViewModels" mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:MovieSeriesFormViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="300">
-    <Grid>
-    </Grid>
+    <UserControl.Resources>
+        <data:BindingProxy x:Key="ViewModel" Data="{Binding}" />
+    </UserControl.Resources>
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <DockPanel Margin="5,5,10,0">
+                <Button Command="{Binding SidePanel.GoUpToMovieSeries}" CommandParameter="{Binding Path=MovieSeries.MovieSeries}"
+                        Style="{StaticResource SidePanelUpButton}" />
+                <Button Command="{Binding SidePanel.Close}" Style="{StaticResource SidePanelCloseButton}" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Command="{Binding SidePanel.SelectPreviousEntry}" CommandParameter="{Binding Path=MovieSeries.MovieSeries}"
+                            Style="{StaticResource SidePanelPreviousButton}" />
+                    <Button Command="{Binding SidePanel.SelectNextEntry}" CommandParameter="{Binding Path=MovieSeries.MovieSeries}"
+                            Style="{StaticResource SidePanelNextButton}" />
+                </StackPanel>
+            </DockPanel>
+
+            <TextBlock Text="{Binding FormTitle}" Style="{StaticResource SidePanelTitle}" />
+        </StackPanel>
+
+        <StackPanel Visibility="{Binding CanSaveOrCancelChanges, Converter={StaticResource BoolToVisibility}}"
+                    Style="{StaticResource SidePanelSaveCancelPanel}">
+            <Button Content="{x:Static resx:Messages.Cancel}" Command="{Binding Cancel}" Margin="0,0,10,0" />
+            <Button Content="{x:Static resx:Messages.Save}" Command="{Binding Save}" Style="{StaticResource ButtonPrimary}"  />
+        </StackPanel>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
+            <StackPanel DataContext="{Binding MovieSeries}" Margin="0,0,0,10">
+                <StackPanel.Resources>
+                    <data:BindingProxy x:Key="MovieSeriesFormItem" Data="{Binding}" />
+                </StackPanel.Resources>
+
+                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <CheckBox Content="{x:Static resx:Messages.MovieSeriesHasName}" IsChecked="{Binding HasName}" />
+                    <CheckBox Content="{x:Static resx:Messages.MovieSeriesLooselyConnected}"
+                              IsChecked="{Binding Path=IsLooselyConnected}" Margin="10,0,0,0" />
+                </WrapPanel>
+
+                <local:TitleListControl Visibility="{Binding HasName, Converter={StaticResource BoolToVisibility}}" />
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>

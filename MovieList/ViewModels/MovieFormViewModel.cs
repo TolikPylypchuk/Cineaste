@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-using HandyControl.Controls;
-
 using MovieList.Commands;
+using MovieList.Controls;
 using MovieList.Events;
 using MovieList.Properties;
 using MovieList.Services;
@@ -62,7 +61,7 @@ namespace MovieList.ViewModels
                 this.movie.PropertyChanged += this.OnMoviePropertyChanged;
 
                 this.OnPropertyChanged();
-                this.OnPropertyChanged(nameof(FormTitle));
+                this.OnPropertyChanged(nameof(this.FormTitle));
             }
         }
 

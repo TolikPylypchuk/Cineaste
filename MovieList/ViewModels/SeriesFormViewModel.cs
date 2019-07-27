@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-using HandyControl.Controls;
-
 using Microsoft.Extensions.Options;
 
 using MovieList.Commands;
 using MovieList.Config;
+using MovieList.Controls;
 using MovieList.Data.Models;
 using MovieList.Events;
 using MovieList.Properties;
@@ -95,7 +94,7 @@ namespace MovieList.ViewModels
                 this.series.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Series));
 
                 this.OnPropertyChanged();
-                this.OnPropertyChanged(nameof(FormTitle));
+                this.OnPropertyChanged(nameof(this.FormTitle));
             }
         }
 

@@ -619,6 +619,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Має власну назву.
+        /// </summary>
+        public static string MovieSeriesHasName {
+            get {
+                return ResourceManager.GetString("MovieSeriesHasName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не сильно пов&apos;язані частини.
+        /// </summary>
+        public static string MovieSeriesLooselyConnected {
+            get {
+                return ResourceManager.GetString("MovieSeriesLooselyConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Назва.
         /// </summary>
         public static string Name {

@@ -12,7 +12,7 @@ using MovieList.Properties;
 
 namespace MovieList.ViewModels.FormItems
 {
-    public class SeriesFormItem : TitledFormItemBase
+    public class SeriesFormItem : MovieSeriesEntryFormItemBase
     {
         private bool isWatched;
         private bool isMiniseries;
@@ -25,6 +25,7 @@ namespace MovieList.ViewModels.FormItems
         private ObservableCollection<SeriesComponentFormItemBase> components;
 
         public SeriesFormItem(Series series, IEnumerable<KindViewModel> allKinds)
+            : base(series.Entry)
         {
             this.Series = series;
             this.AllKinds = allKinds;

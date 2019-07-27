@@ -35,9 +35,9 @@ namespace MovieList.ViewModels
             this.GoUpToMovieSeries = new DelegateCommand<EntityBase?>(
                 this.OnGoUpToMovieSeries, this.CanGoUpToMovieSeries);
 
-            this.SelectNextEntry = new DelegateCommand<MovieSeriesEntry?>(
+            this.SelectNextEntry = new DelegateCommand<EntityBase?>(
                 this.OnSelectNextEntry, this.CanSelectNextEntry);
-            this.SelectPreviousEntry = new DelegateCommand<MovieSeriesEntry?>(
+            this.SelectPreviousEntry = new DelegateCommand<EntityBase?>(
                 this.OnSelectPreviousEntry, this.CanSelectPreviousEntry);
         }
 
@@ -81,6 +81,13 @@ namespace MovieList.ViewModels
 
         private void OnOpenMovieSeries(MovieSeries movieSeries)
         {
+            var control = new MovieSeriesFormControl();
+            control.DataContext = control.ViewModel =
+                this.serviceProvider.GetRequiredService<MovieSeriesFormViewModel>();
+            control.ViewModel.MovieSeriesFormControl = control;
+            control.ViewModel.MovieSeries = new MovieSeriesFormItem(movieSeries);
+
+            this.SidePanelControl.ContentContainer.Content = control;
         }
 
         private void OnOpenSeriesComponent(SeriesComponentFormItemBase component)
@@ -157,27 +164,32 @@ namespace MovieList.ViewModels
                 _ => false
             };
 
-        private void OnSelectNextEntry(MovieSeriesEntry? entry)
+        private void OnSelectNextEntry(EntityBase? entity)
         {
-            if (entry == null)
+            (MovieSeries? movieSeries, int ordinalNumber) = entity switch
+            {
+                MovieSeriesEntry entry => (entry.MovieSeries, entry.OrdinalNumber),
+                MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber.Value),
+                _ => default
+            };
+
+            if (movieSeries == null)
             {
                 return;
             }
 
-            var movieSeries = entry.MovieSeries;
-
             var nextEntry = movieSeries.Entries
-                .Where(e => e.OrdinalNumber > entry.OrdinalNumber)
+                .Where(e => e.OrdinalNumber > ordinalNumber)
                 .OrderBy(e => e.OrdinalNumber)
                 .FirstOrDefault();
 
-            if (nextEntry != null && nextEntry.OrdinalNumber == entry.OrdinalNumber + 1)
+            if (nextEntry != null && nextEntry.OrdinalNumber == ordinalNumber + 1)
             {
                 this.OpenEntry(nextEntry);
             } else
             {
                 var nextPart = movieSeries.Parts
-                    .Where(p => p.OrdinalNumber > entry.OrdinalNumber)
+                    .Where(p => p.OrdinalNumber > ordinalNumber)
                     .OrderBy(p => p.OrdinalNumber)
                     .FirstOrDefault();
 
@@ -188,31 +200,45 @@ namespace MovieList.ViewModels
             }
         }
 
-        private bool CanSelectNextEntry(MovieSeriesEntry? entry)
-            => entry != null && (entry.MovieSeries.Entries.Any(e => e.OrdinalNumber > entry.OrdinalNumber) ||
-                entry.MovieSeries.Parts.Any(p => p.OrdinalNumber! > entry.OrdinalNumber));
-
-        private void OnSelectPreviousEntry(MovieSeriesEntry? entry)
+        private bool CanSelectNextEntry(EntityBase? entity)
         {
-            if (entry == null)
+            (MovieSeries? movieSeries, int ordinalNumber) = entity switch
+            {
+                MovieSeriesEntry entry => (entry.MovieSeries, entry.OrdinalNumber),
+                MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber ?? 0),
+                _ => default
+            };
+
+            return movieSeries != null && (movieSeries.Entries.Any(e => e.OrdinalNumber > ordinalNumber) ||
+                movieSeries.Parts.Any(p => p.OrdinalNumber! > ordinalNumber));
+        }
+
+        private void OnSelectPreviousEntry(EntityBase? entity)
+        {
+            (MovieSeries? movieSeries, int ordinalNumber) = entity switch
+            {
+                MovieSeriesEntry entry => (entry.MovieSeries, entry.OrdinalNumber),
+                MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber.Value),
+                _ => default
+            };
+
+            if (movieSeries == null)
             {
                 return;
             }
 
-            var movieSeries = entry.MovieSeries;
-
             var previousEntry = movieSeries.Entries
-                .Where(e => e.OrdinalNumber < entry.OrdinalNumber)
+                .Where(e => e.OrdinalNumber < ordinalNumber)
                 .OrderByDescending(e => e.OrdinalNumber)
                 .FirstOrDefault();
 
-            if (previousEntry != null && previousEntry.OrdinalNumber == entry.OrdinalNumber - 1)
+            if (previousEntry != null && previousEntry.OrdinalNumber == ordinalNumber - 1)
             {
                 this.OpenEntry(previousEntry);
             } else
             {
                 var previousPart = movieSeries.Parts
-                    .Where(p => p.OrdinalNumber < entry.OrdinalNumber)
+                    .Where(p => p.OrdinalNumber < ordinalNumber)
                     .OrderByDescending(p => p.OrdinalNumber)
                     .FirstOrDefault();
 
@@ -223,9 +249,18 @@ namespace MovieList.ViewModels
             }
         }
 
-        private bool CanSelectPreviousEntry(MovieSeriesEntry? entry)
-            => entry != null && (entry.MovieSeries.Entries.Any(e => e.OrdinalNumber < entry.OrdinalNumber) ||
-                entry.MovieSeries.Parts.Any(p => p.OrdinalNumber! < entry.OrdinalNumber));
+        private bool CanSelectPreviousEntry(EntityBase? entity)
+        {
+            (MovieSeries? movieSeries, int ordinalNumber) = entity switch
+            {
+                MovieSeriesEntry entry => (entry.MovieSeries, entry.OrdinalNumber),
+                MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber ?? 0),
+                _ => default
+            };
+
+            return movieSeries != null && (movieSeries.Entries.Any(e => e.OrdinalNumber < ordinalNumber) ||
+                movieSeries.Parts.Any(p => p.OrdinalNumber! < ordinalNumber));
+        }
 
         private void OpenEntry(MovieSeriesEntry entry)
         {

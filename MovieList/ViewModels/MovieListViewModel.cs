@@ -143,36 +143,28 @@ namespace MovieList.ViewModels
 
         private void OnAddItem(EntityBase entity)
         {
-            switch (entity)
+            ListItem? item = entity switch
             {
-                case Movie movie:
-                    var movieItem = new MovieListItem(movie, this.config.Value);
-                    int movieIndex = Util.BinarySearchIndexOf(this.items, movieItem);
-                    if (movieIndex < 0)
-                    {
-                        movieIndex = ~movieIndex;
-                    }
+                Movie movie => new MovieListItem(movie, this.config.Value),
+                Series series => new SeriesListItem(series, this.config.Value),
+                MovieSeries movieSeries => new MovieSeriesListItem(movieSeries, this.config.Value),
+                _ => (ListItem?)null
+            };
 
-                    this.Items.Insert(movieIndex, movieItem);
-                    this.MovieListControl.List.SelectedIndex = movieIndex;
+            if (item != null)
+            {
+                int index = Util.BinarySearchIndexOf(this.items, item);
 
-                    this.MovieListControl.List.UpdateLayout();
-                    this.MovieListControl.List.ScrollIntoView(this.MovieListControl.List.SelectedItem);
-                    break;
-                case Series series:
-                    var seriesItem = new SeriesListItem(series, this.config.Value);
-                    int seriesIndex = Util.BinarySearchIndexOf(this.items, seriesItem);
-                    if (seriesIndex < 0)
-                    {
-                        seriesIndex = ~seriesIndex;
-                    }
+                if (index < 0)
+                {
+                    index = ~index;
+                }
 
-                    this.Items.Insert(seriesIndex, seriesItem);
-                    this.MovieListControl.List.SelectedIndex = seriesIndex;
+                this.Items.Insert(index, item);
+                this.MovieListControl.List.SelectedIndex = index;
 
-                    this.MovieListControl.List.UpdateLayout();
-                    this.MovieListControl.List.ScrollIntoView(this.MovieListControl.List.SelectedItem);
-                    break;
+                this.MovieListControl.List.UpdateLayout();
+                this.MovieListControl.List.ScrollIntoView(this.MovieListControl.List.SelectedItem);
             }
         }
 
@@ -184,14 +176,17 @@ namespace MovieList.ViewModels
 
         private void OnDeleteItem(EntityBase entity)
         {
-            switch (entity)
+            ListItem? item = entity switch
             {
-                case Movie movie:
-                    this.Items.RemoveAt(Util.BinarySearchIndexOf(this.items, new MovieListItem(movie, this.config.Value)));
-                    break;
-                case Series series:
-                    this.Items.RemoveAt(Util.BinarySearchIndexOf(this.items, new SeriesListItem(series, this.config.Value)));
-                    break;
+                Movie movie => new MovieListItem(movie, this.config.Value),
+                Series series => new SeriesListItem(series, this.config.Value),
+                MovieSeries movieSeries => new MovieSeriesListItem(movieSeries, this.config.Value),
+                _ => (ListItem?)null
+            };
+
+            if (item != null)
+            {
+                this.Items.RemoveAt(Util.BinarySearchIndexOf(this.items, item));
             }
         }
 

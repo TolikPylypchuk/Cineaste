@@ -105,5 +105,8 @@ namespace MovieList.Data.Models
 
         public static IEnumerable<Period> GetOrderedPeriods(this Season season)
             => season.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth);
+
+        public static Title GetTitle(this MovieSeriesEntry entry)
+            => entry.Movie != null ? entry.Movie.Title : entry.Series!.Title;
     }
 }

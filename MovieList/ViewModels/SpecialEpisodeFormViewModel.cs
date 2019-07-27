@@ -4,9 +4,8 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
-using HandyControl.Controls;
-
 using MovieList.Commands;
+using MovieList.Controls;
 using MovieList.Properties;
 using MovieList.ViewModels.FormItems;
 using MovieList.Views;
