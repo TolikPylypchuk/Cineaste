@@ -63,17 +63,16 @@
                         <DataTemplate DataType="{x:Type vmf:MovieSeriesComponentFormItemBase}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Years" />
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Years" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" Text="{Binding Years}" Margin="2,5,10,5"
-                                           HorizontalAlignment="Right" VerticalAlignment="Center" />
-
-                                <Button Grid.Column="1" Content="{Binding Title}" CommandParameter="{Binding}"
+                                <Button Grid.Column="0" Content="{Binding Title}" CommandParameter="{Binding}"
                                         Command="{Binding Path=Data.OpenForm, Source={StaticResource ViewModel}}"
                                         HorizontalAlignment="Stretch" Margin="2,5" />
+
+                                <TextBlock Grid.Column="1" Text="{Binding Years}" Margin="2,5,10,5" VerticalAlignment="Center" />
 
                                 <Button Grid.Column="2" CommandParameter="{Binding}" Width="30" Height="30"
                                         HorizontalAlignment="Stretch" Margin="2,5" Content="⋮"
