@@ -47,11 +47,11 @@ namespace MovieList.ViewModels.ListItems
                 result = ancestor1.OrdinalNumber?.CompareTo(ancestor2.OrdinalNumber) ?? 0;
             } else
             {
-                result = this.MovieSeries.GetTitleToCompare().CompareTo(other.MovieSeries.GetTitleToCompare());
+                result = this.MovieSeries.GetTitleName().CompareTo(other.MovieSeries.GetTitleName());
 
                 if (result == 0)
                 {
-                    result = this.MovieSeries.GetFirstYear().CompareTo(other.MovieSeries.GetFirstYear());
+                    result = this.MovieSeries.GetStartYear().CompareTo(other.MovieSeries.GetStartYear());
                 }
             }
 
@@ -70,7 +70,7 @@ namespace MovieList.ViewModels.ListItems
 
         private int CompareTitleOrYear(ListItem item)
         {
-            int result = this.MovieSeries.GetTitleToCompare().CompareTo(item.Title);
+            int result = this.MovieSeries.GetTitleName().CompareTo(item.Title);
             return result != 0 ? result : this.Year.CompareTo(item.Year);
         }
 

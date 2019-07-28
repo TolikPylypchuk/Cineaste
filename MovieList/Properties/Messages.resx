@@ -162,6 +162,9 @@
   <data name="ColorPickerStandardColors" xml:space="preserve">
     <value>Стандартні кольори</value>
   </data>
+  <data name="Components" xml:space="preserve">
+    <value>Частини</value>
+  </data>
   <data name="DatabasePath" xml:space="preserve">
     <value>Шлях до бази даних</value>
   </data>

@@ -196,6 +196,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Частини.
+        /// </summary>
+        public static string Components {
+            get {
+                return ResourceManager.GetString("Components", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Шлях до бази даних.
         /// </summary>
         public static string DatabasePath {

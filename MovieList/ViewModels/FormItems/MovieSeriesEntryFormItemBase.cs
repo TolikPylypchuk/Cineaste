@@ -4,7 +4,6 @@ namespace MovieList.ViewModels.FormItems
 {
     public abstract class MovieSeriesEntryFormItemBase : MovieSeriesComponentFormItemBase
     {
-        private int ordinalNumber;
         private int? displayNumber;
         private bool shouldDisplayNumber;
 
@@ -15,16 +14,6 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public MovieSeriesEntry? MovieSeriesEntry { get; }
-
-        public int OrdnialNumber
-        {
-            get => this.ordinalNumber;
-            set
-            {
-                this.ordinalNumber = value;
-                this.OnPropertyChanged();
-            }
-        }
 
         public int? DisplayNumber
         {
@@ -48,7 +37,7 @@ namespace MovieList.ViewModels.FormItems
 
         protected void CopyMovieSeriesEntryProperties()
         {
-            this.OrdnialNumber = this.MovieSeriesEntry?.OrdinalNumber ?? 1;
+            this.OrdinalNumber = this.MovieSeriesEntry?.OrdinalNumber ?? 1;
             this.DisplayNumber = this.MovieSeriesEntry != null ? this.MovieSeriesEntry.DisplayNumber : 1;
             this.ShouldDisplayNumber = this.DisplayNumber != null;
         }

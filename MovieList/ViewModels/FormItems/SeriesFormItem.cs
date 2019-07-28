@@ -139,6 +139,20 @@ namespace MovieList.ViewModels.FormItems
                  this.Components[0] is SeasonFormItem season &&
                  season.Periods.Count == 1);
 
+        public override string Title
+            => this.Series.Title.Name;
+
+        public override string Years
+        {
+            get
+            {
+                var startYear = this.Series.StartYear;
+                var endYear = this.Series.EndYear;
+
+                return startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";
+            }
+        }
+
         public Func<string, OperationResult<bool>> VerifyImdbLink
             => this.Verify(nameof(this.ImdbLink));
 
@@ -232,6 +246,9 @@ namespace MovieList.ViewModels.FormItems
             this.CopySeriesProperties();
             this.AreChangesPresent = false;
         }
+
+        public override void OpenForm(SidePanelViewModel sidePanel)
+            => sidePanel.OpenSeries.ExecuteIfCan(this.Series);
 
         private void CopySeriesProperties()
         {

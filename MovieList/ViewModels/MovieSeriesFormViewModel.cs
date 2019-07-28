@@ -28,6 +28,7 @@ namespace MovieList.ViewModels
 
             this.Save = new DelegateCommand(async () => await this.SaveAsync(), () => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(() => this.MovieSeries.RevertChanges(), () => this.CanCancelChanges);
+            this.OpenForm = new DelegateCommand<MovieSeriesComponentFormItemBase>(c => c.OpenForm(this.SidePanel));
         }
 
         public MovieSeriesFormItem MovieSeries
@@ -46,14 +47,15 @@ namespace MovieList.ViewModels
         public DelegateCommand Save { get; }
         public DelegateCommand Cancel { get; }
 
+        public DelegateCommand<MovieSeriesComponentFormItemBase> OpenForm { get; }
+
         public MovieSeriesFormControl MovieSeriesFormControl { get; set; }
 
         public MovieListViewModel MovieList { get; }
         public SidePanelViewModel SidePanel { get; }
 
         public string FormTitle
-            => this.MovieSeries.MovieSeries.Title?.Name
-                ?? this.MovieSeries.MovieSeries.GetFirstEntry().GetTitle().Name;
+            => this.MovieSeries.MovieSeries.GetTitleName();
 
         public bool CanSaveChanges
             => this.MovieSeries.AreChangesPresent &&

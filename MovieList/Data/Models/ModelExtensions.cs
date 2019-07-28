@@ -52,23 +52,19 @@ namespace MovieList.Data.Models
                 : lastPart.GetFirstEntry();
         }
 
-        public static string GetTitleToCompare(this MovieSeries movieSeries)
-        {
-            if (movieSeries.Title != null)
-            {
-                return movieSeries.Title.Name;
-            }
+        public static string GetTitleName(this MovieSeries movieSeries)
+            => movieSeries.Title?.Name ?? movieSeries.GetFirstEntry().GetTitle().Name;
 
-            var firstEntry = movieSeries.GetFirstEntry();
-            var title = firstEntry.Movie != null ? firstEntry.Movie.Title : firstEntry.Series!.Title;
-
-            return title.Name;
-        }
-
-        public static int GetFirstYear(this MovieSeries movieSeries)
+        public static int GetStartYear(this MovieSeries movieSeries)
         {
             var firstEntry = movieSeries.GetFirstEntry();
             return firstEntry.Movie != null ? firstEntry.Movie.Year : firstEntry.Series!.StartYear;
+        }
+
+        public static int GetEndYear(this MovieSeries movieSeries)
+        {
+            var lastEntry = movieSeries.GetLastEntry();
+            return lastEntry.Movie != null ? lastEntry.Movie.Year : lastEntry.Series!.EndYear;
         }
 
         public static string GetDisplayNumber(this MovieSeriesEntry? entry)

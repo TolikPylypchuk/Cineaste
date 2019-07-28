@@ -81,13 +81,14 @@ namespace MovieList.ViewModels
             this.SidePanelControl.ContentContainer.Content = control;
         }
 
-        private void OnOpenMovieSeries(MovieSeries movieSeries)
+        private async void OnOpenMovieSeries(MovieSeries movieSeries)
         {
             var control = new MovieSeriesFormControl();
             control.DataContext = control.ViewModel =
                 this.serviceProvider.GetRequiredService<MovieSeriesFormViewModel>();
             control.ViewModel.MovieSeriesFormControl = control;
-            control.ViewModel.MovieSeries = new MovieSeriesFormItem(movieSeries);
+            var allKinds = await this.dbService.LoadAllKindsAsync();
+            control.ViewModel.MovieSeries = new MovieSeriesFormItem(movieSeries, allKinds);
 
             this.SidePanelControl.ContentContainer.Content = control;
         }

@@ -130,6 +130,12 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public override string Title
+            => this.Movie.Title.Name;
+
+        public override string Years
+            => this.Movie.Year.ToString();
+
         public Func<string, OperationResult<bool>> VerifyYear
             => this.Verify(nameof(this.Year));
 
@@ -206,6 +212,9 @@ namespace MovieList.ViewModels.FormItems
             this.IsReleased = this.Movie.IsReleased;
             this.AreChangesPresent = false;
         }
+
+        public override void OpenForm(SidePanelViewModel sidePanel)
+            => sidePanel.OpenMovie.ExecuteIfCan(this.Movie);
 
         private void CopyMovieProperties()
         {

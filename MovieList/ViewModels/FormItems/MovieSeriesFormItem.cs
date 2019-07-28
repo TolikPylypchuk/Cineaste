@@ -13,9 +13,12 @@ namespace MovieList.ViewModels.FormItems
         private bool isLooselyConnected;
         private ObservableCollection<MovieSeriesComponentFormItemBase> components;
 
-        public MovieSeriesFormItem(MovieSeries movieSeries)
+        private readonly IEnumerable<KindViewModel> allKinds;
+
+        public MovieSeriesFormItem(MovieSeries movieSeries, IEnumerable<KindViewModel> allKinds)
         {
             this.MovieSeries = movieSeries;
+            this.allKinds = allKinds;
 
             this.CopyMovieSeriesProperties();
             this.IsInitialized = true;
@@ -69,6 +72,20 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public override string Title
+            => this.MovieSeries.GetTitleName();
+
+        public override string Years
+        {
+            get
+            {
+                var startYear = this.MovieSeries.GetStartYear();
+                var endYear = this.MovieSeries.GetEndYear();
+
+                return startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";
+            }
+        }
+
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
@@ -114,6 +131,9 @@ namespace MovieList.ViewModels.FormItems
             this.AreChangesPresent = false;
         }
 
+        public override void OpenForm(SidePanelViewModel sidePanel)
+            => sidePanel.OpenMovieSeries.ExecuteIfCan(this.MovieSeries);
+
         private void CopyMovieSeriesProperties()
         {
             this.CopyTitles(this.MovieSeries.Titles);
@@ -121,7 +141,13 @@ namespace MovieList.ViewModels.FormItems
             this.HasName = this.MovieSeries.Titles.Count != 0;
             this.IsLooselyConnected = this.MovieSeries.IsLooselyConnected;
 
-            this.Components = new ObservableCollection<MovieSeriesComponentFormItemBase>();
+            this.Components = new ObservableCollection<MovieSeriesComponentFormItemBase>(
+                this.MovieSeries.Entries
+                    .Select(e => e.Movie != null
+                        ? (MovieSeriesComponentFormItemBase)new MovieFormItem(e.Movie, this.allKinds)
+                        : new SeriesFormItem(e.Series!, this.allKinds))
+                    .Union(this.MovieSeries.Parts.Select(p => new MovieSeriesFormItem(p, this.allKinds)))
+                    .OrderBy(i => i.OrdinalNumber));
         }
     }
 }
