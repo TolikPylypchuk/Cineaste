@@ -16,6 +16,7 @@ namespace MovieList.ViewModels.FormItems
 
         public abstract string Title { get; }
         public abstract string Years { get; }
+        public abstract string NumberToDisplay { get; }
 
         public abstract void OpenForm(SidePanelViewModel sidePanel);
     }

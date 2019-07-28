@@ -28,7 +28,21 @@ namespace MovieList.ViewModels
 
             this.Save = new DelegateCommand(async () => await this.SaveAsync(), () => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(() => this.MovieSeries.RevertChanges(), () => this.CanCancelChanges);
+
             this.OpenForm = new DelegateCommand<MovieSeriesComponentFormItemBase>(c => c.OpenForm(this.SidePanel));
+            this.ShowOrdinalNumber = new DelegateCommand<MovieSeriesEntryFormItemBase>(
+                this.OnShowOrdinalNumber, this.CanShowOrdinalNumber);
+            this.HideOrdinalNumber = new DelegateCommand<MovieSeriesEntryFormItemBase>(
+                this.OnHideOrdinalNumber, this.CanHideOrdinalNumber);
+            this.MoveComponentUp = new DelegateCommand<MovieSeriesComponentFormItemBase>(
+                this.OnMoveComponentUp, this.CanMoveComponentUp);
+            this.MoveComponentDown = new DelegateCommand<MovieSeriesComponentFormItemBase>(
+                this.OnMoveComponentDown, this.CanMoveComponentDown);
+            this.DetachComponent = new DelegateCommand<MovieSeriesComponentFormItemBase>(this.OnDetachComponent);
+
+            this.AttachMovie = new DelegateCommand<Movie>(this.OnAttachMovie);
+            this.AttachSeries = new DelegateCommand<Series>(this.OnAttachSeries);
+            this.AttachMovieSeries = new DelegateCommand<MovieSeries>(this.OnAttachMovieSeries);
         }
 
         public MovieSeriesFormItem MovieSeries
@@ -48,6 +62,15 @@ namespace MovieList.ViewModels
         public DelegateCommand Cancel { get; }
 
         public DelegateCommand<MovieSeriesComponentFormItemBase> OpenForm { get; }
+        public DelegateCommand<MovieSeriesEntryFormItemBase> ShowOrdinalNumber { get; }
+        public DelegateCommand<MovieSeriesEntryFormItemBase> HideOrdinalNumber { get; }
+        public DelegateCommand<MovieSeriesComponentFormItemBase> MoveComponentUp { get; }
+        public DelegateCommand<MovieSeriesComponentFormItemBase> MoveComponentDown { get; }
+        public DelegateCommand<MovieSeriesComponentFormItemBase> DetachComponent { get; }
+
+        public DelegateCommand<Movie> AttachMovie { get; }
+        public DelegateCommand<Series> AttachSeries { get; }
+        public DelegateCommand<MovieSeries> AttachMovieSeries { get; }
 
         public MovieSeriesFormControl MovieSeriesFormControl { get; set; }
 
@@ -102,6 +125,50 @@ namespace MovieList.ViewModels
             base.OnPropertyChanged(nameof(this.CanSaveChanges));
             base.OnPropertyChanged(nameof(this.CanCancelChanges));
             base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
+        }
+
+        private void OnShowOrdinalNumber(MovieSeriesEntryFormItemBase entry)
+        {
+        }
+
+        private bool CanShowOrdinalNumber(MovieSeriesEntryFormItemBase entry)
+            => entry.MovieSeriesEntry?.DisplayNumber == null;
+
+        private void OnHideOrdinalNumber(MovieSeriesEntryFormItemBase entry)
+        {
+        }
+
+        private bool CanHideOrdinalNumber(MovieSeriesEntryFormItemBase entry)
+            => entry.MovieSeriesEntry?.DisplayNumber != null;
+
+        private void OnMoveComponentUp(MovieSeriesComponentFormItemBase component)
+        {
+        }
+
+        private bool CanMoveComponentUp(MovieSeriesComponentFormItemBase component)
+            => component.OrdinalNumber != 1;
+
+        private void OnMoveComponentDown(MovieSeriesComponentFormItemBase component)
+        {
+        }
+
+        private bool CanMoveComponentDown(MovieSeriesComponentFormItemBase component)
+            => component.OrdinalNumber != this.MovieSeries.Components.Count;
+
+        private void OnDetachComponent(MovieSeriesComponentFormItemBase component)
+        {
+        }
+
+        private void OnAttachMovie(Movie movie)
+        {
+        }
+
+        private void OnAttachSeries(Series series)
+        {
+        }
+
+        private void OnAttachMovieSeries(MovieSeries movieSeries)
+        {
         }
     }
 }

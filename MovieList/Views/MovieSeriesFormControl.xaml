@@ -63,23 +63,47 @@
                         <DataTemplate DataType="{x:Type vmf:MovieSeriesComponentFormItemBase}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Numbers" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Years" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <Button Grid.Column="0" Content="{Binding Title}" CommandParameter="{Binding}"
+                                <TextBlock Grid.Column="0" Text="{Binding NumberToDisplay}" Margin="5" VerticalAlignment="Center"
+                                           TextAlignment="Right" />
+
+                                <Button Grid.Column="1" Content="{Binding Title}" CommandParameter="{Binding}"
                                         Command="{Binding Path=Data.OpenForm, Source={StaticResource ViewModel}}"
                                         HorizontalAlignment="Stretch" Margin="2,5" />
 
-                                <TextBlock Grid.Column="1" Text="{Binding Years}" Margin="2,5,10,5" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="2" Text="{Binding Years}" Margin="5" VerticalAlignment="Center" />
 
-                                <Button Grid.Column="2" CommandParameter="{Binding}" Width="30" Height="30"
+                                <Button Grid.Column="3" CommandParameter="{Binding}" Width="30" Height="30"
                                         HorizontalAlignment="Stretch" Margin="2,5" Content="⋮"
                                         PreviewMouseDown="MoreButton_PreviewMouseDown">
                                     <Button.Resources>
                                         <data:BindingProxy x:Key="ComponentProxy" Data="{Binding}" />
                                     </Button.Resources>
+
+                                    <Button.ContextMenu>
+                                        <ContextMenu DataContext="{Binding Path=Data, Source={StaticResource ViewModel}}">
+                                            <ContextMenu.Resources>
+                                                <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                    <Setter Property="CommandParameter" Value="{Binding Path=Data, Source={StaticResource ComponentProxy}}" />
+                                                    <Setter Property="Visibility" Value="{Binding
+                                                                Path=IsEnabled,
+                                                                RelativeSource={RelativeSource Self},
+                                                                Converter={StaticResource BoolToVisibility}}" />
+                                                </Style>
+                                            </ContextMenu.Resources>
+
+                                            <MenuItem Header="{x:Static resx:Messages.ShowOrdinalNumber}" Command="{Binding ShowOrdinalNumber}" />
+                                            <MenuItem Header="{x:Static resx:Messages.HideOrdinalNumber}" Command="{Binding HideOrdinalNumber}" />
+                                            <MenuItem Header="{x:Static resx:Messages.MoveUp}" Command="{Binding MoveComponentUp}" />
+                                            <MenuItem Header="{x:Static resx:Messages.MoveDown}" Command="{Binding MoveComponentDown}" />
+                                            <MenuItem Header="{x:Static resx:Messages.Detach}" Command="{Binding DetachComponent}" />
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
                                 </Button>
                             </Grid>
                         </DataTemplate>

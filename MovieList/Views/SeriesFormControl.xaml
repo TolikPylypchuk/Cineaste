@@ -127,12 +127,11 @@
                                         Command="{Binding Path=Data.SidePanel.OpenSeriesComponent, Source={StaticResource ViewModel}}"
                                         HorizontalAlignment="Stretch" Margin="2,5" />
 
-                                <TextBlock Grid.Column="1" Text="{Binding Years}" Margin="2,5,10,5" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="1" Text="{Binding Years}" Margin="5" VerticalAlignment="Center" />
 
                                 <Button Grid.Column="2" CommandParameter="{Binding}" Width="30" Height="30"
                                         HorizontalAlignment="Stretch" Margin="2,5" Content="⋮"
                                         PreviewMouseDown="MoreButton_PreviewMouseDown">
-
                                     <Button.Resources>
                                         <data:BindingProxy x:Key="ComponentProxy" Data="{Binding}" />
                                     </Button.Resources>

@@ -1,3 +1,5 @@
+using System;
+
 using MovieList.Data.Models;
 
 namespace MovieList.ViewModels.FormItems
@@ -34,6 +36,9 @@ namespace MovieList.ViewModels.FormItems
                 this.OnPropertyChanged();
             }
         }
+
+        public override string NumberToDisplay
+            => this.MovieSeriesEntry?.GetDisplayNumber() ?? String.Empty;
 
         protected void CopyMovieSeriesEntryProperties()
         {

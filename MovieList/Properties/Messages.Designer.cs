@@ -313,6 +313,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Від&apos;єднати.
+        /// </summary>
+        public static string Detach {
+            get {
+                return ResourceManager.GetString("Detach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Редагувати.
         /// </summary>
         public static string Edit {
@@ -381,6 +390,15 @@ namespace MovieList.Properties {
         public static string February {
             get {
                 return ResourceManager.GetString("February", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не показувати порядковий номер.
+        /// </summary>
+        public static string HideOrdinalNumber {
+            get {
+                return ResourceManager.GetString("HideOrdinalNumber", resourceCulture);
             }
         }
         
@@ -912,6 +930,15 @@ namespace MovieList.Properties {
         public static string SettingsTitle {
             get {
                 return ResourceManager.GetString("SettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Показувати порядковий номер.
+        /// </summary>
+        public static string ShowOrdinalNumber {
+            get {
+                return ResourceManager.GetString("ShowOrdinalNumber", resourceCulture);
             }
         }
         

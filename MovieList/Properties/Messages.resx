@@ -201,6 +201,9 @@
   <data name="DeleteSpecialEpisodePrompt" xml:space="preserve">
     <value>Ви дійсно хочете видалити цю серію?</value>
   </data>
+  <data name="Detach" xml:space="preserve">
+    <value>Від'єднати</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Редагувати</value>
   </data>
@@ -224,6 +227,9 @@
   </data>
   <data name="February" xml:space="preserve">
     <value>Лютий</value>
+  </data>
+  <data name="HideOrdinalNumber" xml:space="preserve">
+    <value>Не показувати порядковий номер</value>
   </data>
   <data name="Imdb" xml:space="preserve">
     <value>IMDb</value>
@@ -401,6 +407,9 @@
   </data>
   <data name="SettingsTitle" xml:space="preserve">
     <value>Налаштування</value>
+  </data>
+  <data name="ShowOrdinalNumber" xml:space="preserve">
+    <value>Показувати порядковий номер</value>
   </data>
   <data name="SingleDayRelease" xml:space="preserve">
     <value>Реліз в один день</value>
