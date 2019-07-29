@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieList.Data.Migrations
 {
@@ -28,8 +28,10 @@ namespace MovieList.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     IsLooselyConnected = table.Column<bool>(nullable: false),
-                    ParentSeriesId = table.Column<int>(nullable: true),
-                    OrdinalNumber = table.Column<int>(nullable: true)
+                    ParentSeriesId = table.Column<int?>(nullable: true),
+                    OrdinalNumber = table.Column<int?>(nullable: true),
+                    DisplayNumber = table.Column<int?>(nullable: true),
+                    PosterUrl = table.Column<string?>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,7 +41,7 @@ namespace MovieList.Data.Migrations
                         column: x => x.ParentSeriesId,
                         principalTable: "MovieSeries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,8 +53,8 @@ namespace MovieList.Data.Migrations
                     Year = table.Column<int>(nullable: false),
                     IsWatched = table.Column<bool>(nullable: false),
                     IsReleased = table.Column<bool>(nullable: false),
-                    ImdbLink = table.Column<string>(maxLength: 256, nullable: true),
-                    PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
+                    ImdbLink = table.Column<string?>(maxLength: 256, nullable: true),
+                    PosterUrl = table.Column<string?>(maxLength: 256, nullable: true),
                     KindId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -75,8 +77,8 @@ namespace MovieList.Data.Migrations
                     IsWatched = table.Column<bool>(nullable: false),
                     IsMiniseries = table.Column<bool>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    ImdbLink = table.Column<string>(maxLength: 256, nullable: true),
-                    PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
+                    ImdbLink = table.Column<string?>(maxLength: 256, nullable: true),
+                    PosterUrl = table.Column<string?>(maxLength: 256, nullable: true),
                     KindId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -96,11 +98,11 @@ namespace MovieList.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    MovieId = table.Column<int>(nullable: true),
-                    SeriesId = table.Column<int>(nullable: true),
+                    MovieId = table.Column<int?>(nullable: true),
+                    SeriesId = table.Column<int?>(nullable: true),
                     MovieSeriesId = table.Column<int>(nullable: false),
                     OrdinalNumber = table.Column<int>(nullable: false),
-                    DisplayNumber = table.Column<int>(nullable: true)
+                    DisplayNumber = table.Column<int?>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -160,7 +162,7 @@ namespace MovieList.Data.Migrations
                     IsReleased = table.Column<bool>(nullable: false),
                     Channel = table.Column<string>(maxLength: 64, nullable: false),
                     OrdinalNumber = table.Column<int>(nullable: false),
-                    PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
+                    PosterUrl = table.Column<string?>(maxLength: 256, nullable: true),
                     SeriesId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -186,7 +188,7 @@ namespace MovieList.Data.Migrations
                     EndYear = table.Column<int>(nullable: false),
                     IsSingleDayRelease = table.Column<bool>(nullable: false),
                     NumberOfEpisodes = table.Column<int>(nullable: false),
-                    PosterUrl = table.Column<string>(maxLength: 256, nullable: true),
+                    PosterUrl = table.Column<string?>(maxLength: 256, nullable: true),
                     SeasonId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

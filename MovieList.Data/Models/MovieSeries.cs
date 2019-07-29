@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -12,6 +13,12 @@ namespace MovieList.Data.Models
         public int? ParentSeriesId { get; set; }
 
         public int? OrdinalNumber { get; set; }
+
+        public int? DisplayNumber { get; set; }
+
+        [Url]
+        [StringLength(256)]
+        public string? PosterUrl { get; set; }
 
         [ForeignKey(nameof(ParentSeriesId))]
         public virtual MovieSeries? ParentSeries { get; set; }

@@ -9,14 +9,14 @@ using MovieList.Data;
 namespace MovieList.Data.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20190613171441_Initial")]
+    [Migration("20190729200245_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0-preview6.19304.10");
+                .HasAnnotation("ProductVersion", "3.0.0-preview7.19362.6");
 
             modelBuilder.Entity("MovieList.Data.Models.Kind", b =>
                 {
@@ -44,6 +44,7 @@ namespace MovieList.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ImdbLink")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.Property<bool>("IsReleased");
@@ -53,6 +54,7 @@ namespace MovieList.Data.Migrations
                     b.Property<int>("KindId");
 
                     b.Property<string>("PosterUrl")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.Property<int>("Year");
@@ -69,11 +71,20 @@ namespace MovieList.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("DisplayNumber")
+                        .IsRequired();
+
                     b.Property<bool>("IsLooselyConnected");
 
-                    b.Property<int?>("OrdinalNumber");
+                    b.Property<int?>("OrdinalNumber")
+                        .IsRequired();
 
-                    b.Property<int?>("ParentSeriesId");
+                    b.Property<int?>("ParentSeriesId")
+                        .IsRequired();
+
+                    b.Property<string>("PosterUrl")
+                        .IsRequired()
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
@@ -124,6 +135,7 @@ namespace MovieList.Data.Migrations
                     b.Property<int>("NumberOfEpisodes");
 
                     b.Property<string>("PosterUrl")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.Property<int>("SeasonId");
@@ -169,6 +181,7 @@ namespace MovieList.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ImdbLink")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.Property<bool>("IsMiniseries");
@@ -178,6 +191,7 @@ namespace MovieList.Data.Migrations
                     b.Property<int>("KindId");
 
                     b.Property<string>("PosterUrl")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.Property<int>("Status");
@@ -207,6 +221,7 @@ namespace MovieList.Data.Migrations
                     b.Property<int>("OrdinalNumber");
 
                     b.Property<string>("PosterUrl")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.Property<int>("SeriesId");
@@ -271,7 +286,9 @@ namespace MovieList.Data.Migrations
                 {
                     b.HasOne("MovieList.Data.Models.MovieSeries", "ParentSeries")
                         .WithMany("Parts")
-                        .HasForeignKey("ParentSeriesId");
+                        .HasForeignKey("ParentSeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieList.Data.Models.MovieSeriesEntry", b =>
