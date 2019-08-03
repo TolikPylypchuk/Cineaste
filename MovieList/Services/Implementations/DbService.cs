@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -223,9 +224,60 @@ namespace MovieList.Services.Implementations
             await context.SaveChangesAsync();
         }
 
-        public Task SaveMovieSeriesAsync(MovieSeries movieSeries, IEnumerable<Title> titlesToDelete)
+        public async Task SaveMovieSeriesAsync(
+            MovieSeries movieSeries,
+            IEnumerable<Title> titlesToDelete,
+            IEnumerable<MovieSeriesEntry> entriesToDelete,
+            IEnumerable<MovieSeries> partsToDetach)
         {
-            return Task.CompletedTask;
+            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+
+            if (movieSeries.Id == default)
+            {
+                context.Add(movieSeries);
+                foreach (var entry in movieSeries.Entries)
+                {
+                    context.Add(entry);
+                }
+            } else
+            {
+                context.Entry(movieSeries).State = EntityState.Modified;
+
+                foreach (var title in movieSeries.Titles)
+                {
+                    if (title.Id == default)
+                    {
+                        context.Add(title);
+                    } else
+                    {
+                        context.Entry(title).State = EntityState.Modified;
+                    }
+                }
+            }
+
+            foreach (var title in titlesToDelete)
+            {
+                context.Attach(title).State = EntityState.Deleted;
+            }
+
+            foreach (var entry in entriesToDelete)
+            {
+                context.Attach(entry).State = EntityState.Deleted;
+                this.MoveOrdinalNumbersUp(movieSeries, entry.OrdinalNumber);
+            }
+
+            foreach (var part in partsToDetach)
+            {
+                part.ParentSeries = null;
+                part.OrdinalNumber = null;
+                part.DisplayNumber = null;
+                context.Attach(part).State = EntityState.Modified;
+                movieSeries.Parts.Remove(part);
+
+                this.MoveOrdinalNumbersUp(movieSeries, part.OrdinalNumber ?? 0);
+            }
+
+            await context.SaveChangesAsync();
         }
 
         public async Task SaveKindsAsync(IEnumerable<KindViewModel> kinds)
@@ -314,6 +366,12 @@ namespace MovieList.Services.Implementations
                 context.Entry(title).State = EntityState.Deleted;
             }
 
+            if (movie.Entry != null)
+            {
+                context.Entry(movie.Entry).State = EntityState.Deleted;
+                this.MoveOrdinalNumbersUp(movie.Entry.MovieSeries, movie.Entry.OrdinalNumber);
+            }
+
             await context.SaveChangesAsync();
         }
 
@@ -365,6 +423,12 @@ namespace MovieList.Services.Implementations
                 }
             }
 
+            if (series.Entry != null)
+            {
+                context.Entry(series.Entry).State = EntityState.Deleted;
+                this.MoveOrdinalNumbersUp(series.Entry.MovieSeries, series.Entry.OrdinalNumber);
+            }
+
             await context.SaveChangesAsync();
         }
 
@@ -396,6 +460,27 @@ namespace MovieList.Services.Implementations
 
             return (await context.Movies.Where(m => m.KindId == kind.Kind.Id).CountAsync()) == 0 &&
                 (await context.Series.Where(s => s.KindId == kind.Kind.Id).CountAsync()) == 0;
+        }
+
+        private void MoveOrdinalNumbersUp(MovieSeries movieSeries, int ordinalNumber)
+        {
+            foreach (var entry in movieSeries.Entries.Where(entry => entry.OrdinalNumber > ordinalNumber))
+            {
+                entry.OrdinalNumber--;
+                if (entry.DisplayNumber != null)
+                {
+                    entry.DisplayNumber--;
+                }
+            }
+
+            foreach (var part in movieSeries.Parts.Where(part => part.OrdinalNumber > ordinalNumber))
+            {
+                part.OrdinalNumber--;
+                if (part.DisplayNumber != null)
+                {
+                    part.DisplayNumber--;
+                }
+            }
         }
     }
 }

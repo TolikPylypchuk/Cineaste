@@ -2,11 +2,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.Options;
+
 using MovieList.Commands;
+using MovieList.Config;
 using MovieList.Controls;
 using MovieList.Data.Models;
 using MovieList.Services;
 using MovieList.ViewModels.FormItems;
+using MovieList.ViewModels.ListItems;
 using MovieList.Views;
 
 namespace MovieList.ViewModels
@@ -14,15 +18,18 @@ namespace MovieList.ViewModels
     public class MovieSeriesFormViewModel : ViewModelBase
     {
         private readonly IDbService dbService;
+        private readonly IOptions<Configuration> config;
 
         private MovieSeriesFormItem movieSeries;
 
         public MovieSeriesFormViewModel(
             IDbService dbService,
+            IOptions<Configuration> config,
             MovieListViewModel movieList,
             SidePanelViewModel sidePanel)
         {
             this.dbService = dbService;
+            this.config = config;
             this.MovieList = movieList;
             this.SidePanel = sidePanel;
 
@@ -106,16 +113,29 @@ namespace MovieList.ViewModels
 
             var titlesToDelete = this.MovieSeries.RemovedTitles.Select(t => t.Title).ToList();
 
+            var entriesToDelete = this.MovieSeries.DetachedComponents
+                .OfType<MovieSeriesEntryFormItemBase>()
+                .Select(item => item.MovieSeriesEntry!);
+
+            var partsToDetach = this.MovieSeries.DetachedComponents
+                    .OfType<MovieSeriesFormItem>()
+                    .Select(item => item.MovieSeries);
+
             this.MovieSeries.WriteChanges();
 
             bool shouldAddToList = this.MovieSeries.MovieSeries.Id == default && this.MovieSeries.HasName;
 
-            await this.dbService.SaveMovieSeriesAsync(this.MovieSeries.MovieSeries, titlesToDelete);
+            await this.dbService.SaveMovieSeriesAsync(
+                this.MovieSeries.MovieSeries, titlesToDelete, entriesToDelete, partsToDetach);
 
             (shouldAddToList
                 ? this.MovieList.AddItem
                 : (this.MovieSeries.HasName ? this.MovieList.UpdateItem : this.MovieList.DeleteItem))
                 .ExecuteIfCan(this.MovieSeries.MovieSeries);
+
+            this.UpdateItems(this.MovieSeries.MovieSeries);
+
+            this.MovieList.SelectItem.ExecuteIfCan(new MovieSeriesListItem(this.MovieSeries.MovieSeries, this.config.Value));
         }
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -179,6 +199,24 @@ namespace MovieList.ViewModels
 
         private void OnAttachMovieSeries(MovieSeries movieSeries)
         {
+        }
+
+        private void UpdateItems(MovieSeries movieSeries)
+        {
+            foreach (var entry in movieSeries.Entries)
+            {
+                this.MovieList.UpdateItem.ExecuteIfCan(entry.Movie != null ? (EntityBase)entry.Movie : entry.Series!);
+            }
+
+            foreach (var part in this.MovieSeries.MovieSeries.Parts)
+            {
+                if (part.Title != null)
+                {
+                    this.MovieList.UpdateItem.ExecuteIfCan(part);
+                }
+
+                this.UpdateItems(part);
+            }
         }
     }
 }

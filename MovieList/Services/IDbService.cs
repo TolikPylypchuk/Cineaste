@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -20,7 +19,11 @@ namespace MovieList.Services
             IEnumerable<Season> seasonsToDelete,
             IEnumerable<SpecialEpisode> episodesToDelete,
             IEnumerable<Title> titlesToDelete);
-        Task SaveMovieSeriesAsync(MovieSeries movieSeries, IEnumerable<Title> titlesToDelete);
+        Task SaveMovieSeriesAsync(
+            MovieSeries movieSeries,
+            IEnumerable<Title> titlesToDelete,
+            IEnumerable<MovieSeriesEntry> entriesToDelete,
+            IEnumerable<MovieSeries> partsToDetach);
 
         Task SaveKindsAsync(IEnumerable<KindViewModel> kinds);
 

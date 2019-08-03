@@ -20,6 +20,8 @@ namespace MovieList.ViewModels.FormItems
         private BitmapImage? poster;
 
         private ObservableCollection<MovieSeriesComponentFormItemBase> components;
+        private ObservableCollection<MovieSeriesComponentFormItemBase> detachedComponents =
+            new ObservableCollection<MovieSeriesComponentFormItemBase>();
 
         private readonly IEnumerable<KindViewModel> allKinds;
 
@@ -99,6 +101,18 @@ namespace MovieList.ViewModels.FormItems
                 this.components = value;
                 this.components.CollectionChanged +=
                     (sender, e) => this.OnPropertyChanged(nameof(this.Components));
+                this.OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<MovieSeriesComponentFormItemBase> DetachedComponents
+        {
+            get => this.detachedComponents;
+            set
+            {
+                this.detachedComponents = value;
+                this.detachedComponents.CollectionChanged +=
+                    (sender, e) => this.OnPropertyChanged(nameof(this.DetachedComponents));
                 this.OnPropertyChanged();
             }
         }
