@@ -6,9 +6,6 @@ namespace MovieList.ViewModels.FormItems
 {
     public abstract class MovieSeriesEntryFormItemBase : MovieSeriesComponentFormItemBase
     {
-        private int? displayNumber;
-        private bool shouldDisplayNumber;
-
         public MovieSeriesEntryFormItemBase(MovieSeriesEntry? movieSeriesEntry)
         {
             this.MovieSeriesEntry = movieSeriesEntry;
@@ -16,26 +13,6 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public MovieSeriesEntry? MovieSeriesEntry { get; }
-
-        public int? DisplayNumber
-        {
-            get => this.displayNumber;
-            set
-            {
-                this.displayNumber = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool ShouldDisplayNumber
-        {
-            get => this.shouldDisplayNumber;
-            set
-            {
-                this.shouldDisplayNumber = value;
-                this.OnPropertyChanged();
-            }
-        }
 
         public override string NumberToDisplay
             => this.MovieSeriesEntry?.GetDisplayNumber() ?? String.Empty;

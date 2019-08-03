@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Windows.Media.Imaging;
+
+using HandyControl.Data;
 
 using MovieList.Data.Models;
+using MovieList.Properties;
 
 namespace MovieList.ViewModels.FormItems
 {
@@ -11,6 +16,9 @@ namespace MovieList.ViewModels.FormItems
     {
         private bool hasName;
         private bool isLooselyConnected;
+        private string? posterUrl;
+        private BitmapImage? poster;
+
         private ObservableCollection<MovieSeriesComponentFormItemBase> components;
 
         private readonly IEnumerable<KindViewModel> allKinds;
@@ -60,6 +68,29 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        [Url(
+            ErrorMessageResourceName = nameof(Messages.InvalidPosterUrl),
+            ErrorMessageResourceType = typeof(Messages))]
+        public string? PosterUrl
+        {
+            get => this.posterUrl;
+            set
+            {
+                this.posterUrl = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public BitmapImage? Poster
+        {
+            get => this.poster;
+            set
+            {
+                this.poster = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<MovieSeriesComponentFormItemBase> Components
         {
             get => this.components;
@@ -96,8 +127,12 @@ namespace MovieList.ViewModels.FormItems
                  () => this.MovieSeries.Titles.Where(t => !t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
                 (() => this.OriginalTitles.OrderBy(t => t.Priority).Select(t => t.Name),
                  () => this.MovieSeries.Titles.Where(t => t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
-                (() => this.IsLooselyConnected, () => this.MovieSeries.IsLooselyConnected)
+                (() => this.IsLooselyConnected, () => this.MovieSeries.IsLooselyConnected),
+                (() => this.PosterUrl, () => this.MovieSeries.PosterUrl),
             };
+
+        public Func<string, OperationResult<bool>> VerifyPosterUrl
+            => this.Verify(nameof(this.PosterUrl));
 
         public override void WriteChanges()
         {
@@ -123,7 +158,15 @@ namespace MovieList.ViewModels.FormItems
 
             this.RemovedTitles.Clear();
 
+            if (this.MovieSeries.PosterUrl != this.PosterUrl)
+            {
+                this.SetPoster();
+            }
+
+            this.MovieSeries.OrdinalNumber = this.OrdinalNumber;
+            this.MovieSeries.DisplayNumber = this.DisplayNumber;
             this.MovieSeries.IsLooselyConnected = this.IsLooselyConnected;
+            this.MovieSeries.PosterUrl = this.PosterUrl;
 
             this.AreChangesPresent = false;
         }
@@ -141,8 +184,12 @@ namespace MovieList.ViewModels.FormItems
         {
             this.CopyTitles(this.MovieSeries.Titles);
 
+            this.OrdinalNumber = this.MovieSeries.OrdinalNumber ?? 0;
+            this.DisplayNumber = this.MovieSeries.DisplayNumber;
+            this.ShouldDisplayNumber = this.MovieSeries.DisplayNumber != null;
             this.HasName = this.MovieSeries.Titles.Count != 0;
             this.IsLooselyConnected = this.MovieSeries.IsLooselyConnected;
+            this.PosterUrl = this.MovieSeries.PosterUrl;
 
             this.Components = new ObservableCollection<MovieSeriesComponentFormItemBase>(
                 this.MovieSeries.Entries
@@ -151,6 +198,21 @@ namespace MovieList.ViewModels.FormItems
                         : new SeriesFormItem(e.Series!, this.allKinds))
                     .Union(this.MovieSeries.Parts.Select(p => new MovieSeriesFormItem(p, this.allKinds)))
                     .OrderBy(i => i.OrdinalNumber));
+
+            this.SetPoster();
+        }
+
+        private void SetPoster()
+        {
+            if (this.PosterUrl != null)
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(this.PosterUrl, UriKind.Absolute);
+                bitmap.EndInit();
+
+                this.Poster = bitmap;
+            }
         }
     }
 }

@@ -3,6 +3,8 @@ namespace MovieList.ViewModels.FormItems
     public abstract class MovieSeriesComponentFormItemBase : TitledFormItemBase
     {
         private int ordinalNumber;
+        private int? displayNumber;
+        private bool shouldDisplayNumber;
 
         public int OrdinalNumber
         {
@@ -10,6 +12,26 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.ordinalNumber = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public int? DisplayNumber
+        {
+            get => this.displayNumber;
+            set
+            {
+                this.displayNumber = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public bool ShouldDisplayNumber
+        {
+            get => this.shouldDisplayNumber;
+            set
+            {
+                this.shouldDisplayNumber = value;
                 this.OnPropertyChanged();
             }
         }

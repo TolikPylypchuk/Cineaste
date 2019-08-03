@@ -33,7 +33,7 @@
 
             <TextBlock Text="{Binding FormTitle}" Style="{StaticResource SidePanelTitle}" />
         </StackPanel>
-
+        
         <StackPanel Visibility="{Binding CanSaveOrCancelChanges, Converter={StaticResource BoolToVisibility}}"
                     Style="{StaticResource SidePanelSaveCancelPanel}">
             <Button Content="{x:Static resx:Messages.Cancel}" Command="{Binding Cancel}" Margin="0,0,10,0" />
@@ -45,6 +45,8 @@
                 <StackPanel.Resources>
                     <data:BindingProxy x:Key="MovieSeriesFormItem" Data="{Binding}" />
                 </StackPanel.Resources>
+                
+                <Image Source="{Binding Poster}" Margin="5,0" />
 
                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <CheckBox Content="{x:Static resx:Messages.MovieSeriesHasName}"
@@ -109,6 +111,11 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <controls:TextBox Text="{Binding Path=PosterUrl, UpdateSourceTrigger=PropertyChanged}"
+                                  hc:InfoElement.Title="{x:Static resx:Messages.PosterUrl}"
+                                  Style="{StaticResource UrlInputTextBoxStyle}"
+                                  VerifyFunc="{Binding VerifyPosterUrl}" />
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

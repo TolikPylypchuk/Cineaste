@@ -30,9 +30,9 @@ namespace MovieList.ViewModels
             this.Cancel = new DelegateCommand(() => this.MovieSeries.RevertChanges(), () => this.CanCancelChanges);
 
             this.OpenForm = new DelegateCommand<MovieSeriesComponentFormItemBase>(c => c.OpenForm(this.SidePanel));
-            this.ShowOrdinalNumber = new DelegateCommand<MovieSeriesEntryFormItemBase>(
+            this.ShowOrdinalNumber = new DelegateCommand<MovieSeriesComponentFormItemBase>(
                 this.OnShowOrdinalNumber, this.CanShowOrdinalNumber);
-            this.HideOrdinalNumber = new DelegateCommand<MovieSeriesEntryFormItemBase>(
+            this.HideOrdinalNumber = new DelegateCommand<MovieSeriesComponentFormItemBase>(
                 this.OnHideOrdinalNumber, this.CanHideOrdinalNumber);
             this.MoveComponentUp = new DelegateCommand<MovieSeriesComponentFormItemBase>(
                 this.OnMoveComponentUp, this.CanMoveComponentUp);
@@ -62,8 +62,8 @@ namespace MovieList.ViewModels
         public DelegateCommand Cancel { get; }
 
         public DelegateCommand<MovieSeriesComponentFormItemBase> OpenForm { get; }
-        public DelegateCommand<MovieSeriesEntryFormItemBase> ShowOrdinalNumber { get; }
-        public DelegateCommand<MovieSeriesEntryFormItemBase> HideOrdinalNumber { get; }
+        public DelegateCommand<MovieSeriesComponentFormItemBase> ShowOrdinalNumber { get; }
+        public DelegateCommand<MovieSeriesComponentFormItemBase> HideOrdinalNumber { get; }
         public DelegateCommand<MovieSeriesComponentFormItemBase> MoveComponentUp { get; }
         public DelegateCommand<MovieSeriesComponentFormItemBase> MoveComponentDown { get; }
         public DelegateCommand<MovieSeriesComponentFormItemBase> DetachComponent { get; }
@@ -127,19 +127,29 @@ namespace MovieList.ViewModels
             base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
         }
 
-        private void OnShowOrdinalNumber(MovieSeriesEntryFormItemBase entry)
+        private void OnShowOrdinalNumber(MovieSeriesComponentFormItemBase component)
         {
         }
 
-        private bool CanShowOrdinalNumber(MovieSeriesEntryFormItemBase entry)
-            => entry.MovieSeriesEntry?.DisplayNumber == null;
+        private bool CanShowOrdinalNumber(MovieSeriesComponentFormItemBase component)
+            => component switch
+            {
+                MovieSeriesEntryFormItemBase entry => entry.MovieSeriesEntry?.DisplayNumber == null,
+                MovieSeriesFormItem movieSeries => movieSeries.DisplayNumber == null,
+                _ => false
+            };
 
-        private void OnHideOrdinalNumber(MovieSeriesEntryFormItemBase entry)
+        private void OnHideOrdinalNumber(MovieSeriesComponentFormItemBase component)
         {
         }
 
-        private bool CanHideOrdinalNumber(MovieSeriesEntryFormItemBase entry)
-            => entry.MovieSeriesEntry?.DisplayNumber != null;
+        private bool CanHideOrdinalNumber(MovieSeriesComponentFormItemBase component)
+            => component switch
+            {
+                MovieSeriesEntryFormItemBase entry => entry.MovieSeriesEntry?.DisplayNumber != null,
+                MovieSeriesFormItem movieSeries => movieSeries.DisplayNumber != null,
+                _ => false
+            };
 
         private void OnMoveComponentUp(MovieSeriesComponentFormItemBase component)
         {
