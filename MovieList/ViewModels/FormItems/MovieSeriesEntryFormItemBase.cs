@@ -1,5 +1,3 @@
-using System;
-
 using MovieList.Data.Models;
 
 namespace MovieList.ViewModels.FormItems

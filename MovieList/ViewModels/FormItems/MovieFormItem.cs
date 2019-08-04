@@ -161,7 +161,9 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.IsReleased, () => this.Movie.IsReleased),
                 (() => this.ImdbLink, () => this.Movie.ImdbLink),
                 (() => this.PosterUrl, () => this.Movie.PosterUrl),
-                (() => this.Kind.Kind.Id, () => this.Movie.KindId)
+                (() => this.Kind.Kind.Id, () => this.Movie.KindId),
+                (() => this.OrdinalNumber, () => this.MovieSeriesEntry?.OrdinalNumber),
+                (() => this.DisplayNumber, () => this.MovieSeriesEntry?.DisplayNumber)
             };
 
         public override void WriteChanges()

@@ -1,8 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-using MovieList.Properties;
-
 namespace MovieList.Validation
 {
     public class StringRangeAttribute : ValidationAttribute

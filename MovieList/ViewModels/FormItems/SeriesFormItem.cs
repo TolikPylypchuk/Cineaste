@@ -176,6 +176,8 @@ namespace MovieList.ViewModels.FormItems
                 (() => this.ImdbLink, () => this.Series.ImdbLink),
                 (() => this.PosterUrl, () => this.Series.PosterUrl),
                 (() => this.Kind.Kind.Id, () => this.Series.KindId),
+                (() => this.OrdinalNumber, () => this.MovieSeriesEntry?.OrdinalNumber),
+                (() => this.DisplayNumber, () => this.MovieSeriesEntry?.DisplayNumber),
                 (() => this.Components.Select(c => c.ToString()).OrderBy(c => c),
                  () => this.Series.Seasons
                     .Select(s => new SeasonFormItem(s).ToString())
