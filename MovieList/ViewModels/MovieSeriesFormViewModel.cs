@@ -52,19 +52,6 @@ namespace MovieList.ViewModels
             this.AttachMovieSeries = new DelegateCommand<MovieSeries>(this.OnAttachMovieSeries);
         }
 
-        public MovieSeriesFormItem MovieSeries
-        {
-            get => this.movieSeries;
-            set
-            {
-                this.movieSeries = value;
-                this.movieSeries.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.MovieSeries));
-
-                this.OnPropertyChanged();
-                this.OnPropertyChanged(nameof(this.FormTitle));
-            }
-        }
-
         public DelegateCommand Save { get; }
         public DelegateCommand Cancel { get; }
 
@@ -78,6 +65,19 @@ namespace MovieList.ViewModels
         public DelegateCommand<Movie> AttachMovie { get; }
         public DelegateCommand<Series> AttachSeries { get; }
         public DelegateCommand<MovieSeries> AttachMovieSeries { get; }
+
+        public MovieSeriesFormItem MovieSeries
+        {
+            get => this.movieSeries;
+            set
+            {
+                this.movieSeries = value;
+                this.movieSeries.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.MovieSeries));
+
+                this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.FormTitle));
+            }
+        }
 
         public MovieSeriesFormControl MovieSeriesFormControl { get; set; }
 
@@ -149,27 +149,31 @@ namespace MovieList.ViewModels
 
         private void OnShowOrdinalNumber(MovieSeriesComponentFormItemBase component)
         {
+            component.DisplayNumber = component.OrdinalNumber;
+
+            foreach (var c in this.MovieSeries.Components
+                .Where(c => c.OrdinalNumber > component.OrdinalNumber && c.DisplayNumber != null))
+            {
+                c.DisplayNumber++;
+            }
         }
 
         private bool CanShowOrdinalNumber(MovieSeriesComponentFormItemBase component)
-            => component switch
-            {
-                MovieSeriesEntryFormItemBase entry => entry.MovieSeriesEntry?.DisplayNumber == null,
-                MovieSeriesFormItem movieSeries => movieSeries.DisplayNumber == null,
-                _ => false
-            };
+            => component.DisplayNumber == null;
 
         private void OnHideOrdinalNumber(MovieSeriesComponentFormItemBase component)
         {
+            component.DisplayNumber = null;
+
+            foreach (var c in this.MovieSeries.Components
+                .Where(c => c.OrdinalNumber > component.OrdinalNumber && c.DisplayNumber != null))
+            {
+                c.DisplayNumber--;
+            }
         }
 
         private bool CanHideOrdinalNumber(MovieSeriesComponentFormItemBase component)
-            => component switch
-            {
-                MovieSeriesEntryFormItemBase entry => entry.MovieSeriesEntry?.DisplayNumber != null,
-                MovieSeriesFormItem movieSeries => movieSeries.DisplayNumber != null,
-                _ => false
-            };
+            => !this.MovieSeries.IsLooselyConnected && component.DisplayNumber != null;
 
         private void OnMoveComponentUp(MovieSeriesComponentFormItemBase component)
         {

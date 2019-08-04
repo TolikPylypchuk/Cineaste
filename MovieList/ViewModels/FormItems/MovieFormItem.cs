@@ -24,7 +24,11 @@ namespace MovieList.ViewModels.FormItems
         private BitmapImage? poster;
 
         public MovieFormItem(Movie movie, IEnumerable<KindViewModel> allKinds)
-            : base(movie.Entry)
+            : this(movie, null, allKinds)
+        { }
+
+        public MovieFormItem(Movie movie, MovieSeriesFormItem? movieSeries, IEnumerable<KindViewModel> allKinds)
+            : base(movie.Entry, movieSeries)
         {
             this.Movie = movie;
             this.AllKinds = allKinds;
@@ -182,6 +186,8 @@ namespace MovieList.ViewModels.FormItems
                 this.Movie.Titles.Remove(title.Title);
             }
 
+            base.WriteChanges();
+
             this.RemovedTitles.Clear();
 
             if (this.Movie.PosterUrl != this.PosterUrl)
@@ -202,6 +208,7 @@ namespace MovieList.ViewModels.FormItems
 
         public override void RevertChanges()
         {
+            base.RevertChanges();
             this.CopyMovieProperties();
             this.AreChangesPresent = false;
         }

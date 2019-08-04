@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 
 using HandyControl.Data;
@@ -26,8 +28,16 @@ namespace MovieList.ViewModels.FormItems
         private readonly IEnumerable<KindViewModel> allKinds;
 
         public MovieSeriesFormItem(MovieSeries movieSeries, IEnumerable<KindViewModel> allKinds)
+            : this(movieSeries, null, allKinds)
+        { }
+
+        public MovieSeriesFormItem(
+            MovieSeries movieSeries,
+            MovieSeriesFormItem? parentSeries,
+            IEnumerable<KindViewModel> allKinds)
         {
             this.MovieSeries = movieSeries;
+            this.ParentSeries = parentSeries;
             this.allKinds = allKinds;
 
             this.CopyMovieSeriesProperties();
@@ -35,6 +45,7 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public MovieSeries MovieSeries { get; }
+        public MovieSeriesFormItem? ParentSeries { get; }
 
         public bool HasName
         {
@@ -99,8 +110,13 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.components = value;
-                this.components.CollectionChanged +=
-                    (sender, e) => this.OnPropertyChanged(nameof(this.Components));
+                this.components.CollectionChanged += this.OnComponentsChanged;
+
+                foreach (var component in this.components)
+                {
+                    component.PropertyChanged += (s, e1) => this.OnPropertyChanged(nameof(this.Components));
+                }
+
                 this.OnPropertyChanged();
             }
         }
@@ -131,8 +147,13 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public bool CanBeLooselyConnected
+            => !this.Components.Any(c => c.DisplayNumber == null);
+
         public override string NumberToDisplay
-            => this.MovieSeries.OrdinalNumber?.ToString() ?? String.Empty;
+            => (this.ParentSeries?.IsLooselyConnected ?? false)
+                ? $"({this.MovieSeries.OrdinalNumber})"
+                : this.MovieSeries.DisplayNumber?.ToString() ?? "-";
 
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
@@ -141,6 +162,7 @@ namespace MovieList.ViewModels.FormItems
                  () => this.MovieSeries.Titles.Where(t => !t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
                 (() => this.OriginalTitles.OrderBy(t => t.Priority).Select(t => t.Name),
                  () => this.MovieSeries.Titles.Where(t => t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
+                (() => this.Components.OrderBy(c => c.OrdinalNumber), this.GetMovieSeriesComponents),
                 (() => this.IsLooselyConnected, () => this.MovieSeries.IsLooselyConnected),
                 (() => this.PosterUrl, () => this.MovieSeries.PosterUrl),
             };
@@ -182,6 +204,11 @@ namespace MovieList.ViewModels.FormItems
             this.MovieSeries.IsLooselyConnected = this.IsLooselyConnected;
             this.MovieSeries.PosterUrl = this.PosterUrl;
 
+            foreach (var component in this.Components)
+            {
+                component.WriteChanges();
+            }
+
             this.AreChangesPresent = false;
         }
 
@@ -193,6 +220,29 @@ namespace MovieList.ViewModels.FormItems
 
         public override void OpenForm(SidePanelViewModel sidePanel)
             => sidePanel.OpenMovieSeries.ExecuteIfCan(this.MovieSeries);
+
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            base.OnPropertyChanged(propertyName);
+
+            if (propertyName == nameof(this.Components))
+            {
+                base.OnPropertyChanged(nameof(this.CanBeLooselyConnected));
+            }
+        }
+
+        private void OnComponentsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            foreach (MovieSeriesComponentFormItemBase? component in e.NewItems)
+            {
+                if (component != null)
+                {
+                    component.PropertyChanged += (s, e1) => this.OnPropertyChanged(nameof(this.Components));
+                }
+            }
+
+            this.OnPropertyChanged(nameof(this.Components));
+        }
 
         private void CopyMovieSeriesProperties()
         {
@@ -206,12 +256,7 @@ namespace MovieList.ViewModels.FormItems
             this.PosterUrl = this.MovieSeries.PosterUrl;
 
             this.Components = new ObservableCollection<MovieSeriesComponentFormItemBase>(
-                this.MovieSeries.Entries
-                    .Select(e => e.Movie != null
-                        ? (MovieSeriesComponentFormItemBase)new MovieFormItem(e.Movie, this.allKinds)
-                        : new SeriesFormItem(e.Series!, this.allKinds))
-                    .Union(this.MovieSeries.Parts.Select(p => new MovieSeriesFormItem(p, this.allKinds)))
-                    .OrderBy(i => i.OrdinalNumber));
+                this.GetMovieSeriesComponents());
 
             this.SetPoster();
         }
@@ -228,5 +273,16 @@ namespace MovieList.ViewModels.FormItems
                 this.Poster = bitmap;
             }
         }
+
+        private IEnumerable<MovieSeriesComponentFormItemBase> GetMovieSeriesComponents()
+            => this.MovieSeries.Entries
+                    .Select(this.CreateFormItem)
+                    .Union(this.MovieSeries.Parts.Select(p => new MovieSeriesFormItem(p, this, this.allKinds)))
+                    .OrderBy(item => item.OrdinalNumber);
+
+        private MovieSeriesComponentFormItemBase CreateFormItem(MovieSeriesEntry entry)
+            => entry.Movie != null
+                ? (MovieSeriesComponentFormItemBase)new MovieFormItem(entry.Movie, this, this.allKinds)
+                : new SeriesFormItem(entry.Series!, this, this.allKinds);
     }
 }

@@ -23,6 +23,7 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.displayNumber = value;
                 this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.NumberToDisplay));
             }
         }
 

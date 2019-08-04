@@ -6,16 +6,32 @@ namespace MovieList.ViewModels.FormItems
 {
     public abstract class MovieSeriesEntryFormItemBase : MovieSeriesComponentFormItemBase
     {
-        public MovieSeriesEntryFormItemBase(MovieSeriesEntry? movieSeriesEntry)
+        public MovieSeriesEntryFormItemBase(MovieSeriesEntry? movieSeriesEntry, MovieSeriesFormItem? movieSeries)
         {
             this.MovieSeriesEntry = movieSeriesEntry;
+            this.MovieSeries = movieSeries;
             this.CopyMovieSeriesEntryProperties();
         }
 
         public MovieSeriesEntry? MovieSeriesEntry { get; }
+        public MovieSeriesFormItem? MovieSeries { get; }
 
         public override string NumberToDisplay
-            => this.MovieSeriesEntry?.GetDisplayNumber() ?? String.Empty;
+            => (this.MovieSeries?.IsLooselyConnected ?? false)
+                ? $"({this.OrdinalNumber})"
+                : this.DisplayNumber?.ToString() ?? "-";
+
+        public override void RevertChanges()
+            => this.CopyMovieSeriesEntryProperties();
+
+        public override void WriteChanges()
+        {
+            if (this.MovieSeriesEntry != null)
+            {
+                this.MovieSeriesEntry.OrdinalNumber = this.OrdinalNumber;
+                this.MovieSeriesEntry.DisplayNumber = this.DisplayNumber;
+            }
+        }
 
         protected void CopyMovieSeriesEntryProperties()
         {

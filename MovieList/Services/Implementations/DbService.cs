@@ -90,13 +90,7 @@ namespace MovieList.Services.Implementations
 
                 foreach (var title in movie.Titles)
                 {
-                    if (title.Id == default)
-                    {
-                        context.Add(title);
-                    } else
-                    {
-                        context.Entry(title).State = EntityState.Modified;
-                    }
+                    this.AddOrUpdate(context, title);
                 }
             }
 
@@ -126,67 +120,31 @@ namespace MovieList.Services.Implementations
 
                 foreach (var title in series.Titles)
                 {
-                    if (title.Id == default)
-                    {
-                        context.Add(title);
-                    } else
-                    {
-                        context.Entry(title).State = EntityState.Modified;
-                    }
+                    this.AddOrUpdate(context, title);
                 }
 
                 foreach (var season in series.Seasons)
                 {
-                    if (season.Id == default)
-                    {
-                        context.Add(season);
-                    } else
-                    {
-                        context.Entry(season).State = EntityState.Modified;
-                    }
+                    this.AddOrUpdate(context, season);
 
                     foreach (var period in season.Periods)
                     {
-                        if (period.Id == default)
-                        {
-                            context.Add(period);
-                        } else
-                        {
-                            context.Entry(period).State = EntityState.Modified;
-                        }
+                        this.AddOrUpdate(context, period);
                     }
 
                     foreach (var title in season.Titles)
                     {
-                        if (title.Id == default)
-                        {
-                            context.Add(title);
-                        } else
-                        {
-                            context.Entry(title).State = EntityState.Modified;
-                        }
+                        this.AddOrUpdate(context, title);
                     }
                 }
 
                 foreach (var episode in series.SpecialEpisodes)
                 {
-                    if (episode.Id == default)
-                    {
-                        context.Add(episode);
-                    } else
-                    {
-                        context.Entry(episode).State = EntityState.Modified;
-                    }
+                    this.AddOrUpdate(context, episode);
 
                     foreach (var title in episode.Titles)
                     {
-                        if (title.Id == default)
-                        {
-                            context.Add(title);
-                        } else
-                        {
-                            context.Entry(title).State = EntityState.Modified;
-                        }
+                        this.AddOrUpdate(context, title);
                     }
                 }
             }
@@ -245,13 +203,17 @@ namespace MovieList.Services.Implementations
 
                 foreach (var title in movieSeries.Titles)
                 {
-                    if (title.Id == default)
-                    {
-                        context.Add(title);
-                    } else
-                    {
-                        context.Entry(title).State = EntityState.Modified;
-                    }
+                    this.AddOrUpdate(context, title);
+                }
+
+                foreach (var entry in movieSeries.Entries)
+                {
+                    this.AddOrUpdate(context, entry);
+                }
+
+                foreach (var part in movieSeries.Parts)
+                {
+                    this.AddOrUpdate(context, part);
                 }
             }
 
@@ -460,6 +422,17 @@ namespace MovieList.Services.Implementations
 
             return (await context.Movies.Where(m => m.KindId == kind.Kind.Id).CountAsync()) == 0 &&
                 (await context.Series.Where(s => s.KindId == kind.Kind.Id).CountAsync()) == 0;
+        }
+
+        private void AddOrUpdate(DbContext context, EntityBase entity)
+        {
+            if (entity.Id == default)
+            {
+                context.Add(entity);
+            } else
+            {
+                context.Entry(entity).State = EntityState.Modified;
+            }
         }
 
         private void MoveOrdinalNumbersUp(MovieSeries movieSeries, int ordinalNumber)

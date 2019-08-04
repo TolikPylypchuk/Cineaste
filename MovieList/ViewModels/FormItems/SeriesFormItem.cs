@@ -25,7 +25,11 @@ namespace MovieList.ViewModels.FormItems
         private ObservableCollection<SeriesComponentFormItemBase> components;
 
         public SeriesFormItem(Series series, IEnumerable<KindViewModel> allKinds)
-            : base(series.Entry)
+            : this(series, null, allKinds)
+        { }
+
+        public SeriesFormItem(Series series, MovieSeriesFormItem? movieSeries, IEnumerable<KindViewModel> allKinds)
+            : base(series.Entry, movieSeries)
         {
             this.Series = series;
             this.AllKinds = allKinds;
@@ -203,6 +207,8 @@ namespace MovieList.ViewModels.FormItems
 
             this.RemovedTitles.Clear();
 
+            base.WriteChanges();
+
             foreach (var component in this.Components)
             {
                 component.RemovedTitles.Clear();
@@ -243,6 +249,7 @@ namespace MovieList.ViewModels.FormItems
 
         public override void RevertChanges()
         {
+            base.RevertChanges();
             this.CopySeriesProperties();
             this.AreChangesPresent = false;
         }

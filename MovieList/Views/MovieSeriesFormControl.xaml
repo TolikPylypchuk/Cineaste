@@ -51,9 +51,9 @@
                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <CheckBox Content="{x:Static resx:Messages.MovieSeriesHasName}"
                               IsChecked="{Binding HasName}" Margin="5,0" />
-                    
-                    <CheckBox Content="{x:Static resx:Messages.MovieSeriesLooselyConnected}"
-                              IsChecked="{Binding Path=IsLooselyConnected}" Margin="5,0" />
+
+                    <CheckBox Content="{x:Static resx:Messages.MovieSeriesLooselyConnected}" Margin="5,0"
+                              IsChecked="{Binding IsLooselyConnected}" IsEnabled="{Binding CanBeLooselyConnected}" />
                 </WrapPanel>
 
                 <local:TitleListControl Visibility="{Binding HasName, Converter={StaticResource BoolToVisibility}}" />
@@ -71,8 +71,8 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" Text="{Binding NumberToDisplay}" Margin="5" VerticalAlignment="Center"
-                                           TextAlignment="Right" />
+                                <TextBlock Grid.Column="0" Text="{Binding Path=NumberToDisplay}" Margin="5"
+                                           VerticalAlignment="Center" TextAlignment="Right" />
 
                                 <Button Grid.Column="1" Content="{Binding Title}" CommandParameter="{Binding}"
                                         Command="{Binding Path=Data.OpenForm, Source={StaticResource ViewModel}}"
