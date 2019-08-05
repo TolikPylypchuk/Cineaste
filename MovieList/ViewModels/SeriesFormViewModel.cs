@@ -50,6 +50,8 @@ namespace MovieList.ViewModels
             this.Cancel = new DelegateCommand(this.OnCancel, () => this.CanCancelChanges);
             this.Delete = new DelegateCommand(async () => await this.DeleteAsync(), this.CanDelete);
 
+            this.CreateMovieSeries = new DelegateCommand(this.OnCreateMovieSeries, this.CanCreateMovieSeries);
+
             this.AddSeason = new DelegateCommand(this.OnAddSeason);
             this.AddSpecialEpisode = new DelegateCommand(this.OnAddSpecialEpisode);
 
@@ -73,6 +75,8 @@ namespace MovieList.ViewModels
         public DelegateCommand Save { get; }
         public DelegateCommand Cancel { get; }
         public DelegateCommand Delete { get; }
+
+        public DelegateCommand CreateMovieSeries { get; }
 
         public DelegateCommand AddSeason { get; }
         public DelegateCommand AddSpecialEpisode { get; }
@@ -252,6 +256,12 @@ namespace MovieList.ViewModels
 
         private bool CanDelete()
             => this.Series.Series.Id != default;
+
+        public void OnCreateMovieSeries()
+            => this.SidePanel.CreateMovieSeries.ExecuteIfCan(this.Series.Series);
+
+        public bool CanCreateMovieSeries()
+            => this.Series.Series.Id != default && this.Series.Series.Entry == null;
 
         private void OnAddSeason()
         {
@@ -438,6 +448,7 @@ namespace MovieList.ViewModels
         {
             this.AllKinds = new ObservableCollection<KindViewModel>(e?.Kinds);
             this.Series.Kind = this.AllKinds.First(k => k.Kind.Id == this.Series.Kind.Kind.Id);
+            this.Series.AllKinds = this.AllKinds;
         }
     }
 }

@@ -22,6 +22,9 @@ namespace MovieList.ViewModels.ListItems
 
         public Series Series { get; }
 
+        public override EntityBase Entity
+            => this.Series;
+
         public override int CompareTo(MovieListItem other)
             => this.CompareToEntry(other, this.Series.Entry, other.Movie.Entry);
 

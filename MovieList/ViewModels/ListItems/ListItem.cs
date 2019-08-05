@@ -68,6 +68,7 @@ namespace MovieList.ViewModels.ListItems
                 this.OnPropertyChanged();
             }
         }
+
         public Color Color
         {
             get => this.color;
@@ -78,13 +79,15 @@ namespace MovieList.ViewModels.ListItems
             }
         }
 
+        public abstract EntityBase Entity { get; }
+
         public override bool Equals(object? obj)
             => obj is ListItem item && this.Equals(item);
 
         public bool Equals(ListItem other)
             => other != null &&
                 this.DisplayNumber == other.DisplayNumber &&
-                this.Title == other.DisplayNumber &&
+                this.Title == other.Title &&
                 this.OriginalTitle == other.OriginalTitle &&
                 this.Year == other.Year &&
                 this.Color == other.Color;

@@ -40,7 +40,7 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public Series Series { get; }
-        public IEnumerable<KindViewModel> AllKinds { get; }
+        public IEnumerable<KindViewModel> AllKinds { get; set; }
 
         public IEnumerable<SeriesStatus> AllStatuses { get; } =
             Enum.GetValues(typeof(SeriesStatus)).Cast<SeriesStatus>().ToList();

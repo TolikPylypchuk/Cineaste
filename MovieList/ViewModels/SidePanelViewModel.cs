@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,27 +24,31 @@ namespace MovieList.ViewModels
             this.serviceProvider = serviceProvider;
             this.dbService = dbService;
 
-            this.OpenMovie = new DelegateCommand<Movie>(this.OnOpenMovie);
-            this.OpenSeries = new DelegateCommand<Series>(this.OnOpenSeries);
-            this.OpenMovieSeries = new DelegateCommand<MovieSeries>(this.OnOpenMovieSeries);
+            this.OpenMovie = new DelegateCommand<Movie>(async movie => await this.OpenMovieAsync(movie));
+            this.OpenSeries = new DelegateCommand<Series>(async series => await this.OpenSeriesAsync(series));
+            this.OpenMovieSeries = new DelegateCommand<MovieSeries>(
+                async movieSeries => await this.OpenMovieSeriesAsync(movieSeries));
             this.OpenSeriesComponent = new DelegateCommand<SeriesComponentFormItemBase>(this.OnOpenSeriesComponent);
+            this.CreateMovieSeries = new DelegateCommand<EntityBase>(
+                async entity => await this.CreateMovieSeriesAsync(entity));
 
             this.Close = new DelegateCommand(this.OnClose);
 
             this.GoUpToSeries = new DelegateCommand(this.OnGoUpToSeries, this.CanGoUpToSeries);
             this.GoUpToMovieSeries = new DelegateCommand<EntityBase?>(
-                this.OnGoUpToMovieSeries, this.CanGoUpToMovieSeries);
+                async entity => await this.GoUpToMovieSeriesAsync(entity), this.CanGoUpToMovieSeries);
 
             this.SelectNextEntry = new DelegateCommand<EntityBase?>(
-                this.OnSelectNextEntry, this.CanSelectNextEntry);
+                async entity => await this.SelectNextEntryAsync(entity), this.CanSelectNextEntry);
             this.SelectPreviousEntry = new DelegateCommand<EntityBase?>(
-                this.OnSelectPreviousEntry, this.CanSelectPreviousEntry);
+                async entity => await this.SelectPreviousEntryAsync(entity), this.CanSelectPreviousEntry);
         }
 
         public DelegateCommand<Movie> OpenMovie { get; }
         public DelegateCommand<Series> OpenSeries { get; }
         public DelegateCommand<MovieSeries> OpenMovieSeries { get; }
         public DelegateCommand<SeriesComponentFormItemBase> OpenSeriesComponent { get; }
+        public DelegateCommand<EntityBase> CreateMovieSeries { get; }
 
         public DelegateCommand Close { get; }
 
@@ -57,7 +62,7 @@ namespace MovieList.ViewModels
 
         public event EventHandler Closed;
 
-        private async void OnOpenMovie(Movie movie)
+        private async Task OpenMovieAsync(Movie movie)
         {
             var control = new MovieFormControl();
             control.DataContext = control.ViewModel =
@@ -69,7 +74,7 @@ namespace MovieList.ViewModels
             this.SidePanelControl.ContentContainer.Content = control;
         }
 
-        private async void OnOpenSeries(Series series)
+        private async Task OpenSeriesAsync(Series series)
         {
             var control = new SeriesFormControl();
             control.DataContext = control.ViewModel =
@@ -81,14 +86,14 @@ namespace MovieList.ViewModels
             this.SidePanelControl.ContentContainer.Content = control;
         }
 
-        private async void OnOpenMovieSeries(MovieSeries movieSeries)
+        private async Task OpenMovieSeriesAsync(MovieSeries movieSeries)
         {
             var control = new MovieSeriesFormControl();
             control.DataContext = control.ViewModel =
                 this.serviceProvider.GetRequiredService<MovieSeriesFormViewModel>();
             control.ViewModel.MovieSeriesFormControl = control;
-            var allKinds = await this.dbService.LoadAllKindsAsync();
-            control.ViewModel.MovieSeries = new MovieSeriesFormItem(movieSeries, allKinds);
+            control.ViewModel.AllKinds = await this.dbService.LoadAllKindsAsync();
+            control.ViewModel.MovieSeries = new MovieSeriesFormItem(movieSeries, control.ViewModel.AllKinds);
 
             this.SidePanelControl.ContentContainer.Content = control;
         }
@@ -128,6 +133,48 @@ namespace MovieList.ViewModels
             }
         }
 
+        private async Task CreateMovieSeriesAsync(EntityBase entity)
+        {
+            var movieSeries = new MovieSeries();
+
+            var entry = new MovieSeriesEntry
+            {
+                MovieSeries = movieSeries
+            };
+
+            switch (entity)
+            {
+                case Movie movie:
+                    entry.Movie = movie;
+                    movie.Entry = entry;
+                    break;
+                case Series series:
+                    entry.Series = series;
+                    series.Entry = entry;
+                    break;
+                default:
+                    throw new NotSupportedException($"Creating a movie series for {entity} is not supported.");
+            }
+
+            movieSeries.Entries.Add(entry);
+
+            var control = new MovieSeriesFormControl();
+            control.DataContext = control.ViewModel =
+                this.serviceProvider.GetRequiredService<MovieSeriesFormViewModel>();
+            control.ViewModel.MovieSeriesFormControl = control;
+
+            control.ViewModel.MovieSeries = new MovieSeriesFormItem(
+                movieSeries, await this.dbService.LoadAllKindsAsync());
+
+            var component = control.ViewModel.MovieSeries.Components[0];
+            component.OrdinalNumber = 1;
+            component.DisplayNumber = 1;
+
+            this.SidePanelControl.ContentContainer.Content = control;
+
+            control.ViewModel.MovieSeries.ForceRefreshProperty(nameof(MovieSeriesFormItem.AreChangesPresent));
+        }
+
         private void OnClose()
         {
             var control = new AddNewControl();
@@ -146,15 +193,15 @@ namespace MovieList.ViewModels
         private bool CanGoUpToSeries()
             => this.parentFormControl != null;
 
-        private void OnGoUpToMovieSeries(EntityBase? entity)
+        private async Task GoUpToMovieSeriesAsync(EntityBase? entity)
         {
             switch (entity)
             {
                 case MovieSeriesEntry entry:
-                    this.OnOpenMovieSeries(entry.MovieSeries);
+                    await this.OpenMovieSeriesAsync(entry.MovieSeries);
                     break;
                 case MovieSeries movieSeries:
-                    this.OnOpenMovieSeries(movieSeries.ParentSeries!);
+                    await this.OpenMovieSeriesAsync(movieSeries.ParentSeries!);
                     break;
             }
         }
@@ -167,7 +214,7 @@ namespace MovieList.ViewModels
                 _ => false
             };
 
-        private void OnSelectNextEntry(EntityBase? entity)
+        private async Task SelectNextEntryAsync(EntityBase? entity)
         {
             (MovieSeries? movieSeries, int ordinalNumber) = entity switch
             {
@@ -188,7 +235,7 @@ namespace MovieList.ViewModels
 
             if (nextEntry != null && nextEntry.OrdinalNumber == ordinalNumber + 1)
             {
-                this.OpenEntry(nextEntry);
+                await this.OpenEntryAsync(nextEntry);
             } else
             {
                 var nextPart = movieSeries.Parts
@@ -198,7 +245,7 @@ namespace MovieList.ViewModels
 
                 if (nextPart != null)
                 {
-                    this.OpenEntry(nextPart.GetFirstEntry());
+                    await this.OpenEntryAsync(nextPart.GetFirstEntry());
                 }
             }
         }
@@ -216,7 +263,7 @@ namespace MovieList.ViewModels
                 movieSeries.Parts.Any(p => p.OrdinalNumber! > ordinalNumber));
         }
 
-        private void OnSelectPreviousEntry(EntityBase? entity)
+        private async Task SelectPreviousEntryAsync(EntityBase? entity)
         {
             (MovieSeries? movieSeries, int ordinalNumber) = entity switch
             {
@@ -237,7 +284,7 @@ namespace MovieList.ViewModels
 
             if (previousEntry != null && previousEntry.OrdinalNumber == ordinalNumber - 1)
             {
-                this.OpenEntry(previousEntry);
+                await this.OpenEntryAsync(previousEntry);
             } else
             {
                 var previousPart = movieSeries.Parts
@@ -247,7 +294,7 @@ namespace MovieList.ViewModels
 
                 if (previousPart != null)
                 {
-                    this.OpenEntry(previousPart.GetFirstEntry());
+                    await this.OpenEntryAsync(previousPart.GetFirstEntry());
                 }
             }
         }
@@ -265,15 +312,7 @@ namespace MovieList.ViewModels
                 movieSeries.Parts.Any(p => p.OrdinalNumber! < ordinalNumber));
         }
 
-        private void OpenEntry(MovieSeriesEntry entry)
-        {
-            if (entry.Movie != null)
-            {
-                this.OnOpenMovie(entry.Movie);
-            } else
-            {
-                this.OnOpenSeries(entry.Series!);
-            }
-        }
+        private async Task OpenEntryAsync(MovieSeriesEntry entry)
+            => await (entry.Movie != null ? this.OpenMovieAsync(entry.Movie) : this.OpenSeriesAsync(entry.Series!));
     }
 }

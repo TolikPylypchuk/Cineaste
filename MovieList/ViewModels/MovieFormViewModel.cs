@@ -41,6 +41,8 @@ namespace MovieList.ViewModels
             this.Cancel = new DelegateCommand(() => this.Movie.RevertChanges(), () => this.CanCancelChanges);
             this.Delete = new DelegateCommand(async () => await this.DeleteAsync(), this.CanDelete);
 
+            this.CreateMovieSeries = new DelegateCommand(this.OnCreateMovieSeries, this.CanCreateMovieSeries);
+
             movieList.ListItemUpdated += this.OnListItemUpdated;
             settings.SettingsUpdated += this.OnSettingsUpdated;
         }
@@ -48,6 +50,8 @@ namespace MovieList.ViewModels
         public DelegateCommand Save { get; }
         public DelegateCommand Cancel { get; }
         public DelegateCommand Delete { get; }
+
+        public DelegateCommand CreateMovieSeries { get; }
 
         public MovieFormControl MovieFormControl { get; set; }
 
@@ -134,6 +138,12 @@ namespace MovieList.ViewModels
         public bool CanDelete()
             => this.Movie.Movie.Id != default;
 
+        public void OnCreateMovieSeries()
+            => this.SidePanel.CreateMovieSeries.ExecuteIfCan(this.Movie.Movie);
+
+        public bool CanCreateMovieSeries()
+            => this.Movie.Movie.Id != default && this.Movie.Movie.Entry == null;
+
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             base.OnPropertyChanged(propertyName);
@@ -175,6 +185,7 @@ namespace MovieList.ViewModels
         {
             this.AllKinds = new ObservableCollection<KindViewModel>(e?.Kinds);
             this.Movie.Kind = this.AllKinds.First(k => k.Kind.Id == this.Movie.Kind.Kind.Id);
+            this.Movie.AllKinds = this.AllKinds;
         }
     }
 }

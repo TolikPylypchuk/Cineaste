@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using MovieList.Commands;
 using MovieList.Config;
 using MovieList.Controls;
 using MovieList.Data.Models;
+using MovieList.Events;
 using MovieList.Services;
 using MovieList.ViewModels.FormItems;
 using MovieList.ViewModels.ListItems;
@@ -21,12 +23,14 @@ namespace MovieList.ViewModels
         private readonly IOptions<Configuration> config;
 
         private MovieSeriesFormItem movieSeries;
+        private ObservableCollection<KindViewModel> allKinds;
 
         public MovieSeriesFormViewModel(
             IDbService dbService,
             IOptions<Configuration> config,
             MovieListViewModel movieList,
-            SidePanelViewModel sidePanel)
+            SidePanelViewModel sidePanel,
+            SettingsViewModel settings)
         {
             this.dbService = dbService;
             this.config = config;
@@ -34,7 +38,7 @@ namespace MovieList.ViewModels
             this.SidePanel = sidePanel;
 
             this.Save = new DelegateCommand(async () => await this.SaveAsync(), () => this.CanSaveChanges);
-            this.Cancel = new DelegateCommand(() => this.MovieSeries.RevertChanges(), () => this.CanCancelChanges);
+            this.Cancel = new DelegateCommand(this.OnCancel, () => this.CanCancelChanges);
 
             this.OpenForm = new DelegateCommand<MovieSeriesComponentFormItemBase>(c => c.OpenForm(this.SidePanel));
             this.ShowOrdinalNumber = new DelegateCommand<MovieSeriesComponentFormItemBase>(
@@ -50,6 +54,8 @@ namespace MovieList.ViewModels
             this.AttachMovie = new DelegateCommand<Movie>(this.OnAttachMovie);
             this.AttachSeries = new DelegateCommand<Series>(this.OnAttachSeries);
             this.AttachMovieSeries = new DelegateCommand<MovieSeries>(this.OnAttachMovieSeries);
+
+            settings.SettingsUpdated += this.OnSettingsUpdated;
         }
 
         public DelegateCommand Save { get; }
@@ -87,6 +93,16 @@ namespace MovieList.ViewModels
         public string FormTitle
             => this.MovieSeries.MovieSeries.GetTitleName();
 
+        public ObservableCollection<KindViewModel> AllKinds
+        {
+            get => this.allKinds;
+            set
+            {
+                this.allKinds = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public bool CanSaveChanges
             => this.MovieSeries.AreChangesPresent &&
                 !this.MovieSeries.HasErrors &&
@@ -121,30 +137,59 @@ namespace MovieList.ViewModels
                     .OfType<MovieSeriesFormItem>()
                     .Select(item => item.MovieSeries);
 
-            this.MovieSeries.WriteChanges();
+            var hadName = this.MovieSeries.MovieSeries.Title != null;
+            var hasName = this.MovieSeries.HasName;
 
-            bool shouldAddToList = this.MovieSeries.MovieSeries.Id == default && this.MovieSeries.HasName;
+            this.MovieSeries.WriteChanges();
 
             await this.dbService.SaveMovieSeriesAsync(
                 this.MovieSeries.MovieSeries, titlesToDelete, entriesToDelete, partsToDetach);
 
-            (shouldAddToList
-                ? this.MovieList.AddItem
-                : (this.MovieSeries.HasName ? this.MovieList.UpdateItem : this.MovieList.DeleteItem))
-                .ExecuteIfCan(this.MovieSeries.MovieSeries);
+            var action = (hadName, hasName) switch
+            {
+                (true, true) => this.MovieList.UpdateItem,
+                (false, true) => this.MovieList.AddItem,
+                (true, false) => this.MovieList.DeleteItem,
+                _ => DelegateCommand<EntityBase>.DoNothing
+            };
 
+            action.ExecuteIfCan(this.MovieSeries.MovieSeries);
             this.UpdateItems(this.MovieSeries.MovieSeries);
 
             this.MovieList.SelectItem.ExecuteIfCan(new MovieSeriesListItem(this.MovieSeries.MovieSeries, this.config.Value));
+        }
+
+        private void OnCancel()
+        {
+            if (this.MovieSeries.MovieSeries.Id != default)
+            {
+                this.MovieSeries.RevertChanges();
+            } else
+            {
+                var entry = this.MovieSeries.MovieSeries.GetFirstEntry();
+
+                if (entry.Movie != null)
+                {
+                    entry.Movie.Entry = null;
+                    this.SidePanel.OpenMovie.ExecuteIfCan(entry.Movie);
+                } else
+                {
+                    entry.Series!.Entry = null;
+                    this.SidePanel.OpenSeries.ExecuteIfCan(entry.Series!);
+                }
+            }
         }
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             base.OnPropertyChanged(propertyName);
 
-            base.OnPropertyChanged(nameof(this.CanSaveChanges));
-            base.OnPropertyChanged(nameof(this.CanCancelChanges));
-            base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
+            if (propertyName != nameof(this.AllKinds))
+            {
+                base.OnPropertyChanged(nameof(this.CanSaveChanges));
+                base.OnPropertyChanged(nameof(this.CanCancelChanges));
+                base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
+            }
         }
 
         private void OnShowOrdinalNumber(MovieSeriesComponentFormItemBase component)
@@ -221,6 +266,12 @@ namespace MovieList.ViewModels
 
                 this.UpdateItems(part);
             }
+        }
+
+        private void OnSettingsUpdated(object? sender, SettingsUpdatedEventArgs? e)
+        {
+            this.AllKinds = new ObservableCollection<KindViewModel>(e?.Kinds);
+            this.MovieSeries.AllKinds = this.AllKinds;
         }
     }
 }

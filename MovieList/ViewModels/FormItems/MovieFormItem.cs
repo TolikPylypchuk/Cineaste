@@ -38,7 +38,7 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public Movie Movie { get; }
-        public IEnumerable<KindViewModel> AllKinds { get; }
+        public IEnumerable<KindViewModel> AllKinds { get; set; }
 
         [StringRange(
             Min = 1850,

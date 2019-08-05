@@ -18,6 +18,8 @@ namespace MovieList.Commands
             this.canExecute = canExecute;
         }
 
+        public static DelegateCommand<T> DoNothing { get; } = new DelegateCommand<T>(_ => { });
+
         public event EventHandler CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;

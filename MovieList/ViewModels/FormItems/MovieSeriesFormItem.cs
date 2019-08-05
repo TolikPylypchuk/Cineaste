@@ -25,8 +25,6 @@ namespace MovieList.ViewModels.FormItems
         private ObservableCollection<MovieSeriesComponentFormItemBase> detachedComponents =
             new ObservableCollection<MovieSeriesComponentFormItemBase>();
 
-        private readonly IEnumerable<KindViewModel> allKinds;
-
         public MovieSeriesFormItem(MovieSeries movieSeries, IEnumerable<KindViewModel> allKinds)
             : this(movieSeries, null, allKinds)
         { }
@@ -38,7 +36,7 @@ namespace MovieList.ViewModels.FormItems
         {
             this.MovieSeries = movieSeries;
             this.ParentSeries = parentSeries;
-            this.allKinds = allKinds;
+            this.AllKinds = allKinds;
 
             this.CopyMovieSeriesProperties();
             this.IsInitialized = true;
@@ -46,6 +44,8 @@ namespace MovieList.ViewModels.FormItems
 
         public MovieSeries MovieSeries { get; }
         public MovieSeriesFormItem? ParentSeries { get; }
+
+        public IEnumerable<KindViewModel> AllKinds { get; set; }
 
         public bool HasName
         {
@@ -285,12 +285,12 @@ namespace MovieList.ViewModels.FormItems
         private IEnumerable<MovieSeriesComponentFormItemBase> GetMovieSeriesComponents()
             => this.MovieSeries.Entries
                     .Select(this.CreateFormItem)
-                    .Union(this.MovieSeries.Parts.Select(p => new MovieSeriesFormItem(p, this, this.allKinds)))
+                    .Union(this.MovieSeries.Parts.Select(p => new MovieSeriesFormItem(p, this, this.AllKinds)))
                     .OrderBy(item => item.OrdinalNumber);
 
         private MovieSeriesComponentFormItemBase CreateFormItem(MovieSeriesEntry entry)
             => entry.Movie != null
-                ? (MovieSeriesComponentFormItemBase)new MovieFormItem(entry.Movie, this, this.allKinds)
-                : new SeriesFormItem(entry.Series!, this, this.allKinds);
+                ? (MovieSeriesComponentFormItemBase)new MovieFormItem(entry.Movie, this, this.AllKinds)
+                : new SeriesFormItem(entry.Series!, this, this.AllKinds);
     }
 }

@@ -20,6 +20,9 @@ namespace MovieList.ViewModels.ListItems
 
         public Movie Movie { get; }
 
+        public override EntityBase Entity
+            => this.Movie;
+
         public override int CompareTo(MovieListItem other)
             => this.Movie.Id == other.Movie.Id
                 ? 0

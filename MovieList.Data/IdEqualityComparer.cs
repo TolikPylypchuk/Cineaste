@@ -16,7 +16,7 @@ namespace MovieList.Data
         public override bool Equals(TEntity x, TEntity y)
             => x == null
                 ? y == null ? true : false
-                : x.Id.Equals(y.Id);
+                : x.GetType().Equals(y.GetType()) && x.Id.Equals(y.Id);
 
         public override int GetHashCode(TEntity e)
             => e == null ? 1 : e.Id.GetHashCode();

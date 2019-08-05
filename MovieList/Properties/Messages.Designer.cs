@@ -214,6 +214,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Створити серію фільмів/серіалів.
+        /// </summary>
+        public static string CreateMovieSeries {
+            get {
+                return ResourceManager.GetString("CreateMovieSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Шлях до бази даних.
         /// </summary>
         public static string DatabasePath {

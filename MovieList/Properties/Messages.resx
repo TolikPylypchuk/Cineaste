@@ -168,6 +168,9 @@
   <data name="Components" xml:space="preserve">
     <value>Частини</value>
   </data>
+  <data name="CreateMovieSeries" xml:space="preserve">
+    <value>Створити серію фільмів/серіалів</value>
+  </data>
   <data name="DatabasePath" xml:space="preserve">
     <value>Шлях до бази даних</value>
   </data>

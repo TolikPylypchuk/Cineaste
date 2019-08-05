@@ -274,6 +274,10 @@
                                   Style="{StaticResource UrlInputTextBoxStyle}"
                                   VerifyFunc="{Binding VerifyPosterUrl}" />
 
+                <Button Content="{x:Static resx:Messages.CreateMovieSeries}" HorizontalAlignment="Center" Margin="5" 
+                        Command="{Binding Path=Data.CreateMovieSeries, Source={StaticResource ViewModel}}"
+                        Visibility="{Binding Path=IsEnabled, Converter={StaticResource BoolToVisibility}, RelativeSource={RelativeSource Self}}"/>
+
                 <Button Content="{x:Static resx:Messages.Delete}" Command="{Binding Path=Data.Delete, Source={StaticResource ViewModel}}"
                         Visibility="{Binding Path=IsEnabled, Converter={StaticResource BoolToVisibility}, RelativeSource={RelativeSource Self}}"
                         Style="{StaticResource ButtonDanger}" HorizontalAlignment="Center" Margin="5" />

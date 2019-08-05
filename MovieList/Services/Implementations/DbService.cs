@@ -51,6 +51,7 @@ namespace MovieList.Services.Implementations
                     .ThenInclude(e => e.Movie)
                 .Include(ms => ms.Entries)
                     .ThenInclude(e => e.Series)
+                .Include(ms => ms.Titles)
                 .ToListAsync();
 
             return movies
@@ -192,10 +193,10 @@ namespace MovieList.Services.Implementations
 
             if (movieSeries.Id == default)
             {
-                context.Add(movieSeries);
+                context.Entry(movieSeries).State = EntityState.Added;
                 foreach (var entry in movieSeries.Entries)
                 {
-                    context.Add(entry);
+                    context.Entry(entry).State = EntityState.Added;
                 }
             } else
             {

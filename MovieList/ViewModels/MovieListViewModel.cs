@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Options;
 
 using MovieList.Commands;
 using MovieList.Config;
+using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Events;
 using MovieList.Services;
@@ -170,7 +172,20 @@ namespace MovieList.ViewModels
 
         private void OnUpdateItem(EntityBase entity)
         {
-            this.OnDeleteItem(entity);
+            ListItem? item = entity switch
+            {
+                Movie movie => new MovieListItem(movie, this.config.Value),
+                Series series => new SeriesListItem(series, this.config.Value),
+                MovieSeries movieSeries => new MovieSeriesListItem(movieSeries, this.config.Value),
+                _ => (ListItem?)null
+            };
+
+            if (item != null)
+            {
+                this.Items.Remove(this.Items.First(
+                    i => IdEqualityComparer<EntityBase>.Instance.Equals(i.Entity, item.Entity)));
+            }
+
             this.OnAddItem(entity);
         }
 
