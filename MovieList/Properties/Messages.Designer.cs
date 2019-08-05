@@ -106,6 +106,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Антологія.
+        /// </summary>
+        public static string Anthology {
+            get {
+                return ResourceManager.GetString("Anthology", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Квітень.
         /// </summary>
         public static string April {

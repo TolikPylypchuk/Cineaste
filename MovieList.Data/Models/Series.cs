@@ -11,6 +11,7 @@ namespace MovieList.Data.Models
     {
         public bool IsWatched { get; set; }
         public bool IsMiniseries { get; set; }
+        public bool IsAnthology { get; set; }
 
         public SeriesStatus Status { get; set; }
 

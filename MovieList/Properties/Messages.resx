@@ -132,6 +132,9 @@
   <data name="AdvancedSettings" xml:space="preserve">
     <value>Розширені налаштування</value>
   </data>
+  <data name="Anthology" xml:space="preserve">
+    <value>Антологія</value>
+  </data>
   <data name="April" xml:space="preserve">
     <value>Квітень</value>
   </data>

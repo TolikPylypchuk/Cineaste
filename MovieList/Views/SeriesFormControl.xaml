@@ -55,10 +55,16 @@
                 </TextBlock>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                            <Setter Property="Margin" Value="10,0" />
+                        </Style>
+                    </StackPanel.Resources>
+                    
                     <CheckBox x:Name="IsWatchedCheckBox" Content="{x:Static resx:Messages.Watched}" IsChecked="{Binding IsWatched}"
                               IsEnabled="{Binding Converter={StaticResource CanSelectIfWatched}}" />
                     
-                    <CheckBox x:Name="IsMiniseriesCheckBox" Content="{x:Static resx:Messages.Miniseries}" Margin="10,0,0,0"
+                    <CheckBox x:Name="IsMiniseriesCheckBox" Content="{x:Static resx:Messages.Miniseries}"
                               IsChecked="{Binding Path=IsMiniseries}" IsEnabled="{Binding CanSelectIfMiniseries}">
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="Checked">
@@ -69,6 +75,8 @@
                             </b:EventTrigger>
                         </b:Interaction.Triggers>
                     </CheckBox>
+
+                    <CheckBox Content="{x:Static resx:Messages.Anthology}" IsChecked="{Binding IsAnthology}" />
                 </StackPanel>
 
                 <StackPanel Visibility="{Binding Path=IsMiniseries, Converter={StaticResource BoolToVisibility}}" Margin="0,5,0,0">

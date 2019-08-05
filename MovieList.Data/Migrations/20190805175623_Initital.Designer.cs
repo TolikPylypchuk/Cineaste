@@ -9,8 +9,8 @@ using MovieList.Data;
 namespace MovieList.Data.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20190729200245_Initial")]
-    partial class Initial
+    [Migration("20190805175623_Initital")]
+    partial class Initital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -183,6 +183,8 @@ namespace MovieList.Data.Migrations
                     b.Property<string>("ImdbLink")
                         .IsRequired()
                         .HasMaxLength(256);
+
+                    b.Property<bool>("IsAnthology");
 
                     b.Property<bool>("IsMiniseries");
 

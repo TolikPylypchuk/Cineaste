@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieList.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Initital : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,6 +76,7 @@ namespace MovieList.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     IsWatched = table.Column<bool>(nullable: false),
                     IsMiniseries = table.Column<bool>(nullable: false),
+                    IsAnthology = table.Column<bool>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     ImdbLink = table.Column<string?>(maxLength: 256, nullable: true),
                     PosterUrl = table.Column<string?>(maxLength: 256, nullable: true),
@@ -211,11 +212,11 @@ namespace MovieList.Data.Migrations
                     Name = table.Column<string>(maxLength: 128, nullable: false),
                     Priority = table.Column<int>(nullable: false),
                     IsOriginal = table.Column<bool>(nullable: false),
-                    MovieId = table.Column<int>(nullable: true),
-                    SeriesId = table.Column<int>(nullable: true),
-                    MovieSeriesId = table.Column<int>(nullable: true),
-                    SeasonId = table.Column<int>(nullable: true),
-                    SpecialEpisodeId = table.Column<int>(nullable: true)
+                    MovieId = table.Column<int?>(nullable: true),
+                    SeriesId = table.Column<int?>(nullable: true),
+                    MovieSeriesId = table.Column<int?>(nullable: true),
+                    SeasonId = table.Column<int?>(nullable: true),
+                    SpecialEpisodeId = table.Column<int?>(nullable: true)
                 },
                 constraints: table =>
                 {

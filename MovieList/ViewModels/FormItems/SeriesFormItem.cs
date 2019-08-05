@@ -16,6 +16,7 @@ namespace MovieList.ViewModels.FormItems
     {
         private bool isWatched;
         private bool isMiniseries;
+        private bool isAnthology;
         private SeriesStatus status;
         private string? imdbLink;
         private string? posterUrl;
@@ -60,6 +61,16 @@ namespace MovieList.ViewModels.FormItems
             set
             {
                 this.isMiniseries = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public bool IsAnthology
+        {
+            get => this.isAnthology;
+            set
+            {
+                this.isAnthology = value;
                 this.OnPropertyChanged();
             }
         }
@@ -172,6 +183,7 @@ namespace MovieList.ViewModels.FormItems
                  () => this.Series.Titles.Where(t => t.IsOriginal).OrderBy(t => t.Priority).Select(t => t.Name)),
                 (() => this.IsWatched, () => this.Series.IsWatched),
                 (() => this.IsMiniseries, () => this.Series.IsMiniseries),
+                (() => this.IsAnthology, () => this.Series.IsAnthology),
                 (() => this.Status, () => this.Series.Status),
                 (() => this.ImdbLink, () => this.Series.ImdbLink),
                 (() => this.PosterUrl, () => this.Series.PosterUrl),
@@ -240,6 +252,7 @@ namespace MovieList.ViewModels.FormItems
 
             this.Series.IsWatched = this.IsWatched;
             this.Series.IsMiniseries = this.IsMiniseries;
+            this.Series.IsAnthology = this.IsAnthology;
             this.Series.Status = this.Status;
             this.Series.ImdbLink = this.ImdbLink;
             this.Series.PosterUrl = this.PosterUrl;
@@ -265,6 +278,7 @@ namespace MovieList.ViewModels.FormItems
 
             this.IsWatched = this.Series.IsWatched;
             this.IsMiniseries = this.Series.IsMiniseries;
+            this.IsAnthology = this.Series.IsAnthology;
             this.Status = this.Series.Status;
             this.ImdbLink = this.Series.ImdbLink;
             this.PosterUrl = this.Series.PosterUrl;
