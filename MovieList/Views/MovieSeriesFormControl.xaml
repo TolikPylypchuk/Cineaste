@@ -112,6 +112,26 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonPrimary}">
+                            <Setter Property="Margin" Value="2,5" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        </Style>
+                    </Grid.Resources>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Content="{x:Static resx:Messages.AddNewMovie}"
+                            Command="{Binding Path=Data.AddMovie, Source={StaticResource ViewModel}}" />
+
+                    <Button Grid.Column="1" Content="{x:Static resx:Messages.AddNewSeries}"
+                            Command="{Binding Path=Data.AddSeries, Source={StaticResource ViewModel}}" />
+                </Grid>
+
                 <controls:TextBox Text="{Binding Path=PosterUrl, UpdateSourceTrigger=PropertyChanged}"
                                   hc:InfoElement.Title="{x:Static resx:Messages.PosterUrl}"
                                   Style="{StaticResource UrlInputTextBoxStyle}"

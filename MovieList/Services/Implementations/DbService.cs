@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -83,8 +82,8 @@ namespace MovieList.Services.Implementations
 
             if (movie.Id == default)
             {
-                context.Attach(movie.Kind);
-                context.Add(movie);
+                context.ChangeTracker.TrackGraph(movie, node =>
+                    node.Entry.State = !node.Entry.IsKeySet ? EntityState.Added : EntityState.Unchanged);
             } else
             {
                 context.Entry(movie).State = EntityState.Modified;
@@ -113,8 +112,8 @@ namespace MovieList.Services.Implementations
 
             if (series.Id == default)
             {
-                context.Attach(series.Kind);
-                context.Add(series);
+                context.ChangeTracker.TrackGraph(series, node =>
+                    node.Entry.State = !node.Entry.IsKeySet ? EntityState.Added : EntityState.Unchanged);
             } else
             {
                 context.Entry(series).State = EntityState.Modified;

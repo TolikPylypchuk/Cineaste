@@ -166,7 +166,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <Grid Visibility="{Binding Path=IsMiniseries, Converter={StaticResource InverseBoolToVisibility}}" >
+                <Grid Visibility="{Binding Path=IsMiniseries, Converter={StaticResource InverseBoolToVisibility}}">
                     <Grid.Resources>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonPrimary}">
                             <Setter Property="Margin" Value="2,5" />

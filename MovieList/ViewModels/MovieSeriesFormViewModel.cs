@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -40,7 +42,7 @@ namespace MovieList.ViewModels
             this.Save = new DelegateCommand(async () => await this.SaveAsync(), () => this.CanSaveChanges);
             this.Cancel = new DelegateCommand(this.OnCancel, () => this.CanCancelChanges);
 
-            this.OpenForm = new DelegateCommand<MovieSeriesComponentFormItemBase>(c => c.OpenForm(this.SidePanel));
+            this.OpenForm = new DelegateCommand<MovieSeriesComponentFormItemBase>(this.OnOpenForm);
             this.ShowOrdinalNumber = new DelegateCommand<MovieSeriesComponentFormItemBase>(
                 this.OnShowOrdinalNumber, this.CanShowOrdinalNumber);
             this.HideOrdinalNumber = new DelegateCommand<MovieSeriesComponentFormItemBase>(
@@ -50,6 +52,9 @@ namespace MovieList.ViewModels
             this.MoveComponentDown = new DelegateCommand<MovieSeriesComponentFormItemBase>(
                 this.OnMoveComponentDown, this.CanMoveComponentDown);
             this.DetachComponent = new DelegateCommand<MovieSeriesComponentFormItemBase>(this.OnDetachComponent);
+
+            this.AddMovie = new DelegateCommand(this.OnAddMovie);
+            this.AddSeries = new DelegateCommand(this.OnAddSeries);
 
             this.AttachMovie = new DelegateCommand<Movie>(this.OnAttachMovie);
             this.AttachSeries = new DelegateCommand<Series>(this.OnAttachSeries);
@@ -67,6 +72,9 @@ namespace MovieList.ViewModels
         public DelegateCommand<MovieSeriesComponentFormItemBase> MoveComponentUp { get; }
         public DelegateCommand<MovieSeriesComponentFormItemBase> MoveComponentDown { get; }
         public DelegateCommand<MovieSeriesComponentFormItemBase> DetachComponent { get; }
+
+        public DelegateCommand AddMovie { get; }
+        public DelegateCommand AddSeries { get; }
 
         public DelegateCommand<Movie> AttachMovie { get; }
         public DelegateCommand<Series> AttachSeries { get; }
@@ -156,7 +164,14 @@ namespace MovieList.ViewModels
             action.ExecuteIfCan(this.MovieSeries.MovieSeries);
             this.UpdateItems(this.MovieSeries.MovieSeries);
 
-            this.MovieList.SelectItem.ExecuteIfCan(new MovieSeriesListItem(this.MovieSeries.MovieSeries, this.config.Value));
+            if (this.MovieSeries.HasName)
+            {
+                this.MovieList.SelectItem.ExecuteIfCan(
+                    new MovieSeriesListItem(this.MovieSeries.MovieSeries, this.config.Value));
+            } else
+            {
+                this.SidePanel.OpenMovieSeries.ExecuteIfCan(this.MovieSeries.MovieSeries);
+            }
         }
 
         private void OnCancel()
@@ -190,6 +205,24 @@ namespace MovieList.ViewModels
                 base.OnPropertyChanged(nameof(this.CanCancelChanges));
                 base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
             }
+        }
+
+        private void OnOpenForm(MovieSeriesComponentFormItemBase component)
+        {
+            if (this.MovieSeries.MovieSeries.Id == default)
+            {
+                var entry = this.MovieSeries.MovieSeries.GetFirstEntry();
+
+                if (entry.Movie != null)
+                {
+                    entry.Movie.Entry = null;
+                } else
+                {
+                    entry.Series!.Entry = null;
+                }
+            }
+
+            component.OpenForm(this.SidePanel);
         }
 
         private void OnShowOrdinalNumber(MovieSeriesComponentFormItemBase component)
@@ -236,6 +269,66 @@ namespace MovieList.ViewModels
 
         private void OnDetachComponent(MovieSeriesComponentFormItemBase component)
         {
+        }
+
+        private void OnAddMovie()
+        {
+            var movie = new Movie
+            {
+                Titles = new List<Title>
+                {
+                    new Title { Name = String.Empty, IsOriginal = false, Priority = 1 },
+                    new Title { Name = String.Empty, IsOriginal = true, Priority = 1 }
+                },
+                Year = 2000,
+                Entry = new MovieSeriesEntry
+                {
+                    MovieSeries = this.MovieSeries.MovieSeries,
+                    OrdinalNumber = this.MovieSeries.Components
+                        .OrderByDescending(c => c.OrdinalNumber)
+                        .First()
+                        .OrdinalNumber + 1,
+                    DisplayNumber = this.MovieSeries.Components
+                        .Where(c => c.DisplayNumber != null)
+                        .OrderByDescending(c => c.DisplayNumber)
+                        .First()
+                        .DisplayNumber + 1
+                }
+            };
+
+            movie.Entry.Movie = movie;
+
+            this.SidePanel.OpenMovie.ExecuteIfCan(movie);
+        }
+
+        private void OnAddSeries()
+        {
+            var series = new Series
+            {
+                Titles = new List<Title>
+                {
+                    new Title { Name = String.Empty, IsOriginal = false, Priority = 1 },
+                    new Title { Name = String.Empty, IsOriginal = true, Priority = 1 }
+                },
+                Status = SeriesStatus.Running,
+                Entry = new MovieSeriesEntry
+                {
+                    MovieSeries = this.MovieSeries.MovieSeries,
+                    OrdinalNumber = this.MovieSeries.Components
+                        .OrderByDescending(c => c.OrdinalNumber)
+                        .First()
+                        .OrdinalNumber + 1,
+                    DisplayNumber = this.MovieSeries.Components
+                        .Where(c => c.DisplayNumber != null)
+                        .OrderByDescending(c => c.DisplayNumber)
+                        .First()
+                        .DisplayNumber + 1
+                }
+            };
+
+            series.Entry.Series = series;
+
+            this.SidePanel.OpenSeries.ExecuteIfCan(series);
         }
 
         private void OnAttachMovie(Movie movie)
