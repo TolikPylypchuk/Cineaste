@@ -78,6 +78,14 @@ namespace MovieList.ViewModels.FormItems
             {
                 this.isLooselyConnected = value;
                 this.OnPropertyChanged();
+
+                if (this.Components != null)
+                {
+                    foreach (var component in this.Components)
+                    {
+                        component.ForceRefreshProperty(nameof(component.NumberToDisplay));
+                    }
+                }
             }
         }
 

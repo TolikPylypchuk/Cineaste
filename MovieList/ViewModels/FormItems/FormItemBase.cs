@@ -26,23 +26,19 @@ namespace MovieList.ViewModels.FormItems
         public abstract void WriteChanges();
         public abstract void RevertChanges();
 
+        public void ForceRefreshProperty(string propertyName = "")
+            => this.OnPropertyChanged(propertyName);
+
         public override bool Equals(object? obj)
             => obj is FormItemBase item && this.Equals(item);
 
         public bool Equals(FormItemBase? item)
             => item != null &&
-                this.Values.Count() == item.Values.Count() &&
+                (this.GetType().IsAssignableFrom(item.GetType()) || item.GetType().IsAssignableFrom(this.GetType())) &&
                 this.Values
                     .Select(v => v.CurrentValueProvider())
-                    .Zip(
-                        item.Values.Select(v => v.CurrentValueProvider()),
-                        (v1, v2) => (v1, v2))
-                    .All(v =>
-                        !(v.v1 == null && v.v2 != null) &&
-                        !(v.v1 != null && v.v2 == null) &&
-                        ((v.v1 == null && v.v2 == null) ||
-                            (v.v1 is IEnumerable<object> e1 && v.v2 is IEnumerable<object> e2 && e1.SequenceEqual(e2)) ||
-                            v.v1!.Equals(v.v2)));
+                    .Zip(item.Values.Select(v => v.CurrentValueProvider()), this.AreValuesEqual)
+                    .All(v => v);
 
         public override int GetHashCode()
             => Util.GetHashCode(this.Values.Select(v => v.CurrentValueProvider()).ToArray());
