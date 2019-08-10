@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -41,8 +42,11 @@ namespace MovieList
         private void ConfigureServices(IServiceCollection services)
             => services
                 .AddDbContext<MovieContext>(
-                    (services, builder) =>
-                        builder.ConfigureMovieContext(this.Configuration.GetSection("Config")["DatabasePath"]),
+                    (services, builder) => builder
+                        .ConfigureMovieContext(this.Configuration.GetSection("Config")["DatabasePath"])
+                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                        .EnableSensitiveDataLogging()
+                        .EnableDetailedErrors(),
                     ServiceLifetime.Transient)
 
                 .AddLogging(loggingBuilder => loggingBuilder

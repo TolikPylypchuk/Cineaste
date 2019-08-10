@@ -7,8 +7,10 @@ using System.Windows.Media.Imaging;
 
 using HandyControl.Data;
 
+using MovieList.Config;
 using MovieList.Data.Models;
 using MovieList.Properties;
+using MovieList.ViewModels.ListItems;
 
 namespace MovieList.ViewModels.FormItems
 {
@@ -269,8 +271,8 @@ namespace MovieList.ViewModels.FormItems
             this.AreChangesPresent = false;
         }
 
-        public override void OpenForm(SidePanelViewModel sidePanel)
-            => sidePanel.OpenSeries.ExecuteIfCan(this.Series);
+        public override ListItem ToListItem(Configuration config)
+            => new SeriesListItem(this.Series, config);
 
         private void CopySeriesProperties()
         {

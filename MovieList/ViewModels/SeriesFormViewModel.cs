@@ -249,7 +249,14 @@ namespace MovieList.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 this.MovieList.DeleteItem.ExecuteIfCan(this.Series.Series);
+
                 await this.dbService.DeleteAsync(this.Series.Series);
+
+                if (this.Series.Series.Entry != null)
+                {
+                    this.UpdateItems(this.Series.Series.Entry.MovieSeries);
+                }
+
                 this.SidePanel.Close.ExecuteIfCan();
             }
         }
@@ -449,6 +456,24 @@ namespace MovieList.ViewModels
             this.AllKinds = new ObservableCollection<KindViewModel>(e?.Kinds);
             this.Series.Kind = this.AllKinds.First(k => k.Kind.Id == this.Series.Kind.Kind.Id);
             this.Series.AllKinds = this.AllKinds;
+        }
+
+        private void UpdateItems(MovieSeries movieSeries)
+        {
+            foreach (var entry in movieSeries.Entries)
+            {
+                this.MovieList.UpdateItem.ExecuteIfCan(entry.Movie != null ? (EntityBase)entry.Movie : entry.Series!);
+            }
+
+            foreach (var part in movieSeries.Parts)
+            {
+                if (part.Title != null)
+                {
+                    this.MovieList.UpdateItem.ExecuteIfCan(part);
+                }
+
+                this.UpdateItems(part);
+            }
         }
     }
 }

@@ -123,7 +123,22 @@ namespace MovieList.ViewModels
         public bool CanSaveOrCancelChanges
             => this.CanSaveChanges || this.CanCancelChanges;
 
-        public async Task SaveAsync()
+        public bool CanAddComponent
+            => this.MovieSeries.MovieSeries.Id != default;
+
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            base.OnPropertyChanged(propertyName);
+
+            if (propertyName != nameof(this.AllKinds))
+            {
+                base.OnPropertyChanged(nameof(this.CanSaveChanges));
+                base.OnPropertyChanged(nameof(this.CanCancelChanges));
+                base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
+            }
+        }
+
+        private async Task SaveAsync()
         {
             this.MovieSeries.ClearEmptyTitles();
 
@@ -195,18 +210,6 @@ namespace MovieList.ViewModels
             }
         }
 
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            base.OnPropertyChanged(propertyName);
-
-            if (propertyName != nameof(this.AllKinds))
-            {
-                base.OnPropertyChanged(nameof(this.CanSaveChanges));
-                base.OnPropertyChanged(nameof(this.CanCancelChanges));
-                base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
-            }
-        }
-
         private void OnOpenForm(MovieSeriesComponentFormItemBase component)
         {
             if (this.MovieSeries.MovieSeries.Id == default)
@@ -222,7 +225,7 @@ namespace MovieList.ViewModels
                 }
             }
 
-            component.OpenForm(this.SidePanel);
+            this.MovieList.SelectItem.ExecuteIfCan(component.ToListItem(this.config.Value));
         }
 
         private void OnShowOrdinalNumber(MovieSeriesComponentFormItemBase component)
@@ -285,14 +288,10 @@ namespace MovieList.ViewModels
                 {
                     MovieSeries = this.MovieSeries.MovieSeries,
                     OrdinalNumber = this.MovieSeries.Components
-                        .OrderByDescending(c => c.OrdinalNumber)
-                        .First()
-                        .OrdinalNumber + 1,
+                        .Max(c => c.OrdinalNumber) + 1,
                     DisplayNumber = this.MovieSeries.Components
                         .Where(c => c.DisplayNumber != null)
-                        .OrderByDescending(c => c.DisplayNumber)
-                        .First()
-                        .DisplayNumber + 1
+                        .Max(c => c.DisplayNumber) + 1
                 }
             };
 
@@ -350,7 +349,7 @@ namespace MovieList.ViewModels
                 this.MovieList.UpdateItem.ExecuteIfCan(entry.Movie != null ? (EntityBase)entry.Movie : entry.Series!);
             }
 
-            foreach (var part in this.MovieSeries.MovieSeries.Parts)
+            foreach (var part in movieSeries.Parts)
             {
                 if (part.Title != null)
                 {

@@ -13,14 +13,12 @@ namespace MovieList.ViewModels.FormItems
     {
         private string name;
         private int priority;
+        private bool isOriginal;
 
         public TitleFormItem(Title title)
         {
             this.Title = title;
-
-            this.name = title.Name;
-            this.priority = title.Priority;
-
+            this.CopyTitleProperties();
             this.IsInitialized = true;
         }
 
@@ -49,6 +47,16 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
+        public bool IsOriginal
+        {
+            get => this.isOriginal;
+            set
+            {
+                this.isOriginal = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public Func<string, OperationResult<bool>> VerifyName
             => this.Verify(nameof(this.Name));
 
@@ -56,21 +64,29 @@ namespace MovieList.ViewModels.FormItems
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
                 (() => this.Name, () => this.Title.Name),
-                (() => this.Priority, () => this.Title.Priority)
+                (() => this.Priority, () => this.Title.Priority),
+                (() => this.IsOriginal, () => this.Title.IsOriginal)
             };
 
         public override void WriteChanges()
         {
             this.Title.Name = this.Name;
             this.Title.Priority = this.Priority;
+            this.Title.IsOriginal = this.IsOriginal;
             this.AreChangesPresent = false;
         }
 
         public override void RevertChanges()
         {
+            this.CopyTitleProperties();
+            this.AreChangesPresent = false;
+        }
+
+        private void CopyTitleProperties()
+        {
             this.Name = this.Title.Name;
             this.Priority = this.Title.Priority;
-            this.AreChangesPresent = false;
+            this.IsOriginal = this.Title.IsOriginal;
         }
     }
 }

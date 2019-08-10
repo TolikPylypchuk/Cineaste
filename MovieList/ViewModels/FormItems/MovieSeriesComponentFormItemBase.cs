@@ -1,3 +1,6 @@
+using MovieList.Config;
+using MovieList.ViewModels.ListItems;
+
 namespace MovieList.ViewModels.FormItems
 {
     public abstract class MovieSeriesComponentFormItemBase : TitledFormItemBase
@@ -41,6 +44,6 @@ namespace MovieList.ViewModels.FormItems
         public abstract string Years { get; }
         public abstract string NumberToDisplay { get; }
 
-        public abstract void OpenForm(SidePanelViewModel sidePanel);
+        public abstract ListItem ToListItem(Configuration config);
     }
 }

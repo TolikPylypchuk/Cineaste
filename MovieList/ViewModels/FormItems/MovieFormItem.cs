@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Security.Policy;
 using System.Windows.Media.Imaging;
 
 using HandyControl.Data;
 
+using MovieList.Config;
 using MovieList.Data.Models;
 using MovieList.Properties;
 using MovieList.Validation;
+using MovieList.ViewModels.ListItems;
 
 namespace MovieList.ViewModels.FormItems
 {
@@ -222,8 +223,8 @@ namespace MovieList.ViewModels.FormItems
             this.AreChangesPresent = false;
         }
 
-        public override void OpenForm(SidePanelViewModel sidePanel)
-            => sidePanel.OpenMovie.ExecuteIfCan(this.Movie);
+        public override ListItem ToListItem(Configuration config)
+            => new MovieListItem(this.Movie, config);
 
         private void CopyMovieProperties()
         {

@@ -117,6 +117,10 @@
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonPrimary}">
                             <Setter Property="Margin" Value="2,5" />
                             <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="Visibility" Value="{Binding
+                                        Path=Data.CanAddComponent,
+                                        Source={StaticResource ViewModel},
+                                        Converter={StaticResource BoolToVisibility}}" />
                         </Style>
                     </Grid.Resources>
 

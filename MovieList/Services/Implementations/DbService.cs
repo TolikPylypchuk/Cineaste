@@ -32,11 +32,15 @@ namespace MovieList.Services.Implementations
             using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             var movies = await context.Movies
+                .AsTracking()
                 .Include(context.GetIncludePaths(typeof(Movie)))
+                .Include(movie => movie.Titles)
                 .ToListAsync();
 
             var series = await context.Series
+                .AsTracking()
                 .Include(context.GetIncludePaths(typeof(Series)))
+                .Include(series => series.Titles)
                 .Include(series => series.Seasons)
                     .ThenInclude(season => season.Titles)
                 .Include(series => series.Seasons)
@@ -46,6 +50,7 @@ namespace MovieList.Services.Implementations
                 .ToListAsync();
 
             var movieSeries = await context.MovieSeries
+                .AsTracking()
                 .Include(ms => ms.Entries)
                     .ThenInclude(e => e.Movie)
                 .Include(ms => ms.Entries)
@@ -82,11 +87,21 @@ namespace MovieList.Services.Implementations
 
             if (movie.Id == default)
             {
-                context.ChangeTracker.TrackGraph(movie, node =>
-                    node.Entry.State = !node.Entry.IsKeySet ? EntityState.Added : EntityState.Unchanged);
+                context.Entry(movie).State = EntityState.Added;
+
+                foreach (var title in movie.Titles)
+                {
+                    context.Entry(title).State = EntityState.Added;
+                }
+
+                if (movie.Entry != null)
+                {
+                    context.Entry(movie.Entry).State = EntityState.Added;
+                    movie.Entry.MovieSeries.Entries.Add(movie.Entry);
+                }
             } else
             {
-                context.Entry(movie).State = EntityState.Modified;
+                this.Update(context, movie);
 
                 foreach (var title in movie.Titles)
                 {
@@ -112,11 +127,36 @@ namespace MovieList.Services.Implementations
 
             if (series.Id == default)
             {
-                context.ChangeTracker.TrackGraph(series, node =>
-                    node.Entry.State = !node.Entry.IsKeySet ? EntityState.Added : EntityState.Unchanged);
+                context.Entry(series).State = EntityState.Added;
+
+                foreach (var title in series.Titles)
+                {
+                    context.Entry(title).State = EntityState.Added;
+                }
+
+                foreach (var season in series.Seasons)
+                {
+                    context.Entry(season).State = EntityState.Added;
+
+                    foreach (var period in season.Periods)
+                    {
+                        context.Entry(period).State = EntityState.Added;
+                    }
+                }
+
+                foreach (var episode in series.SpecialEpisodes)
+                {
+                    context.Entry(episode).State = EntityState.Added;
+                }
+
+                if (series.Entry != null)
+                {
+                    context.Entry(series.Entry).State = EntityState.Added;
+                    series.Entry.MovieSeries.Entries.Add(series.Entry);
+                }
             } else
             {
-                context.Entry(series).State = EntityState.Modified;
+                this.Update(context, series);
 
                 foreach (var title in series.Titles)
                 {
@@ -199,7 +239,7 @@ namespace MovieList.Services.Implementations
                 }
             } else
             {
-                context.Entry(movieSeries).State = EntityState.Modified;
+                this.Update(context, movieSeries);
 
                 foreach (var title in movieSeries.Titles)
                 {
@@ -225,7 +265,7 @@ namespace MovieList.Services.Implementations
             foreach (var entry in entriesToDelete)
             {
                 context.Attach(entry).State = EntityState.Deleted;
-                this.MoveOrdinalNumbersUp(movieSeries, entry.OrdinalNumber);
+                this.MoveOrdinalNumbersUp(context, movieSeries, entry.OrdinalNumber);
             }
 
             foreach (var part in partsToDetach)
@@ -233,10 +273,10 @@ namespace MovieList.Services.Implementations
                 part.ParentSeries = null;
                 part.OrdinalNumber = null;
                 part.DisplayNumber = null;
-                context.Attach(part).State = EntityState.Modified;
+                this.Update(context, part);
                 movieSeries.Parts.Remove(part);
 
-                this.MoveOrdinalNumbersUp(movieSeries, part.OrdinalNumber ?? 0);
+                this.MoveOrdinalNumbersUp(context, movieSeries, part.OrdinalNumber ?? 0);
             }
 
             await context.SaveChangesAsync();
@@ -262,7 +302,7 @@ namespace MovieList.Services.Implementations
             {
                 if (await context.Kinds.ContainsAsync(kind))
                 {
-                    context.Attach(kind).State = EntityState.Modified;
+                    this.Update(context, kind);
                 } else
                 {
                     context.Kinds.Add(kind);
@@ -285,12 +325,12 @@ namespace MovieList.Services.Implementations
             {
                 case MovieListItem movieItem:
                     movieItem.Movie.IsWatched = !movieItem.Movie.IsWatched;
-                    context.Attach(movieItem.Movie).State = EntityState.Modified;
+                    this.Update(context, movieItem.Movie);
                     await context.SaveChangesAsync();
                     break;
                 case SeriesListItem seriesItem:
                     seriesItem.Series.IsWatched = !seriesItem.Series.IsWatched;
-                    context.Attach(seriesItem.Series).State = EntityState.Modified;
+                    this.Update(context, seriesItem.Series);
                     await context.SaveChangesAsync();
                     break;
             }
@@ -301,7 +341,7 @@ namespace MovieList.Services.Implementations
             using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             item.Movie.IsReleased = !item.Movie.IsReleased;
-            context.Attach(item.Movie).State = EntityState.Modified;
+            this.Update(context, item.Movie);
             await context.SaveChangesAsync();
         }
 
@@ -314,10 +354,11 @@ namespace MovieList.Services.Implementations
             if (movie.Entry != null)
             {
                 context.Entry(movie.Entry).State = EntityState.Deleted;
+                this.MoveOrdinalNumbersUp(context, movie.Entry.MovieSeries, movie.Entry.OrdinalNumber);
 
                 movie.Entry.MovieSeries.Entries.Remove(movie.Entry);
 
-                if (movie.Entry.MovieSeries.Entries.Count == 0)
+                if (movie.Entry.MovieSeries.Entries.Count == 0 && movie.Entry.MovieSeries.Parts.Count == 0)
                 {
                     context.Entry(movie.Entry.MovieSeries).State = EntityState.Deleted;
                 }
@@ -326,12 +367,6 @@ namespace MovieList.Services.Implementations
             foreach (var title in movie.Titles)
             {
                 context.Entry(title).State = EntityState.Deleted;
-            }
-
-            if (movie.Entry != null)
-            {
-                context.Entry(movie.Entry).State = EntityState.Deleted;
-                this.MoveOrdinalNumbersUp(movie.Entry.MovieSeries, movie.Entry.OrdinalNumber);
             }
 
             await context.SaveChangesAsync();
@@ -346,10 +381,11 @@ namespace MovieList.Services.Implementations
             if (series.Entry != null)
             {
                 context.Entry(series.Entry).State = EntityState.Deleted;
+                this.MoveOrdinalNumbersUp(context, series.Entry.MovieSeries, series.Entry.OrdinalNumber);
 
                 series.Entry.MovieSeries.Entries.Remove(series.Entry);
 
-                if (series.Entry.MovieSeries.Entries.Count == 0)
+                if (series.Entry.MovieSeries.Entries.Count == 0 && series.Entry.MovieSeries.Parts.Count == 0)
                 {
                     context.Entry(series.Entry.MovieSeries).State = EntityState.Deleted;
                 }
@@ -385,12 +421,6 @@ namespace MovieList.Services.Implementations
                 }
             }
 
-            if (series.Entry != null)
-            {
-                context.Entry(series.Entry).State = EntityState.Deleted;
-                this.MoveOrdinalNumbersUp(series.Entry.MovieSeries, series.Entry.OrdinalNumber);
-            }
-
             await context.SaveChangesAsync();
         }
 
@@ -424,18 +454,42 @@ namespace MovieList.Services.Implementations
                 (await context.Series.Where(s => s.KindId == kind.Kind.Id).CountAsync()) == 0;
         }
 
-        private void AddOrUpdate(DbContext context, EntityBase entity)
+        private void AddOrUpdate<TEntity>(DbContext context, TEntity entity)
+            where TEntity : EntityBase
         {
             if (entity.Id == default)
             {
                 context.Add(entity);
             } else
             {
+                this.Update(context, entity);
+            }
+        }
+
+        private void Update<TEntity>(DbContext context, TEntity entity)
+            where TEntity : EntityBase
+        {
+            if (entity.Id != default)
+            {
+                this.DetachLocal(context, entity);
                 context.Entry(entity).State = EntityState.Modified;
             }
         }
 
-        private void MoveOrdinalNumbersUp(MovieSeries movieSeries, int ordinalNumber)
+        private void DetachLocal<TEntity>(DbContext context, TEntity entity)
+            where TEntity : EntityBase
+        {
+            var local = context.Set<TEntity>()
+                    .Local
+                    .FirstOrDefault(entry => entry.Id.Equals(entity.Id));
+
+            if (local != null)
+            {
+                context.Entry(local).State = EntityState.Detached;
+            }
+        }
+
+        private void MoveOrdinalNumbersUp(DbContext context, MovieSeries movieSeries, int ordinalNumber)
         {
             foreach (var entry in movieSeries.Entries.Where(entry => entry.OrdinalNumber > ordinalNumber))
             {
@@ -444,6 +498,8 @@ namespace MovieList.Services.Implementations
                 {
                     entry.DisplayNumber--;
                 }
+
+                context.Entry(entry).State = EntityState.Modified;
             }
 
             foreach (var part in movieSeries.Parts.Where(part => part.OrdinalNumber > ordinalNumber))
@@ -453,6 +509,8 @@ namespace MovieList.Services.Implementations
                 {
                     part.DisplayNumber--;
                 }
+
+                context.Entry(part).State = EntityState.Modified;
             }
         }
     }

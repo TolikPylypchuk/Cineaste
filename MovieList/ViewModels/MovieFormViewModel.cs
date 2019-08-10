@@ -8,6 +8,7 @@ using System.Windows;
 
 using MovieList.Commands;
 using MovieList.Controls;
+using MovieList.Data.Models;
 using MovieList.Events;
 using MovieList.Properties;
 using MovieList.Services;
@@ -96,7 +97,19 @@ namespace MovieList.ViewModels
         public bool CanSaveOrCancelChanges
             => this.CanSaveChanges || this.CanCancelChanges;
 
-        public async Task SaveAsync()
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            base.OnPropertyChanged(propertyName);
+
+            if (propertyName != nameof(this.AllKinds))
+            {
+                base.OnPropertyChanged(nameof(this.CanSaveChanges));
+                base.OnPropertyChanged(nameof(this.CanCancelChanges));
+                base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
+            }
+        }
+
+        private async Task SaveAsync()
         {
             this.Movie.ClearEmptyTitles();
 
@@ -119,7 +132,7 @@ namespace MovieList.ViewModels
             (shouldAddToList ? this.MovieList.AddItem : this.MovieList.UpdateItem).ExecuteIfCan(this.Movie.Movie);
         }
 
-        public async Task DeleteAsync()
+        private async Task DeleteAsync()
         {
             var result = MessageBox.Show(
                 Messages.DeleteMoviePrompt,
@@ -130,31 +143,26 @@ namespace MovieList.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 this.MovieList.DeleteItem.ExecuteIfCan(this.Movie.Movie);
+
                 await this.dbService.DeleteAsync(this.Movie.Movie);
+
+                if (this.Movie.Movie.Entry != null)
+                {
+                    this.UpdateItems(this.Movie.Movie.Entry.MovieSeries);
+                }
+
                 this.SidePanel.Close.ExecuteIfCan();
             }
         }
 
-        public bool CanDelete()
+        private bool CanDelete()
             => this.Movie.Movie.Id != default;
 
-        public void OnCreateMovieSeries()
+        private void OnCreateMovieSeries()
             => this.SidePanel.CreateMovieSeries.ExecuteIfCan(this.Movie.Movie);
 
-        public bool CanCreateMovieSeries()
+        private bool CanCreateMovieSeries()
             => this.Movie.Movie.Id != default && this.Movie.Movie.Entry == null;
-
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            base.OnPropertyChanged(propertyName);
-
-            if (propertyName != nameof(this.AllKinds))
-            {
-                base.OnPropertyChanged(nameof(this.CanSaveChanges));
-                base.OnPropertyChanged(nameof(this.CanCancelChanges));
-                base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
-            }
-        }
 
         private void OnListItemUpdated(object? sender, ListItemUpdatedEventArgs? e)
         {
@@ -186,6 +194,24 @@ namespace MovieList.ViewModels
             this.AllKinds = new ObservableCollection<KindViewModel>(e?.Kinds);
             this.Movie.Kind = this.AllKinds.First(k => k.Kind.Id == this.Movie.Kind.Kind.Id);
             this.Movie.AllKinds = this.AllKinds;
+        }
+
+        private void UpdateItems(MovieSeries movieSeries)
+        {
+            foreach (var entry in movieSeries.Entries)
+            {
+                this.MovieList.UpdateItem.ExecuteIfCan(entry.Movie != null ? (EntityBase)entry.Movie : entry.Series!);
+            }
+
+            foreach (var part in movieSeries.Parts)
+            {
+                if (part.Title != null)
+                {
+                    this.MovieList.UpdateItem.ExecuteIfCan(part);
+                }
+
+                this.UpdateItems(part);
+            }
         }
     }
 }
