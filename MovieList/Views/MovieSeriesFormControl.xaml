@@ -74,9 +74,12 @@
                                 <TextBlock Grid.Column="0" Text="{Binding Path=NumberToDisplay}" Margin="5"
                                            VerticalAlignment="Center" TextAlignment="Right" />
 
-                                <Button Grid.Column="1" Content="{Binding Title}" CommandParameter="{Binding}"
+                                <Button Grid.Column="1" CommandParameter="{Binding}" Margin="2,5"
                                         Command="{Binding Path=Data.OpenForm, Source={StaticResource ViewModel}}"
-                                        HorizontalAlignment="Stretch" Margin="2,5" />
+                                        HorizontalAlignment="Stretch" Height="Auto" MinHeight="{StaticResource DefaultControlHeight}">
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" TextAlignment="Center"
+                                               MaxWidth="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />
+                                </Button>
 
                                 <TextBlock Grid.Column="2" Text="{Binding Years}" Margin="5" VerticalAlignment="Center" />
 

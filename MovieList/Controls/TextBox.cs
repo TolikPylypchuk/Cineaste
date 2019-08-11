@@ -19,6 +19,15 @@ namespace MovieList.Controls
             set => this.SetValue(VerifyFuncProperty, value);
         }
 
+        public override bool VerifyData()
+            => this.IsError || !this.IsFocused ? base.VerifyData() : true;
+
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            base.OnLostFocus(e);
+            this.VerifyData();
+        }
+
         private static void VerifyFuncChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             if (sender is HandyControl.Controls.TextBox textBox &&
