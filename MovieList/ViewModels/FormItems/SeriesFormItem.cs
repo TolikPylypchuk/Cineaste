@@ -256,8 +256,8 @@ namespace MovieList.ViewModels.FormItems
             this.Series.IsMiniseries = this.IsMiniseries;
             this.Series.IsAnthology = this.IsAnthology;
             this.Series.Status = this.Status;
-            this.Series.ImdbLink = this.ImdbLink;
-            this.Series.PosterUrl = this.PosterUrl;
+            this.Series.ImdbLink = String.IsNullOrEmpty(this.ImdbLink) ? null : this.ImdbLink;
+            this.Series.PosterUrl = String.IsNullOrEmpty(this.PosterUrl) ? null : this.PosterUrl;
             this.Series.Kind = this.Kind.Kind;
             this.Series.KindId = this.Kind.Kind.Id;
 
@@ -297,7 +297,7 @@ namespace MovieList.ViewModels.FormItems
 
         private void SetPoster()
         {
-            if (this.PosterUrl != null)
+            if (!String.IsNullOrEmpty(this.PosterUrl))
             {
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
@@ -305,6 +305,10 @@ namespace MovieList.ViewModels.FormItems
                 bitmap.EndInit();
 
                 this.Poster = bitmap;
+            } else
+            {
+                this.PosterUrl = null;
+                this.Poster = null;
             }
         }
 

@@ -15,7 +15,7 @@ namespace MovieList.ViewModels
 {
     public class SpecialEpisodeFormViewModel : ViewModelBase
     {
-        private SpecialEpisodeFormItem episode;
+        private SpecialEpisodeFormItem specialEpisode;
 
         public SpecialEpisodeFormViewModel(SeriesFormViewModel parentForm, SidePanelViewModel sidePanel)
         {
@@ -35,11 +35,11 @@ namespace MovieList.ViewModels
 
         public SpecialEpisodeFormItem SpecialEpisode
         {
-            get => this.episode;
+            get => this.specialEpisode;
             set
             {
-                this.episode = value;
-                this.episode.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.SpecialEpisode));
+                this.specialEpisode = value;
+                this.specialEpisode.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.SpecialEpisode));
 
                 this.OnPropertyChanged();
                 this.OnPropertyChanged(nameof(FormTitle));
@@ -47,8 +47,8 @@ namespace MovieList.ViewModels
         }
 
         public string FormTitle
-            => !String.IsNullOrEmpty(this.episode.SpecialEpisode.Title.Name)
-                ? this.episode.SpecialEpisode.Title.Name
+            => !String.IsNullOrEmpty(this.SpecialEpisode.SpecialEpisode.Title.Name)
+                ? this.specialEpisode.SpecialEpisode.Title.Name
                 : Messages.NewSpecialEpisode;
 
         public bool CanSaveChanges
@@ -89,6 +89,7 @@ namespace MovieList.ViewModels
 
             this.SpecialEpisode.WriteChanges();
             this.ParentForm.AreComponentsChanged = true;
+            this.OnPropertyChanged(nameof(this.FormTitle));
         }
 
         private void OnDelete()

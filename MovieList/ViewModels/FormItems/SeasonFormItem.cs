@@ -21,10 +21,15 @@ namespace MovieList.ViewModels.FormItems
         private int posterIndex;
         private ObservableCollection<BitmapImage> posters;
 
+        private readonly Season backup;
+
         public SeasonFormItem(Season season)
         {
             this.Season = season;
+            this.backup = new Season();
+
             this.CopySeasonProperties();
+            this.CopyProperties(this.Season, backup);
 
             this.ShowNextPoster = new DelegateCommand(
                 () => this.PosterIndex++,
@@ -186,6 +191,9 @@ namespace MovieList.ViewModels.FormItems
             this.Season.IsReleased = this.IsReleased;
             this.Season.Channel = this.Channel;
 
+            this.OnPropertyChanged(nameof(this.Title));
+            this.OnPropertyChanged(nameof(this.Years));
+
             this.AreChangesPresent = false;
         }
 
@@ -193,6 +201,15 @@ namespace MovieList.ViewModels.FormItems
         {
             this.CopySeasonProperties();
             this.AreChangesPresent = false;
+        }
+
+        public override void FullyWriteChanges()
+            => this.CopyProperties(this.Season, this.backup);
+
+        public override void FullyRevertChanges()
+        {
+            this.CopyProperties(this.backup, this.Season);
+            this.RevertChanges();
         }
 
         public override void OpenForm(SidePanelViewModel sidePanel)
@@ -226,7 +243,7 @@ namespace MovieList.ViewModels.FormItems
         {
             this.Posters = new ObservableCollection<BitmapImage>(this.Periods
                 .Select(p => p.PosterUrl)
-                .Where(url => url != null)
+                .Where(url => !String.IsNullOrEmpty(url))
                 .Select(url =>
                 {
                     var bitmap = new BitmapImage();
@@ -236,6 +253,47 @@ namespace MovieList.ViewModels.FormItems
 
                     return bitmap;
                 }));
+        }
+
+        private void CopyProperties(Season source, Season target)
+        {
+            target.Id = source.Id;
+            target.Series = source.Series;
+            target.IsWatched = source.IsWatched;
+            target.IsReleased = source.IsReleased;
+            target.Channel = source.Channel;
+            target.OrdinalNumber = source.OrdinalNumber;
+
+            target.Titles.Clear();
+
+            foreach (var title in source.Titles)
+            {
+                target.Titles.Add(new Title
+                {
+                    Id = title.Id,
+                    Name = title.Name,
+                    IsOriginal = title.IsOriginal,
+                    Season = target
+                });
+            }
+
+            target.Periods.Clear();
+
+            foreach (var period in source.Periods)
+            {
+                target.Periods.Add(new Period
+                {
+                    Id = period.Id,
+                    StartMonth = period.StartMonth,
+                    StartYear = period.StartYear,
+                    EndMonth = period.EndMonth,
+                    EndYear = period.EndYear,
+                    NumberOfEpisodes = period.NumberOfEpisodes,
+                    IsSingleDayRelease = period.IsSingleDayRelease,
+                    PosterUrl = period.PosterUrl,
+                    Season = target
+                });
+            }
         }
 
         private void OnAddPeriod()

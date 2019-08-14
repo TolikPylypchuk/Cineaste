@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Media.Imaging;
 
-using MovieList.Commands;
+using HandyControl.Data;
+
 using MovieList.Data.Models;
 using MovieList.Properties;
 using MovieList.Validation;
@@ -21,10 +22,16 @@ namespace MovieList.ViewModels.FormItems
 
         private BitmapImage? poster;
 
+        private readonly SpecialEpisode backup;
+
         public SpecialEpisodeFormItem(SpecialEpisode specialEpisode)
         {
             this.SpecialEpisode = specialEpisode;
+            this.backup = new SpecialEpisode();
+
             this.CopySpecialEpisodeProperties();
+            this.CopyProperties(this.SpecialEpisode, backup);
+
             this.IsInitialized = true;
         }
 
@@ -104,6 +111,15 @@ namespace MovieList.ViewModels.FormItems
         public override string Years
             => this.Year;
 
+        public Func<string, OperationResult<bool>> VerifyChannel
+            => this.Verify(nameof(this.Channel));
+
+        public Func<string, OperationResult<bool>> VerifyYear
+            => this.Verify(nameof(this.Year));
+
+        public Func<string, OperationResult<bool>> VerifyPosterUrl
+            => this.Verify(nameof(this.PosterUrl));
+
         protected override IEnumerable<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)> Values
             => new List<(Func<object?> CurrentValueProvider, Func<object?> OriginalValueProvider)>
             {
@@ -151,7 +167,10 @@ namespace MovieList.ViewModels.FormItems
             this.SpecialEpisode.IsWatched = this.IsWatched;
             this.SpecialEpisode.IsReleased = this.IsReleased;
             this.SpecialEpisode.Channel = this.Channel;
-            this.SpecialEpisode.PosterUrl = this.PosterUrl;
+            this.SpecialEpisode.PosterUrl = String.IsNullOrEmpty(this.PosterUrl) ? null : this.PosterUrl;
+
+            this.OnPropertyChanged(nameof(this.Title));
+            this.OnPropertyChanged(nameof(this.Years));
 
             this.AreChangesPresent = false;
         }
@@ -160,6 +179,15 @@ namespace MovieList.ViewModels.FormItems
         {
             this.CopySpecialEpisodeProperties();
             this.AreChangesPresent = false;
+        }
+
+        public override void FullyWriteChanges()
+            => this.CopyProperties(this.SpecialEpisode, this.backup);
+
+        public override void FullyRevertChanges()
+        {
+            this.CopyProperties(this.backup, this.SpecialEpisode);
+            this.RevertChanges();
         }
 
         public override void OpenForm(SidePanelViewModel sidePanel)
@@ -185,7 +213,7 @@ namespace MovieList.ViewModels.FormItems
 
         private void SetPoster()
         {
-            if (this.PosterUrl != null)
+            if (!String.IsNullOrEmpty(this.PosterUrl))
             {
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
@@ -193,7 +221,38 @@ namespace MovieList.ViewModels.FormItems
                 bitmap.EndInit();
 
                 this.Poster = bitmap;
+            } else
+            {
+                this.PosterUrl = null;
+                this.Poster = null;
             }
+        }
+
+        private void CopyProperties(SpecialEpisode source, SpecialEpisode target)
+        {
+            target.Id = source.Id;
+            target.Series = source.Series;
+            target.IsWatched = source.IsWatched;
+            target.IsReleased = source.IsReleased;
+            target.Channel = source.Channel;
+            target.Month = source.Month;
+            target.Year = source.Year;
+            target.PosterUrl = source.PosterUrl;
+            target.OrdinalNumber = source.OrdinalNumber;
+
+            target.Titles.Clear();
+
+            foreach (var title in source.Titles)
+            {
+                target.Titles.Add(new Title
+                {
+                    Id = title.Id,
+                    Name = title.Name,
+                    IsOriginal = title.IsOriginal,
+                    SpecialEpisode = target
+                });
+            }
+
         }
     }
 }

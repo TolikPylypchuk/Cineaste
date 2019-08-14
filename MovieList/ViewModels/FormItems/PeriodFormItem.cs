@@ -179,7 +179,7 @@ namespace MovieList.ViewModels.FormItems
             this.Period.EndYear = Int32.Parse(this.IsSingleDayRelease ? this.StartYear : this.EndYear);
             this.Period.IsSingleDayRelease = this.IsSingleDayRelease;
             this.Period.NumberOfEpisodes = Int32.Parse(this.NumberOfEpisodes);
-            this.Period.PosterUrl = this.PosterUrl;
+            this.Period.PosterUrl = String.IsNullOrEmpty(this.PosterUrl) ? null : this.PosterUrl;
             this.AreChangesPresent = false;
         }
 

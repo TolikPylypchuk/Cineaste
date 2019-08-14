@@ -46,7 +46,7 @@ namespace MovieList.ViewModels
         }
 
         public string FormTitle
-            => this.season.Season.Title.Name;
+            => this.Season.Season.Title.Name;
 
         public bool CanSaveChanges
             => this.Season.AreChangesPresent &&
@@ -87,6 +87,7 @@ namespace MovieList.ViewModels
 
             this.Season.WriteChanges();
             this.ParentForm.AreComponentsChanged = true;
+            this.OnPropertyChanged(nameof(this.FormTitle));
         }
 
         private void OnDelete()

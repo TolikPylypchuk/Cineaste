@@ -201,8 +201,8 @@ namespace MovieList.ViewModels.FormItems
             this.Movie.Year = Int32.Parse(this.Year);
             this.Movie.IsWatched = this.IsWatched;
             this.Movie.IsReleased = this.IsReleased;
-            this.Movie.ImdbLink = this.ImdbLink;
-            this.Movie.PosterUrl = this.PosterUrl;
+            this.Movie.ImdbLink = String.IsNullOrEmpty(this.ImdbLink) ? null : this.ImdbLink;
+            this.Movie.PosterUrl = String.IsNullOrEmpty(this.PosterUrl) ? null : this.PosterUrl;
             this.Movie.Kind = this.Kind.Kind;
             this.Movie.KindId = this.Kind.Kind.Id;
 
@@ -242,7 +242,7 @@ namespace MovieList.ViewModels.FormItems
 
         private void SetPoster()
         {
-            if (this.PosterUrl != null)
+            if (!String.IsNullOrEmpty(this.PosterUrl))
             {
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
@@ -250,6 +250,10 @@ namespace MovieList.ViewModels.FormItems
                 bitmap.EndInit();
 
                 this.Poster = bitmap;
+            } else
+            {
+                this.PosterUrl = null;
+                this.Poster = null;
             }
         }
     }

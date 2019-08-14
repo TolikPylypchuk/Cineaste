@@ -138,7 +138,7 @@ namespace MovieList.ViewModels
         }
 
         public string FormTitle
-            => this.series.Series.Id != default ? this.series.Series.Title.Name : Messages.NewSeries;
+            => this.series.Series.Id != default ? this.Series.Series.Title.Name : Messages.NewSeries;
 
         public ObservableCollection<KindViewModel> AllKinds
         {
@@ -219,6 +219,16 @@ namespace MovieList.ViewModels
 
             this.Series.WriteChanges();
 
+            foreach (var component in this.Series.Components)
+            {
+                component.FullyWriteChanges();
+            }
+
+            foreach (var component in this.Series.Components)
+            {
+                component.WriteChanges();
+            }
+
             bool shouldAddToList = this.Series.Series.Id == default;
 
             await this.dbService.SaveSeriesAsync(
@@ -234,7 +244,13 @@ namespace MovieList.ViewModels
 
         private void OnCancel()
         {
+            foreach (var component in this.Series.Components)
+            {
+                component.FullyRevertChanges();
+            }
+
             this.Series.RevertChanges();
+
             this.AreComponentsChanged = false;
         }
 

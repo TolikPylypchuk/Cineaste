@@ -40,6 +40,9 @@ namespace MovieList.ViewModels.FormItems
         public IEnumerable<int> AllMonths
             => Enumerable.Range(1, 12);
 
+        public abstract void FullyWriteChanges();
+        public abstract void FullyRevertChanges();
+
         public abstract void OpenForm(SidePanelViewModel sidePanel);
         public abstract void WriteOrdinalNumber();
     }
