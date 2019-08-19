@@ -78,7 +78,10 @@
                                         Command="{Binding Path=Data.OpenForm, Source={StaticResource ViewModel}}"
                                         HorizontalAlignment="Stretch" Height="Auto" MinHeight="{StaticResource DefaultControlHeight}">
                                     <TextBlock Text="{Binding Title}" TextWrapping="Wrap" TextAlignment="Center"
-                                               MaxWidth="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />
+                                               MaxWidth="{Binding
+                                                    RelativeSource={RelativeSource AncestorType={x:Type Button}},
+                                                    Converter={StaticResource LengthMinusPadding},
+                                                    ConverterParameter=Width}" />
                                 </Button>
 
                                 <TextBlock Grid.Column="2" Text="{Binding Years}" Margin="5" VerticalAlignment="Center" />

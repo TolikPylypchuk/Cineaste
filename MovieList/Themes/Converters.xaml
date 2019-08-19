@@ -8,6 +8,7 @@
     <conv:CanSelectIfReleasedConverter x:Key="CanSelectIfReleased" />
     <conv:SeriesStatusConverter x:Key="SeriesStatus" />
     <conv:MonthNameConverter x:Key="MonthName" />
+    <conv:LengthMinusPaddingConverter x:Key="LengthMinusPadding" />
     <conv:ValueConverterGroup x:Key="InverseBoolToVisibility">
         <conv:InverseBoolConverter />
         <BooleanToVisibilityConverter />
