@@ -182,7 +182,10 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public override void FullyWriteChanges()
-            => this.CopyProperties(this.SpecialEpisode, this.backup);
+        {
+            this.WriteChanges();
+            this.CopyProperties(this.SpecialEpisode, this.backup);
+        }
 
         public override void FullyRevertChanges()
         {

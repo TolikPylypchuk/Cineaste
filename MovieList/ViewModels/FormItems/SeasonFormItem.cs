@@ -204,7 +204,10 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public override void FullyWriteChanges()
-            => this.CopyProperties(this.Season, this.backup);
+        {
+            this.WriteChanges();
+            this.CopyProperties(this.Season, this.backup);
+        }
 
         public override void FullyRevertChanges()
         {

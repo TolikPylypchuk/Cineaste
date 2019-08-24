@@ -114,7 +114,15 @@ namespace MovieList.ViewModels
 
                 if (this.season != null)
                 {
-                    this.season.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Season));
+                    this.season.PropertyChanged += (sender, e) =>
+                    {
+                        if (this.season.AreChangesPresent)
+                        {
+                            this.AreComponentsChanged = true;
+                        }
+
+                        this.OnPropertyChanged(nameof(this.Season));
+                    };
                 }
 
                 this.OnPropertyChanged();
@@ -130,7 +138,15 @@ namespace MovieList.ViewModels
 
                 if (this.period != null)
                 {
-                    this.period.PropertyChanged += (sender, e) => this.OnPropertyChanged(nameof(this.Period));
+                    this.period.PropertyChanged += (sender, e) =>
+                    {
+                        if (this.period.AreChangesPresent)
+                        {
+                            this.AreComponentsChanged = true;
+                        }
+
+                        this.OnPropertyChanged(nameof(this.Period));
+                    };
                 }
 
                 this.OnPropertyChanged();
@@ -191,6 +207,19 @@ namespace MovieList.ViewModels
                 base.OnPropertyChanged(nameof(this.CanCancelChanges));
                 base.OnPropertyChanged(nameof(this.CanSaveOrCancelChanges));
             }
+
+            if (propertyName == nameof(this.Series))
+            {
+                if (this.Series.IsMiniseries && this.Series.Components.Count == 1)
+                {
+                    this.Season = this.Series.Components[0] as SeasonFormItem;
+                    this.Period = this.Season?.Periods[0];
+                } else
+                {
+                    this.Season = null;
+                    this.Period = null;
+                }
+            }
         }
 
         private async Task SaveAsync()
@@ -210,11 +239,9 @@ namespace MovieList.ViewModels
                 .Select(t => t.Title)
                 .ToList();
 
-            if (this.Series.IsMiniseries && this.Season != null && this.Period != null)
+            if (this.Series.IsMiniseries && this.Season != null)
             {
                 this.Season.IsWatched = this.Series.IsWatched;
-                this.Season.WriteChanges();
-                this.Period.WriteChanges();
             }
 
             this.Series.WriteChanges();
@@ -222,11 +249,6 @@ namespace MovieList.ViewModels
             foreach (var component in this.Series.Components)
             {
                 component.FullyWriteChanges();
-            }
-
-            foreach (var component in this.Series.Components)
-            {
-                component.WriteChanges();
             }
 
             bool shouldAddToList = this.Series.Series.Id == default;
