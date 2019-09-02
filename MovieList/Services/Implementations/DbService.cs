@@ -142,11 +142,21 @@ namespace MovieList.Services.Implementations
                     {
                         context.Entry(period).State = EntityState.Added;
                     }
+
+                    foreach (var title in season.Titles)
+                    {
+                        context.Entry(title).State = EntityState.Added;
+                    }
                 }
 
                 foreach (var episode in series.SpecialEpisodes)
                 {
                     context.Entry(episode).State = EntityState.Added;
+
+                    foreach (var title in episode.Titles)
+                    {
+                        context.Entry(title).State = EntityState.Added;
+                    }
                 }
 
                 if (series.Entry != null)
