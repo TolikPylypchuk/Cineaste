@@ -237,7 +237,7 @@ namespace MovieList.ViewModels.FormItems
             this.Channel = this.Season.Channel;
             this.OrdinalNumber = this.Season.OrdinalNumber;
             this.Periods = new ObservableCollection<PeriodFormItem>(
-                this.Season.Periods.Select(period => this.NewPeriod(period)));
+                this.Season.Periods.Select(this.NewPeriod));
 
             this.SetPosters();
         }

@@ -9,18 +9,19 @@ namespace MovieList.Data.Models
 {
     public static class ModelExtensions
     {
-        public static List<MovieSeries> GetAllAncestors(this MovieSeries? series)
+        public static IEnumerable<MovieSeries> GetAllAncestors(this MovieSeries? series)
         {
             if (series == null)
             {
-                return new List<MovieSeries>();
+                yield break;
             }
 
-            var result = new List<MovieSeries>();
-            result.AddRange(series.ParentSeries.GetAllAncestors());
-            result.Add(series);
+            foreach (var ancestor in series.ParentSeries.GetAllAncestors())
+            {
+                yield return ancestor;
+            }
 
-            return result;
+            yield return series;
         }
 
         public static (MovieSeries, MovieSeries) GetDistinctAncestors(this MovieSeries series1, MovieSeries series2)
@@ -49,7 +50,7 @@ namespace MovieList.Data.Models
 
             return lastEntry != null && (lastPart == null || lastEntry.OrdinalNumber > lastPart.OrdinalNumber)
                 ? lastEntry
-                : lastPart.GetFirstEntry();
+                : lastPart.GetLastEntry();
         }
 
         public static string GetTitleName(this MovieSeries movieSeries)
@@ -58,13 +59,13 @@ namespace MovieList.Data.Models
         public static int GetStartYear(this MovieSeries movieSeries)
         {
             var firstEntry = movieSeries.GetFirstEntry();
-            return firstEntry.Movie != null ? firstEntry.Movie.Year : firstEntry.Series!.StartYear;
+            return firstEntry.Movie?.Year ?? firstEntry.Series!.StartYear;
         }
 
         public static int GetEndYear(this MovieSeries movieSeries)
         {
             var lastEntry = movieSeries.GetLastEntry();
-            return lastEntry.Movie != null ? lastEntry.Movie.Year : lastEntry.Series!.EndYear;
+            return lastEntry.Movie?.Year ?? lastEntry.Series!.EndYear;
         }
 
         public static string GetDisplayNumber(this MovieSeriesEntry? entry)
@@ -77,21 +78,21 @@ namespace MovieList.Data.Models
         public static Color GetColor(this Movie movie, Configuration? config)
             => movie.IsReleased
                 ? movie.IsWatched
-                    ? (Color)ColorConverter.ConvertFromString(movie.Kind.ColorForMovie)
+                    ? GetColorFromString(movie.Kind.ColorForMovie)
                     : config?.NotWatchedColor ?? Colors.Red
                 : config?.NotReleasedColor ?? Colors.Red;
 
         public static Color GetColor(this Series series, Configuration? config)
             => series.Seasons.First().IsReleased
                 ? series.IsWatched
-                    ? (Color)ColorConverter.ConvertFromString(series.Kind.ColorForSeries)
+                    ? GetColorFromString(series.Kind.ColorForSeries)
                     : config?.NotWatchedColor ?? Colors.Red
                 : config?.NotReleasedColor ?? Colors.Red;
 
         public static Color GetColor(this MovieSeries movieSeries, Configuration? config)
         {
             var firstEntry = GetFirstEntry(movieSeries);
-            return firstEntry.Movie != null ? firstEntry.Movie.GetColor(config) : firstEntry.Series!.GetColor(config);
+            return firstEntry.Movie?.GetColor(config) ?? firstEntry.Series!.GetColor(config);
         }
 
         public static IEnumerable<Season> GetOrderedSeasons(this Series series)
@@ -104,5 +105,8 @@ namespace MovieList.Data.Models
 
         public static Title GetTitle(this MovieSeriesEntry entry)
             => entry.Movie != null ? entry.Movie.Title : entry.Series!.Title;
+
+        private static Color GetColorFromString(string str)
+            => (Color?)ColorConverter.ConvertFromString(str) ?? Colors.Black;
     }
 }

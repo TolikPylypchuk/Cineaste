@@ -29,7 +29,7 @@ namespace MovieList.Services.Implementations
 
         public async Task<List<ListItem>> LoadListAsync()
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             var movies = await context.Movies
                 .AsTracking()
@@ -40,12 +40,12 @@ namespace MovieList.Services.Implementations
             var series = await context.Series
                 .AsTracking()
                 .Include(context.GetIncludePaths(typeof(Series)))
-                .Include(series => series.Titles)
-                .Include(series => series.Seasons)
+                .Include(s => s.Titles)
+                .Include(s => s.Seasons)
                     .ThenInclude(season => season.Titles)
-                .Include(series => series.Seasons)
+                .Include(s => s.Seasons)
                     .ThenInclude(season => season.Periods)
-                .Include(series => series.SpecialEpisodes)
+                .Include(s => s.SpecialEpisodes)
                     .ThenInclude(episode => episode.Titles)
                 .ToListAsync();
 
@@ -61,17 +61,17 @@ namespace MovieList.Services.Implementations
             return movies
                 .Select(movie => new MovieListItem(movie, this.config.Value))
                 .Cast<ListItem>()
-                .Union(series.Select(series => new SeriesListItem(series, this.config.Value)))
+                .Union(series.Select(s => new SeriesListItem(s, this.config.Value)))
                 .Union(movieSeries
-                    .Where(series => series.Title != null)
-                    .Select(series => new MovieSeriesListItem(series, this.config.Value)))
+                    .Where(ms => ms.Title != null)
+                    .Select(ms => new MovieSeriesListItem(ms, this.config.Value)))
                 .OrderBy(item => item)
                 .ToList();
         }
 
         public async Task<ObservableCollection<KindViewModel>> LoadAllKindsAsync()
         {
-            using var context = serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = serviceProvider.GetRequiredService<MovieContext>();
 
             return new ObservableCollection<KindViewModel>(
                 await context.Kinds
@@ -83,7 +83,7 @@ namespace MovieList.Services.Implementations
 
         public async Task SaveMovieAsync(Movie movie, IEnumerable<Title> titlesToDelete)
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             if (movie.Id == default)
             {
@@ -123,7 +123,7 @@ namespace MovieList.Services.Implementations
             IEnumerable<SpecialEpisode> episodesToDelete,
             IEnumerable<Title> titlesToDelete)
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             if (series.Id == default)
             {
@@ -238,7 +238,7 @@ namespace MovieList.Services.Implementations
             IEnumerable<MovieSeriesEntry> entriesToDelete,
             IEnumerable<MovieSeries> partsToDetach)
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             if (movieSeries.Id == default)
             {
@@ -292,14 +292,14 @@ namespace MovieList.Services.Implementations
             await context.SaveChangesAsync();
         }
 
-        public async Task SaveKindsAsync(IEnumerable<KindViewModel> kinds)
+        public async Task SaveKindsAsync(IList<KindViewModel> kinds)
         {
             if (kinds.Any(k => k.HasErrors))
             {
                 throw new ArgumentException("Cannot save invalid kinds.", nameof(kinds));
             }
 
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             var dbKinds = await context.Kinds
                 .Include(context.GetIncludePaths(typeof(Kind)))
@@ -329,7 +329,7 @@ namespace MovieList.Services.Implementations
 
         public async Task ToggleWatchedAsync(ListItem item)
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             switch (item)
             {
@@ -348,7 +348,7 @@ namespace MovieList.Services.Implementations
 
         public async Task ToggleReleasedAsync(MovieListItem item)
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             item.Movie.IsReleased = !item.Movie.IsReleased;
             this.Update(context, item.Movie);
@@ -357,7 +357,7 @@ namespace MovieList.Services.Implementations
 
         public async Task DeleteAsync(Movie movie)
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             context.Entry(movie).State = EntityState.Deleted;
 
@@ -384,7 +384,7 @@ namespace MovieList.Services.Implementations
 
         public async Task DeleteAsync(Series series)
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             context.Entry(series).State = EntityState.Deleted;
 
@@ -437,7 +437,7 @@ namespace MovieList.Services.Implementations
         public async Task DeleteAsync<TEntity>(TEntity entity)
             where TEntity : EntityBase
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             context.Attach(entity).State = EntityState.Deleted;
             await context.SaveChangesAsync();
@@ -446,7 +446,7 @@ namespace MovieList.Services.Implementations
         public async Task DeleteAsync<TEntity>(IEnumerable<TEntity> entities)
             where TEntity : EntityBase
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             foreach (var entity in entities)
             {
@@ -458,7 +458,7 @@ namespace MovieList.Services.Implementations
 
         public async Task<bool> CanDeleteKindAsync(KindViewModel kind)
         {
-            using var context = this.serviceProvider.GetRequiredService<MovieContext>();
+            await using var context = this.serviceProvider.GetRequiredService<MovieContext>();
 
             return (await context.Movies.Where(m => m.KindId == kind.Kind.Id).CountAsync()) == 0 &&
                 (await context.Series.Where(s => s.KindId == kind.Kind.Id).CountAsync()) == 0;

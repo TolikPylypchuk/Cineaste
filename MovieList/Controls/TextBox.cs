@@ -7,7 +7,7 @@ namespace MovieList.Controls
 {
     public class TextBox : HandyControl.Controls.TextBox
     {
-        public static DependencyProperty VerifyFuncProperty = DependencyProperty.Register(
+        public static readonly DependencyProperty VerifyFuncProperty = DependencyProperty.Register(
             nameof(VerifyFunc),
             typeof(Func<string, OperationResult<bool>>),
             typeof(TextBox),
@@ -20,7 +20,7 @@ namespace MovieList.Controls
         }
 
         public override bool VerifyData()
-            => this.IsError || !this.IsFocused ? base.VerifyData() : true;
+            => !this.IsError && this.IsFocused || base.VerifyData();
 
         protected override void OnLostFocus(RoutedEventArgs e)
         {

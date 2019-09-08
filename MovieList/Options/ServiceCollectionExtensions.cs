@@ -12,7 +12,7 @@ namespace MovieList.Options
             string file = "appsettings.json")
             where T : class, new()
             => services
-                .Configure<T>(value => section.Bind(value))
+                .Configure<T>(section.Bind)
                 .AddTransient<IWritableOptions<T>>(provider =>
                     new WritableOptions<T>(provider.GetService<IOptionsMonitor<T>>(), section.Key, file));
     }

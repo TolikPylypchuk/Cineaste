@@ -84,24 +84,23 @@ namespace MovieList.ViewModels.ListItems
         public override bool Equals(object? obj)
             => obj is ListItem item && this.Equals(item);
 
-        public bool Equals(ListItem other)
-            => other != null &&
-                this.DisplayNumber == other.DisplayNumber &&
-                this.Title == other.Title &&
-                this.OriginalTitle == other.OriginalTitle &&
-                this.Year == other.Year &&
-                this.Color == other.Color;
+        public bool Equals(ListItem? other)
+            => this.DisplayNumber == other?.DisplayNumber &&
+                this.Title == other?.Title &&
+                this.OriginalTitle == other?.OriginalTitle &&
+                this.Year == other?.Year &&
+                this.Color == other?.Color;
 
         public override int GetHashCode()
             => Util.GetHashCode(this.DisplayNumber, this.Title, this.OriginalTitle, this.Year, this.Color);
 
-        public int CompareTo(ListItem other)
+        public int CompareTo(ListItem? other)
             => other switch
         {
             MovieListItem item => this.CompareTo(item),
             SeriesListItem item => this.CompareTo(item),
             MovieSeriesListItem item => this.CompareTo(item),
-            _ => throw new NotSupportedException("Unknown list item type."),
+            _ => throw new NotSupportedException("Unknown list item type.")
         };
 
         public abstract int CompareTo(MovieListItem other);
@@ -117,7 +116,7 @@ namespace MovieList.ViewModels.ListItems
             (null, null) => this.CompareTitleOrYear(item),
             (var entry, null) => new MovieSeriesListItem(entry.MovieSeries).CompareTo(item),
             (null, var entry) => this.CompareTo(new MovieSeriesListItem(entry.MovieSeries)),
-            (var entry1, var entry2) => entry1.MovieSeriesId == entry2.MovieSeriesId
+            var (entry1, entry2) => entry1.MovieSeriesId == entry2.MovieSeriesId
                 ? entry1.OrdinalNumber.CompareTo(entry2.OrdinalNumber)
                 : new MovieSeriesListItem(entry1.MovieSeries)
                     .CompareTo(new MovieSeriesListItem(entry2.MovieSeries))
@@ -128,5 +127,23 @@ namespace MovieList.ViewModels.ListItems
             int result = this.Title.CompareTo(item.Title);
             return result != 0 ? result : this.Year.CompareTo(item.Year);
         }
+
+        public static bool operator ==(ListItem? left, ListItem? right)
+            => left?.Equals(right) ?? right is null;
+
+        public static bool operator !=(ListItem? left, ListItem? right)
+            => !(left == right);
+
+        public static bool operator <(ListItem? left, ListItem? right)
+            => left is null || left.CompareTo(right) < 0;
+
+        public static bool operator <=(ListItem? left, ListItem? right)
+            => left < right || left == right;
+
+        public static bool operator >(ListItem? left, ListItem? right)
+            => !(left <= right);
+
+        public static bool operator >=(ListItem? left, ListItem? right)
+            => !(left < right);
     }
 }

@@ -158,7 +158,7 @@ namespace MovieList.ViewModels.FormItems
         }
 
         public bool CanBeLooselyConnected
-            => !this.Components.Any(c => c.DisplayNumber == null);
+            => this.Components.All(c => c.DisplayNumber != null);
 
         public override string NumberToDisplay
             => (this.ParentSeries?.IsLooselyConnected ?? false)

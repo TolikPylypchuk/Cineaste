@@ -5,11 +5,7 @@ namespace MovieList.ViewModels.ListItems
 {
     public class MovieListItem : ListItem
     {
-        public MovieListItem(Movie movie)
-            : this(movie, null)
-        { }
-
-        public MovieListItem(Movie movie, Configuration? config)
+        public MovieListItem(Movie movie, Configuration? config = null)
             : base(
                 movie.Entry,
                 movie.Title.Name,

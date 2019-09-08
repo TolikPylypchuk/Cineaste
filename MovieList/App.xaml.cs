@@ -36,13 +36,13 @@ namespace MovieList
             AppDomain.CurrentDomain.UnhandledException += this.CatchException;
 
             this.MainWindow = this.ServiceProvider.GetRequiredService<MainWindow>();
-            this.MainWindow.Show();
+            this.MainWindow?.Show();
         }
 
         private void ConfigureServices(IServiceCollection services)
             => services
                 .AddDbContext<MovieContext>(
-                    (services, builder) => builder
+                    (s, builder) => builder
                         .ConfigureMovieContext(this.Configuration.GetSection("Config")["DatabasePath"])
                         .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                         .EnableSensitiveDataLogging()

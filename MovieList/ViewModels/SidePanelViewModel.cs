@@ -216,11 +216,11 @@ namespace MovieList.ViewModels
 
         private async Task SelectNextEntryAsync(EntityBase? entity)
         {
-            (MovieSeries? movieSeries, int ordinalNumber) = entity switch
+            (var movieSeries, int ordinalNumber) = entity switch
             {
                 MovieSeriesEntry entry => (entry.MovieSeries, entry.OrdinalNumber),
-                MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber.Value),
-                _ => default
+                MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber ?? 0),
+                _ => (null, 0)
             };
 
             if (movieSeries == null)
@@ -252,11 +252,11 @@ namespace MovieList.ViewModels
 
         private bool CanSelectNextEntry(EntityBase? entity)
         {
-            (MovieSeries? movieSeries, int ordinalNumber) = entity switch
+            (var movieSeries, int ordinalNumber) = entity switch
             {
                 MovieSeriesEntry entry => (entry.MovieSeries, entry.OrdinalNumber),
                 MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber ?? 0),
-                _ => default
+                _ => (null, 0)
             };
 
             return movieSeries != null && (movieSeries.Entries.Any(e => e.OrdinalNumber > ordinalNumber) ||
@@ -268,8 +268,8 @@ namespace MovieList.ViewModels
             (MovieSeries? movieSeries, int ordinalNumber) = entity switch
             {
                 MovieSeriesEntry entry => (entry.MovieSeries, entry.OrdinalNumber),
-                MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber.Value),
-                _ => default
+                MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber ?? 0),
+                _ => (null, 0)
             };
 
             if (movieSeries == null)
@@ -305,7 +305,7 @@ namespace MovieList.ViewModels
             {
                 MovieSeriesEntry entry => (entry.MovieSeries, entry.OrdinalNumber),
                 MovieSeries ms => (ms.ParentSeries, ms.OrdinalNumber ?? 0),
-                _ => default
+                _ => (null, 0)
             };
 
             return movieSeries != null && (movieSeries.Entries.Any(e => e.OrdinalNumber < ordinalNumber) ||

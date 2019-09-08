@@ -24,7 +24,7 @@ namespace MovieList.Converters
                 10 => Messages.October,
                 11 => Messages.November,
                 12 => Messages.December,
-                var v when v.ToString() == String.Empty => String.Empty,
+                var v when String.IsNullOrEmpty(v?.ToString()) => String.Empty,
                 _ => throw new NotSupportedException($"Cannot convert month #{value}.")
             };
 

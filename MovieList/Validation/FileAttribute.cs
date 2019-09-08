@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MovieList.Validation
 {
-    public class FileAttribute : ValidationAttribute
+    public sealed class FileAttribute : ValidationAttribute
     {
         public override bool IsValid(object value)
             => value == null ||

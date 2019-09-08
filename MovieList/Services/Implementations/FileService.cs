@@ -37,7 +37,7 @@ namespace MovieList.Services.Implementations
         {
             const int bufferSize = 4096;
 
-            using var sourceStream = new FileStream(
+            await using var sourceStream = new FileStream(
                 source,
                 FileMode.Open,
                 FileAccess.Read,
@@ -45,7 +45,7 @@ namespace MovieList.Services.Implementations
                 bufferSize,
                 FileOptions.Asynchronous | FileOptions.SequentialScan);
 
-            using var destinationStream = new FileStream(
+            await using var destinationStream = new FileStream(
                 destination,
                 FileMode.CreateNew,
                 FileAccess.Write,

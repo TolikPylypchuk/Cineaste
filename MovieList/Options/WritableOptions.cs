@@ -21,16 +21,18 @@ namespace MovieList.Options
             this.file = file;
         }
 
-        public T Value => options.CurrentValue;
+        public T Value
+            => this.options.CurrentValue;
 
-        public T Get(string name) => options.Get(name);
+        public T Get(string name)
+            => this.options.Get(name);
 
         public void Update(Action<T> applyChanges)
         {
             var jObject = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(this.file));
             var sectionObject = jObject.TryGetValue(this.section, out var sectionToken)
                 ? JsonConvert.DeserializeObject<T>(sectionToken.ToString())
-                : (this.Value ?? new T());
+                : this.Value ?? new T();
 
             applyChanges(sectionObject);
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MovieList.Validation
 {
-    public class StringRangeAttribute : ValidationAttribute
+    public sealed class StringRangeAttribute : ValidationAttribute
     {
         public int Min { get; set; } = Int32.MinValue;
         public int Max { get; set; } = Int32.MaxValue;

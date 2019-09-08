@@ -20,7 +20,7 @@ namespace MovieList.ViewModels
                 element, this.ColorForMovie, color => this.ColorForMovie = color.ToString()));
 
             this.ChangeColorForSeries = new DelegateCommand<FrameworkElement>(element => Util.OpenColorPickerPopup(
-                element as FrameworkElement, this.ColorForSeries, color => this.ColorForSeries = color.ToString()));
+                element, this.ColorForSeries, color => this.ColorForSeries = color.ToString()));
         }
 
         public DelegateCommand<FrameworkElement> ChangeColorForMovie { get; }

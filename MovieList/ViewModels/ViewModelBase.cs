@@ -14,7 +14,7 @@ namespace MovieList.ViewModels
     {
         public bool HasErrors => this.ValidationErros.Count > 0;
 
-        protected Dictionary<string, ICollection<string>> ValidationErros { get; set; } =
+        protected Dictionary<string, ICollection<string>> ValidationErros { get; } =
             new Dictionary<string, ICollection<string>>();
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,9 +37,8 @@ namespace MovieList.ViewModels
         protected void OnErrorsChanged(string propertyName)
             => this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 
-        protected virtual void Validate([CallerMemberName] string propertyName = "", object? value = null)
+        protected void Validate([CallerMemberName] string propertyName = "", object? value = null)
         {
-            string error = String.Empty;
             value ??= this.GetValue(propertyName);
 
             if (value == null || value.Equals(String.Empty))
@@ -49,7 +48,7 @@ namespace MovieList.ViewModels
 
             var results = new List<ValidationResult>();
 
-            var result = Validator.TryValidateProperty(
+            bool result = Validator.TryValidateProperty(
                 value, new ValidationContext(this, null, null) { MemberName = propertyName }, results);
 
             this.ValidationErros.Remove(propertyName);
@@ -61,7 +60,7 @@ namespace MovieList.ViewModels
             }
         }
 
-        protected virtual Func<string, OperationResult<bool>> Verify(string property)
+        protected Func<string, OperationResult<bool>> Verify(string property)
             => value =>
             {
                 this.Validate(property, value);

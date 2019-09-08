@@ -30,7 +30,7 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        public bool ShouldDisplayNumber
+        protected bool ShouldDisplayNumber
         {
             get => this.shouldDisplayNumber;
             set

@@ -34,7 +34,7 @@ namespace MovieList.ViewModels.FormItems
 
         public bool Equals(FormItemBase? item)
             => item != null &&
-                (this.GetType().IsAssignableFrom(item.GetType()) || item.GetType().IsAssignableFrom(this.GetType())) &&
+                (this.GetType().IsInstanceOfType(item) || item.GetType().IsInstanceOfType(this)) &&
                 this.Values
                     .Select(v => v.CurrentValueProvider())
                     .Zip(item.Values.Select(v => v.CurrentValueProvider()), this.AreValuesEqual)
@@ -49,7 +49,7 @@ namespace MovieList.ViewModels.FormItems
             {
                 base.OnPropertyChanged(propertyName);
 
-                if (propertyName != nameof(AreChangesPresent))
+                if (propertyName != nameof(this.AreChangesPresent))
                 {
                     this.CheckIfValuesChanged();
                 }
@@ -63,8 +63,7 @@ namespace MovieList.ViewModels.FormItems
         private bool AreValuesEqual(object? a, object? b)
             => !(a == null && b != null) &&
                 !(a != null && b == null) &&
-                ((a == null && b == null) ||
-                 (a is IEnumerable<object> e1 && b is IEnumerable<object> e2 && e1.SequenceEqual(e2)) ||
-                 a!.Equals(b));
+                (a == null || a!.Equals(b) ||
+                 a is IEnumerable<object> e1 && b is IEnumerable<object> e2 && e1.SequenceEqual(e2));
     }
 }

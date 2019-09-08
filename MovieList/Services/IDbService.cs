@@ -25,13 +25,13 @@ namespace MovieList.Services
             IEnumerable<MovieSeriesEntry> entriesToDelete,
             IEnumerable<MovieSeries> partsToDetach);
 
-        Task SaveKindsAsync(IEnumerable<KindViewModel> kinds);
+        Task SaveKindsAsync(IList<KindViewModel> kinds);
 
         Task ToggleWatchedAsync(ListItem item);
         Task ToggleReleasedAsync(MovieListItem item);
 
-        public Task DeleteAsync(Movie movie);
-        public Task DeleteAsync(Series series);
+        Task DeleteAsync(Movie movie);
+        Task DeleteAsync(Series series);
 
         Task DeleteAsync<TEntity>(TEntity entity)
             where TEntity : EntityBase;

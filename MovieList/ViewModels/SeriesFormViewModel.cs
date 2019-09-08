@@ -491,7 +491,7 @@ namespace MovieList.ViewModels
 
         private void OnSettingsUpdated(object? sender, SettingsUpdatedEventArgs? e)
         {
-            this.AllKinds = new ObservableCollection<KindViewModel>(e?.Kinds);
+            this.AllKinds = new ObservableCollection<KindViewModel>(e?.Kinds ?? throw new InvalidOperationException());
             this.Series.Kind = this.AllKinds.First(k => k.Kind.Id == this.Series.Kind.Kind.Id);
             this.Series.AllKinds = this.AllKinds;
         }

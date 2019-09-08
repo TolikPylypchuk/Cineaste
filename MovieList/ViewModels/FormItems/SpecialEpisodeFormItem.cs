@@ -30,7 +30,7 @@ namespace MovieList.ViewModels.FormItems
             this.backup = new SpecialEpisode();
 
             this.CopySpecialEpisodeProperties();
-            this.CopyProperties(this.SpecialEpisode, backup);
+            this.CopyProperties(this.SpecialEpisode, this.backup);
 
             this.IsInitialized = true;
         }

@@ -81,7 +81,8 @@ namespace MovieList.ViewModels
         public async Task LoadItemsAsync()
         {
             this.Items = new ObservableCollection<ListItem>(await this.dbService.LoadListAsync());
-            app.Dispatcher.Invoke(() => this.MovieListControl.LoadingProgressBar.Visibility = Visibility.Collapsed);
+            this.app.Dispatcher?.Invoke(() =>
+                this.MovieListControl.LoadingProgressBar.Visibility = Visibility.Collapsed);
         }
 
         public bool MoveSelectedItem(Key key)
@@ -111,20 +112,24 @@ namespace MovieList.ViewModels
                         result = true;
                         break;
                 }
-            } else if (key == Key.Up || key == Key.Home)
+            } else switch (key)
             {
-                this.SelectAndScroll(this.Items.Count - 1);
-                result = true;
-            } else if (key == Key.Down || key == Key.End)
-            {
-                this.SelectAndScroll(0);
-                result = true;
+                case Key.Up:
+                case Key.Home:
+                    this.SelectAndScroll(this.Items.Count - 1);
+                    result = true;
+                    break;
+                case Key.Down:
+                case Key.End:
+                    this.SelectAndScroll(0);
+                    result = true;
+                    break;
             }
 
             return result;
         }
 
-        protected virtual void OnListItemUpdated(ListItem item)
+        protected void OnListItemUpdated(ListItem item)
             => this.ListItemUpdated?.Invoke(this, new ListItemUpdatedEventArgs(item));
 
         private void SelectAndScroll(int index)
@@ -144,7 +149,7 @@ namespace MovieList.ViewModels
 
         private void OnAddItem(EntityBase entity)
         {
-            ListItem? item = entity switch
+            var item = entity switch
             {
                 Movie movie => new MovieListItem(movie, this.config.Value),
                 Series series => new SeriesListItem(series, this.config.Value),
@@ -171,7 +176,7 @@ namespace MovieList.ViewModels
 
         private void OnUpdateItem(EntityBase entity)
         {
-            ListItem? item = entity switch
+            var item = entity switch
             {
                 Movie movie => new MovieListItem(movie, this.config.Value),
                 Series series => new SeriesListItem(series, this.config.Value),
@@ -190,7 +195,7 @@ namespace MovieList.ViewModels
 
         private void OnDeleteItem(EntityBase entity)
         {
-            ListItem? item = entity switch
+            var item = entity switch
             {
                 Movie movie => new MovieListItem(movie, this.config.Value),
                 Series series => new SeriesListItem(series, this.config.Value),
@@ -256,8 +261,8 @@ namespace MovieList.ViewModels
                             movieSeriesItem.MovieSeries.Id == seriesItem.Series.Entry.MovieSeriesId),
                 MovieSeriesListItem movieSeriesItem when movieSeriesItem.MovieSeries.ParentSeries != null =>
                     this.Items.FirstOrDefault(i =>
-                        i is MovieSeriesListItem movieSeriesItem &&
-                        movieSeriesItem.MovieSeries.Id == movieSeriesItem.MovieSeries.ParentSeriesId),
+                        i is MovieSeriesListItem msItem &&
+                        msItem.MovieSeries.Id == msItem.MovieSeries.ParentSeriesId),
                 _ => null
             };
 

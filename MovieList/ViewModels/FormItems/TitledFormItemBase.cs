@@ -15,7 +15,7 @@ namespace MovieList.ViewModels.FormItems
         private ObservableCollection<TitleFormItem> originalTitles;
         private ObservableCollection<TitleFormItem> removedTitles = new ObservableCollection<TitleFormItem>();
 
-        public TitledFormItemBase()
+        protected TitledFormItemBase()
         {
             this.AddTitle = new DelegateCommand(this.OnAddTitle, this.CanAddTitle);
 
@@ -85,7 +85,7 @@ namespace MovieList.ViewModels.FormItems
             }
         }
 
-        protected void CopyTitles(IEnumerable<Title> titles)
+        protected void CopyTitles(IList<Title> titles)
         {
             this.Titles = new ObservableCollection<TitleFormItem>(
                 from title in titles
@@ -166,7 +166,7 @@ namespace MovieList.ViewModels.FormItems
             {
                 foreach (var title in e.NewItems.OfType<TitleFormItem>())
                 {
-                    title.PropertyChanged += (s, e) => this.OnPropertyChanged(
+                    title.PropertyChanged += (s, e1) => this.OnPropertyChanged(
                         sender == this.titles ? nameof(this.Titles) : nameof(this.OriginalTitles));
                 }
             }

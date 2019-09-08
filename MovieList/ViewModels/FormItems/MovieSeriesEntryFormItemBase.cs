@@ -4,7 +4,7 @@ namespace MovieList.ViewModels.FormItems
 {
     public abstract class MovieSeriesEntryFormItemBase : MovieSeriesComponentFormItemBase
     {
-        public MovieSeriesEntryFormItemBase(MovieSeriesEntry? movieSeriesEntry, MovieSeriesFormItem? movieSeries)
+        protected MovieSeriesEntryFormItemBase(MovieSeriesEntry? movieSeriesEntry, MovieSeriesFormItem? movieSeries)
         {
             this.MovieSeriesEntry = movieSeriesEntry;
             this.MovieSeries = movieSeries;

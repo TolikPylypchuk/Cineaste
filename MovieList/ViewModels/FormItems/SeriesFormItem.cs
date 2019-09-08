@@ -163,8 +163,8 @@ namespace MovieList.ViewModels.FormItems
         {
             get
             {
-                var startYear = this.Series.StartYear;
-                var endYear = this.Series.EndYear;
+                int startYear = this.Series.StartYear;
+                int endYear = this.Series.EndYear;
 
                 return startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";
             }
@@ -287,9 +287,9 @@ namespace MovieList.ViewModels.FormItems
             this.Kind = this.AllKinds.FirstOrDefault(k => k.Kind.Id == this.Series.KindId) ?? this.AllKinds.First();
             this.Components = new ObservableCollection<SeriesComponentFormItemBase>(
                 this.Series.Seasons
-                    .Select(season => this.NewSeason(season))
+                    .Select(this.NewSeason)
                     .Cast<SeriesComponentFormItemBase>()
-                    .Union(this.Series.SpecialEpisodes.Select(episode => this.NewSpecialEpisode(episode)))
+                    .Union(this.Series.SpecialEpisodes.Select(this.NewSpecialEpisode))
                     .OrderBy(item => item.OrdinalNumber));
 
             this.SetPoster();

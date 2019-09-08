@@ -7,11 +7,7 @@ namespace MovieList.ViewModels.ListItems
 {
     public class MovieSeriesListItem : ListItem
     {
-        public MovieSeriesListItem(MovieSeries movieSeries)
-            : this(movieSeries, null)
-        { }
-
-        public MovieSeriesListItem(MovieSeries movieSeries, Configuration? config)
+        public MovieSeriesListItem(MovieSeries movieSeries, Configuration? config = null)
             : base(
                 null,
                 movieSeries.Title != null ? $"{movieSeries.Title.Name}:" : String.Empty,
