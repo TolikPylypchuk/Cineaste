@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci578" />
+    <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci578" />
+    <PackageReference Include="ReactiveUI" Version="10.3.1" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="10.3.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="10.3.1" />
+    <PackageReference Include="ReactiveUI.Validation" Version="1.4.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="10.3.1" />
+    <PackageReference Include="Splat" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MovieList.Data\MovieList.Data.csproj" />
     <ProjectReference Include="..\MovieList.ViewModels\MovieList.ViewModels.csproj" />
   </ItemGroup>

@@ -1,8 +1,12 @@
-using System.Windows;
+using MovieList.ViewModels;
+
+using ReactiveUI;
 
 namespace MovieList
 {
-    public partial class MainWindow : Window
+    public abstract class MainWindowBase : ReactiveWindow<MainViewModel> { }
+
+    public partial class MainWindow : MainWindowBase
     {
         public MainWindow()
         {
