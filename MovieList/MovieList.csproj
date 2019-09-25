@@ -8,6 +8,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;CA1031</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci578" />
     <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci578" />
@@ -17,6 +21,7 @@
     <PackageReference Include="ReactiveUI.Validation" Version="1.4.1" />
     <PackageReference Include="ReactiveUI.WPF" Version="10.3.1" />
     <PackageReference Include="Splat" Version="9.0.5" />
+    <PackageReference Include="System.Reactive" Version="4.2.0-preview.625" />
   </ItemGroup>
 
   <ItemGroup>
