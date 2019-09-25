@@ -5,6 +5,13 @@
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:local="clr-namespace:MovieList"
                           mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+                          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+                          TextElement.FontWeight="Regular"
+                          TextElement.FontSize="13"
+                          TextOptions.TextFormattingMode="Ideal" 
+                          TextOptions.TextRenderingMode="Auto"        
+                          Background="{DynamicResource MaterialDesignPaper}"
+                          FontFamily="{DynamicResource MaterialDesignFont}"
                           Title="Movie List" Height="450" Width="800">
     <Grid>
     </Grid>
