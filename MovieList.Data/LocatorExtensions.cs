@@ -1,3 +1,6 @@
+using MovieList.Data.Services;
+using MovieList.Data.Services.Implementations;
+
 using Splat;
 
 namespace MovieList.Data
@@ -6,7 +9,7 @@ namespace MovieList.Data
     {
         public static void RegisterDatabaseServices(this IMutableDependencyResolver resolver)
         {
-            // nothing to register for now
+            resolver.Register(() => new DatabaseService(), typeof(IDatabaseService));
         }
     }
 }
