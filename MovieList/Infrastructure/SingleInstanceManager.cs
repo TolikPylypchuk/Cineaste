@@ -15,16 +15,10 @@ namespace MovieList.Infrastructure
                 SendArgumentAndExit();
             }
 
-            try
+            bool hasHandle = mutex.WaitOne(5000, false);
+            if (!hasHandle)
             {
-                bool hasHandle = mutex.WaitOne(5000, false);
-                if (!hasHandle)
-                {
-                    throw new TimeoutException("Timeout waiting for exclusive access on the mutex.");
-                }
-            } catch (AbandonedMutexException)
-            {
-                // ignore for now
+                throw new TimeoutException("Timeout waiting for exclusive access on the mutex.");
             }
 
             return mutex;
