@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Dapper.Contrib.Extensions;
+
 namespace MovieList.Data.Models
 {
-    [Dapper.Contrib.Extensions.Table("Series")]
+    [Table("Series")]
     public sealed class Series : EntityBase
     {
         public bool IsWatched { get; set; }
@@ -27,18 +29,21 @@ namespace MovieList.Data.Models
 
         public IList<SpecialEpisode> SpecialEpisodes { get; set; } = new List<SpecialEpisode>();
 
+        [Computed]
         public Title Title
             => this.Titles
                 .Where(title => !title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
+        [Computed]
         public Title OriginalTitle
             => this.Titles
                 .Where(title => title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
+        [Computed]
         public int StartYear
             => Math.Min(
                 this.Seasons
@@ -54,6 +59,7 @@ namespace MovieList.Data.Models
                     ?.Year
                 ?? Int32.MaxValue);
 
+        [Computed]
         public int EndYear
             => Math.Max(
                 this.Seasons

@@ -26,12 +26,14 @@ namespace MovieList.Data.Models
 
         public IList<Title> Titles { get; set; } = new List<Title>();
 
+        [Computed]
         public Title Title
             => this.Titles
                 .Where(title => !title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
+        [Computed]
         public Title OriginalTitle
             => this.Titles
                 .Where(title => title.IsOriginal)

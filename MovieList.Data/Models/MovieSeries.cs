@@ -8,8 +8,8 @@ namespace MovieList.Data.Models
     [Table("MovieSeries")]
     public sealed class MovieSeries : EntityBase
     {
-        public bool IsLooselyConnected { get; set; }
         public bool ShowTitles { get; set; }
+        public bool IsLooselyConnected { get; set; }
 
         public string? PosterUrl { get; set; }
 
@@ -24,12 +24,14 @@ namespace MovieList.Data.Models
                 ? this.Titles
                 : this.Entries.OrderBy(e => e.SequenceNumber).First().Titles;
 
+        [Computed]
         public Title? Title
             => this.Titles
                 .Where(title => !title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .FirstOrDefault();
 
+        [Computed]
         public Title? OriginalTitle
             => this.Titles
                 .Where(title => title.IsOriginal)

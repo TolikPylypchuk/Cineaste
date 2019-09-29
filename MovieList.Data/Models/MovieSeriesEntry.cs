@@ -23,6 +23,7 @@ namespace MovieList.Data.Models
         public int SequenceNumber { get; set; }
         public int? DisplayNumber { get; set; }
 
+        [Computed]
         public IList<Title> Titles
             => (this.Movie, this.Series, this.MovieSeries) switch
             {

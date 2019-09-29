@@ -15,6 +15,9 @@ namespace MovieList.Data.Models
 
         public int SequenceNumber { get; set; }
 
+        public int SeriesId { get; set; }
+        public Series Series { get; set; }
+
         public IList<Title> Titles { get; set; } = new List<Title>();
 
         public IList<Period> Periods { get; set; } = new List<Period>();
