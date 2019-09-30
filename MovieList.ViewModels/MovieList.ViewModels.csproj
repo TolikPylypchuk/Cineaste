@@ -20,8 +20,4 @@
     <ProjectReference Include="..\MovieList.Data\MovieList.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Preferences\" />
-  </ItemGroup>
-
 </Project>
