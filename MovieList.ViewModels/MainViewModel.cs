@@ -8,13 +8,11 @@ namespace MovieList.ViewModels
     {
         public MainViewModel()
         {
-            this.OpenFile = ReactiveCommand.Create<string, string>(file =>
-            {
-                this.Log().Debug($"Opening a file: {file}");
-                return file;
-            });
+            this.OpenFile = ReactiveCommand.Create<string, string>(file => file);
+            this.CloseFile = ReactiveCommand.Create<string, string>(file => file);
         }
 
         public ReactiveCommand<string, string> OpenFile { get; }
+        public ReactiveCommand<string, string> CloseFile { get; }
     }
 }

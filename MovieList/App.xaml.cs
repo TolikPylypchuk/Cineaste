@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
@@ -11,14 +12,13 @@ using ReactiveUI;
 
 using Serilog;
 using Serilog.Core;
-using Serilog.Events;
 
 using Splat;
 using Splat.Serilog;
 
 namespace MovieList
 {
-    public partial class App : Application
+    public partial class App : Application, IEnableLogger
     {
         private readonly Mutex mutex;
         private readonly NamedPipeManager namedPipeManager;
@@ -37,6 +37,9 @@ namespace MovieList
             this.namedPipeManager.ReceivedString.InvokeCommand(viewModel.OpenFile);
 
             this.ConfigureLocator();
+
+            viewModel.OpenFile.Subscribe(this.OnOpenFile);
+            viewModel.CloseFile.Subscribe(this.OnCloseFile);
 
             this.MainWindow = new MainWindow
             {
@@ -58,14 +61,26 @@ namespace MovieList
 
         private void ConfigureLocator()
         {
+            Locator.CurrentMutable.InitializeReactiveUI();
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
-            Locator.CurrentMutable.RegisterDatabaseServices();
 
             Locator.CurrentMutable.UseSerilogFullLogger(new LoggerConfiguration()
-                .MinimumLevel.ControlledBy(new LoggingLevelSwitch { MinimumLevel = LogEventLevel.Information })
+                .MinimumLevel.ControlledBy(new LoggingLevelSwitch())
                 .WriteTo.Debug()
                 .WriteTo.File("MovieList.log")
                 .CreateLogger());
+        }
+
+        private void OnOpenFile(string file)
+        {
+            this.Log().Debug($"Opening a file: {file}");
+            Locator.CurrentMutable.RegisterDatabaseServices(file);
+        }
+
+        private void OnCloseFile(string file)
+        {
+            this.Log().Debug($"Closing a file: {file}");
+            Locator.CurrentMutable.UnregisterDatabaseServices(file);
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
