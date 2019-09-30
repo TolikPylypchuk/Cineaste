@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
+    <RootNamespace>MovieList</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MovieList.Data\MovieList.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Preferences\" />
   </ItemGroup>
 
 </Project>

@@ -5,18 +5,18 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 
+using Splat;
+
 namespace MovieList.Infrastructure
 {
-    public sealed class NamedPipeManager
+    public sealed class NamedPipeManager : IEnableLogger
     {
         private Thread? thread;
 
         private readonly Subject<string> receivedString = new Subject<string>();
 
         public NamedPipeManager(string? name)
-        {
-            this.NamedPipeName = name;
-        }
+            => this.NamedPipeName = name;
 
         public string? NamedPipeName { get; }
 
@@ -40,13 +40,15 @@ namespace MovieList.Infrastructure
             try
             {
                 client.Connect(connectTimeout);
-            } catch
+            } catch (Exception e)
             {
+                this.Log().Error(e);
                 return false;
             }
 
             if (!client.IsConnected)
             {
+                this.Log().Error("The client is not connected.");
                 return false;
             }
 
