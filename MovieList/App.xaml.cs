@@ -52,11 +52,7 @@ namespace MovieList
             mainViewModel.OpenFile.Subscribe(this.OnOpenFile);
             mainViewModel.CloseFile.Subscribe(this.OnCloseFile);
 
-            this.MainWindow = new MainWindow
-            {
-                ViewModel = mainViewModel
-            };
-
+            this.MainWindow = this.CreateMainWindow(mainViewModel);
             this.MainWindow.Show();
 
             this.DispatcherUnhandledException += this.OnDispatcherUnhandledException;
@@ -96,7 +92,7 @@ namespace MovieList
         private async Task<UserPreferences> CreateDefaultPreferences()
         {
             var preferences = new UserPreferences(
-                           new UIPreferences(-1, -1, -1, -1, false),
+                           new UIPreferences(0.0, 0.0, 0.0, 0.0, false, false),
                            new FilePreferences(true, new List<string>()),
                            new LoggingPreferences(
                                $"{Assembly.GetExecutingAssembly().GetName().Name}.log",
@@ -105,6 +101,37 @@ namespace MovieList
             await BlobCache.UserAccount.InsertObject(MainPreferences, preferences);
 
             return preferences;
+        }
+
+        private MainWindow CreateMainWindow(MainViewModel viewModel)
+        {
+            var uiPreferences = Locator.Current.GetService<UserPreferences>().UI;
+
+            var window = new MainWindow
+            {
+                ViewModel = viewModel
+            };
+
+            if (uiPreferences.IsInitialized)
+            {
+                window.WindowStartupLocation = WindowStartupLocation.Manual;
+                window.Width = uiPreferences.WindowWidth;
+                window.Height = uiPreferences.WindowHeight;
+                window.Left = uiPreferences.WindowX;
+                window.Top = uiPreferences.WindowY;
+                window.WindowState = uiPreferences.IsWindowMaximized ? WindowState.Maximized : WindowState.Normal;
+            }
+
+            window.Events().SizeChanged
+                .Merge(this.MainWindow.Events().StateChanged
+                    .Where(_ => this.MainWindow.WindowState != WindowState.Minimized))
+                .Merge(this.MainWindow.Events().LocationChanged)
+                .Throttle(TimeSpan.FromMilliseconds(500))
+                .Discard()
+                .ObserveOnDispatcher()
+                .SubscribeAsync(this.SaveUIPreferences);
+
+            return window;
         }
 
         private void OnOpenFile(string file)
@@ -117,6 +144,25 @@ namespace MovieList
         {
             this.Log().Debug($"Closing a file: {file}");
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
+        }
+
+        private async Task SaveUIPreferences()
+        {
+            if (this.MainWindow == null)
+            {
+                return;
+            }
+
+            var preferences = Locator.Current.GetService<UserPreferences>();
+
+            preferences.UI.WindowWidth = this.MainWindow.ActualWidth;
+            preferences.UI.WindowHeight = this.MainWindow.ActualHeight;
+            preferences.UI.WindowX = this.MainWindow.Left;
+            preferences.UI.WindowY = this.MainWindow.Top;
+            preferences.UI.IsWindowMaximized = this.MainWindow.WindowState == WindowState.Maximized;
+            preferences.UI.IsInitialized = true;
+
+            await BlobCache.UserAccount.InsertObject(MainPreferences, preferences);
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
