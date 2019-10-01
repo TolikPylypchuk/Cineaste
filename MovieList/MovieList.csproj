@@ -14,8 +14,8 @@
 
   <ItemGroup>
     <PackageReference Include="akavache" Version="6.8.1" />
-    <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci604" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci604" />
+    <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci607" />
+    <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci607" />
     <PackageReference Include="ReactiveUI" Version="10.3.6" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="10.3.6" />
     <PackageReference Include="ReactiveUI.Fody" Version="10.3.6" />
