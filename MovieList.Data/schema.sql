@@ -175,3 +175,9 @@ CREATE INDEX "Idx_Titles_SeriesId" ON "Titles" ("SeriesId");
 CREATE INDEX "Idx_Titles_SeasonId" ON "Titles" ("SeasonId");
 CREATE INDEX "Idx_Titles_SpecialEpisodeId" ON "Titles" ("SpecialEpisodeId");
 CREATE INDEX "Idx_Titles_MovieSeriesId" ON "Titles" ("MovieSeriesId");
+
+CREATE TABLE "Settings" (
+    "Id" INTEGER PRIMARY KEY,
+    "Key" TEXT UNIQUE NOT NULL,
+    "Value" TEXT NOT NULL
+);

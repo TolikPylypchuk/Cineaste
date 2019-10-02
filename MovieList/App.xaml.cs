@@ -166,7 +166,10 @@ namespace MovieList
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-            => this.CleanUp();
+        {
+            this.Log().Fatal(e.Exception);
+            this.CleanUp();
+        }
 
         private void CleanUp()
         {
