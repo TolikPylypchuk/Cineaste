@@ -28,7 +28,7 @@
     <PackageReference Include="MethodDecorator.Fody" Version="1.1.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="3.0.0" />
     <PackageReference Include="Resourcer.Fody" Version="1.8.0" />
-    <PackageReference Include="Splat" Version="9.0.5" />
+    <PackageReference Include="Splat" Version="9.1.1" />
   </ItemGroup>
 
 </Project>
