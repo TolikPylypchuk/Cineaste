@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
@@ -9,9 +10,12 @@ using System.Windows.Threading;
 
 using Akavache;
 
+using MaterialDesignThemes.Wpf;
+
 using MovieList.Data;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
+using MovieList.Properties;
 using MovieList.ViewModels;
 
 using ReactiveUI;
@@ -54,6 +58,8 @@ namespace MovieList
 
             this.MainWindow = this.CreateMainWindow(mainViewModel);
             this.MainWindow.Show();
+
+            this.SetUpDialogs();
 
             this.DispatcherUnhandledException += this.OnDispatcherUnhandledException;
 
@@ -163,6 +169,31 @@ namespace MovieList
             preferences.UI.IsInitialized = true;
 
             await BlobCache.UserAccount.InsertObject(MainPreferences, preferences);
+        }
+
+        private void SetUpDialogs()
+        {
+            Message.Show.RegisterHandler(async ctx =>
+            {
+                var viewModel = new MessageViewModel(ctx.Input, Messages.OK);
+                var view = ViewLocator.Current.ResolveView(viewModel);
+                view.ViewModel = viewModel;
+
+                await DialogHost.Show(view);
+
+                ctx.SetOutput(Unit.Default);
+            });
+
+            Message.Confirm.RegisterHandler(async ctx =>
+            {
+                var viewModel = new ConfirmationViewModel(ctx.Input, Messages.Confirm, Messages.Cancel);
+                var view = ViewLocator.Current.ResolveView(viewModel);
+                view.ViewModel = viewModel;
+
+                var result = await DialogHost.Show(view);
+
+                ctx.SetOutput(result is bool confirm && confirm);
+            });
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
