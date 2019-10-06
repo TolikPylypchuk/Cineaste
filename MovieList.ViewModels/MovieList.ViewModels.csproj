@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="akavache" Version="6.8.1" />
+    <PackageReference Include="akavache" Version="6.9.1" />
     <PackageReference Include="DynamicData" Version="6.13.13" />
     <PackageReference Include="ReactiveUI" Version="10.3.6" />
     <PackageReference Include="ReactiveUI.Fody" Version="10.3.6" />

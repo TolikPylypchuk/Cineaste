@@ -13,10 +13,11 @@ namespace MovieList.Data
         {
             if (!resolver.HasRegistration(typeof(IDatabaseService), file))
             {
-                resolver.Register(() => new DatabaseService(file), typeof(IDatabaseService), file);
-                resolver.Register(() => new KindService(file), typeof(IKindService), file);
-                resolver.Register(() => new SettingsService(file), typeof(ISettingsService), file);
-                resolver.Register(() => new SqliteConnection($"Data Source={file}"), typeof(SqliteConnection), file);
+                resolver.RegisterLazySingleton(() => new DatabaseService(file), typeof(IDatabaseService), file);
+                resolver.RegisterLazySingleton(() => new KindService(file), typeof(IKindService), file);
+                resolver.RegisterLazySingleton(() => new SettingsService(file), typeof(ISettingsService), file);
+                resolver.RegisterLazySingleton(
+                    () => new SqliteConnection($"Data Source={file}"), typeof(SqliteConnection), file);
             }
         }
 

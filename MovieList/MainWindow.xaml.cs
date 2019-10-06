@@ -23,6 +23,9 @@ namespace MovieList
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
+                this.OneWayBind(this.ViewModel, vm => vm.HomePageViewModel, v => v.HomePageHost.ViewModel)
+                    .DisposeWith(disposables);
+
                 this.ViewModel.OpenFile
                     .ObserveOnDispatcher()
                     .Subscribe(this.OnOpenFile)

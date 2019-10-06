@@ -9,14 +9,15 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;CA1031</NoWarn>
+    <NoWarn>1701;1702;CA1031;NU1701</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="akavache" Version="6.8.1" />
+    <PackageReference Include="akavache" Version="6.9.1" />
     <PackageReference Include="DynamicData" Version="6.13.13" />
-    <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci625" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci625" />
+    <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci632" />
+    <PackageReference Include="MaterialDesignExtensions" Version="2.8.0-a01" />
+    <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci632" />
     <PackageReference Include="ReactiveUI" Version="10.3.6" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="10.3.6" />
     <PackageReference Include="ReactiveUI.Fody" Version="10.3.6" />
