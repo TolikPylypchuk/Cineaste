@@ -2,7 +2,7 @@ using ReactiveUI;
 
 namespace MovieList.ViewModels
 {
-    public class PreferencesViewModel : ReactiveObject
+    public sealed class PreferencesViewModel : ReactiveObject
     {
     }
 }

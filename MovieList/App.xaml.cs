@@ -16,6 +16,7 @@ using MovieList.Data;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
 using MovieList.Properties;
+using MovieList.State;
 using MovieList.ViewModels;
 
 using ReactiveUI;
@@ -40,18 +41,26 @@ namespace MovieList
         {
             this.mutex = SingleInstanceManager.TryAcquireMutex();
             this.namedPipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly().FullName);
+
+            var autoSuspendHelper = new AutoSuspendHelper(this);
+            GC.KeepAlive(autoSuspendHelper);
+
+            BlobCache.ApplicationName = Assembly.GetExecutingAssembly().GetName().Name;
         }
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            await this.ConfigureLocatorAsync();
+
+            RxApp.SuspensionHost.CreateNewAppState = () => new AppState();
+            RxApp.SuspensionHost.SetupDefaultSuspendResume();
+
+            base.OnStartup(e);
+
             var mainViewModel = new MainViewModel();
 
             this.namedPipeManager.StartServer();
             this.namedPipeManager.ReceivedString.InvokeCommand(mainViewModel.OpenFile);
-
-            BlobCache.ApplicationName = Assembly.GetExecutingAssembly().GetName().Name;
-
-            await this.ConfigureLocatorAsync();
 
             mainViewModel.OpenFile.Subscribe(this.OnOpenFile);
             mainViewModel.CloseFile.Subscribe(this.OnCloseFile);
@@ -62,20 +71,19 @@ namespace MovieList
             this.SetUpDialogs();
 
             this.DispatcherUnhandledException += this.OnDispatcherUnhandledException;
-
-            base.OnStartup(e);
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            this.CleanUp();
             base.OnExit(e);
+            this.CleanUp();
         }
 
         private async Task ConfigureLocatorAsync()
         {
             Locator.CurrentMutable.InitializeReactiveUI();
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
+            Locator.CurrentMutable.RegisterSuspensionDriver();
 
             Locator.CurrentMutable.RegisterConstant(BlobCache.LocalMachine, Cache);
             Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, Store);
@@ -98,11 +106,10 @@ namespace MovieList
         private async Task<UserPreferences> CreateDefaultPreferences()
         {
             var preferences = new UserPreferences(
-                           new UIPreferences(0.0, 0.0, 0.0, 0.0, false, false),
-                           new FilePreferences(true, new List<string>()),
-                           new LoggingPreferences(
-                               $"{Assembly.GetExecutingAssembly().GetName().Name}.log",
-                               (int)LogEventLevel.Information));
+                new FilePreferences(true, new List<RecentFile>()),
+                new LoggingPreferences(
+                    $"{Assembly.GetExecutingAssembly().GetName().Name}.log",
+                    (int)LogEventLevel.Information));
 
             await BlobCache.UserAccount.InsertObject(MainPreferences, preferences);
 
@@ -111,21 +118,21 @@ namespace MovieList
 
         private MainWindow CreateMainWindow(MainViewModel viewModel)
         {
-            var uiPreferences = Locator.Current.GetService<UserPreferences>().UI;
+            var state = RxApp.SuspensionHost.GetAppState<AppState>();
 
             var window = new MainWindow
             {
                 ViewModel = viewModel
             };
 
-            if (uiPreferences.IsInitialized)
+            if (state.IsInitialized)
             {
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
-                window.Width = uiPreferences.WindowWidth;
-                window.Height = uiPreferences.WindowHeight;
-                window.Left = uiPreferences.WindowX;
-                window.Top = uiPreferences.WindowY;
-                window.WindowState = uiPreferences.IsWindowMaximized ? WindowState.Maximized : WindowState.Normal;
+                window.Width = state.WindowWidth;
+                window.Height = state.WindowHeight;
+                window.Left = state.WindowX;
+                window.Top = state.WindowY;
+                window.WindowState = state.IsWindowMaximized ? WindowState.Maximized : WindowState.Normal;
             }
 
             window.Events().SizeChanged
@@ -135,7 +142,7 @@ namespace MovieList
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .Discard()
                 .ObserveOnDispatcher()
-                .SubscribeAsync(this.SaveUIPreferences);
+                .Subscribe(this.SaveUIPreferences);
 
             return window;
         }
@@ -152,23 +159,21 @@ namespace MovieList
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
         }
 
-        private async Task SaveUIPreferences()
+        private void SaveUIPreferences()
         {
             if (this.MainWindow == null)
             {
                 return;
             }
 
-            var preferences = Locator.Current.GetService<UserPreferences>();
+            var state = RxApp.SuspensionHost.GetAppState<AppState>();
 
-            preferences.UI.WindowWidth = this.MainWindow.ActualWidth;
-            preferences.UI.WindowHeight = this.MainWindow.ActualHeight;
-            preferences.UI.WindowX = this.MainWindow.Left;
-            preferences.UI.WindowY = this.MainWindow.Top;
-            preferences.UI.IsWindowMaximized = this.MainWindow.WindowState == WindowState.Maximized;
-            preferences.UI.IsInitialized = true;
-
-            await BlobCache.UserAccount.InsertObject(MainPreferences, preferences);
+            state.WindowWidth = this.MainWindow.ActualWidth;
+            state.WindowHeight = this.MainWindow.ActualHeight;
+            state.WindowX = this.MainWindow.Left;
+            state.WindowY = this.MainWindow.Top;
+            state.IsWindowMaximized = this.MainWindow.WindowState == WindowState.Maximized;
+            state.IsInitialized = true;
         }
 
         private void SetUpDialogs()

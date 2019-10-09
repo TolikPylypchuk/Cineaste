@@ -3,7 +3,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.ViewModels
 {
-    public class MessageViewModel : ReactiveObject
+    public sealed class MessageViewModel : ReactiveObject
     {
         public MessageViewModel(string message, string buttonText)
         {

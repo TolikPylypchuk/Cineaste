@@ -3,7 +3,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.ViewModels
 {
-    public class ConfirmationViewModel : ReactiveObject
+    public sealed class ConfirmationViewModel : ReactiveObject
     {
         public ConfirmationViewModel(string message, string confirmButtonText, string cancelButtonText)
         {

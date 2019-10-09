@@ -2,7 +2,7 @@ using ReactiveUI;
 
 namespace MovieList.ViewModels
 {
-    public class FileViewModel : ReactiveObject
+    public sealed class FileViewModel : ReactiveObject
     {
     }
 }

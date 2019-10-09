@@ -14,6 +14,9 @@ namespace MovieList
             where T : class
             => observable.Where(x => x != null).Select(x => x!);
 
+        public static IDisposable Subscribe(this IObservable<Unit> observable, Action observer)
+            => observable.Subscribe(_ => observer());
+
         public static IDisposable SubscribeAsync<T>(this IObservable<T> observable, Func<T, Task> observer)
             => observable.SelectMany(async x =>
             {

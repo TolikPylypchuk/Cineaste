@@ -4,7 +4,7 @@ using Splat;
 
 namespace MovieList.ViewModels
 {
-    public class MainViewModel : ReactiveObject, IEnableLogger
+    public sealed class MainViewModel : ReactiveObject, IEnableLogger
     {
         public MainViewModel()
         {
