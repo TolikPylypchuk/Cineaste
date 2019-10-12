@@ -9,12 +9,12 @@
 
   <ItemGroup>
     <PackageReference Include="akavache" Version="6.9.1" />
-    <PackageReference Include="DynamicData" Version="6.13.13" />
+    <PackageReference Include="DynamicData" Version="6.13.18" />
     <PackageReference Include="ReactiveUI" Version="10.4.1" />
     <PackageReference Include="ReactiveUI.Fody" Version="10.4.1" />
     <PackageReference Include="ReactiveUI.Validation" Version="1.4.1" />
     <PackageReference Include="Splat" Version="9.1.1" />
-    <PackageReference Include="System.Reactive" Version="4.2.0-preview.625" />
+    <PackageReference Include="System.Reactive" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>
