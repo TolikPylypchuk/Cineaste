@@ -1,12 +1,12 @@
 using System.Reactive.Disposables;
 
-using MovieList.ViewModels;
+using MovieList.DialogModels;
 
 using ReactiveUI;
 
 namespace MovieList.Views
 {
-    public abstract class ConfirmationDialogBase : ReactiveUserControl<ConfirmationViewModel> { }
+    public abstract class ConfirmationDialogBase : ReactiveUserControl<ConfirmationModel> { }
 
     public partial class ConfirmationDialog : ConfirmationDialogBase
     {

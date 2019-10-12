@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -28,6 +28,8 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0-dev-00850" />
     <PackageReference Include="Splat" Version="9.1.1" />
     <PackageReference Include="Splat.Serilog" Version="9.1.1" />
+    <PackageReference Include="System.Interactive" Version="4.0.0" />
+    <PackageReference Include="System.Interactive.Async" Version="4.0.0" />
     <PackageReference Include="System.Reactive" Version="4.2.0" />
   </ItemGroup>
 

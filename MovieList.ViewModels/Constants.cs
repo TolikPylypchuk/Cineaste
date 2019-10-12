@@ -5,5 +5,6 @@ namespace MovieList
         public const string Cache = "cache";
         public const string Store = "store";
         public const string MainPreferences = "preferences";
+        public const string ListFileExtension = "mlist";
     }
 }

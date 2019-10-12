@@ -1,14 +1,16 @@
+using MovieList.Properties;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.ViewModels
+namespace MovieList.DialogModels
 {
-    public sealed class MessageViewModel : ReactiveObject
+    public sealed class MessageModel : ReactiveObject
     {
-        public MessageViewModel(string message, string buttonText)
+        public MessageModel(string message, string? buttonText = null)
         {
             this.Message = message;
-            this.ButtonText = buttonText;
+            this.ButtonText = buttonText ?? Resources.OK;
         }
 
         [Reactive]

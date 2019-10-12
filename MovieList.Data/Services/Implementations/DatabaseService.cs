@@ -83,7 +83,7 @@ namespace MovieList.Data.Services.Implementations
                 {
                     Key = SettingsDefaultSeasonOriginalTitleKey,
                     Value = SettingsDefaultSeasonOriginalTitleValue
-                },
+                }
             };
 
             foreach (var setting in settings)

@@ -15,7 +15,6 @@ using MaterialDesignThemes.Wpf;
 using MovieList.Data;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
-using MovieList.Properties;
 using MovieList.State;
 using MovieList.ViewModels;
 
@@ -60,9 +59,11 @@ namespace MovieList
             var mainViewModel = new MainViewModel();
 
             this.namedPipeManager.StartServer();
-            this.namedPipeManager.ReceivedString.InvokeCommand(mainViewModel.OpenFile);
+            this.namedPipeManager.ReceivedString
+                .Select(file => new OpenFileModel(file, true))
+                .InvokeCommand(mainViewModel.OpenFile);
 
-            mainViewModel.OpenFile.Subscribe(this.OnOpenFile);
+            mainViewModel.OpenFile.Select(model => model.File).Subscribe(this.OnOpenFile);
             mainViewModel.CloseFile.Subscribe(this.OnCloseFile);
 
             this.MainWindow = this.CreateMainWindow(mainViewModel);
@@ -178,26 +179,42 @@ namespace MovieList
 
         private void SetUpDialogs()
         {
-            Message.Show.RegisterHandler(async ctx =>
+            Dialog.Show.RegisterHandler(async ctx =>
             {
-                var viewModel = new MessageViewModel(ctx.Input, Messages.OK);
-                var view = ViewLocator.Current.ResolveView(viewModel);
-                view.ViewModel = viewModel;
+                var view = ViewLocator.Current.ResolveView(ctx.Input);
+                view.ViewModel = ctx.Input;
 
                 await DialogHost.Show(view);
 
                 ctx.SetOutput(Unit.Default);
             });
 
-            Message.Confirm.RegisterHandler(async ctx =>
+            Dialog.Confirm.RegisterHandler(async ctx =>
             {
-                var viewModel = new ConfirmationViewModel(ctx.Input, Messages.Confirm, Messages.Cancel);
-                var view = ViewLocator.Current.ResolveView(viewModel);
-                view.ViewModel = viewModel;
+                var view = ViewLocator.Current.ResolveView(ctx.Input);
+                view.ViewModel = ctx.Input;
 
                 var result = await DialogHost.Show(view);
 
                 ctx.SetOutput(result is bool confirm && confirm);
+            });
+
+            Dialog.CreateList.RegisterHandler(ctx =>
+            {
+                ctx.SetOutput(null);
+                return Task.CompletedTask;
+            });
+
+            Dialog.SaveFile.RegisterHandler(ctx =>
+            {
+                ctx.SetOutput(null);
+                return Task.CompletedTask;
+            });
+
+            Dialog.OpenFile.RegisterHandler(ctx =>
+            {
+                ctx.SetOutput(null);
+                return Task.CompletedTask;
             });
         }
 

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 using Akavache;
 
@@ -42,13 +44,33 @@ namespace MovieList.ViewModels
             this.WhenAnyValue(vm => vm.RecentFiles.Count)
                 .Select(count => count != 0)
                 .ToPropertyEx(this, vm => vm.ShowRecentFiles);
+
+            this.CreateFile = ReactiveCommand.CreateFromTask(this.OnCreateFile);
+            this.OpenFile = ReactiveCommand.CreateFromTask<string?, string?>(this.OnOpenFile);
         }
 
         public ReadOnlyObservableCollection<RecentFile> RecentFiles
             => this.recentFiles;
 
-        public ViewModelActivator Activator { get; } = new ViewModelActivator();
-
         public bool ShowRecentFiles { [ObservableAsProperty] get; }
+
+        public ReactiveCommand<Unit, string?> CreateFile { get; set; }
+        public ReactiveCommand<string?, string?> OpenFile { get; set; }
+
+        private async Task<string?> OnCreateFile()
+        {
+            this.Log().Debug("Creating a new list.");
+            string? listName = await Dialog.CreateList.Handle(Unit.Default);
+
+            return listName is null
+                ? null
+                : await Dialog.SaveFile.Handle($"{listName}.{ListFileExtension}");
+        }
+
+        private async Task<string?> OnOpenFile(string? fileName)
+        {
+            this.Log().Debug(fileName is null ? "Opening a list." : $"Opening a list: ${fileName}.");
+            return fileName ?? await Dialog.OpenFile.Handle(Unit.Default);
+        }
     }
 }

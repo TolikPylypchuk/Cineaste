@@ -1,12 +1,12 @@
 using System.Reactive.Disposables;
 
-using MovieList.ViewModels;
+using MovieList.DialogModels;
 
 using ReactiveUI;
 
 namespace MovieList.Views
 {
-    public abstract class MessageDialogBase : ReactiveUserControl<MessageViewModel> { }
+    public abstract class MessageDialogBase : ReactiveUserControl<MessageModel> { }
 
     public partial class MessageDialog : MessageDialogBase
     {
