@@ -42,6 +42,12 @@ namespace MovieList.Views
                 this.ViewModel.RemoveSelectedRecentFiles.CanExecute
                     .Select(this.BoolToVisibility)
                     .BindTo(this, v => v.RemoveButton.Visibility);
+
+                this.BindCommand(this.ViewModel, vm => vm.CreateFile, v => v.CreateListButton)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(this.ViewModel, vm => vm.OpenFile, v => v.OpenListButton)
+                    .DisposeWith(disposables);
             });
         }
 

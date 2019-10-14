@@ -17,18 +17,18 @@
                           FontFamily="{DynamicResource MaterialDesignFont}"
                           Title="Movie List" Width="1600" Height="800" MinWidth="1200" MinHeight="600">
     <m:DialogHost>
-        <StackPanel>
-            <Menu>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
                 <MenuItem Header="{x:Static resx:Messages.File}" />
                 <MenuItem Header="{x:Static resx:Messages.About}" />
             </Menu>
 
             <TabControl Style="{StaticResource MaterialDesignTabControl}">
                 <TabItem Header="{x:Static resx:Messages.HomePage}">
-                    <rx:ViewModelViewHost x:Name="HomePageHost" HorizontalContentAlignment="Stretch"
-                                          VerticalContentAlignment="Stretch" />
+                    <rx:ViewModelViewHost x:Name="HomePageHost" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                          HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
                 </TabItem>
             </TabControl>
-        </StackPanel>
+        </DockPanel>
     </m:DialogHost>
 </local:MainWindowBase>

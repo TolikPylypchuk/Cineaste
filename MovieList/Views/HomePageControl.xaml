@@ -8,11 +8,11 @@
                            mc:Ignorable="d" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                            d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TextBlock Style="{StaticResource MaterialDesignHeadline1TextBlock}" TextAlignment="Center"
-                   Text="{x:Static resx:Messages.MovieList}" HorizontalAlignment="Center" />
+    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TextBlock DockPanel.Dock="Top" Style="{StaticResource MaterialDesignHeadline1TextBlock}"
+                   Text="{x:Static resx:Messages.MovieList}" HorizontalAlignment="Center" TextAlignment="Center" />
 
-        <UniformGrid Rows="1" Columns="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="8">
+        <UniformGrid Rows="1" Columns="2" Margin="8">
             <StackPanel>
                 <TextBlock Text="{x:Static resx:Messages.RecentlyOpenedFiles}" HorizontalAlignment="Center"
                            Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
@@ -26,6 +26,14 @@
                 <Button x:Name="RemoveButton" Style="{StaticResource MaterialDesignRaisedAccentButton}"
                         Content="{x:Static resx:Messages.RemoveFromList}" HorizontalAlignment="Center" Margin="8" />
             </StackPanel>
+
+            <StackPanel HorizontalAlignment="Stretch">
+                <Button x:Name="CreateListButton" Style="{StaticResource MaterialDesignRaisedButton}" Width="168" Height="48"
+                        Content="{x:Static resx:Messages.CreateList}" HorizontalAlignment="Center" />
+
+                <Button x:Name="OpenListButton" Style="{StaticResource MaterialDesignRaisedButton}" Width="168" Height="48"
+                        Content="{x:Static resx:Messages.OpenList}" HorizontalAlignment="Center" Margin="0,24,0,0" />
+            </StackPanel>
         </UniformGrid>
-    </StackPanel>
+    </DockPanel>
 </local:HomePageControlBase>

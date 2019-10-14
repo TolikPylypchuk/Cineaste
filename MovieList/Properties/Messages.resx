@@ -126,6 +126,9 @@
   <data name="Confirm" xml:space="preserve">
     <value>Підтвердити</value>
   </data>
+  <data name="CreateList" xml:space="preserve">
+    <value>Створити список</value>
+  </data>
   <data name="File" xml:space="preserve">
     <value>Файл</value>
   </data>
@@ -140,6 +143,9 @@
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="OpenList" xml:space="preserve">
+    <value>Відкрити список</value>
   </data>
   <data name="Preferences" xml:space="preserve">
     <value>Налаштування</value>

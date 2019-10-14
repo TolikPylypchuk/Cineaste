@@ -88,6 +88,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Створити список.
+        /// </summary>
+        public static string CreateList {
+            get {
+                return ResourceManager.GetString("CreateList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Файл.
         /// </summary>
         public static string File {
@@ -129,6 +138,15 @@ namespace MovieList.Properties {
         public static string OK {
             get {
                 return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Відкрити список.
+        /// </summary>
+        public static string OpenList {
+            get {
+                return ResourceManager.GetString("OpenList", resourceCulture);
             }
         }
         
