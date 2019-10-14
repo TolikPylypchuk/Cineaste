@@ -2,6 +2,8 @@ using System;
 
 namespace MovieList.Preferences
 {
+    [ToString]
+    [Equals(DoNotAddEqualityOperators = true)]
     public sealed class RecentFile
     {
         public RecentFile(string name, string path, DateTime closed)

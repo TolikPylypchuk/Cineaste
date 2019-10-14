@@ -4,8 +4,28 @@
                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            xmlns:local="clr-namespace:MovieList.Views"
-                           mc:Ignorable="d"
+                           xmlns:resx="clr-namespace:MovieList.Properties"
+                           mc:Ignorable="d" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                           HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                            d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-    </Grid>
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TextBlock Style="{StaticResource MaterialDesignHeadline1TextBlock}" TextAlignment="Center"
+                   Text="{x:Static resx:Messages.MovieList}" HorizontalAlignment="Center" />
+
+        <UniformGrid Rows="1" Columns="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="8">
+            <StackPanel>
+                <TextBlock Text="{x:Static resx:Messages.RecentlyOpenedFiles}" HorizontalAlignment="Center"
+                           Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
+
+                <ItemsControl x:Name="RecentFilesList" HorizontalAlignment="Stretch" Margin="24" />
+
+                <TextBlock x:Name="NoRecentlyOpenedFilesTextBlock" HorizontalAlignment="Center"
+                           Text="{x:Static resx:Messages.NoRecentlyOpenedFiles}" Margin="0,16,0,0"
+                           Style="{StaticResource MaterialDesignBody1TextBlock}" />
+
+                <Button x:Name="RemoveButton" Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                        Content="{x:Static resx:Messages.RemoveFromList}" HorizontalAlignment="Center" Margin="8" />
+            </StackPanel>
+        </UniformGrid>
+    </StackPanel>
 </local:HomePageControlBase>

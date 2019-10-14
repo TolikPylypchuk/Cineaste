@@ -20,7 +20,6 @@ namespace MovieList.ViewModels
                 .WhereNotNull()
                 .Select(file => new OpenFileModel(file))
                 .InvokeCommand(this.OpenFile);
-
         }
 
         public HomePageViewModel HomePageViewModel { get; set; }

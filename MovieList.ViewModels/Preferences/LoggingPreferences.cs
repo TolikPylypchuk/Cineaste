@@ -1,6 +1,8 @@
 namespace MovieList.Preferences
 {
-    public class LoggingPreferences
+    [ToString]
+    [Equals(DoNotAddEqualityOperators = true)]
+    public sealed class LoggingPreferences
     {
         public string LogPath { get; set; }
         public int MinLogLevel { get; set; }

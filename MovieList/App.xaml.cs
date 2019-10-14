@@ -58,6 +58,9 @@ namespace MovieList
 
             var mainViewModel = new MainViewModel();
 
+            this.MainWindow = this.CreateMainWindow(mainViewModel);
+            this.MainWindow.Show();
+
             this.namedPipeManager.StartServer();
             this.namedPipeManager.ReceivedString
                 .Select(file => new OpenFileModel(file, true))
@@ -65,9 +68,6 @@ namespace MovieList
 
             mainViewModel.OpenFile.Select(model => model.File).Subscribe(this.OnOpenFile);
             mainViewModel.CloseFile.Subscribe(this.OnCloseFile);
-
-            this.MainWindow = this.CreateMainWindow(mainViewModel);
-            this.MainWindow.Show();
 
             this.SetUpDialogs();
 
@@ -86,10 +86,10 @@ namespace MovieList
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
             Locator.CurrentMutable.RegisterSuspensionDriver();
 
-            Locator.CurrentMutable.RegisterConstant(BlobCache.LocalMachine, Cache);
-            Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, Store);
+            Locator.CurrentMutable.RegisterConstant(BlobCache.LocalMachine, CacheKey);
+            Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, StoreKey);
 
-            var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(MainPreferences)
+            var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
                 .Catch(Observable.FromAsync(this.CreateDefaultPreferences));
 
             var loggingLevelSwitch = new LoggingLevelSwitch((LogEventLevel)preferences.Logging.MinLogLevel);
@@ -112,7 +112,7 @@ namespace MovieList
                     $"{Assembly.GetExecutingAssembly().GetName().Name}.log",
                     (int)LogEventLevel.Information));
 
-            await BlobCache.UserAccount.InsertObject(MainPreferences, preferences);
+            await BlobCache.UserAccount.InsertObject(PreferencesKey, preferences);
 
             return preferences;
         }
@@ -143,7 +143,7 @@ namespace MovieList
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .Discard()
                 .ObserveOnDispatcher()
-                .Subscribe(this.SaveUIPreferences);
+                .Subscribe(this.SaveAppState);
 
             return window;
         }
@@ -160,7 +160,7 @@ namespace MovieList
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
         }
 
-        private void SaveUIPreferences()
+        private void SaveAppState()
         {
             if (this.MainWindow == null)
             {

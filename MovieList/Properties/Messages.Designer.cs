@@ -106,6 +106,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Movie List.
+        /// </summary>
+        public static string MovieList {
+            get {
+                return ResourceManager.GetString("MovieList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Немає нещодавно відкритих файлів.
+        /// </summary>
+        public static string NoRecentlyOpenedFiles {
+            get {
+                return ResourceManager.GetString("NoRecentlyOpenedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string OK {
@@ -120,6 +138,24 @@ namespace MovieList.Properties {
         public static string Preferences {
             get {
                 return ResourceManager.GetString("Preferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Нещодавно відкриті файли.
+        /// </summary>
+        public static string RecentlyOpenedFiles {
+            get {
+                return ResourceManager.GetString("RecentlyOpenedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Видалити зі списку.
+        /// </summary>
+        public static string RemoveFromList {
+            get {
+                return ResourceManager.GetString("RemoveFromList", resourceCulture);
             }
         }
     }

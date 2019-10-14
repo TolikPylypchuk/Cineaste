@@ -2,7 +2,9 @@ using System.Collections.Generic;
 
 namespace MovieList.Preferences
 {
-    public class FilePreferences
+    [ToString]
+    [Equals(DoNotAddEqualityOperators = true)]
+    public sealed class FilePreferences
     {
         public bool ShowRecentFiles { get; set; }
         public List<RecentFile> RecentFiles { get; set; }

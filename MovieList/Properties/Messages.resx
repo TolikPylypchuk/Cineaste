@@ -132,10 +132,22 @@
   <data name="HomePage" xml:space="preserve">
     <value>Домашня сторінка</value>
   </data>
+  <data name="MovieList" xml:space="preserve">
+    <value>Movie List</value>
+  </data>
+  <data name="NoRecentlyOpenedFiles" xml:space="preserve">
+    <value>Немає нещодавно відкритих файлів</value>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="Preferences" xml:space="preserve">
     <value>Налаштування</value>
+  </data>
+  <data name="RecentlyOpenedFiles" xml:space="preserve">
+    <value>Нещодавно відкриті файли</value>
+  </data>
+  <data name="RemoveFromList" xml:space="preserve">
+    <value>Видалити зі списку</value>
   </data>
 </root>

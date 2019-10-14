@@ -1,5 +1,7 @@
 namespace MovieList.Preferences
 {
+    [ToString]
+    [Equals(DoNotAddEqualityOperators = true)]
     public sealed class UserPreferences
     {
         public FilePreferences File { get; }

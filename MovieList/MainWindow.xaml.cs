@@ -1,4 +1,3 @@
-using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -27,13 +26,15 @@ namespace MovieList
                     .DisposeWith(disposables);
 
                 this.ViewModel.OpenFile
+                    .Where(model => model.IsExternal)
+                    .Discard()
                     .ObserveOnDispatcher()
-                    .Subscribe(this.OnOpenFile)
+                    .Subscribe(this.OnOpenFileExternally)
                     .DisposeWith(disposables);
             });
         }
 
-        private void OnOpenFile(string file)
+        private void OnOpenFileExternally()
         {
             if (!this.IsVisible)
             {

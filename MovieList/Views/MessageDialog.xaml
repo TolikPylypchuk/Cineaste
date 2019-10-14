@@ -1,10 +1,10 @@
-<local:MessageDialogBase x:Class="MovieList.Views.MessageDialog"
+<dialogs:MessageDialogBase x:Class="MovieList.Views.MessageDialog"
                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                          xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
-                         xmlns:local="clr-namespace:MovieList.Views"
+                         xmlns:dialogs="clr-namespace:MovieList.Views"
                          mc:Ignorable="d">
     <Grid Margin="16">
         <Grid.RowDefinitions>
@@ -19,4 +19,4 @@
                     Command="{x:Static m:DialogHost.CloseDialogCommand}" />
         </StackPanel>
     </Grid>
-</local:MessageDialogBase>
+</dialogs:MessageDialogBase>

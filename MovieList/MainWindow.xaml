@@ -25,7 +25,8 @@
 
             <TabControl Style="{StaticResource MaterialDesignTabControl}">
                 <TabItem Header="{x:Static resx:Messages.HomePage}">
-                    <rx:ViewModelViewHost x:Name="HomePageHost" />
+                    <rx:ViewModelViewHost x:Name="HomePageHost" HorizontalContentAlignment="Stretch"
+                                          VerticalContentAlignment="Stretch" />
                 </TabItem>
             </TabControl>
         </StackPanel>
