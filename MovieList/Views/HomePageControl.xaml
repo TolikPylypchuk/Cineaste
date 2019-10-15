@@ -5,35 +5,41 @@
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            xmlns:local="clr-namespace:MovieList.Views"
                            xmlns:resx="clr-namespace:MovieList.Properties"
-                           mc:Ignorable="d" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                           HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                           mc:Ignorable="d"
                            d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TextBlock DockPanel.Dock="Top" Style="{StaticResource MaterialDesignHeadline1TextBlock}"
+    <Grid HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignHeadline1TextBlock}"
                    Text="{x:Static resx:Messages.MovieList}" HorizontalAlignment="Center" TextAlignment="Center" />
 
-        <UniformGrid Rows="1" Columns="2" Margin="8">
-            <StackPanel>
-                <TextBlock Text="{x:Static resx:Messages.RecentlyOpenedFiles}" HorizontalAlignment="Center"
-                           Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="36">
+            <Button x:Name="CreateListButton" Style="{StaticResource MaterialDesignRaisedButton}" Width="150" Height="50"
+                    Content="{x:Static resx:Messages.CreateList}" HorizontalAlignment="Center" Margin="0,0,12,0" />
 
-                <ItemsControl x:Name="RecentFilesList" HorizontalAlignment="Stretch" Margin="24" />
+            <Button x:Name="OpenListButton" Style="{StaticResource MaterialDesignRaisedButton}" Width="150" Height="50"
+                    Content="{x:Static resx:Messages.OpenList}" HorizontalAlignment="Center" Margin="12,0,0,0" />
+        </StackPanel>
 
-                <TextBlock x:Name="NoRecentlyOpenedFilesTextBlock" HorizontalAlignment="Center"
-                           Text="{x:Static resx:Messages.NoRecentlyOpenedFiles}" Margin="0,16,0,0"
-                           Style="{StaticResource MaterialDesignBody1TextBlock}" />
+        <TextBlock Grid.Row="2" Text="{x:Static resx:Messages.RecentlyOpenedFiles}" HorizontalAlignment="Center"
+                   Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
 
-                <Button x:Name="RemoveButton" Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                        Content="{x:Static resx:Messages.RemoveFromList}" HorizontalAlignment="Center" Margin="8" />
-            </StackPanel>
+        <DockPanel Grid.Row="3" VerticalAlignment="Top">
+            <Button x:Name="RemoveButton" DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                    Content="{x:Static resx:Messages.RemoveFromList}" HorizontalAlignment="Center" Margin="8,8,8,16" />
 
-            <StackPanel HorizontalAlignment="Stretch">
-                <Button x:Name="CreateListButton" Style="{StaticResource MaterialDesignRaisedButton}" Width="168" Height="48"
-                        Content="{x:Static resx:Messages.CreateList}" HorizontalAlignment="Center" />
+            <ScrollViewer HorizontalAlignment="Stretch" Margin="24" VerticalScrollBarVisibility="Auto" MaxWidth="800">
+                <ItemsControl x:Name="RecentFilesList" HorizontalAlignment="Stretch" />
+            </ScrollViewer>
+        </DockPanel>
 
-                <Button x:Name="OpenListButton" Style="{StaticResource MaterialDesignRaisedButton}" Width="168" Height="48"
-                        Content="{x:Static resx:Messages.OpenList}" HorizontalAlignment="Center" Margin="0,24,0,0" />
-            </StackPanel>
-        </UniformGrid>
-    </DockPanel>
+        <TextBlock x:Name="NoRecentlyOpenedFilesTextBlock" Grid.Row="3" HorizontalAlignment="Center"
+                   Text="{x:Static resx:Messages.NoRecentlyOpenedFiles}" Margin="0,16,0,0"
+                   Style="{StaticResource MaterialDesignBody1TextBlock}" />
+    </Grid>
 </local:HomePageControlBase>
