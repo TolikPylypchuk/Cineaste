@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -15,14 +16,14 @@
   <ItemGroup>
     <PackageReference Include="akavache" Version="6.9.1" />
     <PackageReference Include="DynamicData" Version="6.13.18" />
-    <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci663" />
+    <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci671" />
     <PackageReference Include="MaterialDesignExtensions" Version="2.8.0-a01" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci663" />
-    <PackageReference Include="ReactiveUI" Version="10.5.1" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="10.5.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="10.5.1" />
+    <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci671" />
+    <PackageReference Include="ReactiveUI" Version="10.5.7" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="10.5.7" />
+    <PackageReference Include="ReactiveUI.Fody" Version="10.5.7" />
     <PackageReference Include="ReactiveUI.Validation" Version="1.4.1" />
-    <PackageReference Include="ReactiveUI.WPF" Version="10.5.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="10.5.7" />
     <PackageReference Include="Serilog" Version="2.9.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.2-dev-00020" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0-dev-00850" />
