@@ -1,19 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+
+using DynamicData;
+
+using MovieList.Data;
+using MovieList.Data.Services;
 
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 using Splat;
+
+using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels
 {
     public sealed class MainViewModel : ReactiveObject, IEnableLogger
     {
+        private readonly SourceCache<FileViewModel, string> fileViewModelsSource;
+
         public MainViewModel()
         {
             this.HomePageViewModel = new HomePageViewModel();
 
-            this.OpenFile = ReactiveCommand.Create<OpenFileModel, OpenFileModel>(file => file);
-            this.CloseFile = ReactiveCommand.Create<string, string>(file => file);
+            this.fileViewModelsSource = new SourceCache<FileViewModel, string>(x => x.FileName);
+
+            this.fileViewModelsSource.Connect()
+                .Bind(out var fileViewModels)
+                .DisposeMany()
+                .Subscribe();
+
+            this.FileViewModels = fileViewModels;
+
+            Observable.Return(new List<ReactiveObject> { this.HomePageViewModel })
+                .Concat(this.fileViewModelsSource.Connect()
+                    .ToCollection()
+                    .Select(vms => vms.Cast<ReactiveObject>().Prepend(this.HomePageViewModel)))
+                .ToPropertyEx(this, vm => vm.AllViewModels);
+
+            this.OpenFile = ReactiveCommand.CreateFromTask<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
+            this.CloseFile = ReactiveCommand.Create<string, string>(this.OnCloseFile);
 
             this.HomePageViewModel.OpenFile
                 .Merge(this.HomePageViewModel.CreateFile)
@@ -23,8 +53,42 @@ namespace MovieList.ViewModels
         }
 
         public HomePageViewModel HomePageViewModel { get; set; }
+        public ReadOnlyObservableCollection<FileViewModel> FileViewModels { get; }
 
-        public ReactiveCommand<OpenFileModel, OpenFileModel> OpenFile { get; }
+        public IEnumerable<ReactiveObject> AllViewModels { [ObservableAsProperty] get; } = null!;
+
+        public ReactiveCommand<OpenFileModel, OpenFileModel?> OpenFile { get; }
         public ReactiveCommand<string, string> CloseFile { get; }
+
+        private async Task<OpenFileModel?> OnOpenFileAsync(OpenFileModel model)
+        {
+            this.Log().Debug($"Opening a file: {model.File}");
+            Locator.CurrentMutable.RegisterDatabaseServices(model.File);
+
+            bool isFileValid = await Locator.Current.GetService<IDatabaseService>(model.File)
+                .ValidateDatabaseAsync();
+
+            if (!isFileValid)
+            {
+                this.Log().Debug($"Cancelling opening a file: {model.File}");
+                Locator.CurrentMutable.UnregisterDatabaseServices(model.File);
+                return null;
+            }
+
+            var settings = await Locator.Current.GetService<ISettingsService>(model.File)
+                .GetSettingsAsync();
+
+            this.fileViewModelsSource.AddOrUpdate(new FileViewModel(model.File, settings[SettingsListNameKey]));
+
+            return model;
+        }
+
+        public string OnCloseFile(string file)
+        {
+            this.Log().Debug($"Closing a file: {file}");
+            Locator.CurrentMutable.UnregisterDatabaseServices(file);
+
+            return file;
+        }
     }
 }

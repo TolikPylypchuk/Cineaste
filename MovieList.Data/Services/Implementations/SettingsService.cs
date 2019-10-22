@@ -10,7 +10,7 @@ using Splat;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal class SettingsService : ServiceBase, ISettingsService, IEnableLogger
+    internal class SettingsService : ServiceBase, ISettingsService
     {
         public SettingsService(string file)
             : base(file)

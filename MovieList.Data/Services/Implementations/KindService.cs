@@ -9,7 +9,7 @@ using Splat;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal sealed class KindService : ServiceBase, IKindService, IEnableLogger
+    internal sealed class KindService : ServiceBase, IKindService
     {
         public KindService(string file)
             : base(file)

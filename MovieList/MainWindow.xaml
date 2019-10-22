@@ -1,21 +1,21 @@
 <local:MainWindowBase x:Class="MovieList.MainWindow"
-                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                          xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
-                          xmlns:rx="http://reactiveui.net"
-                          xmlns:local="clr-namespace:MovieList"
-                          xmlns:resx="clr-namespace:MovieList.Properties"
-                          mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-                          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-                          TextElement.FontWeight="Regular"
-                          TextElement.FontSize="13"
-                          TextOptions.TextFormattingMode="Ideal" 
-                          TextOptions.TextRenderingMode="Auto"        
-                          Background="{DynamicResource MaterialDesignPaper}"
-                          FontFamily="{DynamicResource MaterialDesignFont}"
-                          Title="Movie List" Width="1600" Height="800" MinWidth="1200" MinHeight="600">
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
+                      xmlns:rx="http://reactiveui.net"
+                      xmlns:local="clr-namespace:MovieList"
+                      xmlns:resx="clr-namespace:MovieList.Properties"
+                      mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+                      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+                      TextElement.FontWeight="Regular"
+                      TextElement.FontSize="13"
+                      TextOptions.TextFormattingMode="Ideal" 
+                      TextOptions.TextRenderingMode="Auto"        
+                      Background="{DynamicResource MaterialDesignPaper}"
+                      FontFamily="{DynamicResource MaterialDesignFont}"
+                      Title="Movie List" Width="1600" Height="800" MinWidth="1200" MinHeight="600">
     <m:DialogHost>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
@@ -23,11 +23,15 @@
                 <MenuItem Header="{x:Static resx:Messages.About}" />
             </Menu>
 
-            <TabControl Style="{StaticResource MaterialDesignTabControl}">
-                <TabItem Header="{x:Static resx:Messages.HomePage}">
-                    <rx:ViewModelViewHost x:Name="HomePageHost" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                          HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-                </TabItem>
+            <TabControl x:Name="MainTabControl" Style="{StaticResource MaterialDesignTabControl}">
+                <TabControl.Resources>
+                    <Style TargetType="{x:Type rx:ViewModelViewHost}">
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    </Style>
+                </TabControl.Resources>
             </TabControl>
         </DockPanel>
     </m:DialogHost>

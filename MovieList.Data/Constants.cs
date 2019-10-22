@@ -3,6 +3,7 @@ namespace MovieList.Data
     public static class Constants
     {
         public const string SettingsListNameKey = "list.name";
+        public const string SettingsListVersionKey = "list.version";
         public const string SettingsColorForNotWatchedKey = "color.not-watched";
         public const string SettingsColorForNotReleasedKey = "color.not-released";
         public const string SettingsDefaultSeasonTitleKey = "season.title.default";

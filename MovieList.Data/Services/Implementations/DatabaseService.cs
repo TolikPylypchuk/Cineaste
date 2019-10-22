@@ -18,9 +18,10 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal class DatabaseService : ServiceBase, IDatabaseService, IEnableLogger
+    internal class DatabaseService : ServiceBase, IDatabaseService
     {
         private const string SchemaSql = "../../schema.sql";
+        private const string SqliteFileHeader = "SQLite format 3";
 
         public DatabaseService(string file)
             : base(file)
@@ -50,6 +51,23 @@ namespace MovieList.Data.Services.Implementations
             await this.InitSettingsAsync(connection);
         }
 
+        [LogException]
+        public async Task<bool> ValidateDatabaseAsync()
+        {
+            this.Log().Debug($"Validating the database: {this.DatabasePath}.");
+
+            bool isSqliteFile = await this.CheckIfSqliteDatabaseAsync();
+
+            if (!isSqliteFile)
+            {
+                return false;
+            }
+
+            this.Log().Debug($"Checking the database schema: {this.DatabasePath}.");
+
+            return true;
+        }
+
         private async Task InitSettingsAsync(SqliteConnection connection)
         {
             this.Log().Debug($"Initializing settings for the database: {this.DatabasePath}.");
@@ -63,6 +81,11 @@ namespace MovieList.Data.Services.Implementations
                 {
                     Key = SettingsListNameKey,
                     Value = fileName
+                },
+                new Settings
+                {
+                    Key = SettingsListVersionKey,
+                    Value = "1"
                 },
                 new Settings
                 {
@@ -92,6 +115,33 @@ namespace MovieList.Data.Services.Implementations
             }
 
             await transaction.CommitAsync();
+        }
+
+        private async Task<bool> CheckIfSqliteDatabaseAsync()
+        {
+            this.Log().Debug($"Checking if the file is an SQLite database: {this.DatabasePath}.");
+
+            if (!File.Exists(this.DatabasePath))
+            {
+                this.Log().Error($"{this.DatabasePath} doesn't exist.");
+                return false;
+            }
+
+            const int headerSize = 16;
+
+            await using var stream = new FileStream(this.DatabasePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            var header = new byte[headerSize];
+            await stream.ReadAsync(header, 0, headerSize);
+
+            bool isSqliteFile = System.Text.Encoding.UTF8.GetString(header).Contains(SqliteFileHeader);
+
+            if (!isSqliteFile)
+            {
+                this.Log().Error($"{this.DatabasePath} is not an SQLite file.");
+            }
+
+            return isSqliteFile;
         }
     }
 }

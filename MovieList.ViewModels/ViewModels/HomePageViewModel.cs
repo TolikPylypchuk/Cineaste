@@ -50,7 +50,7 @@ namespace MovieList.ViewModels
             this.CreateFile = ReactiveCommand.CreateFromTask(this.OnCreateFile);
             this.OpenFile = ReactiveCommand.CreateFromTask<string?, string?>(this.OnOpenFile);
 
-            var canRemoveSelectedRecentFiles = recentFilesSource.Connect()
+            var canRemoveSelectedRecentFiles = this.recentFilesSource.Connect()
                 .AutoRefresh(file => file.IsSelected)
                 .ToCollection()
                 .Select(files => files.Any(file => file.IsSelected));

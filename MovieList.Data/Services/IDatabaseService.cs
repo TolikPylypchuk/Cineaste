@@ -5,5 +5,6 @@ namespace MovieList.Data.Services
     public interface IDatabaseService
     {
         Task CreateDatabaseAsync();
+        Task<bool> ValidateDatabaseAsync();
     }
 }

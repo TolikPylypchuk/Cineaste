@@ -12,7 +12,6 @@ using Akavache;
 
 using MaterialDesignThemes.Wpf;
 
-using MovieList.Data;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
 using MovieList.State;
@@ -66,9 +65,6 @@ namespace MovieList
                 .Select(file => new OpenFileModel(file, true))
                 .InvokeCommand(mainViewModel.OpenFile);
 
-            mainViewModel.OpenFile.Select(model => model.File).Subscribe(this.OnOpenFile);
-            mainViewModel.CloseFile.Subscribe(this.OnCloseFile);
-
             this.SetUpDialogs();
 
             this.DispatcherUnhandledException += this.OnDispatcherUnhandledException;
@@ -85,6 +81,8 @@ namespace MovieList
             Locator.CurrentMutable.InitializeReactiveUI();
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
             Locator.CurrentMutable.RegisterSuspensionDriver();
+
+            Locator.CurrentMutable.Register(() => new CustomPropertyResolver(), typeof(ICreatesObservableForProperty));
 
             Locator.CurrentMutable.RegisterConstant(BlobCache.LocalMachine, CacheKey);
             Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, StoreKey);
@@ -146,18 +144,6 @@ namespace MovieList
                 .Subscribe(this.SaveAppState);
 
             return window;
-        }
-
-        private void OnOpenFile(string file)
-        {
-            this.Log().Debug($"Opening a file: {file}");
-            Locator.CurrentMutable.RegisterDatabaseServices(file);
-        }
-
-        private void OnCloseFile(string file)
-        {
-            this.Log().Debug($"Closing a file: {file}");
-            Locator.CurrentMutable.UnregisterDatabaseServices(file);
         }
 
         private void SaveAppState()

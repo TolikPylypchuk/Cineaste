@@ -4,7 +4,7 @@ using Splat;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal abstract class ServiceBase
+    internal abstract class ServiceBase : IEnableLogger
     {
         protected readonly string DatabasePath;
 
