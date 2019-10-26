@@ -23,6 +23,8 @@ namespace MovieList.ViewModels
     {
         private readonly SourceCache<FileViewModel, string> fileViewModelsSource;
 
+        private readonly Dictionary<string, IDisposable> closeSubscriptions = new Dictionary<string, IDisposable>();
+
         public MainViewModel()
         {
             this.HomePage = new HomePageViewModel();
@@ -78,7 +80,12 @@ namespace MovieList.ViewModels
             var settings = await Locator.Current.GetService<ISettingsService>(model.File)
                 .GetSettingsAsync();
 
-            this.fileViewModelsSource.AddOrUpdate(new FileViewModel(model.File, settings[SettingsListNameKey]));
+            var fileViewModel = new FileViewModel(model.File, settings[SettingsListNameKey]);
+
+            var subscription = fileViewModel.Header.Close.InvokeCommand(this.CloseFile);
+            this.closeSubscriptions.Add(model.File, subscription);
+
+            this.fileViewModelsSource.AddOrUpdate(fileViewModel);
 
             return model;
         }
@@ -88,6 +95,8 @@ namespace MovieList.ViewModels
             this.Log().Debug($"Closing a file: {file}");
 
             this.fileViewModelsSource.RemoveKey(file);
+            this.closeSubscriptions[file].Dispose();
+            this.closeSubscriptions.Remove(file);
 
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
 

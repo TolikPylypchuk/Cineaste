@@ -28,7 +28,9 @@ namespace MovieList
                 var allChildren = this.WhenAnyValue(v => v.ViewModel.AllChildren)
                     .Select(vms => vms.Select(vm => new TabItem
                     {
-                        Header = vm is FileViewModel fvm ? fvm.ListName : Messages.HomePage,
+                        Header = vm is FileViewModel fvm
+                            ? (object)new ViewModelViewHost { ViewModel = fvm.Header }
+                            : Messages.HomePage,
                         Content = new ViewModelViewHost { ViewModel = vm }
                     }));
 
