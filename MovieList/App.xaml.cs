@@ -11,7 +11,6 @@ using System.Windows.Threading;
 using Akavache;
 
 using MaterialDesignThemes.Wpf;
-
 using MovieList.Infrastructure;
 using MovieList.Preferences;
 using MovieList.State;
@@ -68,6 +67,11 @@ namespace MovieList
             this.SetUpDialogs();
 
             this.DispatcherUnhandledException += this.OnDispatcherUnhandledException;
+
+            if (e.Args.Length > 0)
+            {
+                await mainViewModel.OpenFile.Execute(new OpenFileModel(e.Args[0]));
+            }
         }
 
         protected override void OnExit(ExitEventArgs e)

@@ -25,7 +25,7 @@ namespace MovieList.ViewModels
 
         public MainViewModel()
         {
-            this.HomePageViewModel = new HomePageViewModel();
+            this.HomePage = new HomePageViewModel();
 
             this.fileViewModelsSource = new SourceCache<FileViewModel, string>(x => x.FileName);
 
@@ -34,28 +34,28 @@ namespace MovieList.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
-            this.FileViewModels = fileViewModels;
+            this.Files = fileViewModels;
 
-            Observable.Return(new List<ReactiveObject> { this.HomePageViewModel })
+            Observable.Return(new List<ReactiveObject> { this.HomePage })
                 .Concat(this.fileViewModelsSource.Connect()
                     .ToCollection()
-                    .Select(vms => vms.Cast<ReactiveObject>().Prepend(this.HomePageViewModel)))
-                .ToPropertyEx(this, vm => vm.AllViewModels);
+                    .Select(vms => vms.Cast<ReactiveObject>().Prepend(this.HomePage)))
+                .ToPropertyEx(this, vm => vm.AllChildren);
 
             this.OpenFile = ReactiveCommand.CreateFromTask<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
             this.CloseFile = ReactiveCommand.Create<string, string>(this.OnCloseFile);
 
-            this.HomePageViewModel.OpenFile
-                .Merge(this.HomePageViewModel.CreateFile)
+            this.HomePage.OpenFile
+                .Merge(this.HomePage.CreateFile)
                 .WhereNotNull()
                 .Select(file => new OpenFileModel(file))
                 .InvokeCommand(this.OpenFile);
         }
 
-        public HomePageViewModel HomePageViewModel { get; set; }
-        public ReadOnlyObservableCollection<FileViewModel> FileViewModels { get; }
+        public HomePageViewModel HomePage { get; set; }
+        public ReadOnlyObservableCollection<FileViewModel> Files { get; }
 
-        public IEnumerable<ReactiveObject> AllViewModels { [ObservableAsProperty] get; } = null!;
+        public IEnumerable<ReactiveObject> AllChildren { [ObservableAsProperty] get; } = null!;
 
         public ReactiveCommand<OpenFileModel, OpenFileModel?> OpenFile { get; }
         public ReactiveCommand<string, string> CloseFile { get; }
@@ -86,6 +86,9 @@ namespace MovieList.ViewModels
         public string OnCloseFile(string file)
         {
             this.Log().Debug($"Closing a file: {file}");
+
+            this.fileViewModelsSource.RemoveKey(file);
+
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
 
             return file;

@@ -25,16 +25,23 @@ namespace MovieList
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.WhenAnyValue(v => v.ViewModel.AllViewModels)
+                var allChildren = this.WhenAnyValue(v => v.ViewModel.AllChildren)
                     .Select(vms => vms.Select(vm => new TabItem
                     {
                         Header = vm is FileViewModel fvm ? fvm.ListName : Messages.HomePage,
                         Content = new ViewModelViewHost { ViewModel = vm }
-                    }))
+                    }));
+
+                allChildren
+                    .ObserveOnDispatcher()
                     .BindTo(this, v => v.MainTabControl.ItemsSource)
                     .DisposeWith(disposables);
 
-                this.MainTabControl.SelectedIndex = 0;
+                allChildren
+                    .ObserveOnDispatcher()
+                    .Select(vms => vms.Count() - 1)
+                    .BindTo(this, v => v.MainTabControl.SelectedIndex)
+                    .DisposeWith(disposables);
 
                 this.ViewModel.OpenFile
                     .WhereNotNull()
