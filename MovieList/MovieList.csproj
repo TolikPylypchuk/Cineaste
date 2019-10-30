@@ -15,10 +15,10 @@
 
   <ItemGroup>
     <PackageReference Include="akavache" Version="6.9.1" />
-    <PackageReference Include="DynamicData" Version="6.13.19" />
-    <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci699" />
+    <PackageReference Include="DynamicData" Version="6.13.20" />
+    <PackageReference Include="MaterialDesignColors" Version="1.2.1-ci720" />
     <PackageReference Include="MaterialDesignExtensions" Version="2.8.0" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci699" />
+    <PackageReference Include="MaterialDesignThemes" Version="3.0.0-ci720" />
     <PackageReference Include="ReactiveUI" Version="10.5.7" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="10.5.7" />
     <PackageReference Include="ReactiveUI.Validation" Version="1.4.1" />
