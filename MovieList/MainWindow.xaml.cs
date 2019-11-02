@@ -25,24 +25,13 @@ namespace MovieList
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                var allChildren = this.WhenAnyValue(v => v.ViewModel.AllChildren)
-                    .Select(vms => vms.Select(vm => new TabItem
-                    {
-                        Header = vm is FileViewModel fvm
-                            ? (object)new ViewModelViewHost { ViewModel = fvm.Header }
-                            : Messages.HomePage,
-                        Content = new ViewModelViewHost { ViewModel = vm }
-                    }));
-
-                allChildren
+                this.WhenAnyValue(v => v.ViewModel.AllChildren)
+                    .Select(vms => vms.Select(this.CreateTabItem))
                     .ObserveOnDispatcher()
                     .BindTo(this, v => v.MainTabControl.ItemsSource)
                     .DisposeWith(disposables);
 
-                allChildren
-                    .ObserveOnDispatcher()
-                    .Select(vms => vms.Count() - 1)
-                    .BindTo(this, v => v.MainTabControl.SelectedIndex)
+                this.Bind(this.ViewModel, vm => vm.SelectedItemIndex, v => v.MainTabControl.SelectedIndex)
                     .DisposeWith(disposables);
 
                 this.ViewModel.OpenFile
@@ -72,5 +61,14 @@ namespace MovieList
             this.Topmost = false;
             this.Focus();
         }
+
+        private TabItem CreateTabItem(ReactiveObject vm)
+            => new TabItem
+            {
+                Header = vm is FileViewModel fvm
+                    ? (object)new ViewModelViewHost { ViewModel = fvm.Header }
+                    : Messages.HomePage,
+                Content = new ViewModelViewHost { ViewModel = vm }
+            };
     }
 }

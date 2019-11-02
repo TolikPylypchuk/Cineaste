@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Скасувати</value>
+    <value>Cancel</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Підтвердити</value>
+    <value>Confirm</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>

@@ -61,7 +61,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Про програму.
+        ///   Looks up a localized string similar to About.
         /// </summary>
         public static string About {
             get {
@@ -70,7 +70,16 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Скасувати.
+        ///   Looks up a localized string similar to All FIles.
+        /// </summary>
+        public static string AllExtensionsDescription {
+            get {
+                return ResourceManager.GetString("AllExtensionsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
             get {
@@ -79,7 +88,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Підтвердити.
+        ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
             get {
@@ -88,7 +97,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Створити список.
+        ///   Looks up a localized string similar to CREATE A LIST.
         /// </summary>
         public static string CreateList {
             get {
@@ -97,7 +106,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Файл.
+        ///   Looks up a localized string similar to File.
         /// </summary>
         public static string File {
             get {
@@ -106,7 +115,16 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Домашня сторінка.
+        ///   Looks up a localized string similar to Movie List.
+        /// </summary>
+        public static string FileExtensionDescription {
+            get {
+                return ResourceManager.GetString("FileExtensionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home Page.
         /// </summary>
         public static string HomePage {
             get {
@@ -124,7 +142,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Немає нещодавно відкритих файлів.
+        ///   Looks up a localized string similar to No recently opened files.
         /// </summary>
         public static string NoRecentlyOpenedFiles {
             get {
@@ -142,7 +160,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Відкрити список.
+        ///   Looks up a localized string similar to OPEN A LIST.
         /// </summary>
         public static string OpenList {
             get {
@@ -151,7 +169,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Налаштування.
+        ///   Looks up a localized string similar to Preferences.
         /// </summary>
         public static string Preferences {
             get {
@@ -160,7 +178,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Нещодавно відкриті файли.
+        ///   Looks up a localized string similar to Recently Opened Files.
         /// </summary>
         public static string RecentlyOpenedFiles {
             get {
@@ -169,7 +187,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Видалити зі списку.
+        ///   Looks up a localized string similar to Remove from list.
         /// </summary>
         public static string RemoveFromList {
             get {

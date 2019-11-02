@@ -15,7 +15,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignHeadline1TextBlock}"
+        <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignDisplay4TextBlock}"
                    Text="{x:Static resx:Messages.MovieList}" HorizontalAlignment="Center" TextAlignment="Center" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="36">
@@ -27,7 +27,7 @@
         </StackPanel>
 
         <TextBlock Grid.Row="2" Text="{x:Static resx:Messages.RecentlyOpenedFiles}" HorizontalAlignment="Center"
-                   Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
+                   Style="{StaticResource MaterialDesignHeadlineTextBlock}" />
 
         <DockPanel Grid.Row="3" VerticalAlignment="Top">
             <Button x:Name="RemoveButton" DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignRaisedAccentButton}"

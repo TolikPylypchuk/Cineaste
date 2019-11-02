@@ -45,7 +45,7 @@ namespace MovieList.ViewModels
                 .ToPropertyEx(this, vm => vm.AllChildren);
 
             this.OpenFile = ReactiveCommand.CreateFromTask<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
-            this.CloseFile = ReactiveCommand.Create<string, string>(this.OnCloseFile);
+            this.CloseFile = ReactiveCommand.CreateFromTask<string, string>(this.OnCloseFile);
 
             this.HomePage.OpenFile
                 .Merge(this.HomePage.CreateFile)
@@ -59,11 +59,23 @@ namespace MovieList.ViewModels
 
         public IEnumerable<ReactiveObject> AllChildren { [ObservableAsProperty] get; } = null!;
 
+        [Reactive]
+        public int SelectedItemIndex { get; set; }
+
         public ReactiveCommand<OpenFileModel, OpenFileModel?> OpenFile { get; }
         public ReactiveCommand<string, string> CloseFile { get; }
 
         private async Task<OpenFileModel?> OnOpenFileAsync(OpenFileModel model)
         {
+            int fileIndex = this.Files.TakeWhile(file => file.FileName != model.File).Count();
+
+            if (fileIndex != this.Files.Count)
+            {
+                this.Log().Debug($"The file is already opened: {model.File}. Opening its tab.");
+                this.SelectedItemIndex = fileIndex + 1;
+                return model;
+            }
+
             this.Log().Debug($"Opening a file: {model.File}");
             Locator.CurrentMutable.RegisterDatabaseServices(model.File);
 
@@ -87,16 +99,25 @@ namespace MovieList.ViewModels
 
             this.fileViewModelsSource.AddOrUpdate(fileViewModel);
 
+            this.SelectedItemIndex = this.AllChildren.Count() - 1;
+
             return model;
         }
 
-        public string OnCloseFile(string file)
+        public async Task<string> OnCloseFile(string file)
         {
             this.Log().Debug($"Closing a file: {file}");
+
+            int fileIndex = this.Files.TakeWhile(f => f.FileName != file).Count() + 1;
+            int currentIndex = this.SelectedItemIndex;
 
             this.fileViewModelsSource.RemoveKey(file);
             this.closeSubscriptions[file].Dispose();
             this.closeSubscriptions.Remove(file);
+
+            await Task.Delay(100);
+
+            this.SelectedItemIndex = currentIndex == fileIndex ? fileIndex - 1 : currentIndex;
 
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
 

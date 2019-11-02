@@ -61,7 +61,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Скасувати.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
             get {
@@ -70,7 +70,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Підтвердити.
+        ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
             get {

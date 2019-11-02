@@ -9,10 +9,11 @@ using System.Windows;
 using System.Windows.Threading;
 
 using Akavache;
-
+using MaterialDesignExtensions.Controls;
 using MaterialDesignThemes.Wpf;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
+using MovieList.Properties;
 using MovieList.State;
 using MovieList.ViewModels;
 
@@ -33,6 +34,7 @@ namespace MovieList
     {
         private readonly Mutex mutex;
         private readonly NamedPipeManager namedPipeManager;
+        private DialogHost mainDialogHost = null!;
 
         public App()
         {
@@ -147,6 +149,8 @@ namespace MovieList
                 .ObserveOnDispatcher()
                 .Subscribe(this.SaveAppState);
 
+            this.mainDialogHost = window.MainDialogHost;
+
             return window;
         }
 
@@ -201,10 +205,19 @@ namespace MovieList
                 return Task.CompletedTask;
             });
 
-            Dialog.OpenFile.RegisterHandler(ctx =>
+            Dialog.OpenFile.RegisterHandler(async ctx =>
             {
-                ctx.SetOutput(null);
-                return Task.CompletedTask;
+                var dialogArgs = new OpenFileDialogArguments
+                {
+                    Width = 1000,
+                    Height = 600,
+                    Filters = $"{Messages.FileExtensionDescription}|*.{ListFileExtension}|{Messages.AllExtensionsDescription}|*",
+                    CurrentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                };
+
+                var result = await OpenFileDialog.ShowDialogAsync(this.mainDialogHost, dialogArgs);
+
+                ctx.SetOutput(result != null && result.Canceled ? null : result?.File);
             });
         }
 

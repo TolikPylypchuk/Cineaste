@@ -118,42 +118,48 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>Про програму</value>
+    <value>About</value>
+  </data>
+  <data name="AllExtensionsDescription" xml:space="preserve">
+    <value>All FIles</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Скасувати</value>
+    <value>Cancel</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Підтвердити</value>
+    <value>Confirm</value>
   </data>
   <data name="CreateList" xml:space="preserve">
-    <value>Створити список</value>
+    <value>CREATE A LIST</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>Файл</value>
+    <value>File</value>
+  </data>
+  <data name="FileExtensionDescription" xml:space="preserve">
+    <value>Movie List</value>
   </data>
   <data name="HomePage" xml:space="preserve">
-    <value>Домашня сторінка</value>
+    <value>Home Page</value>
   </data>
   <data name="MovieList" xml:space="preserve">
     <value>Movie List</value>
   </data>
   <data name="NoRecentlyOpenedFiles" xml:space="preserve">
-    <value>Немає нещодавно відкритих файлів</value>
+    <value>No recently opened files</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="OpenList" xml:space="preserve">
-    <value>Відкрити список</value>
+    <value>OPEN A LIST</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>Налаштування</value>
+    <value>Preferences</value>
   </data>
   <data name="RecentlyOpenedFiles" xml:space="preserve">
-    <value>Нещодавно відкриті файли</value>
+    <value>Recently Opened Files</value>
   </data>
   <data name="RemoveFromList" xml:space="preserve">
-    <value>Видалити зі списку</value>
+    <value>Remove from list</value>
   </data>
 </root>

@@ -16,7 +16,7 @@
                       Background="{DynamicResource MaterialDesignPaper}"
                       FontFamily="{DynamicResource MaterialDesignFont}"
                       Title="Movie List" Width="1600" Height="800" MinWidth="1200" MinHeight="600">
-    <m:DialogHost>
+    <m:DialogHost x:Name="MainDialogHost" CloseOnClickAway="True">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="{x:Static resx:Messages.File}" />
