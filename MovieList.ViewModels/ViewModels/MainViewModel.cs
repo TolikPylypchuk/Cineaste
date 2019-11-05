@@ -5,28 +5,35 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
+using Akavache;
+
 using DynamicData;
 
 using MovieList.Data;
 using MovieList.Data.Services;
-
+using MovieList.Preferences;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
+using static MovieList.Constants;
 using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels
 {
     public sealed class MainViewModel : ReactiveObject, IEnableLogger
     {
+        private readonly IBlobCache store;
+
         private readonly SourceCache<FileViewModel, string> fileViewModelsSource;
 
         private readonly Dictionary<string, IDisposable> closeSubscriptions = new Dictionary<string, IDisposable>();
 
-        public MainViewModel()
+        public MainViewModel(IBlobCache? store = null)
         {
+            this.store = store ?? Locator.Current.GetService<IBlobCache>(StoreKey);
+
             this.HomePage = new HomePageViewModel();
 
             this.fileViewModelsSource = new SourceCache<FileViewModel, string>(x => x.FileName);
@@ -39,7 +46,7 @@ namespace MovieList.ViewModels
             this.Files = fileViewModels;
 
             this.OpenFile = ReactiveCommand.CreateFromTask<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
-            this.CloseFile = ReactiveCommand.Create<string, string>(this.OnCloseFile);
+            this.CloseFile = ReactiveCommand.CreateFromTask<string, string>(this.OnCloseFile);
 
             this.HomePage.OpenFile
                 .Merge(this.HomePage.CreateFile)
@@ -96,7 +103,7 @@ namespace MovieList.ViewModels
             return model;
         }
 
-        public string OnCloseFile(string file)
+        public async Task<string> OnCloseFile(string file)
         {
             this.Log().Debug($"Closing a file: {file}");
 
@@ -108,6 +115,30 @@ namespace MovieList.ViewModels
             this.closeSubscriptions.Remove(file);
 
             this.SelectedItemIndex = currentIndex == fileIndex ? fileIndex - 1 : currentIndex;
+
+            var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
+
+            var recentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file);
+
+            if (recentFile != null)
+            {
+                var newRecentFile = new RecentFile(recentFile.Name, recentFile.Path, DateTime.Now);
+                preferences.File.RecentFiles.Remove(recentFile);
+                preferences.File.RecentFiles.Add(newRecentFile);
+
+                await this.HomePage.RemoveRecentFile.Execute(recentFile);
+                await this.HomePage.AddRecentFile.Execute(newRecentFile);
+            } else
+            {
+                var settings = await Locator.Current.GetService<ISettingsService>(file)
+                    .GetSettingsAsync();
+
+                var newRecentFile = new RecentFile(settings[SettingsListNameKey], file, DateTime.Now);
+                preferences.File.RecentFiles.Add(newRecentFile);
+                await this.HomePage.AddRecentFile.Execute(newRecentFile);
+            }
+
+            await this.store.InsertObject(PreferencesKey, preferences);
 
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
 

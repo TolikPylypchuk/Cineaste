@@ -25,7 +25,8 @@ namespace MovieList.ViewModels
     {
         private readonly IBlobCache store;
         private readonly ReadOnlyObservableCollection<RecentFileViewModel> recentFiles;
-        private readonly SourceList<RecentFileViewModel> recentFilesSource = new SourceList<RecentFileViewModel>();
+        private readonly SourceCache<RecentFileViewModel, string> recentFilesSource
+            = new SourceCache<RecentFileViewModel, string>(vm => vm.File.Path);
 
         public HomePageViewModel(IBlobCache? store = null)
         {
@@ -34,7 +35,7 @@ namespace MovieList.ViewModels
             this.store.GetObject<UserPreferences>(PreferencesKey)
                 .SelectMany(preferences => preferences.File.RecentFiles)
                 .Select(file => new RecentFileViewModel(file))
-                .Subscribe(recentFilesSource.Add);
+                .Subscribe(recentFilesSource.AddOrUpdate);
 
             this.recentFilesSource.Connect()
                 .Sort(SortExpressionComparer<RecentFileViewModel>.Descending(vm => vm.File.Closed))
@@ -57,6 +58,12 @@ namespace MovieList.ViewModels
 
             this.RemoveSelectedRecentFiles = ReactiveCommand.CreateFromTask(
                 this.OnRemoveSelectedRecentFilesAsync, canRemoveSelectedRecentFiles);
+
+            this.AddRecentFile = ReactiveCommand.Create<RecentFile>(
+                file => this.recentFilesSource.AddOrUpdate(new RecentFileViewModel(file)));
+
+            this.RemoveRecentFile = ReactiveCommand.Create<RecentFile>(
+                file => this.recentFilesSource.RemoveKey(file.Path));
         }
 
         public ReadOnlyObservableCollection<RecentFileViewModel> RecentFiles
@@ -66,7 +73,11 @@ namespace MovieList.ViewModels
 
         public ReactiveCommand<Unit, string?> CreateFile { get; }
         public ReactiveCommand<string?, string?> OpenFile { get; }
+
         public ReactiveCommand<Unit, Unit> RemoveSelectedRecentFiles { get; }
+
+        public ReactiveCommand<RecentFile, Unit> AddRecentFile { get; }
+        public ReactiveCommand<RecentFile, Unit> RemoveRecentFile { get; }
 
         private async Task<string?> OnCreateFile()
         {
@@ -98,7 +109,7 @@ namespace MovieList.ViewModels
 
             this.Log().Debug($"Removing recent files: {fileNames}.");
 
-            this.recentFilesSource.RemoveMany(filesToRemove);
+            this.recentFilesSource.Remove(filesToRemove);
 
             preferences.File.RecentFiles.RemoveMany(filesToRemove.Select(file => file.File));
 
