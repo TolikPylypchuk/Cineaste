@@ -38,14 +38,8 @@ namespace MovieList.ViewModels
 
             this.Files = fileViewModels;
 
-            Observable.Return(new List<ReactiveObject> { this.HomePage })
-                .Concat(this.fileViewModelsSource.Connect()
-                    .ToCollection()
-                    .Select(vms => vms.Cast<ReactiveObject>().Prepend(this.HomePage)))
-                .ToPropertyEx(this, vm => vm.AllChildren);
-
             this.OpenFile = ReactiveCommand.CreateFromTask<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
-            this.CloseFile = ReactiveCommand.CreateFromTask<string, string>(this.OnCloseFile);
+            this.CloseFile = ReactiveCommand.Create<string, string>(this.OnCloseFile);
 
             this.HomePage.OpenFile
                 .Merge(this.HomePage.CreateFile)
@@ -56,8 +50,6 @@ namespace MovieList.ViewModels
 
         public HomePageViewModel HomePage { get; set; }
         public ReadOnlyObservableCollection<FileViewModel> Files { get; }
-
-        public IEnumerable<ReactiveObject> AllChildren { [ObservableAsProperty] get; } = null!;
 
         [Reactive]
         public int SelectedItemIndex { get; set; }
@@ -99,12 +91,12 @@ namespace MovieList.ViewModels
 
             this.fileViewModelsSource.AddOrUpdate(fileViewModel);
 
-            this.SelectedItemIndex = this.AllChildren.Count() - 1;
+            this.SelectedItemIndex = this.Files.Count;
 
             return model;
         }
 
-        public async Task<string> OnCloseFile(string file)
+        public string OnCloseFile(string file)
         {
             this.Log().Debug($"Closing a file: {file}");
 
@@ -114,8 +106,6 @@ namespace MovieList.ViewModels
             this.fileViewModelsSource.RemoveKey(file);
             this.closeSubscriptions[file].Dispose();
             this.closeSubscriptions.Remove(file);
-
-            await Task.Delay(100);
 
             this.SelectedItemIndex = currentIndex == fileIndex ? fileIndex - 1 : currentIndex;
 
