@@ -34,7 +34,7 @@ namespace MovieList.ViewModels
 
             this.store.GetObject<UserPreferences>(PreferencesKey)
                 .SelectMany(preferences => preferences.File.RecentFiles)
-                .Select(file => new RecentFileViewModel(file))
+                .Select(file => new RecentFileViewModel(file, this))
                 .Subscribe(recentFilesSource.AddOrUpdate);
 
             this.recentFilesSource.Connect()
@@ -60,7 +60,7 @@ namespace MovieList.ViewModels
                 this.OnRemoveSelectedRecentFilesAsync, canRemoveSelectedRecentFiles);
 
             this.AddRecentFile = ReactiveCommand.Create<RecentFile>(
-                file => this.recentFilesSource.AddOrUpdate(new RecentFileViewModel(file)));
+                file => this.recentFilesSource.AddOrUpdate(new RecentFileViewModel(file, this)));
 
             this.RemoveRecentFile = ReactiveCommand.Create<RecentFile>(
                 file => this.recentFilesSource.RemoveKey(file.Path));
