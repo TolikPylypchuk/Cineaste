@@ -106,6 +106,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a name for the new list.
+        /// </summary>
+        public static string CreateListMessage {
+            get {
+                return ResourceManager.GetString("CreateListMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         public static string File {

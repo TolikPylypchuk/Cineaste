@@ -71,7 +71,7 @@ namespace MovieList.ViewModels
 
         public bool RecentFilesPresent { [ObservableAsProperty] get; }
 
-        public ReactiveCommand<Unit, string?> CreateFile { get; }
+        public ReactiveCommand<Unit, CreateFileModel?> CreateFile { get; }
         public ReactiveCommand<string?, string?> OpenFile { get; }
 
         public ReactiveCommand<Unit, Unit> RemoveSelectedRecentFiles { get; }
@@ -79,14 +79,20 @@ namespace MovieList.ViewModels
         public ReactiveCommand<RecentFile, Unit> AddRecentFile { get; }
         public ReactiveCommand<RecentFile, Unit> RemoveRecentFile { get; }
 
-        private async Task<string?> OnCreateFile()
+        private async Task<CreateFileModel?> OnCreateFile()
         {
             this.Log().Debug("Creating a new list.");
-            string? listName = await Dialog.CreateList.Handle(Unit.Default);
 
-            return listName is null
-                ? null
-                : await Dialog.SaveFile.Handle($"{listName}.{ListFileExtension}");
+            string? listName = await Dialog.Input.Handle("CreateListMessage");
+
+            if (listName is null)
+            {
+                return null;
+            }
+
+            string? fileName = await Dialog.SaveFile.Handle(listName);
+
+            return fileName is null ? null : new CreateFileModel(fileName, listName);
         }
 
         private async Task<string?> OnOpenFile(string? fileName)

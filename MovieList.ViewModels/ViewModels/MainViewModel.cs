@@ -45,11 +45,15 @@ namespace MovieList.ViewModels
 
             this.Files = fileViewModels;
 
+            this.CreateFile = ReactiveCommand.CreateFromTask<CreateFileModel, CreateFileModel?>(this.OnCreateFileAsync);
             this.OpenFile = ReactiveCommand.CreateFromTask<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
             this.CloseFile = ReactiveCommand.CreateFromTask<string, string>(this.OnCloseFile);
 
+            this.HomePage.CreateFile
+                .WhereNotNull()
+                .InvokeCommand(this.CreateFile);
+
             this.HomePage.OpenFile
-                .Merge(this.HomePage.CreateFile)
                 .WhereNotNull()
                 .Select(file => new OpenFileModel(file))
                 .InvokeCommand(this.OpenFile);
@@ -61,8 +65,21 @@ namespace MovieList.ViewModels
         [Reactive]
         public int SelectedItemIndex { get; set; }
 
+        public ReactiveCommand<CreateFileModel, CreateFileModel?> CreateFile { get; }
         public ReactiveCommand<OpenFileModel, OpenFileModel?> OpenFile { get; }
         public ReactiveCommand<string, string> CloseFile { get; }
+
+        private async Task<CreateFileModel?> OnCreateFileAsync(CreateFileModel model)
+        {
+            this.Log().Debug($"Creating a file: {model.File}");
+            Locator.CurrentMutable.RegisterDatabaseServices(model.File);
+
+            await Locator.Current.GetService<IDatabaseService>(model.File).CreateDatabaseAsync(model.ListName);
+
+            this.AddFile(model.File, model.ListName);
+
+            return model;
+        }
 
         private async Task<OpenFileModel?> OnOpenFileAsync(OpenFileModel model)
         {
@@ -91,19 +108,12 @@ namespace MovieList.ViewModels
             var settings = await Locator.Current.GetService<ISettingsService>(model.File)
                 .GetSettingsAsync();
 
-            var fileViewModel = new FileViewModel(model.File, settings[SettingsListNameKey]);
-
-            var subscription = fileViewModel.Header.Close.InvokeCommand(this.CloseFile);
-            this.closeSubscriptions.Add(model.File, subscription);
-
-            this.fileViewModelsSource.AddOrUpdate(fileViewModel);
-
-            this.SelectedItemIndex = this.Files.Count;
+            this.AddFile(model.File, settings[SettingsListNameKey]);
 
             return model;
         }
 
-        public async Task<string> OnCloseFile(string file)
+        private async Task<string> OnCloseFile(string file)
         {
             this.Log().Debug($"Closing a file: {file}");
 
@@ -143,6 +153,18 @@ namespace MovieList.ViewModels
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
 
             return file;
+        }
+
+        private void AddFile(string fileName, string listName)
+        {
+            var fileViewModel = new FileViewModel(fileName, listName);
+
+            var subscription = fileViewModel.Header.Close.InvokeCommand(this.CloseFile);
+            this.closeSubscriptions.Add(fileName, subscription);
+
+            this.fileViewModelsSource.AddOrUpdate(fileViewModel);
+
+            this.SelectedItemIndex = this.Files.Count;
         }
     }
 }

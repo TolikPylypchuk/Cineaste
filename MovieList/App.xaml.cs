@@ -177,22 +177,30 @@ namespace MovieList
 
         private void SetUpDialogs()
         {
-            Dialog.Show.RegisterHandler(async ctx =>
+            this.SetUpShowDialog();
+            this.SetUpConfirmDialog();
+            this.SetUpCreateListDialog();
+            this.SetUpSaveFileDialog();
+            this.SetUpOpenFileDialog();
+        }
+
+        private void SetUpShowDialog()
+            => Dialog.Show.RegisterHandler(async ctx =>
             {
-                var view = ViewLocator.Current.ResolveView(ctx.Input);
-                view.ViewModel = ctx.Input;
+                var viewModel = new MessageModel(ctx.Input, Messages.OK);
+                var view = ViewLocator.Current.ResolveView(viewModel);
+                view.ViewModel = viewModel;
 
                 await DialogHost.Show(view);
 
                 ctx.SetOutput(Unit.Default);
             });
 
-            Dialog.ShowSimple.RegisterHandler(async ctx =>
-                await Dialog.Show.Handle(new MessageModel(ctx.Input, Messages.OK)));
-
-            Dialog.Confirm.RegisterHandler(async ctx =>
+        private void SetUpConfirmDialog()
+            => Dialog.Confirm.RegisterHandler(async ctx =>
             {
-                var view = ViewLocator.Current.ResolveView(ctx.Input);
+                var viewModel = new ConfirmationModel(ctx.Input, Messages.Confirm, Messages.Cancel);
+                var view = ViewLocator.Current.ResolveView(viewModel);
                 view.ViewModel = ctx.Input;
 
                 var result = await DialogHost.Show(view);
@@ -200,36 +208,58 @@ namespace MovieList
                 ctx.SetOutput(result is bool confirm && confirm);
             });
 
-            Dialog.ConfirmSimple.RegisterHandler(async ctx =>
-                await Dialog.Confirm.Handle(new ConfirmationModel(ctx.Input, Messages.Confirm, Messages.Cancel)));
-
-            Dialog.CreateList.RegisterHandler(ctx =>
+        public void SetUpCreateListDialog()
+            => Dialog.Input.RegisterHandler(async ctx =>
             {
-                ctx.SetOutput(null);
-                return Task.CompletedTask;
+                var viewModel = new InputModel(
+                    Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty,
+                    Messages.Confirm,
+                    Messages.Cancel);
+
+                var view = ViewLocator.Current.ResolveView(viewModel);
+                view.ViewModel = viewModel;
+
+                var result = await DialogHost.Show(view);
+
+                ctx.SetOutput(result is string value ? value : null);
             });
 
-            Dialog.SaveFile.RegisterHandler(ctx =>
+        public void SetUpSaveFileDialog()
+            => Dialog.SaveFile.RegisterHandler(async ctx =>
             {
-                ctx.SetOutput(null);
-                return Task.CompletedTask;
+                var dialogArgs = new SaveFileDialogArguments
+                {
+                    Width = 1000,
+                    Height = 600,
+                    Filters = $"{Messages.FileExtensionDescription}|*.{ListFileExtension}|" +
+                              $"{Messages.AllExtensionsDescription}|*",
+                    CurrentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    Filename = ctx.Input,
+                    ForceFileExtensionOfFileFilter = true,
+                    CreateNewDirectoryEnabled = true
+                };
+
+                var result = await SaveFileDialog.ShowDialogAsync(this.mainDialogHost, dialogArgs);
+
+                ctx.SetOutput(result == null || result.Canceled ? null : result.File);
             });
 
-            Dialog.OpenFile.RegisterHandler(async ctx =>
+        private void SetUpOpenFileDialog()
+            => Dialog.OpenFile.RegisterHandler(async ctx =>
             {
                 var dialogArgs = new OpenFileDialogArguments
                 {
                     Width = 1000,
                     Height = 600,
-                    Filters = $"{Messages.FileExtensionDescription}|*.{ListFileExtension}|{Messages.AllExtensionsDescription}|*",
-                    CurrentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    Filters = $"{Messages.FileExtensionDescription}|*.{ListFileExtension}|" +
+                              $"{Messages.AllExtensionsDescription}|*",
+                    CurrentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
                 };
 
                 var result = await OpenFileDialog.ShowDialogAsync(this.mainDialogHost, dialogArgs);
 
-                ctx.SetOutput(result != null && result.Canceled ? null : result?.File);
+                ctx.SetOutput(result == null || result.Canceled ? null : result.File);
             });
-        }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {

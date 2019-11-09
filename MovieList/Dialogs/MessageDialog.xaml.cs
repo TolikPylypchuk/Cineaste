@@ -4,7 +4,7 @@ using MovieList.DialogModels;
 
 using ReactiveUI;
 
-namespace MovieList.Views
+namespace MovieList.Dialogs
 {
     public abstract class MessageDialogBase : ReactiveUserControl<MessageModel> { }
 

@@ -32,7 +32,7 @@ namespace MovieList.Data.Services.Implementations
             "Security",
             "CA2100:Review SQL queries for security vulnerabilities",
             Justification = "SQL comes from a database creation script")]
-        public async Task CreateDatabaseAsync()
+        public async Task CreateDatabaseAsync(string listName)
         {
             this.Log().Debug($"Creating a new database: {this.DatabasePath}.");
 
@@ -48,7 +48,7 @@ namespace MovieList.Data.Services.Implementations
             await connection.OpenAsync();
             await connection.ExecuteAsync(sql);
 
-            await this.InitSettingsAsync(connection);
+            await this.InitSettingsAsync(connection, listName);
         }
 
         [LogException]
@@ -68,19 +68,18 @@ namespace MovieList.Data.Services.Implementations
             return true;
         }
 
-        private async Task InitSettingsAsync(SqliteConnection connection)
+        private async Task InitSettingsAsync(SqliteConnection connection, string listName)
         {
             this.Log().Debug($"Initializing settings for the database: {this.DatabasePath}.");
 
             await using var transaction = await connection.BeginTransactionAsync();
-            string fileName = Path.GetFileNameWithoutExtension(this.DatabasePath);
 
             var settings = new List<Settings>
             {
                 new Settings
                 {
                     Key = SettingsListNameKey,
-                    Value = fileName
+                    Value = listName
                 },
                 new Settings
                 {

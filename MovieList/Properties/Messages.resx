@@ -132,6 +132,9 @@
   <data name="CreateList" xml:space="preserve">
     <value>CREATE A LIST</value>
   </data>
+  <data name="CreateListMessage" xml:space="preserve">
+    <value>Enter a name for the new list</value>
+  </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>

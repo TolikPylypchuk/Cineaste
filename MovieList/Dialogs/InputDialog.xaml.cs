@@ -4,13 +4,13 @@ using MovieList.DialogModels;
 
 using ReactiveUI;
 
-namespace MovieList.Views
+namespace MovieList.Dialogs
 {
-    public abstract class ConfirmationDialogBase : ReactiveUserControl<ConfirmationModel> { }
+    public abstract class InputDialogBase : ReactiveUserControl<InputModel> { }
 
-    public partial class ConfirmationDialog : ConfirmationDialogBase
+    public partial class InputDialog : InputDialogBase
     {
-        public ConfirmationDialog()
+        public InputDialog()
         {
             this.InitializeComponent();
 
@@ -21,6 +21,12 @@ namespace MovieList.Views
                     .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Message, v => v.TextBlock.Text)
+                    .DisposeWith(disposables);
+
+                this.Bind(this.ViewModel, vm => vm.Value, v => v.TextBox.Text)
+                    .DisposeWith(disposables);
+
+                this.OneWayBind(this.ViewModel, vm => vm.Value, v => v.ConfirmButton.CommandParameter)
                     .DisposeWith(disposables);
 
                 this.OneWayBind(
