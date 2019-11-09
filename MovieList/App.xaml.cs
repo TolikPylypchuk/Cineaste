@@ -9,8 +9,12 @@ using System.Windows;
 using System.Windows.Threading;
 
 using Akavache;
+
 using MaterialDesignExtensions.Controls;
+
 using MaterialDesignThemes.Wpf;
+
+using MovieList.DialogModels;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
 using MovieList.Properties;
@@ -183,6 +187,9 @@ namespace MovieList
                 ctx.SetOutput(Unit.Default);
             });
 
+            Dialog.ShowSimple.RegisterHandler(async ctx =>
+                await Dialog.Show.Handle(new MessageModel(ctx.Input, Messages.OK)));
+
             Dialog.Confirm.RegisterHandler(async ctx =>
             {
                 var view = ViewLocator.Current.ResolveView(ctx.Input);
@@ -192,6 +199,9 @@ namespace MovieList
 
                 ctx.SetOutput(result is bool confirm && confirm);
             });
+
+            Dialog.ConfirmSimple.RegisterHandler(async ctx =>
+                await Dialog.Confirm.Handle(new ConfirmationModel(ctx.Input, Messages.Confirm, Messages.Cancel)));
 
             Dialog.CreateList.RegisterHandler(ctx =>
             {

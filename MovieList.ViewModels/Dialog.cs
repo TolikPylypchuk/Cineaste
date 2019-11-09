@@ -14,6 +14,12 @@ namespace MovieList
         public static readonly Interaction<ConfirmationModel, bool> Confirm =
             new Interaction<ConfirmationModel, bool>();
 
+        public static readonly Interaction<string, Unit> ShowSimple =
+            new Interaction<string, Unit>();
+
+        public static readonly Interaction<string, bool> ConfirmSimple =
+            new Interaction<string, bool>();
+
         public static readonly Interaction<Unit, string?> CreateList = new Interaction<Unit, string?>();
 
         public static readonly Interaction<string, string?> SaveFile = new Interaction<string, string?>();

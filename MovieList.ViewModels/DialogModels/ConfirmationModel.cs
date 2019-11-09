@@ -1,5 +1,3 @@
-using MovieList.Properties;
-
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -7,14 +5,11 @@ namespace MovieList.DialogModels
 {
     public sealed class ConfirmationModel : ReactiveObject
     {
-        public ConfirmationModel(
-            string message,
-            string? confirmButtonText = null,
-            string? cancelButtonText = null)
+        public ConfirmationModel(string message, string confirmButtonText, string cancelButtonText)
         {
             this.Message = message;
-            this.ConfirmButtonText = confirmButtonText ?? Resources.Confirm;
-            this.CancelButtonText = cancelButtonText ?? Resources.Cancel;
+            this.ConfirmButtonText = confirmButtonText;
+            this.CancelButtonText = cancelButtonText;
         }
 
         [Reactive]

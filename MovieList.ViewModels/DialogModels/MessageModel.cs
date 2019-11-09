@@ -1,5 +1,3 @@
-using MovieList.Properties;
-
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -7,10 +5,10 @@ namespace MovieList.DialogModels
 {
     public sealed class MessageModel : ReactiveObject
     {
-        public MessageModel(string message, string? buttonText = null)
+        public MessageModel(string message, string buttonText)
         {
             this.Message = message;
-            this.ButtonText = buttonText ?? Resources.OK;
+            this.ButtonText = buttonText;
         }
 
         [Reactive]
