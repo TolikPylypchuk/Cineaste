@@ -9,13 +9,11 @@
                       xmlns:resx="clr-namespace:MovieList.Properties"
                       mc:Ignorable="d" WindowStartupLocation="CenterScreen"
                       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-                      TextElement.FontWeight="Regular"
-                      TextElement.FontSize="13"
-                      TextOptions.TextFormattingMode="Ideal" 
-                      TextOptions.TextRenderingMode="Auto"        
-                      Background="{DynamicResource MaterialDesignPaper}"
-                      FontFamily="{DynamicResource MaterialDesignFont}"
-                      Title="Movie List" Width="1600" Height="800" MinWidth="1200" MinHeight="600">
+                      TextElement.FontWeight="Regular" TextElement.FontSize="13"
+                      TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto"
+                      Width="1600" Height="800" Background="{DynamicResource MaterialDesignPaper}"
+                      MinWidth="1200" MinHeight="600" FontFamily="{DynamicResource MaterialDesignFont}"
+                      Title="Movie List" AllowDrop="True">
     <m:DialogHost x:Name="MainDialogHost" CloseOnClickAway="True">
         <DockPanel>
             <Menu DockPanel.Dock="Top">

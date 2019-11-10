@@ -64,6 +64,12 @@ namespace MovieList
                     .Subscribe(this.OnOpenFileExternally)
                     .DisposeWith(disposables);
 
+                this.Events().Drop
+                    .Where(e => e.Data.GetDataPresent(DataFormats.FileDrop))
+                    .SelectMany(e => (string[])e.Data.GetData(DataFormats.FileDrop))
+                    .Select(file => new OpenFileModel(file, true))
+                    .InvokeCommand(this.ViewModel.OpenFile);
+
                 this.Events().Closing
                     .Do(e => e.Cancel = true)
                     .Discard()
