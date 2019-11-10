@@ -36,7 +36,7 @@ namespace MovieList.Views
                 this.Events().MouseDown
                     .Where(e => e.ClickCount == 2)
                     .Select(_ => this.ViewModel.File.Path)
-                    .InvokeCommand(this.ViewModel.HomePage.OpenFile);
+                    .InvokeCommand(this.ViewModel.HomePage.OpenRecentFile);
 
                 this.WhenAnyValue(v => v.ViewModel.IsSelected)
                     .Subscribe(isSelected => this.Border.Background = isSelected

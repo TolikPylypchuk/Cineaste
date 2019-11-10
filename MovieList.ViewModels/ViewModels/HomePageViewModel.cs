@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -50,6 +51,7 @@ namespace MovieList.ViewModels
 
             this.CreateFile = ReactiveCommand.CreateFromTask(this.OnCreateFile);
             this.OpenFile = ReactiveCommand.CreateFromTask<string?, string?>(this.OnOpenFile);
+            this.OpenRecentFile = ReactiveCommand.CreateFromTask<string, string?>(this.OnOpenRecentFile);
 
             var canRemoveSelectedRecentFiles = this.recentFilesSource.Connect()
                 .AutoRefresh(file => file.IsSelected)
@@ -64,6 +66,10 @@ namespace MovieList.ViewModels
 
             this.RemoveRecentFile = ReactiveCommand.Create<RecentFile>(
                 file => this.recentFilesSource.RemoveKey(file.Path));
+
+            this.OpenRecentFile
+                .WhereNotNull()
+                .InvokeCommand(this.OpenFile);
         }
 
         public ReadOnlyObservableCollection<RecentFileViewModel> RecentFiles
@@ -73,6 +79,7 @@ namespace MovieList.ViewModels
 
         public ReactiveCommand<Unit, CreateFileModel?> CreateFile { get; }
         public ReactiveCommand<string?, string?> OpenFile { get; }
+        public ReactiveCommand<string, string?> OpenRecentFile { get; }
 
         public ReactiveCommand<Unit, Unit> RemoveSelectedRecentFiles { get; }
 
@@ -101,6 +108,30 @@ namespace MovieList.ViewModels
             return fileName ?? await Dialog.OpenFile.Handle(Unit.Default);
         }
 
+        private async Task<string?> OnOpenRecentFile(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                return fileName;
+            }
+
+            bool shouldRemoveFile = await Dialog.Confirm.Handle("RemoveRecentFileQuesiton");
+
+            if (shouldRemoveFile)
+            {
+                var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
+
+                this.Log().Debug($"Removing recent file: {fileName}.");
+
+                this.recentFilesSource.Remove(fileName);
+                preferences.File.RecentFiles.RemoveAll(file => file.Path == fileName);
+
+                await this.store.InsertObject(PreferencesKey, preferences);
+            }
+
+            return null;
+        }
+
         private async Task OnRemoveSelectedRecentFilesAsync()
         {
             var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
@@ -116,7 +147,6 @@ namespace MovieList.ViewModels
             this.Log().Debug($"Removing recent files: {fileNames}.");
 
             this.recentFilesSource.Remove(filesToRemove);
-
             preferences.File.RecentFiles.RemoveMany(filesToRemove.Select(file => file.File));
 
             await this.store.InsertObject(PreferencesKey, preferences);

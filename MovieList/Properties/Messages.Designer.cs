@@ -221,5 +221,14 @@ namespace MovieList.Properties {
                 return ResourceManager.GetString("RemoveFromList", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find the file. Remove it from the list?.
+        /// </summary>
+        public static string RemoveRecentFileQuesiton {
+            get {
+                return ResourceManager.GetString("RemoveRecentFileQuesiton", resourceCulture);
+            }
+        }
     }
 }

@@ -196,7 +196,9 @@ namespace MovieList
         private void SetUpShowDialog()
             => Dialog.Show.RegisterHandler(async ctx =>
             {
-                var viewModel = new MessageModel(ctx.Input, Messages.OK);
+                var viewModel = new MessageModel(
+                    Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty, Messages.OK);
+
                 var view = ViewLocator.Current.ResolveView(viewModel);
                 view.ViewModel = viewModel;
 
@@ -208,9 +210,11 @@ namespace MovieList
         private void SetUpConfirmDialog()
             => Dialog.Confirm.RegisterHandler(async ctx =>
             {
-                var viewModel = new ConfirmationModel(ctx.Input, Messages.Confirm, Messages.Cancel);
+                var viewModel = new ConfirmationModel(
+                    Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty, Messages.Confirm, Messages.Cancel);
+
                 var view = ViewLocator.Current.ResolveView(viewModel);
-                view.ViewModel = ctx.Input;
+                view.ViewModel = viewModel;
 
                 var result = await DialogHost.Show(view);
 
@@ -221,9 +225,7 @@ namespace MovieList
             => Dialog.Input.RegisterHandler(async ctx =>
             {
                 var viewModel = new InputModel(
-                    Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty,
-                    Messages.Confirm,
-                    Messages.Cancel);
+                    Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty, Messages.Confirm, Messages.Cancel);
 
                 var view = ViewLocator.Current.ResolveView(viewModel);
                 view.ViewModel = viewModel;

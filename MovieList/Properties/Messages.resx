@@ -171,4 +171,7 @@
   <data name="RemoveFromList" xml:space="preserve">
     <value>Remove from list</value>
   </data>
+  <data name="RemoveRecentFileQuesiton" xml:space="preserve">
+    <value>Cannot find the file. Remove it from the list?</value>
+  </data>
 </root>
