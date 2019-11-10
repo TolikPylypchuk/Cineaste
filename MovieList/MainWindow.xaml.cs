@@ -29,32 +29,8 @@ namespace MovieList
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.MainTabControl.Items.Add(new TabItem
-                {
-                    Header = Messages.HomePage,
-                    Content = new ViewModelViewHost { ViewModel = this.ViewModel.HomePage }
-                });
-
-                this.AddFileTabOnChange(changes => changes.Select(change => change.Item.Current), ListChangeReason.Add)
-                    .DisposeWith(disposables);
-
-                this.AddFileTabOnChange(changes => changes.SelectMany(change => change.Range), ListChangeReason.AddRange)
-                    .DisposeWith(disposables);
-
-                this.ViewModel.Files
-                    .ToObservableChangeSet()
-                    .WhereReasonsAre(ListChangeReason.Remove)
-                    .SelectMany(changeSet => changeSet)
-                    .Select(change => change.Item.Current.FileName)
-                    .Select(fileName => this.MainTabControl.Items
-                        .Cast<TabItem>()
-                        .First(item => fileName.Equals(item.Tag)))
-                    .ObserveOnDispatcher()
-                    .Subscribe(item => this.MainTabControl.Items.Remove(item))
-                    .DisposeWith(disposables);
-
-                this.Bind(this.ViewModel, vm => vm.SelectedItemIndex, v => v.MainTabControl.SelectedIndex)
-                    .DisposeWith(disposables);
+                this.InitializeMainTabControl(disposables);
+                this.InitializeMenu(disposables);
 
                 this.ViewModel.OpenFile
                     .WhereNotNull()
@@ -76,22 +52,100 @@ namespace MovieList
                     .InvokeCommand(this.ViewModel.Shutdown)
                     .DisposeWith(disposables);
 
-                this.BindCommand(this.ViewModel, vm => vm.Shutdown, v => v.ExitMenuItem)
-                    .DisposeWith(disposables);
-
-                this.BindCommand(this.ViewModel, vm => vm.ShowAbout, v => v.AboutMenuItem)
-                    .DisposeWith(disposables);
-
-                this.Events().KeyUp
-                    .Where(e => e.Key == Key.F1)
-                    .Discard()
-                    .InvokeCommand(this.ViewModel.ShowAbout)
-                    .DisposeWith(disposables);
-
                 this.ViewModel.Shutdown
                     .Do(unit => disposables.Dispose())
                     .Subscribe(this.Close);
             });
+        }
+
+        private void InitializeMainTabControl(CompositeDisposable disposables)
+        {
+            this.MainTabControl.Items.Add(new TabItem
+            {
+                Header = Messages.HomePage,
+                Content = new ViewModelViewHost { ViewModel = this.ViewModel.HomePage }
+            });
+
+            this.AddFileTabOnChange(changes => changes.Select(change => change.Item.Current), ListChangeReason.Add)
+                .DisposeWith(disposables);
+
+            this.AddFileTabOnChange(changes => changes.SelectMany(change => change.Range), ListChangeReason.AddRange)
+                .DisposeWith(disposables);
+
+            this.ViewModel.Files
+                .ToObservableChangeSet()
+                .WhereReasonsAre(ListChangeReason.Remove)
+                .SelectMany(changeSet => changeSet)
+                .Select(change => change.Item.Current.FileName)
+                .Select(fileName => this.MainTabControl.Items
+                    .Cast<TabItem>()
+                    .First(item => fileName.Equals(item.Tag)))
+                .ObserveOnDispatcher()
+                .Subscribe(item => this.MainTabControl.Items.Remove(item))
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.SelectedItemIndex, v => v.MainTabControl.SelectedIndex)
+                .DisposeWith(disposables);
+        }
+
+        private void InitializeMenu(CompositeDisposable disposables)
+        {
+            this.BindCommand(this.ViewModel, vm => vm.HomePage.CreateFile, v => v.NewMenuItem)
+                .DisposeWith(disposables);
+
+            this.Events().KeyUp
+                .Where(e => e.Key == Key.N && this.IsCtrlDown() && !this.IsAltDown() && !this.IsShiftDown())
+                .Discard()
+                .InvokeCommand(this.ViewModel.HomePage.CreateFile)
+                .DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel, vm => vm.HomePage.OpenFile, v => v.OpenMenuItem)
+                .DisposeWith(disposables);
+
+            this.Events().KeyUp
+                .Where(e => e.Key == Key.O && this.IsCtrlDown() && !this.IsAltDown() && !this.IsShiftDown())
+                .Select(e => (string?)null)
+                .InvokeCommand(this.ViewModel.HomePage.OpenFile)
+                .DisposeWith(disposables);
+
+            this.ViewModel.HomePage.RecentFiles
+                .ActOnEveryObject(
+                    file => this.OpenRecentMenuItem.Items.Insert(
+                        this.ViewModel.HomePage.RecentFiles.IndexOf(file),
+                        new MenuItem
+                        {
+                            Header = file.File.Path,
+                            Command = this.ViewModel.OpenFile,
+                            CommandParameter = new OpenFileModel(file.File.Path),
+                            Tag = file.File.Path
+                        }),
+                    file => this.OpenRecentMenuItem.Items.Remove(this.OpenRecentMenuItem.Items
+                        .Cast<MenuItem>()
+                        .First(item => file.File.Path.Equals(item.Tag))));
+
+            this.OneWayBind(
+                    this.ViewModel,
+                    vm => vm.HomePage.RecentFiles.Count,
+                    v => v.OpenRecentMenuItem.IsEnabled,
+                    count => count > 0)
+                .DisposeWith(disposables);
+
+            this.SaveMenuItem.IsEnabled = false;
+            this.SaveAsMenuItem.IsEnabled = false;
+            this.SettingsMenuItem.IsEnabled = false;
+            this.CloseMenuItem.IsEnabled = false;
+
+            this.BindCommand(this.ViewModel, vm => vm.Shutdown, v => v.ExitMenuItem)
+                .DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel, vm => vm.ShowAbout, v => v.AboutMenuItem)
+                .DisposeWith(disposables);
+
+            this.Events().KeyUp
+                .Where(e => e.Key == Key.F1)
+                .Discard()
+                .InvokeCommand(this.ViewModel.ShowAbout)
+                .DisposeWith(disposables);
         }
 
         private IDisposable AddFileTabOnChange(
@@ -129,15 +183,15 @@ namespace MovieList
         }
 
         private bool IsCtrlDown()
-            => this.AreKeysDown(Key.LeftCtrl, Key.RightCtrl);
+            => this.IsAnyKeyDown(Key.LeftCtrl, Key.RightCtrl);
 
         private bool IsAltDown()
-            => this.AreKeysDown(Key.LeftAlt, Key.RightAlt);
+            => this.IsAnyKeyDown(Key.LeftAlt, Key.RightAlt);
 
         private bool IsShiftDown()
-            => this.AreKeysDown(Key.LeftShift, Key.RightShift);
+            => this.IsAnyKeyDown(Key.LeftShift, Key.RightShift);
 
-        private bool AreKeysDown(params Key[] keys)
-            => keys.All(Keyboard.IsKeyDown);
+        private bool IsAnyKeyDown(params Key[] keys)
+            => keys.Any(Keyboard.IsKeyDown);
     }
 }
