@@ -10,8 +10,14 @@ namespace MovieList.Data.Models
     {
         public string Name { get; set; } = String.Empty;
 
-        public string ColorForMovie { get; set; } = String.Empty;
-        public string ColorForSeries { get; set; } = String.Empty;
+        public string ColorForWatchedMovie { get; set; } = String.Empty;
+        public string ColorForWatchedSeries { get; set; } = String.Empty;
+
+        public string ColorForNotWatchedMovie { get; set; } = String.Empty;
+        public string ColorForNotWatchedSeries { get; set; } = String.Empty;
+
+        public string ColorForNotReleasedMovie { get; set; } = String.Empty;
+        public string ColorForNotReleasedSeries { get; set; } = String.Empty;
 
         public IList<Movie> Movies { get; set; } = new List<Movie>();
         public IList<Series> Series { get; set; } = new List<Series>();

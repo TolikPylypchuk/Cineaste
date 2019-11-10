@@ -102,8 +102,6 @@ namespace MovieList
                 () => new Settings(
                     String.Empty,
                     ListFileVersion,
-                    "#FF0000",
-                    "#8B0000",
                     Messages.DefaultSeasonTitle,
                     Messages.DefaultSeasonOriginalTitle),
                 NewSettingsKey);

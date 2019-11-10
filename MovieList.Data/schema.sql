@@ -1,8 +1,12 @@
 CREATE TABLE "Kinds" (
     "Id" INTEGER PRIMARY KEY,
     "Name" TEXT UNIQUE NOT NULL,
-    "ColorForMovie" TEXT NOT NULL,
-    "ColorForSeries" TEXT NOT NULL
+    "ColorForWatchedMovie" TEXT NOT NULL,
+    "ColorForWatchedSeries" TEXT NOT NULL,
+    "ColorForNotWatchedMovie" TEXT NOT NULL,
+    "ColorForNotWatchedSeries" TEXT NOT NULL,
+    "ColorForNotReleasedMovie" TEXT NOT NULL,
+    "ColorForNotReleasedSeries" TEXT NOT NULL
 );
 
 CREATE TABLE "Movies" (

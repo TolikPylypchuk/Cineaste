@@ -88,16 +88,6 @@ namespace MovieList.Data.Services.Implementations
                 },
                 new Setting
                 {
-                    Key = SettingsColorForNotWatchedKey,
-                    Value = settings.ColorForNotWatched
-                },
-                new Setting
-                {
-                    Key = SettingsColorForNotReleasedKey,
-                    Value = settings.ColorForNotReleased
-                },
-                new Setting
-                {
                     Key = SettingsDefaultSeasonTitleKey,
                     Value = settings.DefaultSeasonTitle
                 },

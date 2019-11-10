@@ -31,8 +31,6 @@ namespace MovieList.Data.Services.Implementations
             return new Settings(
                 settings[SettingsListNameKey],
                 Int32.Parse(settings[SettingsListVersionKey]),
-                settings[SettingsColorForNotWatchedKey],
-                settings[SettingsColorForNotReleasedKey],
                 settings[SettingsDefaultSeasonTitleKey],
                 settings[SettingsDefaultSeasonOriginalTitleKey]);
         }
@@ -67,8 +65,6 @@ namespace MovieList.Data.Services.Implementations
             {
                 [SettingsListNameKey] = settings.ListName,
                 [SettingsListVersionKey] = settings.ListVersion.ToString(),
-                [SettingsColorForNotWatchedKey] = settings.ColorForNotWatched,
-                [SettingsColorForNotReleasedKey] = settings.ColorForNotReleased,
                 [SettingsDefaultSeasonTitleKey] = settings.DefaultSeasonTitle,
                 [SettingsDefaultSeasonOriginalTitleKey] = settings.DefaultSeasonOriginalTitle
             };
