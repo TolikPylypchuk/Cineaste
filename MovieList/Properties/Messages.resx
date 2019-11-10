@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="AboutText" xml:space="preserve">
+    <value>Movie List. Version 1.0. Created by Tolik Pylypchuk</value>
+  </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All FIles</value>
   </data>
@@ -141,11 +144,20 @@
   <data name="DefaultSeasonTitle" xml:space="preserve">
     <value>Сезон #</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>
   <data name="FileExtensionDescription" xml:space="preserve">
     <value>Movie List</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
   </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home Page</value>
@@ -153,14 +165,23 @@
   <data name="MovieList" xml:space="preserve">
     <value>Movie List</value>
   </data>
+  <data name="New" xml:space="preserve">
+    <value>New</value>
+  </data>
   <data name="NoRecentlyOpenedFiles" xml:space="preserve">
     <value>No recently opened files</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
   <data name="OpenList" xml:space="preserve">
     <value>OPEN A LIST</value>
+  </data>
+  <data name="OpenRecent" xml:space="preserve">
+    <value>Open Recent...</value>
   </data>
   <data name="Preferences" xml:space="preserve">
     <value>Preferences</value>
@@ -173,5 +194,11 @@
   </data>
   <data name="RemoveRecentFileQuesiton" xml:space="preserve">
     <value>Cannot find the file. Remove it from the list?</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save As ...</value>
   </data>
 </root>

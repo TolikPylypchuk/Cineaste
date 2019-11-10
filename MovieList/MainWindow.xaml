@@ -17,8 +17,53 @@
     <m:DialogHost x:Name="MainDialogHost" CloseOnClickAway="True">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
-                <MenuItem Header="{x:Static resx:Messages.File}" />
-                <MenuItem Header="{x:Static resx:Messages.About}" />
+                <MenuItem Header="{x:Static resx:Messages.File}">
+                    <MenuItem x:Name="NewMenuItem" Header="{x:Static resx:Messages.New}" InputGestureText="Ctrl+N">
+                        <MenuItem.Icon>
+                            <m:PackIcon Kind="Create" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem x:Name="OpenMenuItem" Header="{x:Static resx:Messages.Open}" InputGestureText="Ctrl+O" />
+
+                    <MenuItem x:Name="OpenRecentMenuItem" Header="{x:Static resx:Messages.OpenRecent}" />
+
+                    <MenuItem x:Name="SaveMenuItem" Header="{x:Static resx:Messages.Save}" InputGestureText="Ctrl+S">
+                        <MenuItem.Icon>
+                            <m:PackIcon Kind="ContentSave" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem x:Name="SaveAsMenuItem" Header="{x:Static resx:Messages.SaveAs}" InputGestureText="Ctrl+Shift+S">
+                        <MenuItem.Icon>
+                            <m:PackIcon Kind="ContentSaveMove" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <Separator />
+
+                    <MenuItem x:Name="ExitMenuItem" Header="{x:Static resx:Messages.Exit}" InputGestureText="Alt+F4">
+                        <MenuItem.Icon>
+                            <m:PackIcon Kind="ExitToApp" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem Header="{x:Static resx:Messages.Edit}">
+                    <MenuItem x:Name="PreferencesMenuItem" Header="{x:Static resx:Messages.Preferences}" InputGestureText="Ctrl+P">
+                        <MenuItem.Icon>
+                            <m:PackIcon Kind="Cogs" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem Header="{x:Static resx:Messages.Help}">
+                    <MenuItem x:Name="AboutMenuItem" Header="{x:Static resx:Messages.About}" InputGestureText="F1">
+                        <MenuItem.Icon>
+                            <m:PackIcon Kind="InfoCircleOutline" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
             </Menu>
 
             <TabControl x:Name="MainTabControl" Style="{StaticResource MaterialDesignTabControl}">

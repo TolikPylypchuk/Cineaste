@@ -4,7 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Input;
 using DynamicData;
 using DynamicData.Binding;
 
@@ -76,6 +76,18 @@ namespace MovieList
                     .InvokeCommand(this.ViewModel.Shutdown)
                     .DisposeWith(disposables);
 
+                this.BindCommand(this.ViewModel, vm => vm.Shutdown, v => v.ExitMenuItem)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(this.ViewModel, vm => vm.ShowAbout, v => v.AboutMenuItem)
+                    .DisposeWith(disposables);
+
+                this.Events().KeyUp
+                    .Where(e => e.Key == Key.F1)
+                    .Discard()
+                    .InvokeCommand(this.ViewModel.ShowAbout)
+                    .DisposeWith(disposables);
+
                 this.ViewModel.Shutdown
                     .Do(unit => disposables.Dispose())
                     .Subscribe(this.Close);
@@ -115,5 +127,17 @@ namespace MovieList
             this.Topmost = false;
             this.Focus();
         }
+
+        private bool IsCtrlDown()
+            => this.AreKeysDown(Key.LeftCtrl, Key.RightCtrl);
+
+        private bool IsAltDown()
+            => this.AreKeysDown(Key.LeftAlt, Key.RightAlt);
+
+        private bool IsShiftDown()
+            => this.AreKeysDown(Key.LeftShift, Key.RightShift);
+
+        private bool AreKeysDown(params Key[] keys)
+            => keys.All(Keyboard.IsKeyDown);
     }
 }
