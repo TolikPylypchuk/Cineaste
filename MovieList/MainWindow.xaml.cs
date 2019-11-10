@@ -63,6 +63,16 @@ namespace MovieList
                     .ObserveOnDispatcher()
                     .Subscribe(this.OnOpenFileExternally)
                     .DisposeWith(disposables);
+
+                this.Events().Closing
+                    .Do(e => e.Cancel = true)
+                    .Discard()
+                    .InvokeCommand(this.ViewModel.Shutdown)
+                    .DisposeWith(disposables);
+
+                this.ViewModel.Shutdown
+                    .Do(unit => disposables.Dispose())
+                    .Subscribe(this.Close);
             });
         }
 

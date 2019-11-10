@@ -49,9 +49,9 @@ namespace MovieList.ViewModels
                 .Select(count => count != 0)
                 .ToPropertyEx(this, vm => vm.RecentFilesPresent);
 
-            this.CreateFile = ReactiveCommand.CreateFromTask(this.OnCreateFile);
-            this.OpenFile = ReactiveCommand.CreateFromTask<string?, string?>(this.OnOpenFile);
-            this.OpenRecentFile = ReactiveCommand.CreateFromTask<string, string?>(this.OnOpenRecentFile);
+            this.CreateFile = ReactiveCommand.CreateFromTask(this.OnCreateFileAsync);
+            this.OpenFile = ReactiveCommand.CreateFromTask<string?, string?>(this.OnOpenFileAsync);
+            this.OpenRecentFile = ReactiveCommand.CreateFromTask<string, string?>(this.OnOpenRecentFileAsync);
 
             var canRemoveSelectedRecentFiles = this.recentFilesSource.Connect()
                 .AutoRefresh(file => file.IsSelected)
@@ -86,7 +86,7 @@ namespace MovieList.ViewModels
         public ReactiveCommand<RecentFile, Unit> AddRecentFile { get; }
         public ReactiveCommand<RecentFile, Unit> RemoveRecentFile { get; }
 
-        private async Task<CreateFileModel?> OnCreateFile()
+        private async Task<CreateFileModel?> OnCreateFileAsync()
         {
             this.Log().Debug("Creating a new list.");
 
@@ -102,13 +102,13 @@ namespace MovieList.ViewModels
             return fileName is null ? null : new CreateFileModel(fileName, listName);
         }
 
-        private async Task<string?> OnOpenFile(string? fileName)
+        private async Task<string?> OnOpenFileAsync(string? fileName)
         {
             this.Log().Debug(fileName is null ? "Opening a list." : $"Opening a list: ${fileName}.");
             return fileName ?? await Dialog.OpenFile.Handle(Unit.Default);
         }
 
-        private async Task<string?> OnOpenRecentFile(string fileName)
+        private async Task<string?> OnOpenRecentFileAsync(string fileName)
         {
             if (File.Exists(fileName))
             {

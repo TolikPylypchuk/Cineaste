@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -46,7 +47,8 @@ namespace MovieList.ViewModels
 
             this.CreateFile = ReactiveCommand.CreateFromTask<CreateFileModel, CreateFileModel?>(this.OnCreateFileAsync);
             this.OpenFile = ReactiveCommand.CreateFromTask<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
-            this.CloseFile = ReactiveCommand.CreateFromTask<string, string>(this.OnCloseFile);
+            this.CloseFile = ReactiveCommand.CreateFromTask<string, string>(this.OnCloseFileAsync);
+            this.Shutdown = ReactiveCommand.CreateFromTask(this.OnShutdownAsync);
 
             this.HomePage.CreateFile
                 .WhereNotNull()
@@ -67,6 +69,7 @@ namespace MovieList.ViewModels
         public ReactiveCommand<CreateFileModel, CreateFileModel?> CreateFile { get; }
         public ReactiveCommand<OpenFileModel, OpenFileModel?> OpenFile { get; }
         public ReactiveCommand<string, string> CloseFile { get; }
+        public ReactiveCommand<Unit, Unit> Shutdown { get; }
 
         private async Task<CreateFileModel?> OnCreateFileAsync(CreateFileModel model)
         {
@@ -115,7 +118,7 @@ namespace MovieList.ViewModels
             return model;
         }
 
-        private async Task<string> OnCloseFile(string file)
+        private async Task<string> OnCloseFileAsync(string file)
         {
             this.Log().Debug($"Closing a file: {file}");
 
@@ -130,31 +133,25 @@ namespace MovieList.ViewModels
 
             var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
 
-            var recentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file);
-
-            if (recentFile != null)
-            {
-                var newRecentFile = new RecentFile(recentFile.Name, recentFile.Path, DateTime.Now);
-                preferences.File.RecentFiles.Remove(recentFile);
-                preferences.File.RecentFiles.Add(newRecentFile);
-
-                await this.HomePage.RemoveRecentFile.Execute(recentFile);
-                await this.HomePage.AddRecentFile.Execute(newRecentFile);
-            } else
-            {
-                var settings = await Locator.Current.GetService<ISettingsService>(file)
-                    .GetSettingsAsync();
-
-                var newRecentFile = new RecentFile(settings.ListName, file, DateTime.Now);
-                preferences.File.RecentFiles.Add(newRecentFile);
-                await this.HomePage.AddRecentFile.Execute(newRecentFile);
-            }
+            await this.AddFileToRecentAsync(preferences, file, true);
 
             await this.store.InsertObject(PreferencesKey, preferences);
 
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
 
             return file;
+        }
+
+        private async Task OnShutdownAsync()
+        {
+            var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
+
+            foreach (var file in this.Files)
+            {
+                await this.AddFileToRecentAsync(preferences, file.FileName, false);
+            }
+
+            await this.store.InsertObject(PreferencesKey, preferences);
         }
 
         private void AddFile(string fileName, string listName)
@@ -167,6 +164,35 @@ namespace MovieList.ViewModels
             this.fileViewModelsSource.AddOrUpdate(fileViewModel);
 
             this.SelectedItemIndex = this.Files.Count;
+        }
+
+        private async Task AddFileToRecentAsync(UserPreferences preferences, string file, bool notifyHomePage)
+        {
+            var recentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file);
+            RecentFile newRecentFile;
+
+            if (recentFile != null)
+            {
+                newRecentFile = new RecentFile(recentFile.Name, recentFile.Path, DateTime.Now);
+                preferences.File.RecentFiles.Remove(recentFile);
+
+                if (notifyHomePage)
+                {
+                    await this.HomePage.RemoveRecentFile.Execute(recentFile);
+                }
+            } else
+            {
+                var settings = await Locator.Current.GetService<ISettingsService>(file).GetSettingsAsync();
+
+                newRecentFile = new RecentFile(settings.ListName, file, DateTime.Now);
+            }
+
+            preferences.File.RecentFiles.Add(newRecentFile);
+
+            if (notifyHomePage)
+            {
+                await this.HomePage.AddRecentFile.Execute(newRecentFile);
+            }
         }
     }
 }
