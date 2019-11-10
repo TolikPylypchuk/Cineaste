@@ -8,11 +8,13 @@ using MovieList.ViewModels;
 
 using ReactiveUI;
 
+using Splat;
+
 namespace MovieList.Views
 {
     public abstract class RecentFileControlBase : ReactiveUserControl<RecentFileViewModel> { }
 
-    public partial class RecentFileControl : RecentFileControlBase
+    public partial class RecentFileControl : RecentFileControlBase, IEnableLogger
     {
         public RecentFileControl()
         {
@@ -36,6 +38,7 @@ namespace MovieList.Views
                 this.Events().MouseDown
                     .Where(e => e.ClickCount == 2)
                     .Select(_ => this.ViewModel.File.Path)
+                    .Do(path => this.Log().Info(path))
                     .InvokeCommand(this.ViewModel.HomePage.OpenRecentFile);
 
                 this.WhenAnyValue(v => v.ViewModel.IsSelected)

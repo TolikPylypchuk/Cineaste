@@ -13,6 +13,7 @@ using Akavache;
 using MaterialDesignExtensions.Controls;
 
 using MaterialDesignThemes.Wpf;
+
 using MovieList.Data;
 using MovieList.DialogModels;
 using MovieList.Infrastructure;
@@ -196,6 +197,12 @@ namespace MovieList
         private void SetUpShowDialog()
             => Dialog.Show.RegisterHandler(async ctx =>
             {
+                if (this.mainDialogHost.IsOpen)
+                {
+                    ctx.SetOutput(Unit.Default);
+                    return;
+                }
+
                 var viewModel = new MessageModel(
                     Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty, Messages.OK);
 
@@ -210,6 +217,12 @@ namespace MovieList
         private void SetUpConfirmDialog()
             => Dialog.Confirm.RegisterHandler(async ctx =>
             {
+                if (this.mainDialogHost.IsOpen)
+                {
+                    ctx.SetOutput(false);
+                    return;
+                }
+
                 var viewModel = new ConfirmationModel(
                     Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty, Messages.Confirm, Messages.Cancel);
 
@@ -224,6 +237,12 @@ namespace MovieList
         public void SetUpCreateListDialog()
             => Dialog.Input.RegisterHandler(async ctx =>
             {
+                if (this.mainDialogHost.IsOpen)
+                {
+                    ctx.SetOutput(null);
+                    return;
+                }
+
                 var viewModel = new InputModel(
                     Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty, Messages.Confirm, Messages.Cancel);
 

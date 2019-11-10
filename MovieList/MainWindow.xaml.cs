@@ -1,12 +1,9 @@
-using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using DynamicData;
-using DynamicData.Binding;
 
 using MovieList.Properties;
 using MovieList.ViewModels;
@@ -66,22 +63,17 @@ namespace MovieList
                 Content = new ViewModelViewHost { ViewModel = this.ViewModel.HomePage }
             });
 
-            this.AddFileTabOnChange(changes => changes.Select(change => change.Item.Current), ListChangeReason.Add)
-                .DisposeWith(disposables);
-
-            this.AddFileTabOnChange(changes => changes.SelectMany(change => change.Range), ListChangeReason.AddRange)
-                .DisposeWith(disposables);
-
             this.ViewModel.Files
-                .ToObservableChangeSet()
-                .WhereReasonsAre(ListChangeReason.Remove)
-                .SelectMany(changeSet => changeSet)
-                .Select(change => change.Item.Current.FileName)
-                .Select(fileName => this.MainTabControl.Items
-                    .Cast<TabItem>()
-                    .First(item => fileName.Equals(item.Tag)))
-                .ObserveOnDispatcher()
-                .Subscribe(item => this.MainTabControl.Items.Remove(item))
+                .ActOnEveryObject(
+                    vm => this.MainTabControl.Items.Add(new TabItem
+                    {
+                        Header = new ViewModelViewHost { ViewModel = vm.Header },
+                        Content = new ViewModelViewHost { ViewModel = vm },
+                        Tag = vm.FileName
+                    }),
+                    vm => this.MainTabControl.Items.Remove(this.MainTabControl.Items
+                        .Cast<TabItem>()
+                        .First(item => vm.FileName.Equals(item.Tag))))
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.SelectedItemIndex, v => v.MainTabControl.SelectedIndex)
@@ -121,7 +113,8 @@ namespace MovieList
                         }),
                     file => this.OpenRecentMenuItem.Items.Remove(this.OpenRecentMenuItem.Items
                         .Cast<MenuItem>()
-                        .First(item => file.File.Path.Equals(item.Tag))));
+                        .First(item => file.File.Path.Equals(item.Tag))))
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
@@ -147,22 +140,6 @@ namespace MovieList
                 .InvokeCommand(this.ViewModel.ShowAbout)
                 .DisposeWith(disposables);
         }
-
-        private IDisposable AddFileTabOnChange(
-            Func<IObservable<Change<TabItem>>, IObservable<TabItem>> itemSelector,
-            params ListChangeReason[] reasons)
-            => itemSelector(this.ViewModel.Files
-                .ToObservableChangeSet()
-                .WhereReasonsAre(reasons)
-                .Transform(vm => new TabItem
-                {
-                    Header = new ViewModelViewHost { ViewModel = vm.Header },
-                    Content = new ViewModelViewHost { ViewModel = vm },
-                    Tag = vm.FileName
-                })
-                .SelectMany(changeSet => changeSet))
-                .ObserveOnDispatcher()
-                .Subscribe(item => this.MainTabControl.Items.Add(item));
 
         private void OnOpenFileExternally()
         {

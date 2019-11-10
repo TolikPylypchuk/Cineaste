@@ -13,6 +13,7 @@ using DynamicData;
 using MovieList.Data;
 using MovieList.Data.Services;
 using MovieList.Preferences;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
