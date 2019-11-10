@@ -18,7 +18,6 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 
 using static MovieList.Constants;
-using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels
 {
@@ -74,7 +73,10 @@ namespace MovieList.ViewModels
             this.Log().Debug($"Creating a file: {model.File}");
             Locator.CurrentMutable.RegisterDatabaseServices(model.File);
 
-            await Locator.Current.GetService<IDatabaseService>(model.File).CreateDatabaseAsync(model.ListName);
+            var settings = Locator.Current.GetService<Settings>(NewSettingsKey);
+            settings.ListName = model.ListName;
+
+            await Locator.Current.GetService<IDatabaseService>(model.File).CreateDatabaseAsync(settings);
 
             this.AddFile(model.File, model.ListName);
 
@@ -108,7 +110,7 @@ namespace MovieList.ViewModels
             var settings = await Locator.Current.GetService<ISettingsService>(model.File)
                 .GetSettingsAsync();
 
-            this.AddFile(model.File, settings[SettingsListNameKey]);
+            this.AddFile(model.File, settings.ListName);
 
             return model;
         }
@@ -143,7 +145,7 @@ namespace MovieList.ViewModels
                 var settings = await Locator.Current.GetService<ISettingsService>(file)
                     .GetSettingsAsync();
 
-                var newRecentFile = new RecentFile(settings[SettingsListNameKey], file, DateTime.Now);
+                var newRecentFile = new RecentFile(settings.ListName, file, DateTime.Now);
                 preferences.File.RecentFiles.Add(newRecentFile);
                 await this.HomePage.AddRecentFile.Execute(newRecentFile);
             }

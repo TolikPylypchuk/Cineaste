@@ -135,6 +135,12 @@
   <data name="CreateListMessage" xml:space="preserve">
     <value>Enter a name for the new list</value>
   </data>
+  <data name="DefaultSeasonOriginalTitle" xml:space="preserve">
+    <value>Season #</value>
+  </data>
+  <data name="DefaultSeasonTitle" xml:space="preserve">
+    <value>Сезон #</value>
+  </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>

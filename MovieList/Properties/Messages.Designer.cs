@@ -115,6 +115,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Season #.
+        /// </summary>
+        public static string DefaultSeasonOriginalTitle {
+            get {
+                return ResourceManager.GetString("DefaultSeasonOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сезон #.
+        /// </summary>
+        public static string DefaultSeasonTitle {
+            get {
+                return ResourceManager.GetString("DefaultSeasonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         public static string File {

@@ -13,7 +13,7 @@ using Akavache;
 using MaterialDesignExtensions.Controls;
 
 using MaterialDesignThemes.Wpf;
-
+using MovieList.Data;
 using MovieList.DialogModels;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
@@ -31,6 +31,7 @@ using Splat;
 using Splat.Serilog;
 
 using static MovieList.Constants;
+using static MovieList.Data.Constants;
 
 namespace MovieList
 {
@@ -96,6 +97,16 @@ namespace MovieList
 
             Locator.CurrentMutable.RegisterConstant(BlobCache.LocalMachine, CacheKey);
             Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, StoreKey);
+
+            Locator.CurrentMutable.Register(
+                () => new Settings(
+                    String.Empty,
+                    ListFileVersion,
+                    "#FF0000",
+                    "#8B0000",
+                    Messages.DefaultSeasonTitle,
+                    Messages.DefaultSeasonOriginalTitle),
+                NewSettingsKey);
 
             var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
                 .Catch(Observable.FromAsync(this.CreateDefaultPreferences));

@@ -32,7 +32,7 @@ namespace MovieList.Data.Services.Implementations
             "Security",
             "CA2100:Review SQL queries for security vulnerabilities",
             Justification = "SQL comes from a database creation script")]
-        public async Task CreateDatabaseAsync(string listName)
+        public async Task CreateDatabaseAsync(Settings settings)
         {
             this.Log().Debug($"Creating a new database: {this.DatabasePath}.");
 
@@ -48,7 +48,7 @@ namespace MovieList.Data.Services.Implementations
             await connection.OpenAsync();
             await connection.ExecuteAsync(sql);
 
-            await this.InitSettingsAsync(connection, listName);
+            await this.InitSettingsAsync(connection, settings);
         }
 
         [LogException]
@@ -68,47 +68,47 @@ namespace MovieList.Data.Services.Implementations
             return true;
         }
 
-        private async Task InitSettingsAsync(SqliteConnection connection, string listName)
+        private async Task InitSettingsAsync(SqliteConnection connection, Settings settings)
         {
             this.Log().Debug($"Initializing settings for the database: {this.DatabasePath}.");
 
             await using var transaction = await connection.BeginTransactionAsync();
 
-            var settings = new List<Settings>
+            var settingsList = new List<Setting>
             {
-                new Settings
+                new Setting
                 {
                     Key = SettingsListNameKey,
-                    Value = listName
+                    Value = settings.ListName
                 },
-                new Settings
+                new Setting
                 {
                     Key = SettingsListVersionKey,
-                    Value = "1"
+                    Value = settings.ListVersion.ToString()
                 },
-                new Settings
+                new Setting
                 {
                     Key = SettingsColorForNotWatchedKey,
-                    Value = SettingsColorForNotWatchedValue
+                    Value = settings.ColorForNotWatched
                 },
-                new Settings
+                new Setting
                 {
                     Key = SettingsColorForNotReleasedKey,
-                    Value = SettingsColorForNotReleasedValue
+                    Value = settings.ColorForNotReleased
                 },
-                new Settings
+                new Setting
                 {
                     Key = SettingsDefaultSeasonTitleKey,
-                    Value = SettingsDefaultSeasonTitleValue
+                    Value = settings.DefaultSeasonTitle
                 },
-                new Settings
+                new Setting
                 {
                     Key = SettingsDefaultSeasonOriginalTitleKey,
-                    Value = SettingsDefaultSeasonOriginalTitleValue
+                    Value = settings.DefaultSeasonOriginalTitle
                 }
             };
 
-            foreach (var setting in settings)
+            foreach (var setting in settingsList)
             {
                 await connection.InsertAsync(setting, transaction);
             }
