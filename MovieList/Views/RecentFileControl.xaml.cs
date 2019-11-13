@@ -35,10 +35,10 @@ namespace MovieList.Views
                 this.Bind(this.ViewModel, vm => vm.IsSelected, v => v.IsSelectedCheckBox.IsChecked)
                     .DisposeWith(disposables);
 
-                this.Events().MouseDown
+                this.Events().MouseLeftButtonDown
                     .Where(e => e.ClickCount == 2)
-                    .Select(_ => this.ViewModel.File.Path)
-                    .Do(path => this.Log().Info(path))
+                    .Select(e => this.ViewModel.File.Path)
+                    .ObserveOnDispatcher()
                     .InvokeCommand(this.ViewModel.HomePage.OpenRecentFile);
 
                 this.WhenAnyValue(v => v.ViewModel.IsSelected)
