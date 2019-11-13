@@ -20,21 +20,24 @@ namespace MovieList.Dialogs
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.OneWayBind(this.ViewModel, vm => vm.Message, v => v.TextBlock.Text)
+                this.OneWayBind(this.ViewModel, vm => vm.Title, v => v.TitleTextBlock.Text)
                     .DisposeWith(disposables);
 
-                this.Bind(this.ViewModel, vm => vm.Value, v => v.TextBox.Text)
+                this.OneWayBind(this.ViewModel, vm => vm.Message, v => v.MessageTextBlock.Text)
+                    .DisposeWith(disposables);
+
+                this.Bind(this.ViewModel, vm => vm.Value, v => v.ValueTextBox.Text)
                     .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Value, v => v.ConfirmButton.CommandParameter)
                     .DisposeWith(disposables);
 
                 this.OneWayBind(
-                        this.ViewModel, vm => vm.ConfirmButtonText, v => v.ConfirmButton.Content, text => text.ToUpper())
+                        this.ViewModel, vm => vm.ConfirmText, v => v.ConfirmButton.Content, text => text?.ToUpper())
                     .DisposeWith(disposables);
 
                 this.OneWayBind(
-                        this.ViewModel, vm => vm.CancelButtonText, v => v.CancelButton.Content, text => text.ToUpper())
+                        this.ViewModel, vm => vm.CancelText, v => v.CancelButton.Content, text => text?.ToUpper())
                     .DisposeWith(disposables);
             });
         }

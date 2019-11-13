@@ -1,20 +1,14 @@
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.DialogModels
 {
-    public sealed class MessageModel : ReactiveObject
+    public sealed class MessageModel : DialogModelBase
     {
-        public MessageModel(string message, string buttonText)
-        {
-            this.Message = message;
-            this.ButtonText = buttonText;
-        }
+        public MessageModel(string message, string title, string? closeText = null)
+            : base(message, title)
+            => this.CloseText = closeText;
 
         [Reactive]
-        public string Message { get; set; }
-
-        [Reactive]
-        public string ButtonText { get; set; }
+        public string? CloseText { get; set; }
     }
 }

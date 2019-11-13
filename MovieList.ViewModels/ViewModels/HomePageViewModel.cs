@@ -10,7 +10,7 @@ using Akavache;
 
 using DynamicData;
 using DynamicData.Binding;
-
+using MovieList.DialogModels;
 using MovieList.Preferences;
 
 using ReactiveUI;
@@ -90,7 +90,7 @@ namespace MovieList.ViewModels
         {
             this.Log().Debug("Creating a new list.");
 
-            string? listName = await Dialog.Input.Handle("CreateListMessage");
+            string? listName = await Dialog.Input.Handle(new InputModel("CreateListMessage", "CreateListTitle"));
 
             if (listName is null)
             {
@@ -115,7 +115,8 @@ namespace MovieList.ViewModels
                 return fileName;
             }
 
-            bool shouldRemoveFile = await Dialog.Confirm.Handle("RemoveRecentFileQuesiton");
+            bool shouldRemoveFile = await Dialog.Confirm.Handle(
+                new ConfirmationModel("RemoveRecentFileQuesiton", "RemoveRecentFileTitle"));
 
             if (shouldRemoveFile)
             {

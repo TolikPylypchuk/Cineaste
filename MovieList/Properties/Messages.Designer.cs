@@ -79,6 +79,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string AboutTitle {
+            get {
+                return ResourceManager.GetString("AboutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All FIles.
         /// </summary>
         public static string AllExtensionsDescription {
@@ -129,6 +138,15 @@ namespace MovieList.Properties {
         public static string CreateListMessage {
             get {
                 return ResourceManager.GetString("CreateListMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a List.
+        /// </summary>
+        public static string CreateListTitle {
+            get {
+                return ResourceManager.GetString("CreateListTitle", resourceCulture);
             }
         }
         
@@ -300,6 +318,15 @@ namespace MovieList.Properties {
         public static string RemoveRecentFileQuesiton {
             get {
                 return ResourceManager.GetString("RemoveRecentFileQuesiton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove a Recent File.
+        /// </summary>
+        public static string RemoveRecentFileTitle {
+            get {
+                return ResourceManager.GetString("RemoveRecentFileTitle", resourceCulture);
             }
         }
         

@@ -1,24 +1,24 @@
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.DialogModels
 {
-    public sealed class ConfirmationModel : ReactiveObject
+    public sealed class ConfirmationModel : DialogModelBase
     {
-        public ConfirmationModel(string message, string confirmButtonText, string cancelButtonText)
+        public ConfirmationModel(
+            string message,
+            string title,
+            string? confirmButtonText = null,
+            string? cancelButtonText = null)
+            : base(message, title)
         {
-            this.Message = message;
-            this.ConfirmButtonText = confirmButtonText;
-            this.CancelButtonText = cancelButtonText;
+            this.ConfirmText = confirmButtonText;
+            this.CancelText = cancelButtonText;
         }
 
         [Reactive]
-        public string Message { get; set; }
+        public string? ConfirmText { get; set; }
 
         [Reactive]
-        public string ConfirmButtonText { get; set; }
-
-        [Reactive]
-        public string CancelButtonText { get; set; }
+        public string? CancelText { get; set; }
     }
 }

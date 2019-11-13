@@ -1,18 +1,20 @@
 using System.Reactive;
 
+using MovieList.DialogModels;
+
 using ReactiveUI;
 
 namespace MovieList
 {
     public static class Dialog
     {
-        public static readonly Interaction<string, Unit> Show =
-            new Interaction<string, Unit>();
+        public static readonly Interaction<MessageModel, Unit> Show =
+            new Interaction<MessageModel, Unit>();
 
-        public static readonly Interaction<string, bool> Confirm =
-            new Interaction<string, bool>();
+        public static readonly Interaction<ConfirmationModel, bool> Confirm =
+            new Interaction<ConfirmationModel, bool>();
 
-        public static readonly Interaction<string, string?> Input = new Interaction<string, string?>();
+        public static readonly Interaction<InputModel, string?> Input = new Interaction<InputModel, string?>();
 
         public static readonly Interaction<string, string?> SaveFile = new Interaction<string, string?>();
 

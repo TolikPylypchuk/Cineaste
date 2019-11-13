@@ -123,6 +123,9 @@
   <data name="AboutText" xml:space="preserve">
     <value>Movie List. Version 1.0. Created by Tolik Pylypchuk</value>
   </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>About</value>
+  </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All FIles</value>
   </data>
@@ -140,6 +143,9 @@
   </data>
   <data name="CreateListMessage" xml:space="preserve">
     <value>Enter a name for the new list</value>
+  </data>
+  <data name="CreateListTitle" xml:space="preserve">
+    <value>Create a List</value>
   </data>
   <data name="DefaultSeasonOriginalTitle" xml:space="preserve">
     <value>Season #</value>
@@ -197,6 +203,9 @@
   </data>
   <data name="RemoveRecentFileQuesiton" xml:space="preserve">
     <value>Cannot find the file. Remove it from the list?</value>
+  </data>
+  <data name="RemoveRecentFileTitle" xml:space="preserve">
+    <value>Remove a Recent File</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>

@@ -204,7 +204,9 @@ namespace MovieList
                 }
 
                 var viewModel = new MessageModel(
-                    Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty, Messages.OK);
+                    ctx.Input.Message.Localized(),
+                    ctx.Input.Title.Localized(),
+                    ctx.Input.CloseText?.Localized() ?? Messages.OK);
 
                 var view = ViewLocator.Current.ResolveView(viewModel);
                 view.ViewModel = viewModel;
@@ -224,7 +226,10 @@ namespace MovieList
                 }
 
                 var viewModel = new ConfirmationModel(
-                    Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty, Messages.Confirm, Messages.Cancel);
+                    ctx.Input.Message.Localized(),
+                    ctx.Input.Title.Localized(),
+                    ctx.Input.ConfirmText?.Localized() ?? Messages.Confirm,
+                    ctx.Input.CancelText?.Localized() ?? Messages.Cancel);
 
                 var view = ViewLocator.Current.ResolveView(viewModel);
                 view.ViewModel = viewModel;
@@ -244,7 +249,10 @@ namespace MovieList
                 }
 
                 var viewModel = new InputModel(
-                    Messages.ResourceManager.GetString(ctx.Input) ?? String.Empty, Messages.Confirm, Messages.Cancel);
+                    ctx.Input.Message.Localized(),
+                    ctx.Input.Title.Localized(),
+                    ctx.Input.ConfirmText?.Localized() ?? Messages.Confirm,
+                    ctx.Input.CancelText?.Localized() ?? Messages.Cancel);
 
                 var view = ViewLocator.Current.ResolveView(viewModel);
                 view.ViewModel = viewModel;
