@@ -8,7 +8,7 @@ namespace MovieList
 {
     public static class Dialog
     {
-        public static readonly Interaction<MessageModel, Unit> Show =
+        public static readonly Interaction<MessageModel, Unit> ShowMessage =
             new Interaction<MessageModel, Unit>();
 
         public static readonly Interaction<ConfirmationModel, bool> Confirm =

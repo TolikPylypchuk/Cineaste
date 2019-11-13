@@ -51,7 +51,7 @@ namespace MovieList.ViewModels
             this.OpenFile = ReactiveCommand.CreateFromTask<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
             this.CloseFile = ReactiveCommand.CreateFromTask<string, string>(this.OnCloseFileAsync);
             this.Shutdown = ReactiveCommand.CreateFromTask(this.OnShutdownAsync);
-            this.ShowAbout = ReactiveCommand.CreateFromTask(async () => await Dialog.Show.Handle(
+            this.ShowAbout = ReactiveCommand.CreateFromTask(async () => await Dialog.ShowMessage.Handle(
                 new MessageModel("AboutText", "AboutTitle")));
 
             this.HomePage.CreateFile
