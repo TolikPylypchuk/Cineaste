@@ -22,7 +22,7 @@ namespace MovieList
 
         public DialogHost Host { get; }
 
-        public async Task ShowMessageDialog(InteractionContext<MessageModel, Unit> ctx)
+        public async Task ShowMessageDialogAsync(InteractionContext<MessageModel, Unit> ctx)
         {
             if (this.Host.IsOpen)
             {
@@ -43,7 +43,7 @@ namespace MovieList
             ctx.SetOutput(Unit.Default);
         }
 
-        public async Task ShowConfirmDialog(InteractionContext<ConfirmationModel, bool> ctx)
+        public async Task ShowConfirmDialogAsync(InteractionContext<ConfirmationModel, bool> ctx)
         {
             if (this.Host.IsOpen)
             {
@@ -65,7 +65,7 @@ namespace MovieList
             ctx.SetOutput(result is bool confirm && confirm);
         }
 
-        public async Task ShowInputDialog(InteractionContext<InputModel, string?> ctx)
+        public async Task ShowInputDialogAsync(InteractionContext<InputModel, string?> ctx)
         {
             if (this.Host.IsOpen)
             {
@@ -87,7 +87,7 @@ namespace MovieList
             ctx.SetOutput(result is string value ? value : null);
         }
 
-        public async Task ShowSaveFileDialog(InteractionContext<string, string?> ctx)
+        public async Task ShowSaveFileDialogAsync(InteractionContext<string, string?> ctx)
         {
             var dialogArgs = new SaveFileDialogArguments
             {
@@ -106,7 +106,7 @@ namespace MovieList
             ctx.SetOutput(result == null || result.Canceled ? null : result.File);
         }
 
-        public async Task ShowOpenFileDialog(InteractionContext<Unit, string?> ctx)
+        public async Task ShowOpenFileDialogAsync(InteractionContext<Unit, string?> ctx)
         {
             var dialogArgs = new OpenFileDialogArguments
             {

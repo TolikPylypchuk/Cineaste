@@ -180,11 +180,11 @@ namespace MovieList
 
         private void SetUpDialogs(DialogHandler handler)
         {
-            Dialog.ShowMessage.RegisterHandler(handler.ShowMessageDialog);
-            Dialog.Confirm.RegisterHandler(handler.ShowConfirmDialog);
-            Dialog.Input.RegisterHandler(handler.ShowInputDialog);
-            Dialog.SaveFile.RegisterHandler(handler.ShowSaveFileDialog);
-            Dialog.OpenFile.RegisterHandler(handler.ShowOpenFileDialog);
+            Dialog.ShowMessage.RegisterHandler(handler.ShowMessageDialogAsync);
+            Dialog.Confirm.RegisterHandler(handler.ShowConfirmDialogAsync);
+            Dialog.Input.RegisterHandler(handler.ShowInputDialogAsync);
+            Dialog.SaveFile.RegisterHandler(handler.ShowSaveFileDialogAsync);
+            Dialog.OpenFile.RegisterHandler(handler.ShowOpenFileDialogAsync);
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
