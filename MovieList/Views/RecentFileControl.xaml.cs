@@ -8,13 +8,11 @@ using MovieList.ViewModels;
 
 using ReactiveUI;
 
-using Splat;
-
 namespace MovieList.Views
 {
     public abstract class RecentFileControlBase : ReactiveUserControl<RecentFileViewModel> { }
 
-    public partial class RecentFileControl : RecentFileControlBase, IEnableLogger
+    public partial class RecentFileControl : RecentFileControlBase
     {
         public RecentFileControl()
         {

@@ -18,7 +18,7 @@ namespace MovieList.Data.Models
         public MovieSeries? MovieSeries { get; set; }
 
         public int ParentSeriesId { get; set; }
-        public MovieSeries ParentSeries { get; set; }
+        public MovieSeries ParentSeries { get; set; } = null!;
 
         public int SequenceNumber { get; set; }
         public int? DisplayNumber { get; set; }

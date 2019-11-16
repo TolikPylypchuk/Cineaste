@@ -25,7 +25,8 @@ namespace MovieList.Views
             this.InitializeComponent();
 
             this.Events().Loaded
-                .Subscribe(e => this.Navigation.WillSelectNavigationItemCallbackAsync = this.OnWillSelectNavigationItemAsync);
+                .Subscribe(e => this.Navigation.WillSelectNavigationItemCallbackAsync =
+                    this.OnWillSelectNavigationItemAsync);
 
             this.Events().Unloaded
                 .Subscribe(e => this.Navigation.WillSelectNavigationItemCallbackAsync = null);
