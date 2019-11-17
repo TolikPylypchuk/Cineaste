@@ -16,7 +16,7 @@ namespace MovieList.Data
         AttributeTargets.Constructor |
         AttributeTargets.Assembly |
         AttributeTargets.Module)]
-    public sealed class LogExceptionAttribute : Attribute, IMethodDecorator, IEnableLogger
+    public sealed class LogExceptionAttribute : Attribute, IMethodDecorator
     {
         private Type? targetType;
 

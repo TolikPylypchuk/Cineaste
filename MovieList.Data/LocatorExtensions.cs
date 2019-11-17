@@ -14,6 +14,7 @@ namespace MovieList.Data
             if (!resolver.HasRegistration(typeof(IDatabaseService), file))
             {
                 resolver.RegisterLazySingleton(() => new DatabaseService(file), typeof(IDatabaseService), file);
+                resolver.RegisterLazySingleton(() => new ListService(file), typeof(IListService), file);
                 resolver.RegisterLazySingleton(() => new KindService(file), typeof(IKindService), file);
                 resolver.RegisterLazySingleton(() => new SettingsService(file), typeof(ISettingsService), file);
                 resolver.RegisterLazySingleton(
@@ -26,6 +27,7 @@ namespace MovieList.Data
             if (resolver.HasRegistration(typeof(IDatabaseService), file))
             {
                 resolver.UnregisterCurrent(typeof(IDatabaseService), file);
+                resolver.UnregisterCurrent(typeof(IListService), file);
                 resolver.UnregisterCurrent(typeof(IKindService), file);
                 resolver.UnregisterCurrent(typeof(ISettingsService), file);
                 resolver.UnregisterCurrent(typeof(SqliteConnection), file);

@@ -13,7 +13,7 @@ namespace MovieList.Data.Models
         public bool IsMiniseries { get; set; }
         public bool IsAnthology { get; set; }
 
-        public SeriesStatus Status { get; set; }
+        public SeriesStatus Status { get; set; } = SeriesStatus.NotStarted;
 
         public string? ImdbLink { get; set; }
         public string? PosterUrl { get; set; }
