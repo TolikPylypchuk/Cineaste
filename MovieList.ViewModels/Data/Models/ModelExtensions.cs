@@ -34,14 +34,10 @@ namespace MovieList.Data.Models
         }
 
         public static Title GetTitle(this MovieSeries movieSeries)
-            => movieSeries.Title ?? movieSeries.GetFirstEntry().GetTitle();
+            => movieSeries.ShowTitles ? movieSeries.Title! : movieSeries.GetFirstEntry().GetTitle();
 
         public static Title GetTitle(this MovieSeriesEntry entry)
-            => entry.Movie != null
-                ? entry.Movie.Title
-                : entry.Series != null
-                    ? entry.Series.Title
-                    : entry.MovieSeries!.GetTitle();
+            => entry.Movie?.Title ?? entry.Series?.Title ?? entry.MovieSeries!.GetTitle();
 
         public static MovieSeriesEntry GetFirstEntry(this MovieSeries movieSeries)
         {
@@ -89,13 +85,13 @@ namespace MovieList.Data.Models
         public static int GetStartYear(this MovieSeries movieSeries)
         {
             var firstEntry = movieSeries.GetFirstEntry();
-            return firstEntry.Movie?.Year ?? firstEntry.Series!.StartYear;
+            return firstEntry.Movie?.Year ?? firstEntry.Series?.StartYear ?? firstEntry.MovieSeries!.GetStartYear();
         }
 
         public static int GetEndYear(this MovieSeries movieSeries)
         {
             var lastEntry = movieSeries.GetLastEntry();
-            return lastEntry.Movie?.Year ?? lastEntry.Series!.EndYear;
+            return lastEntry.Movie?.Year ?? lastEntry.Series?.EndYear ?? lastEntry.MovieSeries!.GetEndYear();
         }
     }
 }

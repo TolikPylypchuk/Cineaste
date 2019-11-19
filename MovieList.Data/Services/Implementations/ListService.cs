@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
 
-using MovieList.Data.Extensions;
 using MovieList.Data.Models;
 
 using Splat;
@@ -18,7 +17,7 @@ namespace MovieList.Data.Services.Implementations
         { }
 
         [LogException]
-        public async Task<(IEnumerable<Movie>, IEnumerable<Series>, IEnumerable<MovieSeries>)> GetListAsync()
+        public async Task<(IEnumerable<Movie> Movies, IEnumerable<Series> Series, IEnumerable<MovieSeries> MovieSeries)> GetListAsync(IList<Kind> kinds)
         {
             this.Log().Debug("Getting the full list of movies, series and movie series.");
 
@@ -26,7 +25,6 @@ namespace MovieList.Data.Services.Implementations
             await connection.OpenAsync();
             await using var transaction = await connection.BeginTransactionAsync();
 
-            var kinds = await connection.GetAllAsync<Kind>(transaction).ToListAsync();
             var titles = await connection.GetAllAsync<Title>(transaction).ToListAsync();
             var entries = await connection.GetAllAsync<MovieSeriesEntry>(transaction).ToListAsync();
 

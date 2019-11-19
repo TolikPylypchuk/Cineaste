@@ -44,9 +44,9 @@ namespace MovieList.Views
             });
         }
 
-        public FirstLevelNavigationItem ListItem { get; private set; } = null!;
-        public FirstLevelNavigationItem StatsItem { get; private set; } = null!;
-        public FirstLevelNavigationItem SettingsItem { get; private set; } = null!;
+        public INavigationItem ListItem { get; private set; } = null!;
+        public INavigationItem StatsItem { get; private set; } = null!;
+        public INavigationItem SettingsItem { get; private set; } = null!;
 
         private void InitializeSideNavigation(CompositeDisposable disposables)
         {

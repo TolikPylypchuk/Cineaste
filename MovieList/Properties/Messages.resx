@@ -189,6 +189,9 @@
   <data name="NoRecentlyOpenedFiles" xml:space="preserve">
     <value>No recently opened files</value>
   </data>
+  <data name="NumberHeader" xml:space="preserve">
+    <value>#</value>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
@@ -200,6 +203,9 @@
   </data>
   <data name="OpenRecent" xml:space="preserve">
     <value>Open Recent...</value>
+  </data>
+  <data name="OriginalTitleHeader" xml:space="preserve">
+    <value>Original Title</value>
   </data>
   <data name="Preferences" xml:space="preserve">
     <value>Preferences</value>
@@ -224,5 +230,11 @@
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="TitleHeader" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="YearHeader" xml:space="preserve">
+    <value>Year</value>
   </data>
 </root>

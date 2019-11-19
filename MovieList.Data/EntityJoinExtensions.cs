@@ -3,7 +3,7 @@ using System.Linq;
 
 using MovieList.Data.Models;
 
-namespace MovieList.Data.Extensions
+namespace MovieList.Data
 {
     internal static class EntityJoinExtensions
     {

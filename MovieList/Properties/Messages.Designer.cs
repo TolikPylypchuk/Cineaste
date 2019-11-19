@@ -277,6 +277,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #.
+        /// </summary>
+        public static string NumberHeader {
+            get {
+                return ResourceManager.GetString("NumberHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string OK {
@@ -309,6 +318,15 @@ namespace MovieList.Properties {
         public static string OpenRecent {
             get {
                 return ResourceManager.GetString("OpenRecent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original Title.
+        /// </summary>
+        public static string OriginalTitleHeader {
+            get {
+                return ResourceManager.GetString("OriginalTitleHeader", resourceCulture);
             }
         }
         
@@ -381,6 +399,24 @@ namespace MovieList.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string TitleHeader {
+            get {
+                return ResourceManager.GetString("TitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string YearHeader {
+            get {
+                return ResourceManager.GetString("YearHeader", resourceCulture);
             }
         }
     }

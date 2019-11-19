@@ -129,9 +129,7 @@ CREATE TABLE "MovieSeriesEntries" (
 
     FOREIGN KEY ("ParentSeriesId")
         REFERENCES "MovieSeries" ("Id")
-        ON DELETE CASCADE,
-
-    CHECK ("MovieId" IS NULL <> "SeriesId" IS NULL <> "MovieSeriesId" IS NULL)
+        ON DELETE CASCADE
 );
 
 CREATE INDEX "Idx_MovieSeriesEntries_MovieId" ON "MovieSeriesEntries" ("MovieId");
@@ -170,8 +168,7 @@ CREATE TABLE "Titles" (
         REFERENCES "MovieSeries" ("Id")
         ON DELETE CASCADE,
 
-    CHECK ("Priority" >= 1 AND "Priority" <= 10
-       AND "MovieId" IS NULL <> "SeriesId" IS NULL <> "SeasonId" IS NULL <> "SpecialEpisodeId" IS NULL <> "MovieSeriesId" IS NULL)
+    CHECK ("Priority" >= 1 AND "Priority" <= 10)
 );
 
 CREATE INDEX "Idx_Titles_MovieId" ON "Titles" ("MovieId");

@@ -78,11 +78,18 @@ namespace MovieList.ListItems
                 result = ancestor1.Entry?.SequenceNumber.CompareTo(ancestor2.Entry?.SequenceNumber) ?? 0;
             } else
             {
-                result = left.MovieSeries.GetTitle().Name.CompareTo(right.MovieSeries.GetTitle().Name);
+                result = TitleComparer.Instance.Compare(
+                    left.MovieSeries.GetTitle().Name,
+                    right.MovieSeries.GetTitle().Name);
 
                 if (result == 0)
                 {
                     result = left.MovieSeries.GetStartYear().CompareTo(right.MovieSeries.GetStartYear());
+
+                    if (result == 0)
+                    {
+                        result = left.MovieSeries.GetEndYear().CompareTo(right.MovieSeries.GetEndYear());
+                    }
                 }
             }
 
@@ -101,7 +108,7 @@ namespace MovieList.ListItems
                 (null, null) => this.CompareTitleOrYear(left, right),
                 (var entry, null) => this.Compare(new MovieSeriesListItem(entry.ParentSeries), right),
                 (null, var entry) => this.Compare(left, new MovieSeriesListItem(entry.ParentSeries)),
-                var (entry1, entry2) => entry1.MovieSeriesId == entry2.MovieSeriesId
+                var (entry1, entry2) => entry1.ParentSeriesId == entry2.ParentSeriesId
                     ? entry1.SequenceNumber.CompareTo(entry2.SequenceNumber)
                     : this.Compare(
                         new MovieSeriesListItem(entry1.ParentSeries),

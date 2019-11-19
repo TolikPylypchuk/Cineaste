@@ -19,6 +19,9 @@ namespace MovieList.Views
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
+
+                this.OneWayBind(this.ViewModel, vm => vm.Items, v => v.List.ItemsSource)
+                    .DisposeWith(disposables);
             });
         }
     }

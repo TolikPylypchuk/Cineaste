@@ -1,4 +1,3 @@
-using DynamicData.Annotations;
 using MovieList.Data.Models;
 
 namespace MovieList.ListItems
@@ -12,7 +11,7 @@ namespace MovieList.ListItems
                   series.Title.Name,
                   series.OriginalTitle.Name,
                   series.StartYear != series.EndYear
-                      ? $"{series.StartYear}-{series.EndYear}"
+                      ? $"{series.StartYear} - {series.EndYear}"
                       : series.StartYear.ToString(),
                   series.GetActiveColor())
             => this.Series = series;

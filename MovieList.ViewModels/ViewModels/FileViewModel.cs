@@ -1,38 +1,60 @@
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
-using System.Reactive.Disposables;
+using System.Reactive.Linq;
+
+using DynamicData;
+
+using MovieList.Data.Models;
+using MovieList.Data.Services;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using Splat;
+
 namespace MovieList.ViewModels
 {
-    public sealed class FileViewModel : ReactiveObject, IActivatableViewModel
+    public sealed class FileViewModel : ReactiveObject
     {
-        public FileViewModel(string fileName, string listName)
+        private readonly SourceCache<Kind, int> kindsSource;
+        private readonly ReadOnlyObservableCollection<Kind> kinds;
+
+        public FileViewModel(string fileName, string listName, IKindService? kindService = null)
         {
             this.FileName = fileName;
             this.ListName = listName;
 
-            this.Header = new FileHeaderViewModel(FileName, ListName);
+            kindService ??= Locator.Current.GetService<IKindService>(fileName);
 
-            this.List = new ListViewModel(this.FileName);
+            this.Header = new FileHeaderViewModel(FileName, ListName);
             this.Settings = new SettingsViewModel(this.FileName);
 
-            this.Content = this.List;
+            this.kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
+
+            Observable.FromAsync(kindService.GetAllKindsAsync)
+                .Select(kinds => kinds.ToList())
+                .Subscribe(kinds =>
+                {
+                    this.List = new ListViewModel(this.FileName, kinds);
+                    this.Content ??= this.List;
+                    this.kindsSource.AddOrUpdate(kinds);
+                });
 
             this.SwitchToList = ReactiveCommand.Create(() => { this.Content = this.List; });
             this.SwitchToStats = ReactiveCommand.Create(() => { });
             this.SwitchToSettings = ReactiveCommand.Create(() => { this.Content = this.Settings; });
 
-            this.WhenActivated(disposables =>
-            {
-                this.WhenAnyValue(vm => vm.ListName)
-                    .BindTo(this.Header, h => h.ListName)
-                    .DisposeWith(disposables);
-            });
-        }
+            this.WhenAnyValue(vm => vm.ListName)
+                .BindTo(this.Header, h => h.ListName);
 
-        public ViewModelActivator Activator { get; } = new ViewModelActivator();
+            this.kindsSource.Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out this.kinds)
+                .DisposeMany()
+                .Subscribe();
+        }
 
         public string FileName { get; }
 
@@ -41,14 +63,17 @@ namespace MovieList.ViewModels
 
         public FileHeaderViewModel Header { get; }
 
+        [Reactive]
+        public ReactiveObject Content { get; set; } = null!;
+
+        public ListViewModel List { get; private set; } = null!;
+        public SettingsViewModel Settings { get; private set; }
+
+        public ReadOnlyObservableCollection<Kind> Kinds
+            => this.kinds;
+
         public ReactiveCommand<Unit, Unit> SwitchToList { get; }
         public ReactiveCommand<Unit, Unit> SwitchToStats { get; }
         public ReactiveCommand<Unit, Unit> SwitchToSettings { get; }
-
-        [Reactive]
-        public ReactiveObject Content { get; set; }
-
-        public ListViewModel List { get; }
-        public SettingsViewModel Settings { get; }
     }
 }
