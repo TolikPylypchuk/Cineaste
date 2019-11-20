@@ -1,23 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 using MovieList.Data.Models;
+using MovieList.ListItems;
 
-namespace MovieList.ListItems
+namespace MovieList.Comparers
 {
-    public class ListItemComparer : IComparer<ListItem>
+    public class ListItemComparer : NullsFirstComparer<ListItem>
     {
         private ListItemComparer() { }
 
         public static ListItemComparer Instance { get; } = new ListItemComparer();
 
-        public int Compare([AllowNull] ListItem x, [AllowNull] ListItem y)
+        protected override int CompareNonNull(ListItem x, ListItem y)
             => (x, y) switch
             {
-                (null, null) => 0,
-                (null, _) => -1,
-                (_, null) => 1,
                 (MovieListItem left, MovieListItem right) => this.Compare(left, right),
                 (MovieListItem left, SeriesListItem right) => this.Compare(left, right),
                 (MovieListItem left, MovieSeriesListItem right) => this.Compare(left, right),

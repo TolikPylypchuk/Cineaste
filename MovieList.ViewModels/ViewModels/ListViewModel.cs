@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 
 using DynamicData;
 
+using MovieList.Comparers;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.ListItems;
