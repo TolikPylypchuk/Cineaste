@@ -4,14 +4,12 @@ namespace MovieList.Comparers
 {
     public class EnumerableComparer<T> : NullsFirstComparer<IEnumerable<T>>
     {
-        public EnumerableComparer()
-            : this(Comparer<T>.Default)
-        { }
+        private readonly IComparer<T> comparer;
 
         public EnumerableComparer(IComparer<T> comparer)
             => this.comparer = comparer;
 
-        private readonly IComparer<T> comparer;
+        public static EnumerableComparer<T> Default { get; } = new EnumerableComparer<T>(Comparer<T>.Default);
 
         protected override int CompareNonNull(IEnumerable<T> x, IEnumerable<T> y)
         {

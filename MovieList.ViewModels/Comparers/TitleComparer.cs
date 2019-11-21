@@ -6,8 +6,6 @@ namespace MovieList.Comparers
 {
     public class TitleComparer : NullsFirstComparer<string>
     {
-        private static readonly EnumerableComparer<object> Comparer = new EnumerableComparer<object>();
-
         private static readonly Regex NumberRegex = new Regex("([0-9]+)", RegexOptions.Compiled);
 
         private TitleComparer() { }
@@ -15,11 +13,11 @@ namespace MovieList.Comparers
         public static TitleComparer Instance { get; } = new TitleComparer();
 
         protected override int CompareNonNull(string x, string y)
-            => Comparer.Compare(
+            => EnumerableComparer<object>.Default.Compare(
                 NumberRegex.Split(this.Normalize(x)).Select(this.Convert),
                 NumberRegex.Split(this.Normalize(y)).Select(this.Convert));
 
-        private string? Normalize(string title)
+        private string Normalize(string title)
             => title.ToLower()
                 .Replace(":", "")
                 .Replace(".", "")
