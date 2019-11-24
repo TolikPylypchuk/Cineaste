@@ -412,6 +412,51 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The IMDb link is invalid.
+        /// </summary>
+        public static string ValidationImdbLinkInvalid {
+            get {
+                return ResourceManager.GetString("ValidationImdbLinkInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The poster URL is invalid.
+        /// </summary>
+        public static string ValidationPosterUrlInvalid {
+            get {
+                return ResourceManager.GetString("ValidationPosterUrlInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title must not be empty.
+        /// </summary>
+        public static string ValidationTitleNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationTitleNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The year must not be empty.
+        /// </summary>
+        public static string ValidationYearEmpty {
+            get {
+                return ResourceManager.GetString("ValidationYearEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The year is invalid.
+        /// </summary>
+        public static string ValidationYearInvalid {
+            get {
+                return ResourceManager.GetString("ValidationYearInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Year.
         /// </summary>
         public static string YearHeader {

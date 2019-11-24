@@ -234,6 +234,21 @@
   <data name="TitleHeader" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="ValidationImdbLinkInvalid" xml:space="preserve">
+    <value>The IMDb link is invalid</value>
+  </data>
+  <data name="ValidationPosterUrlInvalid" xml:space="preserve">
+    <value>The poster URL is invalid</value>
+  </data>
+  <data name="ValidationTitleNameEmpty" xml:space="preserve">
+    <value>The title must not be empty</value>
+  </data>
+  <data name="ValidationYearEmpty" xml:space="preserve">
+    <value>The year must not be empty</value>
+  </data>
+  <data name="ValidationYearInvalid" xml:space="preserve">
+    <value>The year is invalid</value>
+  </data>
   <data name="YearHeader" xml:space="preserve">
     <value>Year</value>
   </data>

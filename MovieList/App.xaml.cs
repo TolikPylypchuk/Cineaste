@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -93,6 +94,8 @@ namespace MovieList
 
             Locator.CurrentMutable.RegisterConstant(BlobCache.LocalMachine, CacheKey);
             Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, StoreKey);
+
+            Locator.CurrentMutable.RegisterConstant(Messages.ResourceManager, typeof(ResourceManager));
 
             Locator.CurrentMutable.Register(
                 () => new Settings(

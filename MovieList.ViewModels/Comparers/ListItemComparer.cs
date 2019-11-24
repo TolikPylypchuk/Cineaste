@@ -7,7 +7,8 @@ namespace MovieList.Comparers
 {
     public class ListItemComparer : NullsFirstComparer<ListItem>
     {
-        private ListItemComparer() { }
+        private ListItemComparer()
+        { }
 
         public static ListItemComparer Instance { get; } = new ListItemComparer();
 

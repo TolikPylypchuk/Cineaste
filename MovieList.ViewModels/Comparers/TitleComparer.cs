@@ -8,7 +8,8 @@ namespace MovieList.Comparers
     {
         private static readonly Regex NumberRegex = new Regex("([0-9]+)", RegexOptions.Compiled);
 
-        private TitleComparer() { }
+        private TitleComparer()
+        { }
 
         public static TitleComparer Instance { get; } = new TitleComparer();
 
