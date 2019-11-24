@@ -186,6 +186,9 @@
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="NewMovie" xml:space="preserve">
+    <value>New Movie</value>
+  </data>
   <data name="NoRecentlyOpenedFiles" xml:space="preserve">
     <value>No recently opened files</value>
   </data>

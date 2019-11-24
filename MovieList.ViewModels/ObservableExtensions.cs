@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+
+using DynamicData.Binding;
 
 namespace MovieList
 {
@@ -42,5 +45,10 @@ namespace MovieList
                 await observer();
                 return Unit.Default;
             }).Subscribe();
+
+        public static IObservable<bool> CanAddMore<T>(this ReadOnlyObservableCollection<T> collection, int maxCount)
+            => collection.ToObservableChangeSet()
+                .Count()
+                .Select(count => count <= maxCount);
     }
 }

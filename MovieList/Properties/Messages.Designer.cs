@@ -268,6 +268,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Movie.
+        /// </summary>
+        public static string NewMovie {
+            get {
+                return ResourceManager.GetString("NewMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No recently opened files.
         /// </summary>
         public static string NoRecentlyOpenedFiles {

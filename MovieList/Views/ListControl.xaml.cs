@@ -22,6 +22,12 @@ namespace MovieList.Views
 
                 this.OneWayBind(this.ViewModel, vm => vm.Items, v => v.List.ItemsSource)
                     .DisposeWith(disposables);
+
+                this.Bind(this.ViewModel, vm => vm.SelectedItem, v => v.List.SelectedItem)
+                    .DisposeWith(disposables);
+
+                this.OneWayBind(this.ViewModel, vm => vm.SideViewModel, v => v.SideViewHost.ViewModel)
+                    .DisposeWith(disposables);
             });
         }
     }

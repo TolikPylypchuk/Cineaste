@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -48,6 +49,8 @@ namespace MovieList.ViewModels.Forms
 
             this.CopyProperties();
 
+            this.FormTitle = this.CreateFormTitle();
+
             this.YearRule = this.CreateYearRule();
             this.ImdbLinkRule = this.CreateImdbLinkRule();
             this.PosterUrlRule = this.CreatePosterUrlRule();
@@ -57,17 +60,26 @@ namespace MovieList.ViewModels.Forms
             this.formChanged = new BehaviorSubject<bool>(false);
 
             var canSave = new BehaviorSubject<bool>(false);
-            var canDelete = Observable.Return(this.Movie.Id != default).Merge(this.Save.Select(_ => true));
+            var canDelete = new BehaviorSubject<bool>(false);
+
+            this.AddTitle = ReactiveCommand.Create(() => { }, this.Titles.CanAddMore(MaxTitleCount));
+            this.AddOriginalTitle = ReactiveCommand.Create(() => { }, this.OriginalTitles.CanAddMore(MaxTitleCount));
 
             this.Save = ReactiveCommand.Create(() => { }, canSave);
             this.Cancel = ReactiveCommand.Create(() => { }, this.formChanged);
             this.Close = ReactiveCommand.Create(() => true);
             this.Delete = ReactiveCommand.Create<Movie?>(() => null, canDelete);
 
+            Observable.Return(this.Movie.Id != default)
+                .Merge(this.Save.Select(_ => true))
+                .Subscribe(canDelete);
+
             this.InitializeChangeTracking(canSave);
         }
 
         public Movie Movie { get; }
+
+        public IObservable<string> FormTitle { get; }
 
         public ReadOnlyObservableCollection<TitleFormViewModel> Titles
             => this.titles;
@@ -93,12 +105,15 @@ namespace MovieList.ViewModels.Forms
         public IObservable<bool> FormChanged
             => this.formChanged.AsObservable();
 
-        public bool AreChangesPresent
+        public bool IsFormChanged
             => this.formChanged.Value;
 
         public ValidationHelper YearRule { get; }
         public ValidationHelper ImdbLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
+
+        public ReactiveCommand<Unit, Unit> AddTitle { get; }
+        public ReactiveCommand<Unit, Unit> AddOriginalTitle { get; }
 
         public ReactiveCommand<Unit, Unit> Save { get; }
         public ReactiveCommand<Unit, Unit> Cancel { get; }
@@ -118,6 +133,7 @@ namespace MovieList.ViewModels.Forms
                 .Filter(predicate)
                 .Sort(SortExpressionComparer<Title>.Ascending(title => title.Priority))
                 .Transform(title => new TitleFormViewModel(title, canDelete, this.resourceManager))
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out titles)
                 .DisposeMany()
                 .Subscribe();
@@ -139,6 +155,16 @@ namespace MovieList.ViewModels.Forms
                 .Where(year => year != this.scheduler.Now.Year)
                 .Subscribe(year => this.IsReleased = year < this.scheduler.Now.Year);
         }
+
+        private IObservable<string> CreateFormTitle()
+            => this.Titles.ToObservableChangeSet()
+                .AutoRefresh(vm => vm.Name)
+                .AutoRefresh(vm => vm.Priority)
+                .ToCollection()
+                .Select(vms => vms.OrderBy(vm => vm.Priority).Select(vm => vm.Name).FirstOrDefault())
+                .Select(title => this.Movie.Id != default || !String.IsNullOrWhiteSpace(title)
+                    ? title
+                    : this.resourceManager.GetString("NewMovie") ?? String.Empty);
 
         private ValidationHelper CreateYearRule()
             => this.ValidationRule(
@@ -165,6 +191,18 @@ namespace MovieList.ViewModels.Forms
 
         private void InitializeChangeTracking(BehaviorSubject<bool> canSave)
         {
+            var titlesChanged = this.Titles
+                .ToObservableChangeSet()
+                .AutoRefreshOnObservable(vm => vm.FormChanged)
+                .ToCollection()
+                .Select(vms => vms.Any(vm => vm.IsFormChanged));
+
+            var originalTitlesChanged = this.OriginalTitles
+                .ToObservableChangeSet()
+                .AutoRefreshOnObservable(vm => vm.FormChanged)
+                .ToCollection()
+                .Select(vms => vms.Any(vm => vm.IsFormChanged));
+
             var yearChanged = this.WhenAnyValue(vm => vm.Year)
                 .Select(year => year != this.Movie.Year.ToString());
 
@@ -184,7 +222,13 @@ namespace MovieList.ViewModels.Forms
             var falseWhenCancel = this.Cancel.Select(_ => false);
 
             Observable.CombineLatest(
-                    yearChanged, isWatchedChanged, isReleasedChanged, imdbLinkChanged, posterUrlChanged)
+                    titlesChanged,
+                    originalTitlesChanged,
+                    yearChanged,
+                    isWatchedChanged,
+                    isReleasedChanged,
+                    imdbLinkChanged,
+                    posterUrlChanged)
                 .AnyTrue()
                 .Merge(falseWhenSave)
                 .Merge(falseWhenCancel)

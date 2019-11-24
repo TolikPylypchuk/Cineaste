@@ -10,9 +10,9 @@ using MovieList.Comparers;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.ListItems;
-
+using MovieList.ViewModels.Forms;
 using ReactiveUI;
-
+using ReactiveUI.Fody.Helpers;
 using Splat;
 
 namespace MovieList.ViewModels
@@ -42,6 +42,15 @@ namespace MovieList.ViewModels
                 .Bind(out this.items)
                 .DisposeMany()
                 .Subscribe();
+
+            this.WhenAnyValue(vm => vm.SelectedItem)
+                .WhereNotNull()
+                .Select(vm => vm.Item)
+                .Subscribe(this.SelectItem);
+
+            this.WhenAnyValue(vm => vm.SelectedItem)
+                .Where(vm => vm == null)
+                .Subscribe(_ => this.SideViewModel = null);
         }
 
         public string FileName { get; }
@@ -49,11 +58,24 @@ namespace MovieList.ViewModels
         public ReadOnlyObservableCollection<ListItemViewModel> Items
             => this.items;
 
+        [Reactive]
+        public ListItemViewModel? SelectedItem { get; set; }
+
+        [Reactive]
+        public ReactiveObject? SideViewModel { get; private set; }
+
         private IEnumerable<ListItem> ToListItems(
             (IEnumerable<Movie> Movies, IEnumerable<Series> Series, IEnumerable<MovieSeries> MovieSeries) list)
             => list.Movies.Select(movie => new MovieListItem(movie))
                 .Cast<ListItem>()
                 .Concat(list.Series.Select(series => new SeriesListItem(series)))
                 .Concat(list.MovieSeries.Select(movieSeries => new MovieSeriesListItem(movieSeries)));
+
+        private void SelectItem(ListItem item)
+            => this.SideViewModel = item switch
+            {
+                MovieListItem movieItem => new MovieFormViewModel(movieItem.Movie),
+                _ => null
+            };
     }
 }

@@ -3,6 +3,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:rx="http://reactiveui.net"
                        xmlns:local="clr-namespace:MovieList.Views"
                        xmlns:resx="clr-namespace:MovieList.Properties"
                        mc:Ignorable="d">
@@ -54,5 +55,8 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </Grid>
+
+        <rx:ViewModelViewHost x:Name="SideViewHost" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="2" />
     </Grid>
 </local:ListControlBase>

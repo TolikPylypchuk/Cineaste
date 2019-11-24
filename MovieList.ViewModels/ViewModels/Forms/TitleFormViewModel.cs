@@ -13,6 +13,8 @@ using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
+using static MovieList.Data.Constants;
+
 namespace MovieList.ViewModels.Forms
 {
     public class TitleFormViewModel : ReactiveValidationObject<TitleFormViewModel>
@@ -23,6 +25,7 @@ namespace MovieList.ViewModels.Forms
         {
             this.Title = title;
             this.Name = title.Name;
+            this.Priority = title.Priority;
 
             resourceManager ??= Locator.Current.GetService<ResourceManager>();
 
@@ -35,15 +38,53 @@ namespace MovieList.ViewModels.Forms
 
             var canSave = new BehaviorSubject<bool>(false);
 
+            var canMoveUp = this.WhenAnyValue(vm => vm.Priority)
+                .Select(priority => priority >= MinTitleCount);
+
+            this.MoveUp = ReactiveCommand.Create(() => { this.Priority--; }, canMoveUp);
+
             this.Save = ReactiveCommand.Create(this.OnSave, canSave);
             this.Cancel = ReactiveCommand.Create(this.OnCancel, this.FormChanged);
             this.Delete = ReactiveCommand.Create(() => { }, canDelete);
 
+            this.InitializeChangeTracking(canSave);
+        }
+
+        public Title Title { get; }
+
+        [Reactive]
+        public string Name { get; set; }
+
+        [Reactive]
+        public int Priority { get; set; }
+
+        public IObservable<bool> FormChanged
+            => this.formChanged.AsObservable();
+
+        public bool IsFormChanged
+            => this.formChanged.Value;
+
+        public ValidationHelper NameRule { get; }
+
+        public ReactiveCommand<Unit, Unit> MoveUp { get; }
+
+        public ReactiveCommand<Unit, Unit> Save { get; }
+        public ReactiveCommand<Unit, Unit> Cancel { get; }
+        public ReactiveCommand<Unit, Unit> Delete { get; }
+
+        private void InitializeChangeTracking(BehaviorSubject<bool> canSave)
+        {
+            var nameChanged = this.WhenAnyValue(vm => vm.Name)
+                .Select(name => name != this.Title.Name);
+
+            var priorityChanged = this.WhenAnyValue(vm => vm.Priority)
+                .Select(priority => priority != this.Title.Priority);
+
             var falseWhenSave = this.Save.Select(_ => false);
             var falseWhenCancel = this.Cancel.Select(_ => false);
 
-            this.WhenAnyValue(vm => vm.Name)
-                .Select(name => name != this.Title.Name)
+            Observable.CombineLatest(nameChanged, priorityChanged)
+                .AnyTrue()
                 .Merge(falseWhenSave)
                 .Merge(falseWhenCancel)
                 .Subscribe(this.formChanged);
@@ -55,30 +96,17 @@ namespace MovieList.ViewModels.Forms
                 .Subscribe(canSave);
         }
 
-        public Title Title { get; }
-
-        [Reactive]
-        public string Name { get; set; }
-
-        public IObservable<bool> FormChanged
-            => this.formChanged.AsObservable();
-
-        public bool AreChangesPresent
-            => this.formChanged.Value;
-
-        public ValidationHelper NameRule { get; }
-
-        public ReactiveCommand<Unit, Unit> Save { get; }
-        public ReactiveCommand<Unit, Unit> Cancel { get; }
-        public ReactiveCommand<Unit, Unit> Delete { get; }
-
         private void OnSave()
         {
             this.Name = this.Name.Trim();
             this.Title.Name = this.Name;
+            this.Title.Priority = this.Priority;
         }
 
         private void OnCancel()
-            => this.Name = this.Title.Name;
+        {
+            this.Name = this.Title.Name;
+            this.Priority = this.Title.Priority;
+        }
     }
 }

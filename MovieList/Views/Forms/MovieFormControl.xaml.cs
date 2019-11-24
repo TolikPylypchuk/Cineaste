@@ -19,6 +19,13 @@ namespace MovieList.Views.Forms
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
+
+                this.ViewModel.FormTitle
+                    .BindTo(this, v => v.FormTitleTextBlock.Text)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(this.ViewModel, vm => vm.Close, v => v.CloseButton)
+                    .DisposeWith(disposables);
             });
         }
     }
