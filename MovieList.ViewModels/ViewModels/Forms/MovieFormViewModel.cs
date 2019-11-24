@@ -65,7 +65,7 @@ namespace MovieList.ViewModels.Forms
             this.AddTitle = ReactiveCommand.Create(() => { }, this.Titles.CanAddMore(MaxTitleCount));
             this.AddOriginalTitle = ReactiveCommand.Create(() => { }, this.OriginalTitles.CanAddMore(MaxTitleCount));
 
-            this.Save = ReactiveCommand.Create(() => { }, canSave);
+            this.Save = ReactiveCommand.Create(() => this.Movie, canSave);
             this.Cancel = ReactiveCommand.Create(() => { }, this.formChanged);
             this.Close = ReactiveCommand.Create(() => true);
             this.Delete = ReactiveCommand.Create<Movie?>(() => null, canDelete);
@@ -115,7 +115,7 @@ namespace MovieList.ViewModels.Forms
         public ReactiveCommand<Unit, Unit> AddTitle { get; }
         public ReactiveCommand<Unit, Unit> AddOriginalTitle { get; }
 
-        public ReactiveCommand<Unit, Unit> Save { get; }
+        public ReactiveCommand<Unit, Movie> Save { get; }
         public ReactiveCommand<Unit, Unit> Cancel { get; }
         public ReactiveCommand<Unit, bool> Close { get; }
         public ReactiveCommand<Unit, Movie?> Delete { get; }
