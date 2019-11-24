@@ -169,6 +169,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string Edit {
@@ -219,6 +228,24 @@ namespace MovieList.Properties {
         public static string HomePage {
             get {
                 return ResourceManager.GetString("HomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IMDb Link.
+        /// </summary>
+        public static string ImdbLink {
+            get {
+                return ResourceManager.GetString("ImdbLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string Kind {
+            get {
+                return ResourceManager.GetString("Kind", resourceCulture);
             }
         }
         
@@ -333,9 +360,27 @@ namespace MovieList.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Original Title.
         /// </summary>
+        public static string OriginalTitle {
+            get {
+                return ResourceManager.GetString("OriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original Title.
+        /// </summary>
         public static string OriginalTitleHeader {
             get {
                 return ResourceManager.GetString("OriginalTitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poster URL.
+        /// </summary>
+        public static string PosterUrl {
+            get {
+                return ResourceManager.GetString("PosterUrl", resourceCulture);
             }
         }
         
@@ -354,6 +399,15 @@ namespace MovieList.Properties {
         public static string RecentlyOpenedFiles {
             get {
                 return ResourceManager.GetString("RecentlyOpenedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Released.
+        /// </summary>
+        public static string Released {
+            get {
+                return ResourceManager.GetString("Released", resourceCulture);
             }
         }
         
@@ -394,7 +448,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save As ....
+        ///   Looks up a localized string similar to Save As....
         /// </summary>
         public static string SaveAs {
             get {
@@ -408,6 +462,15 @@ namespace MovieList.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         
@@ -462,6 +525,24 @@ namespace MovieList.Properties {
         public static string ValidationYearInvalid {
             get {
                 return ResourceManager.GetString("ValidationYearInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched.
+        /// </summary>
+        public static string Watched {
+            get {
+                return ResourceManager.GetString("Watched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string Year {
+            get {
+                return ResourceManager.GetString("Year", resourceCulture);
             }
         }
         

@@ -153,6 +153,9 @@
   <data name="DefaultSeasonTitle" xml:space="preserve">
     <value>Сезон #</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
@@ -170,6 +173,12 @@
   </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home Page</value>
+  </data>
+  <data name="ImdbLink" xml:space="preserve">
+    <value>IMDb Link</value>
+  </data>
+  <data name="Kind" xml:space="preserve">
+    <value>Kind</value>
   </data>
   <data name="MovieList" xml:space="preserve">
     <value>Movie List</value>
@@ -207,14 +216,23 @@
   <data name="OpenRecent" xml:space="preserve">
     <value>Open Recent...</value>
   </data>
+  <data name="OriginalTitle" xml:space="preserve">
+    <value>Original Title</value>
+  </data>
   <data name="OriginalTitleHeader" xml:space="preserve">
     <value>Original Title</value>
+  </data>
+  <data name="PosterUrl" xml:space="preserve">
+    <value>Poster URL</value>
   </data>
   <data name="Preferences" xml:space="preserve">
     <value>Preferences</value>
   </data>
   <data name="RecentlyOpenedFiles" xml:space="preserve">
     <value>Recently Opened Files</value>
+  </data>
+  <data name="Released" xml:space="preserve">
+    <value>Released</value>
   </data>
   <data name="RemoveFromList" xml:space="preserve">
     <value>Remove from list</value>
@@ -229,10 +247,13 @@
     <value>Save</value>
   </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>Save As ...</value>
+    <value>Save As...</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="TitleHeader" xml:space="preserve">
     <value>Title</value>
@@ -251,6 +272,12 @@
   </data>
   <data name="ValidationYearInvalid" xml:space="preserve">
     <value>The year is invalid</value>
+  </data>
+  <data name="Watched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
   </data>
   <data name="YearHeader" xml:space="preserve">
     <value>Year</value>

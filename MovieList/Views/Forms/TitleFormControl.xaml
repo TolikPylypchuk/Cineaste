@@ -8,11 +8,11 @@
                             mc:Ignorable="d">
     <DockPanel>
         <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
-                VerticalAlignment="Center" Padding="0" Width="15" Height="15" Margin="10,0,0,0">
-            <m:PackIcon Kind="WindowClose" Margin="0" Width="15" Height="15" />
+                VerticalAlignment="Center" Padding="0" Width="15" Height="15" Margin="8,0,0,0">
+            <m:PackIcon Kind="CloseCircleOutline" Margin="0" Width="15" Height="15" />
         </Button>
 
-        <TextBox x:Name="NameTextBox" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                 TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+        <TextBox x:Name="NameTextBox" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLines="10" Margin="0,8" />
     </DockPanel>
 </local:TitleFormControlBase>

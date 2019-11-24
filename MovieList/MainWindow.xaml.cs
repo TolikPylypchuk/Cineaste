@@ -86,7 +86,7 @@ namespace MovieList
                 .DisposeWith(disposables);
 
             this.Events().KeyUp
-                .Where(e => e.Key == Key.N && this.IsCtrlDown() && !this.IsAltDown() && !this.IsShiftDown())
+                .Where(e => e.Key == Key.N && this.IsDown(ModifierKeys.Control))
                 .Discard()
                 .InvokeCommand(this.ViewModel.HomePage.CreateFile)
                 .DisposeWith(disposables);
@@ -95,7 +95,7 @@ namespace MovieList
                 .DisposeWith(disposables);
 
             this.Events().KeyUp
-                .Where(e => e.Key == Key.O && this.IsCtrlDown() && !this.IsAltDown() && !this.IsShiftDown())
+                .Where(e => e.Key == Key.O && this.IsDown(ModifierKeys.Control))
                 .Select(e => (string?)null)
                 .InvokeCommand(this.ViewModel.HomePage.OpenFile)
                 .DisposeWith(disposables);
@@ -159,16 +159,7 @@ namespace MovieList
             this.Focus();
         }
 
-        private bool IsCtrlDown()
-            => this.IsAnyKeyDown(Key.LeftCtrl, Key.RightCtrl);
-
-        private bool IsAltDown()
-            => this.IsAnyKeyDown(Key.LeftAlt, Key.RightAlt);
-
-        private bool IsShiftDown()
-            => this.IsAnyKeyDown(Key.LeftShift, Key.RightShift);
-
-        private bool IsAnyKeyDown(params Key[] keys)
-            => keys.Any(Keyboard.IsKeyDown);
+        private bool IsDown(params ModifierKeys[] keys)
+            => Keyboard.Modifiers == keys.Aggregate((acc, key) => acc | key);
     }
 }

@@ -5,21 +5,72 @@
                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                             xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                             xmlns:local="clr-namespace:MovieList.Views.Forms"
+                            xmlns:resx="clr-namespace:MovieList.Properties"
+                            xmlns:controls="clr-namespace:MovieList.Controls"
                             mc:Ignorable="d" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
             <Button x:Name="CloseButton" DockPanel.Dock="Right" HorizontalAlignment="Right"
-                    Style="{StaticResource MaterialDesignIconButton}">
-                <m:PackIcon Kind="Close" />
+                    Style="{StaticResource MaterialDesignIconButton}" Padding="0" Width="25" Height="25">
+                <m:PackIcon Kind="Close" Margin="0" Width="25" Height="25" />
             </Button>
         </DockPanel>
 
-        <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" Style="{StaticResource MaterialDesignHeadlineTextBlock}" Margin="8" />
+        <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" Style="{StaticResource MaterialDesignHeadlineTextBlock}"
+                   Margin="16,8" TextWrapping="Wrap" />
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="16,8">
+                <Image x:Name="Poster" />
+
+                <TextBlock Margin="8" HorizontalAlignment="Center">
+                    <Hyperlink x:Name="ImdbLink" controls:Properties.IsExternal="True">
+                        <Hyperlink.Inlines>
+                            <Run x:Name="ImdbLinkRun" />
+                        </Hyperlink.Inlines>
+                    </Hyperlink>
+                </TextBlock>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <CheckBox x:Name="IsWatchedCheckBox" Content="{x:Static resx:Messages.Watched}" Margin="0,0,4,0" />
+                    <CheckBox x:Name="IsReleasedCheckBox" Content="{x:Static resx:Messages.Released}" Margin="4,0,0,0" />
+                </StackPanel>
+
+                <ItemsControl x:Name="Titles" />
+                <ItemsControl x:Name="OriginalTitles" />
+
+                <Grid Margin="0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="YearTextBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" m:HintAssist.Hint="{x:Static resx:Messages.Year}" />
+
+                    <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" Margin="8,0,0,0"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.Kind}" />
+                </Grid>
+
+                <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" m:HintAssist.Hint="{x:Static resx:Messages.ImdbLink}" />
+
+                <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
+            <Button x:Name="SaveButton" Content="{x:Static resx:Messages.Save}" Margin="8" HorizontalAlignment="Center" />
+            <Button x:Name="CancelButton" Content="{x:Static resx:Messages.Cancel}" Margin="8" HorizontalAlignment="Center"
+                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+        </StackPanel>
     </Grid>
 </local:MovieFormControlBase>

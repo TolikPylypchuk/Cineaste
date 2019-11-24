@@ -1,8 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 using DynamicData;
 
@@ -33,13 +33,13 @@ namespace MovieList.ViewModels
 
             this.kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
 
-            Observable.FromAsync(kindService.GetAllKindsAsync)
-                .Select(kinds => kinds.ToList())
+            Observable.FromAsync(() => Task.Run(kindService.GetAllKindsAsync))
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(kinds =>
                 {
-                    this.List = new ListViewModel(this.FileName, kinds);
-                    this.Content ??= this.List;
                     this.kindsSource.AddOrUpdate(kinds);
+                    this.List = new ListViewModel(this.FileName, this.Kinds);
+                    this.Content ??= this.List;
                 });
 
             this.SwitchToList = ReactiveCommand.Create(() => { this.Content = this.List; });

@@ -1,6 +1,5 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Windows;
 
 using MovieList.ViewModels;
 
@@ -26,13 +25,13 @@ namespace MovieList.Views
                     .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel.RecentFilesPresent)
-                    .Select(this.BoolToVisibility)
+                    .Select(value => value.ToVisibility())
                     .BindTo(this, v => v.RecentFilesList.Visibility)
                     .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel.RecentFilesPresent)
                     .Select(value => !value)
-                    .Select(this.BoolToVisibility)
+                    .Select(value => value.ToVisibility())
                     .BindTo(this, v => v.NoRecentlyOpenedFilesTextBlock.Visibility)
                     .DisposeWith(disposables);
 
@@ -40,7 +39,7 @@ namespace MovieList.Views
                     .DisposeWith(disposables);
 
                 this.ViewModel.RemoveSelectedRecentFiles.CanExecute
-                    .Select(this.BoolToVisibility)
+                    .Select(value => value.ToVisibility())
                     .BindTo(this, v => v.RemoveButton.Visibility);
 
                 this.BindCommand(this.ViewModel, vm => vm.CreateFile, v => v.CreateListButton)
@@ -50,8 +49,5 @@ namespace MovieList.Views
                     .DisposeWith(disposables);
             });
         }
-
-        private Visibility BoolToVisibility(bool value)
-            => value ? Visibility.Visible : Visibility.Collapsed;
     }
 }

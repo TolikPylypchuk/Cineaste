@@ -35,9 +35,14 @@ namespace MovieList.ViewModels.Forms
 
         private readonly BehaviorSubject<bool> formChanged;
 
-        public MovieFormViewModel(Movie movie, ResourceManager? resourceManager = null, IScheduler? scheduler = null)
+        public MovieFormViewModel(
+            Movie movie,
+            ReadOnlyObservableCollection<Kind> kinds,
+            ResourceManager? resourceManager = null,
+            IScheduler? scheduler = null)
         {
             this.Movie = movie;
+            this.Kinds = kinds;
 
             this.resourceManager = resourceManager ?? Locator.Current.GetService<ResourceManager>();
             this.scheduler = scheduler ?? Scheduler.Default;
@@ -74,12 +79,18 @@ namespace MovieList.ViewModels.Forms
                 .Merge(this.Save.Select(_ => true))
                 .Subscribe(canDelete);
 
+            this.Delete
+                .WhereNotNull()
+                .InvokeCommand(this.Close);
+
             this.InitializeChangeTracking(canSave);
         }
 
         public Movie Movie { get; }
 
         public IObservable<string> FormTitle { get; }
+
+        public ReadOnlyObservableCollection<Kind> Kinds { get; }
 
         public ReadOnlyObservableCollection<TitleFormViewModel> Titles
             => this.titles;
@@ -89,6 +100,9 @@ namespace MovieList.ViewModels.Forms
 
         [Reactive]
         public string Year { get; set; } = String.Empty;
+
+        [Reactive]
+        public Kind Kind { get; set; } = null!;
 
         [Reactive]
         public bool IsWatched { get; set; }
@@ -150,8 +164,8 @@ namespace MovieList.ViewModels.Forms
                 .Subscribe(_ => this.IsReleased = true);
 
             this.WhenAnyValue(vm => vm.Year)
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
+                .Where(_ => this.YearRule.IsValid)
+                .Select(Int32.Parse)
                 .Where(year => year != this.scheduler.Now.Year)
                 .Subscribe(year => this.IsReleased = year < this.scheduler.Now.Year);
         }
@@ -206,6 +220,9 @@ namespace MovieList.ViewModels.Forms
             var yearChanged = this.WhenAnyValue(vm => vm.Year)
                 .Select(year => year != this.Movie.Year.ToString());
 
+            var kindChanged = this.WhenAnyValue(vm => vm.Kind)
+                .Select(kind => kind != this.Movie.Kind);
+
             var isWatchedChanged = this.WhenAnyValue(vm => vm.IsWatched)
                 .Select(isWatched => isWatched != this.Movie.IsWatched);
 
@@ -225,6 +242,7 @@ namespace MovieList.ViewModels.Forms
                     titlesChanged,
                     originalTitlesChanged,
                     yearChanged,
+                    kindChanged,
                     isWatchedChanged,
                     isReleasedChanged,
                     imdbLinkChanged,
@@ -251,6 +269,7 @@ namespace MovieList.ViewModels.Forms
             this.titlesSource.AddRange(this.Movie.Titles);
 
             this.Year = this.Movie.Year.ToString();
+            this.Kind = this.Movie.Kind;
             this.IsWatched = this.Movie.IsWatched;
             this.IsReleased = this.Movie.IsReleased;
             this.ImdbLink = this.Movie.ImdbLink;

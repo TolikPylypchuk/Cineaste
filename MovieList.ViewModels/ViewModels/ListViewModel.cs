@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 using DynamicData;
 
@@ -12,8 +13,10 @@ using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.ListItems;
 using MovieList.ViewModels.Forms;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+
 using Splat;
 
 namespace MovieList.ViewModels
@@ -24,9 +27,13 @@ namespace MovieList.ViewModels
         private readonly ReadOnlyObservableCollection<ListItemViewModel> items;
         private CompositeDisposable sideViewModelSubscriptions;
 
-        public ListViewModel(string fileName, IList<Kind> kinds, IListService? listService = null)
+        public ListViewModel(
+            string fileName,
+            ReadOnlyObservableCollection<Kind> kinds,
+            IListService? listService = null)
         {
             this.FileName = fileName;
+            this.Kinds = kinds;
 
             listService ??= Locator.Current.GetService<IListService>(fileName);
 
@@ -35,7 +42,7 @@ namespace MovieList.ViewModels
             this.source = new SourceCache<ListItem, string>(item => item.Id);
 
             this.source.PopulateFrom(
-                Observable.FromAsync(() => listService.GetListAsync(kinds))
+                Observable.FromAsync(() => Task.Run(() => listService.GetListAsync(kinds)))
                     .Select(this.ToListItems));
 
             this.source.Connect()
@@ -48,20 +55,15 @@ namespace MovieList.ViewModels
                 .Subscribe();
 
             this.WhenAnyValue(vm => vm.SelectedItem)
-                .WhereNotNull()
-                .Select(vm => vm.Item)
-                .DistinctUntilChanged(item => item.Id)
                 .Subscribe(this.SelectItem);
-
-            this.WhenAnyValue(vm => vm.SelectedItem)
-                .Where(vm => vm == null)
-                .Subscribe(_ => this.SelectItem(null));
 
             this.WhenAnyValue(vm => vm.SideViewModel)
                 .Subscribe();
         }
 
         public string FileName { get; }
+
+        private ReadOnlyObservableCollection<Kind> Kinds { get; }
 
         public ReadOnlyObservableCollection<ListItemViewModel> Items
             => this.items;
@@ -79,21 +81,26 @@ namespace MovieList.ViewModels
                 .Concat(list.Series.Select(series => new SeriesListItem(series)))
                 .Concat(list.MovieSeries.Select(movieSeries => new MovieSeriesListItem(movieSeries)));
 
-        private void SelectItem(ListItem? item)
+        private void SelectItem(ListItemViewModel? vm)
         {
             this.sideViewModelSubscriptions.Dispose();
             this.sideViewModelSubscriptions = new CompositeDisposable();
 
-            this.SideViewModel = item switch
+            this.SideViewModel = vm?.Item switch
             {
                 MovieListItem movieItem => this.CreateMovieForm(movieItem.Movie),
                 _ => null
             };
+
+            if (this.SideViewModel == null)
+            {
+                this.SelectedItem = null;
+            }
         }
 
         private MovieFormViewModel CreateMovieForm(Movie movie)
         {
-            var form = new MovieFormViewModel(movie);
+            var form = new MovieFormViewModel(movie, this.Kinds);
 
             form.Save
                 .Select(m => new MovieListItem(m))
@@ -108,7 +115,6 @@ namespace MovieList.ViewModels
 
             form.Delete
                 .WhereNotNull()
-                .Do(_ => form.Close.Execute().Subscribe())
                 .Select(m => new MovieListItem(m))
                 .Subscribe(item => this.source.RemoveKey(item.Id))
                 .DisposeWith(this.sideViewModelSubscriptions);
