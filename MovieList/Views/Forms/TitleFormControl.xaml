@@ -5,6 +5,7 @@
                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                             xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                             xmlns:local="clr-namespace:MovieList.Views.Forms"
+                            xmlns:v="clr-namespace:MovieList.Views"
                             mc:Ignorable="d">
     <DockPanel>
         <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
@@ -13,6 +14,7 @@
         </Button>
 
         <TextBox x:Name="NameTextBox" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                 TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLines="10" Margin="0,8" />
+                 TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLines="10" Margin="0,8"
+                 v:Properties.TripleClickSelectAll="True" />
     </DockPanel>
 </local:TitleFormControlBase>

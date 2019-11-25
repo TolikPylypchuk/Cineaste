@@ -36,6 +36,12 @@ namespace MovieList.Views.Forms
                     .BindTo(this, v => v.FormTitleTextBlock.Text)
                     .DisposeWith(disposables);
 
+                this.BindCommand(this.ViewModel, vm => vm.Save, v => v.SaveButton)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(this.ViewModel, vm => vm.Cancel, v => v.CancelButton)
+                    .DisposeWith(disposables);
+
                 this.BindCommand(this.ViewModel, vm => vm.Close, v => v.CloseButton)
                     .DisposeWith(disposables);
 
@@ -106,7 +112,7 @@ namespace MovieList.Views.Forms
 
         private void LoadPoster()
         {
-            if (this.ViewModel.PosterUrl != null)
+            if (!String.IsNullOrEmpty(this.ViewModel.PosterUrl))
             {
                 this.cache.DownloadUrl(this.ViewModel.PosterUrl, TimeSpan.FromMinutes(5))
                     .Select(data => data.AsImage())

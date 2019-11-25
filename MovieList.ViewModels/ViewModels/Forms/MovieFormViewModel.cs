@@ -70,10 +70,10 @@ namespace MovieList.ViewModels.Forms
             this.AddTitle = ReactiveCommand.Create(() => { }, this.Titles.CanAddMore(MaxTitleCount));
             this.AddOriginalTitle = ReactiveCommand.Create(() => { }, this.OriginalTitles.CanAddMore(MaxTitleCount));
 
-            this.Save = ReactiveCommand.Create(() => this.Movie, canSave);
-            this.Cancel = ReactiveCommand.Create(() => { }, this.formChanged);
+            this.Save = ReactiveCommand.Create(this.OnSave, canSave);
+            this.Cancel = ReactiveCommand.Create(this.OnCancel, this.formChanged);
             this.Close = ReactiveCommand.Create(() => true);
-            this.Delete = ReactiveCommand.Create<Movie?>(() => null, canDelete);
+            this.Delete = ReactiveCommand.Create(this.OnDelete, canDelete);
 
             Observable.Return(this.Movie.Id != default)
                 .Merge(this.Save.Select(_ => true))
@@ -209,31 +209,39 @@ namespace MovieList.ViewModels.Forms
                 .ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.FormChanged)
                 .ToCollection()
-                .Select(vms => vms.Any(vm => vm.IsFormChanged));
+                .Select(vms => vms.Any(vm => vm.IsFormChanged))
+                .Do(changed => this.Log().Debug(changed ? "Titles are changed" : "Titles are unchanged"));
 
             var originalTitlesChanged = this.OriginalTitles
                 .ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.FormChanged)
                 .ToCollection()
-                .Select(vms => vms.Any(vm => vm.IsFormChanged));
+                .Select(vms => vms.Any(vm => vm.IsFormChanged))
+                .Do(changed => this.Log().Debug(changed ? "Original titles are changed" : "Original titles are unchanged"));
 
             var yearChanged = this.WhenAnyValue(vm => vm.Year)
-                .Select(year => year != this.Movie.Year.ToString());
+                .Select(year => year != this.Movie.Year.ToString())
+                .Do(changed => this.Log().Debug(changed ? "Year is changed" : "Year is unchanged"));
 
             var kindChanged = this.WhenAnyValue(vm => vm.Kind)
-                .Select(kind => kind != this.Movie.Kind);
+                .Select(kind => kind != this.Movie.Kind)
+                .Do(changed => this.Log().Debug(changed ? "Kind is changed" : "Kind is unchanged"));
 
             var isWatchedChanged = this.WhenAnyValue(vm => vm.IsWatched)
-                .Select(isWatched => isWatched != this.Movie.IsWatched);
+                .Select(isWatched => isWatched != this.Movie.IsWatched)
+                .Do(changed => this.Log().Debug(changed ? "Is watched is changed" : "Is watched is unchanged"));
 
             var isReleasedChanged = this.WhenAnyValue(vm => vm.IsReleased)
-                .Select(isReleased => isReleased != this.Movie.IsReleased);
+                .Select(isReleased => isReleased != this.Movie.IsReleased)
+                .Do(changed => this.Log().Debug(changed ? "Is released is changed" : "Is released is unchanged"));
 
             var imdbLinkChanged = this.WhenAnyValue(vm => vm.ImdbLink)
-                .Select(link => link != this.Movie.ImdbLink);
+                .Select(link => link.NullIfEmpty() != this.Movie.ImdbLink)
+                .Do(changed => this.Log().Debug(changed ? "IMDb link is changed" : "IMDb link is unchanged"));
 
             var posterUrlChanged = this.WhenAnyValue(vm => vm.PosterUrl)
-                .Select(url => url != this.Movie.PosterUrl);
+                .Select(url => url.NullIfEmpty() != this.Movie.PosterUrl)
+                .Do(changed => this.Log().Debug(changed ? "Poster URL is changed" : "Poster URL is unchanged"));
 
             var falseWhenSave = this.Save.Select(_ => false);
             var falseWhenCancel = this.Cancel.Select(_ => false);
@@ -262,6 +270,17 @@ namespace MovieList.ViewModels.Forms
                 .Merge(falseWhenCancel)
                 .Subscribe(canSave);
         }
+
+        private Movie OnSave()
+        {
+            return this.Movie;
+        }
+
+        private void OnCancel()
+            => this.CopyProperties();
+
+        private Movie? OnDelete()
+            => null;
 
         private void CopyProperties()
         {

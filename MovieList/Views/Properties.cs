@@ -5,7 +5,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
-namespace MovieList.Controls
+namespace MovieList.Views
 {
     public static class Properties
     {

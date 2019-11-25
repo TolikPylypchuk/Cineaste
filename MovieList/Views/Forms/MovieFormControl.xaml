@@ -5,9 +5,15 @@
                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                             xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                             xmlns:local="clr-namespace:MovieList.Views.Forms"
+                            xmlns:v="clr-namespace:MovieList.Views"
                             xmlns:resx="clr-namespace:MovieList.Properties"
-                            xmlns:controls="clr-namespace:MovieList.Controls"
-                            mc:Ignorable="d" >
+                            mc:Ignorable="d">
+    <local:MovieFormControlBase.Resources>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
+        </Style>
+    </local:MovieFormControlBase.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -31,7 +37,7 @@
                 <Image x:Name="Poster" />
 
                 <TextBlock Margin="8" HorizontalAlignment="Center">
-                    <Hyperlink x:Name="ImdbLink" controls:Properties.IsExternal="True">
+                    <Hyperlink x:Name="ImdbLink" v:Properties.IsExternal="True">
                         <Hyperlink.Inlines>
                             <Run x:Name="ImdbLinkRun" />
                         </Hyperlink.Inlines>
@@ -53,17 +59,17 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBox x:Name="YearTextBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" m:HintAssist.Hint="{x:Static resx:Messages.Year}" />
+                             m:HintAssist.Hint="{x:Static resx:Messages.Year}" />
 
                     <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" Margin="8,0,0,0"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.Kind}" />
                 </Grid>
 
                 <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" m:HintAssist.Hint="{x:Static resx:Messages.ImdbLink}" />
+                         m:HintAssist.Hint="{x:Static resx:Messages.ImdbLink}" />
 
                 <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
+                         m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
             </StackPanel>
         </ScrollViewer>
 

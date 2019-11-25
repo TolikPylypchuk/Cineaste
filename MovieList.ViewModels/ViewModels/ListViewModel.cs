@@ -21,7 +21,7 @@ using Splat;
 
 namespace MovieList.ViewModels
 {
-    public sealed class ListViewModel : ReactiveObject
+    public sealed class ListViewModel : ReactiveObject, IEnableLogger
     {
         private readonly ISourceCache<ListItem, string> source;
         private readonly ReadOnlyObservableCollection<ListItemViewModel> items;
@@ -56,9 +56,6 @@ namespace MovieList.ViewModels
 
             this.WhenAnyValue(vm => vm.SelectedItem)
                 .Subscribe(this.SelectItem);
-
-            this.WhenAnyValue(vm => vm.SideViewModel)
-                .Subscribe();
         }
 
         public string FileName { get; }
@@ -91,15 +88,12 @@ namespace MovieList.ViewModels
                 MovieListItem movieItem => this.CreateMovieForm(movieItem.Movie),
                 _ => null
             };
-
-            if (this.SideViewModel == null)
-            {
-                this.SelectedItem = null;
-            }
         }
 
         private MovieFormViewModel CreateMovieForm(Movie movie)
         {
+            this.Log().Debug("Creating a form for movie: {movie}");
+
             var form = new MovieFormViewModel(movie, this.Kinds);
 
             form.Save
@@ -110,7 +104,7 @@ namespace MovieList.ViewModels
             form.Close
                 .Where(closed => closed)
                 .Discard()
-                .Subscribe(() => this.SelectItem(null))
+                .Subscribe(() => this.SelectedItem = null)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Delete
