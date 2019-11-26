@@ -4,9 +4,9 @@
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
-                      xmlns:rx="http://reactiveui.net"
                       xmlns:local="clr-namespace:MovieList"
                       xmlns:resx="clr-namespace:MovieList.Properties"
+                      xmlns:v="clr-namespace:MovieList.Views"
                       mc:Ignorable="d" WindowStartupLocation="CenterScreen"
                       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                       TextElement.FontWeight="Regular" TextElement.FontSize="13"
@@ -86,7 +86,7 @@
 
             <TabControl x:Name="MainTabControl" Style="{StaticResource MaterialDesignTabControl}">
                 <TabControl.Resources>
-                    <Style TargetType="{x:Type rx:ViewModelViewHost}">
+                    <Style TargetType="{x:Type v:ViewModelViewHost}">
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <Setter Property="VerticalAlignment" Value="Stretch" />
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />

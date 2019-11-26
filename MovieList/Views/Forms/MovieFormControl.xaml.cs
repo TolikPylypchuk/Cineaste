@@ -16,13 +16,15 @@ namespace MovieList.Views.Forms
 {
     public abstract class MovieFormControlBase : ReactiveUserControl<MovieFormViewModel> { }
 
-    public partial class MovieFormControl : MovieFormControlBase
+    public partial class MovieFormControl : MovieFormControlBase, IEnableLogger
     {
         private readonly IBlobCache cache;
 
         public MovieFormControl()
         {
             this.InitializeComponent();
+
+            this.Log().Info("Creating the form");
 
             this.cache = Locator.Current.GetService<IBlobCache>(CacheKey);
 
