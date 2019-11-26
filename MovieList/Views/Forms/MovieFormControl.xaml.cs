@@ -16,15 +16,13 @@ namespace MovieList.Views.Forms
 {
     public abstract class MovieFormControlBase : ReactiveUserControl<MovieFormViewModel> { }
 
-    public partial class MovieFormControl : MovieFormControlBase, IEnableLogger
+    public partial class MovieFormControl : MovieFormControlBase
     {
         private readonly IBlobCache cache;
 
         public MovieFormControl()
         {
             this.InitializeComponent();
-
-            this.Log().Info("Creating the form");
 
             this.cache = Locator.Current.GetService<IBlobCache>(CacheKey);
 
@@ -77,7 +75,13 @@ namespace MovieList.Views.Forms
                 this.OneWayBind(this.ViewModel, vm => vm.Titles, v => v.Titles.ItemsSource)
                     .DisposeWith(disposables);
 
+                this.BindCommand(this.ViewModel, vm => vm.AddTitle, v => v.AddTitleButton)
+                    .DisposeWith(disposables);
+
                 this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(this.ViewModel, vm => vm.AddOriginalTitle, v => v.AddOriginalTitleButton)
                     .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Text)

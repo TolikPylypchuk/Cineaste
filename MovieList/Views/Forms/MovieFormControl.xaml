@@ -34,6 +34,17 @@
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel Margin="16,8">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
+                        <Setter Property="Margin" Value="8,0,0,0" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Width" Value="20" />
+                        <Setter Property="Height" Value="20" />
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </StackPanel.Resources>
+
                 <Image x:Name="Poster" />
 
                 <TextBlock Margin="8" HorizontalAlignment="Center">
@@ -50,7 +61,16 @@
                 </StackPanel>
 
                 <ItemsControl x:Name="Titles" />
+
+                <Button x:Name="AddTitleButton">
+                    <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
+                </Button>
+
                 <ItemsControl x:Name="OriginalTitles" />
+
+                <Button x:Name="AddOriginalTitleButton">
+                    <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
+                </Button>
 
                 <Grid Margin="0,8">
                     <Grid.ColumnDefinitions>

@@ -92,7 +92,7 @@ namespace MovieList.ViewModels
 
         private MovieFormViewModel CreateMovieForm(Movie movie)
         {
-            this.Log().Debug("Creating a form for movie: {movie}");
+            this.Log().Debug($"Creating a form for movie: {movie}");
 
             var form = new MovieFormViewModel(movie, this.Kinds);
 

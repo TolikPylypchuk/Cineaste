@@ -64,20 +64,22 @@ namespace MovieList.ViewModels.Forms
 
             this.formChanged = new BehaviorSubject<bool>(false);
 
-            var canSave = new BehaviorSubject<bool>(false);
-            var canDelete = new BehaviorSubject<bool>(false);
+            var canAddTitle = this.Titles.ToObservableChangeSet()
+                .Select(_ => this.Titles.Count < MaxTitleCount);
 
-            this.AddTitle = ReactiveCommand.Create(() => { }, this.Titles.CanAddMore(MaxTitleCount));
-            this.AddOriginalTitle = ReactiveCommand.Create(() => { }, this.OriginalTitles.CanAddMore(MaxTitleCount));
+            var canAddOriginalTitle = this.OriginalTitles.ToObservableChangeSet()
+                .Select(_ => this.OriginalTitles.Count < MaxTitleCount);
+
+            this.AddTitle = ReactiveCommand.Create(() => this.OnAddTitle(false), canAddTitle);
+            this.AddOriginalTitle = ReactiveCommand.Create(() => this.OnAddTitle(true), canAddOriginalTitle);
+
+            var canSave = new BehaviorSubject<bool>(false);
 
             this.Save = ReactiveCommand.Create(this.OnSave, canSave);
             this.Cancel = ReactiveCommand.Create(this.OnCancel, this.formChanged);
             this.Close = ReactiveCommand.Create(() => true);
-            this.Delete = ReactiveCommand.Create(this.OnDelete, canDelete);
-
-            Observable.Return(this.Movie.Id != default)
-                .Merge(this.Save.Select(_ => true))
-                .Subscribe(canDelete);
+            this.Delete = ReactiveCommand.Create(
+                    this.OnDelete, Observable.Return(this.Movie.Id != default).Merge(this.Save.Select(_ => true)));
 
             this.Delete
                 .WhereNotNull()
@@ -139,18 +141,26 @@ namespace MovieList.ViewModels.Forms
             out ReadOnlyObservableCollection<TitleFormViewModel> titles)
         {
             var canDelete = this.titlesSource.Connect()
-                .Filter(predicate)
-                .Count()
+                .Select(_ => this.titlesSource.Items.Where(predicate).Count())
                 .Select(count => count > 1);
 
             this.titlesSource.Connect()
                 .Filter(predicate)
                 .Sort(SortExpressionComparer<Title>.Ascending(title => title.Priority))
-                .Transform(title => new TitleFormViewModel(title, canDelete, this.resourceManager))
+                .Transform(title => this.CreateTitleForm(title, canDelete))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out titles)
                 .DisposeMany()
                 .Subscribe();
+        }
+
+        private TitleFormViewModel CreateTitleForm(Title title, IObservable<bool> canDelete)
+        {
+            var titleForm = new TitleFormViewModel(title, canDelete, this.resourceManager);
+
+            titleForm.Delete.Subscribe(() => this.titlesSource.Remove(title));
+
+            return titleForm;
         }
 
         private void InitializeValueDependencies()
@@ -209,14 +219,16 @@ namespace MovieList.ViewModels.Forms
                 .ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.FormChanged)
                 .ToCollection()
-                .Select(vms => vms.Any(vm => vm.IsFormChanged))
+                .Select(vms => vms.Any(vm => vm.IsFormChanged || vm.Title.Id == default) ||
+                               vms.Count != this.Movie.Titles.Count(title => !title.IsOriginal))
                 .Do(changed => this.Log().Debug(changed ? "Titles are changed" : "Titles are unchanged"));
 
             var originalTitlesChanged = this.OriginalTitles
                 .ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.FormChanged)
                 .ToCollection()
-                .Select(vms => vms.Any(vm => vm.IsFormChanged))
+                .Select(vms => vms.Any(vm => vm.IsFormChanged || vm.Title.Id == default) ||
+                               vms.Count != this.Movie.Titles.Count(title => title.IsOriginal))
                 .Do(changed => this.Log().Debug(changed ? "Original titles are changed" : "Original titles are unchanged"));
 
             var yearChanged = this.WhenAnyValue(vm => vm.Year)
@@ -270,6 +282,9 @@ namespace MovieList.ViewModels.Forms
                 .Merge(falseWhenCancel)
                 .Subscribe(canSave);
         }
+
+        private void OnAddTitle(bool isOriginal)
+            => this.titlesSource.Add(new Title { IsOriginal = isOriginal, Movie = this.Movie });
 
         private Movie OnSave()
         {
