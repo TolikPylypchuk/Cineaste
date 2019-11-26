@@ -10,6 +10,8 @@ using MovieList.ViewModels;
 
 using ReactiveUI;
 
+using ViewModelViewHost = MovieList.Views.ViewModelViewHost;
+
 namespace MovieList
 {
     public abstract class MainWindowBase : ReactiveWindow<MainViewModel> { }
