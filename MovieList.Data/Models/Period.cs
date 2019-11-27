@@ -18,6 +18,8 @@ namespace MovieList.Data.Models
         public string? PosterUrl { get; set; }
 
         public int SeasonId { get; set; }
+
+        [Write(false)]
         public Season Season { get; set; } = null!;
 
         public override string ToString()

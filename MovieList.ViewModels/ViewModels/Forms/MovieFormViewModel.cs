@@ -6,12 +6,13 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
-
+using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
 
 using MovieList.Data.Models;
-
+using MovieList.Data.Services;
+using MovieList.DialogModels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
@@ -27,6 +28,7 @@ namespace MovieList.ViewModels.Forms
     {
         private readonly ResourceManager resourceManager;
         private readonly IScheduler scheduler;
+        private readonly IMovieService movieService;
 
         private readonly SourceList<Title> titlesSource;
 
@@ -38,14 +40,17 @@ namespace MovieList.ViewModels.Forms
         public MovieFormViewModel(
             Movie movie,
             ReadOnlyObservableCollection<Kind> kinds,
+            string fileName,
             ResourceManager? resourceManager = null,
-            IScheduler? scheduler = null)
+            IScheduler? scheduler = null,
+            IMovieService? movieService = null)
         {
             this.Movie = movie;
             this.Kinds = kinds;
 
             this.resourceManager = resourceManager ?? Locator.Current.GetService<ResourceManager>();
             this.scheduler = scheduler ?? Scheduler.Default;
+            this.movieService = movieService ?? Locator.Current.GetService<IMovieService>(fileName);
 
             this.titlesSource = new SourceList<Title>();
 
@@ -75,14 +80,16 @@ namespace MovieList.ViewModels.Forms
 
             var canSave = new BehaviorSubject<bool>(false);
 
-            this.Save = ReactiveCommand.Create(this.OnSave, canSave);
+            this.Save = ReactiveCommand.CreateFromTask(this.OnSaveAsync, canSave);
             this.Cancel = ReactiveCommand.Create(this.OnCancel, this.formChanged);
             this.Close = ReactiveCommand.Create(() => true);
-            this.Delete = ReactiveCommand.Create(
-                    this.OnDelete, Observable.Return(this.Movie.Id != default).Merge(this.Save.Select(_ => true)));
+            this.Delete = ReactiveCommand.CreateFromTask(
+                    this.OnDeleteAsync,
+                    Observable.Return(this.Movie.Id != default).Merge(this.Save.Select(_ => true)));
 
             this.Delete
                 .WhereNotNull()
+                .Discard()
                 .InvokeCommand(this.Close);
 
             this.InitializeChangeTracking(canSave);
@@ -286,16 +293,44 @@ namespace MovieList.ViewModels.Forms
         private void OnAddTitle(bool isOriginal)
             => this.titlesSource.Add(new Title { IsOriginal = isOriginal, Movie = this.Movie });
 
-        private Movie OnSave()
+        private async Task<Movie> OnSaveAsync()
         {
+            foreach (var title in this.Titles.Union(this.OriginalTitles))
+            {
+                await title.Save.Execute();
+            }
+
+            this.Movie.Titles.Add(this.titlesSource.Items.Except(this.Movie.Titles));
+            this.Movie.Titles.Remove(this.Movie.Titles.Except(this.titlesSource.Items));
+
+            this.Movie.IsWatched = this.IsWatched;
+            this.Movie.IsReleased = this.IsReleased;
+            this.Movie.Year = Int32.Parse(this.Year);
+            this.Movie.Kind = this.Kind;
+            this.Movie.ImdbLink = this.ImdbLink;
+            this.Movie.PosterUrl = this.PosterUrl;
+
+            await this.movieService.SaveAsync(this.Movie);
+
             return this.Movie;
         }
 
         private void OnCancel()
             => this.CopyProperties();
 
-        private Movie? OnDelete()
-            => null;
+        private async Task<Movie?> OnDeleteAsync()
+        {
+            bool shouldDelete = await Dialog.Confirm.Handle(
+                new ConfirmationModel("DeleteMovieQuestion", "DeleteMovieTitle"));
+
+            if (shouldDelete)
+            {
+                await this.movieService.DeleteAsync(this.Movie);
+                return this.Movie;
+            }
+
+            return null;
+        }
 
         private void CopyProperties()
         {

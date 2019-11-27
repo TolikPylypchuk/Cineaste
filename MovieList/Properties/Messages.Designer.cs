@@ -178,6 +178,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the movie?.
+        /// </summary>
+        public static string DeleteMovieQuestion {
+            get {
+                return ResourceManager.GetString("DeleteMovieQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Movie.
+        /// </summary>
+        public static string DeleteMovieTitle {
+            get {
+                return ResourceManager.GetString("DeleteMovieTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string Edit {

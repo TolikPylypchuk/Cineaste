@@ -156,6 +156,12 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="DeleteMovieQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete the movie?</value>
+  </data>
+  <data name="DeleteMovieTitle" xml:space="preserve">
+    <value>Delete Movie</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>

@@ -16,18 +16,28 @@ namespace MovieList.Data.Models
         public bool IsOriginal { get; set; }
 
         public int? MovieId { get; set; }
+
+        [Write(false)]
         public Movie? Movie { get; set; }
 
         public int? SeriesId { get; set; }
+
+        [Write(false)]
         public Series? Series { get; set; }
 
         public int? SeasonId { get; set; }
+
+        [Write(false)]
         public Season? Season { get; set; }
 
         public int? SpecialEpisodeId { get; set; }
+
+        [Write(false)]
         public SpecialEpisode? SpecialEpisode { get; set; }
 
         public int? MovieSeriesId { get; set; }
+
+        [Write(false)]
         public MovieSeries? MovieSeries { get; set; }
 
         public static string ToString(IEnumerable<Title> titles)

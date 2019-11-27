@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 using DynamicData;
+using DynamicData.Kernel;
 
 using MovieList.Comparers;
 using MovieList.Data.Models;
@@ -47,6 +48,10 @@ namespace MovieList.ViewModels
 
             this.source.Connect()
                 .Filter(item => !String.IsNullOrEmpty(item.Title))
+                .AutoRefresh(item => item.DisplayNumber)
+                .AutoRefresh(item => item.Title)
+                .AutoRefresh(item => item.OriginalTitle)
+                .AutoRefresh(item => item.Year)
                 .Sort(ListItemComparer.Instance)
                 .Transform(item => new ListItemViewModel(item))
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -94,7 +99,7 @@ namespace MovieList.ViewModels
         {
             this.Log().Debug($"Creating a form for movie: {movie}");
 
-            var form = new MovieFormViewModel(movie, this.Kinds);
+            var form = new MovieFormViewModel(movie, this.Kinds, this.FileName);
 
             form.Save
                 .Select(m => new MovieListItem(m))
@@ -109,11 +114,48 @@ namespace MovieList.ViewModels
 
             form.Delete
                 .WhereNotNull()
-                .Select(m => new MovieListItem(m))
-                .Subscribe(item => this.source.RemoveKey(item.Id))
+                .Subscribe(this.RemoveMovie)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
+        }
+
+        private void RemoveMovie(Movie movie)
+        {
+            this.source.RemoveKey(new MovieListItem(movie).Id);
+
+            if (movie.Entry != null)
+            {
+                this.RemoveMovieSeriesEntry(movie.Entry);
+            }
+        }
+
+        private void RemoveMovieSeriesEntry(MovieSeriesEntry movieSeriesEntry)
+        {
+            var movieSeries = movieSeriesEntry.ParentSeries;
+
+            foreach (var entry in movieSeries.Entries
+                .Where(entry => entry.SequenceNumber >= movieSeriesEntry.SequenceNumber))
+            {
+                var item = entry.Movie != null
+                    ? new MovieListItem(entry.Movie)
+                    : entry.Series != null
+                        ? (ListItem)new SeriesListItem(entry.Series)
+                        : new MovieSeriesListItem(entry.MovieSeries!);
+
+                this.source.Lookup(item.Id)
+                    .IfHasValue(sourceItem => sourceItem.DisplayNumber = entry.GetDisplayNumber());
+            }
+
+            if (movieSeries.Entries.Count == 0 && movieSeries.ShowTitles)
+            {
+                this.source.RemoveKey(new MovieSeriesListItem(movieSeries).Id);
+
+                if (movieSeries.Entry != null)
+                {
+                    this.RemoveMovieSeriesEntry(movieSeries.Entry);
+                }
+            }
         }
     }
 }

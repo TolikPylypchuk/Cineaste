@@ -13,12 +13,14 @@ namespace MovieList.Data.Models
 
         public string? PosterUrl { get; set; }
 
+        [Write(false)]
         public MovieSeriesEntry? Entry { get; set; }
 
         public IList<MovieSeriesEntry> Entries { get; set; } = new List<MovieSeriesEntry>();
 
         public IList<Title> Titles { get; set; } = new List<Title>();
 
+        [Computed]
         public IList<Title> ActualTitles
             => this.Titles.Count != 0
                 ? this.Titles

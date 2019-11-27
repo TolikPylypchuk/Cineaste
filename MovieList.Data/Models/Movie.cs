@@ -17,8 +17,11 @@ namespace MovieList.Data.Models
         public string? PosterUrl { get; set; }
 
         public int KindId { get; }
+
+        [Write(false)]
         public Kind Kind { get; set; } = null!;
 
+        [Write(false)]
         public MovieSeriesEntry? Entry { get; set; }
 
         public IList<Title> Titles { get; set; } = new List<Title>();
