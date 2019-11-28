@@ -7,12 +7,14 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 using System.Threading.Tasks;
+
 using DynamicData;
 using DynamicData.Binding;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.DialogModels;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;

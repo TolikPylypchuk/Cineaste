@@ -16,7 +16,7 @@ namespace MovieList.Data.Models
         public string? ImdbLink { get; set; }
         public string? PosterUrl { get; set; }
 
-        public int KindId { get; }
+        public int KindId { get; set; }
 
         [Write(false)]
         public Kind Kind { get; set; } = null!;
@@ -24,6 +24,7 @@ namespace MovieList.Data.Models
         [Write(false)]
         public MovieSeriesEntry? Entry { get; set; }
 
+        [Write(false)]
         public IList<Title> Titles { get; set; } = new List<Title>();
 
         [Computed]

@@ -19,7 +19,10 @@ namespace MovieList.Data.Models
         public string ColorForNotReleasedMovie { get; set; } = String.Empty;
         public string ColorForNotReleasedSeries { get; set; } = String.Empty;
 
+        [Write(false)]
         public IList<Movie> Movies { get; set; } = new List<Movie>();
+
+        [Write(false)]
         public IList<Series> Series { get; set; } = new List<Series>();
 
         public override string ToString()

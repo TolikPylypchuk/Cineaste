@@ -16,8 +16,10 @@ namespace MovieList.Data.Models
         [Write(false)]
         public MovieSeriesEntry? Entry { get; set; }
 
+        [Write(false)]
         public IList<MovieSeriesEntry> Entries { get; set; } = new List<MovieSeriesEntry>();
 
+        [Write(false)]
         public IList<Title> Titles { get; set; } = new List<Title>();
 
         [Computed]

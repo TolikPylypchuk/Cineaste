@@ -26,6 +26,7 @@ namespace MovieList.ViewModels
     {
         private readonly ISourceCache<ListItem, string> source;
         private readonly ReadOnlyObservableCollection<ListItemViewModel> items;
+
         private CompositeDisposable sideViewModelSubscriptions;
 
         public ListViewModel(
@@ -102,8 +103,7 @@ namespace MovieList.ViewModels
             var form = new MovieFormViewModel(movie, this.Kinds, this.FileName);
 
             form.Save
-                .Select(m => new MovieListItem(m))
-                .Subscribe(this.source.AddOrUpdate)
+                .Subscribe(this.AddOrUpdateMovie)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Close
@@ -118,6 +118,20 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
+        }
+
+        private void AddOrUpdateMovie(Movie movie)
+        {
+            var item = new MovieListItem(movie);
+            var sourceItem = this.source.Lookup(item.Id).ValueOrDefault();
+
+            if (sourceItem != null)
+            {
+                sourceItem.Refresh();
+            } else
+            {
+                this.source.AddOrUpdate(item);
+            }
         }
 
         private void RemoveMovie(Movie movie)
@@ -143,8 +157,7 @@ namespace MovieList.ViewModels
                         ? (ListItem)new SeriesListItem(entry.Series)
                         : new MovieSeriesListItem(entry.MovieSeries!);
 
-                this.source.Lookup(item.Id)
-                    .IfHasValue(sourceItem => sourceItem.DisplayNumber = entry.GetDisplayNumber());
+                this.source.Lookup(item.Id).IfHasValue(sourceItem => sourceItem.Refresh());
             }
 
             if (movieSeries.Entries.Count == 0 && movieSeries.ShowTitles)

@@ -16,7 +16,13 @@ namespace MovieList.Data
                     (kind, moviesWithKind) =>
                     {
                         kind.Movies = moviesWithKind.ToList();
-                        kind.Movies.ForEach(movie => movie.Kind = kind);
+
+                        foreach (var movie in kind.Movies)
+                        {
+                            movie.Kind = kind;
+                            movie.KindId = kind.Id;
+                        }
+
                         return kind.Movies;
                     })
                 .SelectMany(m => m);
@@ -29,7 +35,13 @@ namespace MovieList.Data
                 (movie, movieTitles) =>
                 {
                     movie.Titles = movieTitles.ToList();
-                    movie.Titles.ForEach(title => title.Movie = movie);
+
+                    foreach (var title in movie.Titles)
+                    {
+                        title.Movie = movie;
+                        title.MovieId = movie.Id;
+                    }
+
                     return movie;
                 });
 
@@ -46,6 +58,7 @@ namespace MovieList.Data
                     {
                         movie.Entry = entry;
                         entry.Movie = movie;
+                        entry.MovieId = movie.Id;
                     }
 
                     return movie;
@@ -60,7 +73,13 @@ namespace MovieList.Data
                     (kind, seriesWithKind) =>
                     {
                         kind.Series = seriesWithKind.ToList();
-                        kind.Series.ForEach(movie => movie.Kind = kind);
+
+                        foreach (var series in kind.Series)
+                        {
+                            series.Kind = kind;
+                            series.KindId = kind.Id;
+                        }
+
                         return kind.Series;
                     })
                 .SelectMany(s => s);
@@ -73,7 +92,13 @@ namespace MovieList.Data
                 (series, seriesTitles) =>
                 {
                     series.Titles = seriesTitles.ToList();
-                    series.Titles.ForEach(title => title.Series = series);
+
+                    foreach (var title in series.Titles)
+                    {
+                        title.Series = series;
+                        title.SeriesId = series.Id;
+                    }
+
                     return series;
                 });
 
@@ -85,7 +110,13 @@ namespace MovieList.Data
                 (series, seriesSeasons) =>
                 {
                     series.Seasons = seriesSeasons.ToList();
-                    series.Seasons.ForEach(season => season.Series = series);
+
+                    foreach (var season in series.Seasons)
+                    {
+                        season.Series = series;
+                        season.SeriesId = series.Id;
+                    }
+
                     return series;
                 });
 
@@ -97,7 +128,13 @@ namespace MovieList.Data
                 (series, seriesEpisodes) =>
                 {
                     series.SpecialEpisodes = seriesEpisodes.ToList();
-                    series.SpecialEpisodes.ForEach(episode => episode.Series = series);
+
+                    foreach (var episode in series.SpecialEpisodes)
+                    {
+                        episode.Series = series;
+                        episode.SeriesId = series.Id;
+                    }
+
                     return series;
                 });
 
@@ -114,6 +151,7 @@ namespace MovieList.Data
                     {
                         series.Entry = entry;
                         entry.Series = series;
+                        entry.SeriesId = series.Id;
                     }
 
                     return series;
@@ -127,7 +165,13 @@ namespace MovieList.Data
                 (season, seasonPeriods) =>
                 {
                     season.Periods = seasonPeriods.ToList();
-                    season.Periods.ForEach(period => period.Season = season);
+
+                    foreach (var period in season.Periods)
+                    {
+                        period.Season = season;
+                        period.SeasonId = season.Id;
+                    }
+
                     return season;
                 });
 
@@ -139,7 +183,13 @@ namespace MovieList.Data
                 (season, seasonTitles) =>
                 {
                     season.Titles = seasonTitles.ToList();
-                    season.Titles.ForEach(title => title.Season = season);
+
+                    foreach (var title in season.Titles)
+                    {
+                        title.Season = season;
+                        title.SeasonId = season.Id;
+                    }
+
                     return season;
                 });
 
@@ -151,7 +201,13 @@ namespace MovieList.Data
                 (episode, episodeTitles) =>
                 {
                     episode.Titles = episodeTitles.ToList();
-                    episode.Titles.ForEach(title => title.SpecialEpisode = episode);
+
+                    foreach (var title in episode.Titles)
+                    {
+                        title.SpecialEpisode = episode;
+                        title.SpecialEpisodeId = episode.Id;
+                    }
+
                     return episode;
                 });
 
@@ -163,7 +219,13 @@ namespace MovieList.Data
                 (movieSeries, movieSeriesTitles) =>
                 {
                     movieSeries.Titles = movieSeriesTitles.ToList();
-                    movieSeries.Titles.ForEach(title => title.MovieSeries = movieSeries);
+
+                    foreach (var title in movieSeries.Titles)
+                    {
+                        title.MovieSeries = movieSeries;
+                        title.MovieSeriesId = movieSeries.Id;
+                    }
+
                     return movieSeries;
                 });
 
@@ -181,6 +243,7 @@ namespace MovieList.Data
                         {
                             movieSeries.Entry = entry;
                             entry.MovieSeries = movieSeries;
+                            entry.MovieSeriesId = movieSeries.Id;
                         }
 
                         return movieSeries;
@@ -192,7 +255,13 @@ namespace MovieList.Data
                     (movieSeries, entriesOfMovieSeries) =>
                     {
                         movieSeries.Entries = entriesOfMovieSeries.ToList();
-                        movieSeries.Entries.ForEach(entry => entry.ParentSeries = movieSeries);
+
+                        foreach (var entry in movieSeries.Entries)
+                        {
+                            entry.ParentSeries = movieSeries;
+                            entry.ParentSeriesId = movieSeries.Id;
+                        }
+
                         return movieSeries;
                     });
     }

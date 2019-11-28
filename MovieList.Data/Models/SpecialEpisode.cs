@@ -26,6 +26,7 @@ namespace MovieList.Data.Models
         [Write(false)]
         public Series Series { get; set; } = null!;
 
+        [Write(false)]
         public IList<Title> Titles { get; set; } = new List<Title>();
 
         [Computed]
