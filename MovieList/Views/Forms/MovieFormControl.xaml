@@ -47,7 +47,7 @@
 
                 <Image x:Name="Poster" />
 
-                <TextBlock Margin="8" HorizontalAlignment="Center">
+                <TextBlock x:Name="ImdbLinkTextBlock" Margin="0,8,0,0" HorizontalAlignment="Center">
                     <Hyperlink x:Name="ImdbLink" v:Properties.IsExternal="True">
                         <Hyperlink.Inlines>
                             <Run x:Name="ImdbLinkRun" />
@@ -55,7 +55,7 @@
                     </Hyperlink>
                 </TextBlock>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
                     <CheckBox x:Name="IsWatchedCheckBox" Content="{x:Static resx:Messages.Watched}" Margin="0,0,4,0" />
                     <CheckBox x:Name="IsReleasedCheckBox" Content="{x:Static resx:Messages.Released}" Margin="4,0,0,0" />
                 </StackPanel>

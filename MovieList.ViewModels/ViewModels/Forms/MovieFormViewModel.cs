@@ -83,16 +83,11 @@ namespace MovieList.ViewModels.Forms
             var canSave = new BehaviorSubject<bool>(false);
 
             this.Save = ReactiveCommand.CreateFromTask(this.OnSaveAsync, canSave);
-            this.Cancel = ReactiveCommand.Create(this.OnCancel, this.formChanged);
-            this.Close = ReactiveCommand.Create(() => true);
+            this.Cancel = ReactiveCommand.Create(this.CopyProperties, this.formChanged);
+            this.Close = ReactiveCommand.Create(() => { });
             this.Delete = ReactiveCommand.CreateFromTask(
                     this.OnDeleteAsync,
                     Observable.Return(this.Movie.Id != default).Merge(this.Save.Select(_ => true)));
-
-            this.Delete
-                .WhereNotNull()
-                .Discard()
-                .InvokeCommand(this.Close);
 
             this.InitializeChangeTracking(canSave);
         }
@@ -142,7 +137,7 @@ namespace MovieList.ViewModels.Forms
 
         public ReactiveCommand<Unit, Movie> Save { get; }
         public ReactiveCommand<Unit, Unit> Cancel { get; }
-        public ReactiveCommand<Unit, bool> Close { get; }
+        public ReactiveCommand<Unit, Unit> Close { get; }
         public ReactiveCommand<Unit, Movie?> Delete { get; }
 
         private void InitializeTitles(
@@ -309,21 +304,17 @@ namespace MovieList.ViewModels.Forms
             this.Movie.IsReleased = this.IsReleased;
             this.Movie.Year = Int32.Parse(this.Year);
             this.Movie.Kind = this.Kind;
-            this.Movie.ImdbLink = this.ImdbLink;
-            this.Movie.PosterUrl = this.PosterUrl;
+            this.Movie.ImdbLink = this.ImdbLink.NullIfEmpty();
+            this.Movie.PosterUrl = this.PosterUrl.NullIfEmpty();
 
             await this.movieService.SaveAsync(this.Movie);
 
             return this.Movie;
         }
 
-        private void OnCancel()
-            => this.CopyProperties();
-
         private async Task<Movie?> OnDeleteAsync()
         {
-            bool shouldDelete = await Dialog.Confirm.Handle(
-                new ConfirmationModel("DeleteMovieQuestion", "DeleteMovieTitle"));
+            bool shouldDelete = await Dialog.Confirm.Handle(new ConfirmationModel("DeleteMovie"));
 
             if (shouldDelete)
             {

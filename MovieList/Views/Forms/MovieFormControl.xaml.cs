@@ -105,6 +105,12 @@ namespace MovieList.Views.Forms
 
             this.OneWayBind(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLinkRun.Text)
                 .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.ImdbLink)
+                .Select(link => !String.IsNullOrWhiteSpace(link))
+                .Select(isEmpty => isEmpty.ToVisibility())
+                .BindTo(this, v => v.ImdbLinkTextBlock.Visibility)
+                .DisposeWith(disposables);
         }
 
         private void BindFields(CompositeDisposable disposables)
@@ -112,8 +118,16 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.Titles, v => v.Titles.ItemsSource)
                 .DisposeWith(disposables);
 
+            this.ViewModel.AddTitle.CanExecute
+                .Select(canAddTitle => canAddTitle.ToVisibility())
+                .BindTo(this, v => v.AddTitleButton.Visibility);
+
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
                 .DisposeWith(disposables);
+
+            this.ViewModel.AddOriginalTitle.CanExecute
+                .Select(canAddOriginalTitle => canAddOriginalTitle.ToVisibility())
+                .BindTo(this, v => v.AddOriginalTitleButton.Visibility);
 
             this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Text)
                 .DisposeWith(disposables);

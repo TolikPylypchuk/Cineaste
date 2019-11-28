@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 using DynamicData;
@@ -12,6 +14,7 @@ using DynamicData.Kernel;
 using MovieList.Comparers;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
+using MovieList.DialogModels;
 using MovieList.ListItems;
 using MovieList.ViewModels.Forms;
 
@@ -26,6 +29,7 @@ namespace MovieList.ViewModels
     {
         private readonly ISourceCache<ListItem, string> source;
         private readonly ReadOnlyObservableCollection<ListItemViewModel> items;
+        private readonly Subject<Unit> cancelSelection = new Subject<Unit>();
 
         private CompositeDisposable sideViewModelSubscriptions;
 
@@ -60,8 +64,7 @@ namespace MovieList.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
-            this.WhenAnyValue(vm => vm.SelectedItem)
-                .Subscribe(this.SelectItem);
+            this.SelectItem = ReactiveCommand.CreateFromTask<ListItemViewModel?, bool>(this.OnSelectItemAsync);
         }
 
         public string FileName { get; }
@@ -77,6 +80,11 @@ namespace MovieList.ViewModels
         [Reactive]
         public ReactiveObject? SideViewModel { get; private set; }
 
+        public IObservable<Unit> CancelSelection
+            => this.cancelSelection.AsObservable();
+
+        public ReactiveCommand<ListItemViewModel?, bool> SelectItem { get; }
+
         private IEnumerable<ListItem> ToListItems(
             (IEnumerable<Movie> Movies, IEnumerable<Series> Series, IEnumerable<MovieSeries> MovieSeries) list)
             => list.Movies.Select(movie => new MovieListItem(movie))
@@ -84,16 +92,35 @@ namespace MovieList.ViewModels
                 .Concat(list.Series.Select(series => new SeriesListItem(series)))
                 .Concat(list.MovieSeries.Select(movieSeries => new MovieSeriesListItem(movieSeries)));
 
-        private void SelectItem(ListItemViewModel? vm)
+        private async Task<bool> OnSelectItemAsync(ListItemViewModel? vm)
         {
+            bool canSelect = true;
+
+            if (this.SideViewModel is MovieFormViewModel movieForm &&
+                this.source.Lookup(new MovieListItem(movieForm.Movie).Id).HasValue &&
+                movieForm.IsFormChanged)
+            {
+                canSelect = await Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"));
+            }
+
+            if (!canSelect)
+            {
+                this.cancelSelection.OnNext(Unit.Default);
+                return false;
+            }
+
             this.sideViewModelSubscriptions.Dispose();
             this.sideViewModelSubscriptions = new CompositeDisposable();
+
+            this.SelectedItem = vm;
 
             this.SideViewModel = vm?.Item switch
             {
                 MovieListItem movieItem => this.CreateMovieForm(movieItem.Movie),
                 _ => null
             };
+
+            return true;
         }
 
         private MovieFormViewModel CreateMovieForm(Movie movie)
@@ -107,15 +134,18 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Close
-                .Where(closed => closed)
-                .Discard()
-                .Subscribe(() => this.SelectedItem = null)
+                .SubscribeAsync(async () => await this.SelectItem.Execute())
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Delete
                 .WhereNotNull()
                 .Subscribe(this.RemoveMovie)
                 .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Delete
+                .WhereNotNull()
+                .Discard()
+                .InvokeCommand(form.Close);
 
             return form;
         }

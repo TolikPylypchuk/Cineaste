@@ -4,6 +4,13 @@ namespace MovieList.DialogModels
 {
     public sealed class ConfirmationModel : DialogModelBase
     {
+        public const string MessageSuffix = "Question";
+        public const string TitleSuffix = "Title";
+
+        public ConfirmationModel(string messageAndTitle)
+            : this(messageAndTitle + MessageSuffix, messageAndTitle + TitleSuffix)
+        { }
+
         public ConfirmationModel(
             string message,
             string title,

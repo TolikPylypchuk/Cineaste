@@ -115,6 +115,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are unsaved changes. Are you sure you want to close the form?.
+        /// </summary>
+        public static string CloseFormQuestion {
+            get {
+                return ResourceManager.GetString("CloseFormQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Form.
+        /// </summary>
+        public static string CloseFormTitle {
+            get {
+                return ResourceManager.GetString("CloseFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {

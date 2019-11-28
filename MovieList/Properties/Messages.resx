@@ -135,6 +135,12 @@
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="CloseFormQuestion" xml:space="preserve">
+    <value>There are unsaved changes. Are you sure you want to close the form?</value>
+  </data>
+  <data name="CloseFormTitle" xml:space="preserve">
+    <value>Close Form</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
