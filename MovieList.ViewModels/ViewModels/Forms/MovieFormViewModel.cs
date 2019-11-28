@@ -162,7 +162,14 @@ namespace MovieList.ViewModels.Forms
         {
             var titleForm = new TitleFormViewModel(title, canDelete, this.resourceManager);
 
-            titleForm.Delete.Subscribe(() => this.titlesSource.Remove(title));
+            titleForm.Delete.Subscribe(() =>
+            {
+                this.titlesSource.Remove(title);
+
+                (!title.IsOriginal ? this.Titles : this.OriginalTitles)
+                    .Where(t => t.Priority > title.Priority)
+                    .ForEach(t => t.Priority--);
+            });
 
             return titleForm;
         }
@@ -288,7 +295,12 @@ namespace MovieList.ViewModels.Forms
         }
 
         private void OnAddTitle(bool isOriginal)
-            => this.titlesSource.Add(new Title { IsOriginal = isOriginal, Movie = this.Movie });
+            => this.titlesSource.Add(new Title
+            {
+                IsOriginal = isOriginal,
+                Movie = this.Movie,
+                Priority = !isOriginal ? this.Titles.Count + 1 : this.OriginalTitles.Count + 1
+            });
 
         private async Task<Movie> OnSaveAsync()
         {

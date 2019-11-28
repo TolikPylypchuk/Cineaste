@@ -88,6 +88,33 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ADD NEW MINISERIES.
+        /// </summary>
+        public static string AddNewMiniseries {
+            get {
+                return ResourceManager.GetString("AddNewMiniseries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ADD NEW MOVIE.
+        /// </summary>
+        public static string AddNewMovie {
+            get {
+                return ResourceManager.GetString("AddNewMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ADD NEW SERIES.
+        /// </summary>
+        public static string AddNewSeries {
+            get {
+                return ResourceManager.GetString("AddNewSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All FIles.
         /// </summary>
         public static string AllExtensionsDescription {

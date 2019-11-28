@@ -65,6 +65,8 @@ namespace MovieList.ViewModels
                 .Subscribe();
 
             this.SelectItem = ReactiveCommand.CreateFromTask<ListItemViewModel?, bool>(this.OnSelectItemAsync);
+
+            this.SideViewModel = new NewItemViewModel();
         }
 
         public string FileName { get; }
@@ -78,7 +80,7 @@ namespace MovieList.ViewModels
         public ListItemViewModel? SelectedItem { get; set; }
 
         [Reactive]
-        public ReactiveObject? SideViewModel { get; private set; }
+        public ReactiveObject SideViewModel { get; private set; }
 
         public IObservable<Unit> CancelSelection
             => this.cancelSelection.AsObservable();
@@ -117,13 +119,13 @@ namespace MovieList.ViewModels
             this.SideViewModel = vm?.Item switch
             {
                 MovieListItem movieItem => this.CreateMovieForm(movieItem.Movie),
-                _ => null
+                _ => new NewItemViewModel()
             };
 
             return true;
         }
 
-        private MovieFormViewModel CreateMovieForm(Movie movie)
+        private ReactiveObject CreateMovieForm(Movie movie)
         {
             this.Log().Debug($"Creating a form for movie: {movie}");
 

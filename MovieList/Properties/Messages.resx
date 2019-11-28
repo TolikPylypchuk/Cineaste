@@ -126,6 +126,15 @@
   <data name="AboutTitle" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="AddNewMiniseries" xml:space="preserve">
+    <value>ADD NEW MINISERIES</value>
+  </data>
+  <data name="AddNewMovie" xml:space="preserve">
+    <value>ADD NEW MOVIE</value>
+  </data>
+  <data name="AddNewSeries" xml:space="preserve">
+    <value>ADD NEW SERIES</value>
+  </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All FIles</value>
   </data>
