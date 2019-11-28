@@ -98,7 +98,7 @@ namespace MovieList.ViewModels.Forms
 
         private void OnSave()
         {
-            this.Name = this.Name.Trim();
+            this.Name = this.Name.Trim().Replace(" - ", " – ");
             this.Title.Name = this.Name;
             this.Title.Priority = this.Priority;
         }
