@@ -34,15 +34,16 @@ namespace MovieList.ViewModels
             this.kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
 
             this.kindsSource.Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.kinds)
                 .DisposeMany()
                 .Subscribe();
 
             Observable.FromAsync(() => Task.Run(kindService.GetAllKindsAsync))
+                .Do(this.kindsSource.AddOrUpdate)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(kinds =>
                 {
-                    this.kindsSource.AddOrUpdate(kinds);
                     this.List = new ListViewModel(this.FileName, this.Kinds);
                     this.Content ??= this.List;
                 });

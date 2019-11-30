@@ -30,6 +30,11 @@ namespace MovieList.Views
                     .InvokeCommand(this.ViewModel.SelectItem)
                     .DisposeWith(disposables);
 
+                this.WhenAnyValue(v => v.List.SelectedItem)
+                    .WhereNotNull()
+                    .ObserveOnDispatcher()
+                    .Subscribe(this.List.ScrollIntoView);
+
                 this.WhenAnyValue(v => v.ViewModel.SelectedItem)
                     .Where(item => item == null)
                     .Subscribe(_ => this.List.SelectedItem = null)

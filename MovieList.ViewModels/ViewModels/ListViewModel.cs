@@ -61,6 +61,7 @@ namespace MovieList.ViewModels
                 .AutoRefresh(item => item.Year)
                 .Transform(item => new ListItemViewModel(item))
                 .Sort(new ListItemViewModelComparer(ListItemTitleComparer.Instance))
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.items)
                 .Subscribe();
 
@@ -153,7 +154,10 @@ namespace MovieList.ViewModels
             var form = new MovieFormViewModel(movie, this.Kinds, this.FileName);
 
             form.Save
-                .Subscribe(this.AddOrUpdateMovie)
+                .Select(m => new MovieListItem(m))
+                .Do(this.source.AddOrUpdate)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(item => this.SelectedItem = this.Items.First(vm => vm.Item == item))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Save
@@ -176,13 +180,6 @@ namespace MovieList.ViewModels
                 .InvokeCommand(form.Close);
 
             return form;
-        }
-
-        private void AddOrUpdateMovie(Movie movie)
-        {
-            var item = new MovieListItem(movie);
-            this.source.AddOrUpdate(item);
-            this.SelectedItem = this.Items.First(vm => vm.Item == item);
         }
 
         private void RemoveMovie(Movie movie)
