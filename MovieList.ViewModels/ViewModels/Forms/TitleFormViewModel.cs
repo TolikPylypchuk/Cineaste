@@ -20,6 +20,7 @@ namespace MovieList.ViewModels.Forms
     public class TitleFormViewModel : ReactiveValidationObject<TitleFormViewModel>
     {
         private readonly BehaviorSubject<bool> formChanged;
+        private readonly BehaviorSubject<bool> valid;
 
         public TitleFormViewModel(Title title, IObservable<bool> canDelete, ResourceManager? resourceManager = null)
         {
@@ -35,6 +36,9 @@ namespace MovieList.ViewModels.Forms
                 resourceManager.GetString("ValidationTitleNameEmpty"));
 
             this.formChanged = new BehaviorSubject<bool>(false);
+            this.valid = new BehaviorSubject<bool>(false);
+
+            this.NameRule.Valid().Subscribe(this.valid);
 
             var canSave = new BehaviorSubject<bool>(false);
 
@@ -63,6 +67,12 @@ namespace MovieList.ViewModels.Forms
 
         public bool IsFormChanged
             => this.formChanged.Value;
+
+        public IObservable<bool> Valid
+            => this.valid.AsObservable();
+
+        public bool IsValid
+            => this.valid.Value;
 
         public ValidationHelper NameRule { get; }
 
@@ -93,6 +103,7 @@ namespace MovieList.ViewModels.Forms
                 .AllTrue()
                 .Merge(falseWhenSave)
                 .Merge(falseWhenCancel)
+                .Do(can => this.Log().Debug(can ? "Can save a title" : "Cannot save a title"))
                 .Subscribe(canSave);
         }
 

@@ -219,6 +219,9 @@
   <data name="NewMovie" xml:space="preserve">
     <value>New Movie</value>
   </data>
+  <data name="NoItemsInList" xml:space="preserve">
+    <value>There are no items in the list. You can start by adding a movie or series.</value>
+  </data>
   <data name="NoRecentlyOpenedFiles" xml:space="preserve">
     <value>No recently opened files</value>
   </data>

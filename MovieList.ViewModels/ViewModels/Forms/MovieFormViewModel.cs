@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -208,7 +209,7 @@ namespace MovieList.ViewModels.Forms
                         Int32.TryParse(year, out int value) &&
                         value >= MovieMinYear &&
                         value <= MovieMaxYear,
-                year => !String.IsNullOrWhiteSpace(year)
+                year => String.IsNullOrWhiteSpace(year)
                     ? this.resourceManager.GetString("ValidationYearEmpty")
                     : this.resourceManager.GetString("ValidationYearInvalid"));
 
@@ -230,16 +231,14 @@ namespace MovieList.ViewModels.Forms
                 .ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.FormChanged)
                 .ToCollection()
-                .Select(vms => vms.Any(vm => vm.IsFormChanged || vm.Title.Id == default) ||
-                               vms.Count != this.Movie.Titles.Count(title => !title.IsOriginal))
+                .Select(this.AreTitlesChanged)
                 .Do(changed => this.Log().Debug(changed ? "Titles are changed" : "Titles are unchanged"));
 
             var originalTitlesChanged = this.OriginalTitles
                 .ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.FormChanged)
                 .ToCollection()
-                .Select(vms => vms.Any(vm => vm.IsFormChanged || vm.Title.Id == default) ||
-                               vms.Count != this.Movie.Titles.Count(title => title.IsOriginal))
+                .Select(this.AreTitlesChanged)
                 .Do(changed => this.Log().Debug(changed ? "Original titles are changed" : "Original titles are unchanged"));
 
             var yearChanged = this.WhenAnyValue(vm => vm.Year)
@@ -283,8 +282,22 @@ namespace MovieList.ViewModels.Forms
                 .Merge(falseWhenCancel)
                 .Subscribe(this.formChanged);
 
+            var titlesValid = this.Titles
+                .ToObservableChangeSet()
+                .AutoRefreshOnObservable(vm => vm.Valid)
+                .ToCollection()
+                .SelectMany(vms => vms.Select(vm => vm.Valid).CombineLatest().AllTrue());
+
+            var originalTitlesValid = this.OriginalTitles
+                .ToObservableChangeSet()
+                .AutoRefreshOnObservable(vm => vm.Valid)
+                .ToCollection()
+                .SelectMany(vms => vms.Select(vm => vm.Valid).CombineLatest().AllTrue());
+
             Observable.CombineLatest(
                     this.FormChanged,
+                    titlesValid,
+                    originalTitlesValid,
                     this.YearRule.Valid(),
                     this.ImdbLinkRule.Valid(),
                     this.PosterUrlRule.Valid())
@@ -309,8 +322,8 @@ namespace MovieList.ViewModels.Forms
                 await title.Save.Execute();
             }
 
-            this.Movie.Titles.Add(this.titlesSource.Items.Except(this.Movie.Titles));
-            this.Movie.Titles.Remove(this.Movie.Titles.Except(this.titlesSource.Items));
+            this.Movie.Titles.Add(this.titlesSource.Items.Except(this.Movie.Titles).ToList());
+            this.Movie.Titles.Remove(this.Movie.Titles.Except(this.titlesSource.Items).ToList());
 
             this.Movie.IsWatched = this.IsWatched;
             this.Movie.IsReleased = this.IsReleased;
@@ -349,5 +362,9 @@ namespace MovieList.ViewModels.Forms
             this.ImdbLink = this.Movie.ImdbLink;
             this.PosterUrl = this.Movie.PosterUrl;
         }
+
+        private bool AreTitlesChanged(IReadOnlyCollection<TitleFormViewModel> vms)
+            => vms.Count != this.Movie.Titles.Count(title => !title.IsOriginal) ||
+                vms.Any(vm => vm.IsFormChanged || this.Movie.Id != default && vm.Title.Id == default);
     }
 }

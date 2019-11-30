@@ -10,13 +10,12 @@
         <StackPanel.Resources>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">
                 <Setter Property="Height" Value="50" />
-                <Setter Property="Margin" Value="16" />
+                <Setter Property="Margin" Value="32,16" />
                 <Setter Property="HorizontalAlignment" Value="Stretch" />
             </Style>
         </StackPanel.Resources>
 
         <Button x:Name="AddNewMovieButton" Content="{x:Static resx:Messages.AddNewMovie}" />
         <Button x:Name="AddNewSeriesButton" Content="{x:Static resx:Messages.AddNewSeries}" />
-        <Button x:Name="AddNewMiniseriesButton" Content="{x:Static resx:Messages.AddNewMiniseries}" />
     </StackPanel>
 </local:NewItemControlBase>

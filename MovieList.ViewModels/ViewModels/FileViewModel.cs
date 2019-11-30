@@ -33,6 +33,11 @@ namespace MovieList.ViewModels
 
             this.kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
 
+            this.kindsSource.Connect()
+                .Bind(out this.kinds)
+                .DisposeMany()
+                .Subscribe();
+
             Observable.FromAsync(() => Task.Run(kindService.GetAllKindsAsync))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(kinds =>
@@ -48,12 +53,6 @@ namespace MovieList.ViewModels
 
             this.WhenAnyValue(vm => vm.ListName)
                 .BindTo(this.Header, h => h.ListName);
-
-            this.kindsSource.Connect()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out this.kinds)
-                .DisposeMany()
-                .Subscribe();
         }
 
         public string FileName { get; }

@@ -104,7 +104,7 @@ namespace MovieList.ViewModels
 
         private async Task<string?> OnOpenFileAsync(string? fileName)
         {
-            this.Log().Debug(fileName is null ? "Opening a list." : $"Opening a list: ${fileName}.");
+            this.Log().Debug(fileName is null ? "Opening a list." : $"Opening a list: {fileName}.");
             return fileName ?? await Dialog.OpenFile.Handle(Unit.Default);
         }
 

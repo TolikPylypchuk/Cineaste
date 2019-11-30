@@ -12,6 +12,7 @@ using DynamicData;
 using DynamicData.Kernel;
 
 using MovieList.Comparers;
+using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.DialogModels;
@@ -49,7 +50,8 @@ namespace MovieList.ViewModels
 
             this.source.PopulateFrom(
                 Observable.FromAsync(() => Task.Run(() => listService.GetListAsync(kinds)))
-                    .Select(this.ToListItems));
+                    .Select(list => list.ToListItems())
+                    .Do(items => this.Log().Debug($"Loaded the list of {items.Count} items")));
 
             this.source.Connect()
                 .Filter(item => !String.IsNullOrEmpty(item.Title))
@@ -59,14 +61,14 @@ namespace MovieList.ViewModels
                 .AutoRefresh(item => item.Year)
                 .Sort(ListItemComparer.Instance)
                 .Transform(item => new ListItemViewModel(item))
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.items)
                 .DisposeMany()
                 .Subscribe();
 
             this.SelectItem = ReactiveCommand.CreateFromTask<ListItemViewModel?, bool>(this.OnSelectItemAsync);
+            this.Save = ReactiveCommand.Create(() => { });
 
-            this.SideViewModel = new NewItemViewModel();
+            this.SideViewModel = this.CreateNewItemViewModel();
         }
 
         public string FileName { get; }
@@ -86,13 +88,7 @@ namespace MovieList.ViewModels
             => this.cancelSelection.AsObservable();
 
         public ReactiveCommand<ListItemViewModel?, bool> SelectItem { get; }
-
-        private IEnumerable<ListItem> ToListItems(
-            (IEnumerable<Movie> Movies, IEnumerable<Series> Series, IEnumerable<MovieSeries> MovieSeries) list)
-            => list.Movies.Select(movie => new MovieListItem(movie))
-                .Cast<ListItem>()
-                .Concat(list.Series.Select(series => new SeriesListItem(series)))
-                .Concat(list.MovieSeries.Select(movieSeries => new MovieSeriesListItem(movieSeries)));
+        public ReactiveCommand<Unit, Unit> Save { get; }
 
         private async Task<bool> OnSelectItemAsync(ListItemViewModel? vm)
         {
@@ -119,10 +115,36 @@ namespace MovieList.ViewModels
             this.SideViewModel = vm?.Item switch
             {
                 MovieListItem movieItem => this.CreateMovieForm(movieItem.Movie),
-                _ => new NewItemViewModel()
+                _ => this.CreateNewItemViewModel()
             };
 
             return true;
+        }
+
+        private ReactiveObject CreateNewItemViewModel()
+        {
+            var viewModel = new NewItemViewModel();
+
+            this.sideViewModelSubscriptions.Dispose();
+            this.sideViewModelSubscriptions = new CompositeDisposable();
+
+            viewModel.AddNewMovie
+                .Select(_ => new Movie
+                {
+                    Titles = new List<Title>
+                    {
+                        new Title { Name = String.Empty, Priority = 1, IsOriginal = false },
+                        new Title { Name = String.Empty, Priority = 1, IsOriginal = true }
+                    },
+                    Year = 2000,
+                    Kind = this.Kinds.First()
+                })
+                .Select(movie => new MovieListItem(movie))
+                .Select(item => new ListItemViewModel(item))
+                .InvokeCommand(this.SelectItem)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            return viewModel;
         }
 
         private ReactiveObject CreateMovieForm(Movie movie)
@@ -133,6 +155,11 @@ namespace MovieList.ViewModels
 
             form.Save
                 .Subscribe(this.AddOrUpdateMovie)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Save
+                .Discard()
+                .InvokeCommand(this.Save)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Close
@@ -163,6 +190,7 @@ namespace MovieList.ViewModels
             } else
             {
                 this.source.AddOrUpdate(item);
+                this.SelectedItem = this.Items.First(vm => vm.Item == item);
             }
         }
 

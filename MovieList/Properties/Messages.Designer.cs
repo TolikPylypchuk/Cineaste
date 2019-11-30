@@ -367,6 +367,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no items in the list. You can start by adding a movie or series..
+        /// </summary>
+        public static string NoItemsInList {
+            get {
+                return ResourceManager.GetString("NoItemsInList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No recently opened files.
         /// </summary>
         public static string NoRecentlyOpenedFiles {

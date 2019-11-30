@@ -25,9 +25,6 @@ namespace MovieList.Views
 
                 this.BindCommand(this.ViewModel, vm => vm.AddNewSeries, v => v.AddNewSeriesButton)
                     .DisposeWith(disposables);
-
-                this.BindCommand(this.ViewModel, vm => vm.AddNewMiniseries, v => v.AddNewMiniseriesButton)
-                    .DisposeWith(disposables);
             });
         }
     }

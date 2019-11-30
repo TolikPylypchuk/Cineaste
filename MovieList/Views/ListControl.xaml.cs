@@ -36,7 +36,8 @@ namespace MovieList.Views
                     .DisposeWith(disposables);
 
                 this.ViewModel.CancelSelection
-                    .Subscribe(_ => this.List.SelectedItem = this.ViewModel.SelectedItem)
+                    .Merge(this.ViewModel.Save)
+                    .Subscribe(() => this.List.SelectedItem = this.ViewModel.SelectedItem)
                     .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.SideViewModel, v => v.SideViewHost.ViewModel)

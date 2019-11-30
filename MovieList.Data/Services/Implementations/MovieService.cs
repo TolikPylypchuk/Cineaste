@@ -53,6 +53,8 @@ namespace MovieList.Data.Services.Implementations
 
         private async Task InsertMovieAsync(Movie movie, SqliteConnection connection, IDbTransaction transaction)
         {
+            movie.KindId = movie.Kind.Id;
+
             movie.Id = await connection.InsertAsync(movie, transaction);
 
             foreach (var title in movie.Titles)
