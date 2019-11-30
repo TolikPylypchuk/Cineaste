@@ -44,8 +44,8 @@ CREATE INDEX "Idx_Series_KindId" ON "Series" ("KindId");
 
 CREATE TABLE "Seasons" (
     "Id" INTEGER PRIMARY KEY,
-    "IsWatched" INTEGER(1) NOT NULL,
-    "IsReleased" INTEGER(1) NOT NULL,
+    "WatchStatus" INTEGER NOT NULL,
+    "ReleaseStatus" INTEGER NOT NULL,
     "Channel" TEXT NOT NULL,
     "SequenceNumber" INTEGER NOT NULL,
     "SeriesId" INTEGER NOT NULL,
@@ -70,11 +70,7 @@ CREATE TABLE "Periods" (
 
     FOREIGN KEY ("SeasonId")
         REFERENCES "Seasons" ("Id")
-        ON DELETE CASCADE,
-
-    CHECK ("StartMonth" >= 1 AND "StartMonth" <= 12
-       AND "EndMonth" >= 1 AND "EndMonth" <= 12
-       AND ("StartYear" < "EndYear" OR ("StartYear" = "EndYear" AND "StartMonth" <= "EndMonth")))
+        ON DELETE CASCADE
 );
 
 CREATE INDEX "Idx_Periods_SeasonId" ON "Periods" ("SeasonId");
