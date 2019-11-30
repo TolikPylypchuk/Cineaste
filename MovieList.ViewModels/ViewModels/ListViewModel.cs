@@ -59,10 +59,9 @@ namespace MovieList.ViewModels
                 .AutoRefresh(item => item.Title)
                 .AutoRefresh(item => item.OriginalTitle)
                 .AutoRefresh(item => item.Year)
-                .Sort(ListItemComparer.Instance)
                 .Transform(item => new ListItemViewModel(item))
+                .Sort(new ListItemViewModelComparer(ListItemTitleComparer.Instance))
                 .Bind(out this.items)
-                .DisposeMany()
                 .Subscribe();
 
             this.SelectItem = ReactiveCommand.CreateFromTask<ListItemViewModel?, bool>(this.OnSelectItemAsync);
@@ -182,16 +181,8 @@ namespace MovieList.ViewModels
         private void AddOrUpdateMovie(Movie movie)
         {
             var item = new MovieListItem(movie);
-            var sourceItem = this.source.Lookup(item.Id).ValueOrDefault();
-
-            if (sourceItem != null)
-            {
-                sourceItem.Refresh();
-            } else
-            {
-                this.source.AddOrUpdate(item);
-                this.SelectedItem = this.Items.First(vm => vm.Item == item);
-            }
+            this.source.AddOrUpdate(item);
+            this.SelectedItem = this.Items.First(vm => vm.Item == item);
         }
 
         private void RemoveMovie(Movie movie)
@@ -217,7 +208,7 @@ namespace MovieList.ViewModels
                         ? (ListItem)new SeriesListItem(entry.Series)
                         : new MovieSeriesListItem(entry.MovieSeries!);
 
-                this.source.Lookup(item.Id).IfHasValue(sourceItem => sourceItem.Refresh());
+                this.source.Lookup(item.Id).IfHasValue(this.source.AddOrUpdate);
             }
 
             if (movieSeries.Entries.Count == 0 && movieSeries.ShowTitles)

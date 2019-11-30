@@ -17,13 +17,5 @@ namespace MovieList.ListItems
             => this.MovieSeries = movieSeries;
 
         public MovieSeries MovieSeries { get; }
-
-        public override void Refresh()
-            => this.SetProperties(
-                this.MovieSeries.Entry,
-                this.MovieSeries.Title != null ? $"{this.MovieSeries.Title.Name}:" : String.Empty,
-                this.MovieSeries.OriginalTitle != null ? $"{this.MovieSeries.OriginalTitle.Name}:" : String.Empty,
-                String.Empty,
-                this.MovieSeries.GetActiveColor());
     }
 }

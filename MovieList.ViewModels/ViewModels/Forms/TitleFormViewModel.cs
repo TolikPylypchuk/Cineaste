@@ -103,7 +103,6 @@ namespace MovieList.ViewModels.Forms
                 .AllTrue()
                 .Merge(falseWhenSave)
                 .Merge(falseWhenCancel)
-                .Do(can => this.Log().Debug(can ? "Can save a title" : "Cannot save a title"))
                 .Subscribe(canSave);
         }
 

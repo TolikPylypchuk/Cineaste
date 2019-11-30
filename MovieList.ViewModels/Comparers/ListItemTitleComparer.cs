@@ -5,12 +5,12 @@ using MovieList.ListItems;
 
 namespace MovieList.Comparers
 {
-    public class ListItemComparer : NullsFirstComparer<ListItem>
+    public class ListItemTitleComparer : NullsFirstComparer<ListItem>
     {
-        private ListItemComparer()
+        private ListItemTitleComparer()
         { }
 
-        public static ListItemComparer Instance { get; } = new ListItemComparer();
+        public static ListItemTitleComparer Instance { get; } = new ListItemTitleComparer();
 
         protected override int CompareNonNull(ListItem x, ListItem y)
             => (x, y) switch
@@ -18,12 +18,15 @@ namespace MovieList.Comparers
                 (MovieListItem left, MovieListItem right) => this.Compare(left, right),
                 (MovieListItem left, SeriesListItem right) => this.Compare(left, right),
                 (MovieListItem left, MovieSeriesListItem right) => this.Compare(left, right),
+
                 (SeriesListItem left, MovieListItem right) => this.Compare(left, right),
                 (SeriesListItem left, SeriesListItem right) => this.Compare(left, right),
                 (SeriesListItem left, MovieSeriesListItem right) => this.Compare(left, right),
+
                 (MovieSeriesListItem left, MovieListItem right) => this.Compare(left, right),
                 (MovieSeriesListItem left, SeriesListItem right) => this.Compare(left, right),
                 (MovieSeriesListItem left, MovieSeriesListItem right) => this.Compare(left, right),
+
                 _ => throw new NotSupportedException(
                     $"Types of list items to compare are not supported: {x.GetType()}, {y.GetType()}")
             };
@@ -98,9 +101,9 @@ namespace MovieList.Comparers
         private int CompareEntries(
             ListItem left,
             ListItem right,
-            MovieSeriesEntry? thisEntry,
-            MovieSeriesEntry? otherEntry)
-            => (thisEntry, otherEntry) switch
+            MovieSeriesEntry? leftEntry,
+            MovieSeriesEntry? rightEntry)
+            => (leftEntry, rightEntry) switch
             {
                 (null, null) => this.CompareTitleOrYear(left, right),
                 (var entry, null) => this.Compare(new MovieSeriesListItem(entry.ParentSeries), right),

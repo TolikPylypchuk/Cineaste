@@ -15,13 +15,5 @@ namespace MovieList.ListItems
             => this.Movie = movie;
 
         public Movie Movie { get; }
-
-        public override void Refresh()
-            => this.SetProperties(
-                this.Movie.Entry,
-                this.Movie.Title.Name,
-                this.Movie.OriginalTitle.Name,
-                this.Movie.Year.ToString(),
-                this.Movie.GetActiveColor());
     }
 }
