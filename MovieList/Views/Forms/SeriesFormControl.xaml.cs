@@ -10,11 +10,11 @@ using ReactiveUI;
 
 namespace MovieList.Views.Forms
 {
-    public abstract class MovieFormControlBase : ReactiveUserControl<MovieFormViewModel> { }
+    public abstract class SeriesFormControlBase : ReactiveUserControl<SeriesFormViewModel> { }
 
-    public partial class MovieFormControl : MovieFormControlBase
+    public partial class SeriesFormControl : SeriesFormControlBase
     {
-        public MovieFormControl()
+        public SeriesFormControl()
         {
             this.InitializeComponent();
 
@@ -87,20 +87,8 @@ namespace MovieList.Views.Forms
             this.Bind(this.ViewModel, vm => vm.IsWatched, v => v.IsWatchedCheckBox.IsChecked)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.IsReleased, v => v.IsReleasedCheckBox.IsChecked)
+            this.Bind(this.ViewModel, vm => vm.IsAnthology, v => v.IsAnthologyCheckBox.IsChecked)
                 .DisposeWith(disposables);
-
-            this.WhenAnyValue(v => v.ViewModel.Year)
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
-                .Select(year => year == DateTime.Now.Year)
-                .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled);
-
-            this.WhenAnyValue(v => v.ViewModel.Year)
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
-                .Select(year => year <= DateTime.Now.Year)
-                .BindTo(this, v => v.IsWatchedCheckBox.IsEnabled);
         }
 
         private void BindLink(CompositeDisposable disposables)
@@ -126,7 +114,7 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Text)
+            this.Bind(this.ViewModel, vm => vm.Status, v => v.StatusComboBox.SelectedItem)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Kind, v => v.KindComboBox.SelectedItem)
@@ -144,9 +132,6 @@ namespace MovieList.Views.Forms
 
         private void AddValidation(CompositeDisposable disposables)
         {
-            this.YearTextBox.ValidateWith(this.ViewModel.YearRule)
-                .DisposeWith(disposables);
-
             this.ImdbLinkTextBox.ValidateWith(this.ViewModel.ImdbLinkRule)
                 .DisposeWith(disposables);
 

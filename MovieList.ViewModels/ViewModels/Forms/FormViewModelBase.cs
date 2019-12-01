@@ -15,6 +15,7 @@ namespace MovieList.ViewModels.Forms
 {
     public abstract class FormViewModelBase<TEntity, TViewModel> : ReactiveValidationObject<TViewModel>
         where TEntity : class
+        where TViewModel : FormViewModelBase<TEntity, TViewModel>
     {
         protected readonly ResourceManager ResourceManager;
         protected readonly IScheduler Scheduler;
