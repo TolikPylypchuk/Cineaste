@@ -51,13 +51,11 @@ namespace MovieList.ViewModels.Forms
 
             this.InitializeValueDependencies();
 
-            Observable.Return(this.Movie.Id != default)
-                .Merge(this.Save.Select(_ => true))
-                .Subscribe(this.CanDeleteSubject);
+            this.CanDeleteWhenNotNew();
 
             this.Close = ReactiveCommand.Create(() => { });
 
-            this.InitializeChangeTracking();
+            this.EnableChangeTracking();
         }
 
         public Movie Movie { get; }
@@ -91,63 +89,29 @@ namespace MovieList.ViewModels.Forms
         public override bool IsNew
             => this.Movie.Id == default;
 
+        protected override MovieFormViewModel Self
+            => this;
+
         protected override IEnumerable<Title> ItemTitles
             => this.Movie.Titles;
 
         protected override string NewItemKey
             => "NewMovie";
 
-        protected override void InitializeChangeTracking()
+        protected override void EnableChangeTracking()
         {
-            var yearChanged = this.WhenAnyValue(vm => vm.Year)
-                .Select(year => year != this.Movie.Year.ToString())
-                .Do(changed => this.Log().Debug(changed ? "Year is changed" : "Year is unchanged"));
+            this.TrackChanges(vm => vm.Year, vm => vm.Movie.Year.ToString());
+            this.TrackChanges(vm => vm.Kind, vm=> vm.Movie.Kind);
+            this.TrackChanges(vm => vm.IsWatched, vm => vm.Movie.IsWatched);
+            this.TrackChanges(vm => vm.IsReleased, vm => vm.Movie.IsReleased);
+            this.TrackChanges(vm => vm.ImdbLink, vm=> vm.Movie.ImdbLink.EmptyIfNull());
+            this.TrackChanges(vm => vm.PosterUrl, vm => vm.Movie.PosterUrl.EmptyIfNull());
 
-            var kindChanged = this.WhenAnyValue(vm => vm.Kind)
-                .Select(kind => kind != this.Movie.Kind)
-                .Do(changed => this.Log().Debug(changed ? "Kind is changed" : "Kind is unchanged"));
+            this.TrackValidation(this.YearRule);
+            this.TrackValidation(this.ImdbLinkRule);
+            this.TrackValidation(this.PosterUrlRule);
 
-            var isWatchedChanged = this.WhenAnyValue(vm => vm.IsWatched)
-                .Select(isWatched => isWatched != this.Movie.IsWatched)
-                .Do(changed => this.Log().Debug(changed ? "Is watched is changed" : "Is watched is unchanged"));
-
-            var isReleasedChanged = this.WhenAnyValue(vm => vm.IsReleased)
-                .Select(isReleased => isReleased != this.Movie.IsReleased)
-                .Do(changed => this.Log().Debug(changed ? "Is released is changed" : "Is released is unchanged"));
-
-            var imdbLinkChanged = this.WhenAnyValue(vm => vm.ImdbLink)
-                .Select(link => link.NullIfEmpty() != this.Movie.ImdbLink)
-                .Do(changed => this.Log().Debug(changed ? "IMDb link is changed" : "IMDb link is unchanged"));
-
-            var posterUrlChanged = this.WhenAnyValue(vm => vm.PosterUrl)
-                .Select(url => url.NullIfEmpty() != this.Movie.PosterUrl)
-                .Do(changed => this.Log().Debug(changed ? "Poster URL is changed" : "Poster URL is unchanged"));
-
-            var falseWhenSave = this.Save.Select(_ => false);
-            var falseWhenCancel = this.Cancel.Select(_ => false);
-
-            Observable.CombineLatest(
-                    this.TitlesChanged,
-                    this.OriginalTitlesChanged,
-                    yearChanged,
-                    kindChanged,
-                    isWatchedChanged,
-                    isReleasedChanged,
-                    imdbLinkChanged,
-                    posterUrlChanged)
-                .AnyTrue()
-                .Merge(falseWhenSave)
-                .Merge(falseWhenCancel)
-                .Subscribe(this.FormChangedSubject);
-
-            Observable.CombineLatest(
-                    this.TitlesValid,
-                    this.OriginalTitlesValid,
-                    this.YearRule.Valid(),
-                    this.ImdbLinkRule.Valid(),
-                    this.PosterUrlRule.Valid())
-                .AllTrue()
-                .Subscribe(this.ValidSubject);
+            base.EnableChangeTracking();
         }
 
         protected override async Task<Movie> OnSaveAsync()

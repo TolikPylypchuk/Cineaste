@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -20,9 +22,12 @@ namespace MovieList.ViewModels.Forms
         protected readonly ResourceManager ResourceManager;
         protected readonly IScheduler Scheduler;
 
-        protected readonly BehaviorSubject<bool> FormChangedSubject = new BehaviorSubject<bool>(false);
-        protected readonly BehaviorSubject<bool> ValidSubject = new BehaviorSubject<bool>(false);
-        protected readonly BehaviorSubject<bool> CanDeleteSubject = new BehaviorSubject<bool>(false);
+        private readonly BehaviorSubject<bool> formChangedSubject = new BehaviorSubject<bool>(false);
+        private readonly BehaviorSubject<bool> validSubject = new BehaviorSubject<bool>(false);
+        private readonly BehaviorSubject<bool> canDeleteSubject = new BehaviorSubject<bool>(false);
+
+        private readonly List<IObservable<bool>> changesToTrack = new List<IObservable<bool>>();
+        private readonly List<IObservable<bool>> validationsToTrack = new List<IObservable<bool>>();
 
         protected FormViewModelBase(ResourceManager? resourceManager = null, IScheduler? scheduler = null)
         {
@@ -32,21 +37,21 @@ namespace MovieList.ViewModels.Forms
             var canSave = Observable.CombineLatest(this.FormChanged, this.Valid).AllTrue();
 
             this.Save = ReactiveCommand.CreateFromTask(this.OnSaveAsync, canSave);
-            this.Cancel = ReactiveCommand.Create(this.CopyProperties, this.FormChangedSubject);
-            this.Delete = ReactiveCommand.CreateFromTask(this.OnDeleteAsync, this.CanDeleteSubject);
+            this.Cancel = ReactiveCommand.Create(this.CopyProperties, this.formChangedSubject);
+            this.Delete = ReactiveCommand.CreateFromTask(this.OnDeleteAsync, this.canDeleteSubject);
         }
 
         public IObservable<bool> FormChanged
-            => this.FormChangedSubject.AsObservable();
+            => this.formChangedSubject.AsObservable();
 
         public bool IsFormChanged
-            => this.FormChangedSubject.Value;
+            => this.formChangedSubject.Value;
 
         public IObservable<bool> Valid
-            => this.ValidSubject.AsObservable();
+            => this.validSubject.AsObservable();
 
         public bool IsValid
-            => this.ValidSubject.Value;
+            => this.validSubject.Value;
 
         public abstract bool IsNew { get; }
 
@@ -54,7 +59,52 @@ namespace MovieList.ViewModels.Forms
         public ReactiveCommand<Unit, Unit> Cancel { get; }
         public ReactiveCommand<Unit, TEntity?> Delete { get; }
 
-        protected abstract void InitializeChangeTracking();
+        protected abstract TViewModel Self { get; }
+
+        protected void TrackChanges(IObservable<bool> changes)
+            => this.changesToTrack.Add(changes);
+
+        protected void TrackChanges<T>(Expression<Func<TViewModel, T>> property, Func<TViewModel, T> itemValue)
+        {
+            string description = property.GetMemberName();
+            var self = this.Self;
+
+            this.TrackChanges(
+                self.WhenAnyValue(property)
+                    .Select(value => !Equals(value, itemValue(self)))
+                    .Do(changed => this.Log().Debug(
+                        changed ? $"{description} is changed" : $"{description} is unchanged")));
+        }
+
+        protected void TrackValidation(IObservable<bool> validation)
+            => this.validationsToTrack.Add(validation);
+
+        protected void TrackValidation(ValidationHelper rule)
+            => this.TrackValidation(rule.Valid());
+
+        protected void CanDeleteWhen(IObservable<bool> canDelete)
+            => canDelete.Subscribe(this.canDeleteSubject);
+
+        protected void CanDeleteWhenNotNew()
+            => this.CanDeleteWhen(Observable.Return(!this.IsNew).Merge(this.Save.Select(_ => true)));
+
+        protected virtual void EnableChangeTracking()
+        {
+            var falseWhenSave = this.Save.Select(_ => false);
+            var falseWhenCancel = this.Cancel.Select(_ => false);
+
+            this.changesToTrack
+                .CombineLatest()
+                .AnyTrue()
+                .Merge(falseWhenSave)
+                .Merge(falseWhenCancel)
+                .Subscribe(this.formChangedSubject);
+
+            this.validationsToTrack
+                .CombineLatest()
+                .AllTrue()
+                .Subscribe(this.validSubject);
+        }
 
         protected abstract Task<TEntity> OnSaveAsync();
 

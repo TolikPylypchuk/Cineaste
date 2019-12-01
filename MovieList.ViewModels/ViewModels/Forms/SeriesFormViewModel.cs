@@ -37,13 +37,11 @@ namespace MovieList.ViewModels.Forms
             this.ImdbLinkRule = this.CreateImdbLinkRule();
             this.PosterUrlRule = this.CreatePosterUrlRule();
 
-            Observable.Return(this.Series.Id != default)
-                .Merge(this.Save.Select(_ => true))
-                .Subscribe(this.CanDeleteSubject);
+            this.CanDeleteWhenNotNew();
 
             this.Close = ReactiveCommand.Create(() => { });
 
-            this.InitializeChangeTracking();
+            this.EnableChangeTracking();
         }
 
         public Series Series { get; }
@@ -76,62 +74,28 @@ namespace MovieList.ViewModels.Forms
         public override bool IsNew
             => this.Series.Id == default;
 
+        protected override SeriesFormViewModel Self
+            => this;
+
         protected override IEnumerable<Title> ItemTitles
             => this.Series.Titles;
 
         protected override string NewItemKey
             => "NewSeries";
 
-        protected override void InitializeChangeTracking()
+        protected override void EnableChangeTracking()
         {
-            var statusChanged = this.WhenAnyValue(vm => vm.Status)
-                .Select(status => status != this.Series.Status)
-                .Do(changed => this.Log().Debug(changed ? "Status is changed" : "Status is unchanged"));
+            this.TrackChanges(vm => vm.Status, vm => vm.Series.Status);
+            this.TrackChanges(vm => vm.Kind, vm => vm.Series.Kind);
+            this.TrackChanges(vm => vm.IsWatched, vm => vm.Series.IsWatched);
+            this.TrackChanges(vm => vm.IsAnthology, vm => vm.Series.IsAnthology);
+            this.TrackChanges(vm => vm.ImdbLink, vm => vm.Series.ImdbLink.EmptyIfNull());
+            this.TrackChanges(vm => vm.PosterUrl, vm => vm.Series.PosterUrl.EmptyIfNull());
 
-            var kindChanged = this.WhenAnyValue(vm => vm.Kind)
-                .Select(kind => kind != this.Series.Kind)
-                .Do(changed => this.Log().Debug(changed ? "Kind is changed" : "Kind is unchanged"));
+            this.TrackValidation(this.ImdbLinkRule);
+            this.TrackValidation(this.PosterUrlRule);
 
-            var isWatchedChanged = this.WhenAnyValue(vm => vm.IsWatched)
-                .Select(isWatched => isWatched != this.Series.IsWatched)
-                .Do(changed => this.Log().Debug(changed ? "Is watched is changed" : "Is watched is unchanged"));
-
-            var isAnthologyChanged = this.WhenAnyValue(vm => vm.IsAnthology)
-                .Select(isAnthology => isAnthology != this.Series.IsAnthology)
-                .Do(changed => this.Log().Debug(changed ? "Is anthology is changed" : "Is anthology is unchanged"));
-
-            var imdbLinkChanged = this.WhenAnyValue(vm => vm.ImdbLink)
-                .Select(link => link.NullIfEmpty() != this.Series.ImdbLink)
-                .Do(changed => this.Log().Debug(changed ? "IMDb link is changed" : "IMDb link is unchanged"));
-
-            var posterUrlChanged = this.WhenAnyValue(vm => vm.PosterUrl)
-                .Select(url => url.NullIfEmpty() != this.Series.PosterUrl)
-                .Do(changed => this.Log().Debug(changed ? "Poster URL is changed" : "Poster URL is unchanged"));
-
-            var falseWhenSave = this.Save.Select(_ => false);
-            var falseWhenCancel = this.Cancel.Select(_ => false);
-
-            Observable.CombineLatest(
-                    this.TitlesChanged,
-                    this.OriginalTitlesChanged,
-                    statusChanged,
-                    kindChanged,
-                    isWatchedChanged,
-                    isAnthologyChanged,
-                    imdbLinkChanged,
-                    posterUrlChanged)
-                .AnyTrue()
-                .Merge(falseWhenSave)
-                .Merge(falseWhenCancel)
-                .Subscribe(this.FormChangedSubject);
-
-            Observable.CombineLatest(
-                    this.TitlesValid,
-                    this.OriginalTitlesValid,
-                    this.ImdbLinkRule.Valid(),
-                    this.PosterUrlRule.Valid())
-                .AllTrue()
-                .Subscribe(this.ValidSubject);
+            base.EnableChangeTracking();
         }
 
         protected override Task<Series?> OnDeleteAsync()

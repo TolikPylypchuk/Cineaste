@@ -29,14 +29,14 @@ namespace MovieList.ViewModels.Forms
                 name => !String.IsNullOrWhiteSpace(name),
                 this.ResourceManager.GetString("ValidationTitleNameEmpty"));
 
-            canDelete.Subscribe(this.CanDeleteSubject);
+            this.CanDeleteWhen(canDelete);
 
             var canMoveUp = this.WhenAnyValue(vm => vm.Priority)
                 .Select(priority => priority >= MinTitleCount);
 
             this.MoveUp = ReactiveCommand.Create(() => { this.Priority--; }, canMoveUp);
 
-            this.InitializeChangeTracking();
+            this.EnableChangeTracking();
         }
 
         public Title Title { get; }
@@ -54,25 +54,17 @@ namespace MovieList.ViewModels.Forms
         public override bool IsNew
             => this.Title.Id == default;
 
-        protected override void InitializeChangeTracking()
+        protected override TitleFormViewModel Self
+            => this;
+
+        protected override void EnableChangeTracking()
         {
-            var nameChanged = this.WhenAnyValue(vm => vm.Name)
-                .Select(name => name != this.Title.Name);
+            this.TrackChanges(vm => vm.Name, vm => vm.Title.Name);
+            this.TrackChanges(vm => vm.Priority, vm => vm.Title.Priority);
 
-            var priorityChanged = this.WhenAnyValue(vm => vm.Priority)
-                .Select(priority => priority != this.Title.Priority);
+            this.TrackValidation(this.NameRule);
 
-            var falseWhenSave = this.Save.Select(_ => false);
-            var falseWhenCancel = this.Cancel.Select(_ => false);
-
-            Observable.CombineLatest(nameChanged, priorityChanged)
-                .AnyTrue()
-                .Merge(falseWhenSave)
-                .Merge(falseWhenCancel)
-                .Subscribe(this.FormChangedSubject);
-
-            this.NameRule.Valid()
-                .Subscribe(this.ValidSubject);
+            base.EnableChangeTracking();
         }
 
         protected override Task<Title> OnSaveAsync()

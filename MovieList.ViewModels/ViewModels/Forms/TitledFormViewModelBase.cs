@@ -76,6 +76,17 @@ namespace MovieList.ViewModels.Forms
 
         protected abstract string NewItemKey { get; }
 
+        protected override void EnableChangeTracking()
+        {
+            this.TrackChanges(this.AreTitlesChanged(this.Titles, "Titles"));
+            this.TrackChanges(this.AreTitlesChanged(this.OriginalTitles, "Original titles"));
+
+            this.TrackValidation(this.AreTitlesValid(this.Titles));
+            this.TrackValidation(this.AreTitlesValid(this.OriginalTitles));
+
+            base.EnableChangeTracking();
+        }
+
         protected abstract void AttachTitle(Title title);
 
         private void InitializeTitles(
@@ -129,6 +140,7 @@ namespace MovieList.ViewModels.Forms
                 .AutoRefreshOnObservable(vm => vm.FormChanged)
                 .ToCollection()
                 .Select(vms =>
+                    vms.Count == 0 ||
                     vms.Count != this.ItemTitles.Count(title => title.IsOriginal == vms.First().Title.IsOriginal) ||
                     vms.Any(vm => vm.IsFormChanged || !this.IsNew && vm.IsNew))
                 .Do(changed => this.Log().Debug(

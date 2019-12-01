@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 
 namespace MovieList
 {
@@ -9,5 +10,10 @@ namespace MovieList
 
         public static string EmptyIfNull(this string? str)
             => String.IsNullOrEmpty(str) ? String.Empty : str;
+
+        public static string GetMemberName(this Expression expression)
+            => expression is LambdaExpression lambda && lambda.Body is MemberExpression member
+                ? member.Member.Name
+                : throw new NotSupportedException("Non-lambda expressions with member access are not supported.");
     }
 }
