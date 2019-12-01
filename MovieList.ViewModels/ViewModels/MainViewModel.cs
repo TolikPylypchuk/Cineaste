@@ -21,6 +21,7 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 
 using static MovieList.Constants;
+using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels
 {
@@ -81,10 +82,16 @@ namespace MovieList.ViewModels
             this.Log().Debug($"Creating a file: {model.File}");
             Locator.CurrentMutable.RegisterDatabaseServices(model.File);
 
-            var settings = Locator.Current.GetService<Settings>(NewSettingsKey);
-            settings.ListName = model.ListName;
+            var preferences = Locator.Current.GetService<UserPreferences>().Defaults;
 
-            await Locator.Current.GetService<IDatabaseService>(model.File).CreateDatabaseAsync(settings);
+            var settings = new Settings(
+                model.ListName,
+                ListFileVersion,
+                preferences.DefaultSeasonTitle,
+                preferences.DefaultSeasonOriginalTitle);
+
+            await Locator.Current.GetService<IDatabaseService>(model.File)
+                .CreateDatabaseAsync(settings, preferences.DefaultKinds);
 
             this.AddFile(model.File, model.ListName);
 

@@ -14,12 +14,12 @@ namespace MovieList.Preferences
             List<Kind> defaultKinds)
         {
             this.DefaultSeasonTitle = defaultSeasonTitle;
-            this.DefaultSeasonOriginaltitle = defaultSeasonOriginalTitle;
+            this.DefaultSeasonOriginalTitle = defaultSeasonOriginalTitle;
             this.DefaultKinds = defaultKinds;
         }
 
         public string DefaultSeasonTitle { get; set; }
-        public string DefaultSeasonOriginaltitle { get; set; }
+        public string DefaultSeasonOriginalTitle { get; set; }
         public List<Kind> DefaultKinds { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace MovieList.Data.Services.Implementations
             "Security",
             "CA2100:Review SQL queries for security vulnerabilities",
             Justification = "SQL comes from a database creation script")]
-        public async Task CreateDatabaseAsync(Settings settings)
+        public async Task CreateDatabaseAsync(Settings settings, IEnumerable<Kind> initialKinds)
         {
             this.Log().Debug($"Creating a new database: {this.DatabasePath}.");
 
@@ -46,9 +47,15 @@ namespace MovieList.Data.Services.Implementations
 
             await using var connection = this.GetSqliteConnection();
             await connection.OpenAsync();
-            await connection.ExecuteAsync(sql);
+            await using var transaction = await connection.BeginTransactionAsync();
 
-            await this.InitSettingsAsync(connection, settings);
+            await connection.ExecuteAsync(sql, transaction);
+
+            await this.InitSettingsAsync(connection, transaction, settings);
+
+            await connection.InsertAsync(initialKinds, transaction);
+
+            await transaction.CommitAsync();
         }
 
         [LogException]
@@ -68,11 +75,9 @@ namespace MovieList.Data.Services.Implementations
             return true;
         }
 
-        private async Task InitSettingsAsync(SqliteConnection connection, Settings settings)
+        private async Task InitSettingsAsync(SqliteConnection connection, IDbTransaction transaction, Settings settings)
         {
             this.Log().Debug($"Initializing settings for the database: {this.DatabasePath}.");
-
-            await using var transaction = await connection.BeginTransactionAsync();
 
             var settingsList = new List<Setting>
             {
@@ -102,8 +107,6 @@ namespace MovieList.Data.Services.Implementations
             {
                 await connection.InsertAsync(setting, transaction);
             }
-
-            await transaction.CommitAsync();
         }
 
         private async Task<bool> CheckIfSqliteDatabaseAsync()

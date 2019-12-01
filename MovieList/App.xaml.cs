@@ -10,7 +10,6 @@ using System.Windows.Threading;
 
 using Akavache;
 
-using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
@@ -28,7 +27,6 @@ using Splat;
 using Splat.Serilog;
 
 using static MovieList.Constants;
-using static MovieList.Data.Constants;
 
 namespace MovieList
 {
@@ -98,14 +96,6 @@ namespace MovieList
 
             Locator.CurrentMutable.RegisterConstant(Messages.ResourceManager, typeof(ResourceManager));
 
-            Locator.CurrentMutable.Register(
-                () => new Settings(
-                    String.Empty,
-                    ListFileVersion,
-                    Messages.DefaultSeasonTitle,
-                    Messages.DefaultSeasonOriginalTitle),
-                NewSettingsKey);
-
             var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
                 .Catch(Observable.FromAsync(this.CreateDefaultPreferences));
 
@@ -126,7 +116,7 @@ namespace MovieList
             var filePreferences = new FilePreferences(showRecentFiles: true, new List<RecentFile>());
 
             var defaultsPreferences = new DefaultsPreferences(
-                Messages.DefaultSeasonTitle, Messages.DefaultSeasonOriginalTitle, this.GetDefaultKinds());
+                Messages.DefaultSeasonTitle, Messages.DefaultSeasonOriginalTitle, this.CreateDefaultKinds());
 
             var loggingPreferences = new LoggingPreferences(
                 $"{Assembly.GetExecutingAssembly().GetName().Name}.log",
@@ -136,10 +126,12 @@ namespace MovieList
 
             await BlobCache.UserAccount.InsertObject(PreferencesKey, preferences);
 
+            this.Log().Debug("No preferences found. Created default preferences.");
+
             return preferences;
         }
 
-        private List<Kind> GetDefaultKinds()
+        private List<Kind> CreateDefaultKinds()
         {
             const string black = "#000000";
             const string indigo = "#3949AB";
