@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 
 using Akavache;
 
+using MovieList.Converters;
 using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
@@ -54,28 +55,24 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.ViewModel.Delete.CanExecute
-                .Select(canDelete => canDelete.ToVisibility())
-                .BindTo(this, v => v.DeleteButton.Visibility)
+                .BindTo(this, v => v.DeleteButton.Visibility, null, new BooleanToVisibilityTypeConverter())
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddTitle, v => v.AddTitleButton)
                 .DisposeWith(disposables);
 
             this.ViewModel.AddTitle.CanExecute
-                .Select(canAddTitle => canAddTitle.ToVisibility())
-                .BindTo(this, v => v.AddTitleButton.Visibility);
+                .BindTo(this, v => v.AddTitleButton.Visibility, null, new BooleanToVisibilityTypeConverter());
 
             this.BindCommand(this.ViewModel, vm => vm.AddOriginalTitle, v => v.AddOriginalTitleButton)
                 .DisposeWith(disposables);
 
             this.ViewModel.AddOriginalTitle.CanExecute
-                .Select(canAddOriginalTitle => canAddOriginalTitle.ToVisibility())
-                .BindTo(this, v => v.AddOriginalTitleButton.Visibility);
+                .BindTo(this, v => v.AddOriginalTitleButton.Visibility, null, new BooleanToVisibilityTypeConverter());
 
             Observable.CombineLatest(this.ViewModel.Save.CanExecute, this.ViewModel.Cancel.CanExecute)
                 .AnyTrue()
-                .Select(canSaveOrCancel => canSaveOrCancel.ToVisibility())
-                .BindTo(this, v => v.ActionPanel.Visibility);
+                .BindTo(this, v => v.ActionPanel.Visibility, null, new BooleanToVisibilityTypeConverter());
 
             this.ViewModel.Save
                 .Subscribe(_ => this.LoadPoster())
@@ -101,8 +98,7 @@ namespace MovieList.Views.Forms
 
             this.WhenAnyValue(v => v.ViewModel.ImdbLink)
                 .Select(link => !String.IsNullOrWhiteSpace(link))
-                .Select(isEmpty => isEmpty.ToVisibility())
-                .BindTo(this, v => v.ImdbLinkTextBlock.Visibility)
+                .BindTo(this, v => v.ImdbLinkTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
                 .DisposeWith(disposables);
         }
 
@@ -114,7 +110,13 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.Status, v => v.StatusComboBox.SelectedItem)
+            this.Bind(
+                    this.ViewModel,
+                    vm => vm.Status,
+                    v => v.StatusComboBox.SelectedItem,
+                    null,
+                    new SeriesStatusToStringConverter(),
+                    new SeriesStatusToStringConverter())
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Kind, v => v.KindComboBox.SelectedItem)

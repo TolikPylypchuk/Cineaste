@@ -15,14 +15,6 @@ namespace MovieList.Views
         public static IDisposable ValidateWith(this FrameworkElement element, ValidationHelper rule)
             => ValidationSubscriber.Create(element, rule);
 
-        public static Visibility ToVisibility(this bool value, bool hiddenIfFalse = false)
-            => ((bool?)value).ToVisibility(hiddenIfFalse);
-
-        public static Visibility ToVisibility(this bool? value, bool hiddenIfFalse = false)
-            => value == true
-                ? Visibility.Visible
-                : hiddenIfFalse ? Visibility.Hidden : Visibility.Collapsed;
-
         public static BitmapImage? AsImage([AllowNull] this byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0)

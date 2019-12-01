@@ -1,5 +1,4 @@
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 
 using MaterialDesignThemes.Wpf;
 
@@ -35,8 +34,7 @@ namespace MovieList.Views.Forms
                     .DisposeWith(disposables);
 
                 this.ViewModel.Delete.CanExecute
-                    .Select(canDelete => canDelete.ToVisibility())
-                    .BindTo(this, v => v.DeleteButton.Visibility)
+                    .BindTo(this, v => v.DeleteButton.Visibility, null, new BooleanToVisibilityTypeConverter())
                     .DisposeWith(disposables);
             });
         }
