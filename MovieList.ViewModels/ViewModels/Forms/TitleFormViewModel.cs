@@ -25,9 +25,7 @@ namespace MovieList.ViewModels.Forms
             this.CopyProperties();
 
             this.NameRule = this.ValidationRule(
-                vm => vm.Name,
-                name => !String.IsNullOrWhiteSpace(name),
-                this.ResourceManager.GetString("ValidationTitleNameEmpty"));
+                vm => vm.Name, name => !String.IsNullOrWhiteSpace(name), "TitleNameEmpty");
 
             this.CanDeleteWhen(canDelete);
 

@@ -1,6 +1,8 @@
 using System;
 using System.Windows;
 
+using MovieList.Properties;
+
 using ReactiveUI.Validation.Helpers;
 
 namespace MovieList.Validation
@@ -25,7 +27,9 @@ namespace MovieList.Validation
                         subscriber.eventSubscription = element.Events().LostFocus
                             .Subscribe(_ =>
                             {
-                                ManualValidation.MarkInvalid(element, state.Text[0]);
+                                ManualValidation.MarkInvalid(
+                                    element,
+                                    Messages.ResourceManager.GetString($"Validation{state.Text[0]}") ?? state.Text[0]);
                                 subscriber.eventSubscription?.Dispose();
                             });
                     } else

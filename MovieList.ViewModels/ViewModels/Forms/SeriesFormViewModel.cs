@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
 
@@ -15,8 +14,6 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
-
-using Splat;
 
 namespace MovieList.ViewModels.Forms
 {
@@ -34,8 +31,8 @@ namespace MovieList.ViewModels.Forms
 
             this.CopyProperties();
 
-            this.ImdbLinkRule = this.CreateImdbLinkRule();
-            this.PosterUrlRule = this.CreatePosterUrlRule();
+            this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
+            this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.CanDeleteWhenNotNew();
 
@@ -119,17 +116,5 @@ namespace MovieList.ViewModels.Forms
 
         protected override void AttachTitle(Title title)
             => title.Series = this.Series;
-
-        private ValidationHelper CreateImdbLinkRule()
-            => this.ValidationRule(
-                vm => vm.ImdbLink,
-                link => link.IsUrl(),
-                this.ResourceManager.GetString("ValidationImdbLinkInvalid"));
-
-        private ValidationHelper CreatePosterUrlRule()
-            => this.ValidationRule(
-                vm => vm.PosterUrl,
-                url => url.IsUrl(),
-                this.ResourceManager.GetString("ValidationPosterUrlInvalid"));
     }
 }

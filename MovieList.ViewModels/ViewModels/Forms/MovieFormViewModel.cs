@@ -45,9 +45,16 @@ namespace MovieList.ViewModels.Forms
 
             this.CopyProperties();
 
-            this.YearRule = this.CreateYearRule();
-            this.ImdbLinkRule = this.CreateImdbLinkRule();
-            this.PosterUrlRule = this.CreatePosterUrlRule();
+            this.YearRule = this.ValidationRule(
+                vm => vm.Year,
+                year => !String.IsNullOrWhiteSpace(year) &&
+                        Int32.TryParse(year, out int value) &&
+                        value >= MovieMinYear &&
+                        value <= MovieMaxYear,
+                year => String.IsNullOrWhiteSpace(year) ? "YearEmpty" : "YearInvalid");
+
+            this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
+            this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.InitializeValueDependencies();
 
@@ -104,7 +111,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.Kind, vm=> vm.Movie.Kind);
             this.TrackChanges(vm => vm.IsWatched, vm => vm.Movie.IsWatched);
             this.TrackChanges(vm => vm.IsReleased, vm => vm.Movie.IsReleased);
-            this.TrackChanges(vm => vm.ImdbLink, vm=> vm.Movie.ImdbLink.EmptyIfNull());
+            this.TrackChanges(vm => vm.ImdbLink, vm => vm.Movie.ImdbLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Movie.PosterUrl.EmptyIfNull());
 
             this.TrackValidation(this.YearRule);
@@ -181,28 +188,5 @@ namespace MovieList.ViewModels.Forms
                 .Where(year => year != this.Scheduler.Now.Year)
                 .Subscribe(year => this.IsReleased = year < this.Scheduler.Now.Year);
         }
-
-        private ValidationHelper CreateYearRule()
-            => this.ValidationRule(
-                vm => vm.Year,
-                year => !String.IsNullOrWhiteSpace(year) &&
-                        Int32.TryParse(year, out int value) &&
-                        value >= MovieMinYear &&
-                        value <= MovieMaxYear,
-                year => String.IsNullOrWhiteSpace(year)
-                    ? this.ResourceManager.GetString("ValidationYearEmpty")
-                    : this.ResourceManager.GetString("ValidationYearInvalid"));
-
-        private ValidationHelper CreateImdbLinkRule()
-            => this.ValidationRule(
-                vm => vm.ImdbLink,
-                link => link.IsUrl(),
-                this.ResourceManager.GetString("ValidationImdbLinkInvalid"));
-
-        private ValidationHelper CreatePosterUrlRule()
-            => this.ValidationRule(
-                vm => vm.PosterUrl,
-                url => url.IsUrl(),
-                this.ResourceManager.GetString("ValidationPosterUrlInvalid"));
     }
 }
