@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using Akavache;
 
 using MovieList.Data;
+using MovieList.Data.Models;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
 using MovieList.Properties;
@@ -122,15 +123,66 @@ namespace MovieList
 
         private async Task<UserPreferences> CreateDefaultPreferences()
         {
-            var preferences = new UserPreferences(
-                new FilePreferences(true, new List<RecentFile>()),
-                new LoggingPreferences(
-                    $"{Assembly.GetExecutingAssembly().GetName().Name}.log",
-                    (int)LogEventLevel.Information));
+            var filePreferences = new FilePreferences(showRecentFiles: true, new List<RecentFile>());
+
+            var defaultsPreferences = new DefaultsPreferences(
+                Messages.DefaultSeasonTitle, Messages.DefaultSeasonOriginalTitle, this.GetDefaultKinds());
+
+            var loggingPreferences = new LoggingPreferences(
+                $"{Assembly.GetExecutingAssembly().GetName().Name}.log",
+                (int)LogEventLevel.Information);
+
+            var preferences = new UserPreferences(filePreferences, defaultsPreferences, loggingPreferences);
 
             await BlobCache.UserAccount.InsertObject(PreferencesKey, preferences);
 
             return preferences;
+        }
+
+        private List<Kind> GetDefaultKinds()
+        {
+            const string black = "#000000";
+            const string indigo = "#3949AB";
+            const string green = "#43A047";
+            const string blue = "#1E88E5";
+            const string purple = "#5E35B1";
+
+            const string red = "#E35953";
+            const string darkRed = "#B71C1C";
+
+            return new List<Kind>
+            {
+                new Kind
+                {
+                    Name = Messages.LiveAction,
+                    ColorForWatchedMovie = black,
+                    ColorForWatchedSeries = indigo,
+                    ColorForNotWatchedMovie = red,
+                    ColorForNotWatchedSeries = red,
+                    ColorForNotReleasedMovie = darkRed,
+                    ColorForNotReleasedSeries = darkRed
+                },
+                new Kind
+                {
+                    Name = Messages.Animation,
+                    ColorForWatchedMovie = green,
+                    ColorForWatchedSeries = blue,
+                    ColorForNotWatchedMovie = red,
+                    ColorForNotWatchedSeries = red,
+                    ColorForNotReleasedMovie = darkRed,
+                    ColorForNotReleasedSeries = darkRed
+                },
+                new Kind
+                {
+                    Name = Messages.Documentary,
+                    ColorForWatchedMovie = purple,
+                    ColorForWatchedSeries = purple,
+                    ColorForNotWatchedMovie = red,
+                    ColorForNotWatchedSeries = red,
+                    ColorForNotReleasedMovie = darkRed,
+                    ColorForNotReleasedSeries = darkRed
+                }
+            };
         }
 
         private MainWindow CreateMainWindow(MainViewModel viewModel)

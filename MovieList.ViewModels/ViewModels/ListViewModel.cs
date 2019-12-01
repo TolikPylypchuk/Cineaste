@@ -31,8 +31,7 @@ namespace MovieList.ViewModels
         private readonly ISourceCache<ListItem, string> source;
         private readonly ReadOnlyObservableCollection<ListItemViewModel> items;
         private readonly Subject<Unit> cancelSelection = new Subject<Unit>();
-
-        private CompositeDisposable sideViewModelSubscriptions;
+        private readonly CompositeDisposable sideViewModelSubscriptions = new CompositeDisposable();
 
         public ListViewModel(
             string fileName,
@@ -43,8 +42,6 @@ namespace MovieList.ViewModels
             this.Kinds = kinds;
 
             listService ??= Locator.Current.GetService<IListService>(fileName);
-
-            this.sideViewModelSubscriptions = new CompositeDisposable();
 
             this.source = new SourceCache<ListItem, string>(item => item.Id);
 
@@ -107,8 +104,7 @@ namespace MovieList.ViewModels
                 return false;
             }
 
-            this.sideViewModelSubscriptions.Dispose();
-            this.sideViewModelSubscriptions = new CompositeDisposable();
+            this.sideViewModelSubscriptions.Clear();
 
             this.SelectedItem = vm;
 
@@ -125,8 +121,7 @@ namespace MovieList.ViewModels
         {
             var viewModel = new NewItemViewModel();
 
-            this.sideViewModelSubscriptions.Dispose();
-            this.sideViewModelSubscriptions = new CompositeDisposable();
+            this.sideViewModelSubscriptions.Clear();
 
             viewModel.AddNewMovie
                 .Select(_ => new Movie

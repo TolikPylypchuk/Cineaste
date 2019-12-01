@@ -4,13 +4,15 @@ namespace MovieList.Preferences
     [Equals(DoNotAddEqualityOperators = true)]
     public sealed class UserPreferences
     {
-        public FilePreferences File { get; }
-        public LoggingPreferences Logging { get; }
-
-        public UserPreferences(FilePreferences file, LoggingPreferences logging)
+        public UserPreferences(FilePreferences file, DefaultsPreferences defaults, LoggingPreferences logging)
         {
             this.File = file;
+            this.Defaults = defaults;
             this.Logging = logging;
         }
+
+        public FilePreferences File { get; }
+        public DefaultsPreferences Defaults { get; }
+        public LoggingPreferences Logging { get; }
     }
 }

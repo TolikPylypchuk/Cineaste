@@ -124,6 +124,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Animation.
+        /// </summary>
+        public static string Animation {
+            get {
+                return ResourceManager.GetString("Animation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -241,6 +250,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documentary.
+        /// </summary>
+        public static string Documentary {
+            get {
+                return ResourceManager.GetString("Documentary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string Edit {
@@ -309,6 +327,15 @@ namespace MovieList.Properties {
         public static string Kind {
             get {
                 return ResourceManager.GetString("Kind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Live-Action.
+        /// </summary>
+        public static string LiveAction {
+            get {
+                return ResourceManager.GetString("LiveAction", resourceCulture);
             }
         }
         

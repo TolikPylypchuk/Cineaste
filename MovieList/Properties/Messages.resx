@@ -138,6 +138,9 @@
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All FIles</value>
   </data>
+  <data name="Animation" xml:space="preserve">
+    <value>Animation</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -177,6 +180,9 @@
   <data name="DeleteMovieTitle" xml:space="preserve">
     <value>Delete Movie</value>
   </data>
+  <data name="Documentary" xml:space="preserve">
+    <value>Documentary</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
@@ -200,6 +206,9 @@
   </data>
   <data name="Kind" xml:space="preserve">
     <value>Kind</value>
+  </data>
+  <data name="LiveAction" xml:space="preserve">
+    <value>Live-Action</value>
   </data>
   <data name="MovieList" xml:space="preserve">
     <value>Movie List</value>
