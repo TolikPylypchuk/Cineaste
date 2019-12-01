@@ -6,5 +6,8 @@ namespace MovieList
     {
         public static string? NullIfEmpty(this string? str)
             => String.IsNullOrEmpty(str) ? null : str;
+
+        public static string EmptyIfNull(this string? str)
+            => String.IsNullOrEmpty(str) ? String.Empty : str;
     }
 }

@@ -51,6 +51,9 @@ namespace MovieList.ViewModels.Forms
 
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
 
+        public override bool IsNew
+            => this.Title.Id == default;
+
         protected override void InitializeChangeTracking()
         {
             var nameChanged = this.WhenAnyValue(vm => vm.Name)

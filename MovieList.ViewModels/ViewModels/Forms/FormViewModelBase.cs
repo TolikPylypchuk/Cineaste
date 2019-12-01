@@ -48,6 +48,8 @@ namespace MovieList.ViewModels.Forms
         public bool IsValid
             => this.ValidSubject.Value;
 
+        public abstract bool IsNew { get; }
+
         public ReactiveCommand<Unit, TEntity> Save { get; }
         public ReactiveCommand<Unit, Unit> Cancel { get; }
         public ReactiveCommand<Unit, TEntity?> Delete { get; }

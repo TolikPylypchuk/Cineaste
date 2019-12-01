@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -9,7 +8,6 @@ using System.Resources;
 using System.Threading.Tasks;
 
 using DynamicData;
-using DynamicData.Binding;
 
 using MovieList.Data.Models;
 
@@ -18,17 +16,12 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using static MovieList.Data.Constants;
+using Splat;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class SeriesFormViewModel : FormViewModelBase<Series, SeriesFormViewModel>
+    public sealed class SeriesFormViewModel : TitledFormViewModelBase<Series, SeriesFormViewModel>
     {
-        private readonly SourceList<Title> titlesSource;
-
-        private readonly ReadOnlyObservableCollection<TitleFormViewModel> titles;
-        private readonly ReadOnlyObservableCollection<TitleFormViewModel> originalTitles;
-
         public SeriesFormViewModel(
             Series series,
             ReadOnlyObservableCollection<Kind> kinds,
@@ -39,14 +32,7 @@ namespace MovieList.ViewModels.Forms
             this.Series = series;
             this.Kinds = kinds;
 
-            this.titlesSource = new SourceList<Title>();
-
-            this.InitializeTitles(title => !title.IsOriginal, out this.titles);
-            this.InitializeTitles(title => title.IsOriginal, out this.originalTitles);
-
             this.CopyProperties();
-
-            this.FormTitle = this.CreateFormTitle();
 
             this.ImdbLinkRule = this.CreateImdbLinkRule();
             this.PosterUrlRule = this.CreatePosterUrlRule();
@@ -55,14 +41,6 @@ namespace MovieList.ViewModels.Forms
                 .Merge(this.Save.Select(_ => true))
                 .Subscribe(this.CanDeleteSubject);
 
-            var canAddTitle = this.Titles.ToObservableChangeSet()
-                .Select(_ => this.Titles.Count < MaxTitleCount);
-
-            var canAddOriginalTitle = this.OriginalTitles.ToObservableChangeSet()
-                .Select(_ => this.OriginalTitles.Count < MaxTitleCount);
-
-            this.AddTitle = ReactiveCommand.Create(() => this.OnAddTitle(false), canAddTitle);
-            this.AddOriginalTitle = ReactiveCommand.Create(() => this.OnAddTitle(true), canAddOriginalTitle);
             this.Close = ReactiveCommand.Create(() => { });
 
             this.InitializeChangeTracking();
@@ -70,15 +48,7 @@ namespace MovieList.ViewModels.Forms
 
         public Series Series { get; }
 
-        public IObservable<string> FormTitle { get; }
-
         public ReadOnlyObservableCollection<Kind> Kinds { get; }
-
-        public ReadOnlyObservableCollection<TitleFormViewModel> Titles
-            => this.titles;
-
-        public ReadOnlyObservableCollection<TitleFormViewModel> OriginalTitles
-            => this.originalTitles;
 
         [Reactive]
         public Kind Kind { get; set; } = null!;
@@ -101,12 +71,67 @@ namespace MovieList.ViewModels.Forms
         public ValidationHelper ImdbLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
 
-        public ReactiveCommand<Unit, Unit> AddTitle { get; }
-        public ReactiveCommand<Unit, Unit> AddOriginalTitle { get; }
         public ReactiveCommand<Unit, Unit> Close { get; }
+
+        public override bool IsNew
+            => this.Series.Id == default;
+
+        protected override IEnumerable<Title> ItemTitles
+            => this.Series.Titles;
+
+        protected override string NewItemKey
+            => "NewSeries";
 
         protected override void InitializeChangeTracking()
         {
+            var statusChanged = this.WhenAnyValue(vm => vm.Status)
+                .Select(status => status != this.Series.Status)
+                .Do(changed => this.Log().Debug(changed ? "Status is changed" : "Status is unchanged"));
+
+            var kindChanged = this.WhenAnyValue(vm => vm.Kind)
+                .Select(kind => kind != this.Series.Kind)
+                .Do(changed => this.Log().Debug(changed ? "Kind is changed" : "Kind is unchanged"));
+
+            var isWatchedChanged = this.WhenAnyValue(vm => vm.IsWatched)
+                .Select(isWatched => isWatched != this.Series.IsWatched)
+                .Do(changed => this.Log().Debug(changed ? "Is watched is changed" : "Is watched is unchanged"));
+
+            var isAnthologyChanged = this.WhenAnyValue(vm => vm.IsAnthology)
+                .Select(isAnthology => isAnthology != this.Series.IsAnthology)
+                .Do(changed => this.Log().Debug(changed ? "Is anthology is changed" : "Is anthology is unchanged"));
+
+            var imdbLinkChanged = this.WhenAnyValue(vm => vm.ImdbLink)
+                .Select(link => link.NullIfEmpty() != this.Series.ImdbLink)
+                .Do(changed => this.Log().Debug(changed ? "IMDb link is changed" : "IMDb link is unchanged"));
+
+            var posterUrlChanged = this.WhenAnyValue(vm => vm.PosterUrl)
+                .Select(url => url.NullIfEmpty() != this.Series.PosterUrl)
+                .Do(changed => this.Log().Debug(changed ? "Poster URL is changed" : "Poster URL is unchanged"));
+
+            var falseWhenSave = this.Save.Select(_ => false);
+            var falseWhenCancel = this.Cancel.Select(_ => false);
+
+            Observable.CombineLatest(
+                    this.TitlesChanged,
+                    this.OriginalTitlesChanged,
+                    statusChanged,
+                    kindChanged,
+                    isWatchedChanged,
+                    isAnthologyChanged,
+                    imdbLinkChanged,
+                    posterUrlChanged)
+                .AnyTrue()
+                .Merge(falseWhenSave)
+                .Merge(falseWhenCancel)
+                .Subscribe(this.FormChangedSubject);
+
+            Observable.CombineLatest(
+                    this.TitlesValid,
+                    this.OriginalTitlesValid,
+                    this.ImdbLinkRule.Valid(),
+                    this.PosterUrlRule.Valid())
+                .AllTrue()
+                .Subscribe(this.ValidSubject);
         }
 
         protected override Task<Series?> OnDeleteAsync()
@@ -117,51 +142,19 @@ namespace MovieList.ViewModels.Forms
 
         protected override void CopyProperties()
         {
+            this.TitlesSource.Clear();
+            this.TitlesSource.AddRange(this.Series.Titles);
+
+            this.Status = this.Series.Status;
+            this.Kind = this.Series.Kind;
+            this.IsWatched = this.Series.IsWatched;
+            this.IsAnthology = this.Series.IsAnthology;
+            this.ImdbLink = this.Series.ImdbLink.EmptyIfNull();
+            this.PosterUrl = this.Series.PosterUrl.EmptyIfNull();
         }
 
-        private void InitializeTitles(
-            Func<Title, bool> predicate,
-            out ReadOnlyObservableCollection<TitleFormViewModel> titles)
-        {
-            var canDelete = this.titlesSource.Connect()
-                .Select(_ => this.titlesSource.Items.Where(predicate).Count())
-                .Select(count => count > 1);
-
-            this.titlesSource.Connect()
-                .Filter(predicate)
-                .Sort(SortExpressionComparer<Title>.Ascending(title => title.Priority))
-                .Transform(title => this.CreateTitleForm(title, canDelete))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out titles)
-                .DisposeMany()
-                .Subscribe();
-        }
-
-        private TitleFormViewModel CreateTitleForm(Title title, IObservable<bool> canDelete)
-        {
-            var titleForm = new TitleFormViewModel(title, canDelete, this.ResourceManager);
-
-            titleForm.Delete.Subscribe(_ =>
-            {
-                this.titlesSource.Remove(title);
-
-                (!title.IsOriginal ? this.Titles : this.OriginalTitles)
-                    .Where(t => t.Priority > title.Priority)
-                    .ForEach(t => t.Priority--);
-            });
-
-            return titleForm;
-        }
-
-        private IObservable<string> CreateFormTitle()
-            => this.Titles.ToObservableChangeSet()
-                .AutoRefresh(vm => vm.Name)
-                .AutoRefresh(vm => vm.Priority)
-                .ToCollection()
-                .Select(vms => vms.OrderBy(vm => vm.Priority).Select(vm => vm.Name).FirstOrDefault())
-                .Select(title => this.Series.Id != default || !String.IsNullOrWhiteSpace(title)
-                    ? title
-                    : this.ResourceManager.GetString("NewSeries") ?? String.Empty);
+        protected override void AttachTitle(Title title)
+            => title.Series = this.Series;
 
         private ValidationHelper CreateImdbLinkRule()
             => this.ValidationRule(
@@ -174,17 +167,5 @@ namespace MovieList.ViewModels.Forms
                 vm => vm.PosterUrl,
                 url => url.IsUrl(),
                 this.ResourceManager.GetString("ValidationPosterUrlInvalid"));
-
-        private void OnAddTitle(bool isOriginal)
-            => this.titlesSource.Add(new Title
-            {
-                IsOriginal = isOriginal,
-                Series = this.Series,
-                Priority = !isOriginal ? this.Titles.Count + 1 : this.OriginalTitles.Count + 1
-            });
-
-        private bool AreTitlesChanged(IReadOnlyCollection<TitleFormViewModel> vms)
-            => vms.Count != this.Series.Titles.Count(title => !title.IsOriginal) ||
-               vms.Any(vm => vm.IsFormChanged || this.Series.Id != default && vm.Title.Id == default);
     }
 }
