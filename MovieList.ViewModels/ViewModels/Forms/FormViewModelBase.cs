@@ -19,9 +19,6 @@ namespace MovieList.ViewModels.Forms
         where TEntity : class
         where TViewModel : FormViewModelBase<TEntity, TViewModel>
     {
-        protected readonly ResourceManager ResourceManager;
-        protected readonly IScheduler Scheduler;
-
         private readonly BehaviorSubject<bool> formChangedSubject = new BehaviorSubject<bool>(false);
         private readonly BehaviorSubject<bool> validSubject = new BehaviorSubject<bool>(false);
         private readonly BehaviorSubject<bool> canDeleteSubject = new BehaviorSubject<bool>(false);
@@ -59,6 +56,9 @@ namespace MovieList.ViewModels.Forms
         public ReactiveCommand<Unit, Unit> Cancel { get; }
         public ReactiveCommand<Unit, TEntity?> Delete { get; }
 
+        protected ResourceManager ResourceManager { get; }
+        protected IScheduler Scheduler { get; }
+
         protected abstract TViewModel Self { get; }
 
         protected void TrackChanges(IObservable<bool> changes)
@@ -66,14 +66,13 @@ namespace MovieList.ViewModels.Forms
 
         protected void TrackChanges<T>(Expression<Func<TViewModel, T>> property, Func<TViewModel, T> itemValue)
         {
-            string description = property.GetMemberName();
-            var self = this.Self;
+            string propertyName = property.GetMemberName();
 
             this.TrackChanges(
-                self.WhenAnyValue(property)
-                    .Select(value => !Equals(value, itemValue(self)))
+                this.Self.WhenAnyValue(property)
+                    .Select(value => !Equals(value, itemValue(this.Self)))
                     .Do(changed => this.Log().Debug(
-                        changed ? $"{description} is changed" : $"{description} is unchanged")));
+                        changed ? $"{propertyName} is changed" : $"{propertyName} is unchanged")));
         }
 
         protected void TrackValidation(IObservable<bool> validation)

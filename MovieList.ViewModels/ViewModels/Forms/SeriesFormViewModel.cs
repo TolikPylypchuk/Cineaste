@@ -22,6 +22,7 @@ namespace MovieList.ViewModels.Forms
         public SeriesFormViewModel(
             Series series,
             ReadOnlyObservableCollection<Kind> kinds,
+            string fileName,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
             : base(resourceManager, scheduler)

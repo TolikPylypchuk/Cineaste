@@ -111,6 +111,7 @@ namespace MovieList.ViewModels
             this.SideViewModel = vm?.Item switch
             {
                 MovieListItem movieItem => this.CreateMovieForm(movieItem.Movie),
+                SeriesListItem seriesItem => this.CreateSeriesForm(seriesItem.Series),
                 _ => this.CreateNewItemViewModel()
             };
 
@@ -177,6 +178,41 @@ namespace MovieList.ViewModels
             return form;
         }
 
+        private ReactiveObject CreateSeriesForm(Series series)
+        {
+            this.Log().Debug($"Creating a form for series: {series}");
+
+            var form = new SeriesFormViewModel(series, this.Kinds, this.FileName);
+
+            form.Save
+                .Select(s => new SeriesListItem(s))
+                .Do(this.source.AddOrUpdate)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(item => this.SelectedItem = this.Items.First(vm => vm.Item == item))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Save
+                .Discard()
+                .InvokeCommand(this.Save)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Close
+                .SubscribeAsync(async () => await this.SelectItem.Execute())
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Delete
+                .WhereNotNull()
+                .Subscribe(this.RemoveSeries)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Delete
+                .WhereNotNull()
+                .Discard()
+                .InvokeCommand(form.Close);
+
+            return form;
+        }
+
         private void RemoveMovie(Movie movie)
         {
             this.source.RemoveKey(new MovieListItem(movie).Id);
@@ -184,6 +220,16 @@ namespace MovieList.ViewModels
             if (movie.Entry != null)
             {
                 this.RemoveMovieSeriesEntry(movie.Entry);
+            }
+        }
+
+        private void RemoveSeries(Series series)
+        {
+            this.source.RemoveKey(new SeriesListItem(series).Id);
+
+            if (series.Entry != null)
+            {
+                this.RemoveMovieSeriesEntry(series.Entry);
             }
         }
 

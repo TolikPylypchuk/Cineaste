@@ -78,7 +78,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <ComboBox x:Name="StatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" DisplayMemberPath="Name" Margin="0,0,8,0"
+                    <ComboBox x:Name="StatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.Status}" />
 
                     <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" Margin="8,0,0,0"

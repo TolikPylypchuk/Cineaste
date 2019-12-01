@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using Akavache;
 
 using MovieList.Converters;
+using MovieList.Properties;
 using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
@@ -110,13 +111,9 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
                 .DisposeWith(disposables);
 
-            this.Bind(
-                    this.ViewModel,
-                    vm => vm.Status,
-                    v => v.StatusComboBox.SelectedItem,
-                    null,
-                    new SeriesStatusToStringConverter(),
-                    new SeriesStatusToStringConverter())
+            var converter = new SeriesStatusToStringConverter();
+
+            this.Bind(this.ViewModel, vm => vm.Status, v => v.StatusComboBox.SelectedItem, null, converter, converter)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Kind, v => v.KindComboBox.SelectedItem)
@@ -127,6 +124,11 @@ namespace MovieList.Views.Forms
 
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
                 .DisposeWith(disposables);
+
+            this.StatusComboBox.Items.Add(Messages.SeriesNotStarted);
+            this.StatusComboBox.Items.Add(Messages.SeriesRunning);
+            this.StatusComboBox.Items.Add(Messages.SeriesFinished);
+            this.StatusComboBox.Items.Add(Messages.SeriesCancelled);
 
             this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.KindComboBox.ItemsSource)
                 .DisposeWith(disposables);
