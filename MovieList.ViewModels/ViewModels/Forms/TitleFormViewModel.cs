@@ -1,8 +1,9 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Resources;
+using System.Threading.Tasks;
 
 using MovieList.Data.Models;
 
@@ -11,78 +12,46 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using Splat;
-
 using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public class TitleFormViewModel : ReactiveValidationObject<TitleFormViewModel>
+    public sealed class TitleFormViewModel : FormViewModelBase<Title, TitleFormViewModel>
     {
-        private readonly BehaviorSubject<bool> formChanged;
-        private readonly BehaviorSubject<bool> valid;
-
         public TitleFormViewModel(Title title, IObservable<bool> canDelete, ResourceManager? resourceManager = null)
+            : base(resourceManager)
         {
             this.Title = title;
-            this.Name = title.Name;
-            this.Priority = title.Priority;
-
-            resourceManager ??= Locator.Current.GetService<ResourceManager>();
+            this.CopyProperties();
 
             this.NameRule = this.ValidationRule(
                 vm => vm.Name,
                 name => !String.IsNullOrWhiteSpace(name),
-                resourceManager.GetString("ValidationTitleNameEmpty"));
+                this.ResourceManager.GetString("ValidationTitleNameEmpty"));
 
-            this.formChanged = new BehaviorSubject<bool>(false);
-            this.valid = new BehaviorSubject<bool>(false);
-
-            this.NameRule.Valid().Subscribe(this.valid);
-
-            var canSave = new BehaviorSubject<bool>(false);
+            canDelete.Subscribe(this.CanDeleteSubject);
 
             var canMoveUp = this.WhenAnyValue(vm => vm.Priority)
                 .Select(priority => priority >= MinTitleCount);
 
             this.MoveUp = ReactiveCommand.Create(() => { this.Priority--; }, canMoveUp);
 
-            this.Save = ReactiveCommand.Create(this.OnSave, canSave);
-            this.Cancel = ReactiveCommand.Create(this.OnCancel, this.FormChanged);
-            this.Delete = ReactiveCommand.Create(() => { }, canDelete);
-
-            this.InitializeChangeTracking(canSave);
+            this.InitializeChangeTracking();
         }
 
         public Title Title { get; }
 
         [Reactive]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [Reactive]
         public int Priority { get; set; }
-
-        public IObservable<bool> FormChanged
-            => this.formChanged.AsObservable();
-
-        public bool IsFormChanged
-            => this.formChanged.Value;
-
-        public IObservable<bool> Valid
-            => this.valid.AsObservable();
-
-        public bool IsValid
-            => this.valid.Value;
 
         public ValidationHelper NameRule { get; }
 
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
 
-        public ReactiveCommand<Unit, Unit> Save { get; }
-        public ReactiveCommand<Unit, Unit> Cancel { get; }
-        public ReactiveCommand<Unit, Unit> Delete { get; }
-
-        private void InitializeChangeTracking(BehaviorSubject<bool> canSave)
+        protected override void InitializeChangeTracking()
         {
             var nameChanged = this.WhenAnyValue(vm => vm.Name)
                 .Select(name => name != this.Title.Name);
@@ -97,23 +66,26 @@ namespace MovieList.ViewModels.Forms
                 .AnyTrue()
                 .Merge(falseWhenSave)
                 .Merge(falseWhenCancel)
-                .Subscribe(this.formChanged);
+                .Subscribe(this.FormChangedSubject);
 
-            Observable.CombineLatest(this.FormChanged, this.NameRule.Valid())
-                .AllTrue()
-                .Merge(falseWhenSave)
-                .Merge(falseWhenCancel)
-                .Subscribe(canSave);
+            this.NameRule.Valid()
+                .Subscribe(this.ValidSubject);
         }
 
-        private void OnSave()
+        protected override Task<Title> OnSaveAsync()
         {
             this.Name = this.Name.Trim().Replace(" - ", " – ");
             this.Title.Name = this.Name;
             this.Title.Priority = this.Priority;
+
+            return Task.FromResult(this.Title);
         }
 
-        private void OnCancel()
+        [SuppressMessage("ReSharper", "RedundantCast")]
+        protected override Task<Title?> OnDeleteAsync()
+            => Task.FromResult((Title?)this.Title);
+
+        protected override void CopyProperties()
         {
             this.Name = this.Title.Name;
             this.Priority = this.Title.Priority;
