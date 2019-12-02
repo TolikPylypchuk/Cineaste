@@ -9,7 +9,6 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 using DynamicData;
-using DynamicData.Kernel;
 
 using MovieList.Comparers;
 using MovieList.Data;
@@ -237,17 +236,14 @@ namespace MovieList.ViewModels
         {
             var movieSeries = movieSeriesEntry.ParentSeries;
 
-            foreach (var entry in movieSeries.Entries
-                .Where(entry => entry.SequenceNumber >= movieSeriesEntry.SequenceNumber))
-            {
-                var item = entry.Movie != null
+            movieSeries.Entries
+                .Where(entry => entry.SequenceNumber >= movieSeriesEntry.SequenceNumber)
+                .Select(entry => entry.Movie != null
                     ? new MovieListItem(entry.Movie)
                     : entry.Series != null
                         ? (ListItem)new SeriesListItem(entry.Series)
-                        : new MovieSeriesListItem(entry.MovieSeries!);
-
-                this.source.Lookup(item.Id).IfHasValue(this.source.AddOrUpdate);
-            }
+                        : new MovieSeriesListItem(entry.MovieSeries!))
+                .ForEach(this.source.AddOrUpdate);
 
             if (movieSeries.Entries.Count == 0 && movieSeries.ShowTitles)
             {

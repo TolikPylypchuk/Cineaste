@@ -10,13 +10,13 @@ using MovieList.Data.Models;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal sealed class MovieService : ServiceBase, IMovieService
+    internal sealed class MovieService : EntityServiceBase<Movie>
     {
         public MovieService(string fileName)
             : base(fileName)
         { }
 
-        public async Task SaveAsync(Movie movie)
+        public override async Task SaveAsync(Movie movie)
         {
             await using var connection = this.GetSqliteConnection();
             await connection.OpenAsync();
@@ -33,7 +33,7 @@ namespace MovieList.Data.Services.Implementations
             await transaction.CommitAsync();
         }
 
-        public async Task DeleteAsync(Movie movie)
+        public override async Task DeleteAsync(Movie movie)
         {
             await using var connection = this.GetSqliteConnection();
             await connection.OpenAsync();
@@ -93,41 +93,6 @@ namespace MovieList.Data.Services.Implementations
             if (movie.Entry != null)
             {
                 await connection.UpdateAsync(movie.Entry, transaction);
-            }
-        }
-
-        private async Task DeleteMovieSeriesEntryAsync(
-            MovieSeriesEntry movieSeriesEntry,
-            SqliteConnection connection,
-            IDbTransaction transaction)
-        {
-            await connection.DeleteAsync(movieSeriesEntry, transaction);
-
-            var movieSeries = movieSeriesEntry.ParentSeries;
-
-            foreach (var entry in movieSeries.Entries
-                .Where(entry => entry.SequenceNumber > movieSeriesEntry.SequenceNumber))
-            {
-                entry.SequenceNumber--;
-
-                if (entry.DisplayNumber != null)
-                {
-                    entry.DisplayNumber--;
-                }
-
-                await connection.UpdateAsync(entry, transaction);
-            }
-
-            movieSeries.Entries.Remove(movieSeriesEntry);
-
-            if (movieSeries.Entries.Count == 0)
-            {
-                await connection.DeleteAsync(movieSeries, transaction);
-
-                if (movieSeries.Entry != null)
-                {
-                    await this.DeleteMovieSeriesEntryAsync(movieSeries.Entry, connection, transaction);
-                }
             }
         }
     }

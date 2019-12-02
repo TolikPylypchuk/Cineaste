@@ -42,6 +42,6 @@ namespace MovieList.Data.Models
             };
 
         public override string ToString()
-            => $"Movie Series Entry #{this.Id}: {this.Titles}";
+            => $"Movie Series Entry #{this.Id}: {Title.ToString(this.Titles)}";
     }
 }

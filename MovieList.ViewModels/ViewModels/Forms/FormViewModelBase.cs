@@ -15,9 +15,9 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms
 {
-    public abstract class FormViewModelBase<TEntity, TViewModel> : ReactiveValidationObject<TViewModel>
-        where TEntity : class
-        where TViewModel : FormViewModelBase<TEntity, TViewModel>
+    public abstract class FormViewModelBase<TModel, TViewModel> : ReactiveValidationObject<TViewModel>
+        where TModel : class
+        where TViewModel : FormViewModelBase<TModel, TViewModel>
     {
         private readonly BehaviorSubject<bool> formChangedSubject = new BehaviorSubject<bool>(false);
         private readonly BehaviorSubject<bool> validSubject = new BehaviorSubject<bool>(false);
@@ -52,9 +52,9 @@ namespace MovieList.ViewModels.Forms
 
         public abstract bool IsNew { get; }
 
-        public ReactiveCommand<Unit, TEntity> Save { get; }
+        public ReactiveCommand<Unit, TModel> Save { get; }
         public ReactiveCommand<Unit, Unit> Cancel { get; }
-        public ReactiveCommand<Unit, TEntity?> Delete { get; }
+        public ReactiveCommand<Unit, TModel?> Delete { get; }
 
         protected ResourceManager ResourceManager { get; }
         protected IScheduler Scheduler { get; }
@@ -79,7 +79,7 @@ namespace MovieList.ViewModels.Forms
             => this.validationsToTrack.Add(validation);
 
         protected void TrackValidation(ValidationHelper rule)
-            => this.TrackValidation(rule.Valid());
+            => this.TrackValidation(rule.ValidationChanged.Select(state => state.IsValid));
 
         protected void CanDeleteWhen(IObservable<bool> canDelete)
             => canDelete.Subscribe(this.canDeleteSubject);
@@ -105,9 +105,9 @@ namespace MovieList.ViewModels.Forms
                 .Subscribe(this.validSubject);
         }
 
-        protected abstract Task<TEntity> OnSaveAsync();
+        protected abstract Task<TModel> OnSaveAsync();
 
-        protected abstract Task<TEntity?> OnDeleteAsync();
+        protected abstract Task<TModel?> OnDeleteAsync();
 
         protected abstract void CopyProperties();
     }

@@ -20,12 +20,10 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public abstract class TitledFormViewModelBase<TEntity, TViewModel> : FormViewModelBase<TEntity, TViewModel>
-        where TEntity : class
-        where TViewModel : TitledFormViewModelBase<TEntity, TViewModel>
+    public abstract class TitledFormViewModelBase<TModel, TViewModel> : FormViewModelBase<TModel, TViewModel>
+        where TModel : class
+        where TViewModel : TitledFormViewModelBase<TModel, TViewModel>
     {
-        protected readonly SourceList<Title> TitlesSource;
-
         private readonly ReadOnlyObservableCollection<TitleFormViewModel> titles;
         private readonly ReadOnlyObservableCollection<TitleFormViewModel> originalTitles;
 
@@ -65,6 +63,8 @@ namespace MovieList.ViewModels.Forms
 
         public ReactiveCommand<Unit, Unit> AddTitle { get; }
         public ReactiveCommand<Unit, Unit> AddOriginalTitle { get; }
+
+        protected SourceList<Title> TitlesSource { get; }
 
         protected IObservable<bool> TitlesChanged { get; }
         protected IObservable<bool> OriginalTitlesChanged { get; }
@@ -111,14 +111,16 @@ namespace MovieList.ViewModels.Forms
         {
             var titleForm = new TitleFormViewModel(title, canDelete, this.ResourceManager);
 
-            titleForm.Delete.Subscribe(_ =>
-            {
-                this.TitlesSource.Remove(title);
+            titleForm.Delete
+                .WhereNotNull()
+                .Subscribe(deletedTitle =>
+                {
+                    this.TitlesSource.Remove(deletedTitle);
 
-                (!title.IsOriginal ? this.Titles : this.OriginalTitles)
-                    .Where(t => t.Priority > title.Priority)
-                    .ForEach(t => t.Priority--);
-            });
+                    (!deletedTitle.IsOriginal ? this.Titles : this.OriginalTitles)
+                        .Where(t => t.Priority > deletedTitle.Priority)
+                        .ForEach(t => t.Priority--);
+                });
 
             return titleForm;
         }

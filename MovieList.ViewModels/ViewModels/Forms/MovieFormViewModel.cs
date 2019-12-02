@@ -27,7 +27,7 @@ namespace MovieList.ViewModels.Forms
 {
     public sealed class MovieFormViewModel : TitledFormViewModelBase<Movie, MovieFormViewModel>
     {
-        private readonly IMovieService movieService;
+        private readonly IEntityService<Movie> movieService;
 
         public MovieFormViewModel(
             Movie movie,
@@ -35,13 +35,13 @@ namespace MovieList.ViewModels.Forms
             string fileName,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null,
-            IMovieService? movieService = null)
+            IEntityService<Movie>? movieService = null)
             : base(resourceManager, scheduler)
         {
             this.Movie = movie;
             this.Kinds = kinds;
 
-            this.movieService = movieService ?? Locator.Current.GetService<IMovieService>(fileName);
+            this.movieService = movieService ?? Locator.Current.GetService<IEntityService<Movie>>(fileName);
 
             this.CopyProperties();
 

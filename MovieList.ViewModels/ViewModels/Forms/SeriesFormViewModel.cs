@@ -3,32 +3,41 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
 
 using DynamicData;
 
 using MovieList.Data.Models;
-
+using MovieList.Data.Services;
+using MovieList.DialogModels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
+using Splat;
+
 namespace MovieList.ViewModels.Forms
 {
     public sealed class SeriesFormViewModel : TitledFormViewModelBase<Series, SeriesFormViewModel>
     {
+        private readonly IEntityService<Series> seriesService;
+
         public SeriesFormViewModel(
             Series series,
             ReadOnlyObservableCollection<Kind> kinds,
             string fileName,
             ResourceManager? resourceManager = null,
-            IScheduler? scheduler = null)
+            IScheduler? scheduler = null,
+            IEntityService<Series>? seriesService = null)
             : base(resourceManager, scheduler)
         {
             this.Series = series;
             this.Kinds = kinds;
+
+            this.seriesService = seriesService ?? Locator.Current.GetService<IEntityService<Series>>(fileName);
 
             this.CopyProperties();
 
@@ -96,11 +105,21 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override Task<Series?> OnDeleteAsync()
-            => Task.FromResult<Series?>(null);
-
         protected override Task<Series> OnSaveAsync()
             => Task.FromResult(this.Series);
+
+        protected override async Task<Series?> OnDeleteAsync()
+        {
+            bool shouldDelete = await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeries"));
+
+            if (shouldDelete)
+            {
+                await this.seriesService.DeleteAsync(this.Series);
+                return this.Series;
+            }
+
+            return null;
+        }
 
         protected override void CopyProperties()
         {

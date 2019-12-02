@@ -183,6 +183,12 @@
   <data name="DeleteMovieTitle" xml:space="preserve">
     <value>Delete Movie</value>
   </data>
+  <data name="DeleteSeriesQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete the series?</value>
+  </data>
+  <data name="DeleteSeriesTitle" xml:space="preserve">
+    <value>Delete Series</value>
+  </data>
   <data name="Documentary" xml:space="preserve">
     <value>Documentary</value>
   </data>
