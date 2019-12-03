@@ -1,5 +1,4 @@
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
@@ -41,19 +40,11 @@ namespace MovieList.Data.Services.Implementations
         {
             await connection.UpdateAsync(movie, transaction);
 
-            var dbTitles = (await connection.GetAllAsync<Title>(transaction))
-                .Where(title => title.MovieId == movie.Id)
-                .ToList();
-
-            await connection.UpdateAsync(movie.Titles.Intersect(dbTitles, IdEqualityComparer<Title>.Instance), transaction);
-
-            foreach (var title in movie.Titles.Except(dbTitles, IdEqualityComparer<Title>.Instance))
-            {
-                title.MovieId = movie.Id;
-                title.Id = await connection.InsertAsync(title, transaction);
-            }
-
-            await connection.DeleteAsync(dbTitles.Except(movie.Titles, IdEqualityComparer<Title>.Instance), transaction);
+            await new DependentEntityUpdater(connection, transaction).UpdateDependentEntitiesAsync(
+                movie,
+                movie.Titles,
+                title => title.MovieId,
+                (title, movieId) => title.MovieId = movieId);
 
             if (movie.Entry != null)
             {

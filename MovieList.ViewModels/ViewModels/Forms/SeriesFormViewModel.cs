@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -105,8 +106,27 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override Task<Series> OnSaveAsync()
-            => Task.FromResult(this.Series);
+        protected override async Task<Series> OnSaveAsync()
+        {
+            foreach (var title in this.Titles.Union(this.OriginalTitles))
+            {
+                await title.Save.Execute();
+            }
+
+            this.Series.Titles.Add(this.TitlesSource.Items.Except(this.Series.Titles).ToList());
+            this.Series.Titles.Remove(this.Series.Titles.Except(this.TitlesSource.Items).ToList());
+
+            this.Series.IsWatched = this.IsWatched;
+            this.Series.IsAnthology = this.IsAnthology;
+            this.Series.Status = this.Status;
+            this.Series.Kind = this.Kind;
+            this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
+            this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
+
+            await this.seriesService.SaveAsync(this.Series);
+
+            return this.Series;
+        }
 
         protected override async Task<Series?> OnDeleteAsync()
         {
