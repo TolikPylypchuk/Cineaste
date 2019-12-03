@@ -103,16 +103,23 @@ namespace MovieList.ViewModels
                 return false;
             }
 
-            this.sideViewModelSubscriptions.Clear();
+            bool isSame = this.SelectedItem?.Item.Id == vm?.Item.Id;
 
             this.SelectedItem = vm;
 
-            this.SideViewModel = vm?.Item switch
+            if (!isSame)
             {
-                MovieListItem movieItem => this.CreateMovieForm(movieItem.Movie),
-                SeriesListItem seriesItem => this.CreateSeriesForm(seriesItem.Series),
-                _ => this.CreateNewItemViewModel()
-            };
+                this.sideViewModelSubscriptions.Clear();
+
+                this.SideViewModel = vm?.Item switch
+                {
+                    null => this.CreateNewItemViewModel(),
+                    MovieListItem movieItem => this.CreateMovieForm(movieItem.Movie),
+                    SeriesListItem seriesItem => this.CreateSeriesForm(seriesItem.Series),
+                    MovieSeriesListItem _ => this.CreateNewItemViewModel(),
+                    _ => throw new NotSupportedException("List item type not supported")
+                };
+            }
 
             return true;
         }

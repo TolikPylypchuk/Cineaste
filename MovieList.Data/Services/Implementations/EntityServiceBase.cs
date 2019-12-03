@@ -17,8 +17,18 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public abstract Task SaveAsync(TEntity entity);
-        public abstract Task DeleteAsync(TEntity entity);
+        public Task SaveAsync(TEntity entity)
+            => this.WithTransactionAsync(
+                (connection, transaction) => entity.Id == default
+                    ? this.InsertAsync(entity, connection, transaction)
+                    : this.UpdateAsync(entity, connection, transaction));
+
+        public Task DeleteAsync(TEntity entity)
+            => this.WithTransactionAsync((connection, transaction) => this.DeleteAsync(entity, connection, transaction));
+
+        protected abstract Task InsertAsync(TEntity entity, SqliteConnection connection, IDbTransaction transaction);
+        protected abstract Task UpdateAsync(TEntity entity, SqliteConnection connection, IDbTransaction transaction);
+        protected abstract Task DeleteAsync(TEntity entity, SqliteConnection connection, IDbTransaction transaction);
 
         protected async Task DeleteMovieSeriesEntryAsync(
             MovieSeriesEntry movieSeriesEntry,

@@ -1,8 +1,11 @@
 using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
+
+using Microsoft.Data.Sqlite;
 
 using MovieList.Data.Models;
 
@@ -14,17 +17,18 @@ namespace MovieList.Data.Services.Implementations
             : base(fileName)
         { }
 
-        public override Task SaveAsync(Series series)
+        protected override Task InsertAsync(Series series, SqliteConnection connection, IDbTransaction transaction)
         {
             throw new NotImplementedException();
         }
 
-        public override async Task DeleteAsync(Series series)
+        protected override Task UpdateAsync(Series series, SqliteConnection connection, IDbTransaction transaction)
         {
-            await using var connection = this.GetSqliteConnection();
-            await connection.OpenAsync();
-            await using var transaction = await connection.BeginTransactionAsync();
+            throw new NotImplementedException();
+        }
 
+        protected override async Task DeleteAsync(Series series, SqliteConnection connection, IDbTransaction transaction)
+        {
             await connection.DeleteAsync(series.Titles, transaction);
 
             await connection.DeleteAsync(series.Seasons.SelectMany(season => season.Periods), transaction);
@@ -40,8 +44,6 @@ namespace MovieList.Data.Services.Implementations
             }
 
             await connection.DeleteAsync(series, transaction);
-
-            await transaction.CommitAsync();
         }
     }
 }

@@ -16,42 +16,7 @@ namespace MovieList.Data.Services.Implementations
             : base(fileName)
         { }
 
-        public override async Task SaveAsync(Movie movie)
-        {
-            await using var connection = this.GetSqliteConnection();
-            await connection.OpenAsync();
-            await using var transaction = await connection.BeginTransactionAsync();
-
-            if (movie.Id == default)
-            {
-                await this.InsertMovieAsync(movie, connection, transaction);
-            } else
-            {
-                await this.UpdateMovieAsync(movie, connection, transaction);
-            }
-
-            await transaction.CommitAsync();
-        }
-
-        public override async Task DeleteAsync(Movie movie)
-        {
-            await using var connection = this.GetSqliteConnection();
-            await connection.OpenAsync();
-            await using var transaction = await connection.BeginTransactionAsync();
-
-            await connection.DeleteAsync(movie.Titles, transaction);
-
-            if (movie.Entry != null)
-            {
-                await this.DeleteMovieSeriesEntryAsync(movie.Entry, connection, transaction);
-            }
-
-            await connection.DeleteAsync(movie, transaction);
-
-            await transaction.CommitAsync();
-        }
-
-        private async Task InsertMovieAsync(Movie movie, SqliteConnection connection, IDbTransaction transaction)
+        protected override async Task InsertAsync(Movie movie, SqliteConnection connection, IDbTransaction transaction)
         {
             movie.KindId = movie.Kind.Id;
 
@@ -72,7 +37,7 @@ namespace MovieList.Data.Services.Implementations
             }
         }
 
-        private async Task UpdateMovieAsync(Movie movie, SqliteConnection connection, IDbTransaction transaction)
+        protected override async Task UpdateAsync(Movie movie, SqliteConnection connection, IDbTransaction transaction)
         {
             await connection.UpdateAsync(movie, transaction);
 
@@ -94,6 +59,18 @@ namespace MovieList.Data.Services.Implementations
             {
                 await connection.UpdateAsync(movie.Entry, transaction);
             }
+        }
+
+        protected override async Task DeleteAsync(Movie movie, SqliteConnection connection, IDbTransaction transaction)
+        {
+            await connection.DeleteAsync(movie.Titles, transaction);
+
+            if (movie.Entry != null)
+            {
+                await this.DeleteMovieSeriesEntryAsync(movie.Entry, connection, transaction);
+            }
+
+            await connection.DeleteAsync(movie, transaction);
         }
     }
 }

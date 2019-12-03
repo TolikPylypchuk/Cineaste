@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
+
+using Microsoft.Data.Sqlite;
 
 using MovieList.Data.Models;
 
@@ -16,14 +19,16 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        [LogException]
-        public async Task<MovieList> GetListAsync(IList<Kind> kinds)
+        public Task<MovieList> GetListAsync(IList<Kind> kinds)
+            => this.WithTransactionAsync((connection, transaction) =>
+                this.GetListAsync(kinds, connection, transaction));
+
+        public async Task<MovieList> GetListAsync(
+            IList<Kind> kinds,
+            SqliteConnection connection,
+            IDbTransaction transaction)
         {
             this.Log().Debug("Getting the full list of movies, series and movie series.");
-
-            await using var connection = this.GetSqliteConnection();
-            await connection.OpenAsync();
-            await using var transaction = await connection.BeginTransactionAsync();
 
             var titles = await connection.GetAllAsync<Title>(transaction).ToListAsync();
             var entries = await connection.GetAllAsync<MovieSeriesEntry>(transaction).ToListAsync();
@@ -35,8 +40,6 @@ namespace MovieList.Data.Services.Implementations
             var movies = await connection.GetAllAsync<Movie>(transaction).ToListAsync();
             var series = await connection.GetAllAsync<Series>(transaction).ToListAsync();
             var movieSeries = await connection.GetAllAsync<MovieSeries>(transaction).ToListAsync();
-
-            await transaction.CommitAsync();
 
             return new MovieList(
                 movies

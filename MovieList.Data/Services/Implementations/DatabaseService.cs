@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 using Dapper;
@@ -28,7 +29,6 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        [LogException]
         [SuppressMessage(
             "Security",
             "CA2100:Review SQL queries for security vulnerabilities",
@@ -45,17 +45,12 @@ namespace MovieList.Data.Services.Implementations
             
             string sql = Resource.AsString(SchemaSql);
 
-            await using var connection = this.GetSqliteConnection();
-            await connection.OpenAsync();
-            await using var transaction = await connection.BeginTransactionAsync();
-
-            await connection.ExecuteAsync(sql, transaction);
-
-            await this.InitSettingsAsync(connection, transaction, settings);
-
-            await connection.InsertAsync(initialKinds, transaction);
-
-            await transaction.CommitAsync();
+            await this.WithTransactionAsync(async (connection ,transaction) =>
+            {
+                await connection.ExecuteAsync(sql, transaction);
+                await this.InitSettingsAsync(connection, transaction, settings);
+                await connection.InsertAsync(initialKinds, transaction);
+            });
         }
 
         [LogException]
@@ -121,12 +116,13 @@ namespace MovieList.Data.Services.Implementations
 
             const int headerSize = 16;
 
-            await using var stream = new FileStream(this.DatabasePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            await using var stream = new FileStream(
+                this.DatabasePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
             var header = new byte[headerSize];
             await stream.ReadAsync(header, 0, headerSize);
 
-            bool isSqliteFile = System.Text.Encoding.UTF8.GetString(header).Contains(SqliteFileHeader);
+            bool isSqliteFile = Encoding.UTF8.GetString(header).Contains(SqliteFileHeader);
 
             if (!isSqliteFile)
             {

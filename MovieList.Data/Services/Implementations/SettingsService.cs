@@ -24,15 +24,16 @@ namespace MovieList.Data.Services.Implementations
         {
             this.Log().Debug("Getting all settings.");
 
-            await using var connection = this.GetSqliteConnection();
-            await connection.OpenAsync();
-            var settings = (await connection.GetAllAsync<Setting>()).ToDictionary(s => s.Key, s => s.Value);
+            return await this.WithTransactionAsync(async (connection, transaction) =>
+            {
+                var settings = (await connection.GetAllAsync<Setting>()).ToDictionary(s => s.Key, s => s.Value);
 
-            return new Settings(
-                settings[SettingsListNameKey],
-                Int32.Parse(settings[SettingsListVersionKey]),
-                settings[SettingsDefaultSeasonTitleKey],
-                settings[SettingsDefaultSeasonOriginalTitleKey]);
+                return new Settings(
+                    settings[SettingsListNameKey],
+                    Int32.Parse(settings[SettingsListVersionKey]),
+                    settings[SettingsDefaultSeasonTitleKey],
+                    settings[SettingsDefaultSeasonOriginalTitleKey]);
+            });
         }
 
         [LogException]
@@ -40,24 +41,22 @@ namespace MovieList.Data.Services.Implementations
         {
             this.Log().Debug("Saving settings.");
 
-            await using var connection = this.GetSqliteConnection();
-            await connection.OpenAsync();
-            await using var transaction = await connection.BeginTransactionAsync();
-
-            var dbSettings = await connection.GetAllAsync<Setting>(transaction);
-
-            var settingsDictionary = this.ToDictionary(settings);
-
-            foreach (var setting in dbSettings)
+            await this.WithTransactionAsync(async (connection, transaction) =>
             {
-                if (settingsDictionary.ContainsKey(setting.Key) && settingsDictionary[setting.Key] != setting.Value)
-                {
-                    setting.Value = settingsDictionary[setting.Key];
-                    await connection.UpdateAsync(setting, transaction);
-                }
-            }
+                var dbSettings = await connection.GetAllAsync<Setting>(transaction);
 
-            await transaction.CommitAsync();
+                var settingsDictionary = this.ToDictionary(settings);
+
+                foreach (var setting in dbSettings)
+                {
+                    if (settingsDictionary.ContainsKey(setting.Key) &&
+                        settingsDictionary[setting.Key] != setting.Value)
+                    {
+                        setting.Value = settingsDictionary[setting.Key];
+                        await connection.UpdateAsync(setting, transaction);
+                    }
+                }
+            });
         }
 
         private Dictionary<string, string> ToDictionary(Settings settings)

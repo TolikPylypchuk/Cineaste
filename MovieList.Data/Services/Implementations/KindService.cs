@@ -20,9 +20,8 @@ namespace MovieList.Data.Services.Implementations
         {
             this.Log().Debug("Getting all kinds.");
 
-            await using var connection = this.GetSqliteConnection();
-            await connection.OpenAsync();
-            return await connection.GetAllAsync<Kind>();
+            return await this.WithTransactionAsync(
+                (connection, transaction) => connection.GetAllAsync<Kind>(transaction));
         }
     }
 }
