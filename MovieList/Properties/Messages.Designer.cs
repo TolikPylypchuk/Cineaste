@@ -421,6 +421,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Season.
+        /// </summary>
+        public static string NewSeason {
+            get {
+                return ResourceManager.GetString("NewSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Series.
         /// </summary>
         public static string NewSeries {
@@ -705,6 +714,15 @@ namespace MovieList.Properties {
         public static string TitleHeader {
             get {
                 return ResourceManager.GetString("TitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The channel must not be empty.
+        /// </summary>
+        public static string ValidationChannelEmpty {
+            get {
+                return ResourceManager.GetString("ValidationChannelEmpty", resourceCulture);
             }
         }
         

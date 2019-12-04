@@ -237,6 +237,9 @@
   <data name="NewMovie" xml:space="preserve">
     <value>New Movie</value>
   </data>
+  <data name="NewSeason" xml:space="preserve">
+    <value>New Season</value>
+  </data>
   <data name="NewSeries" xml:space="preserve">
     <value>New Series</value>
   </data>
@@ -332,6 +335,9 @@
   </data>
   <data name="TitleHeader" xml:space="preserve">
     <value>Title</value>
+  </data>
+  <data name="ValidationChannelEmpty" xml:space="preserve">
+    <value>The channel must not be empty</value>
   </data>
   <data name="ValidationImdbLinkInvalid" xml:space="preserve">
     <value>The IMDb link is invalid</value>
