@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,9 +16,38 @@ namespace MovieList.Data.Services.Implementations
             : base(fileName)
         { }
 
-        protected override Task InsertAsync(Series series, SqliteConnection connection, IDbTransaction transaction)
+        protected override async Task InsertAsync(Series series, SqliteConnection connection, IDbTransaction transaction)
         {
-            throw new NotImplementedException();
+            series.KindId = series.Kind.Id;
+
+            series.Id = await connection.InsertAsync(series, transaction);
+
+            foreach (var title in series.Titles)
+            {
+                title.SeriesId = series.Id;
+                title.Id = await connection.InsertAsync(title, transaction);
+            }
+
+            foreach (var season in series.Seasons)
+            {
+                season.SeriesId = series.Id;
+                season.Id = await connection.InsertAsync(season, transaction);
+                await this.InsertSeasonDependentEntities(season, connection, transaction);
+            }
+
+            foreach (var episode in series.SpecialEpisodes)
+            {
+                episode.SeriesId = series.Id;
+                episode.Id = await connection.InsertAsync(episode, transaction);
+            }
+
+            if (series.Entry != null)
+            {
+                var entry = series.Entry;
+                entry.Id = await connection.InsertAsync(entry, transaction);
+                entry.SeriesId = series.Id;
+                entry.ParentSeries.Entries.Add(entry);
+            }
         }
 
         protected override async Task UpdateAsync(Series series, SqliteConnection connection, IDbTransaction transaction)
@@ -38,7 +66,9 @@ namespace MovieList.Data.Services.Implementations
                 series,
                 series.Seasons,
                 season => season.SeriesId,
-                (season, seriesId) => season.SeriesId = seriesId);
+                (season, seriesId) => season.SeriesId = seriesId,
+                season => this.InsertSeasonDependentEntities(season, connection, transaction),
+                season => this.DeleteSeasonDependentEntities(season, connection, transaction));
 
             foreach (var season in series.Seasons)
             {
@@ -84,6 +114,33 @@ namespace MovieList.Data.Services.Implementations
             }
 
             await connection.DeleteAsync(series, transaction);
+        }
+
+        private async Task InsertSeasonDependentEntities(
+            Season season,
+            SqliteConnection connection,
+            IDbTransaction transaction)
+        {
+            foreach (var title in season.Titles)
+            {
+                title.SeasonId = season.Id;
+                title.Id = await connection.InsertAsync(title, transaction);
+            }
+
+            foreach (var period in season.Periods)
+            {
+                period.SeasonId = season.Id;
+                period.Id = await connection.InsertAsync(period, transaction);
+            }
+        }
+
+        private async Task DeleteSeasonDependentEntities(
+            Season season,
+            SqliteConnection connection,
+            IDbTransaction transaction)
+        {
+            await connection.DeleteAsync(season.Periods, transaction);
+            await connection.DeleteAsync(season.Titles, transaction);
         }
     }
 }

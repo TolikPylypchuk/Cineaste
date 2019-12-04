@@ -27,7 +27,9 @@ namespace MovieList.Data.Services.Implementations
             EntityBase entity,
             IList<TDependent> dependentEntities,
             Func<TDependent, int?> relationKeyGetter,
-            Action<TDependent, int> relationKeySetter)
+            Action<TDependent, int> relationKeySetter,
+            Func<TDependent, Task>? entityToInsertCallback = null,
+            Func<TDependent, Task>? entityToDeleteCallback = null)
             where TDependent : EntityBase
         {
             var dbEntities = (await this.connection.GetAllAsync<TDependent>(this.transaction))
@@ -37,15 +39,30 @@ namespace MovieList.Data.Services.Implementations
             await this.connection.UpdateAsync(
                 dependentEntities.Intersect(dbEntities, IdEqualityComparer<TDependent>.Instance), this.transaction);
 
-            foreach (var dependentEntity in dependentEntities.Except(
+            foreach (var entityToInsert in dependentEntities.Except(
                 dbEntities, IdEqualityComparer<TDependent>.Instance))
             {
-                relationKeySetter(dependentEntity, entity.Id);
-                dependentEntity.Id = await this.connection.InsertAsync(dependentEntity, this.transaction);
+                relationKeySetter(entityToInsert, entity.Id);
+                entityToInsert.Id = await this.connection.InsertAsync(entityToInsert, this.transaction);
+
+                if (entityToInsertCallback != null)
+                {
+                    await entityToInsertCallback(entityToInsert);
+                }
             }
 
-            await this.connection.DeleteAsync(
-                dbEntities.Except(dependentEntities, IdEqualityComparer<TDependent>.Instance), this.transaction);
+            var entitiesToDelete = dbEntities.Except(dependentEntities, IdEqualityComparer<TDependent>.Instance)
+                .ToList();
+
+            if (entityToDeleteCallback != null)
+            {
+                foreach (var entityToDelete in entitiesToDelete)
+                {
+                    await entityToDeleteCallback(entityToDelete);
+                }
+            }
+
+            await this.connection.DeleteAsync(entitiesToDelete, this.transaction);
         }
     }
 }
