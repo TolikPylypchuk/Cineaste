@@ -15,7 +15,6 @@ namespace MovieList.Data.Services.Implementations
         protected ServiceBase(string file)
             => this.DatabasePath = file;
 
-        [LogException]
         protected async Task WithTransactionAsync(Func<SqliteConnection, IDbTransaction, Task> action)
         {
             await using var connection = this.GetSqliteConnection();
@@ -26,14 +25,14 @@ namespace MovieList.Data.Services.Implementations
             {
                 await action(connection, transaction);
                 await transaction.CommitAsync();
-            } catch
+            } catch (Exception e)
             {
                 await transaction.RollbackAsync();
+                this.Log().Error(e);
                 throw;
             }
         }
 
-        [LogException]
         protected async Task<TResult> WithTransactionAsync<TResult>(
             Func<SqliteConnection, IDbTransaction, Task<TResult>> action)
         {
@@ -47,9 +46,10 @@ namespace MovieList.Data.Services.Implementations
                 await transaction.CommitAsync();
 
                 return result;
-            } catch
+            } catch (Exception e)
             {
                 await transaction.RollbackAsync();
+                this.Log().Error(e);
                 throw;
             }
         }

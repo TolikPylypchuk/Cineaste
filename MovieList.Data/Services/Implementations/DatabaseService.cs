@@ -53,7 +53,6 @@ namespace MovieList.Data.Services.Implementations
             });
         }
 
-        [LogException]
         public async Task<bool> ValidateDatabaseAsync()
         {
             this.Log().Debug($"Validating the database: {this.DatabasePath}.");

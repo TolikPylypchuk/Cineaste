@@ -19,7 +19,6 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        [LogException]
         public async Task<Settings> GetSettingsAsync()
         {
             this.Log().Debug("Getting all settings.");
@@ -36,7 +35,6 @@ namespace MovieList.Data.Services.Implementations
             });
         }
 
-        [LogException]
         public async Task UpdateSettingsAsync(Settings settings)
         {
             this.Log().Debug("Saving settings.");

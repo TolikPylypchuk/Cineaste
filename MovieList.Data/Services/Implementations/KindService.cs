@@ -15,7 +15,6 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        [LogException]
         public async Task<IEnumerable<Kind>> GetAllKindsAsync()
         {
             this.Log().Debug("Getting all kinds.");
