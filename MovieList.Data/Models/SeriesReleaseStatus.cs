@@ -1,6 +1,6 @@
 namespace MovieList.Data.Models
 {
-    public enum SeriesStatus
+    public enum SeriesReleaseStatus
     {
         NotStarted,
         Running,

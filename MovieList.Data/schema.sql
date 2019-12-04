@@ -28,10 +28,10 @@ CREATE INDEX "Idx_Movies_KindId" ON "Movies" ("KindId");
 
 CREATE TABLE "Series" (
     "Id" INTEGER PRIMARY KEY,
-    "IsWatched" INTEGER(1) NOT NULL,
     "IsMiniseries" INTEGER(1) NOT NULL,
     "IsAnthology" INTEGER(1) NOT NULL,
-    "Status" INTEGER NOT NULL,
+    "WatchStatus" INTEGER NOT NULL,
+    "ReleaseStatus" INTEGER NOT NULL,
     "ImdbLink" TEXT,
     "PosterUrl" TEXT,
     "KindId" INTEGER NOT NULL,

@@ -619,6 +619,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not watched.
+        /// </summary>
+        public static string SeriesNotWatched {
+            get {
+                return ResourceManager.GetString("SeriesNotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release Status.
+        /// </summary>
+        public static string SeriesReleaseStatus {
+            get {
+                return ResourceManager.GetString("SeriesReleaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Running.
         /// </summary>
         public static string SeriesRunning {
@@ -628,20 +646,47 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stopped watching.
+        /// </summary>
+        public static string SeriesStoppedWatching {
+            get {
+                return ResourceManager.GetString("SeriesStoppedWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched.
+        /// </summary>
+        public static string SeriesWatched {
+            get {
+                return ResourceManager.GetString("SeriesWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watching.
+        /// </summary>
+        public static string SeriesWatching {
+            get {
+                return ResourceManager.GetString("SeriesWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch Status.
+        /// </summary>
+        public static string SeriesWatchStatus {
+            get {
+                return ResourceManager.GetString("SeriesWatchStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Status.
-        /// </summary>
-        public static string Status {
-            get {
-                return ResourceManager.GetString("Status", resourceCulture);
             }
         }
         

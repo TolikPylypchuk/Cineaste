@@ -13,6 +13,7 @@ using DynamicData;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.DialogModels;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
@@ -60,13 +61,13 @@ namespace MovieList.ViewModels.Forms
         public Kind Kind { get; set; } = null!;
 
         [Reactive]
-        public bool IsWatched { get; set; }
-
-        [Reactive]
         public bool IsAnthology { get; set; }
 
         [Reactive]
-        public SeriesStatus Status { get; set; }
+        public SeriesWatchStatus WatchStatus { get; set; }
+
+        [Reactive]
+        public SeriesReleaseStatus ReleaseStatus { get; set; }
 
         [Reactive]
         public string ImdbLink { get; set; } = String.Empty;
@@ -93,9 +94,9 @@ namespace MovieList.ViewModels.Forms
 
         protected override void EnableChangeTracking()
         {
-            this.TrackChanges(vm => vm.Status, vm => vm.Series.Status);
+            this.TrackChanges(vm => vm.WatchStatus, vm => vm.Series.WatchStatus);
+            this.TrackChanges(vm => vm.ReleaseStatus, vm => vm.Series.ReleaseStatus);
             this.TrackChanges(vm => vm.Kind, vm => vm.Series.Kind);
-            this.TrackChanges(vm => vm.IsWatched, vm => vm.Series.IsWatched);
             this.TrackChanges(vm => vm.IsAnthology, vm => vm.Series.IsAnthology);
             this.TrackChanges(vm => vm.ImdbLink, vm => vm.Series.ImdbLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Series.PosterUrl.EmptyIfNull());
@@ -116,9 +117,9 @@ namespace MovieList.ViewModels.Forms
             this.Series.Titles.Add(this.TitlesSource.Items.Except(this.Series.Titles).ToList());
             this.Series.Titles.Remove(this.Series.Titles.Except(this.TitlesSource.Items).ToList());
 
-            this.Series.IsWatched = this.IsWatched;
             this.Series.IsAnthology = this.IsAnthology;
-            this.Series.Status = this.Status;
+            this.Series.WatchStatus = this.WatchStatus;
+            this.Series.ReleaseStatus = this.ReleaseStatus;
             this.Series.Kind = this.Kind;
             this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
             this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
@@ -146,10 +147,10 @@ namespace MovieList.ViewModels.Forms
             this.TitlesSource.Clear();
             this.TitlesSource.AddRange(this.Series.Titles);
 
-            this.Status = this.Series.Status;
-            this.Kind = this.Series.Kind;
-            this.IsWatched = this.Series.IsWatched;
             this.IsAnthology = this.Series.IsAnthology;
+            this.Kind = this.Series.Kind;
+            this.WatchStatus = this.Series.WatchStatus;
+            this.ReleaseStatus = this.Series.ReleaseStatus;
             this.ImdbLink = this.Series.ImdbLink.EmptyIfNull();
             this.PosterUrl = this.Series.PosterUrl.EmptyIfNull();
         }

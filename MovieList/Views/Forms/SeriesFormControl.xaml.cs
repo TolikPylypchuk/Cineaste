@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -33,7 +34,6 @@ namespace MovieList.Views.Forms
                 this.LoadPoster();
 
                 this.BindCommands(disposables);
-                this.BindCheckboxes(disposables);
                 this.BindLink(disposables);
                 this.BindFields(disposables);
 
@@ -80,15 +80,6 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
         }
 
-        private void BindCheckboxes(CompositeDisposable disposables)
-        {
-            this.Bind(this.ViewModel, vm => vm.IsWatched, v => v.IsWatchedCheckBox.IsChecked)
-                .DisposeWith(disposables);
-
-            this.Bind(this.ViewModel, vm => vm.IsAnthology, v => v.IsAnthologyCheckBox.IsChecked)
-                .DisposeWith(disposables);
-        }
-
         private void BindLink(CompositeDisposable disposables)
         {
             this.OneWayBind(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLink.NavigateUri)
@@ -111,9 +102,29 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
                 .DisposeWith(disposables);
 
-            var converter = new SeriesStatusToStringConverter();
+            this.WatchStatusComboBox.Items.Add(Messages.SeriesNotWatched);
+            this.WatchStatusComboBox.Items.Add(Messages.SeriesWatching);
+            this.WatchStatusComboBox.Items.Add(Messages.SeriesWatched);
+            this.WatchStatusComboBox.Items.Add(Messages.SeriesStoppedWatching);
 
-            this.Bind(this.ViewModel, vm => vm.Status, v => v.StatusComboBox.SelectedItem, null, converter, converter)
+            this.BindComboBox(
+                    vm => vm.WatchStatus,
+                    v => v.WatchStatusComboBox.SelectedItem,
+                    new SeriesWatchStatusConverter())
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.IsAnthology, v => v.IsAnthologyCheckBox.IsChecked)
+                .DisposeWith(disposables);
+
+            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesNotStarted);
+            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesRunning);
+            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesFinished);
+            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesCancelled);
+
+            this.BindComboBox(
+                    vm => vm.ReleaseStatus,
+                    v => v.ReleaseStatusComboBox.SelectedItem,
+                    new SeriesReleaseStatusConverter())
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Kind, v => v.KindComboBox.SelectedItem)
@@ -125,14 +136,15 @@ namespace MovieList.Views.Forms
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
                 .DisposeWith(disposables);
 
-            this.StatusComboBox.Items.Add(Messages.SeriesNotStarted);
-            this.StatusComboBox.Items.Add(Messages.SeriesRunning);
-            this.StatusComboBox.Items.Add(Messages.SeriesFinished);
-            this.StatusComboBox.Items.Add(Messages.SeriesCancelled);
-
             this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.KindComboBox.ItemsSource)
                 .DisposeWith(disposables);
         }
+
+        private IDisposable BindComboBox<T>(
+            Expression<Func<SeriesFormViewModel, T>> vmProperty,
+            Expression<Func<SeriesFormControl, object>> viewProperty,
+            IBindingTypeConverter converter)
+            => this.Bind(this.ViewModel, vmProperty, viewProperty, null, converter, converter);
 
         private void AddValidation(CompositeDisposable disposables)
         {

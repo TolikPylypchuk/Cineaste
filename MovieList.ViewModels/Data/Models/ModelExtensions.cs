@@ -21,9 +21,9 @@ namespace MovieList.Data.Models
                     : movie.Kind.ColorForNotReleasedMovie;
 
         public static string GetActiveColor(this Series series)
-            => series.IsWatched
+            => series.WatchStatus != SeriesWatchStatus.NotWatched
                 ? series.Kind.ColorForWatchedSeries
-                : series.Status != SeriesStatus.NotStarted
+                : series.ReleaseStatus != SeriesReleaseStatus.NotStarted
                     ? series.Kind.ColorForNotWatchedSeries
                     : series.Kind.ColorForNotReleasedSeries;
 

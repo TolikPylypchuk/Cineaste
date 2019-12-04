@@ -9,11 +9,11 @@ namespace MovieList.Data.Models
     [Table("Series")]
     public sealed class Series : EntityBase
     {
-        public bool IsWatched { get; set; }
         public bool IsMiniseries { get; set; }
         public bool IsAnthology { get; set; }
 
-        public SeriesStatus Status { get; set; } = SeriesStatus.NotStarted;
+        public SeriesWatchStatus WatchStatus { get; set; } = SeriesWatchStatus.NotWatched;
+        public SeriesReleaseStatus ReleaseStatus { get; set; } = SeriesReleaseStatus.NotStarted;
 
         public string? ImdbLink { get; set; }
         public string? PosterUrl { get; set; }

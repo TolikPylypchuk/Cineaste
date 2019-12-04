@@ -1,6 +1,6 @@
 namespace MovieList.Data.Models
 {
-    public enum SeasonWatchStatus
+    public enum SeriesWatchStatus
     {
         NotWatched,
         Watching,
