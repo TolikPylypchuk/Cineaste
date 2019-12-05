@@ -9,6 +9,7 @@ using System.Resources;
 using System.Threading.Tasks;
 
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
 using Splat;
@@ -31,7 +32,7 @@ namespace MovieList.ViewModels.Forms
             this.ResourceManager = resourceManager ?? Locator.Current.GetService<ResourceManager>();
             this.Scheduler = scheduler ?? System.Reactive.Concurrency.Scheduler.Default;
 
-            var canSave = Observable.CombineLatest(this.FormChanged, this.Valid).AllTrue();
+            var canSave = Observable.CombineLatest(this.FormChanged, this.validSubject, this.IsValid()).AllTrue();
 
             this.Save = ReactiveCommand.CreateFromTask(this.OnSaveAsync, canSave);
             this.Cancel = ReactiveCommand.Create(this.CopyProperties, this.formChangedSubject);
@@ -43,12 +44,6 @@ namespace MovieList.ViewModels.Forms
 
         public bool IsFormChanged
             => this.formChangedSubject.Value;
-
-        public IObservable<bool> Valid
-            => this.validSubject.AsObservable();
-
-        public bool IsValid
-            => this.validSubject.Value;
 
         public abstract bool IsNew { get; }
 
@@ -77,9 +72,6 @@ namespace MovieList.ViewModels.Forms
 
         protected void TrackValidation(IObservable<bool> validation)
             => this.validationsToTrack.Add(validation);
-
-        protected void TrackValidation(ValidationHelper rule)
-            => this.TrackValidation(rule.ValidationChanged.Select(state => state.IsValid));
 
         protected void CanDeleteWhen(IObservable<bool> canDelete)
             => canDelete.Subscribe(this.canDeleteSubject);

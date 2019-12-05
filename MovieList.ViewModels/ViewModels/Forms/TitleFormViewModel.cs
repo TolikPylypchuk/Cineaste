@@ -60,8 +60,6 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.Name, vm => vm.Title.Name);
             this.TrackChanges(vm => vm.Priority, vm => vm.Title.Priority);
 
-            this.TrackValidation(this.NameRule);
-
             base.EnableChangeTracking();
         }
 

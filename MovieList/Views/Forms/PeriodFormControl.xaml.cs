@@ -55,6 +55,9 @@ namespace MovieList.Views.Forms
                 this.Bind(this.ViewModel, vm => vm.StartYear, v => v.StartYearTextBox.Text)
                     .DisposeWith(disposables);
 
+                this.StartYearTextBox.ValidateWith(this.ViewModel.StartYearRule)
+                    .DisposeWith(disposables);
+
                 this.Bind(
                         this.ViewModel,
                         vm => vm.EndMonth,
@@ -66,13 +69,22 @@ namespace MovieList.Views.Forms
                 this.Bind(this.ViewModel, vm => vm.EndYear, v => v.EndYearTextBox.Text)
                     .DisposeWith(disposables);
 
+                this.EndYearTextBox.ValidateWith(this.ViewModel.EndYearRule)
+                    .DisposeWith(disposables);
+
                 this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesTextBox.Text)
+                    .DisposeWith(disposables);
+
+                this.NumberOfEpisodesTextBox.ValidateWith(this.ViewModel.NumberOfEpisodesRule)
                     .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.IsSingleDayRelease, v => v.IsSingleDayReleaseCheckBox.IsChecked)
                     .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
+                    .DisposeWith(disposables);
+
+                this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)

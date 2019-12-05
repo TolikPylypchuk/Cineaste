@@ -107,10 +107,6 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.ImdbLink, vm => vm.Movie.ImdbLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Movie.PosterUrl.EmptyIfNull());
 
-            this.TrackValidation(this.YearRule);
-            this.TrackValidation(this.ImdbLinkRule);
-            this.TrackValidation(this.PosterUrlRule);
-
             base.EnableChangeTracking();
         }
 

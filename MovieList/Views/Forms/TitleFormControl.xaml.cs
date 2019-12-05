@@ -26,6 +26,9 @@ namespace MovieList.Views.Forms
                 this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
                     .DisposeWith(disposables);
 
+                this.NameTextBox.ValidateWith(this.ViewModel.NameRule)
+                    .DisposeWith(disposables);
+
                 HintAssist.SetHint(
                     this.NameTextBox,
                     this.ViewModel.Title.IsOriginal ? Messages.OriginalTitle : Messages.Title);

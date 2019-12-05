@@ -77,8 +77,6 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.Channel, vm => vm.Season.Channel);
             this.TrackChanges(vm => vm.SequenceNumber, vm => vm.Season.SequenceNumber);
 
-            this.TrackValidation(this.ChannelRule);
-
             base.EnableChangeTracking();
         }
 

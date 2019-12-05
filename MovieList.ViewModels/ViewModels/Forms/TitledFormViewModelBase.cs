@@ -13,6 +13,7 @@ using DynamicData.Binding;
 using MovieList.Data.Models;
 
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
 
 using Splat;
 
@@ -150,9 +151,9 @@ namespace MovieList.ViewModels.Forms
 
         private IObservable<bool> AreTitlesValid(ReadOnlyObservableCollection<TitleFormViewModel> titles)
             => titles.ToObservableChangeSet()
-                .AutoRefreshOnObservable(vm => vm.Valid)
+                .AutoRefreshOnObservable(vm => vm.IsValid())
                 .ToCollection()
-                .SelectMany(vms => vms.Select(vm => vm.Valid).CombineLatest().AllTrue());
+                .SelectMany(vms => vms.Select(vm => vm.IsValid()).CombineLatest().AllTrue());
 
         private void OnAddTitle(bool isOriginal)
         {

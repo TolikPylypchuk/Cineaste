@@ -81,11 +81,6 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.IsSingleDayRelease, vm => vm.Period.IsSingleDayRelease);
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Period.PosterUrl.EmptyIfNull());
 
-            this.TrackValidation(this.StartYearRule);
-            this.TrackValidation(this.EndYearRule);
-            this.TrackValidation(this.NumberOfEpisodesRule);
-            this.TrackValidation(this.PosterUrlRule);
-
             base.EnableChangeTracking();
         }
 
