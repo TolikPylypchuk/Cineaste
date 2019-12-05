@@ -1,3 +1,5 @@
+using System.Reactive.Disposables;
+
 using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
@@ -11,6 +13,13 @@ namespace MovieList.Views.Forms
         public SeasonFormControl()
         {
             this.InitializeComponent();
+
+            this.WhenActivated(disposables =>
+            {
+                this.WhenAnyValue(v => v.ViewModel)
+                    .BindTo(this, v => v.DataContext)
+                    .DisposeWith(disposables);
+            });
         }
     }
 }

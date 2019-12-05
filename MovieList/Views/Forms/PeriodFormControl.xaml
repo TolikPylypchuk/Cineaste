@@ -1,0 +1,55 @@
+<local:PeriodFormControlBase x:Class="MovieList.Views.Forms.PeriodFormControl"
+                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                             xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
+                             xmlns:local="clr-namespace:MovieList.Views.Forms"
+                             xmlns:resx="clr-namespace:MovieList.Properties"
+                             xmlns:v="clr-namespace:MovieList.Views"
+                             mc:Ignorable="d">
+    <local:PeriodFormControlBase.Resources>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
+        </Style>
+    </local:PeriodFormControlBase.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <ComboBox x:Name="StartMonthComboBox" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.StartMonth}" />
+
+        <TextBox x:Name="StartYearTextBox" Grid.Row="0" Grid.Column="1" Margin="8,0,0,0" />
+
+        <ComboBox x:Name="EndMonthComboBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.StartMonth}" />
+
+        <TextBox x:Name="EndYearTextBox" Grid.Row="1" Grid.Column="1" Margin="8,0,0,0" />
+
+        <TextBox x:Name="NumberOfEpisodesTextBox" Grid.Row="2" Grid.Column="0" Margin="0,0,8,0" />
+
+        <CheckBox x:Name="IsSingleDayReleaseCheckBox" Grid.Row="2" Grid.Column="1" Content="{x:Static resx:Messages.SingleDayRelease}"
+                  Margin="8,0,0,0" VerticalAlignment="Center" />
+
+        <DockPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+            <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
+                    VerticalAlignment="Center" Padding="0" Width="20" Height="20" Margin="8,0,0,0"
+                    Foreground="{StaticResource SecondaryAccentBrush}">
+                <m:PackIcon Kind="CloseCircleOutline" Margin="0" Width="20" Height="20" />
+            </Button>
+
+            <TextBox x:Name="PosterUrlTextBox" m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
+        </DockPanel>
+    </Grid>
+</local:PeriodFormControlBase>

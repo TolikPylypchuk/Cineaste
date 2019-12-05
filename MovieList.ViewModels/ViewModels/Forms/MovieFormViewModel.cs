@@ -45,14 +45,7 @@ namespace MovieList.ViewModels.Forms
 
             this.CopyProperties();
 
-            this.YearRule = this.ValidationRule(
-                vm => vm.Year,
-                year => !String.IsNullOrWhiteSpace(year) &&
-                        Int32.TryParse(year, out int value) &&
-                        value >= MovieMinYear &&
-                        value <= MovieMaxYear,
-                year => String.IsNullOrWhiteSpace(year) ? "YearEmpty" : "YearInvalid");
-
+            this.YearRule = this.ValidationRule(vm => vm.Year, MovieMinYear, MovieMaxYear, nameof(this.Year));
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 

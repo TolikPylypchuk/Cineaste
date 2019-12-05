@@ -144,6 +144,12 @@
   <data name="Anthology" xml:space="preserve">
     <value>Anthology</value>
   </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -167,6 +173,9 @@
   </data>
   <data name="CreateListTitle" xml:space="preserve">
     <value>Create a List</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
   </data>
   <data name="DefaultSeasonOriginalTitle" xml:space="preserve">
     <value>Season #</value>
@@ -195,8 +204,17 @@
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="EndMonth" xml:space="preserve">
+    <value>End Month</value>
+  </data>
+  <data name="EndYEar" xml:space="preserve">
+    <value>EndYear</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
@@ -213,11 +231,26 @@
   <data name="ImdbLink" xml:space="preserve">
     <value>IMDb Link</value>
   </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
   <data name="Kind" xml:space="preserve">
     <value>Kind</value>
   </data>
   <data name="LiveAction" xml:space="preserve">
     <value>Live-Action</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
   </data>
   <data name="MovieList" xml:space="preserve">
     <value>Movie List</value>
@@ -249,8 +282,17 @@
   <data name="NoRecentlyOpenedFiles" xml:space="preserve">
     <value>No recently opened files</value>
   </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
   <data name="NumberHeader" xml:space="preserve">
     <value>#</value>
+  </data>
+  <data name="NumberOfEpisodes" xml:space="preserve">
+    <value># of episodes</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
@@ -297,6 +339,9 @@
   <data name="SaveAs" xml:space="preserve">
     <value>Save As...</value>
   </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
   <data name="SeriesCancelled" xml:space="preserve">
     <value>Cancelled</value>
   </data>
@@ -330,6 +375,15 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="SingleDayRelease" xml:space="preserve">
+    <value>Single-Day Release</value>
+  </data>
+  <data name="StartMonth" xml:space="preserve">
+    <value>Start Month</value>
+  </data>
+  <data name="StartYear" xml:space="preserve">
+    <value>StartYear</value>
+  </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>
   </data>
@@ -341,6 +395,12 @@
   </data>
   <data name="ValidationImdbLinkInvalid" xml:space="preserve">
     <value>The IMDb link is invalid</value>
+  </data>
+  <data name="ValidationNumberOfEpisodesEmpty" xml:space="preserve">
+    <value># of episodes is empty</value>
+  </data>
+  <data name="ValidationNumberOfEpisodesInvalid" xml:space="preserve">
+    <value># of episodes is invalid</value>
   </data>
   <data name="ValidationPosterUrlInvalid" xml:space="preserve">
     <value>The poster URL is invalid</value>
