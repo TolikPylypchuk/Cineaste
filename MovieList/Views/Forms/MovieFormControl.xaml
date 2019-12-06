@@ -62,13 +62,13 @@
 
                 <ItemsControl x:Name="Titles" />
 
-                <Button x:Name="AddTitleButton">
+                <Button x:Name="AddTitleButton" Margin="0,8,0,0">
                     <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
                 </Button>
 
                 <ItemsControl x:Name="OriginalTitles" />
 
-                <Button x:Name="AddOriginalTitleButton">
+                <Button x:Name="AddOriginalTitleButton" Margin="0,8,0,0">
                     <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
                 </Button>
 

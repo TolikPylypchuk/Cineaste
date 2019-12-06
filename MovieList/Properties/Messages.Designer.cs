@@ -916,6 +916,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The period is invalid.
+        /// </summary>
+        public static string ValidationPeriodInvalid {
+            get {
+                return ResourceManager.GetString("ValidationPeriodInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The poster URL is invalid.
         /// </summary>
         public static string ValidationPosterUrlInvalid {

@@ -20,6 +20,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -51,5 +52,8 @@
 
             <TextBox x:Name="PosterUrlTextBox" m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
         </DockPanel>
+
+        <TextBlock x:Name="InvalidFormTextBlock" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                   Foreground="{DynamicResource ValidationErrorBrush}" />
     </Grid>
 </local:PeriodFormControlBase>

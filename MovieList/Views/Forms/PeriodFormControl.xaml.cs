@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Reactive.Disposables;
-
+using System.Reactive.Linq;
 using MovieList.Properties;
 using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
 
 namespace MovieList.Views.Forms
 {
@@ -87,11 +88,21 @@ namespace MovieList.Views.Forms
                 this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)
                     .DisposeWith(disposables);
 
+                this.BindValidation(this.ViewModel, vm => vm.PeriodRule, v => v.InvalidFormTextBlock.Text)
+                    .DisposeWith(disposables);
+
+                var boolToVisibility = new BooleanToVisibilityTypeConverter();
+
+                this.WhenAnyObservable(v => v.ViewModel.PeriodRule.ValidationChanged)
+                    .Select(state => state.IsValid)
+                    .BindTo(this, v => v.InvalidFormTextBlock.Visibility, null, boolToVisibility)
+                    .DisposeWith(disposables);
+
                 this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
                     .DisposeWith(disposables);
 
-                this.ViewModel.Delete.CanExecute
-                    .BindTo(this, v => v.DeleteButton.Visibility, null, new BooleanToVisibilityTypeConverter())
+                this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
+                    .BindTo(this, v => v.DeleteButton.Visibility, null, boolToVisibility)
                     .DisposeWith(disposables);
             });
         }

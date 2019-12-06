@@ -1,10 +1,12 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
 
 using MovieList.Data.Models;
 
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
@@ -31,6 +33,20 @@ namespace MovieList.ViewModels.Forms
                 nameof(this.NumberOfEpisodes));
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
+
+            var periodValid = this.WhenAnyValue(
+                    vm => vm.StartMonth,
+                    vm => vm.StartYear,
+                    vm => vm.EndMonth,
+                    vm => vm.EndYear)
+                .Select(((int StartMonth, string StartYear, int EndMonth, string EndYear) values) =>
+                    Int32.TryParse(values.StartYear, out int startYear) &&
+                    Int32.TryParse(values.EndYear, out int endYear) &&
+                    (startYear < endYear || startYear == endYear && values.StartMonth <= values.EndMonth));
+
+            this.PeriodRule = this.ValidationRule(
+                _ => periodValid,
+                (_, isValid) => isValid ? String.Empty : this.ResourceManager.GetString("ValidationPeriodInvalid"));
 
             this.CanDeleteWhen(canDelete);
 
@@ -64,6 +80,7 @@ namespace MovieList.ViewModels.Forms
         public ValidationHelper EndYearRule { get; }
         public ValidationHelper NumberOfEpisodesRule { get; }
         public ValidationHelper PosterUrlRule { get; }
+        public ValidationHelper PeriodRule { get; }
 
         public override bool IsNew
             => this.Period.Id == default;

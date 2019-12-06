@@ -27,7 +27,7 @@ namespace MovieList.Views.Forms
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.ViewModel.FormTitle
+                this.WhenAnyObservable(v => v.ViewModel.FormTitle)
                     .BindTo(this, v => v.FormTitleTextBlock.Text)
                     .DisposeWith(disposables);
 
@@ -55,27 +55,33 @@ namespace MovieList.Views.Forms
             this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.Delete.CanExecute
-                .BindTo(this, v => v.DeleteButton.Visibility, null, new BooleanToVisibilityTypeConverter())
+            var boolToVisibility = new BooleanToVisibilityTypeConverter();
+
+            this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
+                .BindTo(this, v => v.DeleteButton.Visibility, null, boolToVisibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddTitle, v => v.AddTitleButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.AddTitle.CanExecute
-                .BindTo(this, v => v.AddTitleButton.Visibility, null, new BooleanToVisibilityTypeConverter());
+            this.WhenAnyObservable(v => v.ViewModel.AddTitle.CanExecute)
+                .BindTo(this, v => v.AddTitleButton.Visibility, null, boolToVisibility)
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddOriginalTitle, v => v.AddOriginalTitleButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.AddOriginalTitle.CanExecute
-                .BindTo(this, v => v.AddOriginalTitleButton.Visibility, null, new BooleanToVisibilityTypeConverter());
+            this.WhenAnyObservable(v => v.ViewModel.AddOriginalTitle.CanExecute)
+                .BindTo(this, v => v.AddOriginalTitleButton.Visibility, null, boolToVisibility);
 
-            Observable.CombineLatest(this.ViewModel.Save.CanExecute, this.ViewModel.Cancel.CanExecute)
+            Observable.CombineLatest(
+                    this.WhenAnyObservable(v => v.ViewModel.Save.CanExecute),
+                    this.WhenAnyObservable(v => v.ViewModel.Cancel.CanExecute))
                 .AnyTrue()
-                .BindTo(this, v => v.ActionPanel.Visibility, null, new BooleanToVisibilityTypeConverter());
+                .BindTo(this, v => v.ActionPanel.Visibility, null, boolToVisibility)
+                .DisposeWith(disposables);
 
-            this.ViewModel.Save
+            this.WhenAnyObservable(v => v.ViewModel.Save)
                 .Subscribe(_ => this.LoadPoster())
                 .DisposeWith(disposables);
         }
