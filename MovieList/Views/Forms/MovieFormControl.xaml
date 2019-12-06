@@ -36,7 +36,7 @@
             <StackPanel Margin="16,8">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
-                        <Setter Property="Margin" Value="8,0,0,0" />
+                        <Setter Property="Margin" Value="8,8,0,0" />
                         <Setter Property="Padding" Value="0" />
                         <Setter Property="Width" Value="20" />
                         <Setter Property="Height" Value="20" />
@@ -62,13 +62,13 @@
 
                 <ItemsControl x:Name="Titles" />
 
-                <Button x:Name="AddTitleButton" Margin="0,8,0,0">
+                <Button x:Name="AddTitleButton">
                     <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
                 </Button>
 
                 <ItemsControl x:Name="OriginalTitles" />
 
-                <Button x:Name="AddOriginalTitleButton" Margin="0,8,0,0">
+                <Button x:Name="AddOriginalTitleButton">
                     <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
                 </Button>
 

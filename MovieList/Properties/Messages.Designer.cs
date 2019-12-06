@@ -376,6 +376,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to Series.
+        /// </summary>
+        public static string GoToSeries {
+            get {
+                return ResourceManager.GetString("GoToSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         public static string Help {
@@ -682,6 +691,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Release Status.
+        /// </summary>
+        public static string ReleaseStatus {
+            get {
+                return ResourceManager.GetString("ReleaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove from list.
         /// </summary>
         public static string RemoveFromList {
@@ -723,6 +741,69 @@ namespace MovieList.Properties {
         public static string SaveAs {
             get {
                 return ResourceManager.GetString("SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        public static string SeasonFinished {
+            get {
+                return ResourceManager.GetString("SeasonFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Started.
+        /// </summary>
+        public static string SeasonNotStarted {
+            get {
+                return ResourceManager.GetString("SeasonNotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Watched.
+        /// </summary>
+        public static string SeasonNotWatched {
+            get {
+                return ResourceManager.GetString("SeasonNotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running.
+        /// </summary>
+        public static string SeasonRunning {
+            get {
+                return ResourceManager.GetString("SeasonRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopped Watching.
+        /// </summary>
+        public static string SeasonStoppedWatching {
+            get {
+                return ResourceManager.GetString("SeasonStoppedWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched.
+        /// </summary>
+        public static string SeasonWatched {
+            get {
+                return ResourceManager.GetString("SeasonWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watching.
+        /// </summary>
+        public static string SeasonWatching {
+            get {
+                return ResourceManager.GetString("SeasonWatching", resourceCulture);
             }
         }
         
@@ -772,15 +853,6 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Release Status.
-        /// </summary>
-        public static string SeriesReleaseStatus {
-            get {
-                return ResourceManager.GetString("SeriesReleaseStatus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Running.
         /// </summary>
         public static string SeriesRunning {
@@ -813,15 +885,6 @@ namespace MovieList.Properties {
         public static string SeriesWatching {
             get {
                 return ResourceManager.GetString("SeriesWatching", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Watch Status.
-        /// </summary>
-        public static string SeriesWatchStatus {
-            get {
-                return ResourceManager.GetString("SeriesWatchStatus", resourceCulture);
             }
         }
         
@@ -966,6 +1029,15 @@ namespace MovieList.Properties {
         public static string Watched {
             get {
                 return ResourceManager.GetString("Watched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch Status.
+        /// </summary>
+        public static string WatchStatus {
+            get {
+                return ResourceManager.GetString("WatchStatus", resourceCulture);
             }
         }
         

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
@@ -17,8 +18,12 @@ namespace MovieList.ViewModels.Forms
 {
     public sealed class PeriodFormViewModel : FormViewModelBase<Period, PeriodFormViewModel>
     {
-        public PeriodFormViewModel(Period period, IObservable<bool> canDelete, ResourceManager? resourceManager)
-            : base(resourceManager)
+        public PeriodFormViewModel(
+            Period period,
+            IObservable<bool> canDelete,
+            ResourceManager? resourceManager,
+            IScheduler? scheduler = null)
+            : base(resourceManager, scheduler)
         {
             this.Period = period;
             this.CopyProperties();

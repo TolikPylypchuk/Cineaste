@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
 
@@ -31,9 +32,27 @@ namespace MovieList.ViewModels.Forms
             this.ChannelRule = this.ValidationRule(
                 vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
 
+            this.WhenAnyValue(vm => vm.CurrentPosterIndex)
+                .Select(index => this.Season.Periods[index].PosterUrl)
+                .BindTo(this, vm => vm.CurrentPosterUrl);
+
+            this.Close = ReactiveCommand.Create(() => { });
             this.GoToSeries = ReactiveCommand.Create(() => { });
+
             this.MoveUp = ReactiveCommand.Create(() => { this.SequenceNumber--; });
             this.MoveDown = ReactiveCommand.Create(() => { this.SequenceNumber++; });
+
+            var canSwitchToNextPoster = this.WhenAnyValue(vm => vm.CurrentPosterIndex)
+                .Select(index => index != this.Season.Periods.Count - 1);
+
+            var canSwitchToPreviousPoster = this.WhenAnyValue(vm => vm.CurrentPosterIndex)
+                .Select(index => index != 0);
+
+            this.SwitchToNextPoster = ReactiveCommand.Create(
+                () => { this.CurrentPosterIndex++; }, canSwitchToNextPoster);
+
+            this.SwitchToPreviousPoster = ReactiveCommand.Create(
+                () => { this.CurrentPosterIndex--; }, canSwitchToPreviousPoster);
 
             this.EnableChangeTracking();
         }
@@ -52,11 +71,22 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public int SequenceNumber { get; set; }
 
+        [Reactive]
+        public string? CurrentPosterUrl { get; set; }
+
+        [Reactive]
+        public int CurrentPosterIndex { get; private set; }
+
         public ValidationHelper ChannelRule { get; }
 
+        public ReactiveCommand<Unit, Unit> Close { get; }
         public ReactiveCommand<Unit, Unit> GoToSeries { get; }
+
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
         public ReactiveCommand<Unit, Unit> MoveDown { get; }
+
+        public ReactiveCommand<Unit, Unit> SwitchToNextPoster { get; }
+        public ReactiveCommand<Unit, Unit> SwitchToPreviousPoster { get; }
 
         public override bool IsNew
             => this.Season.Id == default;
@@ -103,6 +133,9 @@ namespace MovieList.ViewModels.Forms
             this.ReleaseStatus = this.Season.ReleaseStatus;
             this.Channel = this.Channel;
             this.SequenceNumber = this.Season.SequenceNumber;
+
+            this.CurrentPosterIndex = 0;
+            this.CurrentPosterUrl = this.Season.Periods[this.CurrentPosterIndex].PosterUrl;
         }
 
         protected override void AttachTitle(Title title)

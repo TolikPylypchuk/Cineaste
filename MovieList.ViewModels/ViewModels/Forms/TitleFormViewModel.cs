@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
@@ -18,8 +19,12 @@ namespace MovieList.ViewModels.Forms
 {
     public sealed class TitleFormViewModel : FormViewModelBase<Title, TitleFormViewModel>
     {
-        public TitleFormViewModel(Title title, IObservable<bool> canDelete, ResourceManager? resourceManager = null)
-            : base(resourceManager)
+        public TitleFormViewModel(
+            Title title,
+            IObservable<bool> canDelete,
+            ResourceManager? resourceManager = null,
+            IScheduler? scheduler = null)
+            : base(resourceManager, scheduler)
         {
             this.Title = title;
             this.CopyProperties();

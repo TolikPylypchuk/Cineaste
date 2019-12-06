@@ -36,7 +36,7 @@
             <StackPanel Margin="16,8">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
-                        <Setter Property="Margin" Value="8,0,0,0" />
+                        <Setter Property="Margin" Value="8,8,0,0" />
                         <Setter Property="Padding" Value="0" />
                         <Setter Property="Width" Value="20" />
                         <Setter Property="Height" Value="20" />
@@ -57,13 +57,13 @@
 
                 <ItemsControl x:Name="Titles" />
 
-                <Button x:Name="AddTitleButton" Margin="0,8,0,0">
+                <Button x:Name="AddTitleButton">
                     <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
                 </Button>
 
                 <ItemsControl x:Name="OriginalTitles" />
 
-                <Button x:Name="AddOriginalTitleButton" Margin="0,8,0,0">
+                <Button x:Name="AddOriginalTitleButton">
                     <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
                 </Button>
 
@@ -74,7 +74,7 @@
                     </Grid.ColumnDefinitions>
 
                     <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.SeriesWatchStatus}" />
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.WatchStatus}" />
 
                     <CheckBox x:Name="IsAnthologyCheckBox" Grid.Column="1" Content="{x:Static resx:Messages.Anthology}" Margin="8,0,0,0"
                               VerticalAlignment="Center" />
@@ -87,7 +87,7 @@
                     </Grid.ColumnDefinitions>
 
                     <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.SeriesReleaseStatus}" />
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.ReleaseStatus}" />
 
                     <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" Margin="8,0,0,0"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.Kind}" />

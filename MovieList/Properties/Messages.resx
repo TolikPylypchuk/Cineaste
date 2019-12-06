@@ -222,6 +222,9 @@
   <data name="FileExtensionDescription" xml:space="preserve">
     <value>Movie List</value>
   </data>
+  <data name="GoToSeries" xml:space="preserve">
+    <value>Go to Series</value>
+  </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
@@ -324,6 +327,9 @@
   <data name="Released" xml:space="preserve">
     <value>Released</value>
   </data>
+  <data name="ReleaseStatus" xml:space="preserve">
+    <value>Release Status</value>
+  </data>
   <data name="RemoveFromList" xml:space="preserve">
     <value>Remove from list</value>
   </data>
@@ -338,6 +344,27 @@
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Save As...</value>
+  </data>
+  <data name="SeasonFinished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="SeasonNotStarted" xml:space="preserve">
+    <value>Not Started</value>
+  </data>
+  <data name="SeasonNotWatched" xml:space="preserve">
+    <value>Not Watched</value>
+  </data>
+  <data name="SeasonRunning" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="SeasonStoppedWatching" xml:space="preserve">
+    <value>Stopped Watching</value>
+  </data>
+  <data name="SeasonWatched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
+  <data name="SeasonWatching" xml:space="preserve">
+    <value>Watching</value>
   </data>
   <data name="September" xml:space="preserve">
     <value>September</value>
@@ -354,9 +381,6 @@
   <data name="SeriesNotWatched" xml:space="preserve">
     <value>Not watched</value>
   </data>
-  <data name="SeriesReleaseStatus" xml:space="preserve">
-    <value>Release Status</value>
-  </data>
   <data name="SeriesRunning" xml:space="preserve">
     <value>Running</value>
   </data>
@@ -368,9 +392,6 @@
   </data>
   <data name="SeriesWatching" xml:space="preserve">
     <value>Watching</value>
-  </data>
-  <data name="SeriesWatchStatus" xml:space="preserve">
-    <value>Watch Status</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
@@ -419,6 +440,9 @@
   </data>
   <data name="Watched" xml:space="preserve">
     <value>Watched</value>
+  </data>
+  <data name="WatchStatus" xml:space="preserve">
+    <value>Watch Status</value>
   </data>
   <data name="Year" xml:space="preserve">
     <value>Year</value>
