@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+
 using MovieList.Properties;
 using MovieList.ViewModels.Forms;
 
@@ -45,66 +46,73 @@ namespace MovieList.Views.Forms
                     this.EndMonthComboBox.Items.Add(month);
                 }
 
-                this.Bind(
-                        this.ViewModel,
-                        vm => vm.StartMonth,
-                        v => v.StartMonthComboBox.SelectedIndex,
-                        month => month - 1,
-                        index => index + 1)
-                    .DisposeWith(disposables);
-
-                this.Bind(this.ViewModel, vm => vm.StartYear, v => v.StartYearTextBox.Text)
-                    .DisposeWith(disposables);
-
-                this.StartYearTextBox.ValidateWith(this.ViewModel.StartYearRule)
-                    .DisposeWith(disposables);
-
-                this.Bind(
-                        this.ViewModel,
-                        vm => vm.EndMonth,
-                        v => v.EndMonthComboBox.SelectedIndex,
-                        month => month - 1,
-                        index => index + 1)
-                    .DisposeWith(disposables);
-
-                this.Bind(this.ViewModel, vm => vm.EndYear, v => v.EndYearTextBox.Text)
-                    .DisposeWith(disposables);
-
-                this.EndYearTextBox.ValidateWith(this.ViewModel.EndYearRule)
-                    .DisposeWith(disposables);
-
-                this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesTextBox.Text)
-                    .DisposeWith(disposables);
-
-                this.NumberOfEpisodesTextBox.ValidateWith(this.ViewModel.NumberOfEpisodesRule)
-                    .DisposeWith(disposables);
-
-                this.Bind(this.ViewModel, vm => vm.IsSingleDayRelease, v => v.IsSingleDayReleaseCheckBox.IsChecked)
-                    .DisposeWith(disposables);
-
-                this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
-                    .DisposeWith(disposables);
-
-                this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)
-                    .DisposeWith(disposables);
-
-                this.BindValidation(this.ViewModel, vm => vm.PeriodRule, v => v.InvalidFormTextBlock.Text)
-                    .DisposeWith(disposables);
-
-                var boolToVisibility = new BooleanToVisibilityTypeConverter();
-
-                this.WhenAnyObservable(v => v.ViewModel.PeriodRule.ValidationChanged)
-                    .Select(state => state.IsValid)
-                    .BindTo(this, v => v.InvalidFormTextBlock.Visibility, null, boolToVisibility)
-                    .DisposeWith(disposables);
+                this.BindFields(disposables);
+                this.AddValidation(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
                     .DisposeWith(disposables);
 
                 this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
-                    .BindTo(this, v => v.DeleteButton.Visibility, null, boolToVisibility)
+                    .BindTo(this, v => v.DeleteButton.Visibility, null, new BooleanToVisibilityTypeConverter())
                     .DisposeWith(disposables);
             });
+        }
+
+        public void BindFields(CompositeDisposable disposables)
+        {
+            this.Bind(
+                    this.ViewModel,
+                    vm => vm.StartMonth,
+                    v => v.StartMonthComboBox.SelectedIndex,
+                    month => month - 1,
+                    index => index + 1)
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.StartYear, v => v.StartYearTextBox.Text)
+                .DisposeWith(disposables);
+
+            this.StartYearTextBox.ValidateWith(this.ViewModel.StartYearRule)
+                .DisposeWith(disposables);
+
+            this.Bind(
+                    this.ViewModel,
+                    vm => vm.EndMonth,
+                    v => v.EndMonthComboBox.SelectedIndex,
+                    month => month - 1,
+                    index => index + 1)
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.EndYear, v => v.EndYearTextBox.Text)
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesTextBox.Text)
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.IsSingleDayRelease, v => v.IsSingleDayReleaseCheckBox.IsChecked)
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
+                .DisposeWith(disposables);
+        }
+
+        public void AddValidation(CompositeDisposable disposables)
+        {
+            this.EndYearTextBox.ValidateWith(this.ViewModel.EndYearRule)
+                .DisposeWith(disposables);
+
+            this.NumberOfEpisodesTextBox.ValidateWith(this.ViewModel.NumberOfEpisodesRule)
+                .DisposeWith(disposables);
+
+            this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)
+                .DisposeWith(disposables);
+
+            this.BindValidation(this.ViewModel, vm => vm.PeriodRule, v => v.InvalidFormTextBlock.Text)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.PeriodRule.ValidationChanged)
+                .Select(state => state.IsValid)
+                .BindTo(this, v => v.InvalidFormTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
+                .DisposeWith(disposables);
         }
     }
 }

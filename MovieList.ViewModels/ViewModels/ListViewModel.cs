@@ -56,7 +56,7 @@ namespace MovieList.ViewModels
                 .AutoRefresh(item => item.OriginalTitle)
                 .AutoRefresh(item => item.Year)
                 .Transform(item => new ListItemViewModel(item))
-                .Sort(new ListItemViewModelComparer(ListItemTitleComparer.Instance))
+                .Sort(new PropertyComparer<ListItemViewModel, ListItem>(vm => vm.Item, ListItemTitleComparer.Instance))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.items)
                 .Subscribe();

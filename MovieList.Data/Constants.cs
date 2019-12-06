@@ -13,6 +13,9 @@ namespace MovieList.Data
         public const int MinTitleCount = 1;
         public const int MaxTitleCount = 10;
 
+        public const int MinPeriodCount = 1;
+        public const int MaxPeriodCount = 5;
+
         public const int PeriodMinNumberOfEpisodes = 1;
         public const int PeriodMaxNumberOfEpisodes = 50;
 

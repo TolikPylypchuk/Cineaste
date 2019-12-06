@@ -988,6 +988,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The periods are overlapping.
+        /// </summary>
+        public static string ValidationPeriodsOverlap {
+            get {
+                return ResourceManager.GetString("ValidationPeriodsOverlap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The poster URL is invalid.
         /// </summary>
         public static string ValidationPosterUrlInvalid {

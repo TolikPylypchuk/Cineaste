@@ -77,6 +77,8 @@
 
                 <ItemsControl x:Name="Periods" />
 
+                <TextBlock x:Name="InvalidFormTextBlock" Foreground="{DynamicResource ValidationErrorBrush}" />
+
                 <Button x:Name="DeleteButton" Content="{x:Static resx:Messages.Delete}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
             </StackPanel>

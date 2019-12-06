@@ -96,7 +96,7 @@ namespace MovieList.ViewModels.Forms
         {
             var canDelete = this.TitlesSource.Connect()
                 .Select(_ => this.TitlesSource.Items.Where(predicate).Count())
-                .Select(count => count > 1);
+                .Select(count => count > MinTitleCount);
 
             this.TitlesSource.Connect()
                 .Filter(predicate)

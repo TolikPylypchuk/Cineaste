@@ -10,6 +10,7 @@ using MovieList.Properties;
 using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
 
 namespace MovieList.Views.Forms
 {
@@ -109,6 +110,9 @@ namespace MovieList.Views.Forms
 
             this.Bind(this.ViewModel, vm => vm.Channel, v => v.ChannelTextBox.Text)
                 .DisposeWith(disposables);
+
+            this.OneWayBind(this.ViewModel, vm => vm.Periods, v => v.Periods.ItemsSource)
+                .DisposeWith(disposables);
         }
 
         private IDisposable BindComboBox<T>(
@@ -120,6 +124,14 @@ namespace MovieList.Views.Forms
         private void AddValidation(CompositeDisposable disposables)
         {
             this.ChannelTextBox.ValidateWith(this.ViewModel.ChannelRule)
+                .DisposeWith(disposables);
+
+            this.BindValidation(this.ViewModel, vm => vm.PeriodOverlapRule, v => v.InvalidFormTextBlock.Text)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.PeriodOverlapRule.ValidationChanged)
+                .Select(state => state.IsValid)
+                .BindTo(this, v => v.InvalidFormTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
                 .DisposeWith(disposables);
         }
 

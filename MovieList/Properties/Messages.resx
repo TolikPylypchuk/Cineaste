@@ -426,6 +426,9 @@
   <data name="ValidationPeriodInvalid" xml:space="preserve">
     <value>The period is invalid</value>
   </data>
+  <data name="ValidationPeriodsOverlap" xml:space="preserve">
+    <value>The periods are overlapping</value>
+  </data>
   <data name="ValidationPosterUrlInvalid" xml:space="preserve">
     <value>The poster URL is invalid</value>
   </data>
