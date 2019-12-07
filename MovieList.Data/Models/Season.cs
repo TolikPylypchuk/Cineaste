@@ -8,8 +8,8 @@ namespace MovieList.Data.Models
     [Table("Seasons")]
     public sealed class Season : EntityBase
     {
-        public SeasonWatchStatus WatchStatus { get; set; }
-        public SeasonReleaseStatus ReleaseStatus { get; set; }
+        public SeasonWatchStatus WatchStatus { get; set; } = SeasonWatchStatus.NotWatched;
+        public SeasonReleaseStatus ReleaseStatus { get; set; } = SeasonReleaseStatus.NotStarted;
 
         public string Channel { get; set; } = String.Empty;
 

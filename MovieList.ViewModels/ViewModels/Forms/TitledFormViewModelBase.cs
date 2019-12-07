@@ -13,9 +13,6 @@ using DynamicData.Binding;
 using MovieList.Data.Models;
 
 using ReactiveUI;
-using ReactiveUI.Validation.Extensions;
-
-using Splat;
 
 using static MovieList.Data.Constants;
 
@@ -46,12 +43,6 @@ namespace MovieList.ViewModels.Forms
 
             this.AddTitle = ReactiveCommand.Create(() => this.OnAddTitle(false), canAddTitle);
             this.AddOriginalTitle = ReactiveCommand.Create(() => this.OnAddTitle(true), canAddOriginalTitle);
-
-            this.TitlesChanged = this.AreTitlesChanged(this.Titles, "Titles");
-            this.OriginalTitlesChanged = this.AreTitlesChanged(this.OriginalTitles, "Original titles");
-
-            this.TitlesValid = this.AreTitlesValid(this.Titles);
-            this.OriginalTitlesValid = this.AreTitlesValid(this.OriginalTitles);
         }
 
         public IObservable<string> FormTitle { get; }
@@ -67,23 +58,22 @@ namespace MovieList.ViewModels.Forms
 
         protected SourceList<Title> TitlesSource { get; }
 
-        protected IObservable<bool> TitlesChanged { get; }
-        protected IObservable<bool> OriginalTitlesChanged { get; }
-
-        protected IObservable<bool> TitlesValid { get; }
-        protected IObservable<bool> OriginalTitlesValid { get; }
-
         protected abstract IEnumerable<Title> ItemTitles { get; }
 
         protected abstract string NewItemKey { get; }
 
         protected override void EnableChangeTracking()
         {
-            this.TrackChanges(this.AreTitlesChanged(this.Titles, "Titles"));
-            this.TrackChanges(this.AreTitlesChanged(this.OriginalTitles, "Original titles"));
+            this.TrackChanges(this.IsCollectionChanged(
+                vm => vm.Titles,
+                vm => vm.ItemTitles.Where(title => !title.IsOriginal).ToList()));
 
-            this.TrackValidation(this.AreTitlesValid(this.Titles));
-            this.TrackValidation(this.AreTitlesValid(this.OriginalTitles));
+            this.TrackChanges(this.IsCollectionChanged(
+                vm => vm.OriginalTitles,
+                vm => vm.ItemTitles.Where(title => title.IsOriginal).ToList()));
+
+            this.TrackValidation(this.IsCollectionValid<TitleFormViewModel, Title>(this.Titles));
+            this.TrackValidation(this.IsCollectionValid<TitleFormViewModel, Title>(this.OriginalTitles));
 
             base.EnableChangeTracking();
         }
@@ -135,25 +125,6 @@ namespace MovieList.ViewModels.Forms
                 .Select(title => this.IsNew && String.IsNullOrWhiteSpace(title)
                     ? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty
                     : title);
-
-        private IObservable<bool> AreTitlesChanged(
-            ReadOnlyObservableCollection<TitleFormViewModel> titles,
-            string description)
-            => titles.ToObservableChangeSet()
-                .AutoRefreshOnObservable(vm => vm.FormChanged)
-                .ToCollection()
-                .Select(vms =>
-                    vms.Count == 0 ||
-                    vms.Count != this.ItemTitles.Count(title => title.IsOriginal == vms.First().Title.IsOriginal) ||
-                    vms.Any(vm => vm.IsFormChanged || !this.IsNew && vm.IsNew))
-                .Do(changed => this.Log().Debug(
-                    changed ? $"{description} are changed" : $"{description} are unchanged"));
-
-        private IObservable<bool> AreTitlesValid(ReadOnlyObservableCollection<TitleFormViewModel> titles)
-            => titles.ToObservableChangeSet()
-                .AutoRefreshOnObservable(vm => vm.IsValid())
-                .ToCollection()
-                .SelectMany(vms => vms.Select(vm => vm.IsValid()).CombineLatest().AllTrue());
 
         private void OnAddTitle(bool isOriginal)
         {

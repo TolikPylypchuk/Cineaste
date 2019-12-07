@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -7,7 +9,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 using System.Threading.Tasks;
-
+using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
@@ -72,6 +75,34 @@ namespace MovieList.ViewModels.Forms
 
         protected void TrackValidation(IObservable<bool> validation)
             => this.validationsToTrack.Add(validation);
+
+        protected IObservable<bool> IsCollectionChanged<TVm, TM>(
+            Expression<Func<TViewModel, ReadOnlyObservableCollection<TVm>>> property,
+            Func<TViewModel, ICollection<TM>> itemCollection)
+            where TVm : FormViewModelBase<TM, TVm>
+            where TM : class
+        {
+            string propertyName = property.GetMemberName();
+
+            return property.Compile()(this.Self).ToObservableChangeSet()
+                .AutoRefreshOnObservable(vm => vm.FormChanged)
+                .ToCollection()
+                .Select(vms =>
+                    vms.Count == 0 ||
+                    vms.Count != itemCollection(this.Self).Count ||
+                    vms.Any(vm => vm.IsFormChanged || !this.IsNew && vm.IsNew))
+                .Do(changed => this.Log().Debug(
+                    changed ? $"{propertyName} are changed" : $"{propertyName} are unchanged"));
+        }
+
+        protected IObservable<bool> IsCollectionValid<TVm, TM>(ReadOnlyObservableCollection<TVm> viewModels)
+            where TVm : FormViewModelBase<TM, TVm>
+            where TM : class
+            => viewModels.ToObservableChangeSet()
+                .AutoRefreshOnObservable(vm => vm.IsValid())
+                .ToCollection()
+                .Select(vms => vms.Select(vm => vm.IsValid()).CombineLatest().AllTrue())
+                .Switch();
 
         protected void CanDeleteWhen(IObservable<bool> canDelete)
             => canDelete.Subscribe(this.canDeleteSubject);

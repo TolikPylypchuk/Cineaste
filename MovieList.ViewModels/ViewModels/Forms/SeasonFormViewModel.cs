@@ -19,8 +19,6 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using Splat;
-
 using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
@@ -58,19 +56,14 @@ namespace MovieList.ViewModels.Forms
 
             this.ChannelRule = this.ValidationRule(
                 vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
-
-            this.periods.ToObservableChangeSet()
-                .AutoRefreshOnObservable(vm => vm.IsValid())
-                .Select(_ => this.Periods.Select(period => period.IsValid()).CombineLatest().AllTrue())
-                .Switch()
-                .ToPropertyEx(this, vm => vm.AreAllPeriodsValid);
-
-            var arePeriodsValidAndOverlapping = this.periods.ToObservableChangeSet()
-                .AutoRefreshOnObservable(vm => vm.Changed)
-                .Select(_ => this.AreAllPeriodsValid && this.AreAllPeriodsNonOverlapping());
-
+            
             this.PeriodOverlapRule = this.ValidationRule(
-                _ => arePeriodsValidAndOverlapping,
+                vm => Observable.CombineLatest(
+                        vm.IsCollectionValid<PeriodFormViewModel, Period>(this.periods),
+                        vm.periods.ToObservableChangeSet()
+                            .AutoRefreshOnObservable(pvm => pvm.Changed)
+                            .Select(_ => this.AreAllPeriodsNonOverlapping()))
+                    .AllTrue(),
                 (_, isValid) => isValid ? String.Empty : this.ResourceManager.GetString("ValidationPeriodsOverlap"));
 
             this.WhenAnyValue(vm => vm.CurrentPosterIndex)
@@ -126,8 +119,6 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public int CurrentPosterIndex { get; private set; }
 
-        public bool AreAllPeriodsValid { [ObservableAsProperty] get; }
-
         public ValidationHelper ChannelRule { get; }
         public ValidationHelper PeriodOverlapRule { get; }
 
@@ -160,22 +151,9 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.ReleaseStatus, vm => vm.Season.ReleaseStatus);
             this.TrackChanges(vm => vm.Channel, vm => vm.Season.Channel);
             this.TrackChanges(vm => vm.SequenceNumber, vm => vm.Season.SequenceNumber);
+            this.TrackChanges(this.IsCollectionChanged(vm => vm.Periods, vm => vm.Season.Periods));
 
-            this.TrackChanges(
-                this.periods.ToObservableChangeSet()
-                    .AutoRefreshOnObservable(vm => vm.FormChanged)
-                    .ToCollection()
-                    .Select(vms =>
-                        vms.Count == 0 ||
-                        vms.Count != this.Season.Periods.Count ||
-                        vms.Any(vm => vm.IsFormChanged || !this.IsNew && vm.IsNew))
-                    .Do(changed => this.Log().Debug(changed ? "Periods are changed" : "Periods are unchanged")));
-
-            this.TrackValidation(
-                this.periods.ToObservableChangeSet()
-                    .AutoRefreshOnObservable(vm => vm.IsValid())
-                    .ToCollection()
-                    .SelectMany(vms => vms.Select(vm => vm.IsValid()).CombineLatest().AllTrue()));
+            this.TrackValidation(this.IsCollectionValid<PeriodFormViewModel, Period>(this.Periods));
 
             base.EnableChangeTracking();
         }

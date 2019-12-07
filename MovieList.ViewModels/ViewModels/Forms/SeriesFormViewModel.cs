@@ -9,6 +9,7 @@ using System.Resources;
 using System.Threading.Tasks;
 
 using DynamicData;
+using DynamicData.Binding;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
@@ -27,6 +28,9 @@ namespace MovieList.ViewModels.Forms
     {
         private readonly IEntityService<Series> seriesService;
 
+        private readonly SourceList<Season> seasonsSource;
+        private readonly ReadOnlyObservableCollection<SeasonFormViewModel> seasons;
+
         public SeriesFormViewModel(
             Series series,
             ReadOnlyObservableCollection<Kind> kinds,
@@ -43,12 +47,24 @@ namespace MovieList.ViewModels.Forms
 
             this.CopyProperties();
 
+            this.seasonsSource = new SourceList<Season>();
+
+            this.seasonsSource.Connect()
+                .Sort(SortExpressionComparer<Season>.Ascending(season => season.SequenceNumber))
+                .Transform(this.CreateSeasonForm)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out this.seasons)
+                .DisposeMany()
+                .Subscribe();
+
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.CanDeleteWhenNotNew();
 
             this.Close = ReactiveCommand.Create(() => { });
+
+            this.AddSeason = ReactiveCommand.Create(this.OnAddSeason);
 
             this.EnableChangeTracking();
         }
@@ -69,6 +85,9 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public SeriesReleaseStatus ReleaseStatus { get; set; }
 
+        public ReadOnlyObservableCollection<SeasonFormViewModel> Seasons
+            => this.seasons;
+
         [Reactive]
         public string ImdbLink { get; set; } = String.Empty;
 
@@ -79,6 +98,8 @@ namespace MovieList.ViewModels.Forms
         public ValidationHelper PosterUrlRule { get; }
 
         public ReactiveCommand<Unit, Unit> Close { get; }
+
+        public ReactiveCommand<Unit, Unit> AddSeason { get; }
 
         public override bool IsNew
             => this.Series.Id == default;
@@ -100,6 +121,9 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.IsAnthology, vm => vm.Series.IsAnthology);
             this.TrackChanges(vm => vm.ImdbLink, vm => vm.Series.ImdbLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Series.PosterUrl.EmptyIfNull());
+            this.TrackChanges(this.IsCollectionChanged(vm => vm.Seasons, vm => vm.Series.Seasons));
+
+            this.TrackValidation(this.IsCollectionValid<SeasonFormViewModel, Season>(this.Seasons));
 
             base.EnableChangeTracking();
         }
@@ -154,5 +178,35 @@ namespace MovieList.ViewModels.Forms
 
         protected override void AttachTitle(Title title)
             => title.Series = this.Series;
+
+        private void OnAddSeason()
+        {
+            var period = new Period
+            {
+                StartMonth = 1,
+                StartYear = 2000,
+                EndMonth = 1,
+                EndYear = 2000
+            };
+
+            var season = new Season
+            {
+                Titles = new List<Title>
+                {
+                    new Title { Priority = 1, IsOriginal = false },
+                    new Title { Priority = 1, IsOriginal = true }
+                },
+                Series = this.Series,
+                Periods = new List<Period> { period },
+                SequenceNumber = this.Seasons.Count + 1
+            };
+
+            period.Season = season;
+
+            this.seasonsSource.Add(season);
+        }
+
+        private SeasonFormViewModel CreateSeasonForm(Season season)
+            => new SeasonFormViewModel(season, this.ResourceManager, this.Scheduler);
     }
 }
