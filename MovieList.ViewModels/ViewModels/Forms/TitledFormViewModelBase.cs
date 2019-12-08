@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
+using System.Threading.Tasks;
 
 using DynamicData;
 using DynamicData.Binding;
@@ -22,14 +23,14 @@ namespace MovieList.ViewModels.Forms
         where TModel : class
         where TViewModel : TitledFormViewModelBase<TModel, TViewModel>
     {
+        private readonly SourceList<Title> titlesSource = new SourceList<Title>();
+
         private readonly ReadOnlyObservableCollection<TitleFormViewModel> titles;
         private readonly ReadOnlyObservableCollection<TitleFormViewModel> originalTitles;
 
         protected TitledFormViewModelBase(ResourceManager? resourceManager, IScheduler? scheduler = null)
             : base(resourceManager, scheduler)
         {
-            this.TitlesSource = new SourceList<Title>();
-
             this.InitializeTitles(title => !title.IsOriginal, out this.titles);
             this.InitializeTitles(title => title.IsOriginal, out this.originalTitles);
 
@@ -56,9 +57,7 @@ namespace MovieList.ViewModels.Forms
         public ReactiveCommand<Unit, Unit> AddTitle { get; }
         public ReactiveCommand<Unit, Unit> AddOriginalTitle { get; }
 
-        protected SourceList<Title> TitlesSource { get; }
-
-        protected abstract IEnumerable<Title> ItemTitles { get; }
+        protected abstract ICollection<Title> ItemTitles { get; }
 
         protected abstract string NewItemKey { get; }
 
@@ -78,17 +77,41 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
+        protected override void CopyProperties()
+        {
+            this.titlesSource.Clear();
+            this.titlesSource.AddRange(this.ItemTitles);
+        }
+
         protected abstract void AttachTitle(Title title);
+
+        protected async Task SaveTitlesAsync()
+        {
+            foreach (var title in this.Titles.Union(this.OriginalTitles))
+            {
+                await title.Save.Execute();
+            }
+
+            foreach (var title in this.titlesSource.Items.Except(this.ItemTitles).ToList())
+            {
+                this.ItemTitles.Add(title);
+            }
+
+            foreach (var title in this.ItemTitles.Except(this.titlesSource.Items).ToList())
+            {
+                this.ItemTitles.Remove(title);
+            }
+        }
 
         private void InitializeTitles(
             Func<Title, bool> predicate,
             out ReadOnlyObservableCollection<TitleFormViewModel> titles)
         {
-            var canDelete = this.TitlesSource.Connect()
-                .Select(_ => this.TitlesSource.Items.Where(predicate).Count())
+            var canDelete = this.titlesSource.Connect()
+                .Select(_ => this.titlesSource.Items.Where(predicate).Count())
                 .Select(count => count > MinTitleCount);
 
-            this.TitlesSource.Connect()
+            this.titlesSource.Connect()
                 .Filter(predicate)
                 .Sort(SortExpressionComparer<Title>.Ascending(title => title.Priority))
                 .Transform(title => this.CreateTitleForm(title, canDelete))
@@ -106,7 +129,7 @@ namespace MovieList.ViewModels.Forms
                 .WhereNotNull()
                 .Subscribe(deletedTitle =>
                 {
-                    this.TitlesSource.Remove(deletedTitle);
+                    this.titlesSource.Remove(deletedTitle);
 
                     (!deletedTitle.IsOriginal ? this.Titles : this.OriginalTitles)
                         .Where(t => t.Priority > deletedTitle.Priority)
@@ -135,7 +158,7 @@ namespace MovieList.ViewModels.Forms
             };
 
             this.AttachTitle(title);
-            this.TitlesSource.Add(title);
+            this.titlesSource.Add(title);
         }
     }
 }

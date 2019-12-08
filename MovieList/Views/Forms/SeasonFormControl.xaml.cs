@@ -10,7 +10,6 @@ using MovieList.Properties;
 using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
-using ReactiveUI.Validation.Extensions;
 
 namespace MovieList.Views.Forms
 {
@@ -126,11 +125,12 @@ namespace MovieList.Views.Forms
             this.ChannelTextBox.ValidateWith(this.ViewModel.ChannelRule)
                 .DisposeWith(disposables);
 
-            this.BindValidation(this.ViewModel, vm => vm.PeriodOverlapRule, v => v.InvalidFormTextBlock.Text)
+            this.WhenAnyObservable(v => v.ViewModel.PeriodsNonOverlapping)
+                .Select(isValid => isValid ? String.Empty : Messages.ValidationPeriodsOverlap)
+                .BindTo(this, v => v.InvalidFormTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.PeriodOverlapRule.ValidationChanged)
-                .Select(state => state.IsValid)
+            this.WhenAnyObservable(v => v.ViewModel.PeriodsNonOverlapping)
                 .BindTo(this, v => v.InvalidFormTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
                 .DisposeWith(disposables);
         }

@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
-
-using DynamicData;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
@@ -92,7 +89,7 @@ namespace MovieList.ViewModels.Forms
         protected override MovieFormViewModel Self
             => this;
 
-        protected override IEnumerable<Title> ItemTitles
+        protected override ICollection<Title> ItemTitles
             => this.Movie.Titles;
 
         protected override string NewItemKey
@@ -112,13 +109,7 @@ namespace MovieList.ViewModels.Forms
 
         protected override async Task<Movie> OnSaveAsync()
         {
-            foreach (var title in this.Titles.Union(this.OriginalTitles))
-            {
-                await title.Save.Execute();
-            }
-
-            this.Movie.Titles.Add(this.TitlesSource.Items.Except(this.Movie.Titles).ToList());
-            this.Movie.Titles.Remove(this.Movie.Titles.Except(this.TitlesSource.Items).ToList());
+            await this.SaveTitlesAsync();
 
             this.Movie.IsWatched = this.IsWatched;
             this.Movie.IsReleased = this.IsReleased;
@@ -147,8 +138,7 @@ namespace MovieList.ViewModels.Forms
 
         protected override void CopyProperties()
         {
-            this.TitlesSource.Clear();
-            this.TitlesSource.AddRange(this.Movie.Titles);
+            base.CopyProperties();
 
             this.Year = this.Movie.Year.ToString();
             this.Kind = this.Movie.Kind;

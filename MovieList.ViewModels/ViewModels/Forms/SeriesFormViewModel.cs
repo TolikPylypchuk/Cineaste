@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -28,8 +27,10 @@ namespace MovieList.ViewModels.Forms
     {
         private readonly IEntityService<Series> seriesService;
 
-        private readonly SourceList<Season> seasonsSource;
+        private readonly SourceList<Season> seasonsSource = new SourceList<Season>();
+
         private readonly ReadOnlyObservableCollection<SeasonFormViewModel> seasons;
+        private readonly ReadOnlyObservableCollection<SeriesComponentViewModel> components;
 
         public SeriesFormViewModel(
             Series series,
@@ -47,13 +48,18 @@ namespace MovieList.ViewModels.Forms
 
             this.CopyProperties();
 
-            this.seasonsSource = new SourceList<Season>();
-
             this.seasonsSource.Connect()
                 .Sort(SortExpressionComparer<Season>.Ascending(season => season.SequenceNumber))
                 .Transform(this.CreateSeasonForm)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.seasons)
+                .DisposeMany()
+                .Subscribe();
+
+            this.seasons.ToObservableChangeSet()
+                .Transform(season => new SeriesComponentViewModel(season))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out this.components)
                 .DisposeMany()
                 .Subscribe();
 
@@ -88,6 +94,9 @@ namespace MovieList.ViewModels.Forms
         public ReadOnlyObservableCollection<SeasonFormViewModel> Seasons
             => this.seasons;
 
+        public ReadOnlyObservableCollection<SeriesComponentViewModel> Components
+            => this.components;
+
         [Reactive]
         public string ImdbLink { get; set; } = String.Empty;
 
@@ -107,7 +116,7 @@ namespace MovieList.ViewModels.Forms
         protected override SeriesFormViewModel Self
             => this;
 
-        protected override IEnumerable<Title> ItemTitles
+        protected override ICollection<Title> ItemTitles
             => this.Series.Titles;
 
         protected override string NewItemKey
@@ -130,13 +139,7 @@ namespace MovieList.ViewModels.Forms
 
         protected override async Task<Series> OnSaveAsync()
         {
-            foreach (var title in this.Titles.Union(this.OriginalTitles))
-            {
-                await title.Save.Execute();
-            }
-
-            this.Series.Titles.Add(this.TitlesSource.Items.Except(this.Series.Titles).ToList());
-            this.Series.Titles.Remove(this.Series.Titles.Except(this.TitlesSource.Items).ToList());
+            await this.SaveTitlesAsync();
 
             this.Series.IsAnthology = this.IsAnthology;
             this.Series.WatchStatus = this.WatchStatus;
@@ -165,8 +168,10 @@ namespace MovieList.ViewModels.Forms
 
         protected override void CopyProperties()
         {
-            this.TitlesSource.Clear();
-            this.TitlesSource.AddRange(this.Series.Titles);
+            base.CopyProperties();
+
+            this.seasonsSource.Clear();
+            this.seasonsSource.AddRange(this.Series.Seasons);
 
             this.IsAnthology = this.Series.IsAnthology;
             this.Kind = this.Series.Kind;

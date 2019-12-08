@@ -37,6 +37,9 @@ namespace MovieList.Views.Forms
                 this.BindLink(disposables);
                 this.BindFields(disposables);
 
+                this.OneWayBind(this.ViewModel, vm => vm.Components, v => v.Components.ItemsSource)
+                    .DisposeWith(disposables);
+
                 this.AddValidation(disposables);
             });
         }

@@ -51,7 +51,7 @@ namespace MovieList.ViewModels.Forms
 
             this.PeriodRule = this.ValidationRule(
                 _ => periodValid,
-                (_, isValid) => isValid ? String.Empty : this.ResourceManager.GetString("ValidationPeriodInvalid"));
+                (vm, isValid) => isValid ? String.Empty : vm.ResourceManager.GetString("ValidationPeriodInvalid"));
 
             this.CanDeleteWhen(canDelete);
 

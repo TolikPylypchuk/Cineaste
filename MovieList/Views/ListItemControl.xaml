@@ -5,7 +5,8 @@
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            xmlns:local="clr-namespace:MovieList.Views"
                            mc:Ignorable="d">
-    <Border HorizontalAlignment="Stretch" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,1" Padding="16">
+    <Border HorizontalAlignment="Stretch" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,1" Padding="16"
+            Background="Transparent" Cursor="Hand">
         <Grid HorizontalAlignment="Stretch">
             <Grid.Resources>
                 <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">

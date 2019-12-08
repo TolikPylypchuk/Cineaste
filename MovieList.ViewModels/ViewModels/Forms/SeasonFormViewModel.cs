@@ -25,7 +25,8 @@ namespace MovieList.ViewModels.Forms
 {
     public sealed class SeasonFormViewModel : TitledFormViewModelBase<Season, SeasonFormViewModel>
     {
-        private readonly SourceList<Period> periodsSource;
+        private readonly SourceList<Period> periodsSource = new SourceList<Period>();
+
         private readonly ReadOnlyObservableCollection<PeriodFormViewModel> periods;
 
         public SeasonFormViewModel(
@@ -36,8 +37,6 @@ namespace MovieList.ViewModels.Forms
         {
             this.Season = season;
             this.CopyProperties();
-
-            this.periodsSource = new SourceList<Period>();
 
             var canDeletePeriod = this.periodsSource.Connect()
                 .Select(_ => this.periodsSource.Items.Count())
@@ -56,22 +55,18 @@ namespace MovieList.ViewModels.Forms
 
             this.ChannelRule = this.ValidationRule(
                 vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
-            
-            this.PeriodOverlapRule = this.ValidationRule(
-                vm => Observable.CombineLatest(
-                        vm.IsCollectionValid<PeriodFormViewModel, Period>(this.periods),
-                        vm.periods.ToObservableChangeSet()
-                            .AutoRefreshOnObservable(pvm => pvm.Changed)
-                            .Select(_ => this.AreAllPeriodsNonOverlapping()))
-                    .AllTrue(),
-                (_, isValid) => isValid ? String.Empty : this.ResourceManager.GetString("ValidationPeriodsOverlap"));
+
+            this.PeriodsNonOverlapping =
+                this.periods.ToObservableChangeSet()
+                    .AutoRefreshOnObservable(pvm => pvm.Changed)
+                    .Select(_ => this.AreAllPeriodsNonOverlapping());
 
             this.WhenAnyValue(vm => vm.CurrentPosterIndex)
                 .Select(index => this.Season.Periods[index].PosterUrl)
                 .BindTo(this, vm => vm.CurrentPosterUrl);
 
             this.Close = ReactiveCommand.Create(() => { });
-            this.GoToSeries = ReactiveCommand.Create(() => { });
+            this.GoToSeries = ReactiveCommand.Create(() => { }, this.Save.CanExecute);
 
             var canAddPeriod = this.periodsSource.Connect()
                 .Select(_ => this.periods.Count < MaxPeriodCount);
@@ -120,7 +115,8 @@ namespace MovieList.ViewModels.Forms
         public int CurrentPosterIndex { get; private set; }
 
         public ValidationHelper ChannelRule { get; }
-        public ValidationHelper PeriodOverlapRule { get; }
+
+        public IObservable<bool> PeriodsNonOverlapping { get; }
 
         public ReactiveCommand<Unit, Unit> Close { get; }
         public ReactiveCommand<Unit, Unit> GoToSeries { get; }
@@ -139,7 +135,7 @@ namespace MovieList.ViewModels.Forms
         protected override SeasonFormViewModel Self
             => this;
 
-        protected override IEnumerable<Title> ItemTitles
+        protected override ICollection<Title> ItemTitles
             => this.Season.Titles;
 
         protected override string NewItemKey
@@ -158,14 +154,16 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override Task<Season> OnSaveAsync()
+        protected override async Task<Season> OnSaveAsync()
         {
+            await this.SaveTitlesAsync();
+
             this.Season.WatchStatus = this.WatchStatus;
             this.Season.ReleaseStatus = this.ReleaseStatus;
             this.Season.Channel = this.Channel;
             this.Season.SequenceNumber = this.SequenceNumber;
 
-            return Task.FromResult(this.Season);
+            return this.Season;
         }
 
         [SuppressMessage("ReSharper", "RedundantCast")]
@@ -174,12 +172,14 @@ namespace MovieList.ViewModels.Forms
 
         protected override void CopyProperties()
         {
-            this.TitlesSource.Clear();
-            this.TitlesSource.AddRange(this.Season.Titles);
+            base.CopyProperties();
+
+            this.periodsSource.Clear();
+            this.periodsSource.AddRange(this.Season.Periods);
 
             this.WatchStatus = this.Season.WatchStatus;
             this.ReleaseStatus = this.Season.ReleaseStatus;
-            this.Channel = this.Channel;
+            this.Channel = this.Season.Channel;
             this.SequenceNumber = this.Season.SequenceNumber;
 
             this.CurrentPosterIndex = 0;
