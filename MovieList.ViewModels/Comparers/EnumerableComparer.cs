@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace MovieList.Comparers
 {
-    public class EnumerableComparer<T> : NullsFirstComparer<IEnumerable<T>>
+    public sealed class EnumerableComparer<T> : IComparer<IEnumerable<T>>
     {
         private readonly IComparer<T> comparer;
 
@@ -11,7 +11,7 @@ namespace MovieList.Comparers
 
         public static EnumerableComparer<T> Default { get; } = new EnumerableComparer<T>(Comparer<T>.Default);
 
-        protected override int CompareNonNull(IEnumerable<T> x, IEnumerable<T> y)
+        public int Compare(IEnumerable<T> x, IEnumerable<T> y)
         {
             using var leftEnumerator = x.GetEnumerator();
             using var rightEnumerator = y.GetEnumerator();

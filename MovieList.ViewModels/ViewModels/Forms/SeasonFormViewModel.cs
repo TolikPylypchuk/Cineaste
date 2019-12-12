@@ -66,7 +66,7 @@ namespace MovieList.ViewModels.Forms
                 .BindTo(this, vm => vm.CurrentPosterUrl);
 
             this.Close = ReactiveCommand.Create(() => { });
-            this.GoToSeries = ReactiveCommand.Create(() => { }, this.Save.CanExecute);
+            this.GoToSeries = ReactiveCommand.Create(() => { });
 
             var canAddPeriod = this.periodsSource.Connect()
                 .Select(_ => this.periods.Count < MaxPeriodCount);

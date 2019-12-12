@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MovieList.Comparers
 {
-    public sealed class PropertyComparer<T, TProperty> : NullsFirstComparer<T>
+    public sealed class PropertyComparer<T, TProperty> : IComparer<T>
     {
         private readonly Func<T, TProperty> propertyGetter;
         private readonly IComparer<TProperty> propertyComparer;
@@ -14,7 +14,7 @@ namespace MovieList.Comparers
             this.propertyComparer = propertyComparer;
         }
 
-        protected override int CompareNonNull(T x, T y)
+        public int Compare(T x, T y)
             => this.propertyComparer.Compare(this.propertyGetter(x), this.propertyGetter(y));
     }
 }

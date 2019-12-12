@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace MovieList.Comparers
 {
-    public class TitleComparer : NullsFirstComparer<string>
+    public sealed class TitleComparer : IComparer<string>
     {
         private static readonly Regex NumberRegex = new Regex("([0-9]+)", RegexOptions.Compiled);
 
@@ -13,7 +14,7 @@ namespace MovieList.Comparers
 
         public static TitleComparer Instance { get; } = new TitleComparer();
 
-        protected override int CompareNonNull(string x, string y)
+        public int Compare(string x, string y)
             => EnumerableComparer<object>.Default.Compare(
                 NumberRegex.Split(this.Normalize(x)).Select(this.Convert),
                 NumberRegex.Split(this.Normalize(y)).Select(this.Convert));
