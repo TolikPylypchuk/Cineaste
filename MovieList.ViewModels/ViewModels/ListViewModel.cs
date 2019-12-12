@@ -31,6 +31,7 @@ namespace MovieList.ViewModels
         private readonly ReadOnlyObservableCollection<ListItemViewModel> items;
         private readonly Subject<Unit> cancelSelection = new Subject<Unit>();
         private readonly CompositeDisposable sideViewModelSubscriptions = new CompositeDisposable();
+        private readonly CompositeDisposable sideViewModelSecondarySubscriptions = new CompositeDisposable();
 
         public ListViewModel(
             string fileName,
@@ -110,6 +111,7 @@ namespace MovieList.ViewModels
             if (!isSame)
             {
                 this.sideViewModelSubscriptions.Clear();
+                this.sideViewModelSecondarySubscriptions.Clear();
 
                 this.SideViewModel = vm?.Item switch
                 {
@@ -129,6 +131,7 @@ namespace MovieList.ViewModels
             var viewModel = new NewItemViewModel();
 
             this.sideViewModelSubscriptions.Clear();
+            this.sideViewModelSecondarySubscriptions.Clear();
 
             viewModel.AddNewMovie
                 .Select(_ => new Movie
@@ -214,9 +217,34 @@ namespace MovieList.ViewModels
             form.Delete
                 .WhereNotNull()
                 .Discard()
-                .InvokeCommand(form.Close);
+                .InvokeCommand(form.Close)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.SelectComponent
+                .OfType<SeasonFormViewModel>()
+                .Subscribe(this.OpenSeasonForm)
+                .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
+        }
+
+        private void OpenSeasonForm(SeasonFormViewModel form)
+        {
+            this.Log().Debug($"Opening a form for season: {form.Season}");
+
+            form.Close
+                .SubscribeAsync(async () => await this.SelectItem.Execute())
+                .DisposeWith(this.sideViewModelSecondarySubscriptions);
+
+            form.GoToSeries
+                .Subscribe(seriesForm => this.SideViewModel = seriesForm)
+                .DisposeWith(this.sideViewModelSecondarySubscriptions);
+
+            form.GoToSeries
+                .Subscribe(_ => this.sideViewModelSecondarySubscriptions.Clear())
+                .DisposeWith(this.sideViewModelSecondarySubscriptions);
+
+            this.SideViewModel = form;
         }
 
         private void RemoveMovie(Movie movie)

@@ -23,7 +23,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class SeasonFormViewModel : TitledFormViewModelBase<Season, SeasonFormViewModel>
+    public sealed class SeasonFormViewModel : SeriesComponentFormViewModelBase<Season, SeasonFormViewModel>
     {
         private readonly SourceList<Period> periodsSource = new SourceList<Period>();
 
@@ -31,9 +31,10 @@ namespace MovieList.ViewModels.Forms
 
         public SeasonFormViewModel(
             Season season,
+            SeriesFormViewModel parent,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
-            : base(resourceManager, scheduler)
+            : base(parent, resourceManager, scheduler)
         {
             this.Season = season;
             this.CopyProperties();
@@ -65,16 +66,10 @@ namespace MovieList.ViewModels.Forms
                 .Select(index => this.Season.Periods[index].PosterUrl)
                 .BindTo(this, vm => vm.CurrentPosterUrl);
 
-            this.Close = ReactiveCommand.Create(() => { });
-            this.GoToSeries = ReactiveCommand.Create(() => { });
-
             var canAddPeriod = this.periodsSource.Connect()
                 .Select(_ => this.periods.Count < MaxPeriodCount);
 
             this.AddPeriod = ReactiveCommand.Create(this.OnAddPeriod, canAddPeriod);
-
-            this.MoveUp = ReactiveCommand.Create(() => { this.SequenceNumber--; });
-            this.MoveDown = ReactiveCommand.Create(() => { this.SequenceNumber++; });
 
             var canSwitchToNextPoster = this.WhenAnyValue(vm => vm.CurrentPosterIndex)
                 .Select(index => index != this.Season.Periods.Count - 1);
@@ -102,9 +97,6 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public string Channel { get; set; } = null!;
 
-        [Reactive]
-        public int SequenceNumber { get; set; }
-
         public ReadOnlyObservableCollection<PeriodFormViewModel> Periods
             => this.periods;
 
@@ -118,13 +110,7 @@ namespace MovieList.ViewModels.Forms
 
         public IObservable<bool> PeriodsNonOverlapping { get; }
 
-        public ReactiveCommand<Unit, Unit> Close { get; }
-        public ReactiveCommand<Unit, Unit> GoToSeries { get; }
-
         public ReactiveCommand<Unit, Unit> AddPeriod { get; }
-
-        public ReactiveCommand<Unit, Unit> MoveUp { get; }
-        public ReactiveCommand<Unit, Unit> MoveDown { get; }
 
         public ReactiveCommand<Unit, Unit> SwitchToNextPoster { get; }
         public ReactiveCommand<Unit, Unit> SwitchToPreviousPoster { get; }
@@ -150,6 +136,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(this.IsCollectionChanged(vm => vm.Periods, vm => vm.Season.Periods));
 
             this.TrackValidation(this.IsCollectionValid<PeriodFormViewModel, Period>(this.Periods));
+            this.TrackValidation(this.PeriodsNonOverlapping);
 
             base.EnableChangeTracking();
         }

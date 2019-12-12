@@ -169,6 +169,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Channel.
+        /// </summary>
+        public static string Channel {
+            get {
+                return ResourceManager.GetString("Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {
@@ -331,7 +340,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EndYear.
+        ///   Looks up a localized string similar to End Year.
         /// </summary>
         public static string EndYEar {
             get {
@@ -916,7 +925,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to StartYear.
+        ///   Looks up a localized string similar to Start Year.
         /// </summary>
         public static string StartYear {
             get {

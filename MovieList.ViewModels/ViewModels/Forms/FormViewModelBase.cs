@@ -9,8 +9,10 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 using System.Threading.Tasks;
+
 using DynamicData;
 using DynamicData.Binding;
+
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;

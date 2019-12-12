@@ -57,7 +57,7 @@ namespace MovieList.ViewModels.Forms
                 .Subscribe();
 
             this.seasons.ToObservableChangeSet()
-                .Transform(season => new SeriesComponentViewModel(season))
+                .Transform(this.CreateComponent)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.components)
                 .DisposeMany()
@@ -68,9 +68,8 @@ namespace MovieList.ViewModels.Forms
 
             this.CanDeleteWhenNotNew();
 
-            this.Close = ReactiveCommand.Create(() => { });
-
             this.AddSeason = ReactiveCommand.Create(this.OnAddSeason);
+            this.SelectComponent = ReactiveCommand.Create<ReactiveObject, ReactiveObject>(form => form);
 
             this.EnableChangeTracking();
         }
@@ -106,9 +105,8 @@ namespace MovieList.ViewModels.Forms
         public ValidationHelper ImdbLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
 
-        public ReactiveCommand<Unit, Unit> Close { get; }
-
         public ReactiveCommand<Unit, Unit> AddSeason { get; }
+        public ReactiveCommand<ReactiveObject, ReactiveObject> SelectComponent { get; }
 
         public override bool IsNew
             => this.Series.Id == default;
@@ -212,6 +210,15 @@ namespace MovieList.ViewModels.Forms
         }
 
         private SeasonFormViewModel CreateSeasonForm(Season season)
-            => new SeasonFormViewModel(season, this.ResourceManager, this.Scheduler);
+            => new SeasonFormViewModel(season, this, this.ResourceManager, this.Scheduler);
+
+        private SeriesComponentViewModel CreateComponent(SeasonFormViewModel season)
+        {
+            var component = new SeriesComponentViewModel(season);
+
+            component.Select.InvokeCommand(this.SelectComponent);
+
+            return component;
+        }
     }
 }

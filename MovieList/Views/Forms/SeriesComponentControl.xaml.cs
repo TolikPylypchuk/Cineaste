@@ -1,4 +1,5 @@
 using System.Reactive.Disposables;
+using System.Windows.Controls;
 
 using MovieList.ViewModels.Forms;
 
@@ -24,6 +25,11 @@ namespace MovieList.Views.Forms
                     .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Years, v => v.YearsTextBlock.Text)
+                    .DisposeWith(disposables);
+
+                this.Events().MouseDoubleClick
+                    .Discard()
+                    .InvokeCommand(this.ViewModel.Select)
                     .DisposeWith(disposables);
             });
         }

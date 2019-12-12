@@ -65,15 +65,15 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+                    <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.WatchStatus}" />
 
-                    <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="8,0,0,0"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.WatchStatus}" />
+                    <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8,8,0,8"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.ReleaseStatus}" />
                 </Grid>
 
                 <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8"
-                         m:HintAssist.Hint="{x:Static resx:Messages.ImdbLink}" />
+                         m:HintAssist.Hint="{x:Static resx:Messages.Channel}" />
 
                 <ItemsControl x:Name="Periods" />
 

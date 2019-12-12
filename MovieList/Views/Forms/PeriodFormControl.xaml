@@ -28,29 +28,34 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="StartMonthComboBox" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+        <ComboBox x:Name="StartMonthComboBox" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
                   Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.StartMonth}" />
 
-        <TextBox x:Name="StartYearTextBox" Grid.Row="0" Grid.Column="1" Margin="8,0,0,0" />
+        <TextBox x:Name="StartYearTextBox" Grid.Row="0" Grid.Column="1" Margin="8,8,0,8"
+                 m:HintAssist.Hint="{x:Static resx:Messages.StartYear}" />
 
-        <ComboBox x:Name="EndMonthComboBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+        <ComboBox x:Name="EndMonthComboBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
                   Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.StartMonth}" />
 
-        <TextBox x:Name="EndYearTextBox" Grid.Row="1" Grid.Column="1" Margin="8,0,0,0" />
+        <TextBox x:Name="EndYearTextBox" Grid.Row="1" Grid.Column="1" Margin="8,8,0,8"
+                 m:HintAssist.Hint="{x:Static resx:Messages.EndYEar}" />
 
-        <TextBox x:Name="NumberOfEpisodesTextBox" Grid.Row="2" Grid.Column="0" Margin="0,0,8,0" />
+        <TextBox x:Name="NumberOfEpisodesTextBox" Grid.Row="2" Grid.Column="0" Margin="0,8,8,8"
+                 m:HintAssist.Hint="{x:Static resx:Messages.NumberOfEpisodes}" />
 
-        <CheckBox x:Name="IsSingleDayReleaseCheckBox" Grid.Row="2" Grid.Column="1" Content="{x:Static resx:Messages.SingleDayRelease}"
-                  Margin="8,0,0,0" VerticalAlignment="Center" />
+        <CheckBox x:Name="IsSingleDayReleaseCheckBox" Grid.Row="2" Grid.Column="1"
+                  Margin="8,0,0,0" VerticalAlignment="Center">
+            <TextBlock Text="{x:Static resx:Messages.SingleDayRelease}" TextWrapping="Wrap" />
+        </CheckBox>
 
         <DockPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
             <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
-                    VerticalAlignment="Center" Padding="0" Width="20" Height="20" Margin="8,0,0,0"
+                    VerticalAlignment="Center" Padding="0" Width="20" Height="20" Margin="8,8,0,8"
                     Foreground="{StaticResource SecondaryAccentBrush}">
                 <m:PackIcon Kind="CloseCircleOutline" Margin="0" Width="20" Height="20" />
             </Button>
 
-            <TextBox x:Name="PosterUrlTextBox" m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
+            <TextBox x:Name="PosterUrlTextBox" Margin="0,8" m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
         </DockPanel>
 
         <TextBlock x:Name="InvalidFormTextBlock" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"

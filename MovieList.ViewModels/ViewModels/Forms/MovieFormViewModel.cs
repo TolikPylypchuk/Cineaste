@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
@@ -50,8 +49,6 @@ namespace MovieList.ViewModels.Forms
 
             this.CanDeleteWhenNotNew();
 
-            this.Close = ReactiveCommand.Create(() => { });
-
             this.EnableChangeTracking();
         }
 
@@ -80,8 +77,6 @@ namespace MovieList.ViewModels.Forms
         public ValidationHelper YearRule { get; }
         public ValidationHelper ImdbLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
-
-        public ReactiveCommand<Unit, Unit> Close { get; }
 
         public override bool IsNew
             => this.Movie.Id == default;

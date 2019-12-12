@@ -42,6 +42,8 @@ namespace MovieList.ViewModels.Forms
             var canAddOriginalTitle = this.OriginalTitles.ToObservableChangeSet()
                 .Select(_ => this.OriginalTitles.Count < MaxTitleCount);
 
+            this.Close = ReactiveCommand.Create(() => { });
+
             this.AddTitle = ReactiveCommand.Create(() => this.OnAddTitle(false), canAddTitle);
             this.AddOriginalTitle = ReactiveCommand.Create(() => this.OnAddTitle(true), canAddOriginalTitle);
         }
@@ -53,6 +55,8 @@ namespace MovieList.ViewModels.Forms
 
         public ReadOnlyObservableCollection<TitleFormViewModel> OriginalTitles
             => this.originalTitles;
+
+        public ReactiveCommand<Unit, Unit> Close { get; }
 
         public ReactiveCommand<Unit, Unit> AddTitle { get; }
         public ReactiveCommand<Unit, Unit> AddOriginalTitle { get; }
