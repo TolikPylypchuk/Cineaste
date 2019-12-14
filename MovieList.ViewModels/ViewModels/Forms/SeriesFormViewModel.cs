@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -138,6 +139,7 @@ namespace MovieList.ViewModels.Forms
         protected override async Task<Series> OnSaveAsync()
         {
             await this.SaveTitlesAsync();
+            await this.SaveSeasonsAsync();
 
             this.Series.IsAnthology = this.IsAnthology;
             this.Series.WatchStatus = this.WatchStatus;
@@ -210,7 +212,15 @@ namespace MovieList.ViewModels.Forms
         }
 
         private SeasonFormViewModel CreateSeasonForm(Season season)
-            => new SeasonFormViewModel(season, this, this.ResourceManager, this.Scheduler);
+        {
+            var form = new SeasonFormViewModel(season, this, this.ResourceManager, this.Scheduler);
+
+            form.Delete
+                .WhereNotNull()
+                .Subscribe(s => this.seasonsSource.Remove(s));
+
+            return form;
+        }
 
         private SeriesComponentViewModel CreateComponent(SeasonFormViewModel season)
         {
@@ -220,5 +230,24 @@ namespace MovieList.ViewModels.Forms
 
             return component;
         }
+
+        private async Task SaveSeasonsAsync()
+        {
+            foreach (var season in this.Seasons)
+            {
+                await season.Save.Execute();
+            }
+
+            foreach (var season in this.seasonsSource.Items.Except(this.Series.Seasons).ToList())
+            {
+                this.Series.Seasons.Add(season);
+            }
+
+            foreach (var season in this.Series.Seasons.Except(this.seasonsSource.Items).ToList())
+            {
+                this.Series.Seasons.Remove(season);
+            }
+        }
+
     }
 }

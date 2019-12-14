@@ -131,6 +131,7 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.PeriodsNonOverlapping)
+                .Invert()
                 .BindTo(this, v => v.InvalidFormTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
                 .DisposeWith(disposables);
         }

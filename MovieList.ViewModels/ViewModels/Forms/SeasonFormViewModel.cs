@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -13,7 +12,7 @@ using DynamicData;
 using DynamicData.Binding;
 
 using MovieList.Data.Models;
-
+using MovieList.DialogModels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
@@ -65,6 +64,8 @@ namespace MovieList.ViewModels.Forms
             this.WhenAnyValue(vm => vm.CurrentPosterIndex)
                 .Select(index => this.Season.Periods[index].PosterUrl)
                 .BindTo(this, vm => vm.CurrentPosterUrl);
+
+            this.CanDeleteWhenNotNew();
 
             var canAddPeriod = this.periodsSource.Connect()
                 .Select(_ => this.periods.Count < MaxPeriodCount);
@@ -144,6 +145,7 @@ namespace MovieList.ViewModels.Forms
         protected override async Task<Season> OnSaveAsync()
         {
             await this.SaveTitlesAsync();
+            await this.SavePeriodsAsync();
 
             this.Season.WatchStatus = this.WatchStatus;
             this.Season.ReleaseStatus = this.ReleaseStatus;
@@ -153,9 +155,10 @@ namespace MovieList.ViewModels.Forms
             return this.Season;
         }
 
-        [SuppressMessage("ReSharper", "RedundantCast")]
-        protected override Task<Season?> OnDeleteAsync()
-            => Task.FromResult((Season?)this.Season);
+        protected override async Task<Season?> OnDeleteAsync()
+            => await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeries"))
+                ? this.Season
+                : null;
 
         protected override void CopyProperties()
         {
@@ -197,8 +200,26 @@ namespace MovieList.ViewModels.Forms
                 Season = this.Season
             });
 
+        private async Task SavePeriodsAsync()
+        {
+            foreach (var period in this.Periods)
+            {
+                await period.Save.Execute();
+            }
+
+            foreach (var period in this.periodsSource.Items.Except(this.Season.Periods).ToList())
+            {
+                this.Season.Periods.Add(period);
+            }
+
+            foreach (var period in this.Season.Periods.Except(this.periodsSource.Items).ToList())
+            {
+                this.Season.Periods.Remove(period);
+            }
+        }
+
         private bool AreAllPeriodsNonOverlapping()
-            => this.Periods.Count == MinPeriodCount ||
+            => this.Periods.Count == 1 ||
                this.Periods.Buffer(2, 1).All(periods => this.ArePeriodsNonOverlapping(periods[0], periods[1]));
 
         private bool ArePeriodsNonOverlapping(PeriodFormViewModel earlier, PeriodFormViewModel later)

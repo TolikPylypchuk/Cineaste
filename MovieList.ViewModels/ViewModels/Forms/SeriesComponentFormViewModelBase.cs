@@ -19,7 +19,7 @@ namespace MovieList.ViewModels.Forms
         {
             this.Parent = parent;
 
-            this.GoToSeries = ReactiveCommand.Create<Unit, SeriesFormViewModel>(_ => this.Parent);
+            this.GoToSeries = ReactiveCommand.Create<Unit, SeriesFormViewModel>(_ => this.Parent, this.Valid);
 
             this.MoveUp = ReactiveCommand.Create(() => { this.SequenceNumber--; });
             this.MoveDown = ReactiveCommand.Create(() => { this.SequenceNumber++; });

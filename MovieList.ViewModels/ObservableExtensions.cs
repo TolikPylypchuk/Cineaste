@@ -26,6 +26,9 @@ namespace MovieList
             where T : struct
             => observable.Where(x => x.HasValue).Select(x => x ?? default);
 
+        public static IObservable<bool> Invert(this IObservable<bool> observable)
+            => observable.Select(value => !value);
+
         public static IDisposable Subscribe(this IObservable<Unit> observable, Action observer)
             => observable.Subscribe(_ => observer());
 

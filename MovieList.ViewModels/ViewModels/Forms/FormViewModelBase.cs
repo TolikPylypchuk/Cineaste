@@ -37,7 +37,9 @@ namespace MovieList.ViewModels.Forms
             this.ResourceManager = resourceManager ?? Locator.Current.GetService<ResourceManager>();
             this.Scheduler = scheduler ?? System.Reactive.Concurrency.Scheduler.Default;
 
-            var canSave = Observable.CombineLatest(this.FormChanged, this.validSubject, this.IsValid()).AllTrue();
+            this.Valid = Observable.CombineLatest(this.validSubject, this.IsValid()).AllTrue();
+
+            var canSave = Observable.CombineLatest(this.FormChanged, this.Valid).AllTrue();
 
             this.Save = ReactiveCommand.CreateFromTask(this.OnSaveAsync, canSave);
             this.Cancel = ReactiveCommand.Create(this.CopyProperties, this.formChangedSubject);
@@ -49,6 +51,8 @@ namespace MovieList.ViewModels.Forms
 
         public bool IsFormChanged
             => this.formChangedSubject.Value;
+
+        public IObservable<bool> Valid { get; }
 
         public abstract bool IsNew { get; }
 

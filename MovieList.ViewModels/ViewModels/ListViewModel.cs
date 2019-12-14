@@ -222,13 +222,13 @@ namespace MovieList.ViewModels
 
             form.SelectComponent
                 .OfType<SeasonFormViewModel>()
-                .Subscribe(this.OpenSeasonForm)
+                .Subscribe(seasonForm => this.OpenSeasonForm(seasonForm, form))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
         }
 
-        private void OpenSeasonForm(SeasonFormViewModel form)
+        private void OpenSeasonForm(SeasonFormViewModel form, SeriesFormViewModel seriesForm)
         {
             this.Log().Debug($"Opening a form for season: {form.Season}");
 
@@ -236,8 +236,13 @@ namespace MovieList.ViewModels
                 .SubscribeAsync(async () => await this.SelectItem.Execute())
                 .DisposeWith(this.sideViewModelSecondarySubscriptions);
 
+            form.Delete
+                .WhereNotNull()
+                .Subscribe(_ => this.SideViewModel = seriesForm)
+                .DisposeWith(this.sideViewModelSecondarySubscriptions);
+
             form.GoToSeries
-                .Subscribe(seriesForm => this.SideViewModel = seriesForm)
+                .Subscribe(parentForm => this.SideViewModel = parentForm)
                 .DisposeWith(this.sideViewModelSecondarySubscriptions);
 
             form.GoToSeries

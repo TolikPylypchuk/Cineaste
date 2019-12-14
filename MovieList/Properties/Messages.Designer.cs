@@ -295,6 +295,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the season?.
+        /// </summary>
+        public static string DeleteSeasonQuestion {
+            get {
+                return ResourceManager.GetString("DeleteSeasonQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Season.
+        /// </summary>
+        public static string DeleteSeasonTitle {
+            get {
+                return ResourceManager.GetString("DeleteSeasonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete the series?.
         /// </summary>
         public static string DeleteSeriesQuestion {
