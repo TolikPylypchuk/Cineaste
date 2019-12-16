@@ -88,16 +88,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ADD NEW MINISERIES.
-        /// </summary>
-        public static string AddNewMiniseries {
-            get {
-                return ResourceManager.GetString("AddNewMiniseries", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ADD NEW MOVIE.
+        ///   Looks up a localized string similar to Add new movie.
         /// </summary>
         public static string AddNewMovie {
             get {
@@ -106,7 +97,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ADD NEW SERIES.
+        ///   Looks up a localized string similar to Add new series.
         /// </summary>
         public static string AddNewSeries {
             get {
@@ -115,7 +106,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ADD ORIGINAL TITLE.
+        ///   Looks up a localized string similar to Add original title.
         /// </summary>
         public static string AddOriginalTitle {
             get {
@@ -124,7 +115,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ADD TITLE.
+        ///   Looks up a localized string similar to Add title.
         /// </summary>
         public static string AddTitle {
             get {
@@ -232,7 +223,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CREATE A LIST.
+        ///   Looks up a localized string similar to Create a list.
         /// </summary>
         public static string CreateList {
             get {
@@ -286,7 +277,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE.
+        ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
             get {
@@ -421,7 +412,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go to Series.
+        ///   Looks up a localized string similar to Go to series.
         /// </summary>
         public static string GoToSeries {
             get {
@@ -682,7 +673,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OPEN A LIST.
+        ///   Looks up a localized string similar to Open a list.
         /// </summary>
         public static string OpenList {
             get {

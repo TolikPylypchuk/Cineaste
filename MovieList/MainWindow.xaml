@@ -5,7 +5,7 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                       xmlns:local="clr-namespace:MovieList"
-                      xmlns:resx="clr-namespace:MovieList.Properties"
+                      xmlns:l="clr-namespace:MovieList.Localization"
                       xmlns:v="clr-namespace:MovieList.Views"
                       mc:Ignorable="d" WindowStartupLocation="CenterScreen"
                       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -17,42 +17,42 @@
     <m:DialogHost x:Name="MainDialogHost" CloseOnClickAway="True">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
-                <MenuItem Header="{x:Static resx:Messages.File}">
-                    <MenuItem x:Name="NewMenuItem" Header="{x:Static resx:Messages.New}" InputGestureText="Ctrl+N">
+                <MenuItem Header="{l:Translate File}">
+                    <MenuItem x:Name="NewMenuItem" Header="{l:Translate New}" InputGestureText="Ctrl+N">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="FilePlusOutline" />
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem x:Name="OpenMenuItem" Header="{x:Static resx:Messages.Open}" InputGestureText="Ctrl+O">
+                    <MenuItem x:Name="OpenMenuItem" Header="{l:Translate Open}" InputGestureText="Ctrl+O">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="FolderOpenOutline" />
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem x:Name="OpenRecentMenuItem" Header="{x:Static resx:Messages.OpenRecent}" />
+                    <MenuItem x:Name="OpenRecentMenuItem" Header="{l:Translate OpenRecent}" />
 
                     <Separator />
 
-                    <MenuItem x:Name="SaveMenuItem" Header="{x:Static resx:Messages.Save}" InputGestureText="Ctrl+S">
+                    <MenuItem x:Name="SaveMenuItem" Header="{l:Translate Save}" InputGestureText="Ctrl+S">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="ContentSaveOutline" />
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem x:Name="SaveAsMenuItem" Header="{x:Static resx:Messages.SaveAs}" InputGestureText="Ctrl+Shift+S">
+                    <MenuItem x:Name="SaveAsMenuItem" Header="{l:Translate SaveAs}" InputGestureText="Ctrl+Shift+S">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="ContentSaveMoveOutline" />
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem x:Name="SettingsMenuItem" Header="{x:Static resx:Messages.Settings}" InputGestureText="Ctrl+P">
+                    <MenuItem x:Name="SettingsMenuItem" Header="{l:Translate Settings}" InputGestureText="Ctrl+P">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="Cogs" />
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem x:Name="CloseMenuItem" Header="{x:Static resx:Messages.Close}" InputGestureText="Ctrl+Shift+S">
+                    <MenuItem x:Name="CloseMenuItem" Header="{l:Translate Close}" InputGestureText="Ctrl+Shift+S">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="FileRemove" />
                         </MenuItem.Icon>
@@ -60,23 +60,23 @@
 
                     <Separator />
 
-                    <MenuItem x:Name="ExitMenuItem" Header="{x:Static resx:Messages.Exit}" InputGestureText="Alt+F4">
+                    <MenuItem x:Name="ExitMenuItem" Header="{l:Translate Exit}" InputGestureText="Alt+F4">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="ExitToApp" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
 
-                <MenuItem Header="{x:Static resx:Messages.Edit}">
-                    <MenuItem x:Name="PreferencesMenuItem" Header="{x:Static resx:Messages.Preferences}" InputGestureText="Ctrl+Shift+P">
+                <MenuItem Header="{l:Translate Edit}">
+                    <MenuItem x:Name="PreferencesMenuItem" Header="{l:Translate Preferences}" InputGestureText="Ctrl+Shift+P">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="Cogs" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
 
-                <MenuItem Header="{x:Static resx:Messages.Help}">
-                    <MenuItem x:Name="AboutMenuItem" Header="{x:Static resx:Messages.About}" InputGestureText="F1">
+                <MenuItem Header="{l:Translate Help}">
+                    <MenuItem x:Name="AboutMenuItem" Header="{l:Translate About}" InputGestureText="F1">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="InfoCircleOutline" />
                         </MenuItem.Icon>

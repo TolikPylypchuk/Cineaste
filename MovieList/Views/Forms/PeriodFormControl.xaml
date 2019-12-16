@@ -5,7 +5,7 @@
                              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                              xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                              xmlns:local="clr-namespace:MovieList.Views.Forms"
-                             xmlns:resx="clr-namespace:MovieList.Properties"
+                             xmlns:l="clr-namespace:MovieList.Localization"
                              xmlns:v="clr-namespace:MovieList.Views"
                              mc:Ignorable="d">
     <local:PeriodFormControlBase.Resources>
@@ -29,23 +29,23 @@
         </Grid.ColumnDefinitions>
 
         <ComboBox x:Name="StartMonthComboBox" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
-                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.StartMonth}" />
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate StartMonth}" />
 
         <TextBox x:Name="StartYearTextBox" Grid.Row="0" Grid.Column="1" Margin="8,8,0,8"
-                 m:HintAssist.Hint="{x:Static resx:Messages.StartYear}" />
+                 m:HintAssist.Hint="{l:Translate StartYear}" />
 
         <ComboBox x:Name="EndMonthComboBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
-                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.StartMonth}" />
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate StartMonth}" />
 
         <TextBox x:Name="EndYearTextBox" Grid.Row="1" Grid.Column="1" Margin="8,8,0,8"
-                 m:HintAssist.Hint="{x:Static resx:Messages.EndYEar}" />
+                 m:HintAssist.Hint="{l:Translate EndYEar}" />
 
         <TextBox x:Name="NumberOfEpisodesTextBox" Grid.Row="2" Grid.Column="0" Margin="0,8,8,8"
-                 m:HintAssist.Hint="{x:Static resx:Messages.NumberOfEpisodes}" />
+                 m:HintAssist.Hint="{l:Translate NumberOfEpisodes}" />
 
         <CheckBox x:Name="IsSingleDayReleaseCheckBox" Grid.Row="2" Grid.Column="1"
                   Margin="8,0,0,0" VerticalAlignment="Center">
-            <TextBlock Text="{x:Static resx:Messages.SingleDayRelease}" TextWrapping="Wrap" />
+            <TextBlock Text="{l:Translate SingleDayRelease}" TextWrapping="Wrap" />
         </CheckBox>
 
         <DockPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
@@ -55,7 +55,7 @@
                 <m:PackIcon Kind="CloseCircleOutline" Margin="0" Width="20" Height="20" />
             </Button>
 
-            <TextBox x:Name="PosterUrlTextBox" Margin="0,8" m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
+            <TextBox x:Name="PosterUrlTextBox" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
         </DockPanel>
 
         <TextBlock x:Name="InvalidFormTextBlock" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"

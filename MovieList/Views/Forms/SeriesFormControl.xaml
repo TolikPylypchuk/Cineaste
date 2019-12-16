@@ -6,7 +6,7 @@
                              xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                              xmlns:local="clr-namespace:MovieList.Views.Forms"
                              xmlns:v="clr-namespace:MovieList.Views"
-                             xmlns:resx="clr-namespace:MovieList.Properties"
+                             xmlns:l="clr-namespace:MovieList.Localization"
                              mc:Ignorable="d">
     <local:SeriesFormControlBase.Resources>
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -66,9 +66,9 @@
                     </Grid.ColumnDefinitions>
 
                     <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.WatchStatus}" />
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate WatchStatus}" />
 
-                    <CheckBox x:Name="IsAnthologyCheckBox" Grid.Column="1" Content="{x:Static resx:Messages.Anthology}" Margin="8,0,0,0"
+                    <CheckBox x:Name="IsAnthologyCheckBox" Grid.Column="1" Content="{l:Translate Anthology}" Margin="8,0,0,0"
                               VerticalAlignment="Center" />
                 </Grid>
 
@@ -79,19 +79,17 @@
                     </Grid.ColumnDefinitions>
 
                     <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.ReleaseStatus}" />
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate ReleaseStatus}" />
 
                     <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" Margin="8,0,0,0"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.Kind}" />
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate Kind}" />
                 </Grid>
 
                 <ItemsControl x:Name="Components" Margin="0,8" Grid.IsSharedSizeScope="True" />
 
-                <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
-                         m:HintAssist.Hint="{x:Static resx:Messages.ImdbLink}" />
+                <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate ImdbLink}" />
 
-                <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
-                         m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
+                <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
 
                 <Grid Margin="0,8">
                     <Grid.ColumnDefinitions>
@@ -110,24 +108,22 @@
                     </Grid.Resources>
 
                     <Button x:Name="AddTitleButton" Grid.Column="0">
-                        <TextBlock Text="{x:Static resx:Messages.AddTitle}"
-                                   TextAlignment="Center" TextWrapping="Wrap" />
+                        <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                     </Button>
 
                     <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
-                        <TextBlock Text="{x:Static resx:Messages.AddOriginalTitle}"
-                                   TextAlignment="Center" TextWrapping="Wrap" />
+                        <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                     </Button>
                 </Grid>
 
-                <Button x:Name="DeleteButton" Content="{x:Static resx:Messages.Delete}" HorizontalAlignment="Center"
+                <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
             </StackPanel>
         </ScrollViewer>
 
         <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
-            <Button x:Name="SaveButton" Content="{x:Static resx:Messages.Save}" Margin="8" HorizontalAlignment="Center" />
-            <Button x:Name="CancelButton" Content="{x:Static resx:Messages.Cancel}" Margin="8" HorizontalAlignment="Center"
+            <Button x:Name="SaveButton" Content="{l:Translate Save, ToUpper=True}" Margin="8" HorizontalAlignment="Center" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel, ToUpper=True}" Margin="8" HorizontalAlignment="Center"
                     Style="{StaticResource MaterialDesignOutlinedButton}" />
         </StackPanel>
     </Grid>

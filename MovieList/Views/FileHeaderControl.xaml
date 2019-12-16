@@ -6,7 +6,7 @@
                             xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                             xmlns:me="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
                             xmlns:local="clr-namespace:MovieList.Views"
-                            mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+                            mc:Ignorable="d">
     <DockPanel HorizontalAlignment="Stretch">
         <Button x:Name="CloseButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
                 VerticalAlignment="Center" Padding="0" Width="15" Height="15" Margin="10,0,0,0">

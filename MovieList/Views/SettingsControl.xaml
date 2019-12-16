@@ -6,6 +6,5 @@
                            xmlns:local="clr-namespace:MovieList.Views"
                            mc:Ignorable="d">
     <Grid>
-        <TextBlock Margin="20">Settings control</TextBlock>
     </Grid>
 </local:SettingsControlBase>

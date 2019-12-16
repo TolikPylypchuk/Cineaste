@@ -4,7 +4,7 @@
                                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                   xmlns:local="clr-namespace:MovieList.Views.Forms"
-                                  xmlns:resx="clr-namespace:MovieList.Properties"
+                                  xmlns:l="clr-namespace:MovieList.Localization"
                                   mc:Ignorable="d">
     <Border HorizontalAlignment="Stretch" BorderBrush="{DynamicResource MaterialDesignDivider}"
             BorderThickness="0,0,0,1" Padding="8" Background="Transparent" Cursor="Hand">
@@ -20,8 +20,8 @@
 
         <Border.ContextMenu>
             <ContextMenu>
-                <MenuItem x:Name="MoveUpMenuItem" Header="{x:Static resx:Messages.MoveUp}" />
-                <MenuItem x:Name="MoveDownMenuItem" Header="{x:Static resx:Messages.MoveDown}" />
+                <MenuItem x:Name="MoveUpMenuItem" Header="{l:Translate MoveUp}" />
+                <MenuItem x:Name="MoveDownMenuItem" Header="{l:Translate MoveDown}" />
             </ContextMenu>
         </Border.ContextMenu>
     </Border>

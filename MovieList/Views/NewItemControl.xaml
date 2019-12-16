@@ -4,7 +4,7 @@
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:local="clr-namespace:MovieList.Views"
-                          xmlns:resx="clr-namespace:MovieList.Properties"
+                          xmlns:l="clr-namespace:MovieList.Localization"
                           mc:Ignorable="d">
     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center">
         <StackPanel.Resources>
@@ -15,7 +15,7 @@
             </Style>
         </StackPanel.Resources>
 
-        <Button x:Name="AddNewMovieButton" Content="{x:Static resx:Messages.AddNewMovie}" />
-        <Button x:Name="AddNewSeriesButton" Content="{x:Static resx:Messages.AddNewSeries}" />
+        <Button x:Name="AddNewMovieButton" Content="{l:Translate AddNewMovie, ToUpper=True}" />
+        <Button x:Name="AddNewSeriesButton" Content="{l:Translate AddNewSeries, ToUpper=True}" />
     </StackPanel>
 </local:NewItemControlBase>

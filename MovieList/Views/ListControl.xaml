@@ -4,7 +4,7 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:local="clr-namespace:MovieList.Views"
-                       xmlns:resx="clr-namespace:MovieList.Properties"
+                       xmlns:l="clr-namespace:MovieList.Localization"
                        mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -28,16 +28,16 @@
                         <ColumnDefinition Width="142" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="{x:Static resx:Messages.NumberHeader}" TextAlignment="Left"
+                    <TextBlock Grid.Column="0" Text="{l:Translate NumberHeader}" TextAlignment="Left"
                                Style="{StaticResource MaterialDesignBody2TextBlock}" />
 
-                    <TextBlock Grid.Column="1" Text="{x:Static resx:Messages.TitleHeader}" TextAlignment="Center"
+                    <TextBlock Grid.Column="1" Text="{l:Translate TitleHeader}" TextAlignment="Center"
                                Style="{StaticResource MaterialDesignBody2TextBlock}" />
 
-                    <TextBlock Grid.Column="2" Text="{x:Static resx:Messages.OriginalTitleHeader}" TextAlignment="Center"
+                    <TextBlock Grid.Column="2" Text="{l:Translate OriginalTitleHeader}" TextAlignment="Center"
                                Style="{StaticResource MaterialDesignBody2TextBlock}" />
 
-                    <TextBlock Grid.Column="3" Text="{x:Static resx:Messages.YearHeader}" TextAlignment="Right"
+                    <TextBlock Grid.Column="3" Text="{l:Translate YearHeader}" TextAlignment="Right"
                                Style="{StaticResource MaterialDesignBody2TextBlock}" Margin="0,0,17,0" />
                 </Grid>
             </Border>

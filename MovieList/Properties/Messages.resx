@@ -126,20 +126,17 @@
   <data name="AboutTitle" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="AddNewMiniseries" xml:space="preserve">
-    <value>ADD NEW MINISERIES</value>
-  </data>
   <data name="AddNewMovie" xml:space="preserve">
-    <value>ADD NEW MOVIE</value>
+    <value>Add new movie</value>
   </data>
   <data name="AddNewSeries" xml:space="preserve">
-    <value>ADD NEW SERIES</value>
+    <value>Add new series</value>
   </data>
   <data name="AddOriginalTitle" xml:space="preserve">
-    <value>ADD ORIGINAL TITLE</value>
+    <value>Add original title</value>
   </data>
   <data name="AddTitle" xml:space="preserve">
-    <value>ADD TITLE</value>
+    <value>Add title</value>
   </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All FIles</value>
@@ -175,7 +172,7 @@
     <value>Confirm</value>
   </data>
   <data name="CreateList" xml:space="preserve">
-    <value>CREATE A LIST</value>
+    <value>Create a list</value>
   </data>
   <data name="CreateListMessage" xml:space="preserve">
     <value>Enter a name for the new list</value>
@@ -193,7 +190,7 @@
     <value>Сезон #</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>DELETE</value>
+    <value>Delete</value>
   </data>
   <data name="DeleteMovieQuestion" xml:space="preserve">
     <value>Are you sure you want to delete the movie?</value>
@@ -238,7 +235,7 @@
     <value>Movie List</value>
   </data>
   <data name="GoToSeries" xml:space="preserve">
-    <value>Go to Series</value>
+    <value>Go to series</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
@@ -325,7 +322,7 @@
     <value>Open</value>
   </data>
   <data name="OpenList" xml:space="preserve">
-    <value>OPEN A LIST</value>
+    <value>Open a list</value>
   </data>
   <data name="OpenRecent" xml:space="preserve">
     <value>Open Recent...</value>

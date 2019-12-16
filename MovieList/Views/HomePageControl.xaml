@@ -4,9 +4,8 @@
                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            xmlns:local="clr-namespace:MovieList.Views"
-                           xmlns:resx="clr-namespace:MovieList.Properties"
-                           mc:Ignorable="d"
-                           d:DesignHeight="450" d:DesignWidth="800">
+                           xmlns:l="clr-namespace:MovieList.Localization"
+                           mc:Ignorable="d">
     <Grid HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,22 +15,22 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignDisplay4TextBlock}"
-                   Text="{x:Static resx:Messages.MovieList}" HorizontalAlignment="Center" TextAlignment="Center" />
+                   Text="{l:Translate MovieList}" HorizontalAlignment="Center" TextAlignment="Center" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="36">
             <Button x:Name="CreateListButton" Style="{StaticResource MaterialDesignRaisedButton}" Width="150" Height="50"
-                    Content="{x:Static resx:Messages.CreateList}" HorizontalAlignment="Center" Margin="0,0,12,0" />
+                    Content="{l:Translate CreateList, ToUpper=True}" HorizontalAlignment="Center" Margin="0,0,12,0" />
 
             <Button x:Name="OpenListButton" Style="{StaticResource MaterialDesignRaisedButton}" Width="150" Height="50"
-                    Content="{x:Static resx:Messages.OpenList}" HorizontalAlignment="Center" Margin="12,0,0,0" />
+                    Content="{l:Translate OpenList, ToUpper=True}" HorizontalAlignment="Center" Margin="12,0,0,0" />
         </StackPanel>
 
-        <TextBlock Grid.Row="2" Text="{x:Static resx:Messages.RecentlyOpenedFiles}" HorizontalAlignment="Center"
+        <TextBlock Grid.Row="2" Text="{l:Translate RecentlyOpenedFiles}" HorizontalAlignment="Center"
                    Style="{StaticResource MaterialDesignHeadlineTextBlock}" />
 
         <DockPanel Grid.Row="3" VerticalAlignment="Top">
             <Button x:Name="RemoveButton" DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                    Content="{x:Static resx:Messages.RemoveFromList}" HorizontalAlignment="Center" Margin="8,8,8,16" />
+                    Content="{l:Translate RemoveFromList, ToUpper=True}" HorizontalAlignment="Center" Margin="8,8,8,16" />
 
             <ScrollViewer HorizontalAlignment="Stretch" Margin="24" VerticalScrollBarVisibility="Auto" MaxWidth="800">
                 <ItemsControl x:Name="RecentFilesList" HorizontalAlignment="Stretch" />
@@ -39,7 +38,7 @@
         </DockPanel>
 
         <TextBlock x:Name="NoRecentlyOpenedFilesTextBlock" Grid.Row="3" HorizontalAlignment="Center"
-                   Text="{x:Static resx:Messages.NoRecentlyOpenedFiles}" Margin="0,16,0,0"
+                   Text="{l:Translate NoRecentlyOpenedFiles}" Margin="0,16,0,0"
                    Style="{StaticResource MaterialDesignBody1TextBlock}" />
     </Grid>
 </local:HomePageControlBase>

@@ -6,7 +6,7 @@
                              xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                              xmlns:local="clr-namespace:MovieList.Views.Forms"
                              xmlns:v="clr-namespace:MovieList.Views"
-                             xmlns:resx="clr-namespace:MovieList.Properties"
+                             xmlns:l="clr-namespace:MovieList.Localization"
                              mc:Ignorable="d">
     <local:SeasonFormControlBase.Resources>
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -51,21 +51,20 @@
 
                 <ItemsControl x:Name="OriginalTitles" />
 
-                <Grid Margin="0,8">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
                     <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.WatchStatus}" />
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate WatchStatus}" />
 
                     <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8,8,0,8"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{x:Static resx:Messages.ReleaseStatus}" />
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate ReleaseStatus}" />
                 </Grid>
 
-                <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8"
-                         m:HintAssist.Hint="{x:Static resx:Messages.Channel}" />
+                <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate Channel}" />
 
                 <ItemsControl x:Name="Periods" />
 
@@ -88,24 +87,22 @@
                     </Grid.Resources>
 
                     <Button x:Name="AddTitleButton" Grid.Column="0">
-                        <TextBlock Text="{x:Static resx:Messages.AddTitle}"
-                                   TextAlignment="Center" TextWrapping="Wrap" />
+                        <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                     </Button>
 
                     <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
-                        <TextBlock Text="{x:Static resx:Messages.AddOriginalTitle}"
-                                   TextAlignment="Center" TextWrapping="Wrap" />
+                        <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                     </Button>
                 </Grid>
 
-                <Button x:Name="DeleteButton" Content="{x:Static resx:Messages.Delete}" HorizontalAlignment="Center"
+                <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
             </StackPanel>
         </ScrollViewer>
 
         <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
-            <Button x:Name="GoToSeriesButton" Content="{x:Static resx:Messages.GoToSeries}" Margin="8" HorizontalAlignment="Center" />
-            <Button x:Name="CancelButton" Content="{x:Static resx:Messages.Cancel}" Margin="8" HorizontalAlignment="Center"
+            <Button x:Name="GoToSeriesButton" Content="{l:Translate GoToSeries, ToUpper=True}" Margin="8" HorizontalAlignment="Center" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel, ToUpper=True}" Margin="8" HorizontalAlignment="Center"
                     Style="{StaticResource MaterialDesignOutlinedButton}" />
         </StackPanel>
     </Grid>
