@@ -57,15 +57,7 @@
 
                 <ItemsControl x:Name="Titles" />
 
-                <Button x:Name="AddTitleButton">
-                    <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
-                </Button>
-
                 <ItemsControl x:Name="OriginalTitles" />
-
-                <Button x:Name="AddOriginalTitleButton">
-                    <m:PackIcon Kind="AddCircleOutline" Margin="0" Width="20" Height="20" />
-                </Button>
 
                 <Grid Margin="0,8">
                     <Grid.ColumnDefinitions>
@@ -100,6 +92,33 @@
 
                 <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
                          m:HintAssist.Hint="{x:Static resx:Messages.PosterUrl}" />
+
+                <Grid Margin="0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="FontSize" Value="12" />
+                            <Setter Property="Margin" Value="4,0" />
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="MinHeight" Value="32" />
+                        </Style>
+                    </Grid.Resources>
+
+                    <Button x:Name="AddTitleButton" Grid.Column="0">
+                        <TextBlock Text="{x:Static resx:Messages.AddTitle}"
+                                   TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
+
+                    <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
+                        <TextBlock Text="{x:Static resx:Messages.AddOriginalTitle}"
+                                   TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
+                </Grid>
 
                 <Button x:Name="DeleteButton" Content="{x:Static resx:Messages.Delete}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />

@@ -115,6 +115,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ADD ORIGINAL TITLE.
+        /// </summary>
+        public static string AddOriginalTitle {
+            get {
+                return ResourceManager.GetString("AddOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ADD TITLE.
+        /// </summary>
+        public static string AddTitle {
+            get {
+                return ResourceManager.GetString("AddTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All FIles.
         /// </summary>
         public static string AllExtensionsDescription {
@@ -268,7 +286,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete.
+        ///   Looks up a localized string similar to DELETE.
         /// </summary>
         public static string Delete {
             get {

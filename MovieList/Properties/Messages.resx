@@ -135,6 +135,12 @@
   <data name="AddNewSeries" xml:space="preserve">
     <value>ADD NEW SERIES</value>
   </data>
+  <data name="AddOriginalTitle" xml:space="preserve">
+    <value>ADD ORIGINAL TITLE</value>
+  </data>
+  <data name="AddTitle" xml:space="preserve">
+    <value>ADD TITLE</value>
+  </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All FIles</value>
   </data>
@@ -187,7 +193,7 @@
     <value>Сезон #</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>DELETE</value>
   </data>
   <data name="DeleteMovieQuestion" xml:space="preserve">
     <value>Are you sure you want to delete the movie?</value>
