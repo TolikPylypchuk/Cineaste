@@ -264,6 +264,12 @@
   <data name="May" xml:space="preserve">
     <value>May</value>
   </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
   <data name="MovieList" xml:space="preserve">
     <value>Movie List</value>
   </data>

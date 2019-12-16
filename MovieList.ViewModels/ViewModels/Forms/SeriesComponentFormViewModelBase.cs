@@ -1,5 +1,7 @@
+using System;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Resources;
 
 using ReactiveUI;
@@ -13,6 +15,7 @@ namespace MovieList.ViewModels.Forms
     {
         protected SeriesComponentFormViewModelBase(
             SeriesFormViewModel parent,
+            IObservable<int> maxSequenceNumber,
             ResourceManager? resourceManager,
             IScheduler? scheduler = null)
             : base(resourceManager, scheduler)
@@ -21,8 +24,13 @@ namespace MovieList.ViewModels.Forms
 
             this.GoToSeries = ReactiveCommand.Create<Unit, SeriesFormViewModel>(_ => this.Parent, this.Valid);
 
-            this.MoveUp = ReactiveCommand.Create(() => { this.SequenceNumber--; });
-            this.MoveDown = ReactiveCommand.Create(() => { this.SequenceNumber++; });
+            var canMoveUp = this.WhenAnyValue(vm => vm.SequenceNumber).Select(num => num != 1);
+
+            var canMoveDown = Observable.CombineLatest(this.WhenAnyValue(vm => vm.SequenceNumber), maxSequenceNumber)
+                .Select(nums => nums[0] < nums[1]);
+
+            this.MoveUp = ReactiveCommand.Create(() => { this.SequenceNumber--; }, canMoveUp);
+            this.MoveDown = ReactiveCommand.Create(() => { this.SequenceNumber++; }, canMoveDown);
         }
 
         public SeriesFormViewModel Parent { get; }

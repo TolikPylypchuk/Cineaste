@@ -29,7 +29,16 @@ namespace MovieList.ViewModels.Forms
                 .Select(_ => this.GetYears(form.Periods))
                 .BindTo(this, vm => vm.Years);
 
+            form.WhenAnyValue(vm => vm.SequenceNumber)
+                .BindTo(this, vm => vm.SequenceNumber);
+
             this.Select = ReactiveCommand.Create<Unit, ReactiveObject>(_ => this.Form);
+
+            this.MoveUp = ReactiveCommand.CreateFromObservable(
+                () => form.MoveUp.Execute(), form.MoveUp.CanExecute);
+
+            this.MoveDown = ReactiveCommand.CreateFromObservable(
+                () => form.MoveDown.Execute(), form.MoveDown.CanExecute);
         }
 
         public ReactiveObject Form { get; }
@@ -40,7 +49,12 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public string Years { get; set; } = String.Empty;
 
+        [Reactive]
+        public int SequenceNumber { get; set; }
+
         public ReactiveCommand<Unit, ReactiveObject> Select { get; }
+        public ReactiveCommand<Unit, Unit> MoveUp { get; }
+        public ReactiveCommand<Unit, Unit> MoveDown { get; }
 
         private string GetYears(IList<PeriodFormViewModel> periods)
         {

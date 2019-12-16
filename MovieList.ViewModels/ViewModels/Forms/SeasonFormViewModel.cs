@@ -13,6 +13,7 @@ using DynamicData.Binding;
 
 using MovieList.Data.Models;
 using MovieList.DialogModels;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
@@ -31,9 +32,10 @@ namespace MovieList.ViewModels.Forms
         public SeasonFormViewModel(
             Season season,
             SeriesFormViewModel parent,
+            IObservable<int> maxSequenceNumber,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
-            : base(parent, resourceManager, scheduler)
+            : base(parent, maxSequenceNumber, resourceManager, scheduler)
         {
             this.Season = season;
             this.CopyProperties();

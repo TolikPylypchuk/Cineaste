@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Resources;
 using System.Threading.Tasks;
 
@@ -33,6 +34,9 @@ namespace MovieList.ViewModels.Forms
         private readonly ReadOnlyObservableCollection<SeasonFormViewModel> seasons;
         private readonly ReadOnlyObservableCollection<SeriesComponentViewModel> components;
 
+        private readonly BehaviorSubject<int> maxSequenceNumberSubject = new BehaviorSubject<int>(0);
+        private readonly Subject<Unit> resort = new Subject<Unit>();
+
         public SeriesFormViewModel(
             Series series,
             ReadOnlyObservableCollection<Kind> kinds,
@@ -50,8 +54,10 @@ namespace MovieList.ViewModels.Forms
             this.CopyProperties();
 
             this.seasonsSource.Connect()
-                .Sort(SortExpressionComparer<Season>.Ascending(season => season.SequenceNumber))
                 .Transform(this.CreateSeasonForm)
+                .Sort(
+                    SortExpressionComparer<SeasonFormViewModel>.Ascending(season => season.SequenceNumber),
+                    resort: this.resort)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.seasons)
                 .DisposeMany()
@@ -63,6 +69,13 @@ namespace MovieList.ViewModels.Forms
                 .Bind(out this.components)
                 .DisposeMany()
                 .Subscribe();
+
+            this.Components.ToObservableChangeSet()
+                .AutoRefresh(component => component.SequenceNumber)
+                .Select(_ => this.Components.Count != 0
+                    ? this.Components.Max(component => component.SequenceNumber)
+                    : 0)
+                .Subscribe(this.maxSequenceNumberSubject);
 
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
@@ -213,13 +226,29 @@ namespace MovieList.ViewModels.Forms
 
         private SeasonFormViewModel CreateSeasonForm(Season season)
         {
-            var form = new SeasonFormViewModel(season, this, this.ResourceManager, this.Scheduler);
+            var seasonForm = new SeasonFormViewModel(
+                season, this, this.maxSequenceNumberSubject, this.ResourceManager, this.Scheduler);
 
-            form.Delete
+            seasonForm.Delete
                 .WhereNotNull()
                 .Subscribe(s => this.seasonsSource.Remove(s));
 
-            return form;
+            seasonForm.WhenAnyValue(form => form.SequenceNumber)
+                .StartWith(seasonForm.SequenceNumber)
+                .Buffer(2, 1)
+                .Select(values => (Old: values[0], New: values[1]))
+                .Where(values => values.Old != values.New)
+                .Subscribe(values => this.Seasons
+                    .Where(form => form != seasonForm && form.SequenceNumber == seasonForm.SequenceNumber)
+                    .ForEach(form => form.SequenceNumber = values.New < values.Old
+                        ? form.SequenceNumber + 1
+                        : form.SequenceNumber - 1));
+
+            seasonForm.WhenAnyValue(form => form.SequenceNumber)
+                .Discard()
+                .Subscribe(this.resort);
+
+            return seasonForm;
         }
 
         private SeriesComponentViewModel CreateComponent(SeasonFormViewModel season)
