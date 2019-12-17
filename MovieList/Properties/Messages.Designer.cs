@@ -115,6 +115,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add period.
+        /// </summary>
+        public static string AddPeriod {
+            get {
+                return ResourceManager.GetString("AddPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add title.
         /// </summary>
         public static string AddTitle {

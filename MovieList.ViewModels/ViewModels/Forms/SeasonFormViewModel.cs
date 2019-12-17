@@ -193,14 +193,23 @@ namespace MovieList.ViewModels.Forms
         }
 
         private void OnAddPeriod()
-            => this.periodsSource.Add(new Period
+        {
+            int lastYear = this.periodsSource.Items.OrderByDescending(period => period.StartYear)
+                .ThenByDescending(period => period.StartMonth)
+                .ThenByDescending(period => period.EndYear)
+                .ThenByDescending(period => period.EndMonth)
+                .First()
+                .EndYear;
+
+            this.periodsSource.Add(new Period
             {
                 StartMonth = 1,
-                StartYear = 2000,
+                StartYear = lastYear + 1,
                 EndMonth = 1,
-                EndYear = 2000,
+                EndYear = lastYear + 1,
                 Season = this.Season
             });
+        }
 
         private async Task SavePeriodsAsync()
         {
@@ -222,7 +231,9 @@ namespace MovieList.ViewModels.Forms
 
         private bool AreAllPeriodsNonOverlapping()
             => this.Periods.Count == 1 ||
-               this.Periods.Buffer(2, 1).All(periods => this.ArePeriodsNonOverlapping(periods[0], periods[1]));
+               this.Periods.Buffer(2, 1)
+                   .Where(periods => periods.Count == 2)
+                   .All(periods => this.ArePeriodsNonOverlapping(periods[0], periods[1]));
 
         private bool ArePeriodsNonOverlapping(PeriodFormViewModel earlier, PeriodFormViewModel later)
             => Int32.TryParse(earlier.EndYear, out int earlierEndYear) &&

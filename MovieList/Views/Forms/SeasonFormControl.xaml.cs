@@ -42,10 +42,16 @@ namespace MovieList.Views.Forms
 
         private void BindCommands(CompositeDisposable disposables)
         {
+            var boolToVisibility = new BooleanToVisibilityTypeConverter();
+
             this.BindCommand(this.ViewModel, vm => vm.GoToSeries, v => v.GoToSeriesButton)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.Cancel, v => v.CancelButton)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.Cancel.CanExecute)
+                .BindTo(this, v => v.CancelButton.Visibility, null, boolToVisibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.Close, v => v.CloseButton)
@@ -53,8 +59,6 @@ namespace MovieList.Views.Forms
 
             this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
                 .DisposeWith(disposables);
-
-            var boolToVisibility = new BooleanToVisibilityTypeConverter();
 
             this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
                 .BindTo(this, v => v.DeleteButton.Visibility, null, boolToVisibility)
@@ -71,10 +75,14 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.AddOriginalTitle.CanExecute)
-                .BindTo(this, v => v.AddOriginalTitleButton.Visibility, null, boolToVisibility);
+                .BindTo(this, v => v.AddOriginalTitleButton.Visibility, null, boolToVisibility)
+                .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.Cancel.CanExecute)
-                .BindTo(this, v => v.CancelButton.Visibility, null, boolToVisibility)
+            this.BindCommand(this.ViewModel, vm => vm.AddPeriod, v => v.AddPeriodButton)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.AddPeriod.CanExecute)
+                .BindTo(this, v => v.AddPeriodButton.Visibility, null, boolToVisibility)
                 .DisposeWith(disposables);
         }
 

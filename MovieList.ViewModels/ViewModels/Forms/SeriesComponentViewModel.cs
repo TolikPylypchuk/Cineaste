@@ -58,6 +58,11 @@ namespace MovieList.ViewModels.Forms
 
         private string GetYears(IList<PeriodFormViewModel> periods)
         {
+            if (periods.Count == 0)
+            {
+                return String.Empty;
+            }
+
             var first = periods[0];
             var last = periods[^1];
 

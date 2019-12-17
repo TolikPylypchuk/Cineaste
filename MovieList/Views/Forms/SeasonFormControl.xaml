@@ -95,6 +95,9 @@
                     </Button>
                 </Grid>
 
+                <Button x:Name="AddPeriodButton" Content="{l:Translate AddPeriod, ToUpper=True}" HorizontalAlignment="Center"
+                        Style="{StaticResource MaterialDesignOutlinedButton}" Margin="8" FontSize="12" />
+
                 <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
             </StackPanel>
