@@ -27,7 +27,7 @@ namespace MovieList.Views.Forms
                 this.OneWayBind(this.ViewModel, vm => vm.Years, v => v.YearsTextBlock.Text)
                     .DisposeWith(disposables);
 
-                this.Events().MouseDoubleClick
+                this.Events().MouseLeftButtonUp
                     .Discard()
                     .InvokeCommand(this.ViewModel.Select)
                     .DisposeWith(disposables);

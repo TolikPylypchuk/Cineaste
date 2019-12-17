@@ -233,6 +233,18 @@ namespace MovieList.ViewModels.Forms
                 .WhereNotNull()
                 .Subscribe(s => this.seasonsSource.Remove(s));
 
+            seasonForm.SelectNext
+                .Select(_ => this.Components.First(component =>
+                    component.SequenceNumber == seasonForm.SequenceNumber + 1))
+                .Select(component => component.Form)
+                .SubscribeAsync(async form => await this.SelectComponent.Execute(form));
+
+            seasonForm.SelectPrevious
+                .Select(_ => this.Components.First(component =>
+                    component.SequenceNumber == seasonForm.SequenceNumber - 1))
+                .Select(component => component.Form)
+                .SubscribeAsync(async form => await this.SelectComponent.Execute(form));
+
             seasonForm.WhenAnyValue(form => form.SequenceNumber)
                 .StartWith(seasonForm.SequenceNumber)
                 .Buffer(2, 1)

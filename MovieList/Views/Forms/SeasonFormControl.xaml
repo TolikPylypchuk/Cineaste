@@ -23,10 +23,24 @@
         </Grid.RowDefinitions>
 
         <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+            <Control DockPanel.Dock="Left" Padding="0" Width="25" Height="25" Visibility="Hidden" />
+
             <Button x:Name="CloseButton" DockPanel.Dock="Right" HorizontalAlignment="Right"
                     Style="{StaticResource MaterialDesignIconButton}" Padding="0" Width="25" Height="25">
                 <m:PackIcon Kind="Close" Margin="0" Width="25" Height="25" />
             </Button>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="SelectPreviousButton" Style="{StaticResource MaterialDesignIconButton}"
+                        Padding="0" Width="25" Height="25">
+                    <m:PackIcon Kind="ChevronLeft" Margin="0" Width="25" Height="25" />
+                </Button>
+
+                <Button x:Name="SelectNextButton" Style="{StaticResource MaterialDesignIconButton}"
+                        Padding="0" Width="25" Height="25">
+                    <m:PackIcon Kind="ChevronRight" Margin="0" Width="25" Height="25" />
+                </Button>
+            </StackPanel>
         </DockPanel>
 
         <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" Style="{StaticResource MaterialDesignHeadlineTextBlock}"

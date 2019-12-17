@@ -24,13 +24,16 @@ namespace MovieList.ViewModels.Forms
 
             this.GoToSeries = ReactiveCommand.Create<Unit, SeriesFormViewModel>(_ => this.Parent, this.Valid);
 
-            var canMoveUp = this.WhenAnyValue(vm => vm.SequenceNumber).Select(num => num != 1);
+            var isNotFirst = this.WhenAnyValue(vm => vm.SequenceNumber).Select(num => num != 1);
 
-            var canMoveDown = Observable.CombineLatest(this.WhenAnyValue(vm => vm.SequenceNumber), maxSequenceNumber)
+            var isNotLast = Observable.CombineLatest(this.WhenAnyValue(vm => vm.SequenceNumber), maxSequenceNumber)
                 .Select(nums => nums[0] < nums[1]);
 
-            this.MoveUp = ReactiveCommand.Create(() => { this.SequenceNumber--; }, canMoveUp);
-            this.MoveDown = ReactiveCommand.Create(() => { this.SequenceNumber++; }, canMoveDown);
+            this.MoveUp = ReactiveCommand.Create(() => { this.SequenceNumber--; }, isNotFirst);
+            this.MoveDown = ReactiveCommand.Create(() => { this.SequenceNumber++; }, isNotLast);
+
+            this.SelectNext = ReactiveCommand.Create(() => { }, isNotLast);
+            this.SelectPrevious = ReactiveCommand.Create(() => { }, isNotFirst);
         }
 
         public SeriesFormViewModel Parent { get; }
@@ -42,5 +45,8 @@ namespace MovieList.ViewModels.Forms
 
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
         public ReactiveCommand<Unit, Unit> MoveDown { get; }
+
+        public ReactiveCommand<Unit, Unit> SelectNext { get; }
+        public ReactiveCommand<Unit, Unit> SelectPrevious { get; }
     }
 }
