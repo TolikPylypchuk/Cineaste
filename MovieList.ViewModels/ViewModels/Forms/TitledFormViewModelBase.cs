@@ -9,6 +9,7 @@ using System.Resources;
 using System.Threading.Tasks;
 
 using DynamicData;
+using DynamicData.Aggregation;
 using DynamicData.Binding;
 
 using MovieList.Data.Models;
@@ -34,13 +35,22 @@ namespace MovieList.ViewModels.Forms
             this.InitializeTitles(title => !title.IsOriginal, out this.titles);
             this.InitializeTitles(title => title.IsOriginal, out this.originalTitles);
 
-            this.FormTitle = this.CreateFormTitle();
+            this.FormTitle = this.Titles.ToObservableChangeSet()
+                .AutoRefresh(vm => vm.Name)
+                .AutoRefresh(vm => vm.Priority)
+                .ToCollection()
+                .Select(vms => vms.OrderBy(vm => vm.Priority).Select(vm => vm.Name).FirstOrDefault())
+                .Select(title => this.IsNew && String.IsNullOrWhiteSpace(title)
+                    ? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty
+                    : title);
 
             var canAddTitle = this.Titles.ToObservableChangeSet()
-                .Select(_ => this.Titles.Count < MaxTitleCount);
+                .Count()
+                .Select(count => count < MaxTitleCount);
 
             var canAddOriginalTitle = this.OriginalTitles.ToObservableChangeSet()
-                .Select(_ => this.OriginalTitles.Count < MaxTitleCount);
+                .Count()
+                .Select(count => count < MaxTitleCount);
 
             this.Close = ReactiveCommand.Create(() => { });
 
@@ -142,16 +152,6 @@ namespace MovieList.ViewModels.Forms
 
             return titleForm;
         }
-
-        private IObservable<string> CreateFormTitle()
-            => this.Titles.ToObservableChangeSet()
-                .AutoRefresh(vm => vm.Name)
-                .AutoRefresh(vm => vm.Priority)
-                .ToCollection()
-                .Select(vms => vms.OrderBy(vm => vm.Priority).Select(vm => vm.Name).FirstOrDefault())
-                .Select(title => this.IsNew && String.IsNullOrWhiteSpace(title)
-                    ? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty
-                    : title);
 
         private void OnAddTitle(bool isOriginal)
         {

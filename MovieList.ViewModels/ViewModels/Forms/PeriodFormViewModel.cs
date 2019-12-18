@@ -44,13 +44,14 @@ namespace MovieList.ViewModels.Forms
                     vm => vm.StartYear,
                     vm => vm.EndMonth,
                     vm => vm.EndYear)
+                .Throttle(TimeSpan.FromMilliseconds(250), this.Scheduler)
                 .Select(((int StartMonth, string StartYear, int EndMonth, string EndYear) values) =>
                     Int32.TryParse(values.StartYear, out int startYear) &&
                     Int32.TryParse(values.EndYear, out int endYear) &&
                     (startYear < endYear || startYear == endYear && values.StartMonth <= values.EndMonth));
 
             this.PeriodRule = this.ValidationRule(
-                _ => periodValid,
+                _ => periodValid.StartWith(true),
                 (vm, isValid) => isValid ? String.Empty : vm.ResourceManager.GetString("ValidationPeriodInvalid"));
 
             this.CanDeleteWhen(canDelete);

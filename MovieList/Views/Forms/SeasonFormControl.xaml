@@ -61,6 +61,18 @@
 
                 <Image x:Name="Poster" Margin="0,0,0,8" />
 
+                <DockPanel x:Name="SwitchPosterPanel" HorizontalAlignment="Stretch">
+                    <Button x:Name="SwitchToPreviousPosterButton" Style="{StaticResource MaterialDesignIconButton}"
+                            Padding="0" Width="25" Height="25" DockPanel.Dock="Left" HorizontalAlignment="Left">
+                        <m:PackIcon Kind="ChevronLeft" Margin="0" Width="25" Height="25" />
+                    </Button>
+
+                    <Button x:Name="SwitchToNextPosterButton" Style="{StaticResource MaterialDesignIconButton}"
+                            Padding="0" Width="25" Height="25" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                        <m:PackIcon Kind="ChevronRight" Margin="0" Width="25" Height="25" />
+                    </Button>
+                </DockPanel>
+
                 <ItemsControl x:Name="Titles" />
 
                 <ItemsControl x:Name="OriginalTitles" />
@@ -82,7 +94,8 @@
 
                 <ItemsControl x:Name="Periods" />
 
-                <TextBlock x:Name="InvalidFormTextBlock" Foreground="{DynamicResource ValidationErrorBrush}" />
+                <TextBlock x:Name="PeriodsOverlapTextBlock" Foreground="{DynamicResource ValidationErrorBrush}"
+                           Text="{l:Translate ValidationPeriodsOverlap}" />
 
                 <Grid Margin="0,8">
                     <Grid.ColumnDefinitions>

@@ -9,6 +9,7 @@ using System.Resources;
 using System.Threading.Tasks;
 
 using DynamicData;
+using DynamicData.Aggregation;
 using DynamicData.Binding;
 
 using MovieList.Data.Models;
@@ -41,7 +42,7 @@ namespace MovieList.ViewModels.Forms
             this.CopyProperties();
 
             var canDeletePeriod = this.periodsSource.Connect()
-                .Select(_ => this.periodsSource.Items.Count())
+                .Count()
                 .Select(count => count > MinPeriodCount);
 
             this.periodsSource.Connect()
@@ -69,22 +70,36 @@ namespace MovieList.ViewModels.Forms
 
             this.CanDeleteWhenNotNew();
 
-            var canAddPeriod = this.periodsSource.Connect()
-                .Select(_ => this.periods.Count < MaxPeriodCount);
+            var canAddPeriod = this.Periods.ToObservableChangeSet()
+                .AutoRefreshOnObservable(period => period.Valid)
+                .ToCollection()
+                .Select(periods => periods.Count < MaxPeriodCount && periods.All(period => !period.HasErrors))
+                .CombineLatest(this.PeriodsNonOverlapping, (a, b) => a && b);
 
             this.AddPeriod = ReactiveCommand.Create(this.OnAddPeriod, canAddPeriod);
 
             var canSwitchToNextPoster = this.WhenAnyValue(vm => vm.CurrentPosterIndex)
-                .Select(index => index != this.Season.Periods.Count - 1);
+                .Merge(this.Save.Select(_ => this.CurrentPosterIndex))
+                .Select(index =>
+                    index != this.Season.Periods.Count - 1 &&
+                    this.Season.Periods.Skip(index + 1).Any(period => period.PosterUrl != null));
 
             var canSwitchToPreviousPoster = this.WhenAnyValue(vm => vm.CurrentPosterIndex)
-                .Select(index => index != 0);
+                .Merge(this.Save.Select(_ => this.CurrentPosterIndex))
+                .Select(index =>
+                    index != 0 &&
+                    this.Season.Periods.Take(index).Any(period => period.PosterUrl != null));
 
             this.SwitchToNextPoster = ReactiveCommand.Create(
-                () => { this.CurrentPosterIndex++; }, canSwitchToNextPoster);
+                () => this.SetCurrentPosterIndex(index => index + 1), canSwitchToNextPoster);
 
             this.SwitchToPreviousPoster = ReactiveCommand.Create(
-                () => { this.CurrentPosterIndex--; }, canSwitchToPreviousPoster);
+                () => this.SetCurrentPosterIndex(index => index - 1), canSwitchToPreviousPoster);
+
+            this.Save.Discard()
+                .Merge(this.GoToSeries.Discard())
+                .Delay(TimeSpan.FromMilliseconds(500), this.Scheduler)
+                .Subscribe(() => this.CurrentPosterIndex = 0);
 
             this.EnableChangeTracking();
         }
@@ -154,6 +169,8 @@ namespace MovieList.ViewModels.Forms
             this.Season.Channel = this.Channel;
             this.Season.SequenceNumber = this.SequenceNumber;
 
+            this.CurrentPosterIndex = 0;
+
             return this.Season;
         }
 
@@ -175,7 +192,6 @@ namespace MovieList.ViewModels.Forms
             this.SequenceNumber = this.Season.SequenceNumber;
 
             this.CurrentPosterIndex = 0;
-            this.CurrentPosterUrl = this.Season.Periods[this.CurrentPosterIndex].PosterUrl;
         }
 
         protected override void AttachTitle(Title title)
@@ -187,6 +203,10 @@ namespace MovieList.ViewModels.Forms
 
             periodForm.Delete
                 .WhereNotNull()
+                .Subscribe(_ => this.CurrentPosterIndex = 0);
+
+            periodForm.Delete
+                .WhereNotNull()
                 .Subscribe(deletedPeriod => this.periodsSource.Remove(deletedPeriod));
 
             return periodForm;
@@ -194,19 +214,22 @@ namespace MovieList.ViewModels.Forms
 
         private void OnAddPeriod()
         {
-            int lastYear = this.periodsSource.Items.OrderByDescending(period => period.StartYear)
+            string lastYear = this.Periods.OrderByDescending(period => period.StartYear)
                 .ThenByDescending(period => period.StartMonth)
                 .ThenByDescending(period => period.EndYear)
                 .ThenByDescending(period => period.EndMonth)
                 .First()
                 .EndYear;
 
+            int year = Int32.Parse(lastYear) + 1;
+
             this.periodsSource.Add(new Period
             {
                 StartMonth = 1,
-                StartYear = lastYear + 1,
+                StartYear = year,
                 EndMonth = 1,
-                EndYear = lastYear + 1,
+                EndYear = year,
+                NumberOfEpisodes = 1,
                 Season = this.Season
             });
         }
@@ -228,6 +251,14 @@ namespace MovieList.ViewModels.Forms
                 this.Season.Periods.Remove(period);
             }
         }
+
+        private void SetCurrentPosterIndex(Func<int, int> next)
+            => this.CurrentPosterIndex = this.GetPosterIndex(next(this.CurrentPosterIndex), next);
+
+        private int GetPosterIndex(int index, Func<int, int> next)
+            => this.Periods[index].Period.PosterUrl != null
+                ? index
+                : this.GetPosterIndex(next(index), next);
 
         private bool AreAllPeriodsNonOverlapping()
             => this.Periods.Count == 1 ||

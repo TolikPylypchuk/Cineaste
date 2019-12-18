@@ -72,9 +72,8 @@ namespace MovieList.ViewModels.Forms
 
             this.Components.ToObservableChangeSet()
                 .AutoRefresh(component => component.SequenceNumber)
-                .Select(_ => this.Components.Count != 0
-                    ? this.Components.Max(component => component.SequenceNumber)
-                    : 0)
+                .ToCollection()
+                .Select(components => components.Count != 0 ? components.Max(c => c.SequenceNumber) : 0)
                 .Subscribe(this.maxSequenceNumberSubject);
 
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");

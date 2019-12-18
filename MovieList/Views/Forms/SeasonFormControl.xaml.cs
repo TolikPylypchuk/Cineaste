@@ -1,9 +1,14 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using Akavache;
+
+using DynamicData;
+using DynamicData.Aggregation;
+using DynamicData.Binding;
 
 using MovieList.Converters;
 using MovieList.Properties;
@@ -81,6 +86,27 @@ namespace MovieList.Views.Forms
                 .BindTo(this, v => v.DeleteButton.Visibility, null, boolToVisibility)
                 .DisposeWith(disposables);
 
+            this.BindCommand(this.ViewModel, vm => vm.SwitchToNextPoster, v => v.SwitchToNextPosterButton)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.SwitchToNextPoster.CanExecute)
+                .BindTo(this, v => v.SwitchToNextPosterButton.Visibility, null, boolToVisibility)
+                .DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel, vm => vm.SwitchToPreviousPoster, v => v.SwitchToPreviousPosterButton)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.SwitchToPreviousPoster.CanExecute)
+                .BindTo(this, v => v.SwitchToPreviousPosterButton.Visibility, null, boolToVisibility)
+                .DisposeWith(disposables);
+
+            this.ViewModel.Periods.ToObservableChangeSet()
+                .Count()
+                .Select(count => count > 1)
+                .ObserveOnDispatcher()
+                .BindTo(this, v => v.SwitchPosterPanel.Visibility, null, boolToVisibility)
+                .DisposeWith(disposables);
+
             this.BindCommand(this.ViewModel, vm => vm.AddTitle, v => v.AddTitleButton)
                 .DisposeWith(disposables);
 
@@ -150,27 +176,27 @@ namespace MovieList.Views.Forms
             this.ChannelTextBox.ValidateWith(this.ViewModel.ChannelRule)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.PeriodsNonOverlapping)
-                .Select(isValid => isValid ? String.Empty : Messages.ValidationPeriodsOverlap)
-                .BindTo(this, v => v.InvalidFormTextBlock.Text)
-                .DisposeWith(disposables);
+            var allPeriodsValid = this.ViewModel.Periods.ToObservableChangeSet()
+                .AutoRefreshOnObservable(period => period.Valid)
+                .ToCollection()
+                .Select(periods => periods.All(period => !period.HasErrors));
 
             this.WhenAnyObservable(v => v.ViewModel.PeriodsNonOverlapping)
-                .Invert()
-                .BindTo(this, v => v.InvalidFormTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
+                .CombineLatest(allPeriodsValid, (a, b) => !a && b)
+                .ObserveOnDispatcher()
+                .BindTo(this, v => v.PeriodsOverlapTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
                 .DisposeWith(disposables);
         }
 
         private void LoadPoster()
         {
-            if (!String.IsNullOrEmpty(this.ViewModel.CurrentPosterUrl))
-            {
-                BlobCache.UserAccount.DownloadUrl(this.ViewModel.CurrentPosterUrl, TimeSpan.FromMinutes(5))
-                    .Select(data => data.AsImage())
-                    .WhereNotNull()
-                    .ObserveOnDispatcher()
-                    .BindTo(this, v => v.Poster.Source);
-            }
+            this.WhenAnyValue(v => v.ViewModel.CurrentPosterUrl)
+                .Where(url => !String.IsNullOrEmpty(url))
+                .SelectMany(url => BlobCache.UserAccount.DownloadUrl(url, TimeSpan.FromMinutes(5)))
+                .Select(data => data.AsImage())
+                .WhereNotNull()
+                .ObserveOnDispatcher()
+                .BindTo(this, v => v.Poster.Source);
         }
     }
 }

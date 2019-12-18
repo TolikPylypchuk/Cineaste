@@ -6,7 +6,6 @@ using MovieList.Properties;
 using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
-using ReactiveUI.Validation.Extensions;
 
 namespace MovieList.Views.Forms
 {
@@ -106,11 +105,11 @@ namespace MovieList.Views.Forms
             this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)
                 .DisposeWith(disposables);
 
-            this.BindValidation(this.ViewModel, vm => vm.PeriodRule, v => v.InvalidFormTextBlock.Text)
+            this.ShowValidationMessage(this.ViewModel.PeriodRule, v => v.InvalidFormTextBlock.Text)
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.PeriodRule.ValidationChanged)
-                .Select(state => state.IsValid)
+                .Select(state => !state.IsValid)
                 .BindTo(this, v => v.InvalidFormTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
                 .DisposeWith(disposables);
         }

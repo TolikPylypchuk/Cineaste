@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 
@@ -26,7 +27,8 @@ namespace MovieList.ViewModels.Forms
             form.Periods.ToObservableChangeSet()
                 .AutoRefresh(period => period.StartYear)
                 .AutoRefresh(period => period.EndYear)
-                .Select(_ => this.GetYears(form.Periods))
+                .ToCollection()
+                .Select(periods => this.GetYears(periods.ToList()))
                 .BindTo(this, vm => vm.Years);
 
             form.WhenAnyValue(vm => vm.SequenceNumber)

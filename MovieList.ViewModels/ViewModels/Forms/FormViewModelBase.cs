@@ -26,7 +26,7 @@ namespace MovieList.ViewModels.Forms
         where TViewModel : FormViewModelBase<TModel, TViewModel>
     {
         private readonly BehaviorSubject<bool> formChangedSubject = new BehaviorSubject<bool>(false);
-        private readonly BehaviorSubject<bool> validSubject = new BehaviorSubject<bool>(false);
+        private readonly BehaviorSubject<bool> validSubject = new BehaviorSubject<bool>(true);
         private readonly BehaviorSubject<bool> canDeleteSubject = new BehaviorSubject<bool>(false);
 
         private readonly List<IObservable<bool>> changesToTrack = new List<IObservable<bool>>();
@@ -105,9 +105,9 @@ namespace MovieList.ViewModels.Forms
             where TVm : FormViewModelBase<TM, TVm>
             where TM : class
             => viewModels.ToObservableChangeSet()
-                .AutoRefreshOnObservable(vm => vm.IsValid())
+                .AutoRefreshOnObservable(vm => vm.Valid)
                 .ToCollection()
-                .Select(vms => vms.Select(vm => vm.IsValid()).CombineLatest().AllTrue())
+                .Select(vms => vms.Select(vm => vm.Valid).CombineLatest().AllTrue())
                 .Switch();
 
         protected void CanDeleteWhen(IObservable<bool> canDelete)

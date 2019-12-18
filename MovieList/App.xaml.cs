@@ -97,7 +97,7 @@ namespace MovieList
             Locator.CurrentMutable.RegisterConstant(Messages.ResourceManager, typeof(ResourceManager));
 
             var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
-                .Catch(Observable.FromAsync(this.CreateDefaultPreferences));
+                .Catch(Observable.FromAsync(this.CreateDefaultPreferencesAsync));
 
             var loggingLevelSwitch = new LoggingLevelSwitch((LogEventLevel)preferences.Logging.MinLogLevel);
 
@@ -111,7 +111,7 @@ namespace MovieList
                 .CreateLogger());
         }
 
-        private async Task<UserPreferences> CreateDefaultPreferences()
+        private async Task<UserPreferences> CreateDefaultPreferencesAsync()
         {
             var filePreferences = new FilePreferences(showRecentFiles: true, new List<RecentFile>());
 

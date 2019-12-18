@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Dapper.Contrib.Extensions;
 
@@ -25,6 +26,20 @@ namespace MovieList.Data.Models
 
         [Write(false)]
         public IList<Period> Periods { get; set; } = new List<Period>();
+
+        [Computed]
+        public Title Title
+            => this.Titles
+                .Where(title => !title.IsOriginal)
+                .OrderBy(title => title.Priority)
+                .First();
+
+        [Computed]
+        public Title OriginalTitle
+            => this.Titles
+                .Where(title => title.IsOriginal)
+                .OrderBy(title => title.Priority)
+                .First();
 
         public override string ToString()
             => $"Series #{this.Id}: {Title.ToString(this.Titles)} ({this.Channel})";
