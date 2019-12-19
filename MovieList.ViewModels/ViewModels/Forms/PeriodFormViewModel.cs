@@ -48,13 +48,16 @@ namespace MovieList.ViewModels.Forms
                 .Select(((int StartMonth, string StartYear, int EndMonth, string EndYear) values) =>
                     Int32.TryParse(values.StartYear, out int startYear) &&
                     Int32.TryParse(values.EndYear, out int endYear) &&
-                    (startYear < endYear || startYear == endYear && values.StartMonth <= values.EndMonth));
+                    (startYear < endYear || startYear == endYear && values.StartMonth <= values.EndMonth))
+                .ObserveOn(RxApp.MainThreadScheduler);
 
             this.PeriodRule = this.ValidationRule(
                 _ => periodValid.StartWith(true),
                 (vm, isValid) => isValid ? String.Empty : vm.ResourceManager.GetString("ValidationPeriodInvalid"));
 
             this.CanDeleteWhen(canDelete);
+
+            this.InitializeValueDependencies();
 
             this.EnableChangeTracking();
         }
@@ -133,6 +136,25 @@ namespace MovieList.ViewModels.Forms
             this.NumberOfEpisodes = this.Period.NumberOfEpisodes.ToString();
             this.IsSingleDayRelease = this.Period.IsSingleDayRelease;
             this.PosterUrl = this.Period.PosterUrl.EmptyIfNull();
+        }
+
+        private void InitializeValueDependencies()
+        {
+            this.WhenAnyValue(
+                    vm => vm.StartMonth,
+                    vm => vm.IsSingleDayRelease,
+                    (month, isSingleDayRelease) => (Month: month, IsSingleDayRelease: isSingleDayRelease))
+                .Where(value => value.IsSingleDayRelease)
+                .Select(value => value.Month)
+                .BindTo(this, vm => vm.EndMonth);
+
+            this.WhenAnyValue(
+                    vm => vm.StartYear,
+                    vm => vm.IsSingleDayRelease,
+                    (year, isSingleDayRelease) => (Year: year, IsSingleDayRelease: isSingleDayRelease))
+                .Where(value => value.IsSingleDayRelease)
+                .Select(value => value.Year)
+                .BindTo(this, vm => vm.EndYear);
         }
     }
 }

@@ -10,6 +10,9 @@ namespace MovieList.Data
         public const int SeriesMinYear = 1950;
         public const int SeriesMaxYear = 2100;
 
+        public const int MovieDefaultYear = 2000;
+        public const int SeasonDefaultYear = 2000;
+
         public const int MinTitleCount = 1;
         public const int MaxTitleCount = 10;
 
@@ -18,6 +21,8 @@ namespace MovieList.Data
 
         public const int PeriodMinNumberOfEpisodes = 1;
         public const int PeriodMaxNumberOfEpisodes = 50;
+
+        public static readonly string SeasonNumberPlaceholder = "#";
 
         internal const string SettingsListNameKey = "list.name";
         internal const string SettingsListVersionKey = "list.version";

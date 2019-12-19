@@ -77,6 +77,9 @@ namespace MovieList.Views.Forms
             this.WhenAnyObservable(v => v.ViewModel.AddOriginalTitle.CanExecute)
                 .BindTo(this, v => v.AddOriginalTitleButton.Visibility, null, boolToVisibility);
 
+            this.BindCommand(this.ViewModel, vm => vm.AddSeason, v => v.AddSeasonButton)
+                .DisposeWith(disposables);
+
             Observable.CombineLatest(
                     this.WhenAnyObservable(v => v.ViewModel.Save.CanExecute),
                     this.WhenAnyObservable(v => v.ViewModel.Cancel.CanExecute))

@@ -18,10 +18,10 @@ namespace MovieList.Converters
         {
             this.statusToString = new Dictionary<SeasonWatchStatus, string>
             {
-                [SeasonWatchStatus.NotWatched] = Messages.SeriesNotWatched,
-                [SeasonWatchStatus.Watching] = Messages.SeriesWatching,
-                [SeasonWatchStatus.Watched] = Messages.SeriesWatched,
-                [SeasonWatchStatus.StoppedWatching] = Messages.SeriesStoppedWatching
+                [SeasonWatchStatus.NotWatched] = Messages.SeasonNotWatched,
+                [SeasonWatchStatus.Watching] = Messages.SeasonWatching,
+                [SeasonWatchStatus.Watched] = Messages.SeasonWatched,
+                [SeasonWatchStatus.StoppedWatching] = Messages.SeasonStoppedWatching
             };
 
             this.stringToStatus = statusToString.ToDictionary(e => e.Value, e => e.Key);

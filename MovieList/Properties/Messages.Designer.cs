@@ -124,6 +124,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add season.
+        /// </summary>
+        public static string AddSeason {
+            get {
+                return ResourceManager.GetString("AddSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add title.
         /// </summary>
         public static string AddTitle {
@@ -516,6 +525,15 @@ namespace MovieList.Properties {
         public static string May {
             get {
                 return ResourceManager.GetString("May", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month.
+        /// </summary>
+        public static string Month {
+            get {
+                return ResourceManager.GetString("Month", resourceCulture);
             }
         }
         

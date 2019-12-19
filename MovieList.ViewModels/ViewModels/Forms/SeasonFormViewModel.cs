@@ -39,7 +39,6 @@ namespace MovieList.ViewModels.Forms
             : base(parent, maxSequenceNumber, resourceManager, scheduler)
         {
             this.Season = season;
-            this.CopyProperties();
 
             var canDeletePeriod = this.periodsSource.Connect()
                 .Count()
@@ -55,6 +54,8 @@ namespace MovieList.ViewModels.Forms
                 .Bind(out this.periods)
                 .DisposeMany()
                 .Subscribe();
+
+            this.CopyProperties();
 
             this.ChannelRule = this.ValidationRule(
                 vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
@@ -169,7 +170,7 @@ namespace MovieList.ViewModels.Forms
             this.Season.Channel = this.Channel;
             this.Season.SequenceNumber = this.SequenceNumber;
 
-            this.CurrentPosterIndex = 0;
+            this.SetCurrentPosterIndexToFirst();
 
             return this.Season;
         }
@@ -191,7 +192,7 @@ namespace MovieList.ViewModels.Forms
             this.Channel = this.Season.Channel;
             this.SequenceNumber = this.Season.SequenceNumber;
 
-            this.CurrentPosterIndex = 0;
+            this.SetCurrentPosterIndexToFirst();
         }
 
         protected override void AttachTitle(Title title)
@@ -249,6 +250,22 @@ namespace MovieList.ViewModels.Forms
             foreach (var period in this.Season.Periods.Except(this.periodsSource.Items).ToList())
             {
                 this.Season.Periods.Remove(period);
+            }
+        }
+
+        private void SetCurrentPosterIndexToFirst()
+        {
+            int oldIndex = this.CurrentPosterIndex;
+
+            var firstPeriodWithPoster = this.Periods.FirstOrDefault(period => period.PosterUrl != null);
+
+            this.CurrentPosterIndex = firstPeriodWithPoster != null
+                ? this.Periods.IndexOf(firstPeriodWithPoster)
+                : 0;
+
+            if (this.CurrentPosterIndex == oldIndex)
+            {
+                this.CurrentPosterUrl = firstPeriodWithPoster?.PosterUrl;
             }
         }
 

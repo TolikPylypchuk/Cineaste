@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+
+using MaterialDesignThemes.Wpf;
 
 using MovieList.Properties;
 using MovieList.ViewModels.Forms;
@@ -67,11 +70,21 @@ namespace MovieList.Views.Forms
                     index => index + 1)
                 .DisposeWith(disposables);
 
+            this.WhenAnyValue(v => v.ViewModel.IsSingleDayRelease)
+                .Subscribe(isSingleDayRelease => HintAssist.SetHint(
+                    this.StartMonthComboBox, isSingleDayRelease ? Messages.Month : Messages.StartMonth));
+
             this.Bind(this.ViewModel, vm => vm.StartYear, v => v.StartYearTextBox.Text)
                 .DisposeWith(disposables);
 
             this.StartYearTextBox.ValidateWith(this.ViewModel.StartYearRule)
                 .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.IsSingleDayRelease)
+                .Subscribe(isSingleDayRelease => HintAssist.SetHint(
+                    this.StartYearTextBox, isSingleDayRelease ? Messages.Year : Messages.StartYear));
+
+            var boolToVisibility = new BooleanToVisibilityTypeConverter();
 
             this.Bind(
                     this.ViewModel,
@@ -81,13 +94,31 @@ namespace MovieList.Views.Forms
                     index => index + 1)
                 .DisposeWith(disposables);
 
+            this.WhenAnyValue(v => v.ViewModel.IsSingleDayRelease)
+                .Invert()
+                .BindTo(this, v => v.EndMonthComboBox.Visibility, null, boolToVisibility);
+
             this.Bind(this.ViewModel, vm => vm.EndYear, v => v.EndYearTextBox.Text)
                 .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.IsSingleDayRelease)
+                .Invert()
+                .BindTo(this, v => v.EndYearTextBox.Visibility, null, boolToVisibility);
 
             this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesTextBox.Text)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsSingleDayRelease, v => v.IsSingleDayReleaseCheckBox.IsChecked)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(
+                    v => v.ViewModel.StartMonth,
+                    v => v.ViewModel.StartYear,
+                    v => v.ViewModel.EndMonth,
+                    v => v.ViewModel.EndYear)
+                .Select(((int StartMonth, string StartYear, int EndMonth, string EndYear) values) =>
+                    values.StartMonth == values.EndMonth && values.StartYear == values.EndYear)
+                .BindTo(this, v => v.IsSingleDayReleaseCheckBox.IsEnabled)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)

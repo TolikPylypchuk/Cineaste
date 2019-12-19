@@ -138,6 +138,9 @@
   <data name="AddPeriod" xml:space="preserve">
     <value>Add period</value>
   </data>
+  <data name="AddSeason" xml:space="preserve">
+    <value>Add season</value>
+  </data>
   <data name="AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>
@@ -269,6 +272,9 @@
   </data>
   <data name="May" xml:space="preserve">
     <value>May</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Month</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
     <value>Move Down</value>

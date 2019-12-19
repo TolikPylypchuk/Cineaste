@@ -87,6 +87,27 @@
 
                 <ItemsControl x:Name="Components" Margin="0,8" Grid.IsSharedSizeScope="True" />
 
+                <Grid Margin="0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="FontSize" Value="12" />
+                            <Setter Property="Margin" Value="4,0" />
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="MinHeight" Value="32" />
+                        </Style>
+                    </Grid.Resources>
+
+                    <Button x:Name="AddSeasonButton" Grid.Column="0">
+                        <TextBlock Text="{l:Translate AddSeason, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
+                </Grid>
+
                 <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate ImdbLink}" />
 
                 <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />

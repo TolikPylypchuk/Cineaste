@@ -52,12 +52,7 @@ namespace MovieList.Data.Models
         [Computed]
         public int StartYear
             => Math.Min(
-                this.Seasons
-                    .SelectMany(season => season.Periods)
-                    .OrderBy(period => period.StartYear)
-                    .ThenBy(period => period.StartMonth)
-                    .First()
-                    .StartYear,
+                this.Seasons.Min(season => season.StartYear),
                 this.SpecialEpisodes
                     .OrderBy(episode => episode.Year)
                     .ThenBy(episode => episode.Month)
@@ -68,12 +63,7 @@ namespace MovieList.Data.Models
         [Computed]
         public int EndYear
             => Math.Max(
-                this.Seasons
-                    .SelectMany(season => season.Periods)
-                    .OrderByDescending(period => period.EndYear)
-                    .ThenByDescending(period => period.EndMonth)
-                    .First()
-                    .EndYear,
+                this.Seasons.Max(season => season.EndYear),
                 this.SpecialEpisodes
                     .OrderByDescending(episode => episode.Year)
                     .ThenByDescending(episode => episode.Month)

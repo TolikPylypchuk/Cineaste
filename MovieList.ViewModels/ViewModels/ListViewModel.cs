@@ -23,6 +23,8 @@ using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
+using static MovieList.Data.Constants;
+
 namespace MovieList.ViewModels
 {
     public sealed class ListViewModel : ReactiveObject, IEnableLogger
@@ -141,7 +143,7 @@ namespace MovieList.ViewModels
                         new Title { Name = String.Empty, Priority = 1, IsOriginal = false },
                         new Title { Name = String.Empty, Priority = 1, IsOriginal = true }
                     },
-                    Year = 2000,
+                    Year = MovieDefaultYear,
                     Kind = this.Kinds.First()
                 })
                 .Select(movie => new MovieListItem(movie))

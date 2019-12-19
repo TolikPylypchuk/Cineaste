@@ -41,6 +41,22 @@ namespace MovieList.Data.Models
                 .OrderBy(title => title.Priority)
                 .First();
 
+        [Computed]
+        public int StartYear
+            => this.Periods
+                .OrderBy(period => period.StartYear)
+                .ThenBy(period => period.StartMonth)
+                .First()
+                .StartYear;
+
+        [Computed]
+        public int EndYear
+            => this.Periods
+                .OrderByDescending(period => period.EndYear)
+                .ThenByDescending(period => period.EndMonth)
+                .First()
+                .EndYear;
+
         public override string ToString()
             => $"Series #{this.Id}: {Title.ToString(this.Titles)} ({this.Channel})";
     }

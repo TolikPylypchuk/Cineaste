@@ -1,3 +1,5 @@
+using static MovieList.Data.Constants;
+
 namespace MovieList.Data
 {
     public sealed class Settings
@@ -19,5 +21,11 @@ namespace MovieList.Data
 
         public string DefaultSeasonTitle { get; set; }
         public string DefaultSeasonOriginalTitle { get; set; }
+
+        public string GetSeasonTitle(int num)
+            => this.DefaultSeasonTitle.Replace(SeasonNumberPlaceholder, num.ToString());
+
+        public string GetSeasonOriginalTitle(int num)
+            => this.DefaultSeasonOriginalTitle.Replace(SeasonNumberPlaceholder, num.ToString());
     }
 }

@@ -23,11 +23,14 @@ using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
+using static MovieList.Data.Constants;
+
 namespace MovieList.ViewModels.Forms
 {
     public sealed class SeriesFormViewModel : TitledFormViewModelBase<Series, SeriesFormViewModel>
     {
         private readonly IEntityService<Series> seriesService;
+        private readonly ISettingsService settingsService;
 
         private readonly SourceList<Season> seasonsSource = new SourceList<Season>();
 
@@ -43,13 +46,15 @@ namespace MovieList.ViewModels.Forms
             string fileName,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null,
-            IEntityService<Series>? seriesService = null)
+            IEntityService<Series>? seriesService = null,
+            ISettingsService? settingsService = null)
             : base(resourceManager, scheduler)
         {
             this.Series = series;
             this.Kinds = kinds;
 
             this.seriesService = seriesService ?? Locator.Current.GetService<IEntityService<Series>>(fileName);
+            this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
 
             this.CopyProperties();
 
@@ -81,8 +86,13 @@ namespace MovieList.ViewModels.Forms
 
             this.CanDeleteWhenNotNew();
 
-            this.AddSeason = ReactiveCommand.Create(this.OnAddSeason);
+            this.AddSeason = ReactiveCommand.CreateFromTask(this.OnAddSeasonAsync);
             this.SelectComponent = ReactiveCommand.Create<ReactiveObject, ReactiveObject>(form => form);
+
+            this.AddSeason
+                .SelectMany(_ => this.Seasons.MaxBy(season => season.SequenceNumber))
+                .Cast<ReactiveObject>()
+                .InvokeCommand(this.SelectComponent);
 
             this.EnableChangeTracking();
         }
@@ -196,26 +206,34 @@ namespace MovieList.ViewModels.Forms
         protected override void AttachTitle(Title title)
             => title.Series = this.Series;
 
-        private void OnAddSeason()
+        private async Task OnAddSeasonAsync()
         {
+            int seasonNumber = this.Seasons.Count + 1;
+            var previousSeason = seasonNumber != 1 ? this.Seasons[seasonNumber - 2].Season : null;
+            int year = previousSeason?.EndYear + 1 ?? SeasonDefaultYear;
+
             var period = new Period
             {
                 StartMonth = 1,
-                StartYear = 2000,
+                StartYear = year,
                 EndMonth = 1,
-                EndYear = 2000
+                EndYear = year,
+                NumberOfEpisodes = 1
             };
+
+            var settings = await this.settingsService.GetSettingsAsync();
 
             var season = new Season
             {
                 Titles = new List<Title>
                 {
-                    new Title { Priority = 1, IsOriginal = false },
-                    new Title { Priority = 1, IsOriginal = true }
+                    new Title { Name = settings.GetSeasonTitle(seasonNumber), Priority = 1, IsOriginal = false },
+                    new Title { Name = settings.GetSeasonOriginalTitle(seasonNumber), Priority = 1, IsOriginal = true }
                 },
                 Series = this.Series,
                 Periods = new List<Period> { period },
-                SequenceNumber = this.Seasons.Count + 1
+                SequenceNumber = this.Components.Count + 1,
+                Channel = previousSeason?.Channel ?? String.Empty
             };
 
             period.Season = season;
