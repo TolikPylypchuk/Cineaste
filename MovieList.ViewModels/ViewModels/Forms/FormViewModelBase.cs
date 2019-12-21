@@ -116,6 +116,9 @@ namespace MovieList.ViewModels.Forms
         protected void CanDeleteWhenNotNew()
             => this.CanDeleteWhen(Observable.Return(!this.IsNew).Merge(this.Save.Select(_ => true)));
 
+        protected void CanAlwaysDelete()
+            => this.CanDeleteWhen(Observable.Return(true));
+
         protected virtual void EnableChangeTracking()
         {
             var falseWhenSave = this.Save.Select(_ => false);

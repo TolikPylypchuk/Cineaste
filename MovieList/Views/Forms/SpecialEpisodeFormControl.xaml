@@ -72,7 +72,7 @@
 
                 <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate Channel}" />
 
-                <Grid Margin="0,8">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
@@ -81,7 +81,7 @@
                     <ComboBox x:Name="MonthComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate Month}" />
 
-                    <TextBox x:Name="YearTextBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+                    <TextBox x:Name="YearTextBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8,8,0,8"
                              m:HintAssist.Hint="{l:Translate Year}" />
                 </Grid>
 

@@ -94,19 +94,17 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.Year)
-                .Throttle(TimeSpan.FromMilliseconds(250))
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
-                .Select(year => year == DateTime.Now.Year)
-                .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled)
-                .DisposeWith(disposables);
-
-            this.WhenAnyValue(v => v.ViewModel.Year)
-                .Throttle(TimeSpan.FromMilliseconds(250))
                 .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
                 .WhereValueNotNull()
                 .Select(year => year <= DateTime.Now.Year)
                 .BindTo(this, v => v.IsWatchedCheckBox.IsEnabled)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.Year)
+                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
+                .WhereValueNotNull()
+                .Select(year => year == DateTime.Now.Year)
+                .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled)
                 .DisposeWith(disposables);
         }
 

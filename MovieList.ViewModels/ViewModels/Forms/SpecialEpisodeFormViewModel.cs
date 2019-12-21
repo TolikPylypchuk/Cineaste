@@ -39,7 +39,7 @@ namespace MovieList.ViewModels.Forms
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.InitializeValueDependencies();
-            this.CanDeleteWhenNotNew();
+            this.CanAlwaysDelete();
             this.EnableChangeTracking();
         }
 
@@ -79,6 +79,9 @@ namespace MovieList.ViewModels.Forms
         protected override string NewItemKey
             => "NewSpecialEpisode";
 
+        public override int GetNextYear()
+            => Int32.Parse(this.Year) + 1;
+
         protected override void EnableChangeTracking()
         {
             this.TrackChanges(vm => vm.Month, vm => vm.SpecialEpisode.Month);
@@ -87,7 +90,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.IsReleased, vm => vm.SpecialEpisode.IsReleased);
             this.TrackChanges(vm => vm.Channel, vm => vm.SpecialEpisode.Channel);
             this.TrackChanges(vm => vm.SequenceNumber, vm => vm.SpecialEpisode.SequenceNumber);
-            this.TrackChanges(vm => vm.PosterUrl, vm => vm.SpecialEpisode.PosterUrl);
+            this.TrackChanges(vm => vm.PosterUrl, vm => vm.SpecialEpisode.PosterUrl.EmptyIfNull());
 
             base.EnableChangeTracking();
         }
@@ -108,7 +111,7 @@ namespace MovieList.ViewModels.Forms
         }
 
         protected override async Task<SpecialEpisode?> OnDeleteAsync()
-            => await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeason"))
+            => await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSpecialEpisode"))
                 ? this.SpecialEpisode
                 : null;
 

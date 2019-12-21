@@ -138,23 +138,22 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.Year)
-                .Throttle(TimeSpan.FromMilliseconds(250))
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
-                .CombineLatest(this.WhenAnyValue(v => v.ViewModel.Month), (year, month) => (Year: year, Month: month))
-                .Select(values => values.Month == DateTime.Now.Month && values.Year == DateTime.Now.Year)
-                .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled)
-                .DisposeWith(disposables);
-
-            this.WhenAnyValue(v => v.ViewModel.Year)
-                .Throttle(TimeSpan.FromMilliseconds(250))
                 .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
                 .WhereValueNotNull()
                 .CombineLatest(this.WhenAnyValue(v => v.ViewModel.Month), (year, month) => (Year: year, Month: month))
                 .Select(values =>
                     values.Year < DateTime.Now.Year ||
                     values.Year == DateTime.Now.Year && values.Month <= DateTime.Now.Month)
+                .ObserveOnDispatcher()
                 .BindTo(this, v => v.IsWatchedCheckBox.IsEnabled)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.Year)
+                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
+                .WhereValueNotNull()
+                .CombineLatest(this.WhenAnyValue(v => v.ViewModel.Month), (year, month) => (Year: year, Month: month))
+                .Select(values => values.Month == DateTime.Now.Month && values.Year == DateTime.Now.Year)
+                .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled)
                 .DisposeWith(disposables);
         }
 

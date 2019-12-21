@@ -10,7 +10,7 @@ using ReactiveUI.Fody.Helpers;
 namespace MovieList.ViewModels.Forms
 {
     public abstract class SeriesComponentFormViewModelBase<TModel, TViewModel>
-        : TitledFormViewModelBase<TModel, TViewModel>
+        : TitledFormViewModelBase<TModel, TViewModel>, ISeriesComponentForm
         where TModel : class
         where TViewModel : SeriesComponentFormViewModelBase<TModel, TViewModel>
     {
@@ -57,5 +57,7 @@ namespace MovieList.ViewModels.Forms
 
         public ReactiveCommand<Unit, Unit> SelectNext { get; }
         public ReactiveCommand<Unit, Unit> SelectPrevious { get; }
+
+        public abstract int GetNextYear();
     }
 }

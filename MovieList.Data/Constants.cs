@@ -11,7 +11,7 @@ namespace MovieList.Data
         public const int SeriesMaxYear = 2100;
 
         public const int MovieDefaultYear = 2000;
-        public const int SeasonDefaultYear = 2000;
+        public const int SeriesDefaultYear = 2000;
 
         public const int MinTitleCount = 1;
         public const int MaxTitleCount = 10;

@@ -100,7 +100,7 @@ namespace MovieList.ViewModels.Forms
                 .Delay(TimeSpan.FromMilliseconds(500), this.Scheduler)
                 .Subscribe(() => this.CurrentPosterIndex = 0);
 
-            this.CanDeleteWhenNotNew();
+            this.CanAlwaysDelete();
             this.EnableChangeTracking();
         }
 
@@ -144,6 +144,9 @@ namespace MovieList.ViewModels.Forms
 
         protected override string NewItemKey
             => "NewSeason";
+
+        public override int GetNextYear()
+            => Int32.Parse(this.Periods.Last().EndYear) + 1;
 
         protected override void EnableChangeTracking()
         {

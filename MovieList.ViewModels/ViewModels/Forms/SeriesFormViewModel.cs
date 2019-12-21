@@ -32,9 +32,11 @@ namespace MovieList.ViewModels.Forms
         private readonly IEntityService<Series> seriesService;
         private readonly ISettingsService settingsService;
 
-        private readonly SourceList<Season> seasonsSource = new SourceList<Season>();
+        private readonly SourceList<EntityBase> componentsSource = new SourceList<EntityBase>();
 
+        private readonly ReadOnlyObservableCollection<ISeriesComponentForm> componentForms;
         private readonly ReadOnlyObservableCollection<SeasonFormViewModel> seasons;
+        private readonly ReadOnlyObservableCollection<SpecialEpisodeFormViewModel> specialEpisodes;
         private readonly ReadOnlyObservableCollection<SeriesComponentViewModel> components;
 
         private readonly BehaviorSubject<int> maxSequenceNumberSubject = new BehaviorSubject<int>(0);
@@ -58,20 +60,36 @@ namespace MovieList.ViewModels.Forms
 
             this.CopyProperties();
 
-            this.seasonsSource.Connect()
-                .Transform(this.CreateSeasonForm)
+            this.componentsSource.Connect()
+                .Transform(this.CreateForm)
                 .Sort(
-                    SortExpressionComparer<SeasonFormViewModel>.Ascending(season => season.SequenceNumber),
+                    SortExpressionComparer<ISeriesComponentForm>.Ascending(form => form.SequenceNumber),
                     resort: this.resort)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out this.componentForms)
+                .DisposeMany()
+                .Subscribe();
+
+            this.ComponentForms.ToObservableChangeSet()
+                .Transform(this.CreateComponent)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out this.components)
+                .DisposeMany()
+                .Subscribe();
+
+            this.ComponentForms.ToObservableChangeSet()
+                .Filter(form => form is SeasonFormViewModel)
+                .Transform(form => (SeasonFormViewModel)form)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.seasons)
                 .DisposeMany()
                 .Subscribe();
 
-            this.seasons.ToObservableChangeSet()
-                .Transform(this.CreateComponent)
+            this.ComponentForms.ToObservableChangeSet()
+                .Filter(form => form is SpecialEpisodeFormViewModel)
+                .Transform(form => (SpecialEpisodeFormViewModel)form)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out this.components)
+                .Bind(out this.specialEpisodes)
                 .DisposeMany()
                 .Subscribe();
 
@@ -85,11 +103,13 @@ namespace MovieList.ViewModels.Forms
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.AddSeason = ReactiveCommand.CreateFromTask(this.OnAddSeasonAsync);
-            this.SelectComponent = ReactiveCommand.Create<ReactiveObject, ReactiveObject>(form => form);
+            this.AddSpecialEpisode = ReactiveCommand.Create(this.OnAddSpecialEpisode);
+            this.SelectComponent = ReactiveCommand.Create<ISeriesComponentForm, ISeriesComponentForm>(form => form);
 
             this.AddSeason
-                .SelectMany(_ => this.Seasons.MaxBy(season => season.SequenceNumber))
-                .Cast<ReactiveObject>()
+                .Merge(this.AddSpecialEpisode)
+                .SelectMany(_ => this.ComponentForms.MaxBy(season => season.SequenceNumber))
+                .Cast<ISeriesComponentForm>()
                 .InvokeCommand(this.SelectComponent);
 
             this.CanDeleteWhenNotNew();
@@ -112,8 +132,14 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public SeriesReleaseStatus ReleaseStatus { get; set; }
 
+        public ReadOnlyObservableCollection<ISeriesComponentForm> ComponentForms
+            => this.componentForms;
+
         public ReadOnlyObservableCollection<SeasonFormViewModel> Seasons
             => this.seasons;
+
+        public ReadOnlyObservableCollection<SpecialEpisodeFormViewModel> SpecialEpisodes
+            => this.specialEpisodes;
 
         public ReadOnlyObservableCollection<SeriesComponentViewModel> Components
             => this.components;
@@ -128,7 +154,8 @@ namespace MovieList.ViewModels.Forms
         public ValidationHelper PosterUrlRule { get; }
 
         public ReactiveCommand<Unit, Unit> AddSeason { get; }
-        public ReactiveCommand<ReactiveObject, ReactiveObject> SelectComponent { get; }
+        public ReactiveCommand<Unit, Unit> AddSpecialEpisode { get; }
+        public ReactiveCommand<ISeriesComponentForm, ISeriesComponentForm> SelectComponent { get; }
 
         public override bool IsNew
             => this.Series.Id == default;
@@ -151,8 +178,11 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.ImdbLink, vm => vm.Series.ImdbLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Series.PosterUrl.EmptyIfNull());
             this.TrackChanges(this.IsCollectionChanged(vm => vm.Seasons, vm => vm.Series.Seasons));
+            this.TrackChanges(this.IsCollectionChanged(vm => vm.SpecialEpisodes, vm => vm.Series.SpecialEpisodes));
 
             this.TrackValidation(this.IsCollectionValid<SeasonFormViewModel, Season>(this.Seasons));
+            this.TrackValidation(this.IsCollectionValid<SpecialEpisodeFormViewModel, SpecialEpisode>(
+                this.SpecialEpisodes));
 
             base.EnableChangeTracking();
         }
@@ -161,6 +191,7 @@ namespace MovieList.ViewModels.Forms
         {
             await this.SaveTitlesAsync();
             await this.SaveSeasonsAsync();
+            await this.SaveSpecialEpisodesAsync();
 
             this.Series.IsAnthology = this.IsAnthology;
             this.Series.WatchStatus = this.WatchStatus;
@@ -191,8 +222,9 @@ namespace MovieList.ViewModels.Forms
         {
             base.CopyProperties();
 
-            this.seasonsSource.Clear();
-            this.seasonsSource.AddRange(this.Series.Seasons);
+            this.componentsSource.Clear();
+            this.componentsSource.AddRange(this.Series.Seasons);
+            this.componentsSource.AddRange(this.Series.SpecialEpisodes);
 
             this.IsAnthology = this.Series.IsAnthology;
             this.Kind = this.Series.Kind;
@@ -208,8 +240,9 @@ namespace MovieList.ViewModels.Forms
         private async Task OnAddSeasonAsync()
         {
             int seasonNumber = this.Seasons.Count + 1;
-            var previousSeason = seasonNumber != 1 ? this.Seasons[seasonNumber - 2].Season : null;
-            int year = previousSeason?.EndYear + 1 ?? SeasonDefaultYear;
+
+            var previousComponent = this.ComponentForms.Count != 0 ? this.ComponentForms[^1] : null;
+            int year = previousComponent?.GetNextYear() ?? SeriesDefaultYear;
 
             var period = new Period
             {
@@ -232,56 +265,100 @@ namespace MovieList.ViewModels.Forms
                 Series = this.Series,
                 Periods = new List<Period> { period },
                 SequenceNumber = this.Components.Count + 1,
-                Channel = previousSeason?.Channel ?? String.Empty
+                Channel = previousComponent?.Channel ?? String.Empty
             };
 
             period.Season = season;
 
-            this.seasonsSource.Add(season);
+            this.componentsSource.Add(season);
         }
+
+        private void OnAddSpecialEpisode()
+        {
+            var previousComponent = this.ComponentForms.Count != 0 ? this.ComponentForms[^1] : null;
+
+            this.componentsSource.Add(new SpecialEpisode
+            {
+                Titles = new List<Title>
+                {
+                    new Title { Priority = 1, IsOriginal = false },
+                    new Title { Priority = 1, IsOriginal = true }
+                },
+                Series = this.Series,
+                SequenceNumber = this.Components.Count + 1,
+                Channel = previousComponent?.Channel ?? String.Empty,
+                Month = 1,
+                Year = previousComponent?.GetNextYear() ?? SeriesDefaultYear
+            });
+        }
+
+        private ISeriesComponentForm CreateForm(EntityBase entity)
+            => entity switch
+            {
+                Season season => this.CreateSeasonForm(season),
+                SpecialEpisode episode => this.CreateSpecialEpisodeForm(episode),
+                _ => throw new NotSupportedException($"Cannot create a form for entity {entity.GetType()}")
+            };
 
         private SeasonFormViewModel CreateSeasonForm(Season season)
         {
             var seasonForm = new SeasonFormViewModel(
                 season, this, this.maxSequenceNumberSubject, this.ResourceManager, this.Scheduler);
 
-            seasonForm.Delete
-                .WhereNotNull()
-                .Subscribe(s => this.seasonsSource.Remove(s));
-
-            seasonForm.SelectNext
-                .Select(_ => this.Components.First(component =>
-                    component.SequenceNumber == seasonForm.SequenceNumber + 1))
-                .Select(component => component.Form)
-                .SubscribeAsync(async form => await this.SelectComponent.Execute(form));
-
-            seasonForm.SelectPrevious
-                .Select(_ => this.Components.First(component =>
-                    component.SequenceNumber == seasonForm.SequenceNumber - 1))
-                .Select(component => component.Form)
-                .SubscribeAsync(async form => await this.SelectComponent.Execute(form));
-
-            seasonForm.WhenAnyValue(form => form.SequenceNumber)
-                .StartWith(seasonForm.SequenceNumber)
-                .Buffer(2, 1)
-                .Select(values => (Old: values[0], New: values[1]))
-                .Where(values => values.Old != values.New)
-                .Subscribe(values => this.Seasons
-                    .Where(form => form != seasonForm && form.SequenceNumber == seasonForm.SequenceNumber)
-                    .ForEach(form => form.SequenceNumber = values.New < values.Old
-                        ? form.SequenceNumber + 1
-                        : form.SequenceNumber - 1));
-
-            seasonForm.WhenAnyValue(form => form.SequenceNumber)
-                .Discard()
-                .Subscribe(this.resort);
+            this.SubscribeToFormEvents(seasonForm);
 
             return seasonForm;
         }
 
-        private SeriesComponentViewModel CreateComponent(SeasonFormViewModel season)
+        private SpecialEpisodeFormViewModel CreateSpecialEpisodeForm(SpecialEpisode episode)
         {
-            var component = new SeriesComponentViewModel(season);
+            var episodeForm = new SpecialEpisodeFormViewModel(
+                episode, this, this.maxSequenceNumberSubject, this.ResourceManager, this.Scheduler);
+
+            this.SubscribeToFormEvents(episodeForm);
+
+            return episodeForm;
+        }
+
+        private void SubscribeToFormEvents<TM, TVm>(SeriesComponentFormViewModelBase<TM, TVm> componentForm)
+            where TM : EntityBase
+            where TVm : SeriesComponentFormViewModelBase<TM, TVm>
+        {
+            componentForm.Delete
+                .WhereNotNull()
+                .Subscribe(s => this.componentsSource.Remove(s));
+
+            componentForm.SelectNext
+                .Select(_ => this.Components.First(component =>
+                    component.SequenceNumber == componentForm.SequenceNumber + 1))
+                .Select(component => component.Form)
+                .SubscribeAsync(async form => await this.SelectComponent.Execute(form));
+
+            componentForm.SelectPrevious
+                .Select(_ => this.Components.First(component =>
+                    component.SequenceNumber == componentForm.SequenceNumber - 1))
+                .Select(component => component.Form)
+                .SubscribeAsync(async form => await this.SelectComponent.Execute(form));
+
+            componentForm.WhenAnyValue(form => form.SequenceNumber)
+                .StartWith(componentForm.SequenceNumber)
+                .Buffer(2, 1)
+                .Select(values => (Old: values[0], New: values[1]))
+                .Where(values => values.Old != values.New)
+                .Subscribe(values => this.ComponentForms
+                    .Where(form => form != componentForm && form.SequenceNumber == componentForm.SequenceNumber)
+                    .ForEach(form => form.SequenceNumber = values.New < values.Old
+                        ? form.SequenceNumber + 1
+                        : form.SequenceNumber - 1));
+
+            componentForm.WhenAnyValue(form => form.SequenceNumber)
+                .Discard()
+                .Subscribe(this.resort);
+        }
+
+        private SeriesComponentViewModel CreateComponent(ISeriesComponentForm form)
+        {
+            var component = SeriesComponentViewModel.FromForm(form);
 
             component.Select.InvokeCommand(this.SelectComponent);
 
@@ -295,16 +372,43 @@ namespace MovieList.ViewModels.Forms
                 await season.Save.Execute();
             }
 
-            foreach (var season in this.seasonsSource.Items.Except(this.Series.Seasons).ToList())
+            foreach (var season in this.componentsSource.Items
+                .OfType<Season>()
+                .Except(this.Series.Seasons)
+                .ToList())
             {
                 this.Series.Seasons.Add(season);
             }
 
-            foreach (var season in this.Series.Seasons.Except(this.seasonsSource.Items).ToList())
+            foreach (var season in this.Series.Seasons
+                .Except(this.componentsSource.Items.OfType<Season>())
+                .ToList())
             {
                 this.Series.Seasons.Remove(season);
             }
         }
 
+        private async Task SaveSpecialEpisodesAsync()
+        {
+            foreach (var episode in this.SpecialEpisodes)
+            {
+                await episode.Save.Execute();
+            }
+
+            foreach (var episode in this.componentsSource.Items
+                .OfType<SpecialEpisode>()
+                .Except(this.Series.SpecialEpisodes)
+                .ToList())
+            {
+                this.Series.SpecialEpisodes.Add(episode);
+            }
+
+            foreach (var episode in this.Series.SpecialEpisodes
+                .Except(this.componentsSource.Items.OfType<SpecialEpisode>())
+                .ToList())
+            {
+                this.Series.SpecialEpisodes.Remove(episode);
+            }
+        }
     }
 }

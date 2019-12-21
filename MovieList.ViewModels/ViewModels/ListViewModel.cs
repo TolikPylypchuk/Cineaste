@@ -227,6 +227,11 @@ namespace MovieList.ViewModels
                 .Subscribe(seasonForm => this.OpenSeasonForm(seasonForm, form))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.SelectComponent
+                .OfType<SpecialEpisodeFormViewModel>()
+                .Subscribe(episodeForm => this.OpenSpecialEpisodeForm(episodeForm, form))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             return form;
         }
 
@@ -234,6 +239,26 @@ namespace MovieList.ViewModels
         {
             this.Log().Debug($"Opening a form for season: {form.Season}");
 
+            this.SubscribeToSeriesComponentEvents(form, seriesForm);
+
+            this.SideViewModel = form;
+        }
+
+        private void OpenSpecialEpisodeForm(SpecialEpisodeFormViewModel form, SeriesFormViewModel seriesForm)
+        {
+            this.Log().Debug($"Opening a form for special episode: {form.SpecialEpisode}");
+
+            this.SubscribeToSeriesComponentEvents(form, seriesForm);
+
+            this.SideViewModel = form;
+        }
+
+        private void SubscribeToSeriesComponentEvents<TM, TVm>(
+            SeriesComponentFormViewModelBase<TM, TVm> form,
+            SeriesFormViewModel seriesForm)
+            where TM : EntityBase
+            where TVm : SeriesComponentFormViewModelBase<TM, TVm>
+        {
             form.Close
                 .SubscribeAsync(async () => await this.SelectItem.Execute())
                 .DisposeWith(this.sideViewModelSecondarySubscriptions);
@@ -250,8 +275,6 @@ namespace MovieList.ViewModels
             form.GoToSeries
                 .Subscribe(_ => this.sideViewModelSecondarySubscriptions.Clear())
                 .DisposeWith(this.sideViewModelSecondarySubscriptions);
-
-            this.SideViewModel = form;
         }
 
         private void RemoveMovie(Movie movie)

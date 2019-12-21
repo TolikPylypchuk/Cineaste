@@ -16,7 +16,7 @@ namespace MovieList.ViewModels.Forms
 {
     public sealed class SeriesComponentViewModel : ReactiveObject, IEnableLogger
     {
-        public SeriesComponentViewModel(SeasonFormViewModel form)
+        private SeriesComponentViewModel(SeasonFormViewModel form)
         {
             this.Log().Debug($"Creating a view model for a season inside the series form: {form.Season}");
 
@@ -34,7 +34,7 @@ namespace MovieList.ViewModels.Forms
             form.WhenAnyValue(vm => vm.SequenceNumber)
                 .BindTo(this, vm => vm.SequenceNumber);
 
-            this.Select = ReactiveCommand.Create<Unit, ReactiveObject>(_ => this.Form);
+            this.Select = ReactiveCommand.Create<Unit, ISeriesComponentForm>(_ => this.Form);
 
             this.MoveUp = ReactiveCommand.CreateFromObservable(
                 () => form.MoveUp.Execute(), form.MoveUp.CanExecute);
@@ -43,7 +43,31 @@ namespace MovieList.ViewModels.Forms
                 () => form.MoveDown.Execute(), form.MoveDown.CanExecute);
         }
 
-        public ReactiveObject Form { get; }
+        private SeriesComponentViewModel(SpecialEpisodeFormViewModel form)
+        {
+            this.Log().Debug(
+                $"Creating a view model for a special episode inside the series form: {form.SpecialEpisode}");
+
+            this.Form = form;
+
+            form.FormTitle.BindTo(this, vm => vm.Title);
+
+            form.WhenAnyValue(vm => vm.Year)
+                .BindTo(this, vm => vm.Years);
+
+            form.WhenAnyValue(vm => vm.SequenceNumber)
+                .BindTo(this, vm => vm.SequenceNumber);
+
+            this.Select = ReactiveCommand.Create<Unit, ISeriesComponentForm>(_ => this.Form);
+
+            this.MoveUp = ReactiveCommand.CreateFromObservable(
+                () => form.MoveUp.Execute(), form.MoveUp.CanExecute);
+
+            this.MoveDown = ReactiveCommand.CreateFromObservable(
+                () => form.MoveDown.Execute(), form.MoveDown.CanExecute);
+        }
+
+        public ISeriesComponentForm Form { get; }
 
         [Reactive]
         public string Title { get; set; } = String.Empty;
@@ -54,9 +78,18 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public int SequenceNumber { get; set; }
 
-        public ReactiveCommand<Unit, ReactiveObject> Select { get; }
+        public ReactiveCommand<Unit, ISeriesComponentForm> Select { get; }
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
         public ReactiveCommand<Unit, Unit> MoveDown { get; }
+
+        public static SeriesComponentViewModel FromForm(ISeriesComponentForm form)
+            => form switch
+            {
+                SeasonFormViewModel vm => new SeriesComponentViewModel(vm),
+                SpecialEpisodeFormViewModel vm => new SeriesComponentViewModel(vm),
+                _ => throw new NotSupportedException(
+                    $"Cannot create a series component view model for type {form.GetType()}")
+            };
 
         private string GetYears(IList<PeriodFormViewModel> periods)
         {

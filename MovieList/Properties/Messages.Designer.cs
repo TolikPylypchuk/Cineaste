@@ -133,6 +133,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add special episode.
+        /// </summary>
+        public static string AddSpecialEpisode {
+            get {
+                return ResourceManager.GetString("AddSpecialEpisode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add title.
         /// </summary>
         public static string AddTitle {

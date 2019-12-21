@@ -106,6 +106,10 @@
                     <Button x:Name="AddSeasonButton" Grid.Column="0">
                         <TextBlock Text="{l:Translate AddSeason, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                     </Button>
+
+                    <Button x:Name="AddSpecialEpisodeButton" Grid.Column="1">
+                        <TextBlock Text="{l:Translate AddSpecialEpisode, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
                 </Grid>
 
                 <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate ImdbLink}" />
