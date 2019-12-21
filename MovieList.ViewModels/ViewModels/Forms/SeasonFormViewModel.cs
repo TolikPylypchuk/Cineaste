@@ -69,8 +69,6 @@ namespace MovieList.ViewModels.Forms
                 .Select(index => this.Season.Periods[index].PosterUrl)
                 .BindTo(this, vm => vm.CurrentPosterUrl);
 
-            this.CanDeleteWhenNotNew();
-
             var canAddPeriod = this.Periods.ToObservableChangeSet()
                 .AutoRefreshOnObservable(period => period.Valid)
                 .ToCollection()
@@ -102,6 +100,7 @@ namespace MovieList.ViewModels.Forms
                 .Delay(TimeSpan.FromMilliseconds(500), this.Scheduler)
                 .Subscribe(() => this.CurrentPosterIndex = 0);
 
+            this.CanDeleteWhenNotNew();
             this.EnableChangeTracking();
         }
 
@@ -114,7 +113,7 @@ namespace MovieList.ViewModels.Forms
         public SeasonReleaseStatus ReleaseStatus { get; set; }
 
         [Reactive]
-        public string Channel { get; set; } = null!;
+        public override string Channel { get; set; } = null!;
 
         public ReadOnlyObservableCollection<PeriodFormViewModel> Periods
             => this.periods;
@@ -176,7 +175,7 @@ namespace MovieList.ViewModels.Forms
         }
 
         protected override async Task<Season?> OnDeleteAsync()
-            => await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeries"))
+            => await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeason"))
                 ? this.Season
                 : null;
 

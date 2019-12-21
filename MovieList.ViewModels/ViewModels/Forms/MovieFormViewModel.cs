@@ -46,9 +46,7 @@ namespace MovieList.ViewModels.Forms
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.InitializeValueDependencies();
-
             this.CanDeleteWhenNotNew();
-
             this.EnableChangeTracking();
         }
 

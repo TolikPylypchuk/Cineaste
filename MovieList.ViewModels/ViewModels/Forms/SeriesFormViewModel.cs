@@ -84,8 +84,6 @@ namespace MovieList.ViewModels.Forms
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
-            this.CanDeleteWhenNotNew();
-
             this.AddSeason = ReactiveCommand.CreateFromTask(this.OnAddSeasonAsync);
             this.SelectComponent = ReactiveCommand.Create<ReactiveObject, ReactiveObject>(form => form);
 
@@ -94,6 +92,7 @@ namespace MovieList.ViewModels.Forms
                 .Cast<ReactiveObject>()
                 .InvokeCommand(this.SelectComponent);
 
+            this.CanDeleteWhenNotNew();
             this.EnableChangeTracking();
         }
 

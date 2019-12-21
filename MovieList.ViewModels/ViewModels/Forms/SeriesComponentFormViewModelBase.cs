@@ -9,8 +9,8 @@ using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.ViewModels.Forms
 {
-    public abstract class SeriesComponentFormViewModelBase<TModel, TViewModel> :
-        TitledFormViewModelBase<TModel, TViewModel>
+    public abstract class SeriesComponentFormViewModelBase<TModel, TViewModel>
+        : TitledFormViewModelBase<TModel, TViewModel>
         where TModel : class
         where TViewModel : SeriesComponentFormViewModelBase<TModel, TViewModel>
     {
@@ -44,6 +44,8 @@ namespace MovieList.ViewModels.Forms
         }
 
         public SeriesFormViewModel Parent { get; }
+
+        public abstract string Channel { get; set; }
 
         [Reactive]
         public int SequenceNumber { get; set; }

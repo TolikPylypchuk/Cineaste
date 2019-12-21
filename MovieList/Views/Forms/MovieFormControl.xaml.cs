@@ -94,6 +94,7 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.Year)
+                .Throttle(TimeSpan.FromMilliseconds(250))
                 .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
                 .WhereValueNotNull()
                 .Select(year => year == DateTime.Now.Year)
@@ -101,6 +102,7 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.Year)
+                .Throttle(TimeSpan.FromMilliseconds(250))
                 .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
                 .WhereValueNotNull()
                 .Select(year => year <= DateTime.Now.Year)

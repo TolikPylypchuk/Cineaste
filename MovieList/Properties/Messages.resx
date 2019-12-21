@@ -216,6 +216,12 @@
   <data name="DeleteSeriesTitle" xml:space="preserve">
     <value>Delete Series</value>
   </data>
+  <data name="DeleteSpecialEpisodeQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete the episode?</value>
+  </data>
+  <data name="DeleteSpecialEpisodeTitle" xml:space="preserve">
+    <value>Delete Special Episode</value>
+  </data>
   <data name="Documentary" xml:space="preserve">
     <value>Documentary</value>
   </data>
@@ -305,6 +311,9 @@
   </data>
   <data name="NewSeries" xml:space="preserve">
     <value>New Series</value>
+  </data>
+  <data name="NewSpecialEpisode" xml:space="preserve">
+    <value>New Special Episode</value>
   </data>
   <data name="NoItemsInList" xml:space="preserve">
     <value>There are no items in the list. You can start by adding a movie or series.</value>

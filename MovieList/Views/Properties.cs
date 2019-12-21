@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -5,10 +6,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
+using MovieList.Properties;
+
 namespace MovieList.Views
 {
     public static class Properties
     {
+        public static readonly IReadOnlyList<string> MonthNames = new List<string>
+        {
+            Messages.January,
+            Messages.February,
+            Messages.March,
+            Messages.April,
+            Messages.May,
+            Messages.June,
+            Messages.July,
+            Messages.August,
+            Messages.September,
+            Messages.October,
+            Messages.November,
+            Messages.December
+        };
+
         public static readonly DependencyProperty TripleClickSelectAllProperty = DependencyProperty.RegisterAttached(
             "TripleClickSelectAll",
             typeof(bool),

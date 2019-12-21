@@ -358,6 +358,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the episode?.
+        /// </summary>
+        public static string DeleteSpecialEpisodeQuestion {
+            get {
+                return ResourceManager.GetString("DeleteSpecialEpisodeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Special Episode.
+        /// </summary>
+        public static string DeleteSpecialEpisodeTitle {
+            get {
+                return ResourceManager.GetString("DeleteSpecialEpisodeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentary.
         /// </summary>
         public static string Documentary {
@@ -624,6 +642,15 @@ namespace MovieList.Properties {
         public static string NewSeries {
             get {
                 return ResourceManager.GetString("NewSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Special Episode.
+        /// </summary>
+        public static string NewSpecialEpisode {
+            get {
+                return ResourceManager.GetString("NewSpecialEpisode", resourceCulture);
             }
         }
         

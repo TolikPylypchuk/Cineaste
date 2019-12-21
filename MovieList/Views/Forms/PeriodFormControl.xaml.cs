@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -16,22 +15,6 @@ namespace MovieList.Views.Forms
 
     public partial class PeriodFormControl : PeriodFormControlBase
     {
-        private readonly List<string> monthNames = new List<string>
-        {
-            Messages.January,
-            Messages.February,
-            Messages.March,
-            Messages.April,
-            Messages.May,
-            Messages.June,
-            Messages.July,
-            Messages.August,
-            Messages.September,
-            Messages.October,
-            Messages.November,
-            Messages.December
-        };
-
         public PeriodFormControl()
         {
             this.InitializeComponent();
@@ -42,7 +25,7 @@ namespace MovieList.Views.Forms
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                foreach (string month in this.monthNames)
+                foreach (string month in Properties.MonthNames)
                 {
                     this.StartMonthComboBox.Items.Add(month);
                     this.EndMonthComboBox.Items.Add(month);
