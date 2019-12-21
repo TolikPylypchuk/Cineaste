@@ -28,13 +28,13 @@ namespace MovieList.Infrastructure
         {
             try
             {
-                var namePipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly().FullName);
+                var namedPipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly().FullName);
 
                 string message = Environment.GetCommandLineArgs().Length > 1
                     ? Environment.GetCommandLineArgs()[1]
                     : String.Empty;
 
-                namePipeManager.Write(message);
+                namedPipeManager.Write(message);
             } finally
             {
                 Environment.Exit(0);
