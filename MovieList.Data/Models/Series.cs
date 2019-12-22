@@ -70,7 +70,7 @@ namespace MovieList.Data.Models
                 this.Seasons
                     .OrderByDescending(season => season.EndYear)
                     .FirstOrDefault()
-                    ?.StartYear
+                    ?.EndYear
                     ?? Int32.MinValue,
                 this.SpecialEpisodes
                     .OrderByDescending(episode => episode.Year)

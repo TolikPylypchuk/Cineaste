@@ -33,17 +33,17 @@ namespace MovieList.ViewModels
         {
             this.store = store ?? Locator.Current.GetService<IBlobCache>(StoreKey);
 
-            this.store.GetObject<UserPreferences>(PreferencesKey)
-                .SelectMany(preferences => preferences.File.RecentFiles)
-                .Select(file => new RecentFileViewModel(file, this))
-                .Subscribe(recentFilesSource.AddOrUpdate);
-
             this.recentFilesSource.Connect()
                 .Sort(SortExpressionComparer<RecentFileViewModel>.Descending(vm => vm.File.Closed))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.recentFiles)
                 .DisposeMany()
                 .Subscribe();
+
+            this.store.GetObject<UserPreferences>(PreferencesKey)
+                .SelectMany(preferences => preferences.File.RecentFiles)
+                .Select(file => new RecentFileViewModel(file, this))
+                .Subscribe(recentFilesSource.AddOrUpdate);
 
             this.WhenAnyValue(vm => vm.RecentFiles.Count)
                 .Select(count => count != 0)
