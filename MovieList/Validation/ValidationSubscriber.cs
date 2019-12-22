@@ -22,6 +22,8 @@ namespace MovieList.Validation
             subscriber.mainSubscription = rule.ValidationChanged
                 .Subscribe(state =>
                 {
+                    subscriber.eventSubscription?.Dispose();
+
                     if (!state.IsValid)
                     {
                         subscriber.eventSubscription = element.Events().LostFocus
@@ -35,7 +37,6 @@ namespace MovieList.Validation
                     } else
                     {
                         ManualValidation.ClearValidation(element);
-                        subscriber.eventSubscription?.Dispose();
                     }
                 });
 

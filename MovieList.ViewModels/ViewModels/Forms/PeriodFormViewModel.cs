@@ -68,22 +68,22 @@ namespace MovieList.ViewModels.Forms
         public int StartMonth { get; set; }
 
         [Reactive]
-        public string StartYear { get; set; } = null!;
+        public string StartYear { get; set; } = String.Empty;
 
         [Reactive]
         public int EndMonth { get; set; }
 
         [Reactive]
-        public string EndYear { get; set; } = null!;
+        public string EndYear { get; set; } = String.Empty;
 
         [Reactive]
-        public string NumberOfEpisodes { get; set; } = null!;
+        public string NumberOfEpisodes { get; set; } = String.Empty;
 
         [Reactive]
         public bool IsSingleDayRelease { get; set; }
 
         [Reactive]
-        public string PosterUrl { get; set; } = null!;
+        public string PosterUrl { get; set; } = String.Empty;
 
         public ValidationHelper StartYearRule { get; }
         public ValidationHelper EndYearRule { get; }
