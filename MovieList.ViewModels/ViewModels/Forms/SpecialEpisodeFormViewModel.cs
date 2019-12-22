@@ -58,7 +58,7 @@ namespace MovieList.ViewModels.Forms
         public bool IsReleased { get; set; }
 
         [Reactive]
-        public override string Channel { get; set; } = null!;
+        public override string Channel { get; set; } = String.Empty;
 
         [Reactive]
         public string? PosterUrl { get; set; }

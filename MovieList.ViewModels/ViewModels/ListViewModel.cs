@@ -93,9 +93,8 @@ namespace MovieList.ViewModels
         {
             bool canSelect = true;
 
-            if (this.SideViewModel is MovieFormViewModel movieForm &&
-                this.source.Lookup(new MovieListItem(movieForm.Movie).Id).HasValue &&
-                movieForm.IsFormChanged)
+            if (this.IsMovieFormChanged() || this.IsSeriesFormChanged() ||
+                this.IsSeasonFormChanged() || this.IsSpecialEpisodeFormChanged())
             {
                 canSelect = await Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"));
             }
@@ -128,6 +127,20 @@ namespace MovieList.ViewModels
             return true;
         }
 
+        private bool IsMovieFormChanged()
+            => this.SideViewModel is MovieFormViewModel movieForm && movieForm.IsFormChanged;
+
+        private bool IsSeriesFormChanged()
+            => this.SideViewModel is SeriesFormViewModel seriesForm && seriesForm.IsFormChanged;
+
+        private bool IsSeasonFormChanged()
+            => this.SideViewModel is SeasonFormViewModel seasonForm &&
+               (seasonForm.IsFormChanged || seasonForm.Parent.IsFormChanged);
+
+        private bool IsSpecialEpisodeFormChanged()
+            => this.SideViewModel is SpecialEpisodeFormViewModel episodeForm &&
+               (episodeForm.IsFormChanged || episodeForm.Parent.IsFormChanged);
+
         private ReactiveObject CreateNewItemViewModel()
         {
             var viewModel = new NewItemViewModel();
@@ -140,13 +153,28 @@ namespace MovieList.ViewModels
                 {
                     Titles = new List<Title>
                     {
-                        new Title { Name = String.Empty, Priority = 1, IsOriginal = false },
-                        new Title { Name = String.Empty, Priority = 1, IsOriginal = true }
+                        new Title { Priority = 1, IsOriginal = false },
+                        new Title { Priority = 1, IsOriginal = true }
                     },
                     Year = MovieDefaultYear,
                     Kind = this.Kinds.First()
                 })
                 .Select(movie => new MovieListItem(movie))
+                .Select(item => new ListItemViewModel(item))
+                .InvokeCommand(this.SelectItem)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            viewModel.AddNewSeries
+                .Select(_ => new Series
+                {
+                    Titles = new List<Title>
+                    {
+                        new Title { Priority = 1, IsOriginal = false},
+                        new Title { Priority = 1, IsOriginal = true}
+                    },
+                    Kind = this.Kinds.First()
+                })
+                .Select(series => new SeriesListItem(series))
                 .Select(item => new ListItemViewModel(item))
                 .InvokeCommand(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);

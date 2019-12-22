@@ -10,6 +10,7 @@ using System.Resources;
 using System.Threading.Tasks;
 
 using DynamicData;
+using DynamicData.Aggregation;
 using DynamicData.Binding;
 
 using MovieList.Data.Models;
@@ -183,6 +184,8 @@ namespace MovieList.ViewModels.Forms
             this.TrackValidation(this.IsCollectionValid<SeasonFormViewModel, Season>(this.Seasons));
             this.TrackValidation(this.IsCollectionValid<SpecialEpisodeFormViewModel, SpecialEpisode>(
                 this.SpecialEpisodes));
+
+            this.TrackValidationStrict(this.componentsSource.Connect().Count().Select(count => count > 0));
 
             base.EnableChangeTracking();
         }

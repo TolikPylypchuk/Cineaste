@@ -39,7 +39,7 @@ namespace MovieList.ViewModels.Forms
 
             this.Valid = Observable.CombineLatest(this.validSubject, this.IsValid()).AllTrue();
 
-            var canSave = Observable.CombineLatest(this.FormChanged, this.Valid).AllTrue();
+            var canSave = Observable.CombineLatest(this.formChangedSubject, this.Valid).AllTrue();
 
             this.Save = ReactiveCommand.CreateFromTask(this.OnSaveAsync, canSave);
             this.Cancel = ReactiveCommand.Create(this.CopyProperties, this.formChangedSubject);
@@ -66,7 +66,7 @@ namespace MovieList.ViewModels.Forms
         protected abstract TViewModel Self { get; }
 
         protected void TrackChanges(IObservable<bool> changes)
-            => this.changesToTrack.Add(changes);
+            => this.changesToTrack.Add(changes.StartWith(false));
 
         protected void TrackChanges<T>(Expression<Func<TViewModel, T>> property, Func<TViewModel, T> itemValue)
         {
@@ -80,7 +80,10 @@ namespace MovieList.ViewModels.Forms
         }
 
         protected void TrackValidation(IObservable<bool> validation)
-            => this.validationsToTrack.Add(validation);
+            => this.validationsToTrack.Add(validation.StartWith(true));
+
+        protected void TrackValidationStrict(IObservable<bool> validation)
+            => this.validationsToTrack.Add(validation.StartWith(false));
 
         protected IObservable<bool> IsCollectionChanged<TVm, TM>(
             Expression<Func<TViewModel, ReadOnlyObservableCollection<TVm>>> property,

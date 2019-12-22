@@ -1,3 +1,5 @@
+using System;
+
 using MovieList.Data.Models;
 
 namespace MovieList.ListItems
@@ -10,9 +12,11 @@ namespace MovieList.ListItems
                   series.Entry,
                   series.Title.Name,
                   series.OriginalTitle.Name,
-                  series.StartYear != series.EndYear
-                      ? $"{series.StartYear} - {series.EndYear}"
-                      : series.StartYear.ToString(),
+                  series.Seasons.Count != 0 || series.SpecialEpisodes.Count != 0
+                    ? series.StartYear != series.EndYear
+                        ? $"{series.StartYear} - {series.EndYear}"
+                        : series.StartYear.ToString()
+                    : String.Empty,
                   series.GetActiveColor())
             => this.Series = series;
 

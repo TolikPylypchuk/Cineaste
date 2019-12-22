@@ -52,24 +52,32 @@ namespace MovieList.Data.Models
         [Computed]
         public int StartYear
             => Math.Min(
-                this.Seasons.Min(season => season.StartYear),
+                this.Seasons
+                    .OrderBy(season => season.StartYear)
+                    .FirstOrDefault()
+                    ?.StartYear
+                    ?? Int32.MaxValue,
                 this.SpecialEpisodes
                     .OrderBy(episode => episode.Year)
                     .ThenBy(episode => episode.Month)
                     .FirstOrDefault()
                     ?.Year
-                ?? Int32.MaxValue);
+                    ?? Int32.MaxValue);
 
         [Computed]
         public int EndYear
             => Math.Max(
-                this.Seasons.Max(season => season.EndYear),
+                this.Seasons
+                    .OrderByDescending(season => season.EndYear)
+                    .FirstOrDefault()
+                    ?.StartYear
+                    ?? Int32.MinValue,
                 this.SpecialEpisodes
                     .OrderByDescending(episode => episode.Year)
                     .ThenByDescending(episode => episode.Month)
                     .FirstOrDefault()
                     ?.Year
-                ?? Int32.MinValue);
+                    ?? Int32.MinValue);
 
         public override string ToString()
             => $"Series #{this.Id}: {Title.ToString(this.Titles)}";

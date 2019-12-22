@@ -113,7 +113,7 @@ namespace MovieList.ViewModels.Forms
         public SeasonReleaseStatus ReleaseStatus { get; set; }
 
         [Reactive]
-        public override string Channel { get; set; } = null!;
+        public override string Channel { get; set; } = String.Empty;
 
         public ReadOnlyObservableCollection<PeriodFormViewModel> Periods
             => this.periods;
