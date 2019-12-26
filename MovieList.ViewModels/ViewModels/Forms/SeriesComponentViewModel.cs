@@ -7,6 +7,8 @@ using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
 
+using MovieList.ViewModels.Forms.Base;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -34,7 +36,7 @@ namespace MovieList.ViewModels.Forms
             form.WhenAnyValue(vm => vm.SequenceNumber)
                 .BindTo(this, vm => vm.SequenceNumber);
 
-            this.Select = ReactiveCommand.Create<Unit, ISeriesComponentForm>(_ => this.Form);
+            this.Select = ReactiveCommand.Create<Unit, ISeriesComponentFormViewModel>(_ => this.Form);
 
             this.MoveUp = ReactiveCommand.CreateFromObservable(
                 () => form.MoveUp.Execute(), form.MoveUp.CanExecute);
@@ -58,7 +60,7 @@ namespace MovieList.ViewModels.Forms
             form.WhenAnyValue(vm => vm.SequenceNumber)
                 .BindTo(this, vm => vm.SequenceNumber);
 
-            this.Select = ReactiveCommand.Create<Unit, ISeriesComponentForm>(_ => this.Form);
+            this.Select = ReactiveCommand.Create<Unit, ISeriesComponentFormViewModel>(_ => this.Form);
 
             this.MoveUp = ReactiveCommand.CreateFromObservable(
                 () => form.MoveUp.Execute(), form.MoveUp.CanExecute);
@@ -67,7 +69,7 @@ namespace MovieList.ViewModels.Forms
                 () => form.MoveDown.Execute(), form.MoveDown.CanExecute);
         }
 
-        public ISeriesComponentForm Form { get; }
+        public ISeriesComponentFormViewModel Form { get; }
 
         [Reactive]
         public string Title { get; set; } = String.Empty;
@@ -78,11 +80,11 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public int SequenceNumber { get; set; }
 
-        public ReactiveCommand<Unit, ISeriesComponentForm> Select { get; }
+        public ReactiveCommand<Unit, ISeriesComponentFormViewModel> Select { get; }
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
         public ReactiveCommand<Unit, Unit> MoveDown { get; }
 
-        public static SeriesComponentViewModel FromForm(ISeriesComponentForm form)
+        public static SeriesComponentViewModel FromForm(ISeriesComponentFormViewModel form)
             => form switch
             {
                 SeasonFormViewModel vm => new SeriesComponentViewModel(vm),

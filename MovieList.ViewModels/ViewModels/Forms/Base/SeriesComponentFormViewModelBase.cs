@@ -7,10 +7,10 @@ using System.Resources;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.ViewModels.Forms
+namespace MovieList.ViewModels.Forms.Base
 {
     public abstract class SeriesComponentFormViewModelBase<TModel, TViewModel>
-        : TitledFormViewModelBase<TModel, TViewModel>, ISeriesComponentForm
+        : TitledFormViewModelBase<TModel, TViewModel>, ISeriesComponentFormViewModel
         where TModel : class
         where TViewModel : SeriesComponentFormViewModelBase<TModel, TViewModel>
     {

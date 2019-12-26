@@ -6,6 +6,7 @@ using System.Resources;
 using System.Threading.Tasks;
 
 using MovieList.Data.Models;
+using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -84,6 +85,9 @@ namespace MovieList.ViewModels.Forms
 
         [Reactive]
         public string PosterUrl { get; set; } = String.Empty;
+
+        [Reactive]
+        public bool ShowPosterUrl { get; set; } = true;
 
         public ValidationHelper StartYearRule { get; }
         public ValidationHelper EndYearRule { get; }

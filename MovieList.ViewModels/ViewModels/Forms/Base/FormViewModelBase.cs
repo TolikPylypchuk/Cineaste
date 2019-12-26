@@ -19,9 +19,9 @@ using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
-namespace MovieList.ViewModels.Forms
+namespace MovieList.ViewModels.Forms.Base
 {
-    public abstract class FormViewModelBase<TModel, TViewModel> : ReactiveValidationObject<TViewModel>
+    public abstract class FormViewModelBase<TModel, TViewModel> : ReactiveValidationObject<TViewModel>, IFormViewModel
         where TModel : class
         where TViewModel : FormViewModelBase<TModel, TViewModel>
     {

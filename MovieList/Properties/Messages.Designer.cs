@@ -628,6 +628,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Miniseries.
+        /// </summary>
+        public static string NewMiniseries {
+            get {
+                return ResourceManager.GetString("NewMiniseries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Movie.
         /// </summary>
         public static string NewMovie {

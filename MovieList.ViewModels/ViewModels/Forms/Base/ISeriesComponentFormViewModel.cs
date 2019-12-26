@@ -1,8 +1,6 @@
-using ReactiveUI;
-
-namespace MovieList.ViewModels.Forms
+namespace MovieList.ViewModels.Forms.Base
 {
-    public interface ISeriesComponentForm : IReactiveObject
+    public interface ISeriesComponentFormViewModel : IFormViewModel
     {
         SeriesFormViewModel Parent { get; }
 

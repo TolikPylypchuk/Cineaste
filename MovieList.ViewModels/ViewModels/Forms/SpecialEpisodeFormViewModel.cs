@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using MovieList.Data.Models;
 using MovieList.DialogModels;
+using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;

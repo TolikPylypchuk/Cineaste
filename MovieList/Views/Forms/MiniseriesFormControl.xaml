@@ -1,0 +1,132 @@
+<local:MiniseriesFormControlBase x:Class="MovieList.Views.Forms.MiniseriesFormControl"
+                                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                 xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
+                                 xmlns:local="clr-namespace:MovieList.Views.Forms"
+                                 xmlns:v="clr-namespace:MovieList.Views"
+                                 xmlns:l="clr-namespace:MovieList.Localization"
+                                 mc:Ignorable="d">
+    <local:MiniseriesFormControlBase.Resources>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
+        </Style>
+    </local:MiniseriesFormControlBase.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+            <Button x:Name="CloseButton" DockPanel.Dock="Right" HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignIconButton}" Padding="0" Width="25" Height="25">
+                <m:PackIcon Kind="Close" Margin="0" Width="25" Height="25" />
+            </Button>
+        </DockPanel>
+
+        <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" Style="{StaticResource MaterialDesignHeadlineTextBlock}"
+                   Margin="16,8" TextWrapping="Wrap" />
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="16,8">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
+                        <Setter Property="Margin" Value="8,8,0,0" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Width" Value="20" />
+                        <Setter Property="Height" Value="20" />
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </StackPanel.Resources>
+
+                <Image x:Name="Poster" />
+
+                <TextBlock x:Name="ImdbLinkTextBlock" Margin="0,8,0,0" HorizontalAlignment="Center">
+                    <Hyperlink x:Name="ImdbLink" v:Properties.IsExternal="True">
+                        <Hyperlink.Inlines>
+                            <Run x:Name="ImdbLinkRun" />
+                        </Hyperlink.Inlines>
+                    </Hyperlink>
+                </TextBlock>
+
+                <ItemsControl x:Name="Titles" />
+
+                <ItemsControl x:Name="OriginalTitles" />
+
+                <Grid Margin="0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate WatchStatus}" />
+
+                    <CheckBox x:Name="IsAnthologyCheckBox" Grid.Column="1" Content="{l:Translate Anthology}" Margin="8,0,0,0"
+                              VerticalAlignment="Center" />
+                </Grid>
+
+                <Grid Margin="0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate ReleaseStatus}" />
+
+                    <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" Margin="8,0,0,0"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate Kind}" />
+                </Grid>
+
+                <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate Channel}" />
+
+                <v:ViewModelViewHost x:Name="PeriodViewHost" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+
+                <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate ImdbLink}" />
+
+                <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
+
+                <Grid Margin="0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="FontSize" Value="12" />
+                            <Setter Property="Margin" Value="4,0" />
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="MinHeight" Value="32" />
+                        </Style>
+                    </Grid.Resources>
+
+                    <Button x:Name="AddTitleButton" Grid.Column="0">
+                        <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
+
+                    <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
+                        <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
+                </Grid>
+
+                <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
+                        Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
+            <Button x:Name="SaveButton" Content="{l:Translate Save, ToUpper=True}" Margin="8" HorizontalAlignment="Center" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel, ToUpper=True}" Margin="8" HorizontalAlignment="Center"
+                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+        </StackPanel>
+    </Grid>
+</local:MiniseriesFormControlBase>

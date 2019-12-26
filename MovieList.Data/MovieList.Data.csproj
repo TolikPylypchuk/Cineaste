@@ -28,10 +28,10 @@
     <PackageReference Include="MethodDecorator.Fody" Version="1.1.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.0" />
     <PackageReference Include="Resourcer.Fody" Version="1.8.0" />
-    <PackageReference Include="Splat" Version="9.3.1" />
+    <PackageReference Include="Splat" Version="9.3.4" />
     <PackageReference Include="System.Interactive" Version="4.0.0" />
     <PackageReference Include="System.Interactive.Async" Version="4.0.0" />
-    <PackageReference Include="System.Reactive" Version="4.3.1" />
+    <PackageReference Include="System.Reactive" Version="4.3.2" />
   </ItemGroup>
 
 </Project>

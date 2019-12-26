@@ -17,6 +17,7 @@ using MovieList.Data.Services;
 using MovieList.DialogModels;
 using MovieList.ListItems;
 using MovieList.ViewModels.Forms;
+using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -93,8 +94,9 @@ namespace MovieList.ViewModels
         {
             bool canSelect = true;
 
-            if (this.IsMovieFormChanged() || this.IsSeriesFormChanged() ||
-                this.IsSeasonFormChanged() || this.IsSpecialEpisodeFormChanged())
+            if (this.SideViewModel is ISeriesComponentFormViewModel seriesComponentForm &&
+                (seriesComponentForm.IsFormChanged || seriesComponentForm.Parent.IsFormChanged) || 
+                this.SideViewModel is IFormViewModel form && form.IsFormChanged)
             {
                 canSelect = await Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"));
             }
@@ -116,30 +118,23 @@ namespace MovieList.ViewModels
 
                 this.SideViewModel = vm?.Item switch
                 {
-                    null => this.CreateNewItemViewModel(),
-                    MovieListItem movieItem => this.CreateMovieForm(movieItem.Movie),
-                    SeriesListItem seriesItem => this.CreateSeriesForm(seriesItem.Series),
-                    MovieSeriesListItem _ => this.CreateNewItemViewModel(),
-                    _ => throw new NotSupportedException("List item type not supported")
+                    null =>
+                        this.CreateNewItemViewModel(),
+                    MovieListItem movieItem =>
+                        this.CreateMovieForm(movieItem.Movie),
+                    SeriesListItem seriesItem when !seriesItem.Series.IsMiniseries =>
+                        this.CreateSeriesForm(seriesItem.Series),
+                    SeriesListItem seriesItem when seriesItem.Series.IsMiniseries =>
+                        this.CreateMiniseriesForm(seriesItem.Series),
+                    MovieSeriesListItem _ =>
+                        this.CreateNewItemViewModel(),
+                    _ =>
+                        throw new NotSupportedException("List item type not supported")
                 };
             }
 
             return true;
         }
-
-        private bool IsMovieFormChanged()
-            => this.SideViewModel is MovieFormViewModel movieForm && movieForm.IsFormChanged;
-
-        private bool IsSeriesFormChanged()
-            => this.SideViewModel is SeriesFormViewModel seriesForm && seriesForm.IsFormChanged;
-
-        private bool IsSeasonFormChanged()
-            => this.SideViewModel is SeasonFormViewModel seasonForm &&
-               (seasonForm.IsFormChanged || seasonForm.Parent.IsFormChanged);
-
-        private bool IsSpecialEpisodeFormChanged()
-            => this.SideViewModel is SpecialEpisodeFormViewModel episodeForm &&
-               (episodeForm.IsFormChanged || episodeForm.Parent.IsFormChanged);
 
         private ReactiveObject CreateNewItemViewModel()
         {
@@ -258,6 +253,42 @@ namespace MovieList.ViewModels
             form.SelectComponent
                 .OfType<SpecialEpisodeFormViewModel>()
                 .Subscribe(episodeForm => this.OpenSpecialEpisodeForm(episodeForm, form))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            return form;
+        }
+
+        private ReactiveObject CreateMiniseriesForm(Series series)
+        {
+            this.Log().Debug($"Creating a form for miniseries: {series}");
+
+            var form = new MiniseriesFormViewModel(series, this.Kinds, this.FileName);
+
+            form.Save
+                .Select(s => new SeriesListItem(s))
+                .Do(this.source.AddOrUpdate)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(item => this.SelectedItem = this.Items.First(vm => vm.Item == item))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Save
+                .Discard()
+                .InvokeCommand(this.Save)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Close
+                .SubscribeAsync(async () => await this.SelectItem.Execute())
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Delete
+                .WhereNotNull()
+                .Subscribe(this.RemoveSeries)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Delete
+                .WhereNotNull()
+                .Discard()
+                .InvokeCommand(form.Close)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;

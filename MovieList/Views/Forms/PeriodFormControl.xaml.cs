@@ -106,6 +106,9 @@ namespace MovieList.Views.Forms
 
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
                 .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.ShowPosterUrl)
+                .BindTo(this, v => v.PosterUrlTextBox.Visibility, null, boolToVisibility);
         }
 
         public void AddValidation(CompositeDisposable disposables)

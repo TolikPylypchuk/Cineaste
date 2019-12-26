@@ -306,6 +306,9 @@
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="NewMiniseries" xml:space="preserve">
+    <value>New Miniseries</value>
+  </data>
   <data name="NewMovie" xml:space="preserve">
     <value>New Movie</value>
   </data>

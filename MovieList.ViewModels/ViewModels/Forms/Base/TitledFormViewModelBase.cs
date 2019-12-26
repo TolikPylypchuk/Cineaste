@@ -18,7 +18,7 @@ using ReactiveUI;
 
 using static MovieList.Data.Constants;
 
-namespace MovieList.ViewModels.Forms
+namespace MovieList.ViewModels.Forms.Base
 {
     public abstract class TitledFormViewModelBase<TModel, TViewModel> : FormViewModelBase<TModel, TViewModel>
         where TModel : class
