@@ -113,8 +113,7 @@ namespace MovieList.ViewModels
 
             if (!isSame)
             {
-                this.sideViewModelSubscriptions.Clear();
-                this.sideViewModelSecondarySubscriptions.Clear();
+                this.ClearSubscriptions();
 
                 this.SideViewModel = vm?.Item switch
                 {
@@ -136,7 +135,7 @@ namespace MovieList.ViewModels
             return true;
         }
 
-        private ReactiveObject CreateNewItemViewModel()
+        private NewItemViewModel CreateNewItemViewModel()
         {
             var viewModel = new NewItemViewModel();
 
@@ -177,7 +176,7 @@ namespace MovieList.ViewModels
             return viewModel;
         }
 
-        private ReactiveObject CreateMovieForm(Movie movie)
+        private MovieFormViewModel CreateMovieForm(Movie movie)
         {
             this.Log().Debug($"Creating a form for movie: {movie}");
 
@@ -196,7 +195,8 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Close
-                .SubscribeAsync(async () => await this.SelectItem.Execute())
+                .Select<Unit, ListItem?>(_ => null)
+                .InvokeCommand(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Delete
@@ -212,7 +212,7 @@ namespace MovieList.ViewModels
             return form;
         }
 
-        private ReactiveObject CreateSeriesForm(Series series)
+        private SeriesFormViewModel CreateSeriesForm(Series series)
         {
             this.Log().Debug($"Creating a form for series: {series}");
 
@@ -231,7 +231,8 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Close
-                .SubscribeAsync(async () => await this.SelectItem.Execute())
+                .Select<Unit, ListItem?>(_ => null)
+                .InvokeCommand(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Delete
@@ -255,10 +256,15 @@ namespace MovieList.ViewModels
                 .Subscribe(episodeForm => this.OpenSpecialEpisodeForm(episodeForm, form))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.ConvertToMiniseries
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(() => this.ConvertSeriesToMiniseries(form))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             return form;
         }
 
-        private ReactiveObject CreateMiniseriesForm(Series series)
+        private MiniseriesFormViewModel CreateMiniseriesForm(Series series)
         {
             this.Log().Debug($"Creating a form for miniseries: {series}");
 
@@ -277,7 +283,8 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Close
-                .SubscribeAsync(async () => await this.SelectItem.Execute())
+                .Select<Unit, ListItem?>(_ => null)
+                .InvokeCommand(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Delete
@@ -289,6 +296,11 @@ namespace MovieList.ViewModels
                 .WhereNotNull()
                 .Discard()
                 .InvokeCommand(form.Close)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.ConvertToSeries
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeAsync(async () => await this.ConvertMiniseriesToSeriesAsync(form))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
@@ -319,7 +331,8 @@ namespace MovieList.ViewModels
             where TVm : SeriesComponentFormViewModelBase<TM, TVm>
         {
             form.Close
-                .SubscribeAsync(async () => await this.SelectItem.Execute())
+                .Select<Unit, ListItem?>(_ => null)
+                .InvokeCommand(this.SelectItem)
                 .DisposeWith(this.sideViewModelSecondarySubscriptions);
 
             form.Delete
@@ -334,6 +347,78 @@ namespace MovieList.ViewModels
             form.GoToSeries
                 .Subscribe(_ => this.sideViewModelSecondarySubscriptions.Clear())
                 .DisposeWith(this.sideViewModelSecondarySubscriptions);
+        }
+
+        private void ConvertSeriesToMiniseries(SeriesFormViewModel seriesForm)
+        {
+            this.Log().Debug($"Converting a series to miniseries: {seriesForm.Series}");
+
+            this.ClearSubscriptions();
+
+            var miniseriesForm = this.CreateMiniseriesForm(seriesForm.Series);
+
+            miniseriesForm.Kind = seriesForm.Kind;
+            miniseriesForm.IsAnthology = seriesForm.IsAnthology;
+            miniseriesForm.WatchStatus = seriesForm.WatchStatus;
+            miniseriesForm.ReleaseStatus = seriesForm.ReleaseStatus;
+            miniseriesForm.ImdbLink = seriesForm.ImdbLink;
+            miniseriesForm.PosterUrl = seriesForm.PosterUrl;
+
+            if (seriesForm.Seasons.Count == 1)
+            {
+                var seasonForm = seriesForm.Seasons[0];
+
+                miniseriesForm.Channel = seasonForm.Channel;
+
+                var periodForm = seasonForm.Periods[0];
+
+                miniseriesForm.PeriodForm.StartMonth = periodForm.StartMonth;
+                miniseriesForm.PeriodForm.StartYear = periodForm.StartYear;
+                miniseriesForm.PeriodForm.EndMonth = periodForm.EndMonth;
+                miniseriesForm.PeriodForm.EndYear = periodForm.EndYear;
+                miniseriesForm.PeriodForm.NumberOfEpisodes = periodForm.NumberOfEpisodes;
+                miniseriesForm.PeriodForm.IsSingleDayRelease = periodForm.IsSingleDayRelease;
+                miniseriesForm.PeriodForm.PosterUrl = periodForm.PosterUrl;
+            }
+
+            this.SideViewModel = miniseriesForm;
+        }
+
+        private async Task ConvertMiniseriesToSeriesAsync(MiniseriesFormViewModel miniseriesForm)
+        {
+            this.Log().Debug($"Converting a miniseries to series: {miniseriesForm.Series}");
+
+            this.ClearSubscriptions();
+
+            var seriesForm = this.CreateSeriesForm(miniseriesForm.Series);
+
+            seriesForm.Kind = miniseriesForm.Kind;
+            seriesForm.IsAnthology = miniseriesForm.IsAnthology;
+            seriesForm.WatchStatus = miniseriesForm.WatchStatus;
+            seriesForm.ReleaseStatus = miniseriesForm.ReleaseStatus;
+            seriesForm.ImdbLink = miniseriesForm.ImdbLink;
+            seriesForm.PosterUrl = miniseriesForm.PosterUrl;
+
+            if (seriesForm.Seasons.Count == 0)
+            {
+                await seriesForm.AddSeasonAsync();
+            }
+
+            var seasonForm = seriesForm.Seasons[0];
+
+            seasonForm.Channel = miniseriesForm.Channel;
+
+            var periodForm = seasonForm.Periods[0];
+
+            periodForm.StartMonth = miniseriesForm.PeriodForm.StartMonth;
+            periodForm.StartYear = miniseriesForm.PeriodForm.StartYear;
+            periodForm.EndMonth = miniseriesForm.PeriodForm.EndMonth;
+            periodForm.EndYear = miniseriesForm.PeriodForm.EndYear;
+            periodForm.NumberOfEpisodes = miniseriesForm.PeriodForm.NumberOfEpisodes;
+            periodForm.IsSingleDayRelease = miniseriesForm.PeriodForm.IsSingleDayRelease;
+            periodForm.PosterUrl = miniseriesForm.PeriodForm.PosterUrl;
+
+            this.SideViewModel = seriesForm;
         }
 
         private void RemoveMovie(Movie movie)
@@ -362,11 +447,7 @@ namespace MovieList.ViewModels
 
             movieSeries.Entries
                 .Where(entry => entry.SequenceNumber >= movieSeriesEntry.SequenceNumber)
-                .Select(entry => entry.Movie != null
-                    ? new MovieListItem(entry.Movie)
-                    : entry.Series != null
-                        ? (ListItem)new SeriesListItem(entry.Series)
-                        : new MovieSeriesListItem(entry.MovieSeries!))
+                .Select(this.EntryToListItem)
                 .ForEach(this.source.AddOrUpdate);
 
             if (movieSeries.Entries.Count == 0 && movieSeries.ShowTitles)
@@ -378,6 +459,19 @@ namespace MovieList.ViewModels
                     this.RemoveMovieSeriesEntry(movieSeries.Entry);
                 }
             }
+        }
+
+        private ListItem EntryToListItem(MovieSeriesEntry entry)
+            => entry.Movie != null
+                ? new MovieListItem(entry.Movie)
+                : entry.Series != null
+                    ? (ListItem)new SeriesListItem(entry.Series)
+                    : new MovieSeriesListItem(entry.MovieSeries!);
+
+        private void ClearSubscriptions()
+        {
+            this.sideViewModelSubscriptions.Clear();
+            this.sideViewModelSecondarySubscriptions.Clear();
         }
     }
 }

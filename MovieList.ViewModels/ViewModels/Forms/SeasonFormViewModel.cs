@@ -51,7 +51,6 @@ namespace MovieList.ViewModels.Forms
                     .ThenByAscending(period => period.EndYear)
                     .ThenByAscending(period => period.EndMonth))
                 .Transform(period => this.CreatePeriodForm(period, canDeletePeriod))
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.periods)
                 .DisposeMany()
                 .Subscribe();
@@ -187,8 +186,11 @@ namespace MovieList.ViewModels.Forms
         {
             base.CopyProperties();
 
-            this.periodsSource.Clear();
-            this.periodsSource.AddRange(this.Season.Periods);
+            this.periodsSource.Edit(periods =>
+            {
+                periods.Clear();
+                periods.AddRange(this.Season.Periods);
+            });
 
             this.WatchStatus = this.Season.WatchStatus;
             this.ReleaseStatus = this.Season.ReleaseStatus;

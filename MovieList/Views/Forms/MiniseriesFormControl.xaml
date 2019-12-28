@@ -118,6 +118,11 @@
                     </Button>
                 </Grid>
 
+                <Button x:Name="ConvertToSeriesButton" HorizontalAlignment="Center" Margin="8"
+                        Style="{StaticResource MaterialDesignOutlinedButton}" FontSize="12">
+                    <TextBlock Text="{l:Translate ConvertToSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                </Button>
+
                 <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
             </StackPanel>

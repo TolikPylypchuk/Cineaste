@@ -58,6 +58,6 @@ namespace MovieList.Data.Models
                 .EndYear;
 
         public override string ToString()
-            => $"Series #{this.Id}: {Title.ToString(this.Titles)} ({this.Channel})";
+            => $"Season #{this.Id}: {Title.ToString(this.Titles)} ({this.Channel})";
     }
 }

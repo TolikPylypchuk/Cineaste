@@ -250,6 +250,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert to miniseries.
+        /// </summary>
+        public static string ConvertToMiniseries {
+            get {
+                return ResourceManager.GetString("ConvertToMiniseries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert to series.
+        /// </summary>
+        public static string ConvertToSeries {
+            get {
+                return ResourceManager.GetString("ConvertToSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a list.
         /// </summary>
         public static string CreateList {

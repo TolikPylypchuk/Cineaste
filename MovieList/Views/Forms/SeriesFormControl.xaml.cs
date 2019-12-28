@@ -83,6 +83,13 @@ namespace MovieList.Views.Forms
             this.BindCommand(this.ViewModel, vm => vm.AddSpecialEpisode, v => v.AddSpecialEpisodeButton)
                 .DisposeWith(disposables);
 
+            this.BindCommand(this.ViewModel, vm => vm.ConvertToMiniseries, v => v.ConvertToMiniseriesButton)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.ConvertToMiniseries.CanExecute)
+                .BindTo(this, v => v.ConvertToMiniseriesButton.Visibility, null, boolToVisibility)
+                .DisposeWith(disposables);
+
             Observable.CombineLatest(
                     this.WhenAnyObservable(v => v.ViewModel.Save.CanExecute),
                     this.WhenAnyObservable(v => v.ViewModel.Cancel.CanExecute))

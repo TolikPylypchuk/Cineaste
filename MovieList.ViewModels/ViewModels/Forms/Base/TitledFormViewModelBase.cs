@@ -92,10 +92,11 @@ namespace MovieList.ViewModels.Forms.Base
         }
 
         protected override void CopyProperties()
-        {
-            this.titlesSource.Clear();
-            this.titlesSource.AddRange(this.ItemTitles);
-        }
+            => this.titlesSource.Edit(titles =>
+            {
+                titles.Clear();
+                titles.AddRange(this.ItemTitles);
+            });
 
         protected abstract void AttachTitle(Title title);
 
@@ -129,7 +130,6 @@ namespace MovieList.ViewModels.Forms.Base
                 .Filter(predicate)
                 .Sort(SortExpressionComparer<Title>.Ascending(title => title.Priority))
                 .Transform(title => this.CreateTitleForm(title, canDelete))
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out titles)
                 .DisposeMany()
                 .Subscribe();

@@ -60,21 +60,20 @@ namespace MovieList.ViewModels.Forms
             this.seriesService = seriesService ?? Locator.Current.GetService<IEntityService<Series>>(fileName);
             this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
 
-            this.CopyProperties();
+            this.SelectComponent = ReactiveCommand.Create<ISeriesComponentFormViewModel, ISeriesComponentFormViewModel>(
+                form => form);
 
             this.componentsSource.Connect()
                 .Transform(this.CreateForm)
                 .Sort(
                     SortExpressionComparer<ISeriesComponentFormViewModel>.Ascending(form => form.SequenceNumber),
                     resort: this.resort)
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.componentForms)
                 .DisposeMany()
                 .Subscribe();
 
             this.ComponentForms.ToObservableChangeSet()
                 .Transform(this.CreateComponent)
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.components)
                 .DisposeMany()
                 .Subscribe();
@@ -82,7 +81,6 @@ namespace MovieList.ViewModels.Forms
             this.ComponentForms.ToObservableChangeSet()
                 .Filter(form => form is SeasonFormViewModel)
                 .Transform(form => (SeasonFormViewModel)form)
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.seasons)
                 .DisposeMany()
                 .Subscribe();
@@ -90,7 +88,6 @@ namespace MovieList.ViewModels.Forms
             this.ComponentForms.ToObservableChangeSet()
                 .Filter(form => form is SpecialEpisodeFormViewModel)
                 .Transform(form => (SpecialEpisodeFormViewModel)form)
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.specialEpisodes)
                 .DisposeMany()
                 .Subscribe();
@@ -101,13 +98,14 @@ namespace MovieList.ViewModels.Forms
                 .Select(components => components.Count != 0 ? components.Max(c => c.SequenceNumber) : 0)
                 .Subscribe(this.maxSequenceNumberSubject);
 
+            this.CopyProperties();
+
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
-            this.AddSeason = ReactiveCommand.CreateFromTask(this.OnAddSeasonAsync);
+            this.AddSeason = ReactiveCommand.CreateFromTask(this.AddSeasonAsync);
             this.AddSpecialEpisode = ReactiveCommand.Create(this.OnAddSpecialEpisode);
-            this.SelectComponent = ReactiveCommand.Create<ISeriesComponentFormViewModel, ISeriesComponentFormViewModel>(form => form);
-            this.ConvertToMiniseries = ReactiveCommand.Create(() => { });
+            this.ConvertToMiniseries = ReactiveCommand.Create(() => { }, this.CanConvertToMiniseries);
 
             this.AddSeason
                 .Merge(this.AddSpecialEpisode)
@@ -173,77 +171,24 @@ namespace MovieList.ViewModels.Forms
         protected override string NewItemKey
             => "NewSeries";
 
-        protected override void EnableChangeTracking()
-        {
-            this.TrackChanges(vm => vm.WatchStatus, vm => vm.Series.WatchStatus);
-            this.TrackChanges(vm => vm.ReleaseStatus, vm => vm.Series.ReleaseStatus);
-            this.TrackChanges(vm => vm.Kind, vm => vm.Series.Kind);
-            this.TrackChanges(vm => vm.IsAnthology, vm => vm.Series.IsAnthology);
-            this.TrackChanges(vm => vm.ImdbLink, vm => vm.Series.ImdbLink.EmptyIfNull());
-            this.TrackChanges(vm => vm.PosterUrl, vm => vm.Series.PosterUrl.EmptyIfNull());
-            this.TrackChanges(this.IsCollectionChanged(vm => vm.Seasons, vm => vm.Series.Seasons));
-            this.TrackChanges(this.IsCollectionChanged(vm => vm.SpecialEpisodes, vm => vm.Series.SpecialEpisodes));
+        private IObservable<bool> CanConvertToMiniseries
+            => Observable.CombineLatest(
+                    this.Seasons.ToObservableChangeSet()
+                        .Count()
+                        .StartWith(0)
+                        .Select(count => count <= 1),
+                    this.Seasons.ToObservableChangeSet()
+                        .TransformMany(season => season.Periods)
+                        .Count()
+                        .StartWith(0)
+                        .Select(count => count <= 1),
+                    this.SpecialEpisodes.ToObservableChangeSet()
+                        .Count()
+                        .StartWith(0)
+                        .Select(count => count == 0))
+                .AllTrue();
 
-            this.TrackValidation(this.IsCollectionValid<SeasonFormViewModel, Season>(this.Seasons));
-            this.TrackValidation(this.IsCollectionValid<SpecialEpisodeFormViewModel, SpecialEpisode>(
-                this.SpecialEpisodes));
-
-            this.TrackValidationStrict(this.componentsSource.Connect().Count().Select(count => count > 0));
-
-            base.EnableChangeTracking();
-        }
-
-        protected override async Task<Series> OnSaveAsync()
-        {
-            await this.SaveTitlesAsync();
-            await this.SaveSeasonsAsync();
-            await this.SaveSpecialEpisodesAsync();
-
-            this.Series.IsAnthology = this.IsAnthology;
-            this.Series.WatchStatus = this.WatchStatus;
-            this.Series.ReleaseStatus = this.ReleaseStatus;
-            this.Series.Kind = this.Kind;
-            this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
-            this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
-
-            await this.seriesService.SaveAsync(this.Series);
-
-            return this.Series;
-        }
-
-        protected override async Task<Series?> OnDeleteAsync()
-        {
-            bool shouldDelete = await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeries"));
-
-            if (shouldDelete)
-            {
-                await this.seriesService.DeleteAsync(this.Series);
-                return this.Series;
-            }
-
-            return null;
-        }
-
-        protected override void CopyProperties()
-        {
-            base.CopyProperties();
-
-            this.componentsSource.Clear();
-            this.componentsSource.AddRange(this.Series.Seasons);
-            this.componentsSource.AddRange(this.Series.SpecialEpisodes);
-
-            this.IsAnthology = this.Series.IsAnthology;
-            this.Kind = this.Series.Kind;
-            this.WatchStatus = this.Series.WatchStatus;
-            this.ReleaseStatus = this.Series.ReleaseStatus;
-            this.ImdbLink = this.Series.ImdbLink.EmptyIfNull();
-            this.PosterUrl = this.Series.PosterUrl.EmptyIfNull();
-        }
-
-        protected override void AttachTitle(Title title)
-            => title.Series = this.Series;
-
-        private async Task OnAddSeasonAsync()
+        public async Task AddSeasonAsync()
         {
             int seasonNumber = this.Seasons.Count + 1;
 
@@ -278,6 +223,87 @@ namespace MovieList.ViewModels.Forms
 
             this.componentsSource.Add(season);
         }
+
+        protected override void EnableChangeTracking()
+        {
+            this.TrackChanges(vm => vm.WatchStatus, vm => vm.Series.WatchStatus);
+            this.TrackChanges(vm => vm.ReleaseStatus, vm => vm.Series.ReleaseStatus);
+            this.TrackChanges(vm => vm.Kind, vm => vm.Series.Kind);
+            this.TrackChanges(vm => vm.IsAnthology, vm => vm.Series.IsAnthology);
+            this.TrackChanges(vm => vm.ImdbLink, vm => vm.Series.ImdbLink.EmptyIfNull());
+            this.TrackChanges(vm => vm.PosterUrl, vm => vm.Series.PosterUrl.EmptyIfNull());
+            this.TrackChanges(this.IsCollectionChanged(vm => vm.Seasons, vm => vm.Series.Seasons));
+            this.TrackChanges(this.IsCollectionChanged(vm => vm.SpecialEpisodes, vm => vm.Series.SpecialEpisodes));
+
+            if (this.Series.IsMiniseries && !this.IsNew)
+            {
+                this.TrackChanges(Observable.Return(true).Merge(this.Save.Select(_ => false)));
+            }
+
+            this.TrackValidation(this.IsCollectionValid<SeasonFormViewModel, Season>(this.Seasons));
+            this.TrackValidation(this.IsCollectionValid<SpecialEpisodeFormViewModel, SpecialEpisode>(
+                this.SpecialEpisodes));
+
+            this.TrackValidationStrict(this.componentsSource.Connect().Count().Select(count => count > 0));
+
+            base.EnableChangeTracking();
+        }
+
+        protected override async Task<Series> OnSaveAsync()
+        {
+            await this.SaveTitlesAsync();
+            await this.SaveSeasonsAsync();
+            await this.SaveSpecialEpisodesAsync();
+
+            this.Series.IsMiniseries = false;
+            this.Series.IsAnthology = this.IsAnthology;
+            this.Series.WatchStatus = this.WatchStatus;
+            this.Series.ReleaseStatus = this.ReleaseStatus;
+            this.Series.Kind = this.Kind;
+            this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
+            this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
+
+            await this.seriesService.SaveAsync(this.Series);
+
+            return this.Series;
+        }
+
+        protected override async Task<Series?> OnDeleteAsync()
+        {
+            bool shouldDelete = await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeries"));
+
+            if (shouldDelete)
+            {
+                await this.seriesService.DeleteAsync(this.Series);
+                return this.Series;
+            }
+
+            return null;
+        }
+
+        protected override void CopyProperties()
+        {
+            base.CopyProperties();
+
+            this.componentsSource.Edit(components =>
+            {
+                components.Clear();
+                components.AddRange(this.Series.Seasons);
+                components.AddRange(this.Series.SpecialEpisodes);
+            });
+
+            this.resort.OnNext(Unit.Default);
+
+            this.IsAnthology = this.Series.IsAnthology;
+            this.Kind = this.Series.Kind;
+            this.WatchStatus = this.Series.WatchStatus;
+            this.ReleaseStatus = this.Series.ReleaseStatus;
+            this.ImdbLink = this.Series.ImdbLink.EmptyIfNull();
+            this.PosterUrl = this.Series.PosterUrl.EmptyIfNull();
+        }
+
+        protected override void AttachTitle(Title title)
+            => title.Series = this.Series;
 
         private void OnAddSpecialEpisode()
         {

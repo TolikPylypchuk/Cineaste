@@ -3,6 +3,7 @@
                                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                  xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                                   xmlns:local="clr-namespace:MovieList.Views.Forms"
                                   xmlns:l="clr-namespace:MovieList.Localization"
                                   mc:Ignorable="d">
@@ -20,8 +21,17 @@
 
         <Border.ContextMenu>
             <ContextMenu>
-                <MenuItem x:Name="MoveUpMenuItem" Header="{l:Translate MoveUp}" />
-                <MenuItem x:Name="MoveDownMenuItem" Header="{l:Translate MoveDown}" />
+                <MenuItem x:Name="MoveUpMenuItem" Header="{l:Translate MoveUp}">
+                    <MenuItem.Icon>
+                        <m:PackIcon Kind="ArrowUpward" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem x:Name="MoveDownMenuItem" Header="{l:Translate MoveDown}">
+                    <MenuItem.Icon>
+                        <m:PackIcon Kind="ArrowDownward" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </ContextMenu>
         </Border.ContextMenu>
     </Border>

@@ -19,6 +19,8 @@ using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
+using static MovieList.Data.Constants;
+
 namespace MovieList.ViewModels.Forms
 {
     public sealed class MiniseriesFormViewModel : TitledFormViewModelBase<Series, MiniseriesFormViewModel>
@@ -40,7 +42,7 @@ namespace MovieList.ViewModels.Forms
             this.Kinds = kinds;
 
             this.seriesService = seriesService ?? Locator.Current.GetService<IEntityService<Series>>(fileName);
-            this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>();
+            this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
 
             this.CopyProperties();
 
@@ -110,8 +112,16 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.IsAnthology, vm => vm.Series.IsAnthology);
             this.TrackChanges(vm => vm.ImdbLink, vm => vm.Series.ImdbLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Series.PosterUrl.EmptyIfNull());
-            this.TrackChanges(vm => vm.Channel, vm => vm.Series.Seasons.Count == 1 ? vm.Series.Seasons[0].Channel : null);
+            this.TrackChanges(
+                vm => vm.Channel,
+                vm => vm.Series.Seasons.Count == 1 ? vm.Series.Seasons[0].Channel : String.Empty);
+
             this.TrackChanges(this.WhenAnyValue(vm => vm.PeriodForm).Select(vm => vm.FormChanged).Switch());
+
+            if (!this.Series.IsMiniseries && !this.IsNew)
+            {
+                this.TrackChanges(Observable.Return(true).Merge(this.Save.Select(_ => false)));
+            }
 
             base.EnableChangeTracking();
         }
@@ -122,6 +132,7 @@ namespace MovieList.ViewModels.Forms
 
             await this.PeriodForm.Save.Execute();
 
+            this.Series.IsMiniseries = true;
             this.Series.IsAnthology = this.IsAnthology;
             this.Series.WatchStatus = this.WatchStatus;
             this.Series.ReleaseStatus = this.ReleaseStatus;
@@ -175,8 +186,19 @@ namespace MovieList.ViewModels.Forms
         {
             base.CopyProperties();
 
+            var period = this.Series.Seasons.Count == 1
+                ? this.Series.Seasons[0].Periods[0]
+                : new Period
+                {
+                    StartMonth = 1,
+                    StartYear = SeriesDefaultYear,
+                    EndMonth = 1,
+                    EndYear = SeriesDefaultYear,
+                    NumberOfEpisodes = 1
+                };
+
             this.PeriodForm = new PeriodFormViewModel(
-                this.Series.Seasons[0].Periods[0], Observable.Return(false), this.ResourceManager, this.Scheduler)
+                period, Observable.Return(false), this.ResourceManager, this.Scheduler)
             {
                 ShowPosterUrl = false
             };
@@ -185,7 +207,7 @@ namespace MovieList.ViewModels.Forms
             this.IsAnthology = this.Series.IsAnthology;
             this.WatchStatus = this.Series.WatchStatus;
             this.ReleaseStatus = this.Series.ReleaseStatus;
-            this.Channel = this.Series.Seasons[0].Channel;
+            this.Channel = this.Series.Seasons.Count == 1 ? this.Series.Seasons[0].Channel : String.Empty;
             this.ImdbLink = this.Series.ImdbLink.EmptyIfNull();
             this.PosterUrl = this.Series.PosterUrl.EmptyIfNull();
         }

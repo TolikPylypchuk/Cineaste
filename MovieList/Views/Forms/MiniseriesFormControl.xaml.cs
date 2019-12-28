@@ -2,7 +2,9 @@ using System;
 using System.Linq.Expressions;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+
 using Akavache;
+
 using MovieList.Converters;
 using MovieList.Properties;
 using MovieList.ViewModels.Forms;
@@ -70,6 +72,13 @@ namespace MovieList.Views.Forms
 
             this.WhenAnyObservable(v => v.ViewModel.AddOriginalTitle.CanExecute)
                 .BindTo(this, v => v.AddOriginalTitleButton.Visibility, null, boolToVisibility)
+                .DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel, vm => vm.ConvertToSeries, v => v.ConvertToSeriesButton)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.ConvertToSeries.CanExecute)
+                .BindTo(this, v => v.ConvertToSeriesButton.Visibility, null, boolToVisibility)
                 .DisposeWith(disposables);
 
             Observable.CombineLatest(
