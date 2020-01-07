@@ -13,7 +13,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Margin="0 8 0 8" Style="{StaticResource MaterialDesignTitleTextBlock}" />
+        <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Margin="0 8 0 8" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
 
         <TextBlock x:Name="MessageTextBlock" Grid.Row="1" Margin="0 8 0 0" />
 

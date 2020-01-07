@@ -22,17 +22,13 @@
                 <ColumnDefinition Width="125" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="NumberTextBlock" Grid.Column="0" TextAlignment="Left"
-                       Style="{StaticResource MaterialDesignBody1TextBlock}" />
+            <TextBlock x:Name="NumberTextBlock" Grid.Column="0" TextAlignment="Left" />
 
-            <TextBlock x:Name="TitleTextBlock" Grid.Column="1" TextAlignment="Center"
-                       Style="{StaticResource MaterialDesignBody1TextBlock}" />
+            <TextBlock x:Name="TitleTextBlock" Grid.Column="1" TextAlignment="Center" />
 
-            <TextBlock x:Name="OriginalTitleTextBlock" Grid.Column="2" TextAlignment="Center"
-                       Style="{StaticResource MaterialDesignBody1TextBlock}" />
+            <TextBlock x:Name="OriginalTitleTextBlock" Grid.Column="2" TextAlignment="Center" />
 
-            <TextBlock x:Name="YearTextBlock" Grid.Column="3" TextAlignment="Right"
-                       Style="{StaticResource MaterialDesignBody1TextBlock}" />
+            <TextBlock x:Name="YearTextBlock" Grid.Column="3" TextAlignment="Right" />
         </Grid>
     </Border>
 </local:ListItemControlBase>

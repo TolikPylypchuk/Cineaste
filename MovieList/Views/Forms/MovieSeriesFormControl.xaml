@@ -29,7 +29,7 @@
             </Button>
         </DockPanel>
 
-        <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" Style="{StaticResource MaterialDesignHeadlineTextBlock}"
+        <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                    Margin="16,8" TextWrapping="Wrap" />
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
