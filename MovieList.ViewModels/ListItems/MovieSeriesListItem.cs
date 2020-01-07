@@ -10,8 +10,12 @@ namespace MovieList.ListItems
             : base(
                 $"MS-{movieSeries.Id}",
                 null,
-                movieSeries.Title != null ? $"{movieSeries.Title.Name}:" : String.Empty,
-                movieSeries.OriginalTitle != null ? $"{movieSeries.OriginalTitle.Name}:" : String.Empty,
+                movieSeries.ShowTitles && movieSeries.Title != null
+                    ? $"{movieSeries.Title.Name}:"
+                    : String.Empty,
+                movieSeries.ShowTitles && movieSeries.OriginalTitle != null
+                    ? $"{movieSeries.OriginalTitle.Name}:"
+                    : String.Empty,
                 String.Empty,
                 movieSeries.GetActiveColor())
             => this.MovieSeries = movieSeries;

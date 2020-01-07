@@ -178,6 +178,9 @@ namespace MovieList.Views.Forms
                     .WhereNotNull()
                     .ObserveOnDispatcher()
                     .BindTo(this, v => v.Poster.Source);
+            } else
+            {
+                this.Poster.Source = null;
             }
         }
     }

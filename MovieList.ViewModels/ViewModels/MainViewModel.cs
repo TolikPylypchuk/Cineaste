@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -28,14 +29,16 @@ namespace MovieList.ViewModels
     public sealed class MainViewModel : ReactiveObject, IEnableLogger
     {
         private readonly IBlobCache store;
+        private readonly IScheduler scheduler;
 
         private readonly SourceCache<FileViewModel, string> fileViewModelsSource;
 
         private readonly Dictionary<string, IDisposable> closeSubscriptions = new Dictionary<string, IDisposable>();
 
-        public MainViewModel(IBlobCache? store = null)
+        public MainViewModel(IBlobCache? store = null, IScheduler? scheduler = null)
         {
             this.store = store ?? Locator.Current.GetService<IBlobCache>(StoreKey);
+            this.scheduler = scheduler ?? Scheduler.Default;
 
             this.HomePage = new HomePageViewModel();
 
@@ -146,7 +149,6 @@ namespace MovieList.ViewModels
             var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
 
             await this.AddFileToRecentAsync(preferences, file, true);
-
             await this.store.InsertObject(PreferencesKey, preferences);
 
             Locator.CurrentMutable.UnregisterDatabaseServices(file);
@@ -185,7 +187,7 @@ namespace MovieList.ViewModels
 
             if (recentFile != null)
             {
-                newRecentFile = new RecentFile(recentFile.Name, recentFile.Path, DateTime.Now);
+                newRecentFile = new RecentFile(recentFile.Name, recentFile.Path, this.scheduler.Now.LocalDateTime);
                 preferences.File.RecentFiles.Remove(recentFile);
 
                 if (notifyHomePage)
@@ -196,7 +198,7 @@ namespace MovieList.ViewModels
             {
                 var settings = await Locator.Current.GetService<ISettingsService>(file).GetSettingsAsync();
 
-                newRecentFile = new RecentFile(settings.ListName, file, DateTime.Now);
+                newRecentFile = new RecentFile(settings.ListName, file, this.scheduler.Now.LocalDateTime);
             }
 
             preferences.File.RecentFiles.Add(newRecentFile);

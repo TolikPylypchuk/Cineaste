@@ -282,6 +282,9 @@
   <data name="LiveAction" xml:space="preserve">
     <value>Live-Action</value>
   </data>
+  <data name="LooselyConnected" xml:space="preserve">
+    <value>Loosely connected</value>
+  </data>
   <data name="March" xml:space="preserve">
     <value>March</value>
   </data>
@@ -300,6 +303,12 @@
   <data name="MovieList" xml:space="preserve">
     <value>Movie List</value>
   </data>
+  <data name="MovieSeriesHasTitles" xml:space="preserve">
+    <value>Has titles</value>
+  </data>
+  <data name="MovieSeriesShowInList" xml:space="preserve">
+    <value>Show in the list</value>
+  </data>
   <data name="NavigationList" xml:space="preserve">
     <value>List</value>
   </data>
@@ -317,6 +326,9 @@
   </data>
   <data name="NewMovie" xml:space="preserve">
     <value>New Movie</value>
+  </data>
+  <data name="NewMovieSeries" xml:space="preserve">
+    <value>New Movie Series</value>
   </data>
   <data name="NewSeason" xml:space="preserve">
     <value>New Season</value>

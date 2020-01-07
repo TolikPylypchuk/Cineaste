@@ -10,11 +10,11 @@ using ReactiveUI;
 
 namespace MovieList.Views.Forms
 {
-    public abstract class MovieFormControlBase : ReactiveUserControl<MovieFormViewModel> { }
+    public abstract class MovieSeriesFormControlBase : ReactiveUserControl<MovieSeriesFormViewModel> { }
 
-    public partial class MovieFormControl : MovieFormControlBase
+    public partial class MovieSeriesFormControl : MovieSeriesFormControlBase
     {
-        public MovieFormControl()
+        public MovieSeriesFormControl()
         {
             this.InitializeComponent();
 
@@ -32,7 +32,6 @@ namespace MovieList.Views.Forms
 
                 this.BindCommands(disposables);
                 this.BindCheckboxes(disposables);
-                this.BindLink(disposables);
                 this.BindFields(disposables);
 
                 this.AddValidation(disposables);
@@ -50,14 +49,7 @@ namespace MovieList.Views.Forms
             this.BindCommand(this.ViewModel, vm => vm.Close, v => v.CloseButton)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
-                .DisposeWith(disposables);
-
             var boolToVisibility = new BooleanToVisibilityTypeConverter();
-
-            this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
-                .BindTo(this, v => v.DeleteButton.Visibility, null, boolToVisibility)
-                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddTitle, v => v.AddTitleButton)
                 .DisposeWith(disposables);
@@ -87,38 +79,17 @@ namespace MovieList.Views.Forms
 
         private void BindCheckboxes(CompositeDisposable disposables)
         {
-            this.Bind(this.ViewModel, vm => vm.IsWatched, v => v.IsWatchedCheckBox.IsChecked)
+            this.Bind(this.ViewModel, vm => vm.HasTitles, v => v.HasTitlesCheckBox.IsChecked)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.IsReleased, v => v.IsReleasedCheckBox.IsChecked)
+            this.Bind(this.ViewModel, vm => vm.ShowTitles, v => v.ShowInListCheckBox.IsChecked)
                 .DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ViewModel.Year)
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
-                .Select(year => year <= DateTime.Now.Year)
-                .BindTo(this, v => v.IsWatchedCheckBox.IsEnabled)
+            this.Bind(this.ViewModel, vm => vm.IsLooselyConnected, v => v.IsLooselyConnectedCheckBox.IsChecked)
                 .DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ViewModel.Year)
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
-                .Select(year => year == DateTime.Now.Year)
-                .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled)
-                .DisposeWith(disposables);
-        }
-
-        private void BindLink(CompositeDisposable disposables)
-        {
-            this.OneWayBind(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLink.NavigateUri)
-                .DisposeWith(disposables);
-
-            this.OneWayBind(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLinkRun.Text)
-                .DisposeWith(disposables);
-
-            this.WhenAnyValue(v => v.ViewModel.ImdbLink)
-                .Select(link => !String.IsNullOrWhiteSpace(link))
-                .BindTo(this, v => v.ImdbLinkTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
+            this.WhenAnyValue(v => v.ViewModel.HasTitles)
+                .BindTo(this, v => v.ShowInListCheckBox.IsEnabled)
                 .DisposeWith(disposables);
         }
 
@@ -130,33 +101,31 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Text)
+            var boolToVisibility = new BooleanToVisibilityTypeConverter();
+
+            this.WhenAnyValue(v => v.ViewModel.HasTitles)
+                .BindTo(this, v => v.Titles.Visibility, null, boolToVisibility)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.Kind, v => v.KindComboBox.SelectedItem)
+            this.WhenAnyValue(v => v.ViewModel.HasTitles)
+                .BindTo(this, v => v.OriginalTitles.Visibility, null, boolToVisibility)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLinkTextBox.Text)
+            this.WhenAnyValue(v => v.ViewModel.HasTitles)
+                .BindTo(this, v => v.AddTitleButton.Visibility, null, boolToVisibility)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.HasTitles)
+                .BindTo(this, v => v.AddOriginalTitleButton.Visibility, null, boolToVisibility)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
                 .DisposeWith(disposables);
-
-            this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.KindComboBox.ItemsSource)
-                .DisposeWith(disposables);
         }
 
         private void AddValidation(CompositeDisposable disposables)
-        {
-            this.YearTextBox.ValidateWith(this.ViewModel.YearRule)
+            => this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)
                 .DisposeWith(disposables);
-
-            this.ImdbLinkTextBox.ValidateWith(this.ViewModel.ImdbLinkRule)
-                .DisposeWith(disposables);
-
-            this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)
-                .DisposeWith(disposables);
-        }
 
         private void LoadPoster()
         {

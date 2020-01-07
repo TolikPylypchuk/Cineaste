@@ -38,7 +38,7 @@ namespace MovieList.Data.Models
                 (var movie, null, null) when movie != null => movie.Titles,
                 (null, var series, null) when series != null => series.Titles,
                 (null, null, var movieSeries) when movieSeries != null => movieSeries.ActualTitles,
-                _ => throw new InvalidOperationException("At least one movie series entry component must be non-null.")
+                _ => throw new InvalidOperationException("Exactly one movie series entry component must be non-null.")
             };
 
         public override string ToString()

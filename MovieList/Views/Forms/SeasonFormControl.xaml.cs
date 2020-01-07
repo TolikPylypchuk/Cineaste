@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows.Media;
 
 using Akavache;
 
@@ -36,7 +37,7 @@ namespace MovieList.Views.Forms
                     .BindTo(this, v => v.FormTitleTextBlock.Text)
                     .DisposeWith(disposables);
 
-                this.LoadPoster();
+                this.LoadPoster(disposables);
 
                 this.BindCommands(disposables);
                 this.BindFields(disposables);
@@ -188,7 +189,7 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
         }
 
-        private void LoadPoster()
+        private void LoadPoster(CompositeDisposable disposables)
         {
             this.WhenAnyValue(v => v.ViewModel.CurrentPosterUrl)
                 .Where(url => !String.IsNullOrEmpty(url))
@@ -196,7 +197,14 @@ namespace MovieList.Views.Forms
                 .Select(data => data.AsImage())
                 .WhereNotNull()
                 .ObserveOnDispatcher()
-                .BindTo(this, v => v.Poster.Source);
+                .BindTo(this, v => v.Poster.Source)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.CurrentPosterUrl)
+                .Where(String.IsNullOrEmpty)
+                .Select<string?, ImageSource?>(_ => null)
+                .BindTo(this, v => v.Poster.Source)
+                .DisposeWith(disposables);
         }
     }
 }

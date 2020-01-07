@@ -26,6 +26,8 @@ namespace MovieList.Data
 
 #pragma warning restore 8509
 
+        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
+        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
         public int GetHashCode([AllowNull] TEntity obj)
             => obj?.Id.GetHashCode() ?? 1;
     }

@@ -42,7 +42,8 @@ namespace MovieList.ViewModels.Forms.Base
                 .Select(vms => vms.OrderBy(vm => vm.Priority).Select(vm => vm.Name).FirstOrDefault())
                 .Select(title => this.IsNew && String.IsNullOrWhiteSpace(title)
                     ? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty
-                    : title);
+                    : title)
+                .ObserveOn(RxApp.MainThreadScheduler);
 
             var canAddTitle = this.Titles.ToObservableChangeSet()
                 .Count()
@@ -58,7 +59,7 @@ namespace MovieList.ViewModels.Forms.Base
             this.AddOriginalTitle = ReactiveCommand.Create(() => this.OnAddTitle(true), canAddOriginalTitle);
         }
 
-        public IObservable<string> FormTitle { get; }
+        public IObservable<string> FormTitle { get; protected set; }
 
         public ReadOnlyObservableCollection<TitleFormViewModel> Titles
             => this.titles;
@@ -117,6 +118,9 @@ namespace MovieList.ViewModels.Forms.Base
                 this.ItemTitles.Remove(title);
             }
         }
+
+        protected void ClearTitles()
+            => this.titlesSource.Clear();
 
         private void InitializeTitles(
             Func<Title, bool> predicate,

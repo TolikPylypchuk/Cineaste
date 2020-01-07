@@ -125,8 +125,8 @@ namespace MovieList.ViewModels
                         this.CreateSeriesForm(seriesItem.Series),
                     SeriesListItem seriesItem when seriesItem.Series.IsMiniseries =>
                         this.CreateMiniseriesForm(seriesItem.Series),
-                    MovieSeriesListItem _ =>
-                        this.CreateNewItemViewModel(),
+                    MovieSeriesListItem movieSeriesItem =>
+                        this.CreateMovieSeriesForm(movieSeriesItem.MovieSeries),
                     _ =>
                         throw new NotSupportedException("List item type not supported")
                 };
@@ -301,6 +301,33 @@ namespace MovieList.ViewModels
             form.ConvertToSeries
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .SubscribeAsync(async () => await this.ConvertMiniseriesToSeriesAsync(form))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            return form;
+        }
+
+        private MovieSeriesFormViewModel CreateMovieSeriesForm(MovieSeries movieSeries)
+        {
+            this.Log().Debug($"Creating a form for movie series: {movieSeries}");
+
+            var form = new MovieSeriesFormViewModel(movieSeries, this.FileName);
+
+            form.Save
+                .Where(_ => form.ShowTitles)
+                .Select(m => new MovieSeriesListItem(m))
+                .Do(this.source.AddOrUpdate)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(item => this.SelectedItem = this.Items.FirstOrDefault(vm => vm.Item == item))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Save
+                .Discard()
+                .InvokeCommand(this.Save)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Close
+                .Select<Unit, ListItem?>(_ => null)
+                .InvokeCommand(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;

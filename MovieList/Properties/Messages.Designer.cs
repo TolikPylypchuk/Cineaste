@@ -556,6 +556,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loosely connected.
+        /// </summary>
+        public static string LooselyConnected {
+            get {
+                return ResourceManager.GetString("LooselyConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to March.
         /// </summary>
         public static string March {
@@ -610,6 +619,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Has titles.
+        /// </summary>
+        public static string MovieSeriesHasTitles {
+            get {
+                return ResourceManager.GetString("MovieSeriesHasTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in the list.
+        /// </summary>
+        public static string MovieSeriesShowInList {
+            get {
+                return ResourceManager.GetString("MovieSeriesShowInList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List.
         /// </summary>
         public static string NavigationList {
@@ -660,6 +687,15 @@ namespace MovieList.Properties {
         public static string NewMovie {
             get {
                 return ResourceManager.GetString("NewMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Movie Series.
+        /// </summary>
+        public static string NewMovieSeries {
+            get {
+                return ResourceManager.GetString("NewMovieSeries", resourceCulture);
             }
         }
         
