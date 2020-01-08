@@ -1,3 +1,5 @@
+using System;
+
 using MovieList.Data.Models;
 
 using ReactiveUI;
@@ -5,7 +7,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.ListItems
 {
-    public abstract class ListItem : ReactiveObject
+    public abstract class ListItem : ReactiveObject, IEquatable<ListItem>
     {
         protected ListItem(
             string id,
@@ -40,7 +42,22 @@ namespace MovieList.ListItems
         [Reactive]
         public string Color { get; set; }
 
+        public override bool Equals(object? obj)
+            => obj is ListItem item && this.Equals(item);
+
+        public bool Equals(ListItem? other)
+            => !(other is null) && (ReferenceEquals(this, other) || this.Id == other.Id);
+
+        public override int GetHashCode()
+            => this.Id.GetHashCode();
+
         public override string ToString()
             => $"{this.Title} ({this.Id})";
+
+        public static bool operator ==(ListItem? left, ListItem? right)
+            => left?.Equals(right) ?? right is null;
+
+        public static bool operator !=(ListItem? left, ListItem? right)
+            => !(left == right);
     }
 }

@@ -184,7 +184,7 @@ namespace MovieList.ViewModels
 
             form.Save
                 .Select(m => new MovieListItem(m))
-                .Do(this.source.AddOrUpdate)
+                .Do(this.AddOrUpdate)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(item => this.SelectedItem = this.Items.First(vm => vm.Item == item))
                 .DisposeWith(this.sideViewModelSubscriptions);
@@ -220,7 +220,7 @@ namespace MovieList.ViewModels
 
             form.Save
                 .Select(s => new SeriesListItem(s))
-                .Do(this.source.AddOrUpdate)
+                .Do(this.AddOrUpdate)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(item => this.SelectedItem = this.Items.First(vm => vm.Item == item))
                 .DisposeWith(this.sideViewModelSubscriptions);
@@ -272,7 +272,7 @@ namespace MovieList.ViewModels
 
             form.Save
                 .Select(s => new SeriesListItem(s))
-                .Do(this.source.AddOrUpdate)
+                .Do(this.AddOrUpdate)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(item => this.SelectedItem = this.Items.First(vm => vm.Item == item))
                 .DisposeWith(this.sideViewModelSubscriptions);
@@ -315,7 +315,7 @@ namespace MovieList.ViewModels
             form.Save
                 .Where(_ => form.ShowTitles)
                 .Select(m => new MovieSeriesListItem(m))
-                .Do(this.source.AddOrUpdate)
+                .Do(this.AddOrUpdate)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(item => this.SelectedItem = this.Items.FirstOrDefault(vm => vm.Item == item))
                 .DisposeWith(this.sideViewModelSubscriptions);
@@ -446,6 +446,43 @@ namespace MovieList.ViewModels
             periodForm.PosterUrl = miniseriesForm.PeriodForm.PosterUrl;
 
             this.SideViewModel = seriesForm;
+        }
+
+        private void AddOrUpdate(ListItem item)
+        {
+            var movieSeries = item switch
+            {
+                MovieListItem movieItem => movieItem.Movie.Entry?.ParentSeries,
+                SeriesListItem seriesItem => seriesItem.Series.Entry?.ParentSeries,
+                MovieSeriesListItem movieSeriesItem => movieSeriesItem.MovieSeries,
+                _ => throw new NotSupportedException()
+            };
+
+            if (movieSeries != null)
+            {
+                var rootSeries = movieSeries.GetRootSeries();
+                this.source.Edit(list =>
+                {
+                    list.AddOrUpdate(new MovieSeriesListItem(rootSeries));
+                    this.AddOrUpdateSeries(rootSeries, list);
+                });
+            } else
+            {
+                this.source.AddOrUpdate(item);
+            }
+        }
+
+        private void AddOrUpdateSeries(MovieSeries movieSeries, ISourceUpdater<ListItem, string> list)
+        {
+            foreach (var entry in movieSeries.Entries)
+            {
+                list.AddOrUpdate(this.EntryToListItem(entry));
+
+                if (entry.MovieSeries != null)
+                {
+                    this.AddOrUpdateSeries(entry.MovieSeries, list);
+                }
+            }
         }
 
         private void RemoveMovie(Movie movie)
