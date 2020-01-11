@@ -19,7 +19,7 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MovieSeriesFormViewModel : TitledFormViewModelBase<MovieSeries, MovieSeriesFormViewModel>
+    public sealed class MovieSeriesFormViewModel : MovieSeriesComponentFormBase<MovieSeries, MovieSeriesFormViewModel>
     {
         private readonly IEntityService<MovieSeries> movieSeriesService;
 
@@ -29,7 +29,7 @@ namespace MovieList.ViewModels.Forms
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null,
             IEntityService<MovieSeries>? movieSeriesService = null)
-            : base(resourceManager, scheduler)
+            : base(movieSeries.Entry, resourceManager, scheduler)
         {
             this.MovieSeries = movieSeries;
 

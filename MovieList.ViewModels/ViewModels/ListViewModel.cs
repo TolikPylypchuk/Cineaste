@@ -32,9 +32,10 @@ namespace MovieList.ViewModels
     {
         private readonly ISourceCache<ListItem, string> source;
         private readonly ReadOnlyObservableCollection<ListItemViewModel> items;
-        private readonly Subject<Unit> cancelSelection = new Subject<Unit>();
+        private readonly Subject<Unit> forceSelectedItem = new Subject<Unit>();
         private readonly CompositeDisposable sideViewModelSubscriptions = new CompositeDisposable();
         private readonly CompositeDisposable sideViewModelSecondarySubscriptions = new CompositeDisposable();
+        private readonly Subject<Unit> resort = new Subject<Unit>();
 
         public ListViewModel(
             string fileName,
@@ -60,7 +61,9 @@ namespace MovieList.ViewModels
                 .AutoRefresh(item => item.OriginalTitle)
                 .AutoRefresh(item => item.Year)
                 .Transform(item => new ListItemViewModel(item))
-                .Sort(new PropertyComparer<ListItemViewModel, ListItem>(vm => vm.Item, ListItemTitleComparer.Instance))
+                .Sort(
+                    new PropertyComparer<ListItemViewModel, ListItem>(vm => vm.Item, ListItemTitleComparer.Instance),
+                    this.resort)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.items)
                 .Subscribe();
@@ -84,8 +87,8 @@ namespace MovieList.ViewModels
         [Reactive]
         public ReactiveObject SideViewModel { get; private set; }
 
-        public IObservable<Unit> CancelSelection
-            => this.cancelSelection.AsObservable();
+        public IObservable<Unit> ForceSelectedItem
+            => this.forceSelectedItem.AsObservable();
 
         public ReactiveCommand<ListItemViewModel?, bool> SelectItem { get; }
         public ReactiveCommand<Unit, Unit> Save { get; }
@@ -94,16 +97,16 @@ namespace MovieList.ViewModels
         {
             bool canSelect = true;
 
-            if (this.SideViewModel is ISeriesComponentFormViewModel seriesComponentForm &&
+            if (this.SideViewModel is ISeriesComponentForm seriesComponentForm &&
                 (seriesComponentForm.IsFormChanged || seriesComponentForm.Parent.IsFormChanged) || 
-                this.SideViewModel is IFormViewModel form && form.IsFormChanged)
+                this.SideViewModel is IForm form && form.IsFormChanged)
             {
                 canSelect = await Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"));
             }
 
             if (!canSelect)
             {
-                this.cancelSelection.OnNext(Unit.Default);
+                this.forceSelectedItem.OnNext(Unit.Default);
                 return false;
             }
 
@@ -111,7 +114,7 @@ namespace MovieList.ViewModels
 
             this.SelectedItem = vm;
 
-            if (!isSame)
+            if (!isSame || vm == null)
             {
                 this.ClearSubscriptions();
 
@@ -139,8 +142,7 @@ namespace MovieList.ViewModels
         {
             var viewModel = new NewItemViewModel();
 
-            this.sideViewModelSubscriptions.Clear();
-            this.sideViewModelSecondarySubscriptions.Clear();
+            this.ClearSubscriptions();
 
             viewModel.AddNewMovie
                 .Select(_ => new Movie
@@ -207,7 +209,12 @@ namespace MovieList.ViewModels
             form.Delete
                 .WhereNotNull()
                 .Discard()
-                .InvokeCommand(form.Close);
+                .InvokeCommand(form.Close)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.GoToMovieSeries
+                .Subscribe(this.GoToMovieSeries)
+                .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
         }
@@ -261,6 +268,10 @@ namespace MovieList.ViewModels
                 .Subscribe(() => this.ConvertSeriesToMiniseries(form))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.GoToMovieSeries
+                .Subscribe(this.GoToMovieSeries)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             return form;
         }
 
@@ -303,6 +314,10 @@ namespace MovieList.ViewModels
                 .SubscribeAsync(async () => await this.ConvertMiniseriesToSeriesAsync(form))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.GoToMovieSeries
+                .Subscribe(this.GoToMovieSeries)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             return form;
         }
 
@@ -313,7 +328,6 @@ namespace MovieList.ViewModels
             var form = new MovieSeriesFormViewModel(movieSeries, this.FileName);
 
             form.Save
-                .Where(_ => form.ShowTitles)
                 .Select(m => new MovieSeriesListItem(m))
                 .Do(this.AddOrUpdate)
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -328,6 +342,10 @@ namespace MovieList.ViewModels
             form.Close
                 .Select<Unit, ListItem?>(_ => null)
                 .InvokeCommand(this.SelectItem)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.GoToMovieSeries
+                .Subscribe(this.GoToMovieSeries)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
@@ -352,10 +370,10 @@ namespace MovieList.ViewModels
         }
 
         private void SubscribeToSeriesComponentEvents<TM, TVm>(
-            SeriesComponentFormViewModelBase<TM, TVm> form,
+            SeriesComponentFormBase<TM, TVm> form,
             SeriesFormViewModel seriesForm)
             where TM : EntityBase
-            where TVm : SeriesComponentFormViewModelBase<TM, TVm>
+            where TVm : SeriesComponentFormBase<TM, TVm>
         {
             form.Close
                 .Select<Unit, ListItem?>(_ => null)
@@ -450,77 +468,60 @@ namespace MovieList.ViewModels
 
         private void AddOrUpdate(ListItem item)
         {
-            var movieSeries = item switch
-            {
-                MovieListItem movieItem => movieItem.Movie.Entry?.ParentSeries,
-                SeriesListItem seriesItem => seriesItem.Series.Entry?.ParentSeries,
-                MovieSeriesListItem movieSeriesItem => movieSeriesItem.MovieSeries,
-                _ => throw new NotSupportedException()
-            };
-
-            if (movieSeries != null)
-            {
-                var rootSeries = movieSeries.GetRootSeries();
-                this.source.Edit(list =>
-                {
-                    list.AddOrUpdate(new MovieSeriesListItem(rootSeries));
-                    this.AddOrUpdateSeries(rootSeries, list);
-                });
-            } else
-            {
-                this.source.AddOrUpdate(item);
-            }
+            this.source.AddOrUpdate(item);
+            this.resort.OnNext(Unit.Default);
         }
 
-        private void AddOrUpdateSeries(MovieSeries movieSeries, ISourceUpdater<ListItem, string> list)
+        private void GoToMovieSeries(MovieSeries movieSeries)
         {
-            foreach (var entry in movieSeries.Entries)
-            {
-                list.AddOrUpdate(this.EntryToListItem(entry));
+            this.ClearSubscriptions();
 
-                if (entry.MovieSeries != null)
-                {
-                    this.AddOrUpdateSeries(entry.MovieSeries, list);
-                }
-            }
+            this.SideViewModel = this.CreateMovieSeriesForm(movieSeries);
+
+            var listItem = new MovieSeriesListItem(movieSeries);
+            this.SelectedItem = this.Items.FirstOrDefault(item => item.Item == listItem);
+
+            this.forceSelectedItem.OnNext(Unit.Default);
         }
 
         private void RemoveMovie(Movie movie)
-        {
-            this.source.RemoveKey(new MovieListItem(movie).Id);
-
-            if (movie.Entry != null)
+            => this.source.Edit(list =>
             {
-                this.RemoveMovieSeriesEntry(movie.Entry);
-            }
-        }
+                list.RemoveKey(new MovieListItem(movie).Id);
+
+                if (movie.Entry != null)
+                {
+                    this.RemoveMovieSeriesEntry(movie.Entry, list);
+                }
+            });
 
         private void RemoveSeries(Series series)
-        {
-            this.source.RemoveKey(new SeriesListItem(series).Id);
-
-            if (series.Entry != null)
+            => this.source.Edit(list =>
             {
-                this.RemoveMovieSeriesEntry(series.Entry);
-            }
-        }
+                list.RemoveKey(new SeriesListItem(series).Id);
 
-        private void RemoveMovieSeriesEntry(MovieSeriesEntry movieSeriesEntry)
+                if (series.Entry != null)
+                {
+                    this.RemoveMovieSeriesEntry(series.Entry, list);
+                }
+            });
+
+        private void RemoveMovieSeriesEntry(MovieSeriesEntry movieSeriesEntry, ISourceUpdater<ListItem, string> list)
         {
             var movieSeries = movieSeriesEntry.ParentSeries;
 
             movieSeries.Entries
                 .Where(entry => entry.SequenceNumber >= movieSeriesEntry.SequenceNumber)
                 .Select(this.EntryToListItem)
-                .ForEach(this.source.AddOrUpdate);
+                .ForEach(list.AddOrUpdate);
 
             if (movieSeries.Entries.Count == 0 && movieSeries.ShowTitles)
             {
-                this.source.RemoveKey(new MovieSeriesListItem(movieSeries).Id);
+                list.RemoveKey(new MovieSeriesListItem(movieSeries).Id);
 
                 if (movieSeries.Entry != null)
                 {
-                    this.RemoveMovieSeriesEntry(movieSeries.Entry);
+                    this.RemoveMovieSeriesEntry(movieSeries.Entry, list);
                 }
             }
         }

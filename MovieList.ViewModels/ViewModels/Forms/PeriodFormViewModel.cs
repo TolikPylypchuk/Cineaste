@@ -17,7 +17,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class PeriodFormViewModel : FormViewModelBase<Period, PeriodFormViewModel>
+    public sealed class PeriodFormViewModel : FormBase<Period, PeriodFormViewModel>
     {
         public PeriodFormViewModel(
             Period period,

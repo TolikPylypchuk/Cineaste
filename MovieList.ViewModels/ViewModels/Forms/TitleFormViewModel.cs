@@ -18,7 +18,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class TitleFormViewModel : FormViewModelBase<Title, TitleFormViewModel>
+    public sealed class TitleFormViewModel : FormBase<Title, TitleFormViewModel>
     {
         public TitleFormViewModel(
             Title title,

@@ -22,7 +22,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MovieFormViewModel : TitledFormViewModelBase<Movie, MovieFormViewModel>
+    public sealed class MovieFormViewModel : MovieSeriesComponentFormBase<Movie, MovieFormViewModel>
     {
         private readonly IEntityService<Movie> movieService;
 
@@ -33,7 +33,7 @@ namespace MovieList.ViewModels.Forms
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null,
             IEntityService<Movie>? movieService = null)
-            : base(resourceManager, scheduler)
+            : base(movie.Entry, resourceManager, scheduler)
         {
             this.Movie = movie;
             this.Kinds = kinds;

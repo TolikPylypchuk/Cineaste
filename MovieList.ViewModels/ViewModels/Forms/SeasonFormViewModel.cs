@@ -25,7 +25,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class SeasonFormViewModel : SeriesComponentFormViewModelBase<Season, SeasonFormViewModel>
+    public sealed class SeasonFormViewModel : SeriesComponentFormBase<Season, SeasonFormViewModel>
     {
         private readonly SourceList<Period> periodsSource = new SourceList<Period>();
 

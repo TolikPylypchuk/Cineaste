@@ -19,7 +19,7 @@ using static MovieList.Data.Constants;
 namespace MovieList.ViewModels.Forms
 {
     public sealed class SpecialEpisodeFormViewModel
-        : SeriesComponentFormViewModelBase<SpecialEpisode, SpecialEpisodeFormViewModel>
+        : SeriesComponentFormBase<SpecialEpisode, SpecialEpisodeFormViewModel>
     {
         public SpecialEpisodeFormViewModel(
             SpecialEpisode episode,

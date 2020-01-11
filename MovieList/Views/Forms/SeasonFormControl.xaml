@@ -23,7 +23,10 @@
         </Grid.RowDefinitions>
 
         <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
-            <Control DockPanel.Dock="Left" Padding="0" Width="25" Height="25" Visibility="Hidden" />
+            <Button x:Name="GoToSeriesIconButton" DockPanel.Dock="Left" HorizontalAlignment="Left"
+                    Style="{StaticResource MaterialDesignIconButton}" Padding="0" Width="25" Height="25">
+                <m:PackIcon Kind="ChevronUp" Margin="0" Width="25" Height="25" />
+            </Button>
 
             <Button x:Name="CloseButton" DockPanel.Dock="Right" HorizontalAlignment="Right"
                     Style="{StaticResource MaterialDesignIconButton}" Padding="0" Width="25" Height="25">

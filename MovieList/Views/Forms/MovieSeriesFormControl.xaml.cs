@@ -40,6 +40,9 @@ namespace MovieList.Views.Forms
 
         private void BindCommands(CompositeDisposable disposables)
         {
+            var boolToVisibility = new BooleanToVisibilityTypeConverter();
+            const BooleanToVisibilityHint useHidden = BooleanToVisibilityHint.UseHidden;
+
             this.BindCommand(this.ViewModel, vm => vm.Save, v => v.SaveButton)
                 .DisposeWith(disposables);
 
@@ -49,7 +52,12 @@ namespace MovieList.Views.Forms
             this.BindCommand(this.ViewModel, vm => vm.Close, v => v.CloseButton)
                 .DisposeWith(disposables);
 
-            var boolToVisibility = new BooleanToVisibilityTypeConverter();
+            this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesButton)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.GoToMovieSeries.CanExecute)
+                .BindTo(this, v => v.GoToMovieSeriesButton.Visibility, useHidden, boolToVisibility)
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddTitle, v => v.AddTitleButton)
                 .DisposeWith(disposables);

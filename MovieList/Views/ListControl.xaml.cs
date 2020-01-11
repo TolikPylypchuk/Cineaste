@@ -40,7 +40,7 @@ namespace MovieList.Views
                     .Subscribe(_ => this.List.SelectedItem = null)
                     .DisposeWith(disposables);
 
-                this.ViewModel.CancelSelection
+                this.ViewModel.ForceSelectedItem
                     .Merge(this.ViewModel.Save)
                     .Subscribe(() => this.List.SelectedItem = this.ViewModel.SelectedItem)
                     .DisposeWith(disposables);

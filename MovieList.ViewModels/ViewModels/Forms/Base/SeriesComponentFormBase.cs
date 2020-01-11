@@ -9,12 +9,12 @@ using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.ViewModels.Forms.Base
 {
-    public abstract class SeriesComponentFormViewModelBase<TModel, TViewModel>
-        : TitledFormViewModelBase<TModel, TViewModel>, ISeriesComponentFormViewModel
+    public abstract class SeriesComponentFormBase<TModel, TViewModel>
+        : TitledFormBase<TModel, TViewModel>, ISeriesComponentForm
         where TModel : class
-        where TViewModel : SeriesComponentFormViewModelBase<TModel, TViewModel>
+        where TViewModel : SeriesComponentFormBase<TModel, TViewModel>
     {
-        protected SeriesComponentFormViewModelBase(
+        protected SeriesComponentFormBase(
             SeriesFormViewModel parent,
             IObservable<int> maxSequenceNumber,
             ResourceManager? resourceManager,

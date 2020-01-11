@@ -20,16 +20,16 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms.Base
 {
-    public abstract class TitledFormViewModelBase<TModel, TViewModel> : FormViewModelBase<TModel, TViewModel>
+    public abstract class TitledFormBase<TModel, TViewModel> : FormBase<TModel, TViewModel>
         where TModel : class
-        where TViewModel : TitledFormViewModelBase<TModel, TViewModel>
+        where TViewModel : TitledFormBase<TModel, TViewModel>
     {
         private readonly SourceList<Title> titlesSource = new SourceList<Title>();
 
         private readonly ReadOnlyObservableCollection<TitleFormViewModel> titles;
         private readonly ReadOnlyObservableCollection<TitleFormViewModel> originalTitles;
 
-        protected TitledFormViewModelBase(ResourceManager? resourceManager, IScheduler? scheduler = null)
+        protected TitledFormBase(ResourceManager? resourceManager, IScheduler? scheduler = null)
             : base(resourceManager, scheduler)
         {
             this.InitializeTitles(title => !title.IsOriginal, out this.titles);

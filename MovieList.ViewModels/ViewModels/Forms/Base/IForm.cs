@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace MovieList.ViewModels.Forms.Base
 {
-    public interface IFormViewModel : IReactiveObject
+    public interface IForm : IReactiveObject
     {
         IObservable<bool> FormChanged { get; }
         bool IsFormChanged { get; }

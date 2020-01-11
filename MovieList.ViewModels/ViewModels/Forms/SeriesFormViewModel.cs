@@ -29,14 +29,14 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class SeriesFormViewModel : TitledFormViewModelBase<Series, SeriesFormViewModel>
+    public sealed class SeriesFormViewModel : MovieSeriesComponentFormBase<Series, SeriesFormViewModel>
     {
         private readonly IEntityService<Series> seriesService;
         private readonly ISettingsService settingsService;
 
         private readonly SourceList<EntityBase> componentsSource = new SourceList<EntityBase>();
 
-        private readonly ReadOnlyObservableCollection<ISeriesComponentFormViewModel> componentForms;
+        private readonly ReadOnlyObservableCollection<ISeriesComponentForm> componentForms;
         private readonly ReadOnlyObservableCollection<SeasonFormViewModel> seasons;
         private readonly ReadOnlyObservableCollection<SpecialEpisodeFormViewModel> specialEpisodes;
         private readonly ReadOnlyObservableCollection<SeriesComponentViewModel> components;
@@ -52,7 +52,7 @@ namespace MovieList.ViewModels.Forms
             IScheduler? scheduler = null,
             IEntityService<Series>? seriesService = null,
             ISettingsService? settingsService = null)
-            : base(resourceManager, scheduler)
+            : base(series.Entry, resourceManager, scheduler)
         {
             this.Series = series;
             this.Kinds = kinds;
@@ -60,13 +60,13 @@ namespace MovieList.ViewModels.Forms
             this.seriesService = seriesService ?? Locator.Current.GetService<IEntityService<Series>>(fileName);
             this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
 
-            this.SelectComponent = ReactiveCommand.Create<ISeriesComponentFormViewModel, ISeriesComponentFormViewModel>(
+            this.SelectComponent = ReactiveCommand.Create<ISeriesComponentForm, ISeriesComponentForm>(
                 form => form);
 
             this.componentsSource.Connect()
                 .Transform(this.CreateForm)
                 .Sort(
-                    SortExpressionComparer<ISeriesComponentFormViewModel>.Ascending(form => form.SequenceNumber),
+                    SortExpressionComparer<ISeriesComponentForm>.Ascending(form => form.SequenceNumber),
                     resort: this.resort)
                 .Bind(out this.componentForms)
                 .DisposeMany()
@@ -110,7 +110,7 @@ namespace MovieList.ViewModels.Forms
             this.AddSeason
                 .Merge(this.AddSpecialEpisode)
                 .SelectMany(_ => this.ComponentForms.MaxBy(season => season.SequenceNumber))
-                .Cast<ISeriesComponentFormViewModel>()
+                .Cast<ISeriesComponentForm>()
                 .InvokeCommand(this.SelectComponent);
 
             this.CanDeleteWhenNotNew();
@@ -133,7 +133,7 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public SeriesReleaseStatus ReleaseStatus { get; set; }
 
-        public ReadOnlyObservableCollection<ISeriesComponentFormViewModel> ComponentForms
+        public ReadOnlyObservableCollection<ISeriesComponentForm> ComponentForms
             => this.componentForms;
 
         public ReadOnlyObservableCollection<SeasonFormViewModel> Seasons
@@ -156,7 +156,7 @@ namespace MovieList.ViewModels.Forms
 
         public ReactiveCommand<Unit, Unit> AddSeason { get; }
         public ReactiveCommand<Unit, Unit> AddSpecialEpisode { get; }
-        public ReactiveCommand<ISeriesComponentFormViewModel, ISeriesComponentFormViewModel> SelectComponent { get; }
+        public ReactiveCommand<ISeriesComponentForm, ISeriesComponentForm> SelectComponent { get; }
         public ReactiveCommand<Unit, Unit> ConvertToMiniseries { get; }
 
         public override bool IsNew
@@ -324,7 +324,7 @@ namespace MovieList.ViewModels.Forms
             });
         }
 
-        private ISeriesComponentFormViewModel CreateForm(EntityBase entity)
+        private ISeriesComponentForm CreateForm(EntityBase entity)
             => entity switch
             {
                 Season season => this.CreateSeasonForm(season),
@@ -352,9 +352,9 @@ namespace MovieList.ViewModels.Forms
             return episodeForm;
         }
 
-        private void SubscribeToFormEvents<TM, TVm>(SeriesComponentFormViewModelBase<TM, TVm> componentForm)
+        private void SubscribeToFormEvents<TM, TVm>(SeriesComponentFormBase<TM, TVm> componentForm)
             where TM : EntityBase
-            where TVm : SeriesComponentFormViewModelBase<TM, TVm>
+            where TVm : SeriesComponentFormBase<TM, TVm>
         {
             componentForm.Delete
                 .WhereNotNull()
@@ -388,7 +388,7 @@ namespace MovieList.ViewModels.Forms
                 .Subscribe(this.resort);
         }
 
-        private SeriesComponentViewModel CreateComponent(ISeriesComponentFormViewModel form)
+        private SeriesComponentViewModel CreateComponent(ISeriesComponentForm form)
         {
             var component = SeriesComponentViewModel.FromForm(form);
 

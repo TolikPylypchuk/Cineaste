@@ -21,9 +21,9 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms.Base
 {
-    public abstract class FormViewModelBase<TModel, TViewModel> : ReactiveValidationObject<TViewModel>, IFormViewModel
+    public abstract class FormBase<TModel, TViewModel> : ReactiveValidationObject<TViewModel>, IForm
         where TModel : class
-        where TViewModel : FormViewModelBase<TModel, TViewModel>
+        where TViewModel : FormBase<TModel, TViewModel>
     {
         private readonly BehaviorSubject<bool> formChangedSubject = new BehaviorSubject<bool>(false);
         private readonly BehaviorSubject<bool> validSubject = new BehaviorSubject<bool>(true);
@@ -32,7 +32,7 @@ namespace MovieList.ViewModels.Forms.Base
         private readonly List<IObservable<bool>> changesToTrack = new List<IObservable<bool>>();
         private readonly List<IObservable<bool>> validationsToTrack = new List<IObservable<bool>>();
 
-        protected FormViewModelBase(ResourceManager? resourceManager = null, IScheduler? scheduler = null)
+        protected FormBase(ResourceManager? resourceManager = null, IScheduler? scheduler = null)
         {
             this.ResourceManager = resourceManager ?? Locator.Current.GetService<ResourceManager>();
             this.Scheduler = scheduler ?? System.Reactive.Concurrency.Scheduler.Default;
@@ -88,7 +88,7 @@ namespace MovieList.ViewModels.Forms.Base
         protected IObservable<bool> IsCollectionChanged<TVm, TM>(
             Expression<Func<TViewModel, ReadOnlyObservableCollection<TVm>>> property,
             Func<TViewModel, ICollection<TM>> itemCollection)
-            where TVm : FormViewModelBase<TM, TVm>
+            where TVm : FormBase<TM, TVm>
             where TM : class
         {
             string propertyName = property.GetMemberName();
@@ -105,7 +105,7 @@ namespace MovieList.ViewModels.Forms.Base
         }
 
         protected IObservable<bool> IsCollectionValid<TVm, TM>(ReadOnlyObservableCollection<TVm> viewModels)
-            where TVm : FormViewModelBase<TM, TVm>
+            where TVm : FormBase<TM, TVm>
             where TM : class
             => viewModels.ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.Valid)
