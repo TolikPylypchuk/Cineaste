@@ -27,7 +27,7 @@ namespace MovieList.Views
 
                 this.WhenAnyValue(v => v.List.SelectedItem)
                     .WhereNotNull()
-                    .InvokeCommand(this.ViewModel.SelectItem)
+                    .InvokeCommand(this.ViewModel.PreviewSelectItem)
                     .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.List.SelectedItem)
@@ -41,11 +41,7 @@ namespace MovieList.Views
                     .DisposeWith(disposables);
 
                 this.ViewModel.ForceSelectedItem
-                    .Merge(this.ViewModel.Save)
                     .Subscribe(() => this.List.SelectedItem = this.ViewModel.SelectedItem)
-                    .DisposeWith(disposables);
-
-                this.OneWayBind(this.ViewModel, vm => vm.SideViewModel, v => v.SideViewHost.ViewModel)
                     .DisposeWith(disposables);
             });
         }

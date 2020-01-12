@@ -44,11 +44,11 @@ namespace MovieList.ViewModels
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(kinds =>
                 {
-                    this.List = new ListViewModel(this.FileName, this.Kinds);
-                    this.Content ??= this.List;
+                    this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
+                    this.Content ??= this.MainContent;
                 });
 
-            this.SwitchToList = ReactiveCommand.Create(() => { this.Content = this.List; });
+            this.SwitchToList = ReactiveCommand.Create(() => { this.Content = this.MainContent; });
             this.SwitchToStats = ReactiveCommand.Create(() => { });
             this.SwitchToSettings = ReactiveCommand.Create(() => { this.Content = this.Settings; });
 
@@ -66,7 +66,7 @@ namespace MovieList.ViewModels
         [Reactive]
         public ReactiveObject Content { get; set; } = null!;
 
-        public ListViewModel List { get; private set; } = null!;
+        public FileMainContentViewModel MainContent { get; private set; } = null!;
         public SettingsViewModel Settings { get; private set; }
 
         public ReadOnlyObservableCollection<Kind> Kinds

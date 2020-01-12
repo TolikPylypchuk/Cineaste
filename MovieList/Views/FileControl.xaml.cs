@@ -61,7 +61,7 @@ namespace MovieList.Views
                     this.ViewModel,
                     vm => vm.Content,
                     v => v.ListItem.IsSelected,
-                    content => content == this.ViewModel.List)
+                    content => content == this.ViewModel.MainContent)
                 .DisposeWith(disposables);
 
             this.StatsItem = new FirstLevelNavigationItem
