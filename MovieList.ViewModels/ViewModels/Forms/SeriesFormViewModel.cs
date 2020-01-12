@@ -360,13 +360,13 @@ namespace MovieList.ViewModels.Forms
                 .WhereNotNull()
                 .Subscribe(s => this.componentsSource.Remove(s));
 
-            componentForm.SelectNext
+            componentForm.GoToNext
                 .Select(_ => this.Components.First(component =>
                     component.SequenceNumber == componentForm.SequenceNumber + 1))
                 .Select(component => component.Form)
                 .SubscribeAsync(async form => await this.SelectComponent.Execute(form));
 
-            componentForm.SelectPrevious
+            componentForm.GoToPrevious
                 .Select(_ => this.Components.First(component =>
                     component.SequenceNumber == componentForm.SequenceNumber - 1))
                 .Select(component => component.Form)

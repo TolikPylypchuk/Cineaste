@@ -34,12 +34,12 @@
             </Button>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button x:Name="SelectPreviousButton" Style="{StaticResource MaterialDesignIconButton}"
+                <Button x:Name="GoToPreviousButton" Style="{StaticResource MaterialDesignIconButton}"
                         Padding="0" Width="25" Height="25">
                     <m:PackIcon Kind="ChevronLeft" Margin="0" Width="25" Height="25" />
                 </Button>
 
-                <Button x:Name="SelectNextButton" Style="{StaticResource MaterialDesignIconButton}"
+                <Button x:Name="GoToNextButton" Style="{StaticResource MaterialDesignIconButton}"
                         Padding="0" Width="25" Height="25">
                     <m:PackIcon Kind="ChevronRight" Margin="0" Width="25" Height="25" />
                 </Button>

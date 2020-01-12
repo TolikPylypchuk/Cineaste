@@ -117,28 +117,30 @@ namespace MovieList.ViewModels
             if (!isSame || vm == null)
             {
                 this.ClearSubscriptions();
-
-                this.SideViewModel = vm?.Item switch
-                {
-                    null =>
-                        this.CreateNewItemViewModel(),
-                    MovieListItem movieItem =>
-                        this.CreateMovieForm(movieItem.Movie),
-                    SeriesListItem seriesItem when !seriesItem.Series.IsMiniseries =>
-                        this.CreateSeriesForm(seriesItem.Series),
-                    SeriesListItem seriesItem when seriesItem.Series.IsMiniseries =>
-                        this.CreateMiniseriesForm(seriesItem.Series),
-                    MovieSeriesListItem movieSeriesItem =>
-                        this.CreateMovieSeriesForm(movieSeriesItem.MovieSeries),
-                    _ =>
-                        throw new NotSupportedException("List item type not supported")
-                };
+                this.SideViewModel = this.CreateSideViewModel(vm?.Item);
             }
 
             return true;
         }
 
-        private NewItemViewModel CreateNewItemViewModel()
+        private ReactiveObject CreateSideViewModel(ListItem? item)
+            => item switch
+            {
+                null =>
+                    this.CreateNewItemViewModel(),
+                MovieListItem movieItem =>
+                    this.CreateMovieForm(movieItem.Movie),
+                SeriesListItem seriesItem when !seriesItem.Series.IsMiniseries =>
+                    this.CreateSeriesForm(seriesItem.Series),
+                SeriesListItem seriesItem when seriesItem.Series.IsMiniseries =>
+                    this.CreateMiniseriesForm(seriesItem.Series),
+                MovieSeriesListItem movieSeriesItem =>
+                    this.CreateMovieSeriesForm(movieSeriesItem.MovieSeries),
+                _ =>
+                    throw new NotSupportedException("List item type not supported")
+            };
+
+    private NewItemViewModel CreateNewItemViewModel()
         {
             var viewModel = new NewItemViewModel();
 
@@ -216,6 +218,11 @@ namespace MovieList.ViewModels
                 .Subscribe(this.GoToMovieSeries)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.GoToNext
+                .Merge(form.GoToPrevious)
+                .Subscribe(this.GoToMovieSeriesEntry)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             return form;
         }
 
@@ -272,6 +279,11 @@ namespace MovieList.ViewModels
                 .Subscribe(this.GoToMovieSeries)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.GoToNext
+                .Merge(form.GoToPrevious)
+                .Subscribe(this.GoToMovieSeriesEntry)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             return form;
         }
 
@@ -318,6 +330,11 @@ namespace MovieList.ViewModels
                 .Subscribe(this.GoToMovieSeries)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.GoToNext
+                .Merge(form.GoToPrevious)
+                .Subscribe(this.GoToMovieSeriesEntry)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             return form;
         }
 
@@ -346,6 +363,11 @@ namespace MovieList.ViewModels
 
             form.GoToMovieSeries
                 .Subscribe(this.GoToMovieSeries)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.GoToNext
+                .Merge(form.GoToPrevious)
+                .Subscribe(this.GoToMovieSeriesEntry)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
@@ -479,6 +501,16 @@ namespace MovieList.ViewModels
             this.SideViewModel = this.CreateMovieSeriesForm(movieSeries);
 
             var listItem = new MovieSeriesListItem(movieSeries);
+            this.SelectedItem = this.Items.FirstOrDefault(item => item.Item == listItem);
+
+            this.forceSelectedItem.OnNext(Unit.Default);
+        }
+
+        private void GoToMovieSeriesEntry(MovieSeriesEntry entry)
+        {
+            var listItem = this.EntryToListItem(entry);
+
+            this.SideViewModel = this.CreateSideViewModel(listItem);
             this.SelectedItem = this.Items.FirstOrDefault(item => item.Item == listItem);
 
             this.forceSelectedItem.OnNext(Unit.Default);

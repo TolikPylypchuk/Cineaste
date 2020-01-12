@@ -34,11 +34,11 @@ namespace MovieList.ViewModels.Forms.Base
             this.MoveUp = ReactiveCommand.Create(() => { this.SequenceNumber--; }, isNotFirst);
             this.MoveDown = ReactiveCommand.Create(() => { this.SequenceNumber++; }, isNotLast);
 
-            this.SelectNext = ReactiveCommand.Create(
+            this.GoToNext = ReactiveCommand.Create(
                 () => { },
                 Observable.CombineLatest(isNotLast, this.Valid).AllTrue());
 
-            this.SelectPrevious = ReactiveCommand.Create(
+            this.GoToPrevious = ReactiveCommand.Create(
                 () => { },
                 Observable.CombineLatest(isNotFirst, this.Valid).AllTrue());
         }
@@ -55,8 +55,8 @@ namespace MovieList.ViewModels.Forms.Base
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
         public ReactiveCommand<Unit, Unit> MoveDown { get; }
 
-        public ReactiveCommand<Unit, Unit> SelectNext { get; }
-        public ReactiveCommand<Unit, Unit> SelectPrevious { get; }
+        public ReactiveCommand<Unit, Unit> GoToNext { get; }
+        public ReactiveCommand<Unit, Unit> GoToPrevious { get; }
 
         public abstract int GetNextYear();
     }
