@@ -58,7 +58,7 @@ namespace MovieList.ViewModels
             this.SelectItem = ReactiveCommand.Create<ListItem?, bool>(this.OnSelectItem);
             this.PreviewSelectItem = ReactiveCommand.Create<ListItemViewModel, ListItemViewModel>(vm => vm);
             this.ForceSelectedItem = ReactiveCommand.Create(() => { });
-            this.AddOrUpdate = ReactiveCommand.Create<ListItem>(this.OnAddOrUpdate);
+            this.AddOrUpdate = ReactiveCommand.Create<ListItem, ListItem>(this.OnAddOrUpdate);
             this.RemoveMovie = ReactiveCommand.Create<Movie>(this.OnRemoveMovie);
             this.RemoveSeries = ReactiveCommand.Create<Series>(this.OnRemoveSeries);
 
@@ -74,7 +74,7 @@ namespace MovieList.ViewModels
         public ReactiveCommand<ListItem?, bool> SelectItem { get; }
         public ReactiveCommand<ListItemViewModel, ListItemViewModel> PreviewSelectItem { get; }
         public ReactiveCommand<Unit, Unit> ForceSelectedItem { get; }
-        public ReactiveCommand<ListItem, Unit> AddOrUpdate { get; }
+        public ReactiveCommand<ListItem, ListItem> AddOrUpdate { get; }
         public ReactiveCommand<Movie, Unit> RemoveMovie { get; }
         public ReactiveCommand<Series, Unit> RemoveSeries { get; }
 
@@ -87,10 +87,12 @@ namespace MovieList.ViewModels
             return !isSame || item == null;
         }
 
-        private void OnAddOrUpdate(ListItem item)
+        private ListItem OnAddOrUpdate(ListItem item)
         {
             this.source.AddOrUpdate(item);
             this.resort.OnNext(Unit.Default);
+
+            return item;
         }
 
         private void OnRemoveMovie(Movie movie)
