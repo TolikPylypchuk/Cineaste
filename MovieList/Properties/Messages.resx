@@ -231,6 +231,9 @@
   <data name="DeleteSpecialEpisodeTitle" xml:space="preserve">
     <value>Delete Special Episode</value>
   </data>
+  <data name="Detach" xml:space="preserve">
+    <value>Detach</value>
+  </data>
   <data name="Documentary" xml:space="preserve">
     <value>Documentary</value>
   </data>
@@ -260,6 +263,9 @@
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
+  </data>
+  <data name="HideDisplayNumber" xml:space="preserve">
+    <value>Hide display number</value>
   </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home Page</value>
@@ -455,6 +461,9 @@
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="ShowDisplayNumber" xml:space="preserve">
+    <value>Show display number</value>
   </data>
   <data name="SingleDayRelease" xml:space="preserve">
     <value>Single-Day Release</value>

@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace MovieList.ViewModels.Forms.Base
 {
-    public interface IMovieSeriesComponent : IReactiveObject
+    public interface IMovieSeriesEntryForm : IReactiveObject
     {
         MovieSeriesEntry? MovieSeriesEntry { get; }
     }

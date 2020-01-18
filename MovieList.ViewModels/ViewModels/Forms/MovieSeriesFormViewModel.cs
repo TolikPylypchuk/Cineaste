@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
+
+using DynamicData;
+using DynamicData.Binding;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
@@ -19,9 +23,12 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MovieSeriesFormViewModel : MovieSeriesComponentFormBase<MovieSeries, MovieSeriesFormViewModel>
+    public sealed class MovieSeriesFormViewModel : MovieSeriesEntryFormBase<MovieSeries, MovieSeriesFormViewModel>
     {
         private readonly IEntityService<MovieSeries> movieSeriesService;
+
+        private readonly SourceList<MovieSeriesEntry> entriesSource = new SourceList<MovieSeriesEntry>();
+        private readonly ReadOnlyObservableCollection<MovieSeriesEntryViewModel> entries;
 
         public MovieSeriesFormViewModel(
             MovieSeries movieSeries,
@@ -35,6 +42,14 @@ namespace MovieList.ViewModels.Forms
 
             this.movieSeriesService = movieSeriesService ??
                 Locator.Current.GetService<IEntityService<MovieSeries>>(fileName);
+
+            this.entriesSource.Connect()
+                .Transform(entry => new MovieSeriesEntryViewModel(entry, this, this.ResourceManager, this.Scheduler))
+                .AutoRefresh(vm => vm.SequenceNumber)
+                .Sort(SortExpressionComparer<MovieSeriesEntryViewModel>.Ascending(vm => vm.SequenceNumber))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out this.entries)
+                .Subscribe();
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
@@ -60,6 +75,9 @@ namespace MovieList.ViewModels.Forms
         }
 
         public MovieSeries MovieSeries { get; }
+
+        public ReadOnlyObservableCollection<MovieSeriesEntryViewModel> Entries
+            => this.entries;
 
         [Reactive]
         public bool HasTitles { get; set; }
@@ -121,6 +139,12 @@ namespace MovieList.ViewModels.Forms
         protected override void CopyProperties()
         {
             base.CopyProperties();
+
+            this.entriesSource.Edit(list =>
+            {
+                list.Clear();
+                list.AddRange(this.MovieSeries.Entries);
+            });
 
             this.HasTitles = this.MovieSeries.Titles.Count > 0;
             this.ShowTitles = this.MovieSeries.ShowTitles;

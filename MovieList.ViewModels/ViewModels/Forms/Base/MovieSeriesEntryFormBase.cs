@@ -11,12 +11,12 @@ using ReactiveUI;
 
 namespace MovieList.ViewModels.Forms.Base
 {
-    public abstract class MovieSeriesComponentFormBase<TModel, TViewModel>
-        : TitledFormBase<TModel, TViewModel>, IMovieSeriesComponent
+    public abstract class MovieSeriesEntryFormBase<TModel, TViewModel>
+        : TitledFormBase<TModel, TViewModel>, IMovieSeriesEntryForm
         where TModel : class
-        where TViewModel : MovieSeriesComponentFormBase<TModel, TViewModel>
+        where TViewModel : MovieSeriesEntryFormBase<TModel, TViewModel>
     {
-        protected MovieSeriesComponentFormBase(
+        protected MovieSeriesEntryFormBase(
             MovieSeriesEntry? entry,
             ResourceManager? resourceManager,
             IScheduler? scheduler = null)

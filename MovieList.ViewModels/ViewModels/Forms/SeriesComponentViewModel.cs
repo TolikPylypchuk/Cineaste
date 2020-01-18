@@ -16,7 +16,7 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class SeriesComponentViewModel : ReactiveObject, IEnableLogger
+    public sealed class SeriesComponentViewModel : ReactiveObject
     {
         private SeriesComponentViewModel(SeasonFormViewModel form)
         {

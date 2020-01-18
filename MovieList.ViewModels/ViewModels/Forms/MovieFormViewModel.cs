@@ -22,7 +22,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MovieFormViewModel : MovieSeriesComponentFormBase<Movie, MovieFormViewModel>
+    public sealed class MovieFormViewModel : MovieSeriesEntryFormBase<Movie, MovieFormViewModel>
     {
         private readonly IEntityService<Movie> movieService;
 

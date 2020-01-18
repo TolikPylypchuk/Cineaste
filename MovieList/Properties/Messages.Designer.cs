@@ -403,6 +403,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detach.
+        /// </summary>
+        public static string Detach {
+            get {
+                return ResourceManager.GetString("Detach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentary.
         /// </summary>
         public static string Documentary {
@@ -489,6 +498,15 @@ namespace MovieList.Properties {
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide display number.
+        /// </summary>
+        public static string HideDisplayNumber {
+            get {
+                return ResourceManager.GetString("HideDisplayNumber", resourceCulture);
             }
         }
         
@@ -1074,6 +1092,15 @@ namespace MovieList.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show display number.
+        /// </summary>
+        public static string ShowDisplayNumber {
+            get {
+                return ResourceManager.GetString("ShowDisplayNumber", resourceCulture);
             }
         }
         

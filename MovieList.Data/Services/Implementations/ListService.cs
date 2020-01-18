@@ -23,7 +23,7 @@ namespace MovieList.Data.Services.Implementations
             => this.WithTransactionAsync((connection, transaction) =>
                 this.GetListAsync(kinds, connection, transaction));
 
-        public async Task<MovieList> GetListAsync(
+        private async Task<MovieList> GetListAsync(
             IList<Kind> kinds,
             SqliteConnection connection,
             IDbTransaction transaction)

@@ -74,6 +74,8 @@
 
                 <ItemsControl x:Name="OriginalTitles" />
 
+                <ItemsControl x:Name="Entries" Margin="0,8" Grid.IsSharedSizeScope="True" />
+
                 <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
 
                 <Grid Margin="0,8">

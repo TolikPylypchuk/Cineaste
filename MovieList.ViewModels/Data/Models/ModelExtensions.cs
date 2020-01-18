@@ -2,15 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using static MovieList.Data.Constants;
+
 namespace MovieList.Data.Models
 {
     public static class ModelExtensions
     {
-        public static string GetDisplayNumber(this MovieSeriesEntry? entry)
+        public static string GetNumberToDisplay(this MovieSeriesEntry? entry)
             => entry != null
                 ? entry.ParentSeries.IsLooselyConnected
                     ? $"({entry.SequenceNumber})"
-                    : entry.DisplayNumber?.ToString() ?? "-"
+                    : entry.DisplayNumber?.ToString() ?? NoDisplayNumberPlaceholder
+                : String.Empty;
+
+        public static string AsDisplayNumber(this int? number, bool inParentheses)
+            => number != null
+                ? inParentheses ? $"({number})" : number.ToString() ?? NoDisplayNumberPlaceholder
                 : String.Empty;
 
         public static string GetActiveColor(this Movie movie)
@@ -92,6 +99,27 @@ namespace MovieList.Data.Models
         {
             var lastEntry = movieSeries.GetLastEntry();
             return lastEntry.Movie?.Year ?? lastEntry.Series?.EndYear ?? lastEntry.MovieSeries!.GetEndYear();
+        }
+
+        public static string GetYears(this MovieSeriesEntry entry)
+            => entry.Movie != null
+                ? entry.Movie.Year.ToString()
+                : entry.Series != null
+                    ? entry.Series.GetYears()
+                    : entry.MovieSeries!.GetYears();
+        
+        public static string GetYears(this Series series)
+        {
+            int startYear = series.StartYear;
+            int endYear = series.EndYear;
+            return startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";
+        }
+
+        public static string GetYears(this MovieSeries movieSeries)
+        {
+            int startYear = movieSeries.GetStartYear();
+            int endYear = movieSeries.GetEndYear();
+            return startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";
         }
     }
 }

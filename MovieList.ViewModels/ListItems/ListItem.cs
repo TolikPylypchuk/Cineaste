@@ -18,7 +18,7 @@ namespace MovieList.ListItems
             string color)
         {
             this.Id = id;
-            this.DisplayNumber = entry.GetDisplayNumber();
+            this.DisplayNumber = entry.GetNumberToDisplay();
             this.Title = title;
             this.OriginalTitle = originalTitle;
             this.Year = year;

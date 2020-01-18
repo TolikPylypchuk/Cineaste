@@ -23,6 +23,7 @@ namespace MovieList.Data
         public const int PeriodMaxNumberOfEpisodes = 50;
 
         public static readonly string SeasonNumberPlaceholder = "#";
+        public static readonly string NoDisplayNumberPlaceholder = "-";
 
         internal const string SettingsListNameKey = "list.name";
         internal const string SettingsListVersionKey = "list.version";
