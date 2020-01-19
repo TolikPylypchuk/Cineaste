@@ -173,12 +173,12 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
-                .SubscribeAsync(this.GoToMovieSeries)
+                .SubscribeAsync(this.GoToMovieSeriesAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToNext
                 .Merge(form.GoToPrevious)
-                .SubscribeAsync(this.GoToMovieSeriesEntry)
+                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
@@ -240,12 +240,12 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
-                .SubscribeAsync(this.GoToMovieSeries)
+                .SubscribeAsync(this.GoToMovieSeriesAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToNext
                 .Merge(form.GoToPrevious)
-                .SubscribeAsync(this.GoToMovieSeriesEntry)
+                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
@@ -297,12 +297,12 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
-                .SubscribeAsync(this.GoToMovieSeries)
+                .SubscribeAsync(this.GoToMovieSeriesAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToNext
                 .Merge(form.GoToPrevious)
-                .SubscribeAsync(this.GoToMovieSeriesEntry)
+                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
@@ -320,11 +320,27 @@ namespace MovieList.ViewModels
             this.Log().Debug($"Creating a form for movie series: {movieSeries}");
 
             var form = new MovieSeriesFormViewModel(movieSeries, this.FileName);
+            var detachedEntries = new List<MovieSeriesEntry>();
 
             form.Save
                 .Select(m => new MovieSeriesListItem(m))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .InvokeCommand<ListItem>(this.List.AddOrUpdate)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Save
+                .Discard()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeAsync(async item =>
+                {
+                    foreach (var entry in detachedEntries)
+                    {
+                        this.ClearEntryConnection(entry);
+                        await this.List.AddOrUpdate.Execute(this.List.EntryToListItem(entry));
+                    }
+
+                    detachedEntries.Clear();
+                })
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Save
@@ -337,13 +353,17 @@ namespace MovieList.ViewModels
                 .InvokeCommand(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.SelectEntry
+                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             form.GoToMovieSeries
-                .SubscribeAsync(this.GoToMovieSeries)
+                .SubscribeAsync(this.GoToMovieSeriesAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToNext
                 .Merge(form.GoToPrevious)
-                .SubscribeAsync(this.GoToMovieSeriesEntry)
+                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
@@ -351,6 +371,10 @@ namespace MovieList.ViewModels
                 .Merge(form.GoToNext.Discard())
                 .Merge(form.GoToPrevious.Discard())
                 .InvokeCommand(this.List.ForceSelectedItem)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.DetachEntry
+                .Subscribe(detachedEntries.Add)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
@@ -471,7 +495,7 @@ namespace MovieList.ViewModels
             this.SideViewModel = seriesForm;
         }
 
-        private async Task GoToMovieSeries(MovieSeries movieSeries)
+        private async Task GoToMovieSeriesAsync(MovieSeries movieSeries)
         {
             this.ClearSubscriptions();
 
@@ -482,21 +506,28 @@ namespace MovieList.ViewModels
             await this.List.ForceSelectedItem.Execute(Unit.Default);
         }
 
-        private async Task GoToMovieSeriesEntry(MovieSeriesEntry entry)
+        private async Task GoToMovieSeriesEntryAsync(MovieSeriesEntry entry)
         {
-            var listItem = this.EntryToListItem(entry);
+            var listItem = this.List.EntryToListItem(entry);
 
             this.SideViewModel = this.CreateSideViewModel(listItem);
             await this.SelectItem.Execute(listItem);
             await this.List.ForceSelectedItem.Execute(Unit.Default);
         }
 
-        private ListItem EntryToListItem(MovieSeriesEntry entry)
-            => entry.Movie != null
-                ? new MovieListItem(entry.Movie)
-                : entry.Series != null
-                    ? (ListItem)new SeriesListItem(entry.Series)
-                    : new MovieSeriesListItem(entry.MovieSeries!);
+        private void ClearEntryConnection(MovieSeriesEntry entry)
+        {
+            if (entry.Movie != null)
+            {
+                entry.Movie.Entry = null;
+            } else if (entry.Series != null)
+            {
+                entry.Series.Entry = null;
+            } else if (entry.MovieSeries != null)
+            {
+                entry.MovieSeries.Entry = null;
+            }
+        }
 
         private void ClearSubscriptions()
         {

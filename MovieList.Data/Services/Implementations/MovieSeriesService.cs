@@ -51,6 +51,12 @@ namespace MovieList.Data.Services.Implementations
                 title => title.MovieSeriesId,
                 (title, movieSeriesId) => title.MovieSeriesId = movieSeriesId);
 
+            await new DependentEntityUpdater(connection, transaction).UpdateDependentEntitiesAsync(
+                movieSeries,
+                movieSeries.Entries,
+                entry => entry.ParentSeriesId,
+                (entry, movieSeriesId) => entry.ParentSeriesId = movieSeriesId);
+
             if (movieSeries.Entry != null)
             {
                 await connection.UpdateAsync(movieSeries.Entry, transaction);

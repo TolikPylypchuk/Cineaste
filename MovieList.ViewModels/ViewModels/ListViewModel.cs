@@ -78,6 +78,13 @@ namespace MovieList.ViewModels
         public ReactiveCommand<Movie, Unit> RemoveMovie { get; }
         public ReactiveCommand<Series, Unit> RemoveSeries { get; }
 
+        public ListItem EntryToListItem(MovieSeriesEntry entry)
+            => entry.Movie != null
+                ? new MovieListItem(entry.Movie)
+                : entry.Series != null
+                    ? (ListItem)new SeriesListItem(entry.Series)
+                    : new MovieSeriesListItem(entry.MovieSeries!);
+
         private bool OnSelectItem(ListItem? item)
         {
             bool isSame = this.SelectedItem?.Item.Id == item?.Id;
@@ -89,7 +96,18 @@ namespace MovieList.ViewModels
 
         private ListItem OnAddOrUpdate(ListItem item)
         {
-            this.source.AddOrUpdate(item);
+            this.source.Edit(list =>
+            {
+                list.AddOrUpdate(item);
+
+                if (item is MovieSeriesListItem movieSeriesItem)
+                {
+                    movieSeriesItem.MovieSeries.Entries
+                        .Select(this.EntryToListItem)
+                        .ForEach(list.AddOrUpdate);
+                }
+            });
+            
             this.resort.OnNext(Unit.Default);
 
             return item;
@@ -136,12 +154,5 @@ namespace MovieList.ViewModels
                 }
             }
         }
-
-        private ListItem EntryToListItem(MovieSeriesEntry entry)
-            => entry.Movie != null
-                ? new MovieListItem(entry.Movie)
-                : entry.Series != null
-                    ? (ListItem)new SeriesListItem(entry.Series)
-                    : new MovieSeriesListItem(entry.MovieSeries!);
     }
 }

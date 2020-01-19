@@ -11,14 +11,14 @@ namespace MovieList.Data.Models
         public static string GetNumberToDisplay(this MovieSeriesEntry? entry)
             => entry != null
                 ? entry.ParentSeries.IsLooselyConnected
-                    ? $"({entry.SequenceNumber})"
+                    ? $"({entry.DisplayNumber})"
                     : entry.DisplayNumber?.ToString() ?? NoDisplayNumberPlaceholder
                 : String.Empty;
 
         public static string AsDisplayNumber(this int? number, bool inParentheses)
             => number != null
                 ? inParentheses ? $"({number})" : number.ToString() ?? NoDisplayNumberPlaceholder
-                : String.Empty;
+                : NoDisplayNumberPlaceholder;
 
         public static string GetActiveColor(this Movie movie)
             => movie.IsWatched

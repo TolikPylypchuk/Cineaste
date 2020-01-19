@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
@@ -44,14 +45,12 @@ namespace MovieList.ViewModels.Forms
                 Locator.Current.GetService<IEntityService<MovieSeries>>(fileName);
 
             this.entriesSource.Connect()
-                .Transform(entry => new MovieSeriesEntryViewModel(entry, this, this.ResourceManager, this.Scheduler))
+                .Transform(this.CreateEntryViewModel)
                 .AutoRefresh(vm => vm.SequenceNumber)
                 .Sort(SortExpressionComparer<MovieSeriesEntryViewModel>.Ascending(vm => vm.SequenceNumber))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.entries)
                 .Subscribe();
-
-            this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             var formTitleWhenHasTitles = this.FormTitle;
             var formTitleWhenDoesNotHaveTitles = Observable.Return(this.GetFormTitle(this.MovieSeries));
@@ -61,6 +60,15 @@ namespace MovieList.ViewModels.Forms
                     .Select(hasTitles => hasTitles ? formTitleWhenHasTitles : formTitleWhenDoesNotHaveTitles)
                     .Switch()
                     .ObserveOn(RxApp.MainThreadScheduler);
+
+            this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
+
+            var canSelectEntry = this.FormChanged.Invert();
+
+            this.SelectEntry = ReactiveCommand.Create<MovieSeriesEntryViewModel, MovieSeriesEntry>(
+                vm => vm.Entry, canSelectEntry);
+
+            this.DetachEntry = ReactiveCommand.Create<MovieSeriesEntry, MovieSeriesEntry>(this.OnDetachEntry);
 
             this.WhenAnyValue(vm => vm.HasTitles)
                 .BindTo(this, vm => vm.ShowTitles);
@@ -93,6 +101,9 @@ namespace MovieList.ViewModels.Forms
 
         public ValidationHelper PosterUrlRule { get; }
 
+        public ReactiveCommand<MovieSeriesEntryViewModel, MovieSeriesEntry> SelectEntry { get; }
+        public ReactiveCommand<MovieSeriesEntry, MovieSeriesEntry> DetachEntry { get; }
+
         public override bool IsNew
             => this.MovieSeries.Id == default;
 
@@ -112,6 +123,8 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.IsLooselyConnected, vm => vm.MovieSeries.IsLooselyConnected);
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.MovieSeries.PosterUrl.EmptyIfNull());
 
+            this.TrackChanges(this.IsCollectionChanged(vm => vm.Entries, vm => vm.MovieSeries.Entries));
+
             base.EnableChangeTracking();
         }
 
@@ -123,6 +136,21 @@ namespace MovieList.ViewModels.Forms
             }
 
             await this.SaveTitlesAsync();
+
+            foreach (var entry in this.Entries)
+            {
+                await entry.Save.Execute();
+            }
+
+            foreach (var entry in this.entriesSource.Items.Except(this.MovieSeries.Entries).ToList())
+            {
+                this.MovieSeries.Entries.Add(entry);
+            }
+
+            foreach (var entry in this.MovieSeries.Entries.Except(this.entriesSource.Items).ToList())
+            {
+                this.MovieSeries.Entries.Remove(entry);
+            }
 
             this.MovieSeries.ShowTitles = this.ShowTitles;
             this.MovieSeries.IsLooselyConnected = this.IsLooselyConnected;
@@ -172,5 +200,111 @@ namespace MovieList.ViewModels.Forms
             this.Titles[0].Name = titleName;
             this.OriginalTitles[0].Name = originalTitleName;
         }
+
+        private MovieSeriesEntryViewModel CreateEntryViewModel(MovieSeriesEntry entry)
+        {
+            var viewModel = new MovieSeriesEntryViewModel(entry, this, this.ResourceManager, this.Scheduler);
+            var subsciptions = new CompositeDisposable();
+
+            viewModel.Select
+                .Select(_ => viewModel)
+                .InvokeCommand(this.SelectEntry)
+                .DisposeWith(subsciptions);
+
+            viewModel.MoveUp
+                .Select(_ => viewModel)
+                .Subscribe(this.MoveEntryUp)
+                .DisposeWith(subsciptions);
+
+            viewModel.MoveDown
+                .Select(_ => viewModel)
+                .Subscribe(this.MoveEntryDown)
+                .DisposeWith(subsciptions);
+
+            viewModel.HideDisplayNumber
+                .Select(_ => viewModel)
+                .Subscribe(this.HideDisplayNumber)
+                .DisposeWith(subsciptions);
+
+            viewModel.ShowDisplayNumber
+                .Select(_ => viewModel)
+                .Subscribe(this.ShowDisplayNumber)
+                .DisposeWith(subsciptions);
+
+            viewModel.Delete
+                .WhereNotNull()
+                .InvokeCommand(this.DetachEntry)
+                .DisposeWith(subsciptions);
+
+            viewModel.Delete
+                .WhereNotNull()
+                .Discard()
+                .Subscribe(subsciptions.Dispose)
+                .DisposeWith(subsciptions);
+
+            return viewModel;
+        }
+
+        private void MoveEntryUp(MovieSeriesEntryViewModel vm)
+            => this.SwapEntryNumbers(this.Entries.First(e => e.SequenceNumber == vm.SequenceNumber - 1), vm);
+
+        private void MoveEntryDown(MovieSeriesEntryViewModel vm)
+            => this.SwapEntryNumbers(vm, this.Entries.First(e => e.SequenceNumber == vm.SequenceNumber + 1));
+
+        private void SwapEntryNumbers(MovieSeriesEntryViewModel first, MovieSeriesEntryViewModel second)
+        {
+            first.SequenceNumber++;
+            second.SequenceNumber--;
+
+            if (first.DisplayNumber.HasValue)
+            {
+                first.DisplayNumber++;
+            }
+
+            if (second.DisplayNumber.HasValue)
+            {
+                second.DisplayNumber--;
+            }
+        }
+
+        private MovieSeriesEntry OnDetachEntry(MovieSeriesEntry entry)
+        {
+            this.DecrementNumbers(entry.SequenceNumber);
+
+            this.Entries
+                .Where(e => e.SequenceNumber >= entry.SequenceNumber)
+                .ForEach(e => e.SequenceNumber--);
+
+            this.entriesSource.Remove(entry);
+
+            return entry;
+        }
+
+        private void HideDisplayNumber(MovieSeriesEntryViewModel vm)
+        {
+            vm.DisplayNumber = null;
+            this.DecrementNumbers(vm.SequenceNumber);
+        }
+
+        private void ShowDisplayNumber(MovieSeriesEntryViewModel vm)
+        {
+            vm.DisplayNumber = (this.Entries
+                .Where(entry => entry.SequenceNumber < vm.SequenceNumber && entry.DisplayNumber.HasValue)
+                .Select(entry => entry.DisplayNumber)
+                .Max() ?? 0) + 1;
+
+            this.IncrementNumbers(vm.SequenceNumber);
+        }
+
+        private void IncrementNumbers(int num)
+            => this.UpdateNumbers(num, n => n + 1);
+
+        private void DecrementNumbers(int num)
+            => this.UpdateNumbers(num, n => n - 1);
+
+        private void UpdateNumbers(int num, Func<int, int> update)
+            => this.Entries
+                .Where(entry => entry.SequenceNumber > num && entry.DisplayNumber.HasValue)
+                .ForEach(entry => entry.DisplayNumber = update(entry.DisplayNumber ?? 0));
     }
 }

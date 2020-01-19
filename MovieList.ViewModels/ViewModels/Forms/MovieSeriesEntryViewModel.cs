@@ -36,21 +36,21 @@ namespace MovieList.ViewModels.Forms
             this.Select = ReactiveCommand.Create(() => { });
 
             var canMoveUp = this.WhenAnyValue(vm => vm.SequenceNumber)
-                .Select(num => num != 0);
+                .Select(num => num != 1);
 
             var canMoveDown = this.WhenAnyValue(vm => vm.SequenceNumber)
                 .Select(num => num < this.Entry.ParentSeries.Entries.Count);
 
-            this.MoveUp = ReactiveCommand.Create(() => { this.SequenceNumber--; }, canMoveUp);
-            this.MoveDown = ReactiveCommand.Create(() => { this.SequenceNumber++; }, canMoveDown);
+            this.MoveUp = ReactiveCommand.Create(() => { }, canMoveUp);
+            this.MoveDown = ReactiveCommand.Create(() => { }, canMoveDown);
 
-            var canHideDisplayNumber = this.Entry.ParentSeries.IsLooselyConnected
-                ? Observable.Return(false)
-                : this.WhenAnyValue(vm => vm.DisplayNumber).Select(num => num != null);
+            var canHideDisplayNumber = this.WhenAnyValue(vm => vm.ParentForm.IsLooselyConnected)
+                .Invert()
+                .CombineLatest(this.WhenAnyValue(vm => vm.DisplayNumber).Select(num => num != null), (a, b) => a && b);
 
-            var canShowDisplayNumber = this.Entry.ParentSeries.IsLooselyConnected
-                ? Observable.Return(false)
-                : this.WhenAnyValue(vm => vm.DisplayNumber).Select(num => num == null);
+            var canShowDisplayNumber = this.WhenAnyValue(vm => vm.ParentForm.IsLooselyConnected)
+                .Invert()
+                .CombineLatest(this.WhenAnyValue(vm => vm.DisplayNumber).Select(num => num == null), (a, b) => a && b);
 
             this.HideDisplayNumber = ReactiveCommand.Create(() => { }, canHideDisplayNumber);
             this.ShowDisplayNumber = ReactiveCommand.Create(() => { }, canShowDisplayNumber);
@@ -60,7 +60,7 @@ namespace MovieList.ViewModels.Forms
                     vm => vm.ParentForm.IsLooselyConnected,
                     (num, isLooselyConnected) => (Number: num, IsLooselyConnected: isLooselyConnected))
                 .Select(props => props.Number.AsDisplayNumber(props.IsLooselyConnected))
-                .BindTo(this, vm => vm.NumberToDisplay);
+                .ToPropertyEx(this, vm => vm.NumberToDisplay);
 
             this.CopyProperties();
 
@@ -82,8 +82,7 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public int? DisplayNumber { get; set; }
 
-        [Reactive]
-        public string NumberToDisplay { get; set; } = String.Empty;
+        public string NumberToDisplay { [ObservableAsProperty] get; } = String.Empty;
 
         public ReactiveCommand<Unit, Unit> Select { get; }
 
@@ -125,7 +124,6 @@ namespace MovieList.ViewModels.Forms
             this.Years = this.Entry.GetYears();
             this.SequenceNumber = this.Entry.SequenceNumber;
             this.DisplayNumber = this.Entry.DisplayNumber;
-            this.NumberToDisplay = this.Entry.GetNumberToDisplay();
         }
     }
 }

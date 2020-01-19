@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using Akavache;
-
+using DynamicData;
+using DynamicData.Binding;
 using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
@@ -115,6 +117,13 @@ namespace MovieList.Views.Forms
 
             this.WhenAnyValue(v => v.ViewModel.HasTitles)
                 .BindTo(this, v => v.ShowInListCheckBox.IsEnabled)
+                .DisposeWith(disposables);
+
+            this.ViewModel.Entries.ToObservableChangeSet()
+                .AutoRefresh(vm => vm.DisplayNumber)
+                .ToCollection()
+                .Select(vms => vms.All(vm => vm.DisplayNumber.HasValue))
+                .BindTo(this, v => v.IsLooselyConnectedCheckBox.IsEnabled)
                 .DisposeWith(disposables);
         }
 

@@ -97,7 +97,6 @@ namespace MovieList.ViewModels.Forms.Base
                 .AutoRefreshOnObservable(vm => vm.FormChanged)
                 .ToCollection()
                 .Select(vms =>
-                    vms.Count == 0 ||
                     vms.Count != itemCollection(this.Self).Count ||
                     vms.Any(vm => vm.IsFormChanged || !this.IsNew && vm.IsNew))
                 .Do(changed => this.Log().Debug(
