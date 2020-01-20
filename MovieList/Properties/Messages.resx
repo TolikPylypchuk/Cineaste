@@ -210,6 +210,13 @@
   <data name="DeleteMovieQuestion" xml:space="preserve">
     <value>Are you sure you want to delete the movie?</value>
   </data>
+  <data name="DeleteMovieSeriesQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete the movie series?
+This will detach all entries without deleting them.</value>
+  </data>
+  <data name="DeleteMovieSeriesTitle" xml:space="preserve">
+    <value>Delete Movie Series</value>
+  </data>
   <data name="DeleteMovieTitle" xml:space="preserve">
     <value>Delete Movie</value>
   </data>

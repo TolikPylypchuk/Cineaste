@@ -340,6 +340,25 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the movie series?
+        ///This will detach all entries without deleting them..
+        /// </summary>
+        public static string DeleteMovieSeriesQuestion {
+            get {
+                return ResourceManager.GetString("DeleteMovieSeriesQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Movie Series.
+        /// </summary>
+        public static string DeleteMovieSeriesTitle {
+            get {
+                return ResourceManager.GetString("DeleteMovieSeriesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Movie.
         /// </summary>
         public static string DeleteMovieTitle {

@@ -61,6 +61,7 @@ namespace MovieList.ViewModels
             this.AddOrUpdate = ReactiveCommand.Create<ListItem, ListItem>(this.OnAddOrUpdate);
             this.RemoveMovie = ReactiveCommand.Create<Movie>(this.OnRemoveMovie);
             this.RemoveSeries = ReactiveCommand.Create<Series>(this.OnRemoveSeries);
+            this.RemoveMovieSeries = ReactiveCommand.Create<MovieSeries>(this.OnRemoveMovieSeries);
 
             this.AddOrUpdate.InvokeCommand(this.SelectItem);
         }
@@ -74,9 +75,12 @@ namespace MovieList.ViewModels
         public ReactiveCommand<ListItem?, bool> SelectItem { get; }
         public ReactiveCommand<ListItemViewModel, ListItemViewModel> PreviewSelectItem { get; }
         public ReactiveCommand<Unit, Unit> ForceSelectedItem { get; }
+
         public ReactiveCommand<ListItem, ListItem> AddOrUpdate { get; }
+
         public ReactiveCommand<Movie, Unit> RemoveMovie { get; }
         public ReactiveCommand<Series, Unit> RemoveSeries { get; }
+        public ReactiveCommand<MovieSeries, Unit> RemoveMovieSeries { get; }
 
         public ListItem EntryToListItem(MovieSeriesEntry entry)
             => entry.Movie != null
@@ -132,6 +136,22 @@ namespace MovieList.ViewModels
                 if (series.Entry != null)
                 {
                     this.RemoveMovieSeriesEntry(series.Entry, list);
+                }
+            });
+
+        private void OnRemoveMovieSeries(MovieSeries movieSeries)
+            => this.source.Edit(list =>
+            {
+                list.RemoveKey(new MovieSeriesListItem(movieSeries).Id);
+
+                if (movieSeries.Entry != null)
+                {
+                    this.RemoveMovieSeriesEntry(movieSeries.Entry, list);
+                }
+
+                foreach (var entry in movieSeries.Entries)
+                {
+                    list.AddOrUpdate(this.EntryToListItem(entry));
                 }
             });
 

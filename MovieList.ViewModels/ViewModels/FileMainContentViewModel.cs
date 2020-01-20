@@ -353,6 +353,18 @@ namespace MovieList.ViewModels
                 .InvokeCommand(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.Delete
+                .WhereNotNull()
+                .Do(ms => ms.Entries.ForEach(this.ClearEntryConnection))
+                .InvokeCommand(this.List.RemoveMovieSeries)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Delete
+                .WhereNotNull()
+                .Discard()
+                .InvokeCommand(form.Close)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             form.SelectEntry
                 .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);

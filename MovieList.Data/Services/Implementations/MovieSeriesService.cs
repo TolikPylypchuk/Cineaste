@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -63,10 +62,20 @@ namespace MovieList.Data.Services.Implementations
             }
         }
 
-        protected override Task DeleteAsync(
+        protected override async Task DeleteAsync(
             MovieSeries movieSeries,
             SqliteConnection connection,
             IDbTransaction transaction)
-            => throw new NotSupportedException("A movie series cannot be deleted directly.");
+        {
+            await connection.DeleteAsync(movieSeries.Titles, transaction);
+            await connection.DeleteAsync(movieSeries.Entries, transaction);
+
+            if (movieSeries.Entry != null)
+            {
+                await this.DeleteMovieSeriesEntryAsync(movieSeries.Entry, connection, transaction);
+            }
+
+            await connection.DeleteAsync(movieSeries, transaction);
+        }
     }
 }

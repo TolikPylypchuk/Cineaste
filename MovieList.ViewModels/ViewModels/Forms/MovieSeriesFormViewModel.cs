@@ -13,6 +13,7 @@ using DynamicData.Binding;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
+using MovieList.DialogModels;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
@@ -79,6 +80,7 @@ namespace MovieList.ViewModels.Forms
                 .SubscribeAsync(this.AddTitles);
 
             this.CopyProperties();
+            this.CanDeleteWhenNotNew();
             this.EnableChangeTracking();
         }
 
@@ -161,8 +163,18 @@ namespace MovieList.ViewModels.Forms
             return this.MovieSeries;
         }
 
-        protected override Task<MovieSeries?> OnDeleteAsync()
-            => throw new NotSupportedException("A movie series cannot be deleted directly.");
+        protected override async Task<MovieSeries?> OnDeleteAsync()
+        {
+            bool shouldDelete = await Dialog.Confirm.Handle(new ConfirmationModel("DeleteMovieSeries"));
+
+            if (shouldDelete)
+            {
+                await this.movieSeriesService.DeleteAsync(this.MovieSeries);
+                return this.MovieSeries;
+            }
+
+            return null;
+        }
 
         protected override void CopyProperties()
         {

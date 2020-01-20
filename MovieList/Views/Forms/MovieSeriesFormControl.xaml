@@ -102,6 +102,9 @@
                         <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                     </Button>
                 </Grid>
+
+                <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
+                        Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
             </StackPanel>
         </ScrollViewer>
 
