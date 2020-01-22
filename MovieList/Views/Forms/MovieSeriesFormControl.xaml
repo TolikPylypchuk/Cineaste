@@ -50,62 +50,64 @@
                    Margin="16,8" TextWrapping="Wrap" />
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel Margin="16,8">
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
-                        <Setter Property="Margin" Value="8,8,0,0" />
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="Width" Value="20" />
-                        <Setter Property="Height" Value="20" />
-                        <Setter Property="HorizontalAlignment" Value="Right" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                    </Style>
-                </StackPanel.Resources>
-
-                <Image x:Name="Poster" />
-
-                <WrapPanel HorizontalAlignment="Center" Margin="0,8,0,0">
-                    <CheckBox x:Name="HasTitlesCheckBox" Content="{l:Translate MovieSeriesHasTitles}" Margin="4,0" />
-                    <CheckBox x:Name="ShowInListCheckBox" Content="{l:Translate MovieSeriesShowInList}" Margin="4,0" />
-                    <CheckBox x:Name="IsLooselyConnectedCheckBox" Content="{l:Translate LooselyConnected}" Margin="4,0" />
-                </WrapPanel>
-
-                <ItemsControl x:Name="Titles" />
-
-                <ItemsControl x:Name="OriginalTitles" />
-
-                <ItemsControl x:Name="Entries" Margin="0,8" Grid.IsSharedSizeScope="True" />
-
-                <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
-
-                <Grid Margin="0,8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <Grid.Resources>
-                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
-                            <Setter Property="HorizontalAlignment" Value="Stretch" />
-                            <Setter Property="FontSize" Value="12" />
-                            <Setter Property="Margin" Value="4,0" />
-                            <Setter Property="Height" Value="Auto" />
-                            <Setter Property="MinHeight" Value="32" />
-                        </Style>
-                    </Grid.Resources>
-
-                    <Button x:Name="AddTitleButton" Grid.Column="0">
-                        <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
-                    </Button>
-
-                    <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
-                        <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
-                    </Button>
-                </Grid>
-
+            <DockPanel>
                 <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
-                        Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
-            </StackPanel>
+                        Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" DockPanel.Dock="Bottom" />
+
+                <StackPanel Margin="16,8,16,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
+                            <Setter Property="Margin" Value="8,8,0,0" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Width" Value="20" />
+                            <Setter Property="Height" Value="20" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <Image x:Name="Poster" />
+
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,8,0,0">
+                        <CheckBox x:Name="HasTitlesCheckBox" Content="{l:Translate MovieSeriesHasTitles}" Margin="4,0" />
+                        <CheckBox x:Name="ShowInListCheckBox" Content="{l:Translate MovieSeriesShowInList}" Margin="4,0" />
+                        <CheckBox x:Name="IsLooselyConnectedCheckBox" Content="{l:Translate LooselyConnected}" Margin="4,0" />
+                    </WrapPanel>
+
+                    <ItemsControl x:Name="Titles" />
+
+                    <ItemsControl x:Name="OriginalTitles" />
+
+                    <ItemsControl x:Name="Entries" Margin="0,8" Grid.IsSharedSizeScope="True" />
+
+                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
+
+                    <Grid Margin="0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="FontSize" Value="12" />
+                                <Setter Property="Margin" Value="4,0" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="MinHeight" Value="32" />
+                            </Style>
+                        </Grid.Resources>
+
+                        <Button x:Name="AddTitleButton" Grid.Column="0">
+                            <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        </Button>
+
+                        <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
+                            <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </DockPanel>
         </ScrollViewer>
 
         <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">

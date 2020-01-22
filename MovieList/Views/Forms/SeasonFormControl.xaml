@@ -50,87 +50,89 @@
                    Margin="16,8" TextWrapping="Wrap" />
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel Margin="16,8">
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
-                        <Setter Property="Margin" Value="8,8,0,0" />
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="Width" Value="20" />
-                        <Setter Property="Height" Value="20" />
-                        <Setter Property="HorizontalAlignment" Value="Right" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                    </Style>
-                </StackPanel.Resources>
+            <DockPanel>
+                <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
+                        Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" DockPanel.Dock="Bottom" />
 
-                <Image x:Name="Poster" Margin="0,0,0,8" />
+                <StackPanel Margin="16,8,16,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
+                            <Setter Property="Margin" Value="8,8,0,0" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Width" Value="20" />
+                            <Setter Property="Height" Value="20" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
 
-                <DockPanel x:Name="SwitchPosterPanel" HorizontalAlignment="Stretch">
-                    <Button x:Name="SwitchToPreviousPosterButton" Style="{StaticResource MaterialDesignIconButton}"
+                    <Image x:Name="Poster" Margin="0,0,0,8" />
+
+                    <DockPanel x:Name="SwitchPosterPanel" HorizontalAlignment="Stretch">
+                        <Button x:Name="SwitchToPreviousPosterButton" Style="{StaticResource MaterialDesignIconButton}"
                             Padding="0" Width="25" Height="25" DockPanel.Dock="Left" HorizontalAlignment="Left">
-                        <m:PackIcon Kind="ChevronLeft" Margin="0" Width="25" Height="25" />
-                    </Button>
+                            <m:PackIcon Kind="ChevronLeft" Margin="0" Width="25" Height="25" />
+                        </Button>
 
-                    <Button x:Name="SwitchToNextPosterButton" Style="{StaticResource MaterialDesignIconButton}"
+                        <Button x:Name="SwitchToNextPosterButton" Style="{StaticResource MaterialDesignIconButton}"
                             Padding="0" Width="25" Height="25" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                        <m:PackIcon Kind="ChevronRight" Margin="0" Width="25" Height="25" />
-                    </Button>
-                </DockPanel>
+                            <m:PackIcon Kind="ChevronRight" Margin="0" Width="25" Height="25" />
+                        </Button>
+                    </DockPanel>
 
-                <ItemsControl x:Name="Titles" />
+                    <ItemsControl x:Name="Titles" />
 
-                <ItemsControl x:Name="OriginalTitles" />
+                    <ItemsControl x:Name="OriginalTitles" />
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
 
-                    <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
+                        <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate WatchStatus}" />
 
-                    <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8,8,0,8"
+                        <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8,8,0,8"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate ReleaseStatus}" />
-                </Grid>
+                    </Grid>
 
-                <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate Channel}" />
+                    <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate Channel}" />
 
-                <ItemsControl x:Name="Periods" />
+                    <ItemsControl x:Name="Periods" />
 
-                <TextBlock x:Name="PeriodsOverlapTextBlock" Foreground="{DynamicResource ValidationErrorBrush}"
+                    <TextBlock x:Name="PeriodsOverlapTextBlock" Foreground="{DynamicResource ValidationErrorBrush}"
                            Text="{l:Translate ValidationPeriodsOverlap}" />
 
-                <Grid Margin="0,8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                    <Grid Margin="0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
 
-                    <Grid.Resources>
-                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
-                            <Setter Property="HorizontalAlignment" Value="Stretch" />
-                            <Setter Property="FontSize" Value="12" />
-                            <Setter Property="Margin" Value="4,0" />
-                            <Setter Property="Height" Value="Auto" />
-                            <Setter Property="MinHeight" Value="32" />
-                        </Style>
-                    </Grid.Resources>
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="FontSize" Value="12" />
+                                <Setter Property="Margin" Value="4,0" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="MinHeight" Value="32" />
+                            </Style>
+                        </Grid.Resources>
 
-                    <Button x:Name="AddTitleButton" Grid.Column="0">
-                        <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
-                    </Button>
+                        <Button x:Name="AddTitleButton" Grid.Column="0">
+                            <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        </Button>
 
-                    <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
-                        <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
-                    </Button>
-                </Grid>
+                        <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
+                            <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        </Button>
+                    </Grid>
 
-                <Button x:Name="AddPeriodButton" Content="{l:Translate AddPeriod, ToUpper=True}" HorizontalAlignment="Center"
+                    <Button x:Name="AddPeriodButton" Content="{l:Translate AddPeriod, ToUpper=True}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignOutlinedButton}" Margin="8" FontSize="12" />
-
-                <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
-                        Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
-            </StackPanel>
+                </StackPanel>
+            </DockPanel>
         </ScrollViewer>
 
         <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">

@@ -54,7 +54,7 @@ namespace MovieList.ViewModels.Forms
 
             this.ConvertToSeries = ReactiveCommand.Create(() => { });
 
-            this.CanDeleteWhenNotNew();
+            this.CanDeleteWhenNotChanged();
             this.EnableChangeTracking();
         }
 

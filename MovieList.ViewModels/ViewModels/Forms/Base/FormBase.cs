@@ -115,8 +115,8 @@ namespace MovieList.ViewModels.Forms.Base
         protected void CanDeleteWhen(IObservable<bool> canDelete)
             => canDelete.Subscribe(this.canDeleteSubject);
 
-        protected void CanDeleteWhenNotNew()
-            => this.CanDeleteWhen(Observable.Return(!this.IsNew).Merge(this.Save.Select(_ => true)));
+        protected void CanDeleteWhenNotChanged()
+            => this.CanDeleteWhen(Observable.Return(!this.IsNew).Merge(this.FormChanged.Invert()));
 
         protected void CanAlwaysDelete()
             => this.CanDeleteWhen(Observable.Return(true));

@@ -80,7 +80,7 @@ namespace MovieList.ViewModels.Forms
                 .SubscribeAsync(this.AddTitles);
 
             this.CopyProperties();
-            this.CanDeleteWhenNotNew();
+            this.CanDeleteWhenNotChanged();
             this.EnableChangeTracking();
         }
 

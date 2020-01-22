@@ -50,82 +50,84 @@
                    Margin="16,8" TextWrapping="Wrap" />
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel Margin="16,8">
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
-                        <Setter Property="Margin" Value="8,8,0,0" />
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="Width" Value="20" />
-                        <Setter Property="Height" Value="20" />
-                        <Setter Property="HorizontalAlignment" Value="Right" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                    </Style>
-                </StackPanel.Resources>
+            <DockPanel>
+                <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
+                        Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" DockPanel.Dock="Bottom" />
 
-                <Image x:Name="Poster" />
+                <StackPanel Margin="16,8,16,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
+                            <Setter Property="Margin" Value="8,8,0,0" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Width" Value="20" />
+                            <Setter Property="Height" Value="20" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
 
-                <TextBlock x:Name="ImdbLinkTextBlock" Margin="0,8,0,0" HorizontalAlignment="Center">
+                    <Image x:Name="Poster" />
+
+                    <TextBlock x:Name="ImdbLinkTextBlock" Margin="0,8,0,0" HorizontalAlignment="Center">
                     <Hyperlink x:Name="ImdbLink" v:Properties.IsExternal="True">
                         <Hyperlink.Inlines>
                             <Run x:Name="ImdbLinkRun" />
                         </Hyperlink.Inlines>
                     </Hyperlink>
-                </TextBlock>
+                    </TextBlock>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
-                    <CheckBox x:Name="IsWatchedCheckBox" Content="{l:Translate Watched}" Margin="0,0,4,0" />
-                    <CheckBox x:Name="IsReleasedCheckBox" Content="{l:Translate Released}" Margin="4,0,0,0" />
-                </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
+                        <CheckBox x:Name="IsWatchedCheckBox" Content="{l:Translate Watched}" Margin="0,0,4,0" />
+                        <CheckBox x:Name="IsReleasedCheckBox" Content="{l:Translate Released}" Margin="4,0,0,0" />
+                    </StackPanel>
 
-                <ItemsControl x:Name="Titles" />
+                    <ItemsControl x:Name="Titles" />
 
-                <ItemsControl x:Name="OriginalTitles" />
+                    <ItemsControl x:Name="OriginalTitles" />
 
-                <Grid Margin="0,8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                    <Grid Margin="0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="YearTextBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
+                        <TextBox x:Name="YearTextBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,8,0"
                              m:HintAssist.Hint="{l:Translate Year}" />
 
-                    <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" Margin="8,0,0,0"
+                        <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" Margin="8,0,0,0"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate Kind}" />
-                </Grid>
+                    </Grid>
 
-                <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate ImdbLink}" />
+                    <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate ImdbLink}" />
 
-                <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
+                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
 
-                <Grid Margin="0,8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                    <Grid Margin="0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
 
-                    <Grid.Resources>
-                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
-                            <Setter Property="HorizontalAlignment" Value="Stretch" />
-                            <Setter Property="FontSize" Value="12" />
-                            <Setter Property="Margin" Value="4,0" />
-                            <Setter Property="Height" Value="Auto" />
-                            <Setter Property="MinHeight" Value="32" />
-                        </Style>
-                    </Grid.Resources>
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="FontSize" Value="12" />
+                                <Setter Property="Margin" Value="4,0" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="MinHeight" Value="32" />
+                            </Style>
+                        </Grid.Resources>
 
-                    <Button x:Name="AddTitleButton" Grid.Column="0">
-                        <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
-                    </Button>
+                        <Button x:Name="AddTitleButton" Grid.Column="0">
+                            <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        </Button>
 
-                    <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
-                        <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
-                    </Button>
-                </Grid>
-
-                <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
-                        Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" />
-            </StackPanel>
+                        <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
+                            <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </DockPanel>
         </ScrollViewer>
 
         <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">

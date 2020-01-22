@@ -25,7 +25,8 @@ namespace MovieList.Comparers
                 .Replace(".", "")
                 .Replace(" - ", " ")
                 .Replace(" – ", " ")
-                .Replace("'", "");
+                .Replace("'", "")
+                .Replace("\"", "");
 
         private object Convert(string title)
             => Int32.TryParse(title, out int result) ? (object)result : title;

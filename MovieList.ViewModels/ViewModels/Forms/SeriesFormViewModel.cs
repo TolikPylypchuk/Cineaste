@@ -113,7 +113,7 @@ namespace MovieList.ViewModels.Forms
                 .Cast<ISeriesComponentForm>()
                 .InvokeCommand(this.SelectComponent);
 
-            this.CanDeleteWhenNotNew();
+            this.CanDeleteWhenNotChanged();
             this.EnableChangeTracking();
         }
 
