@@ -91,6 +91,7 @@ namespace MovieList
 
             Locator.CurrentMutable.Register(() => new CustomPropertyResolver(), typeof(ICreatesObservableForProperty));
 
+            Locator.CurrentMutable.RegisterConstant(RxApp.TaskpoolScheduler, TaskPoolKey);
             Locator.CurrentMutable.RegisterConstant(BlobCache.LocalMachine, CacheKey);
             Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, StoreKey);
 
