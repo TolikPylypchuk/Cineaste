@@ -129,6 +129,7 @@ namespace MovieList.ViewModels.Forms.Base
             this.changesToTrack
                 .CombineLatest()
                 .AnyTrue()
+                .Merge(Observable.Return(this.IsNew))
                 .Merge(falseWhenSave)
                 .Merge(falseWhenCancel)
                 .Subscribe(this.formChangedSubject);

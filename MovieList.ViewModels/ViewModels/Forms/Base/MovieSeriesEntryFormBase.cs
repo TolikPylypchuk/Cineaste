@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Resources;
 
 using MovieList.Data.Models;
@@ -16,6 +17,8 @@ namespace MovieList.ViewModels.Forms.Base
         where TModel : class
         where TViewModel : MovieSeriesEntryFormBase<TModel, TViewModel>
     {
+        private readonly BehaviorSubject<bool> canCreateMovieSeriesSubject = new BehaviorSubject<bool>(false);
+
         protected MovieSeriesEntryFormBase(
             MovieSeriesEntry? entry,
             ResourceManager? resourceManager,
@@ -34,28 +37,30 @@ namespace MovieList.ViewModels.Forms.Base
 
             var canGoToMiniseries = this.IfMovieSeriesPresent(() => formNotChanged);
 
+            this.GoToMovieSeries = ReactiveCommand.Create<Unit, MovieSeries>(
+                _ => this.MovieSeriesEntry!.ParentSeries, canGoToMiniseries);
+
             var canGoToNext = this.IfMovieSeriesPresent(() =>
                 this.MovieSeriesEntry!.SequenceNumber == lastSequenceNumber
                     ? Observable.Return(false)
                     : formNotChanged);
-
-            var canGoToPrevious = this.IfMovieSeriesPresent(() =>
-                this.MovieSeriesEntry!.SequenceNumber == 1
-                    ? Observable.Return(false)
-                    : formNotChanged);
-
-            this.GoToMovieSeries = ReactiveCommand.Create<Unit, MovieSeries>(
-                _ => this.MovieSeriesEntry!.ParentSeries, canGoToMiniseries);
 
             this.GoToNext = ReactiveCommand.Create<Unit, MovieSeriesEntry>(
                 _ => this.MovieSeriesEntry!.ParentSeries.Entries
                     .First(e => e.SequenceNumber > this.MovieSeriesEntry!.SequenceNumber),
                 canGoToNext);
 
+            var canGoToPrevious = this.IfMovieSeriesPresent(() =>
+                this.MovieSeriesEntry!.SequenceNumber == 1
+                    ? Observable.Return(false)
+                    : formNotChanged);
+
             this.GoToPrevious = ReactiveCommand.Create<Unit, MovieSeriesEntry>(
                 _ => this.MovieSeriesEntry!.ParentSeries.Entries
                     .Last(e => e.SequenceNumber < this.MovieSeriesEntry!.SequenceNumber),
                 canGoToPrevious);
+
+            this.CreateMovieSeries = ReactiveCommand.Create(() => { }, this.canCreateMovieSeriesSubject);
         }
 
         public MovieSeriesEntry? MovieSeriesEntry { get; }
@@ -63,6 +68,15 @@ namespace MovieList.ViewModels.Forms.Base
         public ReactiveCommand<Unit, MovieSeries> GoToMovieSeries { get; }
         public ReactiveCommand<Unit, MovieSeriesEntry> GoToNext { get; }
         public ReactiveCommand<Unit, MovieSeriesEntry> GoToPrevious { get; }
+        public ReactiveCommand<Unit, Unit> CreateMovieSeries { get; }
+
+        protected void CanCreateMovieSeries()
+            => Observable.CombineLatest(
+                   Observable.Return(!this.IsNew).Merge(this.Save.Select(_ => true)),
+                   Observable.Return(this.MovieSeriesEntry == null),
+                   this.FormChanged.Invert())
+                .AllTrue()
+                .Subscribe(this.canCreateMovieSeriesSubject);
 
         private IObservable<bool> IfMovieSeriesPresent(Func<IObservable<bool>> observableProvider)
             => this.MovieSeriesEntry == null

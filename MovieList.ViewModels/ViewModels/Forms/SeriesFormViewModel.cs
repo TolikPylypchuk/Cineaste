@@ -114,6 +114,7 @@ namespace MovieList.ViewModels.Forms
                 .InvokeCommand(this.SelectComponent);
 
             this.CanDeleteWhenNotChanged();
+            this.CanCreateMovieSeries();
             this.EnableChangeTracking();
         }
 

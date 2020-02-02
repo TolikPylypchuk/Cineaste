@@ -48,6 +48,7 @@ namespace MovieList.ViewModels.Forms
 
             this.InitializeValueDependencies();
             this.CanDeleteWhenNotChanged();
+            this.CanCreateMovieSeries();
             this.EnableChangeTracking();
         }
 

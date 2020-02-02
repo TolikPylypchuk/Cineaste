@@ -295,6 +295,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create movie series.
+        /// </summary>
+        public static string CreateMovieSeries {
+            get {
+                return ResourceManager.GetString("CreateMovieSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to December.
         /// </summary>
         public static string December {

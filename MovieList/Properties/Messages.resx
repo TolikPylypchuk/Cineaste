@@ -195,6 +195,9 @@
   <data name="CreateListTitle" xml:space="preserve">
     <value>Create a List</value>
   </data>
+  <data name="CreateMovieSeries" xml:space="preserve">
+    <value>Create movie series</value>
+  </data>
   <data name="December" xml:space="preserve">
     <value>December</value>
   </data>

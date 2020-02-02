@@ -81,6 +81,7 @@ namespace MovieList.ViewModels.Forms
 
             this.CopyProperties();
             this.CanDeleteWhenNotChanged();
+            this.CanCreateMovieSeries();
             this.EnableChangeTracking();
         }
 

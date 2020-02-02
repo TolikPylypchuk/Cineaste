@@ -163,8 +163,13 @@
                     </Grid>
 
                     <Button x:Name="ConvertToMiniseriesButton" HorizontalAlignment="Center" Margin="8"
-                        Style="{StaticResource MaterialDesignOutlinedButton}" FontSize="12">
+                        Style="{StaticResource MaterialDesignOutlinedButton}" Height="Auto" MinHeight="32" FontSize="12">
                         <TextBlock Text="{l:Translate ConvertToMiniseries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
+
+                    <Button x:Name="CreateMovieSeriesButton" Style="{StaticResource MaterialDesignOutlinedButton}"
+                            HorizontalAlignment="Center" Height="Auto" MinHeight="32" FontSize="12" Margin="8">
+                        <TextBlock Text="{l:Translate CreateMovieSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                     </Button>
                 </StackPanel>
             </DockPanel>

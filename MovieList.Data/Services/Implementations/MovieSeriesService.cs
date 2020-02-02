@@ -28,6 +28,35 @@ namespace MovieList.Data.Services.Implementations
                 title.Id = await connection.InsertAsync(title, transaction);
             }
 
+            foreach (var entry in movieSeries.Entries)
+            {
+                entry.ParentSeriesId = movieSeries.Id;
+
+                if (entry.Movie != null)
+                {
+                    entry.MovieId = entry.Movie.Id;
+                } else if (entry.Series != null)
+                {
+                    entry.SeriesId = entry.Series.Id;
+                } else if (entry.MovieSeries != null)
+                {
+                    entry.MovieSeriesId = entry.MovieSeries.Id;
+                }
+
+                entry.Id = await connection.InsertAsync(entry, transaction);
+
+                if (entry.Movie != null)
+                {
+                    entry.Movie.Entry = entry;
+                } else if (entry.Series != null)
+                {
+                    entry.Series.Entry = entry;
+                } else if (entry.MovieSeries != null)
+                {
+                    entry.MovieSeries.Entry = entry;
+                }
+            }
+
             if (movieSeries.Entry != null)
             {
                 var entry = movieSeries.Entry;

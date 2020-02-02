@@ -126,6 +126,11 @@
                             <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                         </Button>
                     </Grid>
+
+                    <Button x:Name="CreateMovieSeriesButton" Style="{StaticResource MaterialDesignOutlinedButton}"
+                            HorizontalAlignment="Center" Height="Auto" MinHeight="32" FontSize="12" Margin="8">
+                        <TextBlock Text="{l:Translate CreateMovieSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
                 </StackPanel>
             </DockPanel>
         </ScrollViewer>

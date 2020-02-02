@@ -145,8 +145,98 @@ namespace MovieList.ViewModels
 
             var form = new MovieFormViewModel(movie, this.Kinds, this.FileName);
 
+            this.SubscribeToCommonCommands(form, m => new MovieListItem(m), e => e.Movie = form.Movie);
+
+            return form;
+        }
+
+        private SeriesFormViewModel CreateSeriesForm(Series series)
+        {
+            this.Log().Debug($"Creating a form for series: {series}");
+
+            var form = new SeriesFormViewModel(series, this.Kinds, this.FileName);
+
+            this.SubscribeToCommonCommands(form, s => new SeriesListItem(s), e => e.Series = form.Series);
+
+            form.SelectComponent
+                .OfType<SeasonFormViewModel>()
+                .Subscribe(seasonForm => this.OpenSeasonForm(seasonForm, form))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.SelectComponent
+                .OfType<SpecialEpisodeFormViewModel>()
+                .Subscribe(episodeForm => this.OpenSpecialEpisodeForm(episodeForm, form))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.ConvertToMiniseries
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(() => this.ConvertSeriesToMiniseries(form))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            return form;
+        }
+
+        private MiniseriesFormViewModel CreateMiniseriesForm(Series series)
+        {
+            this.Log().Debug($"Creating a form for miniseries: {series}");
+
+            var form = new MiniseriesFormViewModel(series, this.Kinds, this.FileName);
+
+            this.SubscribeToCommonCommands(form, s => new SeriesListItem(s), e => e.Series = form.Series);
+
+            form.ConvertToSeries
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeAsync(async () => await this.ConvertMiniseriesToSeriesAsync(form))
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            return form;
+        }
+
+        private MovieSeriesFormViewModel CreateMovieSeriesForm(MovieSeries movieSeries)
+        {
+            this.Log().Debug($"Creating a form for movie series: {movieSeries}");
+
+            var form = new MovieSeriesFormViewModel(movieSeries, this.FileName);
+            var detachedEntries = new List<MovieSeriesEntry>();
+
+            this.SubscribeToCommonCommands(
+                form, ms => new MovieSeriesListItem(ms), e => e.MovieSeries = form.MovieSeries);
+
             form.Save
-                .Select(m => new MovieListItem(m))
+                .Discard()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeAsync(async item =>
+                {
+                    foreach (var entry in detachedEntries)
+                    {
+                        this.ClearEntryConnection(entry);
+                        await this.List.AddOrUpdate.Execute(this.List.EntryToListItem(entry));
+                    }
+
+                    detachedEntries.Clear();
+                })
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.SelectEntry
+                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.DetachEntry
+                .Subscribe(detachedEntries.Add)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            return form;
+        }
+
+        private void SubscribeToCommonCommands<TModel, TViewModel>(
+            MovieSeriesEntryFormBase<TModel, TViewModel> form,
+            Func<TModel, ListItem> listItemSelector,
+            Action<MovieSeriesEntry> entryRelationSetter)
+            where TModel : class
+            where TViewModel : MovieSeriesEntryFormBase<TModel, TViewModel>
+        {
+            form.Save
+                .Select(listItemSelector)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .InvokeCommand<ListItem>(this.List.AddOrUpdate)
                 .DisposeWith(this.sideViewModelSubscriptions);
@@ -181,215 +271,33 @@ namespace MovieList.ViewModels
                 .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
-            form.GoToMovieSeries
-                .Discard()
-                .Merge(form.GoToNext.Discard())
-                .Merge(form.GoToPrevious.Discard())
-                .InvokeCommand(this.List.ForceSelectedItem)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            return form;
-        }
-
-        private SeriesFormViewModel CreateSeriesForm(Series series)
-        {
-            this.Log().Debug($"Creating a form for series: {series}");
-
-            var form = new SeriesFormViewModel(series, this.Kinds, this.FileName);
-
-            form.Save
-                .Select(s => new SeriesListItem(s))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .InvokeCommand<ListItem>(this.List.AddOrUpdate)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Save
-                .Discard()
-                .InvokeCommand(this.Save)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Close
-                .Select<Unit, ListItem?>(_ => null)
-                .InvokeCommand(this.SelectItem)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Delete
-                .WhereNotNull()
-                .InvokeCommand(this.List.RemoveSeries)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Delete
-                .WhereNotNull()
-                .Discard()
-                .InvokeCommand(form.Close)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.SelectComponent
-                .OfType<SeasonFormViewModel>()
-                .Subscribe(seasonForm => this.OpenSeasonForm(seasonForm, form))
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.SelectComponent
-                .OfType<SpecialEpisodeFormViewModel>()
-                .Subscribe(episodeForm => this.OpenSpecialEpisodeForm(episodeForm, form))
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.ConvertToMiniseries
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(() => this.ConvertSeriesToMiniseries(form))
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.GoToMovieSeries
-                .SubscribeAsync(this.GoToMovieSeriesAsync)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.GoToNext
-                .Merge(form.GoToPrevious)
-                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.GoToMovieSeries
-                .Discard()
-                .Merge(form.GoToNext.Discard())
-                .Merge(form.GoToPrevious.Discard())
-                .InvokeCommand(this.List.ForceSelectedItem)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            return form;
-        }
-
-        private MiniseriesFormViewModel CreateMiniseriesForm(Series series)
-        {
-            this.Log().Debug($"Creating a form for miniseries: {series}");
-
-            var form = new MiniseriesFormViewModel(series, this.Kinds, this.FileName);
-
-            form.Save
-                .Select(s => new SeriesListItem(s))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .InvokeCommand<ListItem>(this.List.AddOrUpdate)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Save
-                .Discard()
-                .InvokeCommand(this.Save)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Close
-                .Select<Unit, ListItem?>(_ => null)
-                .InvokeCommand(this.SelectItem)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Delete
-                .WhereNotNull()
-                .InvokeCommand(this.List.RemoveSeries)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Delete
-                .WhereNotNull()
-                .Discard()
-                .InvokeCommand(form.Close)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.ConvertToSeries
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .SubscribeAsync(async () => await this.ConvertMiniseriesToSeriesAsync(form))
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.GoToMovieSeries
-                .SubscribeAsync(this.GoToMovieSeriesAsync)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.GoToNext
-                .Merge(form.GoToPrevious)
-                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.GoToMovieSeries
-                .Discard()
-                .Merge(form.GoToNext.Discard())
-                .Merge(form.GoToPrevious.Discard())
-                .InvokeCommand(this.List.ForceSelectedItem)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            return form;
-        }
-
-        private MovieSeriesFormViewModel CreateMovieSeriesForm(MovieSeries movieSeries)
-        {
-            this.Log().Debug($"Creating a form for movie series: {movieSeries}");
-
-            var form = new MovieSeriesFormViewModel(movieSeries, this.FileName);
-            var detachedEntries = new List<MovieSeriesEntry>();
-
-            form.Save
-                .Select(m => new MovieSeriesListItem(m))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .InvokeCommand<ListItem>(this.List.AddOrUpdate)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Save
-                .Discard()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .SubscribeAsync(async item =>
+            form.CreateMovieSeries
+                .Select(_ =>
                 {
-                    foreach (var entry in detachedEntries)
+                    var movieSeries = new MovieSeries();
+                    var entry = new MovieSeriesEntry
                     {
-                        this.ClearEntryConnection(entry);
-                        await this.List.AddOrUpdate.Execute(this.List.EntryToListItem(entry));
-                    }
+                        SequenceNumber = 1,
+                        DisplayNumber = 1,
+                        ParentSeries = movieSeries
+                    };
 
-                    detachedEntries.Clear();
+                    entryRelationSetter(entry);
+                    movieSeries.Entries.Add(entry);
+
+                    return movieSeries;
                 })
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Save
-                .Discard()
-                .InvokeCommand(this.Save)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Close
-                .Select<Unit, ListItem?>(_ => null)
-                .InvokeCommand(this.SelectItem)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Delete
-                .WhereNotNull()
-                .Do(ms => ms.Entries.ForEach(this.ClearEntryConnection))
-                .InvokeCommand(this.List.RemoveMovieSeries)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.Delete
-                .WhereNotNull()
-                .Discard()
-                .InvokeCommand(form.Close)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.SelectEntry
-                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.GoToMovieSeries
-                .SubscribeAsync(this.GoToMovieSeriesAsync)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.GoToNext
-                .Merge(form.GoToPrevious)
-                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
+                .Select(this.CreateMovieSeriesForm)
+                .Subscribe(f => this.SideViewModel = f)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
                 .Discard()
                 .Merge(form.GoToNext.Discard())
                 .Merge(form.GoToPrevious.Discard())
+                .Merge(form.CreateMovieSeries)
                 .InvokeCommand(this.List.ForceSelectedItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
-
-            form.DetachEntry
-                .Subscribe(detachedEntries.Add)
-                .DisposeWith(this.sideViewModelSubscriptions);
-
-            return form;
         }
 
         private void OpenSeasonForm(SeasonFormViewModel form, SeriesFormViewModel seriesForm)
