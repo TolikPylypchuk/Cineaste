@@ -79,6 +79,11 @@ namespace MovieList.ViewModels.Forms
                 .Discard()
                 .SubscribeAsync(this.AddTitles);
 
+            this.WhenAnyValue(vm => vm.HasTitles)
+                .Where(hasTitles => !hasTitles && this.Titles.Count > 0)
+                .Discard()
+                .Subscribe(this.ClearTitles);
+
             this.CopyProperties();
             this.CanDeleteWhenNotChanged();
             this.CanCreateMovieSeries();
@@ -133,11 +138,6 @@ namespace MovieList.ViewModels.Forms
 
         protected override async Task<MovieSeries> OnSaveAsync()
         {
-            if (!this.HasTitles)
-            {
-                this.ClearTitles();
-            }
-
             await this.SaveTitlesAsync();
 
             foreach (var entry in this.Entries)

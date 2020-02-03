@@ -27,6 +27,7 @@ namespace MovieList.ViewModels.Forms.Base
     {
         private readonly BehaviorSubject<bool> formChangedSubject = new BehaviorSubject<bool>(false);
         private readonly BehaviorSubject<bool> validSubject = new BehaviorSubject<bool>(true);
+        private readonly BehaviorSubject<bool> canSaveSubject = new BehaviorSubject<bool>(false);
         private readonly BehaviorSubject<bool> canDeleteSubject = new BehaviorSubject<bool>(false);
 
         private readonly List<IObservable<bool>> changesToTrack = new List<IObservable<bool>>();
@@ -39,7 +40,10 @@ namespace MovieList.ViewModels.Forms.Base
 
             this.Valid = Observable.CombineLatest(this.validSubject, this.IsValid()).AllTrue();
 
-            var canSave = Observable.CombineLatest(this.formChangedSubject, this.Valid).AllTrue();
+            var canSave = Observable.CombineLatest(
+                    Observable.CombineLatest(this.formChangedSubject, this.canSaveSubject).AnyTrue(),
+                    this.Valid)
+                .AllTrue();
 
             this.Save = ReactiveCommand.CreateFromTask(this.OnSaveAsync, canSave);
             this.Cancel = ReactiveCommand.Create(this.CopyProperties, this.formChangedSubject);
@@ -129,10 +133,13 @@ namespace MovieList.ViewModels.Forms.Base
             this.changesToTrack
                 .CombineLatest()
                 .AnyTrue()
-                .Merge(Observable.Return(this.IsNew))
                 .Merge(falseWhenSave)
                 .Merge(falseWhenCancel)
                 .Subscribe(this.formChangedSubject);
+
+            Observable.Return(this.IsNew)
+                .Merge(falseWhenSave)
+                .Subscribe(this.canSaveSubject);
 
             this.validationsToTrack
                 .CombineLatest()
