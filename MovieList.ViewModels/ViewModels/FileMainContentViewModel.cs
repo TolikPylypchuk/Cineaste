@@ -145,7 +145,8 @@ namespace MovieList.ViewModels
 
             var form = new MovieFormViewModel(movie, this.Kinds, this.FileName);
 
-            this.SubscribeToCommonCommands(form, m => new MovieListItem(m), e => e.Movie = form.Movie);
+            this.SubscribeToCommonCommands(
+                form, this.List.RemoveMovie, m => new MovieListItem(m), e => e.Movie = form.Movie);
 
             return form;
         }
@@ -156,7 +157,8 @@ namespace MovieList.ViewModels
 
             var form = new SeriesFormViewModel(series, this.Kinds, this.FileName);
 
-            this.SubscribeToCommonCommands(form, s => new SeriesListItem(s), e => e.Series = form.Series);
+            this.SubscribeToCommonCommands(
+                form, this.List.RemoveSeries, s => new SeriesListItem(s), e => e.Series = form.Series);
 
             form.SelectComponent
                 .OfType<SeasonFormViewModel>()
@@ -182,7 +184,8 @@ namespace MovieList.ViewModels
 
             var form = new MiniseriesFormViewModel(series, this.Kinds, this.FileName);
 
-            this.SubscribeToCommonCommands(form, s => new SeriesListItem(s), e => e.Series = form.Series);
+            this.SubscribeToCommonCommands(
+                form, this.List.RemoveSeries, s => new SeriesListItem(s), e => e.Series = form.Series);
 
             form.ConvertToSeries
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -200,7 +203,10 @@ namespace MovieList.ViewModels
             var detachedEntries = new List<MovieSeriesEntry>();
 
             this.SubscribeToCommonCommands(
-                form, ms => new MovieSeriesListItem(ms), e => e.MovieSeries = form.MovieSeries);
+                form,
+                this.List.RemoveMovieSeries,
+                ms => new MovieSeriesListItem(ms),
+                e => e.MovieSeries = form.MovieSeries);
 
             form.Save
                 .Discard()
@@ -251,6 +257,7 @@ namespace MovieList.ViewModels
 
         private void SubscribeToCommonCommands<TModel, TViewModel>(
             MovieSeriesEntryFormBase<TModel, TViewModel> form,
+            ReactiveCommand<TModel, Unit> removeFromList,
             Func<TModel, ListItem> listItemSelector,
             Action<MovieSeriesEntry> entryRelationSetter)
             where TModel : class
@@ -274,7 +281,7 @@ namespace MovieList.ViewModels
 
             form.Delete
                 .WhereNotNull()
-                .InvokeCommand(this.List.RemoveMovie)
+                .InvokeCommand(removeFromList)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Delete
