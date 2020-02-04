@@ -225,6 +225,27 @@ namespace MovieList.ViewModels
                 .Subscribe(detachedEntries.Add)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
+            form.AddMovie
+                .Select(_ => form.MovieSeries)
+                .Select(this.CreateMovieForMovieSeries)
+                .Select(movie => new MovieListItem(movie))
+                .InvokeCommand<ListItem>(this.SelectItem)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.AddSeries
+                .Select(_ => form.MovieSeries)
+                .Select(this.CreateSeriesForMovieSeries)
+                .Select(series => new SeriesListItem(series))
+                .InvokeCommand<ListItem>(this.SelectItem)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.AddMovieSeries
+                .Select(_ => form.MovieSeries)
+                .Select(this.CreateMovieSeriesForMovieSeries)
+                .Select(ms => new MovieSeriesListItem(ms))
+                .InvokeCommand<ListItem>(this.SelectItem)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             return form;
         }
 
@@ -287,8 +308,8 @@ namespace MovieList.ViewModels
 
                     return movieSeries;
                 })
-                .Select(this.CreateMovieSeriesForm)
-                .Subscribe(f => this.SideViewModel = f)
+                .Select(ms => new MovieSeriesListItem(ms))
+                .InvokeCommand<ListItem>(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
@@ -434,6 +455,70 @@ namespace MovieList.ViewModels
             await this.SelectItem.Execute(listItem);
             await this.List.ForceSelectedItem.Execute(Unit.Default);
         }
+
+        private Movie CreateMovieForMovieSeries(MovieSeries parentSeries)
+        {
+            var entry = this.CreateEntryForMovieSeries(parentSeries);
+
+            var movie = new Movie
+            {
+                Titles = new List<Title>
+                {
+                    new Title { Priority = 1, IsOriginal = false },
+                    new Title { Priority = 1, IsOriginal = true }
+                },
+                Year = MovieDefaultYear,
+                Kind = this.Kinds.First(),
+                Entry = entry
+            };
+
+            entry.Movie = movie;
+
+            return movie;
+        }
+
+        private Series CreateSeriesForMovieSeries(MovieSeries parentSeries)
+        {
+            var entry = this.CreateEntryForMovieSeries(parentSeries);
+
+            var series = new Series
+            {
+                Titles = new List<Title>
+                {
+                    new Title { Priority = 1, IsOriginal = false},
+                    new Title { Priority = 1, IsOriginal = true}
+                },
+                Kind = this.Kinds.First(),
+                Entry = entry
+            };
+
+            entry.Series = series;
+
+            return series;
+        }
+
+        private MovieSeries CreateMovieSeriesForMovieSeries(MovieSeries parentSeries)
+        {
+            var entry = this.CreateEntryForMovieSeries(parentSeries);
+
+            var movieSeries = new MovieSeries { Entry = entry };
+
+            entry.MovieSeries = movieSeries;
+
+            return movieSeries;
+        }
+
+        private MovieSeriesEntry CreateEntryForMovieSeries(MovieSeries parentSeries)
+            => new MovieSeriesEntry
+            {
+                ParentSeries = parentSeries,
+                SequenceNumber = parentSeries.Entries.Count == 0
+                    ? 1
+                    : parentSeries.Entries.Select(e => e.SequenceNumber).Max() + 1,
+                DisplayNumber = parentSeries.Entries.Count == 0
+                    ? 1
+                    : parentSeries.Entries.Select(e => e.DisplayNumber).Max() + 1
+            };
 
         private void ClearEntryConnection(MovieSeriesEntry entry)
         {

@@ -98,6 +98,36 @@
                             </Style>
                         </Grid.Resources>
 
+                        <Button x:Name="AddMovieButton" Grid.Column="0">
+                            <TextBlock Text="{l:Translate AddNewMovie, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        </Button>
+
+                        <Button x:Name="AddSeriesButton" Grid.Column="1">
+                            <TextBlock Text="{l:Translate AddNewSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        </Button>
+                    </Grid>
+
+                    <Button x:Name="AddMovieSeriesButton" Style="{StaticResource MaterialDesignOutlinedButton}"
+                            HorizontalAlignment="Center" Height="Auto" MinHeight="32" FontSize="12" Margin="8">
+                        <TextBlock Text="{l:Translate AddNewMovieSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
+
+                    <Grid Margin="0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="FontSize" Value="12" />
+                                <Setter Property="Margin" Value="4,0" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="MinHeight" Value="32" />
+                            </Style>
+                        </Grid.Resources>
+
                         <Button x:Name="AddTitleButton" Grid.Column="0">
                             <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                         </Button>

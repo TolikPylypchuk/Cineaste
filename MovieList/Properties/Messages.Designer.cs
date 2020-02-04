@@ -97,6 +97,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new movie series.
+        /// </summary>
+        public static string AddNewMovieSeries {
+            get {
+                return ResourceManager.GetString("AddNewMovieSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new series.
         /// </summary>
         public static string AddNewSeries {

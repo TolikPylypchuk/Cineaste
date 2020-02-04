@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -71,6 +72,15 @@ namespace MovieList.ViewModels.Forms
 
             this.DetachEntry = ReactiveCommand.Create<MovieSeriesEntry, MovieSeriesEntry>(this.OnDetachEntry);
 
+            var canAddEntry = Observable.CombineLatest(
+                    Observable.Return(!this.IsNew).Merge(this.Save.Select(_ => true)),
+                    this.FormChanged.Invert())
+                .AllTrue();
+
+            this.AddMovie = ReactiveCommand.Create(() => { }, canAddEntry);
+            this.AddSeries = ReactiveCommand.Create(() => { }, canAddEntry);
+            this.AddMovieSeries = ReactiveCommand.Create(() => { }, canAddEntry);
+
             this.WhenAnyValue(vm => vm.HasTitles)
                 .BindTo(this, vm => vm.ShowTitles);
 
@@ -111,6 +121,9 @@ namespace MovieList.ViewModels.Forms
 
         public ReactiveCommand<MovieSeriesEntryViewModel, MovieSeriesEntry> SelectEntry { get; }
         public ReactiveCommand<MovieSeriesEntry, MovieSeriesEntry> DetachEntry { get; }
+        public ReactiveCommand<Unit, Unit> AddMovie { get; }
+        public ReactiveCommand<Unit, Unit> AddSeries { get; }
+        public ReactiveCommand<Unit, Unit> AddMovieSeries { get; }
 
         public override bool IsNew
             => this.MovieSeries.Id == default;

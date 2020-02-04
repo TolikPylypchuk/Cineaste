@@ -30,8 +30,9 @@ namespace MovieList.Data.Services.Implementations
             if (movie.Entry != null)
             {
                 var entry = movie.Entry;
-                entry.Id = await connection.InsertAsync(entry, transaction);
                 entry.MovieId = movie.Id;
+                entry.ParentSeriesId = entry.ParentSeries.Id;
+                entry.Id = await connection.InsertAsync(entry, transaction);
                 entry.ParentSeries.Entries.Add(entry);
             }
         }

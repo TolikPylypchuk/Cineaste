@@ -129,6 +129,9 @@
   <data name="AddNewMovie" xml:space="preserve">
     <value>Add new movie</value>
   </data>
+  <data name="AddNewMovieSeries" xml:space="preserve">
+    <value>Add new movie series</value>
+  </data>
   <data name="AddNewSeries" xml:space="preserve">
     <value>Add new series</value>
   </data>
