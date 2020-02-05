@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using MovieList.Data.Models;
 using MovieList.ListItems;
 
@@ -111,19 +111,52 @@ namespace MovieList.Comparers
                 (null, var entry) => this.Compare(left, new MovieSeriesListItem(entry.ParentSeries)),
                 var (entry1, entry2) => entry1.ParentSeriesId == entry2.ParentSeriesId
                     ? entry1.SequenceNumber.CompareTo(entry2.SequenceNumber)
-                    : this.Compare(
-                        new MovieSeriesListItem(entry1.ParentSeries),
-                        new MovieSeriesListItem(entry2.ParentSeries))
+                    : this.CompareEntries(entry1, entry2)
             };
 
 #pragma warning restore 8509
 
         private int CompareEntries(MovieSeriesListItem left, ListItem right, MovieSeriesEntry? entry)
-            => entry == null
-                ? this.CompareTitleOrYear(left, right)
-                : entry.ParentSeriesId == left.MovieSeries.Id
-                    ? -1
-                    : this.Compare(left, new MovieSeriesListItem(entry.ParentSeries));
+        {
+            if (entry == null)
+            {
+                return this.CompareTitleOrYear(left, right);
+            }
+
+            if (left.MovieSeries.IsDescendantOf(entry.ParentSeries))
+            {
+                return -1;
+            }
+
+            return this.Compare(left, new MovieSeriesListItem(entry.ParentSeries));
+        }
+
+        private int CompareEntries(MovieSeriesEntry entry1, MovieSeriesEntry entry2)
+        {
+            if (entry1.ParentSeries.IsDescendantOf(entry2.ParentSeries))
+            {
+                return entry1.ParentSeries.GetAllAncestors()
+                        .Where(a => a.Entry != null)
+                        .First(a => a.Entry!.ParentSeriesId == entry2.ParentSeriesId)
+                        .Entry!
+                    .SequenceNumber
+                    .CompareTo(entry2.SequenceNumber);
+            }
+
+            if (entry2.ParentSeries.IsDescendantOf(entry1.ParentSeries))
+            {
+                return entry1.SequenceNumber.CompareTo(
+                    entry2.ParentSeries.GetAllAncestors()
+                        .Where(a => a.Entry != null)
+                        .First(a => a.Entry!.ParentSeriesId == entry1.ParentSeriesId)
+                        .Entry!
+                        .SequenceNumber);
+            }
+
+            return this.Compare(
+                new MovieSeriesListItem(entry1.ParentSeries),
+                new MovieSeriesListItem(entry2.ParentSeries));
+        }
 
         private int CompareTitleOrYear(ListItem left, ListItem right)
         {
