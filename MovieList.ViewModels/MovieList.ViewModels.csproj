@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="akavache" Version="6.10.3" />
-    <PackageReference Include="DynamicData" Version="6.14.3" />
-    <PackageReference Include="Equals.Fody" Version="4.0.0" />
-    <PackageReference Include="Fody" Version="6.0.8">
+    <PackageReference Include="akavache" Version="6.10.4" />
+    <PackageReference Include="DynamicData" Version="6.14.8" />
+    <PackageReference Include="Equals.Fody" Version="4.0.1" />
+    <PackageReference Include="Fody" Version="6.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
