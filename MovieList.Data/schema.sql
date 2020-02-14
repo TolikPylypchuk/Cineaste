@@ -99,6 +99,7 @@ CREATE TABLE "MovieSeries" (
     "Id" INTEGER PRIMARY KEY,
     "ShowTitles" INTEGER(1) NOT NULL,
     "IsLooselyConnected" INTEGER(1) NOT NULL,
+    "MergeDisplayNumbers" INTEGER(1) NOT NULL DEFAULT 0,
     "PosterUrl" TEXT
 );
 

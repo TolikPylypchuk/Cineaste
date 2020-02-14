@@ -10,6 +10,7 @@ namespace MovieList.Data.Models
     {
         public bool ShowTitles { get; set; }
         public bool IsLooselyConnected { get; set; }
+        public bool MergeDisplayNumbers { get; set; }
 
         public string? PosterUrl { get; set; }
 
