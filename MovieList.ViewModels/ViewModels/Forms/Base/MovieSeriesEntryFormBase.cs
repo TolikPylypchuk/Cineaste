@@ -35,13 +35,13 @@ namespace MovieList.ViewModels.Forms.Base
                 .Max()
                 ?? 0;
 
-            var canGoToMiniseries = this.IfMovieSeriesPresent(() => formNotChanged);
+            var canGoToMovieSeries = this.IfMovieSeriesPresent(() => formNotChanged);
 
             this.GoToMovieSeries = ReactiveCommand.Create<Unit, MovieSeries>(
-                _ => this.MovieSeriesEntry!.ParentSeries, canGoToMiniseries);
+                _ => this.MovieSeriesEntry!.ParentSeries, canGoToMovieSeries);
 
             var canGoToNext = this.IfMovieSeriesPresent(() =>
-                this.MovieSeriesEntry!.SequenceNumber == lastSequenceNumber
+                this.MovieSeriesEntry!.SequenceNumber >= lastSequenceNumber
                     ? Observable.Return(false)
                     : formNotChanged);
 
