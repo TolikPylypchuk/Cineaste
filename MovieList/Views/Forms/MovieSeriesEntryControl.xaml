@@ -16,9 +16,9 @@
                 <ColumnDefinition SharedSizeGroup="Years" Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="DisplayNumberTextBlock" Grid.Column="0" Margin="0,0,4,0" TextAlignment="Left" />
-            <TextBlock x:Name="TitleTextBlock" Grid.Column="1" TextAlignment="Center" />
-            <TextBlock x:Name="YearsTextBlock" Grid.Column="2" Margin="4,0,0,0" TextAlignment="Right" />
+            <TextBlock x:Name="DisplayNumberTextBlock" Grid.Column="0" Margin="0,0,8,0" TextAlignment="Left" />
+            <TextBlock x:Name="TitleTextBlock" Grid.Column="1" TextAlignment="Center" TextWrapping="Wrap" />
+            <TextBlock x:Name="YearsTextBlock" Grid.Column="2" Margin="8,0,0,0" TextAlignment="Right" />
         </Grid>
 
         <Border.ContextMenu>
