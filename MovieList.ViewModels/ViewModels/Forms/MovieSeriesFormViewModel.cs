@@ -56,14 +56,11 @@ namespace MovieList.ViewModels.Forms
                 .Bind(out this.entries)
                 .Subscribe();
 
-            var formTitleWhenHasTitles = this.FormTitle;
-            var formTitleWhenDoesNotHaveTitles = Observable.Return(this.GetFormTitle(this.MovieSeries));
-
             this.FormTitle =
-                this.WhenAnyValue(vm => vm.HasTitles)
-                    .Select(hasTitles => hasTitles ? formTitleWhenHasTitles : formTitleWhenDoesNotHaveTitles)
-                    .Switch()
-                    .ObserveOn(RxApp.MainThreadScheduler);
+                this.FormTitle
+                    .Select(title => this.MovieSeriesEntry != null
+                        ? $"{this.GetFormTitle(this.MovieSeriesEntry.ParentSeries)}: {title}"
+                        : title);
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
@@ -243,7 +240,7 @@ namespace MovieList.ViewModels.Forms
         private string GetFormTitle(MovieSeries movieSeries)
         {
             string title = movieSeries.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name
-                           ?? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty;
+                ?? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty;
             return movieSeries.Entry == null ? title : $"{this.GetFormTitle(movieSeries.Entry.ParentSeries)}: {title}";
         }
 
