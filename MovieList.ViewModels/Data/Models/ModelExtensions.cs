@@ -70,10 +70,13 @@ namespace MovieList.Data.Models
         public static MovieSeries GetRootSeries(this MovieSeries movieSeries)
             => movieSeries.Entry == null ? movieSeries : movieSeries.Entry.ParentSeries.GetRootSeries();
 
-        public static bool IsDescendantOf(this MovieSeries? series, MovieSeries potentialAncestor)
-            => series != null &&
-                (series.Id == potentialAncestor.Id ||
-                    (series.Entry?.ParentSeries.IsDescendantOf(potentialAncestor) ?? false));
+        public static bool IsDescendantOf(this MovieSeries? movieSeries, MovieSeries potentialAncestor)
+            => movieSeries != null &&
+                (movieSeries.Id == potentialAncestor.Id ||
+                    (movieSeries.Entry?.ParentSeries.IsDescendantOf(potentialAncestor) ?? false));
+
+        public static bool IsStrictDescendantOf(this MovieSeries? movieSeries, MovieSeries potentialAncestor)
+            => movieSeries != potentialAncestor && movieSeries.IsDescendantOf(potentialAncestor);
 
         public static IEnumerable<MovieSeries> GetAllAncestors(this MovieSeries? series)
         {

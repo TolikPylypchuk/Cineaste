@@ -124,9 +124,19 @@ namespace MovieList.Comparers
                 return this.CompareTitleOrYear(left, right);
             }
 
-            if (left.MovieSeries.IsDescendantOf(entry.ParentSeries))
+            if (left.MovieSeries == entry.ParentSeries)
             {
                 return -1;
+            }
+
+            if (left.MovieSeries.IsStrictDescendantOf(entry.ParentSeries))
+            {
+                var leftEntry = left.MovieSeries
+                    .GetAllAncestors()
+                    .First(ms => ms.Entry?.ParentSeries == entry.ParentSeries)
+                    .Entry!;
+
+                return leftEntry.SequenceNumber.CompareTo(entry.SequenceNumber);
             }
 
             return this.Compare(left, new MovieSeriesListItem(entry.ParentSeries));
