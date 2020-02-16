@@ -155,11 +155,10 @@ namespace MovieList.Views.Forms
             this.Bind(this.ViewModel, vm => vm.MergeDisplayNumbers, v => v.MergeDisplayNumbersCheckBox.IsChecked)
                 .DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ViewModel.CanHaveTitles)
-                .BindTo(this, v => v.HasTitlesCheckBox.IsEnabled)
-                .DisposeWith(disposables);
-
-            this.WhenAnyValue(v => v.ViewModel.HasTitles)
+            this.WhenAnyValue(
+                    v => v.ViewModel.HasTitles,
+                    v => v.ViewModel.CanShowTitles,
+                    (hasTitles, canShowTitles) => hasTitles && canShowTitles)
                 .BindTo(this, v => v.ShowInListCheckBox.IsEnabled)
                 .DisposeWith(disposables);
 

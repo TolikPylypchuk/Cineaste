@@ -44,6 +44,9 @@ namespace MovieList.Data.Models
         }
 
         public static Title? GetTitle(this MovieSeries movieSeries)
+            => movieSeries.Titles.Count > 0 ? movieSeries.Title! : movieSeries.GetFirstEntry()?.GetTitle();
+
+        public static Title? GetListTitle(this MovieSeries movieSeries)
             => movieSeries.ShowTitles ? movieSeries.Title! : movieSeries.GetFirstEntry()?.GetTitle();
 
         public static Title? GetTitle(this MovieSeriesEntry entry)

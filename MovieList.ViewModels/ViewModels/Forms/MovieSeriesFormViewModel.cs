@@ -58,16 +58,15 @@ namespace MovieList.ViewModels.Forms
 
             this.FormTitle =
                 this.FormTitle
-                    .Select(title => this.MovieSeriesEntry != null
-                        ? $"{this.GetFormTitle(this.MovieSeriesEntry.ParentSeries)}: {title}"
-                        : title);
+                    .Select(this.GetFullFormTitle)
+                    .StartWith(this.GetFullFormTitle(this.GetFormTitle(String.Empty)));
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.entriesSource.Connect()
                 .Count()
                 .Select(count => count > 0)
-                .ToPropertyEx(this, vm => vm.CanHaveTitles);
+                .ToPropertyEx(this, vm => vm.CanShowTitles);
 
             var canSelectEntry = this.FormChanged.Invert();
 
@@ -114,7 +113,7 @@ namespace MovieList.ViewModels.Forms
 
         public ValidationHelper PosterUrlRule { get; }
 
-        public bool CanHaveTitles { [ObservableAsProperty] get; }
+        public bool CanShowTitles { [ObservableAsProperty] get; }
 
         public ReactiveCommand<MovieSeriesEntryViewModel, MovieSeriesEntry> SelectEntry { get; }
         public ReactiveCommand<MovieSeriesEntry, MovieSeriesEntry> DetachEntry { get; }
@@ -212,24 +211,21 @@ namespace MovieList.ViewModels.Forms
         private void InitializeValueDependencies()
         {
             this.WhenAnyValue(vm => vm.HasTitles)
-                .Where(_ => this.CanHaveTitles)
                 .BindTo(this, vm => vm.ShowTitles);
 
             this.WhenAnyValue(vm => vm.HasTitles)
-                .Where(_ => this.CanHaveTitles)
                 .Where(hasTitles => hasTitles && this.Titles.Count == 0)
                 .Discard()
                 .SubscribeAsync(this.AddTitles);
 
             this.WhenAnyValue(vm => vm.HasTitles)
-                .Where(_ => this.CanHaveTitles)
                 .Where(hasTitles => !hasTitles && this.Titles.Count > 0)
                 .Discard()
                 .Subscribe(this.ClearTitles);
 
-            this.WhenAnyValue(vm => vm.HasTitles)
-                .Where(hasTitles => hasTitles && !this.CanHaveTitles)
-                .Subscribe(_ => this.HasTitles = false);
+            this.WhenAnyValue(vm => vm.ShowTitles)
+                .Where(showTitles => showTitles && !this.CanShowTitles)
+                .Subscribe(_ => this.ShowTitles = false);
 
             this.WhenAnyValue(vm => vm.MergeDisplayNumbers)
                 .SubscribeBool(this.OnMergeDisplayNumbers, this.OnUnmergeDisplayNumbers);
@@ -239,15 +235,24 @@ namespace MovieList.ViewModels.Forms
         [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
         private string GetFormTitle(MovieSeries movieSeries)
         {
-            string title = movieSeries.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name
-                ?? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty;
+            string title = movieSeries.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name ?? String.Empty;
             return movieSeries.Entry == null ? title : $"{this.GetFormTitle(movieSeries.Entry.ParentSeries)}: {title}";
         }
 
+        private string GetFullFormTitle(string title)
+            => this.MovieSeriesEntry != null
+                ? $"{this.GetFormTitle(this.MovieSeriesEntry.ParentSeries)}: {title}"
+                : title;
+
+        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
+        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
         private async Task AddTitles()
         {
-            string titleName = this.MovieSeries.ActualTitles.First(t => !t.IsOriginal).Name;
-            string originalTitleName = this.MovieSeries.ActualTitles.First(t => t.IsOriginal).Name;
+            string titleName = this.MovieSeries.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name
+                ?? String.Empty;
+
+            string originalTitleName = this.MovieSeries.ActualTitles.FirstOrDefault(t => t.IsOriginal)?.Name
+                ?? String.Empty;
 
             await this.AddTitle.Execute();
             await this.AddOriginalTitle.Execute();

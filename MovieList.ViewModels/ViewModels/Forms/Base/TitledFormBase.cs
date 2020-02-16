@@ -40,9 +40,7 @@ namespace MovieList.ViewModels.Forms.Base
                 .AutoRefresh(vm => vm.Priority)
                 .ToCollection()
                 .Select(vms => vms.OrderBy(vm => vm.Priority).Select(vm => vm.Name).FirstOrDefault())
-                .Select(title => this.IsNew && String.IsNullOrWhiteSpace(title)
-                    ? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty
-                    : title)
+                .Select(this.GetFormTitle)
                 .ObserveOn(RxApp.MainThreadScheduler);
 
             var canAddTitle = this.Titles.ToObservableChangeSet()
@@ -121,6 +119,11 @@ namespace MovieList.ViewModels.Forms.Base
 
         protected void ClearTitles()
             => this.titlesSource.Clear();
+
+        protected string GetFormTitle(string title)
+            => this.IsNew && String.IsNullOrWhiteSpace(title)
+                ? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty
+                : title;
 
         private void InitializeTitles(
             Func<Title, bool> predicate,

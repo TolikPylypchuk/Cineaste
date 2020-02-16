@@ -124,6 +124,11 @@ namespace MovieList.ViewModels.Forms
             this.Years = this.Entry.GetYears();
             this.SequenceNumber = this.Entry.SequenceNumber;
             this.DisplayNumber = this.Entry.DisplayNumber;
+
+            if (this.Years == "0")
+            {
+                this.Years = String.Empty;
+            }
         }
     }
 }
