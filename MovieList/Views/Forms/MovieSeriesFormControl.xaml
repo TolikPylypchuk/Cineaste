@@ -71,7 +71,11 @@
                     <WrapPanel HorizontalAlignment="Center" Margin="0,8,0,0">
                         <CheckBox x:Name="HasTitlesCheckBox" Content="{l:Translate MovieSeriesHasTitles}" Margin="4,0" />
                         <CheckBox x:Name="ShowInListCheckBox" Content="{l:Translate MovieSeriesShowInList}" Margin="4,0" />
+                    </WrapPanel>
+
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,8,0,0">
                         <CheckBox x:Name="IsLooselyConnectedCheckBox" Content="{l:Translate LooselyConnected}" Margin="4,0" />
+                        <CheckBox x:Name="MergeDisplayNumbersCheckBox" Content="{l:Translate MergeDisplayNumbers}" Margin="4,0" />
                     </WrapPanel>
 
                     <ItemsControl x:Name="Titles" />

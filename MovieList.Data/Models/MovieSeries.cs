@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Dapper.Contrib.Extensions;
@@ -24,10 +25,12 @@ namespace MovieList.Data.Models
         public IList<Title> Titles { get; set; } = new List<Title>();
 
         [Computed]
+        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
+        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
         public IList<Title> ActualTitles
             => this.Titles.Count != 0
                 ? this.Titles
-                : this.Entries.OrderBy(e => e.SequenceNumber).First().Titles;
+                : this.Entries.OrderBy(e => e.SequenceNumber).FirstOrDefault()?.Titles ?? new List<Title>();
 
         [Computed]
         public Title? Title

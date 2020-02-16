@@ -638,6 +638,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Merge display numbers.
+        /// </summary>
+        public static string MergeDisplayNumbers {
+            get {
+                return ResourceManager.GetString("MergeDisplayNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Month.
         /// </summary>
         public static string Month {

@@ -4,8 +4,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using Akavache;
+
 using DynamicData;
 using DynamicData.Binding;
+
 using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
@@ -148,6 +150,13 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsLooselyConnected, v => v.IsLooselyConnectedCheckBox.IsChecked)
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.MergeDisplayNumbers, v => v.MergeDisplayNumbersCheckBox.IsChecked)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.CanHaveTitles)
+                .BindTo(this, v => v.HasTitlesCheckBox.IsEnabled)
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.HasTitles)

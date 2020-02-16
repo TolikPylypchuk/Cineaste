@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -10,6 +11,7 @@ using System.Resources;
 using System.Threading.Tasks;
 
 using DynamicData;
+using DynamicData.Aggregation;
 using DynamicData.Binding;
 
 using MovieList.Data.Models;
@@ -65,6 +67,11 @@ namespace MovieList.ViewModels.Forms
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
+            this.entriesSource.Connect()
+                .Count()
+                .Select(count => count > 0)
+                .ToPropertyEx(this, vm => vm.CanHaveTitles);
+
             var canSelectEntry = this.FormChanged.Invert();
 
             this.SelectEntry = ReactiveCommand.Create<MovieSeriesEntryViewModel, MovieSeriesEntry>(
@@ -81,19 +88,7 @@ namespace MovieList.ViewModels.Forms
             this.AddSeries = ReactiveCommand.Create(() => { }, canAddEntry);
             this.AddMovieSeries = ReactiveCommand.Create(() => { }, canAddEntry);
 
-            this.WhenAnyValue(vm => vm.HasTitles)
-                .BindTo(this, vm => vm.ShowTitles);
-
-            this.WhenAnyValue(vm => vm.HasTitles)
-                .Where(hasTitles => hasTitles && this.Titles.Count == 0)
-                .Discard()
-                .SubscribeAsync(this.AddTitles);
-
-            this.WhenAnyValue(vm => vm.HasTitles)
-                .Where(hasTitles => !hasTitles && this.Titles.Count > 0)
-                .Discard()
-                .Subscribe(this.ClearTitles);
-
+            this.InitializeValueDependencies();
             this.CopyProperties();
             this.CanDeleteWhenNotChanged();
             this.CanCreateMovieSeries();
@@ -115,9 +110,14 @@ namespace MovieList.ViewModels.Forms
         public bool IsLooselyConnected { get; set; }
 
         [Reactive]
+        public bool MergeDisplayNumbers { get; set; }
+
+        [Reactive]
         public string PosterUrl { get; set; } = String.Empty;
 
         public ValidationHelper PosterUrlRule { get; }
+
+        public bool CanHaveTitles { [ObservableAsProperty] get; }
 
         public ReactiveCommand<MovieSeriesEntryViewModel, MovieSeriesEntry> SelectEntry { get; }
         public ReactiveCommand<MovieSeriesEntry, MovieSeriesEntry> DetachEntry { get; }
@@ -142,6 +142,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.HasTitles, vm => vm.MovieSeries.Titles.Count > 0);
             this.TrackChanges(vm => vm.ShowTitles, vm => vm.MovieSeries.ShowTitles);
             this.TrackChanges(vm => vm.IsLooselyConnected, vm => vm.MovieSeries.IsLooselyConnected);
+            this.TrackChanges(vm => vm.MergeDisplayNumbers, vm => vm.MovieSeries.MergeDisplayNumbers);
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.MovieSeries.PosterUrl.EmptyIfNull());
 
             this.TrackChanges(this.IsCollectionChanged(vm => vm.Entries, vm => vm.MovieSeries.Entries));
@@ -170,6 +171,7 @@ namespace MovieList.ViewModels.Forms
 
             this.MovieSeries.ShowTitles = this.ShowTitles;
             this.MovieSeries.IsLooselyConnected = this.IsLooselyConnected;
+            this.MovieSeries.MergeDisplayNumbers = this.MergeDisplayNumbers;
             this.MovieSeries.PosterUrl = this.PosterUrl.NullIfEmpty();
 
             await this.movieSeriesService.SaveAsync(this.MovieSeries);
@@ -203,15 +205,45 @@ namespace MovieList.ViewModels.Forms
             this.HasTitles = this.MovieSeries.Titles.Count > 0;
             this.ShowTitles = this.MovieSeries.ShowTitles;
             this.IsLooselyConnected = this.MovieSeries.IsLooselyConnected;
+            this.MergeDisplayNumbers = this.MovieSeries.MergeDisplayNumbers;
             this.PosterUrl = this.MovieSeries.PosterUrl.EmptyIfNull();
         }
 
         protected override void AttachTitle(Title title)
             => title.MovieSeries = this.MovieSeries;
 
+        private void InitializeValueDependencies()
+        {
+            this.WhenAnyValue(vm => vm.HasTitles)
+                .Where(_ => this.CanHaveTitles)
+                .BindTo(this, vm => vm.ShowTitles);
+
+            this.WhenAnyValue(vm => vm.HasTitles)
+                .Where(_ => this.CanHaveTitles)
+                .Where(hasTitles => hasTitles && this.Titles.Count == 0)
+                .Discard()
+                .SubscribeAsync(this.AddTitles);
+
+            this.WhenAnyValue(vm => vm.HasTitles)
+                .Where(_ => this.CanHaveTitles)
+                .Where(hasTitles => !hasTitles && this.Titles.Count > 0)
+                .Discard()
+                .Subscribe(this.ClearTitles);
+
+            this.WhenAnyValue(vm => vm.HasTitles)
+                .Where(hasTitles => hasTitles && !this.CanHaveTitles)
+                .Subscribe(_ => this.HasTitles = false);
+
+            this.WhenAnyValue(vm => vm.MergeDisplayNumbers)
+                .SubscribeBool(this.OnMergeDisplayNumbers, this.OnUnmergeDisplayNumbers);
+        }
+
+        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
+        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
         private string GetFormTitle(MovieSeries movieSeries)
         {
-            string title = movieSeries.ActualTitles.First(t => !t.IsOriginal).Name;
+            string title = movieSeries.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name
+                           ?? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty;
             return movieSeries.Entry == null ? title : $"{this.GetFormTitle(movieSeries.Entry.ParentSeries)}: {title}";
         }
 
@@ -332,5 +364,39 @@ namespace MovieList.ViewModels.Forms
             => this.Entries
                 .Where(entry => entry.SequenceNumber > num && entry.DisplayNumber.HasValue)
                 .ForEach(entry => entry.DisplayNumber = update(entry.DisplayNumber ?? 0));
+
+        private void OnMergeDisplayNumbers()
+            => this.AdjustDisplayNumbers(
+                this.GetNextDisplayNumber(this.MovieSeriesEntry?.ParentSeries.Entries
+                    .LastOrDefault(entry => entry.SequenceNumber < this.MovieSeriesEntry.SequenceNumber)));
+
+        private void OnUnmergeDisplayNumbers()
+            => this.AdjustDisplayNumbers(1);
+
+        private void AdjustDisplayNumbers(int firstNumber)
+            => this.Entries
+                .Where(entry => entry.DisplayNumber != null)
+                .ForEach((entry, index) => entry.DisplayNumber = index + firstNumber);
+
+        private int GetNextDisplayNumber(MovieSeriesEntry? entry)
+        {
+            if (entry == null)
+            {
+                return 1;
+            }
+
+            if (entry.DisplayNumber != null && (entry.Movie != null || entry.Series != null))
+            {
+                return entry.DisplayNumber.Value + 1;
+            }
+
+            if (entry.MovieSeries != null)
+            {
+                return (entry.MovieSeries.Entries.Select(e => e.DisplayNumber).Max() ?? 0) + 1;
+            }
+
+            return this.GetNextDisplayNumber(entry.ParentSeries.Entries
+                .LastOrDefault(e => e.SequenceNumber < entry.SequenceNumber));
+        }
     }
 }

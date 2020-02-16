@@ -31,7 +31,7 @@ namespace MovieList.ViewModels.Forms.Base
 
             int lastSequenceNumber = this.MovieSeriesEntry?.ParentSeries
                 .Entries
-                .Select(e => e.SequenceNumber)
+                .Select(e => (int?)e.SequenceNumber)
                 .Max()
                 ?? 0;
 

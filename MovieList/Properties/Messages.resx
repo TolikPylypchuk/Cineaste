@@ -310,6 +310,9 @@ This will detach all entries without deleting them.</value>
   <data name="May" xml:space="preserve">
     <value>May</value>
   </data>
+  <data name="MergeDisplayNumbers" xml:space="preserve">
+    <value>Merge display numbers</value>
+  </data>
   <data name="Month" xml:space="preserve">
     <value>Month</value>
   </data>

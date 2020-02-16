@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using MovieList.Data.Models;
 using MovieList.ListItems;
 
@@ -80,8 +81,8 @@ namespace MovieList.Comparers
             } else
             {
                 result = TitleComparer.Instance.Compare(
-                    left.MovieSeries.GetTitle().Name,
-                    right.MovieSeries.GetTitle().Name);
+                    left.MovieSeries.GetTitle()?.Name ?? String.Empty,
+                    right.MovieSeries.GetTitle()?.Name ?? String.Empty);
 
                 if (result == 0)
                 {
@@ -166,7 +167,9 @@ namespace MovieList.Comparers
 
         private int CompareTitleOrYear(MovieSeriesListItem left, ListItem right)
         {
-            int result = TitleComparer.Instance.Compare(left.MovieSeries.GetTitle().Name, right.Title);
+            int result = TitleComparer.Instance.Compare(
+                left.MovieSeries.GetTitle()?.Name ?? String.Empty, right.Title);
+
             return result != 0 ? result : left.Year.CompareTo(right.Year);
         }
     }

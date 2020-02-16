@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using static MovieList.Data.Constants;
@@ -36,26 +37,34 @@ namespace MovieList.Data.Models
 
         public static string GetActiveColor(this MovieSeries movieSeries)
         {
-            var firstEntry = GetFirstEntry(movieSeries);
-            return firstEntry.Movie?.GetActiveColor() ?? firstEntry.Series!.GetActiveColor();
+            var firstEntry = movieSeries.GetFirstEntry();
+            return firstEntry != null
+                ? firstEntry.Movie?.GetActiveColor() ?? firstEntry.Series!.GetActiveColor()
+                : String.Empty;
         }
 
-        public static Title GetTitle(this MovieSeries movieSeries)
-            => movieSeries.ShowTitles ? movieSeries.Title! : movieSeries.GetFirstEntry().GetTitle();
+        public static Title? GetTitle(this MovieSeries movieSeries)
+            => movieSeries.ShowTitles ? movieSeries.Title! : movieSeries.GetFirstEntry()?.GetTitle();
 
-        public static Title GetTitle(this MovieSeriesEntry entry)
+        public static Title? GetTitle(this MovieSeriesEntry entry)
             => entry.Movie?.Title ?? entry.Series?.Title ?? entry.MovieSeries!.GetTitle();
 
-        public static MovieSeriesEntry GetFirstEntry(this MovieSeries movieSeries)
+        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
+        public static MovieSeriesEntry? GetFirstEntry(this MovieSeries movieSeries)
         {
-            var firstEntry = movieSeries.Entries.OrderBy(entry => entry.SequenceNumber).First();
-            return firstEntry.MovieSeries == null ? firstEntry : firstEntry.MovieSeries.GetFirstEntry();
+            var firstEntry = movieSeries.Entries.OrderBy(entry => entry.SequenceNumber).FirstOrDefault();
+            return firstEntry != null
+                ? firstEntry.MovieSeries == null ? firstEntry : firstEntry.MovieSeries.GetFirstEntry()
+                : null;
         }
 
-        public static MovieSeriesEntry GetLastEntry(this MovieSeries movieSeries)
+        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
+        public static MovieSeriesEntry? GetLastEntry(this MovieSeries movieSeries)
         {
-            var lastEntry = movieSeries.Entries.OrderByDescending(entry => entry.SequenceNumber).First();
-            return lastEntry.MovieSeries == null ? lastEntry : lastEntry.MovieSeries.GetLastEntry();
+            var lastEntry = movieSeries.Entries.OrderByDescending(entry => entry.SequenceNumber).FirstOrDefault();
+            return lastEntry != null
+                ? lastEntry.MovieSeries == null ? lastEntry : lastEntry.MovieSeries.GetLastEntry()
+                : null;
         }
 
         public static MovieSeries GetRootSeries(this MovieSeries movieSeries)
@@ -92,13 +101,17 @@ namespace MovieList.Data.Models
         public static int GetStartYear(this MovieSeries movieSeries)
         {
             var firstEntry = movieSeries.GetFirstEntry();
-            return firstEntry.Movie?.Year ?? firstEntry.Series?.StartYear ?? firstEntry.MovieSeries!.GetStartYear();
+            return firstEntry != null
+                ? firstEntry.Movie?.Year ?? firstEntry.Series?.StartYear ?? firstEntry.MovieSeries!.GetStartYear()
+                : 0;
         }
 
         public static int GetEndYear(this MovieSeries movieSeries)
         {
             var lastEntry = movieSeries.GetLastEntry();
-            return lastEntry.Movie?.Year ?? lastEntry.Series?.EndYear ?? lastEntry.MovieSeries!.GetEndYear();
+            return lastEntry != null
+                ? lastEntry.Movie?.Year ?? lastEntry.Series?.EndYear ?? lastEntry.MovieSeries!.GetEndYear()
+                : 0;
         }
 
         public static string GetYears(this MovieSeriesEntry entry)

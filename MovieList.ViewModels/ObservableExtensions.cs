@@ -45,5 +45,17 @@ namespace MovieList
                 await observer();
                 return Unit.Default;
             }).Subscribe();
+
+        public static IDisposable SubscribeBool(this IObservable<bool> observable, Action onTrue, Action onFalse)
+            => observable.Subscribe(value =>
+            {
+                if (value)
+                {
+                    onTrue();
+                } else
+                {
+                    onFalse();
+                }
+            });
     }
 }

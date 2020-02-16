@@ -120,7 +120,7 @@ namespace MovieList.ViewModels.Forms
 
         protected override void CopyProperties()
         {
-            this.Title = this.Entry.GetTitle().Name;
+            this.Title = this.Entry.GetTitle()?.Name ?? String.Empty;
             this.Years = this.Entry.GetYears();
             this.SequenceNumber = this.Entry.SequenceNumber;
             this.DisplayNumber = this.Entry.DisplayNumber;
