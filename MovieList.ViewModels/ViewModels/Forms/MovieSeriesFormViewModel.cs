@@ -47,7 +47,7 @@ namespace MovieList.ViewModels.Forms
 
             this.movieSeriesService = movieSeriesService ??
                 Locator.Current.GetService<IEntityService<MovieSeries>>(fileName);
-
+            
             this.entriesSource.Connect()
                 .Transform(this.CreateEntryViewModel)
                 .AutoRefresh(vm => vm.SequenceNumber)
@@ -80,9 +80,9 @@ namespace MovieList.ViewModels.Forms
                     this.FormChanged.Invert())
                 .AllTrue();
 
-            this.AddMovie = ReactiveCommand.Create(() => { }, canAddEntry);
-            this.AddSeries = ReactiveCommand.Create(() => { }, canAddEntry);
-            this.AddMovieSeries = ReactiveCommand.Create(() => { }, canAddEntry);
+            this.AddMovie = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
+            this.AddSeries = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
+            this.AddMovieSeries = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
 
             this.InitializeValueDependencies();
             this.CopyProperties();
@@ -117,9 +117,9 @@ namespace MovieList.ViewModels.Forms
 
         public ReactiveCommand<MovieSeriesEntryViewModel, MovieSeriesEntry> SelectEntry { get; }
         public ReactiveCommand<MovieSeriesEntry, MovieSeriesEntry> DetachEntry { get; }
-        public ReactiveCommand<Unit, Unit> AddMovie { get; }
-        public ReactiveCommand<Unit, Unit> AddSeries { get; }
-        public ReactiveCommand<Unit, Unit> AddMovieSeries { get; }
+        public ReactiveCommand<Unit, int> AddMovie { get; }
+        public ReactiveCommand<Unit, int> AddSeries { get; }
+        public ReactiveCommand<Unit, int> AddMovieSeries { get; }
 
         public override bool IsNew
             => this.MovieSeries.Id == default;
@@ -228,7 +228,7 @@ namespace MovieList.ViewModels.Forms
                 .Subscribe(_ => this.ShowTitles = false);
 
             this.WhenAnyValue(vm => vm.MergeDisplayNumbers)
-                .SubscribeBool(this.OnMergeDisplayNumbers, this.OnUnmergeDisplayNumbers);
+                .Subscribe(_ => this.AdjustDisplayNumbers(this.GetFirstDisplayNumber()));
         }
 
         [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
@@ -351,7 +351,7 @@ namespace MovieList.ViewModels.Forms
             vm.DisplayNumber = (this.Entries
                 .Where(entry => entry.SequenceNumber < vm.SequenceNumber && entry.DisplayNumber.HasValue)
                 .Select(entry => entry.DisplayNumber)
-                .Max() ?? 0) + 1;
+                .Max() ?? (this.GetFirstDisplayNumber() - 1)) + 1;
 
             this.IncrementNumbers(vm.SequenceNumber);
         }
@@ -367,13 +367,11 @@ namespace MovieList.ViewModels.Forms
                 .Where(entry => entry.SequenceNumber > num && entry.DisplayNumber.HasValue)
                 .ForEach(entry => entry.DisplayNumber = update(entry.DisplayNumber ?? 0));
 
-        private void OnMergeDisplayNumbers()
-            => this.AdjustDisplayNumbers(
-                this.GetNextDisplayNumber(this.MovieSeriesEntry?.ParentSeries.Entries
-                    .LastOrDefault(entry => entry.SequenceNumber < this.MovieSeriesEntry.SequenceNumber)));
-
-        private void OnUnmergeDisplayNumbers()
-            => this.AdjustDisplayNumbers(1);
+        private int GetFirstDisplayNumber()
+            => this.MergeDisplayNumbers
+                ? this.GetNextDisplayNumber(this.MovieSeriesEntry?.ParentSeries.Entries
+                    .LastOrDefault(entry => entry.SequenceNumber < this.MovieSeriesEntry.SequenceNumber))
+                : 1;
 
         private void AdjustDisplayNumbers(int firstNumber)
             => this.Entries

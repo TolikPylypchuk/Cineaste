@@ -111,14 +111,15 @@ namespace MovieList.ViewModels
                         .ForEach(list.AddOrUpdate);
                 }
             });
-            
-            this.resort.OnNext(Unit.Default);
+
+            this.Resort();
 
             return item;
         }
 
         private void OnRemoveMovie(Movie movie)
-            => this.source.Edit(list =>
+        {
+            this.source.Edit(list =>
             {
                 list.RemoveKey(new MovieListItem(movie).Id);
 
@@ -128,8 +129,12 @@ namespace MovieList.ViewModels
                 }
             });
 
+            this.Resort();
+        }
+
         private void OnRemoveSeries(Series series)
-            => this.source.Edit(list =>
+        {
+            this.source.Edit(list =>
             {
                 list.RemoveKey(new SeriesListItem(series).Id);
 
@@ -139,8 +144,12 @@ namespace MovieList.ViewModels
                 }
             });
 
+            this.Resort();
+        }
+
         private void OnRemoveMovieSeries(MovieSeries movieSeries)
-            => this.source.Edit(list =>
+        {
+            this.source.Edit(list =>
             {
                 list.RemoveKey(new MovieSeriesListItem(movieSeries).Id);
 
@@ -154,6 +163,9 @@ namespace MovieList.ViewModels
                     list.AddOrUpdate(this.EntryToListItem(entry));
                 }
             });
+
+            this.Resort();
+        }
 
         private void RemoveMovieSeriesEntry(MovieSeriesEntry movieSeriesEntry, ISourceUpdater<ListItem, string> list)
         {
@@ -174,5 +186,8 @@ namespace MovieList.ViewModels
                 }
             }
         }
+
+        private void Resort()
+            => this.resort.OnNext(Unit.Default);
     }
 }

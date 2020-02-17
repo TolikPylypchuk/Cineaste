@@ -232,22 +232,19 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.AddMovie
-                .Select(_ => form.MovieSeries)
-                .Select(this.CreateMovieForMovieSeries)
+                .Select(displayNumber => this.CreateMovieForMovieSeries(form.MovieSeries, displayNumber))
                 .Select(movie => new MovieListItem(movie))
                 .InvokeCommand<ListItem>(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.AddSeries
-                .Select(_ => form.MovieSeries)
-                .Select(this.CreateSeriesForMovieSeries)
+                .Select(displayNumber => this.CreateSeriesForMovieSeries(form.MovieSeries, displayNumber))
                 .Select(series => new SeriesListItem(series))
                 .InvokeCommand<ListItem>(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.AddMovieSeries
-                .Select(_ => form.MovieSeries)
-                .Select(this.CreateMovieSeriesForMovieSeries)
+                .Select(displayNumber => this.CreateMovieSeriesForMovieSeries(form.MovieSeries, displayNumber))
                 .Select(ms => new MovieSeriesListItem(ms))
                 .InvokeCommand<ListItem>(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
@@ -463,9 +460,9 @@ namespace MovieList.ViewModels
             await this.List.ForceSelectedItem.Execute(Unit.Default);
         }
 
-        private Movie CreateMovieForMovieSeries(MovieSeries parentSeries)
+        private Movie CreateMovieForMovieSeries(MovieSeries parentSeries, int displayNumber)
         {
-            var entry = this.CreateEntryForMovieSeries(parentSeries);
+            var entry = this.CreateEntryForMovieSeries(parentSeries, displayNumber);
 
             var movie = new Movie
             {
@@ -484,9 +481,9 @@ namespace MovieList.ViewModels
             return movie;
         }
 
-        private Series CreateSeriesForMovieSeries(MovieSeries parentSeries)
+        private Series CreateSeriesForMovieSeries(MovieSeries parentSeries, int displayNumber)
         {
-            var entry = this.CreateEntryForMovieSeries(parentSeries);
+            var entry = this.CreateEntryForMovieSeries(parentSeries, displayNumber);
 
             var series = new Series
             {
@@ -504,9 +501,9 @@ namespace MovieList.ViewModels
             return series;
         }
 
-        private MovieSeries CreateMovieSeriesForMovieSeries(MovieSeries parentSeries)
+        private MovieSeries CreateMovieSeriesForMovieSeries(MovieSeries parentSeries, int displayNumber)
         {
-            var entry = this.CreateEntryForMovieSeries(parentSeries);
+            var entry = this.CreateEntryForMovieSeries(parentSeries, displayNumber);
 
             var movieSeries = new MovieSeries { Entry = entry };
 
@@ -515,7 +512,7 @@ namespace MovieList.ViewModels
             return movieSeries;
         }
 
-        private MovieSeriesEntry CreateEntryForMovieSeries(MovieSeries parentSeries)
+        private MovieSeriesEntry CreateEntryForMovieSeries(MovieSeries parentSeries, int displayNumber)
             => new MovieSeriesEntry
             {
                 ParentSeries = parentSeries,
@@ -523,8 +520,8 @@ namespace MovieList.ViewModels
                     ? 1
                     : parentSeries.Entries.Select(e => e.SequenceNumber).Max() + 1,
                 DisplayNumber = parentSeries.Entries.Count == 0
-                    ? 1
-                    : parentSeries.Entries.Select(e => e.DisplayNumber).Max() + 1
+                    ? displayNumber
+                    : (parentSeries.Entries.Select(e => e.DisplayNumber).Max() ?? (displayNumber - 1)) + 1
             };
 
         private void ClearEntryConnection(MovieSeriesEntry entry)

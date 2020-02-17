@@ -100,6 +100,20 @@ namespace MovieList.Data.Services.Implementations
             await connection.DeleteAsync(movieSeries.Titles, transaction);
             await connection.DeleteAsync(movieSeries.Entries, transaction);
 
+            foreach (var entry in movieSeries.Entries)
+            {
+                if (entry.Movie != null)
+                {
+                    entry.Movie.Entry = null;
+                } else if (entry.Series != null)
+                {
+                    entry.Series.Entry = null;
+                } else if (entry.MovieSeries != null)
+                {
+                    entry.MovieSeries.Entry = null;
+                }
+            }
+
             if (movieSeries.Entry != null)
             {
                 await this.DeleteMovieSeriesEntryAsync(movieSeries.Entry, connection, transaction);
