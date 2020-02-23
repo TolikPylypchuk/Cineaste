@@ -30,8 +30,10 @@ namespace MovieList.ViewModels
         public ListViewModel(
             string fileName,
             ReadOnlyObservableCollection<Kind> kinds,
+            Settings? settings = null,
             IListService? listService = null)
         {
+            settings ??= Locator.Current.GetService<Settings>(fileName);
             listService ??= Locator.Current.GetService<IListService>(fileName);
 
             this.source = new SourceCache<ListItem, string>(item => item.Id);
@@ -49,7 +51,8 @@ namespace MovieList.ViewModels
                 .AutoRefresh(item => item.Year)
                 .Transform(item => new ListItemViewModel(item))
                 .Sort(
-                    new PropertyComparer<ListItemViewModel, ListItem>(vm => vm.Item, ListItemTitleComparer.Instance),
+                    new PropertyComparer<ListItemViewModel, ListItem>(
+                        vm => vm.Item, new ListItemTitleComparer(settings.CultureInfo)),
                     this.resort)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.items)

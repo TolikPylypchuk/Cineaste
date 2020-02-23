@@ -117,7 +117,7 @@ namespace MovieList
             var filePreferences = new FilePreferences(showRecentFiles: true, new List<RecentFile>());
 
             var defaultsPreferences = new DefaultsPreferences(
-                Messages.DefaultSeasonTitle, Messages.DefaultSeasonOriginalTitle, this.CreateDefaultKinds());
+                Messages.DefaultSeasonTitle, Messages.DefaultSeasonOriginalTitle, this.CreateDefaultKinds(), "uk-UA");
 
             var loggingPreferences = new LoggingPreferences(
                 $"{Assembly.GetExecutingAssembly().GetName().Name}.log",

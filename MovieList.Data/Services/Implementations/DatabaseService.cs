@@ -87,6 +87,11 @@ namespace MovieList.Data.Services.Implementations
                 },
                 new Setting
                 {
+                    Key = SettingsListCultureKey,
+                    Value = settings.CultureInfo.Name
+                },
+                new Setting
+                {
                     Key = SettingsDefaultSeasonTitleKey,
                     Value = settings.DefaultSeasonTitle
                 },

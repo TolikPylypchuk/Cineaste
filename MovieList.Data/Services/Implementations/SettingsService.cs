@@ -31,7 +31,8 @@ namespace MovieList.Data.Services.Implementations
                     settings[SettingsListNameKey],
                     Int32.Parse(settings[SettingsListVersionKey]),
                     settings[SettingsDefaultSeasonTitleKey],
-                    settings[SettingsDefaultSeasonOriginalTitleKey]);
+                    settings[SettingsDefaultSeasonOriginalTitleKey],
+                    settings[SettingsListCultureKey]);
             });
         }
 

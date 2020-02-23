@@ -1,3 +1,4 @@
+using System.Globalization;
 using static MovieList.Data.Constants;
 
 namespace MovieList.Data
@@ -8,12 +9,14 @@ namespace MovieList.Data
             string listName,
             int listVersion,
             string defaultSeasonTitle,
-            string defaultSeasonOriginalTitle)
+            string defaultSeasonOriginalTitle,
+            string cultureInfo)
         {
             this.ListName = listName;
             this.ListVersion = listVersion;
             this.DefaultSeasonTitle = defaultSeasonTitle;
             this.DefaultSeasonOriginalTitle = defaultSeasonOriginalTitle;
+            this.CultureInfo = new CultureInfo(cultureInfo);
         }
 
         public string ListName { get; set; }
@@ -21,6 +24,8 @@ namespace MovieList.Data
 
         public string DefaultSeasonTitle { get; set; }
         public string DefaultSeasonOriginalTitle { get; set; }
+
+        public CultureInfo CultureInfo { get; set; }
 
         public string GetSeasonTitle(int num)
             => this.DefaultSeasonTitle.Replace(SeasonNumberPlaceholder, num.ToString());

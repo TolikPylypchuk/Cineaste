@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -9,13 +10,14 @@ namespace MovieList.Comparers
     {
         private static readonly Regex NumberRegex = new Regex("([0-9]+)", RegexOptions.Compiled);
 
-        private TitleComparer()
-        { }
+        private readonly EnumerableComparer<object> comparer;
 
-        public static TitleComparer Instance { get; } = new TitleComparer();
+        public TitleComparer(CultureInfo culture)
+            => this.comparer = new EnumerableComparer<object>(
+                new StringOrIntComparer(culture.CompareInfo.GetStringComparer(CompareOptions.None)));
 
         public int Compare(string x, string y)
-            => EnumerableComparer<object>.Default.Compare(
+            => this.comparer.Compare(
                 NumberRegex.Split(this.Normalize(x)).Select(this.Convert),
                 NumberRegex.Split(this.Normalize(y)).Select(this.Convert));
 

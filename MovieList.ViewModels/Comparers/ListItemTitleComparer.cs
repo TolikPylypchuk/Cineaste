@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using MovieList.Data.Models;
@@ -9,10 +10,10 @@ namespace MovieList.Comparers
 {
     public sealed class ListItemTitleComparer : IComparer<ListItem>
     {
-        private ListItemTitleComparer()
-        { }
+        private readonly TitleComparer titleComparer;
 
-        public static ListItemTitleComparer Instance { get; } = new ListItemTitleComparer();
+        public ListItemTitleComparer(CultureInfo culture)
+            => this.titleComparer = new TitleComparer(culture);
 
         public int Compare(ListItem x, ListItem y)
             => (x, y) switch
@@ -80,7 +81,7 @@ namespace MovieList.Comparers
                 result = ancestor1.Entry?.SequenceNumber.CompareTo(ancestor2.Entry?.SequenceNumber) ?? 0;
             } else if (left.MovieSeries.Entry == null && right.MovieSeries.Entry == null)
             {
-                result = TitleComparer.Instance.Compare(
+                result = this.titleComparer.Compare(
                     left.MovieSeries.GetListTitle()?.Name ?? String.Empty,
                     right.MovieSeries.GetListTitle()?.Name ?? String.Empty);
 
@@ -176,13 +177,13 @@ namespace MovieList.Comparers
 
         private int CompareTitleOrYear(ListItem left, ListItem right)
         {
-            int result = TitleComparer.Instance.Compare(left.Title, right.Title);
+            int result = this.titleComparer.Compare(left.Title, right.Title);
             return result != 0 ? result : left.Year.CompareTo(right.Year);
         }
 
         private int CompareTitleOrYear(MovieSeriesListItem left, ListItem right)
         {
-            int result = TitleComparer.Instance.Compare(
+            int result = this.titleComparer.Compare(
                 left.MovieSeries.GetListTitle()?.Name ?? String.Empty, right.Title);
 
             return result != 0 ? result : left.Year.CompareTo(right.Year);

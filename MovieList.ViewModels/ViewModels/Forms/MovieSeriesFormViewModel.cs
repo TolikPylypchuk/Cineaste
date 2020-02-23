@@ -35,6 +35,8 @@ namespace MovieList.ViewModels.Forms
         private readonly SourceList<MovieSeriesEntry> entriesSource = new SourceList<MovieSeriesEntry>();
         private readonly ReadOnlyObservableCollection<MovieSeriesEntryViewModel> entries;
 
+        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
+        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
         public MovieSeriesFormViewModel(
             MovieSeries movieSeries,
             string fileName,
@@ -59,7 +61,8 @@ namespace MovieList.ViewModels.Forms
             this.FormTitle =
                 this.FormTitle
                     .Select(this.GetFullFormTitle)
-                    .StartWith(this.GetFullFormTitle(this.GetFormTitle(String.Empty)));
+                    .StartWith(this.GetFullFormTitle(
+                        this.GetFormTitle(this.MovieSeries.ActualTitles.FirstOrDefault()?.Name ?? String.Empty)));
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 

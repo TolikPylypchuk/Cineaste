@@ -83,7 +83,7 @@ namespace MovieList.ViewModels
         private async Task<CreateFileModel?> OnCreateFileAsync(CreateFileModel model)
         {
             this.Log().Debug($"Creating a file: {model.File}");
-            Locator.CurrentMutable.RegisterDatabaseServices(model.File);
+            await this.RegisterDatabaseServicesAsync(model.File);
 
             var preferences = Locator.Current.GetService<UserPreferences>().Defaults;
 
@@ -91,7 +91,8 @@ namespace MovieList.ViewModels
                 model.ListName,
                 ListFileVersion,
                 preferences.DefaultSeasonTitle,
-                preferences.DefaultSeasonOriginalTitle);
+                preferences.DefaultSeasonOriginalTitle,
+                preferences.DefaultCultureInfo);
 
             await Locator.Current.GetService<IDatabaseService>(model.File)
                 .CreateDatabaseAsync(settings, preferences.DefaultKinds);
@@ -113,7 +114,7 @@ namespace MovieList.ViewModels
             }
 
             this.Log().Debug($"Opening a file: {model.File}");
-            Locator.CurrentMutable.RegisterDatabaseServices(model.File);
+            await this.RegisterDatabaseServicesAsync(model.File);
 
             bool isFileValid = await Locator.Current.GetService<IDatabaseService>(model.File)
                 .ValidateDatabaseAsync();
@@ -207,6 +208,16 @@ namespace MovieList.ViewModels
             {
                 await this.HomePage.AddRecentFile.Execute(newRecentFile);
             }
+        }
+
+        private async Task RegisterDatabaseServicesAsync(string file)
+        {
+            Locator.CurrentMutable.RegisterDatabaseServices(file);
+
+            var settingsService = Locator.Current.GetService<ISettingsService>(file);
+
+            Locator.CurrentMutable.RegisterConstant(await settingsService.GetSettingsAsync(), file);
+
         }
     }
 }
