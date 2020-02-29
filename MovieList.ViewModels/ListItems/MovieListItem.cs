@@ -11,6 +11,8 @@ namespace MovieList.ListItems
                 movie.Title.Name,
                 movie.OriginalTitle.Name,
                 movie.Year.ToString(),
+                movie.Year,
+                movie.Year,
                 movie.GetActiveColor())
             => this.Movie = movie;
 

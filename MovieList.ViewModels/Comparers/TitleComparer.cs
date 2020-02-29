@@ -25,9 +25,12 @@ namespace MovieList.Comparers
             => title.ToLower()
                 .Replace(":", "")
                 .Replace(".", "")
+                .Replace(",", "")
                 .Replace(" - ", " ")
                 .Replace(" – ", " ")
+                .Replace("-", " ")
                 .Replace("'", "")
+                .Replace("’", "")
                 .Replace("\"", "");
 
         private object Convert(string title)

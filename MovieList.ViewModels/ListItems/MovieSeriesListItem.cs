@@ -17,6 +17,8 @@ namespace MovieList.ListItems
                     ? $"{movieSeries.OriginalTitle.Name}:"
                     : String.Empty,
                 String.Empty,
+                movieSeries.GetStartYear(),
+                movieSeries.GetEndYear(),
                 movieSeries.GetActiveColor())
             => this.MovieSeries = movieSeries;
 

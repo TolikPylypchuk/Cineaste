@@ -17,6 +17,8 @@ namespace MovieList.ListItems
                         ? $"{series.StartYear} - {series.EndYear}"
                         : series.StartYear.ToString()
                     : String.Empty,
+                  series.StartYear,
+                  series.EndYear,
                   series.GetActiveColor())
             => this.Series = series;
 

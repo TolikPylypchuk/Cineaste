@@ -9,12 +9,14 @@ namespace MovieList.ListItems
 {
     public abstract class ListItem : ReactiveObject, IEquatable<ListItem>
     {
-        protected ListItem(
+        private protected ListItem(
             string id,
             MovieSeriesEntry? entry,
             string title,
             string originalTitle,
             string year,
+            int startYearToCompare,
+            int endYearToCompare,
             string color)
         {
             this.Id = id;
@@ -22,6 +24,8 @@ namespace MovieList.ListItems
             this.Title = title;
             this.OriginalTitle = originalTitle;
             this.Year = year;
+            this.StartYearToCompare = startYearToCompare;
+            this.EndYearToCompare = endYearToCompare;
             this.Color = color;
         }
 
@@ -38,6 +42,12 @@ namespace MovieList.ListItems
 
         [Reactive]
         public string Year { get; set; }
+
+        [Reactive]
+        public int StartYearToCompare { get; set; }
+
+        [Reactive]
+        public int EndYearToCompare { get; set; }
 
         [Reactive]
         public string Color { get; set; }

@@ -127,7 +127,7 @@ namespace MovieList.Comparers
         {
             if (entry == null)
             {
-                return this.CompareTitleOrYear(new MovieSeriesListItem(left.MovieSeries.GetRootSeries()), right);
+                return this.CompareTitleOrYears(new MovieSeriesListItem(left.MovieSeries.GetRootSeries()), right);
             }
 
             if (left.MovieSeries.Id == entry.ParentSeriesId)
@@ -181,12 +181,19 @@ namespace MovieList.Comparers
             return result != 0 ? result : left.Year.CompareTo(right.Year);
         }
 
-        private int CompareTitleOrYear(MovieSeriesListItem left, ListItem right)
+        private int CompareTitleOrYears(MovieSeriesListItem left, ListItem right)
         {
             int result = this.titleComparer.Compare(
                 left.MovieSeries.GetListTitle()?.Name ?? String.Empty, right.Title);
 
-            return result != 0 ? result : left.Year.CompareTo(right.Year);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            result = left.StartYearToCompare.CompareTo(right.StartYearToCompare);
+
+            return result != 0 ? result : left.EndYearToCompare.CompareTo(right.EndYearToCompare);
         }
     }
 }
