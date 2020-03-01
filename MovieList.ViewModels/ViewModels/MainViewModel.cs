@@ -104,6 +104,11 @@ namespace MovieList.ViewModels
 
         private async Task<OpenFileModel?> OnOpenFileAsync(OpenFileModel model)
         {
+            if (String.IsNullOrEmpty(model.File))
+            {
+                return model;
+            }
+
             int fileIndex = this.Files.TakeWhile(file => file.FileName != model.File).Count();
 
             if (fileIndex != this.Files.Count)
@@ -217,7 +222,6 @@ namespace MovieList.ViewModels
             var settingsService = Locator.Current.GetService<ISettingsService>(file);
 
             Locator.CurrentMutable.RegisterConstant(await settingsService.GetSettingsAsync(), file);
-
         }
     }
 }

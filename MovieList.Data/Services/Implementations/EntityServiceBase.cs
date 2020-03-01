@@ -37,9 +37,9 @@ namespace MovieList.Data.Services.Implementations
         {
             await connection.DeleteAsync(movieSeriesEntry, transaction);
 
-            var movieSeries = movieSeriesEntry.ParentSeries;
+            var parentSeries = movieSeriesEntry.ParentSeries;
 
-            foreach (var entry in movieSeries.Entries
+            foreach (var entry in parentSeries.Entries
                 .Where(entry => entry.SequenceNumber > movieSeriesEntry.SequenceNumber))
             {
                 entry.SequenceNumber--;
@@ -52,17 +52,50 @@ namespace MovieList.Data.Services.Implementations
                 await connection.UpdateAsync(entry, transaction);
             }
 
-            movieSeries.Entries.Remove(movieSeriesEntry);
+            parentSeries.Entries.Remove(movieSeriesEntry);
 
-            if (movieSeries.Entries.Count == 0)
+            if (parentSeries.Entries.Count == 0)
             {
-                await connection.DeleteAsync(movieSeries, transaction);
+                await connection.DeleteAsync(parentSeries, transaction);
 
-                if (movieSeries.Entry != null)
+                if (parentSeries.Entry != null)
                 {
-                    await this.DeleteMovieSeriesEntryAsync(movieSeries.Entry, connection, transaction);
+                    await this.DeleteMovieSeriesEntryAsync(parentSeries.Entry, connection, transaction);
                 }
+            } else
+            {
+                this.UpdateMergedDisplayNumbers(movieSeriesEntry.MovieSeries ?? parentSeries);
             }
         }
+
+        protected void UpdateMergedDisplayNumbers(MovieSeries movieSeries)
+        {
+            if (movieSeries.Entry == null)
+            {
+                return;
+            }
+
+            int maxDisplayNumber = movieSeries.Entries.Select(entry => entry.DisplayNumber).Max() ?? 0;
+
+            movieSeries.Entry.ParentSeries.Entries
+                .OrderBy(entry => entry.SequenceNumber)
+                .SkipWhile(entry => entry.SequenceNumber <= movieSeries.Entry.SequenceNumber)
+                .TakeWhile(entry => entry.MovieSeries != null && entry.MovieSeries.MergeDisplayNumbers)
+                .Aggregate(maxDisplayNumber + 1, this.UpdateMergedDisplayNumbers);
+        }
+
+        private int UpdateMergedDisplayNumbers(int firstDisplayNumber, MovieSeriesEntry entry)
+            => entry.MovieSeries!.Entries
+                .OrderBy(e => e.SequenceNumber)
+                .Aggregate(firstDisplayNumber, (num, e) =>
+                {
+                    if (e.DisplayNumber != null)
+                    {
+                        e.DisplayNumber = num;
+                        return num + 1;
+                    }
+
+                    return num;
+                });
     }
 }

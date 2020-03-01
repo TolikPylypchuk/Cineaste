@@ -107,11 +107,15 @@ namespace MovieList.ViewModels
             {
                 list.AddOrUpdate(item);
 
-                if (item is MovieSeriesListItem movieSeriesItem)
+                var movieSeries = this.GetMovieSeries(item);
+
+                if (movieSeries != null)
                 {
-                    movieSeriesItem.MovieSeries.Entries
+                    movieSeries.Entries
                         .Select(this.EntryToListItem)
                         .ForEach(list.AddOrUpdate);
+
+                    this.UpdateParentSeries(movieSeries, list);
                 }
             });
 
@@ -119,6 +123,15 @@ namespace MovieList.ViewModels
 
             return item;
         }
+
+        private MovieSeries? GetMovieSeries(ListItem item)
+            => item switch
+            {
+                MovieListItem movieItem when movieItem.Movie.Entry != null => movieItem.Movie.Entry.ParentSeries,
+                SeriesListItem seriesItem when seriesItem.Series.Entry != null => seriesItem.Series.Entry.ParentSeries,
+                MovieSeriesListItem movieSeriesItem => movieSeriesItem.MovieSeries,
+                _ => null
+            };
 
         private void OnRemoveMovie(Movie movie)
         {
@@ -175,9 +188,12 @@ namespace MovieList.ViewModels
             var movieSeries = movieSeriesEntry.ParentSeries;
 
             movieSeries.Entries
-                .Where(entry => entry.SequenceNumber >= movieSeriesEntry.SequenceNumber)
+                .OrderBy(entry => entry.SequenceNumber)
+                .SkipWhile(entry => entry.SequenceNumber < movieSeriesEntry.SequenceNumber)
                 .Select(this.EntryToListItem)
                 .ForEach(list.AddOrUpdate);
+
+            this.UpdateParentSeries(movieSeries, list);
 
             if (movieSeries.Entries.Count == 0 && movieSeries.ShowTitles)
             {
@@ -192,5 +208,16 @@ namespace MovieList.ViewModels
 
         private void Resort()
             => this.resort.OnNext(Unit.Default);
+
+        private void UpdateParentSeries(MovieSeries movieSeries, ISourceUpdater<ListItem, string> list)
+        {
+            movieSeries.Entry?.ParentSeries.Entries
+                .OrderBy(entry => entry.SequenceNumber)
+                .SkipWhile(entry => entry.SequenceNumber <= movieSeries.Entry.SequenceNumber)
+                .TakeWhile(entry => entry.MovieSeries != null && entry.MovieSeries.MergeDisplayNumbers)
+                .SelectMany(entry => entry.MovieSeries!.Entries)
+                .Select(this.EntryToListItem)
+                .ForEach(list.AddOrUpdate);
+        }
     }
 }

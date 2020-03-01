@@ -34,6 +34,8 @@ namespace MovieList.Data.Services.Implementations
                 entry.ParentSeriesId = entry.ParentSeries.Id;
                 entry.Id = await connection.InsertAsync(entry, transaction);
                 entry.ParentSeries.Entries.Add(entry);
+
+                this.UpdateMergedDisplayNumbers(entry.ParentSeries);
             }
         }
 

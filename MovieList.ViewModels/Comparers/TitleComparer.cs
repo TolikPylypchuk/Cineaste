@@ -24,6 +24,9 @@ namespace MovieList.Comparers
         private string Normalize(string title)
             => title.ToLower()
                 .Replace(":", "")
+                .Replace(";", "")
+                .Replace("!", "")
+                .Replace("?", "")
                 .Replace(".", "")
                 .Replace(",", "")
                 .Replace(" - ", " ")
@@ -31,7 +34,8 @@ namespace MovieList.Comparers
                 .Replace("-", " ")
                 .Replace("'", "")
                 .Replace("’", "")
-                .Replace("\"", "");
+                .Replace("\"", "")
+                .Replace("  ", " ");
 
         private object Convert(string title)
             => Int32.TryParse(title, out int result) ? (object)result : title;

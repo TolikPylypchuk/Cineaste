@@ -1,5 +1,4 @@
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
@@ -65,6 +64,8 @@ namespace MovieList.Data.Services.Implementations
                 entry.ParentSeriesId = entry.ParentSeries.Id;
                 entry.Id = await connection.InsertAsync(entry, transaction);
                 entry.ParentSeries.Entries.Add(entry);
+
+                this.UpdateMergedDisplayNumbers(movieSeries);
             }
         }
 
@@ -78,14 +79,7 @@ namespace MovieList.Data.Services.Implementations
             if (movieSeries.Entry != null)
             {
                 await connection.UpdateAsync(movieSeries.Entry, transaction);
-
-                int maxDisplayNumber = movieSeries.Entries.Select(entry => entry.DisplayNumber).Max() ?? 0;
-
-                movieSeries.Entry.ParentSeries.Entries
-                    .OrderBy(entry => entry.SequenceNumber)
-                    .SkipWhile(entry => entry.SequenceNumber <= movieSeries.Entry.SequenceNumber)
-                    .TakeWhile(entry => entry.MovieSeries != null && entry.MovieSeries.MergeDisplayNumbers)
-                    .Aggregate(maxDisplayNumber + 1, this.UpdateMergedDisplayNumbers);
+                this.UpdateMergedDisplayNumbers(movieSeries);
             }
 
             await new DependentEntityUpdater(connection, transaction).UpdateDependentEntitiesAsync(
@@ -129,11 +123,6 @@ namespace MovieList.Data.Services.Implementations
             }
 
             await connection.DeleteAsync(movieSeries, transaction);
-        }
-
-        private int UpdateMergedDisplayNumbers(int firstDisplayNumber, MovieSeriesEntry entry)
-        {
-            return 1;
         }
     }
 }
