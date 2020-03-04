@@ -4,6 +4,7 @@ namespace MovieList.Data.Models
     {
         NotStarted,
         Running,
+        Hiatus,
         Finished
     }
 }

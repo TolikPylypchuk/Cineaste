@@ -4,6 +4,7 @@ namespace MovieList.Data.Models
     {
         NotWatched,
         Watching,
+        Hiatus,
         Watched,
         StoppedWatching
     }

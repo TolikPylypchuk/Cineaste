@@ -998,6 +998,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hiatus.
+        /// </summary>
+        public static string SeasonHiatus {
+            get {
+                return ResourceManager.GetString("SeasonHiatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Started.
         /// </summary>
         public static string SeasonNotStarted {

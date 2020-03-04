@@ -148,6 +148,7 @@ namespace MovieList.Views.Forms
 
             this.WatchStatusComboBox.Items.Add(Messages.SeasonNotWatched);
             this.WatchStatusComboBox.Items.Add(Messages.SeasonWatching);
+            this.WatchStatusComboBox.Items.Add(Messages.SeasonHiatus);
             this.WatchStatusComboBox.Items.Add(Messages.SeasonWatched);
             this.WatchStatusComboBox.Items.Add(Messages.SeasonStoppedWatching);
 
@@ -159,6 +160,7 @@ namespace MovieList.Views.Forms
 
             this.ReleaseStatusComboBox.Items.Add(Messages.SeasonNotStarted);
             this.ReleaseStatusComboBox.Items.Add(Messages.SeasonRunning);
+            this.ReleaseStatusComboBox.Items.Add(Messages.SeasonHiatus);
             this.ReleaseStatusComboBox.Items.Add(Messages.SeasonFinished);
 
             this.BindComboBox(

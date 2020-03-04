@@ -430,6 +430,9 @@ This will detach all entries without deleting them.</value>
   <data name="SeasonFinished" xml:space="preserve">
     <value>Finished</value>
   </data>
+  <data name="SeasonHiatus" xml:space="preserve">
+    <value>Hiatus</value>
+  </data>
   <data name="SeasonNotStarted" xml:space="preserve">
     <value>Not Started</value>
   </data>
