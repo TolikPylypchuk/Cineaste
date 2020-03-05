@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieList", "MovieList\Movi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieList.Data", "MovieList.Data\MovieList.Data.csproj", "{8DB56EA0-809D-42D7-A3BA-A24551BEEA7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieList.ViewModels", "MovieList.ViewModels\MovieList.ViewModels.csproj", "{0C01CFB1-963E-47AF-BE91-B39714242EA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieList.Core", "MovieList.Core\MovieList.Core.csproj", "{0C01CFB1-963E-47AF-BE91-B39714242EA5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8758E61A-EA1A-4586-A5A9-1874DCE2E982}"
 	ProjectSection(SolutionItems) = preProject
