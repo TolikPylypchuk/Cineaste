@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
-            <Button x:Name="GoToMovieSeriesButton" DockPanel.Dock="Left" HorizontalAlignment="Left"
+            <Button x:Name="GoToMovieSeriesArrowButton" DockPanel.Dock="Left" HorizontalAlignment="Left"
                     Style="{StaticResource MaterialDesignIconButton}" Padding="0" Width="25" Height="25">
                 <m:PackIcon Kind="ChevronUp" Margin="0" Width="25" Height="25" />
             </Button>
@@ -130,6 +130,11 @@
                     <Button x:Name="CreateMovieSeriesButton" Style="{StaticResource MaterialDesignOutlinedButton}"
                             HorizontalAlignment="Center" Height="Auto" MinHeight="32" FontSize="12" Margin="8">
                         <TextBlock Text="{l:Translate CreateMovieSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                    </Button>
+
+                    <Button x:Name="GoToMovieSeriesButton" Style="{StaticResource MaterialDesignOutlinedButton}"
+                            HorizontalAlignment="Center" Height="Auto" MinHeight="32" FontSize="12" Margin="8">
+                        <TextBlock Text="{l:Translate GoToMovieSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                     </Button>
                 </StackPanel>
             </DockPanel>

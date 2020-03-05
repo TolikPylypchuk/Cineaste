@@ -66,6 +66,13 @@ namespace MovieList.Views.Forms
                 .BindTo(this, v => v.GoToMovieSeriesButton.Visibility, useHidden, boolToVisibility)
                 .DisposeWith(disposables);
 
+            this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesArrowButton)
+                .DisposeWith(disposables);
+
+            this.WhenAnyObservable(v => v.ViewModel.GoToMovieSeries.CanExecute)
+                .BindTo(this, v => v.GoToMovieSeriesArrowButton.Visibility, useHidden, boolToVisibility)
+                .DisposeWith(disposables);
+
             this.BindCommand(this.ViewModel, vm => vm.GoToNext, v => v.GoToNextButton)
                 .DisposeWith(disposables);
 

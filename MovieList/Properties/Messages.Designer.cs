@@ -521,6 +521,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to movie series.
+        /// </summary>
+        public static string GoToMovieSeries {
+            get {
+                return ResourceManager.GetString("GoToMovieSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go to series.
         /// </summary>
         public static string GoToSeries {
