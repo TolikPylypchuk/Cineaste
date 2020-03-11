@@ -21,7 +21,8 @@ namespace MovieList.Converters
                 [SeriesReleaseStatus.NotStarted] = Messages.SeriesNotStarted,
                 [SeriesReleaseStatus.Running] = Messages.SeriesRunning,
                 [SeriesReleaseStatus.Finished] = Messages.SeriesFinished,
-                [SeriesReleaseStatus.Cancelled] = Messages.SeriesCancelled
+                [SeriesReleaseStatus.Cancelled] = Messages.SeriesCancelled,
+                [SeriesReleaseStatus.Unknown] = Messages.SeriesUnknown
             };
 
             this.stringToStatus = statusToString.ToDictionary(e => e.Value, e => e.Key);

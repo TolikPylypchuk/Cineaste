@@ -5,6 +5,7 @@ namespace MovieList.Data.Models
         NotStarted,
         Running,
         Finished,
-        Cancelled
+        Cancelled,
+        Unknown
     }
 }

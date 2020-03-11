@@ -178,6 +178,7 @@ namespace MovieList.Views.Forms
             this.ReleaseStatusComboBox.Items.Add(Messages.SeriesRunning);
             this.ReleaseStatusComboBox.Items.Add(Messages.SeriesFinished);
             this.ReleaseStatusComboBox.Items.Add(Messages.SeriesCancelled);
+            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesUnknown);
 
             this.BindComboBox(
                     vm => vm.ReleaseStatus,

@@ -1016,7 +1016,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not Started.
+        ///   Looks up a localized string similar to Not started.
         /// </summary>
         public static string SeasonNotStarted {
             get {
@@ -1025,7 +1025,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not Watched.
+        ///   Looks up a localized string similar to Not watched.
         /// </summary>
         public static string SeasonNotWatched {
             get {
@@ -1043,11 +1043,20 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stopped Watching.
+        ///   Looks up a localized string similar to Stopped watching.
         /// </summary>
         public static string SeasonStoppedWatching {
             get {
                 return ResourceManager.GetString("SeasonStoppedWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t know/don&apos;t care.
+        /// </summary>
+        public static string SeasonUnknown {
+            get {
+                return ResourceManager.GetString("SeasonUnknown", resourceCulture);
             }
         }
         
@@ -1097,7 +1106,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not Started.
+        ///   Looks up a localized string similar to Not started.
         /// </summary>
         public static string SeriesNotStarted {
             get {
@@ -1129,6 +1138,15 @@ namespace MovieList.Properties {
         public static string SeriesStoppedWatching {
             get {
                 return ResourceManager.GetString("SeriesStoppedWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t know/don&apos;t care.
+        /// </summary>
+        public static string SeriesUnknown {
+            get {
+                return ResourceManager.GetString("SeriesUnknown", resourceCulture);
             }
         }
         

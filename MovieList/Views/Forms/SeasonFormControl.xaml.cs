@@ -162,6 +162,7 @@ namespace MovieList.Views.Forms
             this.ReleaseStatusComboBox.Items.Add(Messages.SeasonRunning);
             this.ReleaseStatusComboBox.Items.Add(Messages.SeasonHiatus);
             this.ReleaseStatusComboBox.Items.Add(Messages.SeasonFinished);
+            this.ReleaseStatusComboBox.Items.Add(Messages.SeasonUnknown);
 
             this.BindComboBox(
                     vm => vm.ReleaseStatus,

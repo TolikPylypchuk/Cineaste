@@ -437,16 +437,19 @@ This will detach all entries without deleting them.</value>
     <value>Hiatus</value>
   </data>
   <data name="SeasonNotStarted" xml:space="preserve">
-    <value>Not Started</value>
+    <value>Not started</value>
   </data>
   <data name="SeasonNotWatched" xml:space="preserve">
-    <value>Not Watched</value>
+    <value>Not watched</value>
   </data>
   <data name="SeasonRunning" xml:space="preserve">
     <value>Running</value>
   </data>
   <data name="SeasonStoppedWatching" xml:space="preserve">
-    <value>Stopped Watching</value>
+    <value>Stopped watching</value>
+  </data>
+  <data name="SeasonUnknown" xml:space="preserve">
+    <value>Don't know/don't care</value>
   </data>
   <data name="SeasonWatched" xml:space="preserve">
     <value>Watched</value>
@@ -464,7 +467,7 @@ This will detach all entries without deleting them.</value>
     <value>Finished</value>
   </data>
   <data name="SeriesNotStarted" xml:space="preserve">
-    <value>Not Started</value>
+    <value>Not started</value>
   </data>
   <data name="SeriesNotWatched" xml:space="preserve">
     <value>Not watched</value>
@@ -474,6 +477,9 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="SeriesStoppedWatching" xml:space="preserve">
     <value>Stopped watching</value>
+  </data>
+  <data name="SeriesUnknown" xml:space="preserve">
+    <value>Don't know/don't care</value>
   </data>
   <data name="SeriesWatched" xml:space="preserve">
     <value>Watched</value>
