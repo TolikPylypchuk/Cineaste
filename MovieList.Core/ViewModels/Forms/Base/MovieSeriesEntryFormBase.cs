@@ -47,6 +47,7 @@ namespace MovieList.ViewModels.Forms.Base
 
             this.GoToNext = ReactiveCommand.Create<Unit, MovieSeriesEntry>(
                 _ => this.MovieSeriesEntry!.ParentSeries.Entries
+                    .OrderBy(e => e.SequenceNumber)
                     .First(e => e.SequenceNumber > this.MovieSeriesEntry!.SequenceNumber),
                 canGoToNext);
 
@@ -57,6 +58,7 @@ namespace MovieList.ViewModels.Forms.Base
 
             this.GoToPrevious = ReactiveCommand.Create<Unit, MovieSeriesEntry>(
                 _ => this.MovieSeriesEntry!.ParentSeries.Entries
+                    .OrderBy(e => e.SequenceNumber)
                     .Last(e => e.SequenceNumber < this.MovieSeriesEntry!.SequenceNumber),
                 canGoToPrevious);
 
