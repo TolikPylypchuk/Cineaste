@@ -40,6 +40,7 @@ namespace MovieList.ViewModels
 
             this.source.PopulateFrom(
                 Observable.FromAsync(() => Task.Run(() => listService.GetListAsync(kinds)))
+                    .Do(list => this.MovieList = list)
                     .Select(list => list.ToListItems())
                     .Do(items => this.Log().Debug($"Loaded the list of {items.Count} items")));
 
@@ -71,6 +72,9 @@ namespace MovieList.ViewModels
 
         public ReadOnlyObservableCollection<ListItemViewModel> Items
             => this.items;
+
+        [Reactive]
+        public Data.MovieList MovieList { get; private set; } = null!;
 
         [Reactive]
         public ListItemViewModel? SelectedItem { get; set; }

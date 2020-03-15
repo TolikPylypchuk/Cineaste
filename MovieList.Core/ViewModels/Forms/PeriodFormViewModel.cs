@@ -19,6 +19,8 @@ namespace MovieList.ViewModels.Forms
 {
     public sealed class PeriodFormViewModel : FormBase<Period, PeriodFormViewModel>
     {
+        private const string YearProperty = "Year";
+
         public PeriodFormViewModel(
             Period period,
             IObservable<bool> canDelete,
@@ -29,14 +31,13 @@ namespace MovieList.ViewModels.Forms
             this.Period = period;
             this.CopyProperties();
 
-            this.StartYearRule = this.ValidationRule(vm => vm.StartYear, SeriesMinYear, SeriesMaxYear, "Year");
-            this.EndYearRule = this.ValidationRule(vm => vm.EndYear, SeriesMinYear, SeriesMaxYear, "Year");
+            this.StartYearRule = this.ValidationRule(vm => vm.StartYear, SeriesMinYear, SeriesMaxYear, YearProperty);
+            this.EndYearRule = this.ValidationRule(vm => vm.EndYear, SeriesMinYear, SeriesMaxYear, YearProperty);
 
             this.NumberOfEpisodesRule = this.ValidationRule(
                 vm => vm.NumberOfEpisodes,
                 PeriodMinNumberOfEpisodes,
-                PeriodMaxNumberOfEpisodes,
-                nameof(this.NumberOfEpisodes));
+                PeriodMaxNumberOfEpisodes);
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 

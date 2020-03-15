@@ -7,6 +7,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
+using DynamicData;
+
+using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.DialogModels;
 using MovieList.ListItems;
@@ -27,12 +30,28 @@ namespace MovieList.ViewModels
         private readonly CompositeDisposable sideViewModelSubscriptions = new CompositeDisposable();
         private readonly CompositeDisposable sideViewModelSecondarySubscriptions = new CompositeDisposable();
 
+        private readonly SourceList<MovieSeriesEntry> movieSeriesAddableItemsSource =
+            new SourceList<MovieSeriesEntry>();
+
+        private readonly ReadOnlyObservableCollection<MovieSeriesEntry> movieSeriesAddableItems;
+
         public FileMainContentViewModel(string fileName, ReadOnlyObservableCollection<Kind> kinds)
         {
             this.FileName = fileName;
             this.Kinds = kinds;
 
             this.List = new ListViewModel(fileName, kinds);
+
+            this.movieSeriesAddableItemsSource.Connect()
+                .Bind(out this.movieSeriesAddableItems)
+                .Subscribe();
+
+            this.WhenAnyValue(vm => vm.List.MovieList)
+                .WhereNotNull()
+                .Select(list => list.ToEntries())
+                .Select(entries => entries.Where(entry =>
+                        entry.Movie?.Entry == null && entry.Series?.Entry == null && entry.MovieSeries?.Entry == null))
+                .Subscribe(this.movieSeriesAddableItemsSource.AddRange);
 
             this.SelectItem = ReactiveCommand.CreateFromTask<ListItem?>(this.OnSelectItemAsync);
             this.Save = ReactiveCommand.Create(() => { });
@@ -50,7 +69,10 @@ namespace MovieList.ViewModels
 
         public string FileName { get; }
 
-        private ReadOnlyObservableCollection<Kind> Kinds { get; }
+        public ReadOnlyObservableCollection<MovieSeriesEntry> MovieSeriesAddableItems
+            => this.movieSeriesAddableItems;
+
+        public ReadOnlyObservableCollection<Kind> Kinds { get; }
 
         [Reactive]
         public ReactiveObject SideViewModel { get; private set; }
@@ -199,7 +221,8 @@ namespace MovieList.ViewModels
         {
             this.Log().Debug($"Creating a form for movie series: {movieSeries}");
 
-            var form = new MovieSeriesFormViewModel(movieSeries, this.FileName);
+            var form = new MovieSeriesFormViewModel(movieSeries, this.FileName, this.MovieSeriesAddableItems);
+            var attachedEntries = new List<MovieSeriesEntry>();
             var detachedEntries = new List<MovieSeriesEntry>();
 
             this.SubscribeToCommonCommands(
@@ -213,12 +236,23 @@ namespace MovieList.ViewModels
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .SubscribeAsync(async item =>
                 {
+                    foreach (var entry in attachedEntries)
+                    {
+                        await this.List.AddOrUpdate.Execute(this.List.EntryToListItem(entry));
+                        this.RemoveSameEntry(
+                            this.movieSeriesAddableItemsSource.Items,
+                            entry,
+                            this.movieSeriesAddableItemsSource.RemoveMany);
+                    }
+
                     foreach (var entry in detachedEntries)
                     {
                         this.ClearEntryConnection(entry);
                         await this.List.AddOrUpdate.Execute(this.List.EntryToListItem(entry));
+                        this.movieSeriesAddableItemsSource.Add(entry);
                     }
 
+                    attachedEntries.Clear();
                     detachedEntries.Clear();
                 })
                 .DisposeWith(this.sideViewModelSubscriptions);
@@ -229,6 +263,10 @@ namespace MovieList.ViewModels
 
             form.DetachEntry
                 .Subscribe(detachedEntries.Add)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.DetachEntry
+                .Subscribe(entry => this.RemoveSameEntry(attachedEntries, entry, attachedEntries.RemoveMany))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.AddMovie
@@ -247,6 +285,14 @@ namespace MovieList.ViewModels
                 .Select(displayNumber => this.CreateMovieSeriesForMovieSeries(form.MovieSeries, displayNumber))
                 .Select(ms => new MovieSeriesListItem(ms))
                 .InvokeCommand<ListItem>(this.SelectItem)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.AddExistingItem
+                .Subscribe(attachedEntries.Add)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.AddExistingItem
+                .Subscribe(entry => this.RemoveSameEntry(detachedEntries, entry, detachedEntries.RemoveMany))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
@@ -543,5 +589,14 @@ namespace MovieList.ViewModels
             this.sideViewModelSubscriptions.Clear();
             this.sideViewModelSecondarySubscriptions.Clear();
         }
+
+        private void RemoveSameEntry(
+            IEnumerable<MovieSeriesEntry> entries,
+            MovieSeriesEntry entry,
+            Action<IEnumerable<MovieSeriesEntry>> remove)
+            => remove(entries.Where(e =>
+                (e.Movie != null && e.Movie == entry.Movie) ||
+                (e.Series != null && e.Series == entry.Series) ||
+                (e.MovieSeries != null && e.MovieSeries == entry.MovieSeries)));
     }
 }

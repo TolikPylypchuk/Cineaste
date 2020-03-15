@@ -46,11 +46,19 @@ namespace MovieList.Data.Models
         public static Title? GetTitle(this MovieSeries movieSeries)
             => movieSeries.Titles.Count > 0 ? movieSeries.Title! : movieSeries.GetFirstEntry()?.GetTitle();
 
+        public static Title? GetOriginalTitle(this MovieSeries movieSeries)
+            => movieSeries.Titles.Count > 0
+                ? movieSeries.OriginalTitle!
+                : movieSeries.GetFirstEntry()?.GetOriginalTitle();
+
         public static Title? GetListTitle(this MovieSeries movieSeries)
             => movieSeries.ShowTitles ? movieSeries.Title! : movieSeries.GetFirstEntry()?.GetTitle();
 
         public static Title? GetTitle(this MovieSeriesEntry entry)
             => entry.Movie?.Title ?? entry.Series?.Title ?? entry.MovieSeries!.GetTitle();
+
+        public static Title? GetOriginalTitle(this MovieSeriesEntry entry)
+            => entry.Movie?.OriginalTitle ?? entry.Series?.OriginalTitle ?? entry.MovieSeries!.GetOriginalTitle();
 
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
         public static MovieSeriesEntry? GetFirstEntry(this MovieSeries movieSeries)
@@ -105,20 +113,16 @@ namespace MovieList.Data.Models
                 .First(ancestors => ancestors.Series1.Id != ancestors.Series2.Id);
 
         public static int GetStartYear(this MovieSeries movieSeries)
-        {
-            var firstEntry = movieSeries.GetFirstEntry();
-            return firstEntry != null
-                ? firstEntry.Movie?.Year ?? firstEntry.Series?.StartYear ?? firstEntry.MovieSeries!.GetStartYear()
-                : 0;
-        }
+            => movieSeries.GetFirstEntry()?.GetStartYear() ?? default;
+
+        public static int GetStartYear(this MovieSeriesEntry entry)
+            => entry.Movie?.Year ?? entry.Series?.StartYear ?? entry.MovieSeries!.GetStartYear();
 
         public static int GetEndYear(this MovieSeries movieSeries)
-        {
-            var lastEntry = movieSeries.GetLastEntry();
-            return lastEntry != null
-                ? lastEntry.Movie?.Year ?? lastEntry.Series?.EndYear ?? lastEntry.MovieSeries!.GetEndYear()
-                : 0;
-        }
+            => movieSeries.GetLastEntry()?.GetEndYear() ?? default;
+
+        public static int GetEndYear(this MovieSeriesEntry entry)
+            => entry.Movie?.Year ?? entry.Series?.EndYear ?? entry.MovieSeries!.GetEndYear();
 
         public static string GetYears(this MovieSeriesEntry entry)
             => entry.Movie != null
@@ -138,7 +142,9 @@ namespace MovieList.Data.Models
         {
             int startYear = movieSeries.GetStartYear();
             int endYear = movieSeries.GetEndYear();
-            return startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";
+            return startYear == default
+                ? "-"
+                : startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";
         }
     }
 }

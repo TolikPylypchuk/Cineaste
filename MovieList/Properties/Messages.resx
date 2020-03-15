@@ -325,8 +325,17 @@ This will detach all entries without deleting them.</value>
   <data name="MoveUp" xml:space="preserve">
     <value>Move Up</value>
   </data>
+  <data name="Movie" xml:space="preserve">
+    <value>Movie</value>
+  </data>
   <data name="MovieList" xml:space="preserve">
     <value>Movie List</value>
+  </data>
+  <data name="MovieSeries" xml:space="preserve">
+    <value>Movie series</value>
+  </data>
+  <data name="MovieSeriesAddExistingItem" xml:space="preserve">
+    <value>Add an existing item</value>
   </data>
   <data name="MovieSeriesHasTitles" xml:space="preserve">
     <value>Has titles</value>
@@ -459,6 +468,9 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="September" xml:space="preserve">
     <value>September</value>
+  </data>
+  <data name="Series" xml:space="preserve">
+    <value>Series</value>
   </data>
   <data name="SeriesCancelled" xml:space="preserve">
     <value>Cancelled</value>

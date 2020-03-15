@@ -14,6 +14,8 @@ using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
+using MovieList.Comparers;
+using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.DialogModels;
@@ -35,17 +37,23 @@ namespace MovieList.ViewModels.Forms
         private readonly SourceList<MovieSeriesEntry> entriesSource = new SourceList<MovieSeriesEntry>();
         private readonly ReadOnlyObservableCollection<MovieSeriesEntryViewModel> entries;
 
+        private readonly SourceList<MovieSeriesEntry> addableItemsSource = new SourceList<MovieSeriesEntry>();
+        private readonly ReadOnlyObservableCollection<MovieSeriesAddableItemViewModel> addableItems;
+
         [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
         [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
         public MovieSeriesFormViewModel(
             MovieSeries movieSeries,
             string fileName,
+            IEnumerable<MovieSeriesEntry> addableItems,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null,
-            IEntityService<MovieSeries>? movieSeriesService = null)
+            IEntityService<MovieSeries>? movieSeriesService = null,
+            Settings? settings = null)
             : base(movieSeries.Entry, resourceManager, scheduler)
         {
             this.MovieSeries = movieSeries;
+            settings ??= Locator.Current.GetService<Settings>(fileName);
 
             this.movieSeriesService = movieSeriesService ??
                 Locator.Current.GetService<IEntityService<MovieSeries>>(fileName);
@@ -57,6 +65,16 @@ namespace MovieList.ViewModels.Forms
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.entries)
                 .Subscribe();
+
+            this.addableItemsSource.Connect()
+                .Filter(entry => entry.MovieSeries != this.MovieSeries)
+                .Transform(item => new MovieSeriesAddableItemViewModel(item))
+                .Sort(new PropertyComparer<MovieSeriesAddableItemViewModel, MovieSeriesEntry>(
+                        vm => vm.Entry, new MovieSeriesEntryTitleComparer(settings.CultureInfo)))
+                .Bind(out this.addableItems)
+                .Subscribe();
+
+            this.addableItemsSource.AddRange(addableItems);
 
             this.FormTitle =
                 this.FormTitle
@@ -86,6 +104,7 @@ namespace MovieList.ViewModels.Forms
             this.AddMovie = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
             this.AddSeries = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
             this.AddMovieSeries = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
+            this.AddExistingItem = ReactiveCommand.Create<MovieSeriesEntry, MovieSeriesEntry>(this.OnAddExistingItem);
 
             this.InitializeValueDependencies();
             this.CopyProperties();
@@ -98,6 +117,9 @@ namespace MovieList.ViewModels.Forms
 
         public ReadOnlyObservableCollection<MovieSeriesEntryViewModel> Entries
             => this.entries;
+
+        public ReadOnlyObservableCollection<MovieSeriesAddableItemViewModel> AddableItems
+            => this.addableItems;
 
         [Reactive]
         public bool HasTitles { get; set; }
@@ -123,6 +145,7 @@ namespace MovieList.ViewModels.Forms
         public ReactiveCommand<Unit, int> AddMovie { get; }
         public ReactiveCommand<Unit, int> AddSeries { get; }
         public ReactiveCommand<Unit, int> AddMovieSeries { get; }
+        public ReactiveCommand<MovieSeriesEntry, MovieSeriesEntry> AddExistingItem { get; }
 
         public override bool IsNew
             => this.MovieSeries.Id == default;
@@ -339,8 +362,34 @@ namespace MovieList.ViewModels.Forms
                 .ForEach(e => e.SequenceNumber--);
 
             this.entriesSource.Remove(entry);
+            this.addableItemsSource.Add(entry);
 
             return entry;
+        }
+
+        private MovieSeriesEntry OnAddExistingItem(MovieSeriesEntry entry)
+        {
+            var newEntry = new MovieSeriesEntry
+            {
+                Movie = entry.Movie,
+                Series = entry.Series,
+                MovieSeries = entry.MovieSeries,
+                ParentSeries = this.MovieSeries,
+                SequenceNumber = this.Entries
+                    .OrderByDescending(e => e.SequenceNumber)
+                    .Select(e => e.SequenceNumber)
+                    .FirstOrDefault() + 1,
+                DisplayNumber = (this.Entries
+                    .Where(e => e.DisplayNumber != null)
+                    .OrderByDescending(e => e.DisplayNumber)
+                    .Select(e => e.DisplayNumber)
+                    .FirstOrDefault() ?? 0) + 1
+            };
+
+            this.entriesSource.Add(newEntry);
+            this.addableItemsSource.Remove(entry);
+
+            return newEntry;
         }
 
         private void HideDisplayNumber(MovieSeriesEntryViewModel vm)

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows.Controls;
 
 using Akavache;
 
@@ -37,9 +38,7 @@ namespace MovieList.Views.Forms
                 this.BindCommands(disposables);
                 this.BindCheckboxes(disposables);
                 this.BindFields(disposables);
-
-                this.OneWayBind(this.ViewModel, vm => vm.Entries, v => v.Entries.ItemsSource)
-                    .DisposeWith(disposables);
+                this.BindItemSources(disposables);
 
                 this.AddValidation(disposables);
             });
@@ -146,6 +145,10 @@ namespace MovieList.Views.Forms
             this.WhenAnyObservable(v => v.ViewModel.Save)
                 .Subscribe(_ => this.LoadPoster())
                 .DisposeWith(disposables);
+
+            this.ViewModel.AddExistingItem
+                .Subscribe(_ => this.AddableItemsComboBox.SelectedItem = null)
+                .DisposeWith(disposables);
         }
 
         private void BindCheckboxes(CompositeDisposable disposables)
@@ -205,6 +208,22 @@ namespace MovieList.Views.Forms
 
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
                 .DisposeWith(disposables);
+        }
+
+        private void BindItemSources(CompositeDisposable disposables)
+        {
+            this.OneWayBind(this.ViewModel, vm => vm.Entries, v => v.Entries.ItemsSource)
+                .DisposeWith(disposables);
+
+            this.OneWayBind(this.ViewModel, vm => vm.AddableItems, v => v.AddableItemsComboBox.ItemsSource)
+                .DisposeWith(disposables);
+
+            this.AddableItemsComboBox.Events()
+                .SelectionChanged
+                .Select(e => e.AddedItems.OfType<MovieSeriesAddableItemViewModel>().FirstOrDefault())
+                .WhereNotNull()
+                .Select(vm => vm.Entry)
+                .InvokeCommand(this.ViewModel.AddExistingItem);
         }
 
         private void AddValidation(CompositeDisposable disposables)

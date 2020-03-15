@@ -21,14 +21,17 @@ namespace MovieList
             Expression<Func<TViewModel, string>> viewModelProperty,
             int minValue,
             int maxValue,
-            string propertyName)
+            string? propertyName = null)
             where TViewModel : ReactiveObject, IValidatableViewModel
-            => viewModel.ValidationRule(
+        {
+            propertyName ??= viewModelProperty.GetMemberName();
+            return viewModel.ValidationRule(
                 viewModelProperty,
                 value => !String.IsNullOrWhiteSpace(value) &&
-                        Int32.TryParse(value, out int number) &&
-                        number >= minValue &&
-                        number <= maxValue,
+                         Int32.TryParse(value, out int number) &&
+                         number >= minValue &&
+                         number <= maxValue,
                 value => String.IsNullOrWhiteSpace(value) ? $"{propertyName}Empty" : $"{propertyName}Invalid");
+        }
     }
 }

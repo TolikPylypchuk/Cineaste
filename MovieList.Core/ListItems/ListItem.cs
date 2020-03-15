@@ -31,6 +31,8 @@ namespace MovieList.ListItems
 
         public string Id { get; }
 
+        public abstract MovieSeriesEntry? Entry { get; }
+
         [Reactive]
         public string DisplayNumber { get; set; }
 

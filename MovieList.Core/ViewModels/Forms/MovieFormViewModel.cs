@@ -42,7 +42,7 @@ namespace MovieList.ViewModels.Forms
 
             this.CopyProperties();
 
-            this.YearRule = this.ValidationRule(vm => vm.Year, MovieMinYear, MovieMaxYear, nameof(this.Year));
+            this.YearRule = this.ValidationRule(vm => vm.Year, MovieMinYear, MovieMaxYear);
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 

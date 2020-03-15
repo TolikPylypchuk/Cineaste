@@ -150,6 +150,14 @@
                             HorizontalAlignment="Center" Height="Auto" MinHeight="32" FontSize="12" Margin="8">
                         <TextBlock Text="{l:Translate GoToMovieSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
                     </Button>
+
+                    <ComboBox x:Name="AddableItemsComboBox" m:HintAssist.Hint="{l:Translate MovieSeriesAddExistingItem}">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
                 </StackPanel>
             </DockPanel>
         </ScrollViewer>

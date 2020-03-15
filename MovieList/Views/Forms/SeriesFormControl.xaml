@@ -69,11 +69,11 @@
                     <Image x:Name="Poster" />
 
                     <TextBlock x:Name="ImdbLinkTextBlock" Margin="0,8,0,0" HorizontalAlignment="Center">
-                    <Hyperlink x:Name="ImdbLink" v:Properties.IsExternal="True">
-                        <Hyperlink.Inlines>
-                            <Run x:Name="ImdbLinkRun" />
-                        </Hyperlink.Inlines>
-                    </Hyperlink>
+                        <Hyperlink x:Name="ImdbLink" v:Properties.IsExternal="True">
+                            <Hyperlink.Inlines>
+                                <Run x:Name="ImdbLinkRun" />
+                            </Hyperlink.Inlines>
+                        </Hyperlink>
                     </TextBlock>
 
                     <ItemsControl x:Name="Titles" />

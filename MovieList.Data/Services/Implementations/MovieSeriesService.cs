@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
@@ -28,34 +30,7 @@ namespace MovieList.Data.Services.Implementations
                 title.Id = await connection.InsertAsync(title, transaction);
             }
 
-            foreach (var entry in movieSeries.Entries)
-            {
-                entry.ParentSeriesId = movieSeries.Id;
-
-                if (entry.Movie != null)
-                {
-                    entry.MovieId = entry.Movie.Id;
-                } else if (entry.Series != null)
-                {
-                    entry.SeriesId = entry.Series.Id;
-                } else if (entry.MovieSeries != null)
-                {
-                    entry.MovieSeriesId = entry.MovieSeries.Id;
-                }
-
-                entry.Id = await connection.InsertAsync(entry, transaction);
-
-                if (entry.Movie != null)
-                {
-                    entry.Movie.Entry = entry;
-                } else if (entry.Series != null)
-                {
-                    entry.Series.Entry = entry;
-                } else if (entry.MovieSeries != null)
-                {
-                    entry.MovieSeries.Entry = entry;
-                }
-            }
+            await this.InsertEntriesAsync(movieSeries.Entries, movieSeries.Id, connection, transaction);
 
             if (movieSeries.Entry != null)
             {
@@ -87,6 +62,9 @@ namespace MovieList.Data.Services.Implementations
                 movieSeries.Titles,
                 title => title.MovieSeriesId,
                 (title, movieSeriesId) => title.MovieSeriesId = movieSeriesId);
+
+            await this.InsertEntriesAsync(
+                movieSeries.Entries.Where(entry => entry.Id == default), movieSeries.Id, connection, transaction);
 
             await new DependentEntityUpdater(connection, transaction).UpdateDependentEntitiesAsync(
                 movieSeries,
@@ -123,6 +101,42 @@ namespace MovieList.Data.Services.Implementations
             }
 
             await connection.DeleteAsync(movieSeries, transaction);
+        }
+
+        private async Task InsertEntriesAsync(
+            IEnumerable<MovieSeriesEntry> entries,
+            int movieSeriesId,
+            SqliteConnection connection,
+            IDbTransaction transaction)
+        {
+            foreach (var entry in entries)
+            {
+                entry.ParentSeriesId = movieSeriesId;
+
+                if (entry.Movie != null)
+                {
+                    entry.MovieId = entry.Movie.Id;
+                } else if (entry.Series != null)
+                {
+                    entry.SeriesId = entry.Series.Id;
+                } else if (entry.MovieSeries != null)
+                {
+                    entry.MovieSeriesId = entry.MovieSeries.Id;
+                }
+
+                entry.Id = await connection.InsertAsync(entry, transaction);
+
+                if (entry.Movie != null)
+                {
+                    entry.Movie.Entry = entry;
+                } else if (entry.Series != null)
+                {
+                    entry.Series.Entry = entry;
+                } else if (entry.MovieSeries != null)
+                {
+                    entry.MovieSeries.Entry = entry;
+                }
+            }
         }
     }
 }

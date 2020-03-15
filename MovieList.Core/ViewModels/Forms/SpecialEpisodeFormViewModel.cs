@@ -35,7 +35,7 @@ namespace MovieList.ViewModels.Forms
             this.ChannelRule = this.ValidationRule(
                 vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
 
-            this.YearRule = this.ValidationRule(vm => vm.Year, SeriesMinYear, SeriesMaxYear, nameof(this.Year));
+            this.YearRule = this.ValidationRule(vm => vm.Year, SeriesMinYear, SeriesMaxYear);
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 

@@ -683,11 +683,38 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Movie.
+        /// </summary>
+        public static string Movie {
+            get {
+                return ResourceManager.GetString("Movie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Movie List.
         /// </summary>
         public static string MovieList {
             get {
                 return ResourceManager.GetString("MovieList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movie series.
+        /// </summary>
+        public static string MovieSeries {
+            get {
+                return ResourceManager.GetString("MovieSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add an existing item.
+        /// </summary>
+        public static string MovieSeriesAddExistingItem {
+            get {
+                return ResourceManager.GetString("MovieSeriesAddExistingItem", resourceCulture);
             }
         }
         
@@ -1084,6 +1111,15 @@ namespace MovieList.Properties {
         public static string September {
             get {
                 return ResourceManager.GetString("September", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Series.
+        /// </summary>
+        public static string Series {
+            get {
+                return ResourceManager.GetString("Series", resourceCulture);
             }
         }
         
