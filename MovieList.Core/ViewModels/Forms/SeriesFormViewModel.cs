@@ -42,7 +42,6 @@ namespace MovieList.ViewModels.Forms
         private readonly ReadOnlyObservableCollection<SeriesComponentViewModel> components;
 
         private readonly BehaviorSubject<int> maxSequenceNumberSubject = new BehaviorSubject<int>(0);
-        private readonly Subject<Unit> resort = new Subject<Unit>();
 
         public SeriesFormViewModel(
             Series series,
@@ -65,15 +64,16 @@ namespace MovieList.ViewModels.Forms
 
             this.componentsSource.Connect()
                 .Transform(this.CreateForm)
-                .Sort(
-                    SortExpressionComparer<ISeriesComponentForm>.Ascending(form => form.SequenceNumber),
-                    resort: this.resort)
+                .AutoRefresh(form => form.SequenceNumber)
+                .Sort(SortExpressionComparer<ISeriesComponentForm>.Ascending(form => form.SequenceNumber))
                 .Bind(out this.componentForms)
                 .DisposeMany()
                 .Subscribe();
 
             this.ComponentForms.ToObservableChangeSet()
                 .Transform(this.CreateComponent)
+                .AutoRefresh(vm => vm.SequenceNumber)
+                .Sort(SortExpressionComparer<SeriesComponentViewModel>.Ascending(vm => vm.SequenceNumber))
                 .Bind(out this.components)
                 .DisposeMany()
                 .Subscribe();
@@ -293,8 +293,6 @@ namespace MovieList.ViewModels.Forms
                 components.AddRange(this.Series.SpecialEpisodes);
             });
 
-            this.resort.OnNext(Unit.Default);
-
             this.IsAnthology = this.Series.IsAnthology;
             this.Kind = this.Series.Kind;
             this.WatchStatus = this.Series.WatchStatus;
@@ -378,15 +376,11 @@ namespace MovieList.ViewModels.Forms
                 .Buffer(2, 1)
                 .Select(values => (Old: values[0], New: values[1]))
                 .Where(values => values.Old != values.New)
-                .Subscribe(values => this.ComponentForms
+                .Subscribe(values => new List<ISeriesComponentForm>(this.ComponentForms)
                     .Where(form => form != componentForm && form.SequenceNumber == componentForm.SequenceNumber)
                     .ForEach(form => form.SequenceNumber = values.New < values.Old
                         ? form.SequenceNumber + 1
                         : form.SequenceNumber - 1));
-
-            componentForm.WhenAnyValue(form => form.SequenceNumber)
-                .Discard()
-                .Subscribe(this.resort);
         }
 
         private SeriesComponentViewModel CreateComponent(ISeriesComponentForm form)
