@@ -198,9 +198,9 @@ namespace MovieList
             }
 
             window.Events().SizeChanged
-                .Merge(this.MainWindow.Events().StateChanged
-                    .Where(e => this.MainWindow.WindowState != WindowState.Minimized))
-                .Merge(this.MainWindow.Events().LocationChanged)
+                .Merge(window.Events().StateChanged
+                    .Where(e => window.WindowState != WindowState.Minimized))
+                .Merge(window.Events().LocationChanged)
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .Discard()
                 .ObserveOnDispatcher()
