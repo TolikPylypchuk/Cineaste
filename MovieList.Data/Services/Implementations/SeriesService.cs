@@ -39,6 +39,7 @@ namespace MovieList.Data.Services.Implementations
             {
                 episode.SeriesId = series.Id;
                 episode.Id = await connection.InsertAsync(episode, transaction);
+                await this.InsertSpecialEpisodeDependentEntities(episode, connection, transaction);
             }
 
             if (series.Entry != null)
@@ -92,7 +93,9 @@ namespace MovieList.Data.Services.Implementations
                 series,
                 series.SpecialEpisodes,
                 episode => episode.SeriesId,
-                (episode, seriesId) => episode.SeriesId = seriesId);
+                (episode, seriesId) => episode.SeriesId = seriesId,
+                episode => this.InsertSpecialEpisodeDependentEntities(episode, connection, transaction),
+                episode => this.DeleteSpecialEpisodeDependentEntities(episode, connection, transaction));
 
             if (series.Entry != null)
             {
@@ -144,6 +147,26 @@ namespace MovieList.Data.Services.Implementations
         {
             await connection.DeleteAsync(season.Periods, transaction);
             await connection.DeleteAsync(season.Titles, transaction);
+        }
+
+        private async Task InsertSpecialEpisodeDependentEntities(
+            SpecialEpisode episode,
+            SqliteConnection connection,
+            IDbTransaction transaction)
+        {
+            foreach (var title in episode.Titles)
+            {
+                title.SpecialEpisodeId = episode.Id;
+                title.Id = await connection.InsertAsync(title, transaction);
+            }
+        }
+
+        private async Task DeleteSpecialEpisodeDependentEntities(
+            SpecialEpisode episode,
+            SqliteConnection connection,
+            IDbTransaction transaction)
+        {
+            await connection.DeleteAsync(episode.Titles, transaction);
         }
     }
 }

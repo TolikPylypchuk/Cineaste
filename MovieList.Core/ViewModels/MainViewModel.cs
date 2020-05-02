@@ -83,7 +83,8 @@ namespace MovieList.ViewModels
         private async Task<CreateFileModel?> OnCreateFileAsync(CreateFileModel model)
         {
             this.Log().Debug($"Creating a file: {model.File}");
-            await this.RegisterDatabaseServicesAsync(model.File);
+
+            Locator.CurrentMutable.RegisterDatabaseServices(model.File);
 
             var preferences = Locator.Current.GetService<UserPreferences>().Defaults;
 
@@ -96,6 +97,9 @@ namespace MovieList.ViewModels
 
             await Locator.Current.GetService<IDatabaseService>(model.File)
                 .CreateDatabaseAsync(settings, preferences.DefaultKinds);
+
+            var settingsService = Locator.Current.GetService<ISettingsService>(model.File);
+            Locator.CurrentMutable.RegisterConstant(await settingsService.GetSettingsAsync(), model.File);
 
             this.AddFile(model.File, model.ListName);
 
@@ -113,13 +117,16 @@ namespace MovieList.ViewModels
 
             if (fileIndex != this.Files.Count)
             {
-                this.Log().Debug($"The file is already opened: {model.File}. Opening its tab.");
+                this.Log().Debug($"The file is already opened: {model.File}. Opening its tab");
                 this.SelectedItemIndex = fileIndex + 1;
                 return model;
             }
 
             this.Log().Debug($"Opening a file: {model.File}");
-            await this.RegisterDatabaseServicesAsync(model.File);
+
+            Locator.CurrentMutable.RegisterDatabaseServices(model.File);
+            var settingsService = Locator.Current.GetService<ISettingsService>(model.File);
+            Locator.CurrentMutable.RegisterConstant(await settingsService.GetSettingsAsync(), model.File);
 
             bool isFileValid = await Locator.Current.GetService<IDatabaseService>(model.File)
                 .ValidateDatabaseAsync();
@@ -213,15 +220,6 @@ namespace MovieList.ViewModels
             {
                 await this.HomePage.AddRecentFile.Execute(newRecentFile);
             }
-        }
-
-        private async Task RegisterDatabaseServicesAsync(string file)
-        {
-            Locator.CurrentMutable.RegisterDatabaseServices(file);
-
-            var settingsService = Locator.Current.GetService<ISettingsService>(file);
-
-            Locator.CurrentMutable.RegisterConstant(await settingsService.GetSettingsAsync(), file);
         }
     }
 }
