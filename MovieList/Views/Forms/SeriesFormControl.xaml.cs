@@ -1,11 +1,9 @@
 using System;
-using System.Linq.Expressions;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using Akavache;
 
-using MovieList.Converters;
 using MovieList.Properties;
 using MovieList.ViewModels.Forms;
 
@@ -46,7 +44,6 @@ namespace MovieList.Views.Forms
 
         private void BindCommands(CompositeDisposable disposables)
         {
-            var boolToVisibility = new BooleanToVisibilityTypeConverter();
             const BooleanToVisibilityHint useHidden = BooleanToVisibilityHint.UseHidden;
 
             this.BindCommand(this.ViewModel, vm => vm.Save, v => v.SaveButton)
@@ -65,53 +62,53 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.GoToMovieSeries.CanExecute)
-                .BindTo(this, v => v.GoToMovieSeriesButton.Visibility, useHidden, boolToVisibility)
+                .BindTo(this, v => v.GoToMovieSeriesButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesArrowButton)
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.GoToMovieSeries.CanExecute)
-                .BindTo(this, v => v.GoToMovieSeriesArrowButton.Visibility, useHidden, boolToVisibility)
+                .BindTo(this, v => v.GoToMovieSeriesArrowButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.GoToNext, v => v.GoToNextButton)
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.GoToNext.CanExecute)
-                .BindTo(this, v => v.GoToNextButton.Visibility, useHidden, boolToVisibility)
+                .BindTo(this, v => v.GoToNextButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.GoToPrevious, v => v.GoToPreviousButton)
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.GoToPrevious.CanExecute)
-                .BindTo(this, v => v.GoToPreviousButton.Visibility, useHidden, boolToVisibility)
+                .BindTo(this, v => v.GoToPreviousButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.CreateMovieSeries, v => v.CreateMovieSeriesButton)
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.CreateMovieSeries.CanExecute)
-                .BindTo(this, v => v.CreateMovieSeriesButton.Visibility, null, boolToVisibility)
+                .BindTo(this, v => v.CreateMovieSeriesButton.Visibility)
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
-                .BindTo(this, v => v.DeleteButton.Visibility, null, boolToVisibility)
+                .BindTo(this, v => v.DeleteButton.Visibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddTitle, v => v.AddTitleButton)
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.AddTitle.CanExecute)
-                .BindTo(this, v => v.AddTitleButton.Visibility, null, boolToVisibility)
+                .BindTo(this, v => v.AddTitleButton.Visibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddOriginalTitle, v => v.AddOriginalTitleButton)
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.AddOriginalTitle.CanExecute)
-                .BindTo(this, v => v.AddOriginalTitleButton.Visibility, null, boolToVisibility);
+                .BindTo(this, v => v.AddOriginalTitleButton.Visibility);
 
             this.BindCommand(this.ViewModel, vm => vm.AddSeason, v => v.AddSeasonButton)
                 .DisposeWith(disposables);
@@ -123,14 +120,14 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.ConvertToMiniseries.CanExecute)
-                .BindTo(this, v => v.ConvertToMiniseriesButton.Visibility, null, boolToVisibility)
+                .BindTo(this, v => v.ConvertToMiniseriesButton.Visibility)
                 .DisposeWith(disposables);
 
             Observable.CombineLatest(
                     this.WhenAnyObservable(v => v.ViewModel.Save.CanExecute),
                     this.WhenAnyObservable(v => v.ViewModel.Cancel.CanExecute))
                 .AnyTrue()
-                .BindTo(this, v => v.ActionPanel.Visibility, null, boolToVisibility)
+                .BindTo(this, v => v.ActionPanel.Visibility)
                 .DisposeWith(disposables);
 
             this.WhenAnyObservable(v => v.ViewModel.Save)
@@ -148,7 +145,7 @@ namespace MovieList.Views.Forms
 
             this.WhenAnyValue(v => v.ViewModel.ImdbLink)
                 .Select(link => !String.IsNullOrWhiteSpace(link))
-                .BindTo(this, v => v.ImdbLinkTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
+                .BindTo(this, v => v.ImdbLinkTextBlock.Visibility)
                 .DisposeWith(disposables);
         }
 
@@ -165,10 +162,7 @@ namespace MovieList.Views.Forms
             this.WatchStatusComboBox.Items.Add(Messages.SeriesWatched);
             this.WatchStatusComboBox.Items.Add(Messages.SeriesStoppedWatching);
 
-            this.BindComboBox(
-                    vm => vm.WatchStatus,
-                    v => v.WatchStatusComboBox.SelectedItem,
-                    new SeriesWatchStatusConverter())
+            this.Bind(this.ViewModel, vm => vm.WatchStatus, v => v.WatchStatusComboBox.SelectedItem)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsAnthology, v => v.IsAnthologyCheckBox.IsChecked)
@@ -180,10 +174,7 @@ namespace MovieList.Views.Forms
             this.ReleaseStatusComboBox.Items.Add(Messages.SeriesCancelled);
             this.ReleaseStatusComboBox.Items.Add(Messages.SeriesUnknown);
 
-            this.BindComboBox(
-                    vm => vm.ReleaseStatus,
-                    v => v.ReleaseStatusComboBox.SelectedItem,
-                    new SeriesReleaseStatusConverter())
+            this.Bind(this.ViewModel, vm => vm.ReleaseStatus, v => v.ReleaseStatusComboBox.SelectedItem)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Kind, v => v.KindComboBox.SelectedItem)
@@ -198,12 +189,6 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.KindComboBox.ItemsSource)
                 .DisposeWith(disposables);
         }
-
-        private IDisposable BindComboBox<T>(
-            Expression<Func<SeriesFormViewModel, T>> vmProperty,
-            Expression<Func<SeriesFormControl, object>> viewProperty,
-            IBindingTypeConverter converter)
-            => this.Bind(this.ViewModel, vmProperty, viewProperty, null, converter, converter);
 
         private void AddValidation(CompositeDisposable disposables)
         {

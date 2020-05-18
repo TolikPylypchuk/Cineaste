@@ -38,7 +38,7 @@ namespace MovieList.Views.Forms
                     .DisposeWith(disposables);
 
                 this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
-                    .BindTo(this, v => v.DeleteButton.Visibility, null, new BooleanToVisibilityTypeConverter())
+                    .BindTo(this, v => v.DeleteButton.Visibility)
                     .DisposeWith(disposables);
             });
         }
@@ -67,8 +67,6 @@ namespace MovieList.Views.Forms
                 .Subscribe(isSingleDayRelease => HintAssist.SetHint(
                     this.StartYearTextBox, isSingleDayRelease ? Messages.Year : Messages.StartYear));
 
-            var boolToVisibility = new BooleanToVisibilityTypeConverter();
-
             this.Bind(
                     this.ViewModel,
                     vm => vm.EndMonth,
@@ -79,14 +77,14 @@ namespace MovieList.Views.Forms
 
             this.WhenAnyValue(v => v.ViewModel.IsSingleDayRelease)
                 .Invert()
-                .BindTo(this, v => v.EndMonthComboBox.Visibility, null, boolToVisibility);
+                .BindTo(this, v => v.EndMonthComboBox.Visibility);
 
             this.Bind(this.ViewModel, vm => vm.EndYear, v => v.EndYearTextBox.Text)
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.IsSingleDayRelease)
                 .Invert()
-                .BindTo(this, v => v.EndYearTextBox.Visibility, null, boolToVisibility);
+                .BindTo(this, v => v.EndYearTextBox.Visibility);
 
             this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesTextBox.Text)
                 .DisposeWith(disposables);
@@ -98,9 +96,8 @@ namespace MovieList.Views.Forms
                     v => v.ViewModel.StartMonth,
                     v => v.ViewModel.StartYear,
                     v => v.ViewModel.EndMonth,
-                    v => v.ViewModel.EndYear)
-                .Select(((int StartMonth, string StartYear, int EndMonth, string EndYear) values) =>
-                    values.StartMonth == values.EndMonth && values.StartYear == values.EndYear)
+                    v => v.ViewModel.EndYear,
+                    (startMonth, startYear, endMonth, endYear) => startMonth == endMonth && startYear == endYear)
                 .BindTo(this, v => v.IsSingleDayReleaseCheckBox.IsEnabled)
                 .DisposeWith(disposables);
 
@@ -108,7 +105,8 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.ShowPosterUrl)
-                .BindTo(this, v => v.PosterUrlTextBox.Visibility, null, boolToVisibility);
+                .BindTo(this, v => v.PosterUrlTextBox.Visibility)
+                .DisposeWith(disposables);
         }
 
         public void AddValidation(CompositeDisposable disposables)
@@ -127,7 +125,7 @@ namespace MovieList.Views.Forms
 
             this.WhenAnyObservable(v => v.ViewModel.PeriodRule.ValidationChanged)
                 .Select(state => !state.IsValid)
-                .BindTo(this, v => v.InvalidFormTextBlock.Visibility, null, new BooleanToVisibilityTypeConverter())
+                .BindTo(this, v => v.InvalidFormTextBlock.Visibility)
                 .DisposeWith(disposables);
         }
     }

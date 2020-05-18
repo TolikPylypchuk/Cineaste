@@ -29,9 +29,8 @@ namespace MovieList.Converters
         }
 
         public int GetAffinityForObjects(Type fromType, Type toType)
-            => fromType == typeof(SeriesReleaseStatus) && toType == typeof(string) ||
-               fromType == typeof(string) && toType == typeof(SeriesReleaseStatus)
-                ? 10
+            => fromType == typeof(SeriesReleaseStatus) || toType == typeof(SeriesReleaseStatus)
+                ? 10000
                 : 0;
 
         public bool TryConvert(object from, Type toType, object conversionHint, out object? result)

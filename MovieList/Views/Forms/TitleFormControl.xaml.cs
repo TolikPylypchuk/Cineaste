@@ -37,7 +37,7 @@ namespace MovieList.Views.Forms
                     .DisposeWith(disposables);
 
                 this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
-                    .BindTo(this, v => v.DeleteButton.Visibility, null, new BooleanToVisibilityTypeConverter())
+                    .BindTo(this, v => v.DeleteButton.Visibility)
                     .DisposeWith(disposables);
             });
         }

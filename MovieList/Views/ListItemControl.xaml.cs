@@ -36,7 +36,8 @@ namespace MovieList.Views
                 this.OneWayBind(
                     this.ViewModel,
                     vm => vm.Item.Color,
-                    v => v.Foreground, color => new SolidColorBrush
+                    v => v.Foreground,
+                    color => new SolidColorBrush
                     {
                         Color = (Color?)ColorConverter.ConvertFromString(color) ?? Colors.Black
                     })

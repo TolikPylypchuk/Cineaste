@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Threading;
 
 using Akavache;
-
+using MovieList.Converters;
 using MovieList.Data.Models;
 using MovieList.Infrastructure;
 using MovieList.Preferences;
@@ -96,6 +96,13 @@ namespace MovieList
             Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, StoreKey);
 
             Locator.CurrentMutable.RegisterConstant(Messages.ResourceManager, typeof(ResourceManager));
+
+            Locator.CurrentMutable.RegisterConstant(new SeriesWatchStatusConverter(), typeof(IBindingTypeConverter));
+            Locator.CurrentMutable.RegisterConstant(new SeriesReleaseStatusConverter(), typeof(IBindingTypeConverter));
+            Locator.CurrentMutable.RegisterConstant(new SeasonWatchStatusConverter(), typeof(IBindingTypeConverter));
+            Locator.CurrentMutable.RegisterConstant(new SeasonReleaseStatusConverter(), typeof(IBindingTypeConverter));
+            Locator.CurrentMutable.RegisterConstant(
+                new BooleanToVisibilityTypeConverter(), typeof(IBindingTypeConverter));
 
             var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
                 .Catch(Observable.FromAsync(this.CreateDefaultPreferencesAsync));

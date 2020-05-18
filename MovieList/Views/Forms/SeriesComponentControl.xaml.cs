@@ -32,20 +32,18 @@ namespace MovieList.Views.Forms
                     .InvokeCommand(this.ViewModel.Select)
                     .DisposeWith(disposables);
 
-                var boolToVisibility = new BooleanToVisibilityTypeConverter();
-
                 this.BindCommand(this.ViewModel, vm => vm.MoveUp, v => v.MoveUpMenuItem)
                     .DisposeWith(disposables);
 
                 this.WhenAnyObservable(v => v.ViewModel.MoveUp.CanExecute)
-                    .BindTo(this, v => v.MoveUpMenuItem.Visibility, null, boolToVisibility)
+                    .BindTo(this, v => v.MoveUpMenuItem.Visibility)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.MoveDown, v => v.MoveDownMenuItem)
                     .DisposeWith(disposables);
 
                 this.WhenAnyObservable(v => v.ViewModel.MoveDown.CanExecute)
-                    .BindTo(this, v => v.MoveDownMenuItem.Visibility, null, boolToVisibility)
+                    .BindTo(this, v => v.MoveDownMenuItem.Visibility)
                     .DisposeWith(disposables);
             });
         }
