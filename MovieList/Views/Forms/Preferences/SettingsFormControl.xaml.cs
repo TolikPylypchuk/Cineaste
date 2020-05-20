@@ -1,16 +1,16 @@
 using System.Reactive.Disposables;
 
-using MovieList.ViewModels;
+using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 
-namespace MovieList.Views
+namespace MovieList.Views.Forms.Preferences
 {
-    public abstract class SettingsControlBase : ReactiveUserControl<SettingsViewModel> { }
+    public abstract class SettingsFormControlBase : ReactiveUserControl<SettingsFormViewModel> { }
 
-    public partial class SettingsControl : SettingsControlBase
+    public partial class SettingsFormControl : SettingsFormControlBase
     {
-        public SettingsControl()
+        public SettingsFormControl()
         {
             this.InitializeComponent();
 

@@ -1,4 +1,5 @@
 using System.Globalization;
+
 using static MovieList.Data.Constants;
 
 namespace MovieList.Data
