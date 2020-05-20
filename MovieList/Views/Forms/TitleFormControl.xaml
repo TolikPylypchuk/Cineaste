@@ -1,12 +1,9 @@
 <local:TitleFormControlBase x:Class="MovieList.Views.Forms.TitleFormControl"
                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                             xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                             xmlns:local="clr-namespace:MovieList.Views.Forms"
-                            xmlns:v="clr-namespace:MovieList.Views"
-                            mc:Ignorable="d">
+                            xmlns:v="clr-namespace:MovieList.Views">
     <DockPanel>
         <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
                 VerticalAlignment="Center" Padding="0" Width="20" Height="20" Margin="8,0,0,0"

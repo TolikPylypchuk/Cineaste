@@ -1,13 +1,10 @@
 <local:MovieSeriesFormControlBase x:Class="MovieList.Views.Forms.MovieSeriesFormControl"
                                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                   xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                                   xmlns:local="clr-namespace:MovieList.Views.Forms"
                                   xmlns:v="clr-namespace:MovieList.Views"
-                                  xmlns:l="clr-namespace:MovieList.Localization"
-                                  mc:Ignorable="d">
+                                  xmlns:l="clr-namespace:MovieList.Localization">
     <local:MovieSeriesFormControlBase.Resources>
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
             <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
@@ -69,13 +66,17 @@
                     <Image x:Name="Poster" />
 
                     <WrapPanel HorizontalAlignment="Center" Margin="0,8,0,0">
-                        <CheckBox x:Name="HasTitlesCheckBox" Content="{l:Translate MovieSeriesHasTitles}" Margin="4,0" />
-                        <CheckBox x:Name="ShowInListCheckBox" Content="{l:Translate MovieSeriesShowInList}" Margin="4,0" />
+                        <CheckBox x:Name="HasTitlesCheckBox" Margin="4,0"
+                                  Content="{l:Translate MovieSeriesHasTitles}" />
+                        <CheckBox x:Name="ShowInListCheckBox" Margin="4,0"
+                                  Content="{l:Translate MovieSeriesShowInList}" />
                     </WrapPanel>
 
                     <WrapPanel HorizontalAlignment="Center" Margin="0,8,0,0">
-                        <CheckBox x:Name="IsLooselyConnectedCheckBox" Content="{l:Translate LooselyConnected}" Margin="4,0" />
-                        <CheckBox x:Name="MergeDisplayNumbersCheckBox" Content="{l:Translate MergeDisplayNumbers}" Margin="4,0" />
+                        <CheckBox x:Name="IsLooselyConnectedCheckBox" Margin="4,0"
+                                  Content="{l:Translate LooselyConnected}" />
+                        <CheckBox x:Name="MergeDisplayNumbersCheckBox" Margin="4,0"
+                                  Content="{l:Translate MergeDisplayNumbers}" />
                     </WrapPanel>
 
                     <ItemsControl x:Name="Titles" />
@@ -84,7 +85,8 @@
 
                     <ItemsControl x:Name="Entries" Margin="0,8" Grid.IsSharedSizeScope="True" />
 
-                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
+                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                             m:HintAssist.Hint="{l:Translate PosterUrl}" />
 
                     <Grid Margin="0,8">
                         <Grid.ColumnDefinitions>
@@ -103,17 +105,20 @@
                         </Grid.Resources>
 
                         <Button x:Name="AddMovieButton" Grid.Column="0">
-                            <TextBlock Text="{l:Translate AddNewMovie, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                            <TextBlock Text="{l:Translate AddNewMovie, ToUpper=True}" TextAlignment="Center"
+                                       TextWrapping="Wrap" />
                         </Button>
 
                         <Button x:Name="AddSeriesButton" Grid.Column="1">
-                            <TextBlock Text="{l:Translate AddNewSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                            <TextBlock Text="{l:Translate AddNewSeries, ToUpper=True}" TextAlignment="Center"
+                                       TextWrapping="Wrap" />
                         </Button>
                     </Grid>
 
                     <Button x:Name="AddMovieSeriesButton" Style="{StaticResource MaterialDesignOutlinedButton}"
                             HorizontalAlignment="Center" Height="Auto" MinHeight="32" FontSize="12" Margin="8">
-                        <TextBlock Text="{l:Translate AddNewMovieSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        <TextBlock Text="{l:Translate AddNewMovieSeries, ToUpper=True}" TextAlignment="Center"
+                                   TextWrapping="Wrap" />
                     </Button>
 
                     <Grid Margin="0,8">
@@ -133,25 +138,30 @@
                         </Grid.Resources>
 
                         <Button x:Name="AddTitleButton" Grid.Column="0">
-                            <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                            <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center"
+                                       TextWrapping="Wrap" />
                         </Button>
 
                         <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
-                            <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                            <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center"
+                                       TextWrapping="Wrap" />
                         </Button>
                     </Grid>
 
                     <Button x:Name="CreateMovieSeriesButton" Style="{StaticResource MaterialDesignOutlinedButton}"
                             HorizontalAlignment="Center" Height="Auto" MinHeight="32" FontSize="12" Margin="8">
-                        <TextBlock Text="{l:Translate CreateMovieSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        <TextBlock Text="{l:Translate CreateMovieSeries, ToUpper=True}" TextAlignment="Center"
+                                   TextWrapping="Wrap" />
                     </Button>
 
                     <Button x:Name="GoToMovieSeriesButton" Style="{StaticResource MaterialDesignOutlinedButton}"
                             HorizontalAlignment="Center" Height="Auto" MinHeight="32" FontSize="12" Margin="8">
-                        <TextBlock Text="{l:Translate GoToMovieSeries, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                        <TextBlock Text="{l:Translate GoToMovieSeries, ToUpper=True}" TextAlignment="Center"
+                                   TextWrapping="Wrap" />
                     </Button>
 
-                    <ComboBox x:Name="AddableItemsComboBox" m:HintAssist.Hint="{l:Translate MovieSeriesAddExistingItem}">
+                    <ComboBox x:Name="AddableItemsComboBox"
+                              m:HintAssist.Hint="{l:Translate MovieSeriesAddExistingItem}">
                         <ComboBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
@@ -163,9 +173,10 @@
         </ScrollViewer>
 
         <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
-            <Button x:Name="SaveButton" Content="{l:Translate Save, ToUpper=True}" Margin="8" HorizontalAlignment="Center" />
-            <Button x:Name="CancelButton" Content="{l:Translate Cancel, ToUpper=True}" Margin="8" HorizontalAlignment="Center"
-                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+            <Button x:Name="SaveButton" Content="{l:Translate Save, ToUpper=True}" Margin="8"
+                    HorizontalAlignment="Center" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel, ToUpper=True}" Margin="8"
+                    HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
         </StackPanel>
     </Grid>
 </local:MovieSeriesFormControlBase>

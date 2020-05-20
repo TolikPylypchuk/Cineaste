@@ -1,13 +1,10 @@
 <local:SeasonFormControlBase x:Class="MovieList.Views.Forms.SeasonFormControl"
                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                              xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                              xmlns:local="clr-namespace:MovieList.Views.Forms"
                              xmlns:v="clr-namespace:MovieList.Views"
-                             xmlns:l="clr-namespace:MovieList.Localization"
-                             mc:Ignorable="d">
+                             xmlns:l="clr-namespace:MovieList.Localization">
     <local:SeasonFormControlBase.Resources>
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
             <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
@@ -90,19 +87,22 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,8,8,8"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate WatchStatus}" />
+                        <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch"
+                                  Margin="0,8,8,8" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  m:HintAssist.Hint="{l:Translate WatchStatus}" />
 
-                        <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8,8,0,8"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" m:HintAssist.Hint="{l:Translate ReleaseStatus}" />
+                        <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="1" HorizontalAlignment="Stretch"
+                                  Margin="8,8,0,8" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  m:HintAssist.Hint="{l:Translate ReleaseStatus}" />
                     </Grid>
 
-                    <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8" m:HintAssist.Hint="{l:Translate Channel}" />
+                    <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                             m:HintAssist.Hint="{l:Translate Channel}" />
 
                     <ItemsControl x:Name="Periods" />
 
                     <TextBlock x:Name="PeriodsOverlapTextBlock" Foreground="{DynamicResource ValidationErrorBrush}"
-                           Text="{l:Translate ValidationPeriodsOverlap}" />
+                               Text="{l:Translate ValidationPeriodsOverlap}" />
 
                     <Grid Margin="0,8">
                         <Grid.ColumnDefinitions>
@@ -121,24 +121,28 @@
                         </Grid.Resources>
 
                         <Button x:Name="AddTitleButton" Grid.Column="0">
-                            <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                            <TextBlock Text="{l:Translate AddTitle, ToUpper=True}" TextAlignment="Center"
+                                       TextWrapping="Wrap" />
                         </Button>
 
                         <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
-                            <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center" TextWrapping="Wrap" />
+                            <TextBlock Text="{l:Translate AddOriginalTitle, ToUpper=True}" TextAlignment="Center"
+                                       TextWrapping="Wrap" />
                         </Button>
                     </Grid>
 
-                    <Button x:Name="AddPeriodButton" Content="{l:Translate AddPeriod, ToUpper=True}" HorizontalAlignment="Center"
-                        Style="{StaticResource MaterialDesignOutlinedButton}" Margin="8" FontSize="12" />
+                    <Button x:Name="AddPeriodButton" Content="{l:Translate AddPeriod, ToUpper=True}"
+                            HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Margin="8" FontSize="12" />
                 </StackPanel>
             </DockPanel>
         </ScrollViewer>
 
         <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
-            <Button x:Name="GoToSeriesButton" Content="{l:Translate GoToSeries, ToUpper=True}" Margin="8" HorizontalAlignment="Center" />
-            <Button x:Name="CancelButton" Content="{l:Translate Cancel, ToUpper=True}" Margin="8" HorizontalAlignment="Center"
-                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+            <Button x:Name="GoToSeriesButton" Content="{l:Translate GoToSeries, ToUpper=True}" Margin="8"
+                    HorizontalAlignment="Center" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel, ToUpper=True}" Margin="8"
+                    HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
         </StackPanel>
     </Grid>
 </local:SeasonFormControlBase>

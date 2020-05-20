@@ -1,11 +1,8 @@
 <local:NewItemControlBase x:Class="MovieList.Views.NewItemControl"
                           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:local="clr-namespace:MovieList.Views"
-                          xmlns:l="clr-namespace:MovieList.Localization"
-                          mc:Ignorable="d">
+                          xmlns:l="clr-namespace:MovieList.Localization">
     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center">
         <StackPanel.Resources>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">

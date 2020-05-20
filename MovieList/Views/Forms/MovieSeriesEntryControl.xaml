@@ -1,12 +1,9 @@
 <local:MovieSeriesEntryControlBase x:Class="MovieList.Views.Forms.MovieSeriesEntryControl"
                                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                    xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                                    xmlns:local="clr-namespace:MovieList.Views.Forms"
-                                   xmlns:l="clr-namespace:MovieList.Localization"
-                                   mc:Ignorable="d">
+                                   xmlns:l="clr-namespace:MovieList.Localization">
     <Border HorizontalAlignment="Stretch" BorderBrush="{DynamicResource MaterialDesignDivider}"
             BorderThickness="0,0,0,1" Padding="8" Background="Transparent" Cursor="Hand">
         <Grid>
@@ -16,9 +13,12 @@
                 <ColumnDefinition SharedSizeGroup="Years" Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="DisplayNumberTextBlock" Grid.Column="0" Margin="0,0,8,0" TextAlignment="Left" VerticalAlignment="Center" />
-            <TextBlock x:Name="TitleTextBlock" Grid.Column="1" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" />
-            <TextBlock x:Name="YearsTextBlock" Grid.Column="2" Margin="8,0,0,0" TextAlignment="Right" VerticalAlignment="Center" />
+            <TextBlock x:Name="DisplayNumberTextBlock" Grid.Column="0" Margin="0,0,8,0" TextAlignment="Left"
+                       VerticalAlignment="Center" />
+            <TextBlock x:Name="TitleTextBlock" Grid.Column="1" TextAlignment="Center" TextWrapping="Wrap"
+                       VerticalAlignment="Center" />
+            <TextBlock x:Name="YearsTextBlock" Grid.Column="2" Margin="8,0,0,0" TextAlignment="Right"
+                       VerticalAlignment="Center" />
         </Grid>
 
         <Border.ContextMenu>
