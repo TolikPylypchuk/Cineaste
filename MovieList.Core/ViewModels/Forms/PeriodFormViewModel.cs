@@ -17,7 +17,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class PeriodFormViewModel : FormBase<Period, PeriodFormViewModel>
+    public sealed class PeriodFormViewModel : ReactiveForm<Period, PeriodFormViewModel>
     {
         private const string YearProperty = "Year";
 

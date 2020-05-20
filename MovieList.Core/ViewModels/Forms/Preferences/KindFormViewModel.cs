@@ -11,7 +11,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.ViewModels.Forms.Preferences
 {
-    public sealed class KindFormViewModel : FormBase<Kind, KindFormViewModel>
+    public sealed class KindFormViewModel : ReactiveForm<Kind, KindFormViewModel>
     {
         public KindFormViewModel(Kind kind, ResourceManager? resourceManager, IScheduler? scheduler)
             : base(resourceManager, scheduler)

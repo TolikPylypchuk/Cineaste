@@ -1,6 +1,6 @@
 namespace MovieList.ViewModels.Forms.Base
 {
-    public interface ISeriesComponentForm : IForm
+    public interface ISeriesComponentForm : IReactiveForm
     {
         SeriesFormViewModel Parent { get; }
 

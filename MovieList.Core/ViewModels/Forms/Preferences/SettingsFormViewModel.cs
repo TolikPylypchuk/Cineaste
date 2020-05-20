@@ -21,7 +21,7 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms.Preferences
 {
-    public sealed class SettingsFormViewModel : FormBase<SettingsModel, SettingsFormViewModel>
+    public sealed class SettingsFormViewModel : ReactiveForm<SettingsModel, SettingsFormViewModel>
     {
         private readonly ISettingsService settingsService;
         private readonly IKindService kindService;

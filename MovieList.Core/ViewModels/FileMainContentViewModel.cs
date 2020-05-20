@@ -86,7 +86,7 @@ namespace MovieList.ViewModels
 
             if (this.SideViewModel is ISeriesComponentForm seriesComponentForm &&
                 (seriesComponentForm.IsFormChanged || seriesComponentForm.Parent.IsFormChanged) ||
-                this.SideViewModel is IForm form && form.IsFormChanged)
+                this.SideViewModel is IReactiveForm form && form.IsFormChanged)
             {
                 canSelect = await Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"));
             }

@@ -19,7 +19,7 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MovieSeriesEntryViewModel : FormBase<MovieSeriesEntry, MovieSeriesEntryViewModel>
+    public sealed class MovieSeriesEntryViewModel : ReactiveForm<MovieSeriesEntry, MovieSeriesEntryViewModel>
     {
         public MovieSeriesEntryViewModel(
             MovieSeriesEntry entry,
