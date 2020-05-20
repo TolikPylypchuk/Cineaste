@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Threading;
 
 using Akavache;
+
 using MovieList.Converters;
 using MovieList.Data.Models;
 using MovieList.Infrastructure;

@@ -3,14 +3,17 @@ using System.Collections.Generic;
 
 namespace MovieList.Comparers
 {
-    public class StringOrIntComparer : IComparer<object>
+    public class StringOrIntComparer : NullableComparerBase<object>
     {
         private readonly IComparer<string> stringComparer;
 
-        public StringOrIntComparer(IComparer<string> stringComparer)
+        public StringOrIntComparer(
+            IComparer<string> stringComparer,
+            NullComparison nullComparison = NullComparison.NullsFirst)
+            : base(nullComparison)
             => this.stringComparer = stringComparer;
 
-        public int Compare(object x, object y)
+        protected override int CompareSafe(object x, object y)
             => (x, y) switch
             {
                 (string leftStr, string rightStr) => this.stringComparer.Compare(leftStr, rightStr),

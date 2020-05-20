@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -8,14 +7,15 @@ using MovieList.ListItems;
 
 namespace MovieList.Comparers
 {
-    public sealed class ListItemTitleComparer : IComparer<ListItem>
+    public sealed class ListItemTitleComparer : NullableComparerBase<ListItem>
     {
         private readonly TitleComparer titleComparer;
 
-        public ListItemTitleComparer(CultureInfo culture)
+        public ListItemTitleComparer(CultureInfo culture, NullComparison nullComparison = NullComparison.NullsFirst)
+            : base(nullComparison)
             => this.titleComparer = new TitleComparer(culture);
 
-        public int Compare(ListItem x, ListItem y)
+        protected override int CompareSafe(ListItem x, ListItem y)
             => (x, y) switch
             {
                 (MovieListItem left, MovieListItem right) => this.Compare(left, right),

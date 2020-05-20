@@ -1,19 +1,21 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 using MovieList.Data.Models;
 
 namespace MovieList.Comparers
 {
-    public class MovieSeriesEntryTitleComparer : IComparer<MovieSeriesEntry>
+    public class MovieSeriesEntryTitleComparer : NullableComparerBase<MovieSeriesEntry>
     {
         private readonly TitleComparer titleComparer;
 
-        public MovieSeriesEntryTitleComparer(CultureInfo culture)
+        public MovieSeriesEntryTitleComparer(
+            CultureInfo culture,
+            NullComparison nullComparison = NullComparison.NullsFirst)
+            : base(nullComparison)
             => this.titleComparer = new TitleComparer(culture);
 
-        public int Compare(MovieSeriesEntry left, MovieSeriesEntry right)
+        protected override int CompareSafe(MovieSeriesEntry left, MovieSeriesEntry right)
         {
             int result = this.titleComparer.Compare(this.GetTitleName(left), this.GetTitleName(right));
 
