@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -62,6 +63,9 @@ namespace MovieList.ViewModels
                 .Subscribe(data =>
                 {
                     this.Settings = new SettingsFormViewModel(this.FileName, data.Settings, data.Kinds);
+                    this.Settings.Save
+                        .Select(settingsModel => settingsModel.Kinds)
+                        .Subscribe(this.UpdateKinds);
                 });
 
             getKinds.Connect();
@@ -93,5 +97,12 @@ namespace MovieList.ViewModels
         public ReactiveCommand<Unit, Unit> SwitchToList { get; }
         public ReactiveCommand<Unit, Unit> SwitchToStats { get; }
         public ReactiveCommand<Unit, Unit> SwitchToSettings { get; }
+
+        private void UpdateKinds(List<Kind> kinds)
+            => this.kindsSource.Edit(list =>
+            {
+                list.Clear();
+                list.AddOrUpdate(kinds);
+            });
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Resources;
 using System.Threading.Tasks;
 
@@ -89,9 +90,25 @@ namespace MovieList.ViewModels.Forms.Preferences
             base.EnableChangeTracking();
         }
 
-        protected override Task<SettingsModel> OnSaveAsync()
+        protected override async Task<SettingsModel> OnSaveAsync()
         {
-            return Task.FromResult(this.SettingsModel);
+            this.SettingsModel.Settings.ListName = this.ListName;
+            this.SettingsModel.Settings.DefaultSeasonTitle = this.DefaultSeasonTitle;
+            this.SettingsModel.Settings.DefaultSeasonOriginalTitle = this.DefaultSeasonOriginalTitle;
+            this.SettingsModel.Settings.CultureInfo = this.CultureInfo;
+
+            foreach (var kindViewModel in this.Kinds)
+            {
+                await kindViewModel.Save.Execute();
+            }
+
+            this.SettingsModel.Kinds.Clear();
+            this.SettingsModel.Kinds.AddRange(this.kindsSource.Items);
+
+            await this.settingsService.UpdateSettingsAsync(this.SettingsModel.Settings);
+            await this.kindService.UpdateKindsAsync(this.SettingsModel.Kinds);
+
+            return this.SettingsModel;
         }
 
         protected override Task<SettingsModel?> OnDeleteAsync()

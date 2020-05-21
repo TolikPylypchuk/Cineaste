@@ -104,8 +104,6 @@ namespace MovieList.Comparers
             return result;
         }
 
-#pragma warning disable 8509
-
         private int CompareEntries(
             ListItem left,
             ListItem right,
@@ -120,8 +118,6 @@ namespace MovieList.Comparers
                     ? entry1.SequenceNumber.CompareTo(entry2.SequenceNumber)
                     : this.CompareEntries(entry1, entry2)
             };
-
-#pragma warning restore 8509
 
         private int CompareEntries(MovieSeriesListItem left, ListItem right, MovieSeriesEntry? entry)
         {

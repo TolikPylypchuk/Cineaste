@@ -8,5 +8,6 @@ namespace MovieList.Data.Services
     public interface IKindService
     {
         Task<IEnumerable<Kind>> GetAllKindsAsync();
+        Task UpdateKindsAsync(IEnumerable<Kind> kinds);
     }
 }
