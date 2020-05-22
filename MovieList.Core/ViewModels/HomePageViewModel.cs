@@ -10,7 +10,9 @@ using Akavache;
 
 using DynamicData;
 using DynamicData.Binding;
+
 using MovieList.DialogModels;
+using MovieList.Models;
 using MovieList.Preferences;
 
 using ReactiveUI;

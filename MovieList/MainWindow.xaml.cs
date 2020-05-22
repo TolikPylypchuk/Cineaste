@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
+using MovieList.Models;
 using MovieList.Properties;
 using MovieList.ViewModels;
 

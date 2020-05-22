@@ -13,6 +13,7 @@ using Akavache;
 using MovieList.Converters;
 using MovieList.Data.Models;
 using MovieList.Infrastructure;
+using MovieList.Models;
 using MovieList.Preferences;
 using MovieList.Properties;
 using MovieList.State;

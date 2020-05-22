@@ -14,6 +14,7 @@ using DynamicData;
 using MovieList.Data;
 using MovieList.Data.Services;
 using MovieList.DialogModels;
+using MovieList.Models;
 using MovieList.Preferences;
 
 using ReactiveUI;

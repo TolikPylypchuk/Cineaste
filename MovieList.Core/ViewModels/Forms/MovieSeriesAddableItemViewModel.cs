@@ -15,8 +15,8 @@ namespace MovieList.ViewModels.Forms
             this.OriginalTitle = entry.GetOriginalTitle()?.Name ?? String.Empty;
             this.Year = entry.GetYears();
             this.Tag = entry.Movie != null
-                ? "Movie"
-                : entry.Series != null ? "Series" : "MovieSeries";
+                ? nameof(Movie)
+                : entry.Series != null ? nameof(Series) : nameof(MovieSeries);
         }
 
         public MovieSeriesEntry Entry { get; }

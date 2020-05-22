@@ -144,7 +144,7 @@ namespace MovieList.ViewModels.Forms.Base
 
         private TitleFormViewModel CreateTitleForm(Title title, IObservable<bool> canDelete)
         {
-            var titleForm = new TitleFormViewModel(title, canDelete, this.ResourceManager);
+            var titleForm = new TitleFormViewModel(title, canDelete, this.ResourceManager, this.Scheduler);
 
             titleForm.Delete
                 .WhereNotNull()

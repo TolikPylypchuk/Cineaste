@@ -1,4 +1,4 @@
-namespace MovieList.ViewModels
+namespace MovieList.Models
 {
     public class CreateFileModel
     {

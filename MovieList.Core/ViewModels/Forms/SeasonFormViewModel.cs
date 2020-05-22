@@ -205,7 +205,7 @@ namespace MovieList.ViewModels.Forms
 
         private PeriodFormViewModel CreatePeriodForm(Period period, IObservable<bool> canDelete)
         {
-            var periodForm = new PeriodFormViewModel(period, canDelete, this.ResourceManager);
+            var periodForm = new PeriodFormViewModel(period, canDelete, this.ResourceManager, this.Scheduler);
 
             periodForm.Delete
                 .WhereNotNull()

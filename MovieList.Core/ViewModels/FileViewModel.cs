@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Resources;
 using System.Threading.Tasks;
 
 using DynamicData;
@@ -26,6 +28,8 @@ namespace MovieList.ViewModels
         public FileViewModel(
             string fileName,
             string listName,
+            ResourceManager? resourceManager = null,
+            IScheduler? scheduler = null,
             IKindService? kindService = null,
             ISettingsService? settingsService = null)
         {
@@ -62,7 +66,14 @@ namespace MovieList.ViewModels
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(data =>
                 {
-                    this.Settings = new SettingsFormViewModel(this.FileName, data.Settings, data.Kinds);
+                    this.Settings = new SettingsFormViewModel(
+                        this.FileName,
+                        data.Settings,
+                        data.Kinds,
+                        resourceManager,
+                        scheduler,
+                        settingsService, kindService);
+
                     this.Settings.Save
                         .Select(settingsModel => settingsModel.Kinds)
                         .Subscribe(this.UpdateKinds);

@@ -34,10 +34,10 @@ namespace MovieList.ViewModels.Forms.Preferences
             string fileName,
             Settings settings,
             IEnumerable<Kind> kinds,
-            ISettingsService? settingsService = null,
-            IKindService? kindService = null,
             ResourceManager? resourceManager = null,
-            IScheduler? scheduler = null)
+            IScheduler? scheduler = null,
+            ISettingsService? settingsService = null,
+            IKindService? kindService = null)
             : base(resourceManager, scheduler)
         {
             this.SettingsModel = new SettingsModel(settings, kinds.ToList());
