@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -68,6 +69,9 @@ namespace MovieList.ViewModels.Forms.Base
         protected IScheduler Scheduler { get; }
 
         protected abstract TViewModel Self { get; }
+
+        public override IEnumerable GetErrors(string propertyName)
+            => this.IsFormChanged ? base.GetErrors(propertyName) : Enumerable.Empty<string>();
 
         protected void TrackChanges(IObservable<bool> changes)
             => this.changesToTrack.Add(changes.StartWith(false));
