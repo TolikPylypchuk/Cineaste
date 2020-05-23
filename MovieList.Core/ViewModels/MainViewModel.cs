@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -186,8 +187,18 @@ namespace MovieList.ViewModels
         {
             var fileViewModel = new FileViewModel(fileName, listName);
 
-            var subscription = fileViewModel.Header.Close.InvokeCommand(this.CloseFile);
-            this.closeSubscriptions.Add(fileName, subscription);
+            var subscriptions = new CompositeDisposable();
+
+            fileViewModel.Header.Close
+                .InvokeCommand(this.CloseFile)
+                .DisposeWith(subscriptions);
+
+            fileViewModel.UpdateSettings
+                .Select(settingsModel => settingsModel.Settings.ListName)
+                .Where(name => name != listName)
+                .SubscribeAsync(name => this.UpdateRecentFileAsync(fileName, name));
+
+            this.closeSubscriptions.Add(fileName, subscriptions);
 
             this.fileViewModelsSource.AddOrUpdate(fileViewModel);
 
@@ -221,6 +232,28 @@ namespace MovieList.ViewModels
             {
                 await this.HomePage.AddRecentFile.Execute(newRecentFile);
             }
+        }
+
+        private async Task UpdateRecentFileAsync(string file, string newName)
+        {
+            var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
+
+            var recentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file);
+
+            if (recentFile == null)
+            {
+                return;
+            }
+
+            preferences.File.RecentFiles.Remove(recentFile);
+            await this.HomePage.RemoveRecentFile.Execute(recentFile);
+
+            var newRecentFile = new RecentFile(newName, file, recentFile.Closed);
+
+            preferences.File.RecentFiles.Add(newRecentFile);
+            await this.HomePage.AddRecentFile.Execute(newRecentFile);
+
+            await this.store.InsertObject(PreferencesKey, preferences);
         }
     }
 }

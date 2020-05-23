@@ -17,6 +17,8 @@ using MovieList.Models;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI.Fody.Helpers;
+using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
@@ -50,6 +52,9 @@ namespace MovieList.ViewModels.Forms.Preferences
                 .Bind(out this.kinds)
                 .Subscribe();
 
+            this.ListNameRule = this.ValidationRule(
+                vm => vm.ListName, name => !String.IsNullOrWhiteSpace(name), "ListNameEmpty");
+
             this.CopyProperties();
             this.CanNeverDelete();
             this.EnableChangeTracking();
@@ -71,6 +76,8 @@ namespace MovieList.ViewModels.Forms.Preferences
 
         public ReadOnlyObservableCollection<KindFormViewModel> Kinds
             => this.kinds;
+
+        public ValidationHelper ListNameRule { get; }
 
         public override bool IsNew
             => false;

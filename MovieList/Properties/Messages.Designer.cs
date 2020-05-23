@@ -324,6 +324,24 @@ namespace MovieList.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Season #.
         /// </summary>
+        public static string DefaultDefaultSeasonOriginalTitle {
+            get {
+                return ResourceManager.GetString("DefaultDefaultSeasonOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сезон #.
+        /// </summary>
+        public static string DefaultDefaultSeasonTitle {
+            get {
+                return ResourceManager.GetString("DefaultDefaultSeasonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default season original title.
+        /// </summary>
         public static string DefaultSeasonOriginalTitle {
             get {
                 return ResourceManager.GetString("DefaultSeasonOriginalTitle", resourceCulture);
@@ -331,7 +349,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Сезон #.
+        ///   Looks up a localized string similar to Default season title.
         /// </summary>
         public static string DefaultSeasonTitle {
             get {
@@ -607,6 +625,15 @@ namespace MovieList.Properties {
         public static string Kind {
             get {
                 return ResourceManager.GetString("Kind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List name.
+        /// </summary>
+        public static string ListName {
+            get {
+                return ResourceManager.GetString("ListName", resourceCulture);
             }
         }
         
@@ -1282,6 +1309,15 @@ namespace MovieList.Properties {
         public static string ValidationImdbLinkInvalid {
             get {
                 return ResourceManager.GetString("ValidationImdbLinkInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The list name must not be empty.
+        /// </summary>
+        public static string ValidationListNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationListNameEmpty", resourceCulture);
             }
         }
         

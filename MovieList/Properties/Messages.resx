@@ -204,11 +204,17 @@
   <data name="December" xml:space="preserve">
     <value>December</value>
   </data>
-  <data name="DefaultSeasonOriginalTitle" xml:space="preserve">
+  <data name="DefaultDefaultSeasonOriginalTitle" xml:space="preserve">
     <value>Season #</value>
   </data>
-  <data name="DefaultSeasonTitle" xml:space="preserve">
+  <data name="DefaultDefaultSeasonTitle" xml:space="preserve">
     <value>Сезон #</value>
+  </data>
+  <data name="DefaultSeasonOriginalTitle" xml:space="preserve">
+    <value>Default season original title</value>
+  </data>
+  <data name="DefaultSeasonTitle" xml:space="preserve">
+    <value>Default season title</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -300,6 +306,9 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="Kind" xml:space="preserve">
     <value>Kind</value>
+  </data>
+  <data name="ListName" xml:space="preserve">
+    <value>List name</value>
   </data>
   <data name="LiveAction" xml:space="preserve">
     <value>Live-Action</value>
@@ -525,6 +534,9 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="ValidationImdbLinkInvalid" xml:space="preserve">
     <value>The IMDb link is invalid</value>
+  </data>
+  <data name="ValidationListNameEmpty" xml:space="preserve">
+    <value>The list name must not be empty</value>
   </data>
   <data name="ValidationNumberOfEpisodesEmpty" xml:space="preserve">
     <value># of episodes is empty</value>

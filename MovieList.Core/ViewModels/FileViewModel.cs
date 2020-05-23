@@ -11,6 +11,7 @@ using DynamicData;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
+using MovieList.Models;
 using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
@@ -74,9 +75,7 @@ namespace MovieList.ViewModels
                         scheduler,
                         settingsService, kindService);
 
-                    this.Settings.Save
-                        .Select(settingsModel => settingsModel.Kinds)
-                        .Subscribe(this.UpdateKinds);
+                    this.Settings.Save.InvokeCommand(this.UpdateSettings);
                 });
 
             getKinds.Connect();
@@ -84,6 +83,7 @@ namespace MovieList.ViewModels
             this.SwitchToList = ReactiveCommand.Create(() => { this.Content = this.MainContent; });
             this.SwitchToStats = ReactiveCommand.Create(() => { });
             this.SwitchToSettings = ReactiveCommand.Create(() => { this.Content = this.Settings; });
+            this.UpdateSettings = ReactiveCommand.Create<SettingsModel, SettingsModel>(this.OnUpdateSettings);
 
             this.WhenAnyValue(vm => vm.ListName)
                 .BindTo(this.Header, h => h.ListName);
@@ -108,12 +108,19 @@ namespace MovieList.ViewModels
         public ReactiveCommand<Unit, Unit> SwitchToList { get; }
         public ReactiveCommand<Unit, Unit> SwitchToStats { get; }
         public ReactiveCommand<Unit, Unit> SwitchToSettings { get; }
+        public ReactiveCommand<SettingsModel, SettingsModel> UpdateSettings { get; }
 
-        private void UpdateKinds(List<Kind> kinds)
-            => this.kindsSource.Edit(list =>
+        private SettingsModel OnUpdateSettings(SettingsModel settingsModel)
+        {
+            this.kindsSource.Edit(list =>
             {
                 list.Clear();
-                list.AddOrUpdate(kinds);
+                list.AddOrUpdate(settingsModel.Kinds);
             });
+
+            this.Header.ListName = settingsModel.Settings.ListName;
+
+            return settingsModel;
+        }
     }
 }

@@ -97,7 +97,8 @@ namespace MovieList.ViewModels.Forms.Base
         {
             string propertyName = property.GetMemberName();
 
-            return property.Compile()(this.Self).ToObservableChangeSet()
+            return property.Compile()(this.Self)
+                .ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.FormChanged)
                 .ToCollection()
                 .Select(vms =>

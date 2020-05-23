@@ -1,4 +1,5 @@
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 
 using MovieList.ViewModels.Forms.Preferences;
 
@@ -18,6 +19,33 @@ namespace MovieList.Views.Forms.Preferences
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
+                    .DisposeWith(disposables);
+
+                this.Bind(this.ViewModel, vm => vm.ListName, v => v.ListNameTextBox.Text)
+                    .DisposeWith(disposables);
+
+                this.ListNameTextBox.ValidateWith(this.ViewModel.ListNameRule);
+
+                this.Bind(this.ViewModel, vm => vm.DefaultSeasonTitle, v => v.DefaultSeasonTitleTextBox.Text)
+                    .DisposeWith(disposables);
+
+                this.Bind(
+                        this.ViewModel,
+                        vm => vm.DefaultSeasonOriginalTitle,
+                        v => v.DefaultSeasonOriginalTitleTextBox.Text)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(this.ViewModel, vm => vm.Save, v => v.SaveButton)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(this.ViewModel, vm => vm.Cancel, v => v.CancelButton)
+                    .DisposeWith(disposables);
+
+                Observable.CombineLatest(
+                        this.WhenAnyObservable(v => v.ViewModel.Save.CanExecute),
+                        this.WhenAnyObservable(v => v.ViewModel.Cancel.CanExecute))
+                    .AnyTrue()
+                    .BindTo(this, v => v.ActionPanel.Visibility)
                     .DisposeWith(disposables);
             });
         }
