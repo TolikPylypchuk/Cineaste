@@ -216,6 +216,9 @@
   <data name="DefaultSeasonTitle" xml:space="preserve">
     <value>Default season title</value>
   </data>
+  <data name="DefaultSeasonTitleHint" xml:space="preserve">
+    <value>Use the # character in default season titles as a substiture for the actual season number</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -309,6 +312,9 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="ListName" xml:space="preserve">
     <value>List name</value>
+  </data>
+  <data name="ListNameHint" xml:space="preserve">
+    <value>The list name can be different from the actual file name</value>
   </data>
   <data name="LiveAction" xml:space="preserve">
     <value>Live-Action</value>
@@ -528,6 +534,12 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="TitleHeader" xml:space="preserve">
     <value>Title</value>
+  </data>
+  <data name="TitleLanguage" xml:space="preserve">
+    <value>Title language</value>
+  </data>
+  <data name="TitleLanguageHint" xml:space="preserve">
+    <value>If the title language is changed, it takes effect after reopening the list file</value>
   </data>
   <data name="ValidationChannelEmpty" xml:space="preserve">
     <value>The channel must not be empty</value>

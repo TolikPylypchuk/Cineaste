@@ -358,6 +358,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the # character in default season titles as a substiture for the actual season number.
+        /// </summary>
+        public static string DefaultSeasonTitleHint {
+            get {
+                return ResourceManager.GetString("DefaultSeasonTitleHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -634,6 +643,15 @@ namespace MovieList.Properties {
         public static string ListName {
             get {
                 return ResourceManager.GetString("ListName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The list name can be different from the actual file name.
+        /// </summary>
+        public static string ListNameHint {
+            get {
+                return ResourceManager.GetString("ListNameHint", resourceCulture);
             }
         }
         
@@ -1291,6 +1309,24 @@ namespace MovieList.Properties {
         public static string TitleHeader {
             get {
                 return ResourceManager.GetString("TitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title language.
+        /// </summary>
+        public static string TitleLanguage {
+            get {
+                return ResourceManager.GetString("TitleLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the title language is changed, it takes effect after reopening the list file.
+        /// </summary>
+        public static string TitleLanguageHint {
+            get {
+                return ResourceManager.GetString("TitleLanguageHint", resourceCulture);
             }
         }
         

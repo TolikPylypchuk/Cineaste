@@ -31,16 +31,66 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <TextBlock Text="{l:Translate Settings}" Grid.Row="0" Margin="8,16" FontSize="36" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="ListNameTextBox" Grid.Row="1" Width="Auto" MinWidth="300" Margin="10"
+            <TextBlock Text="{l:Translate Settings}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                       Margin="8,16" FontSize="36" />
+
+            <TextBox x:Name="ListNameTextBox" Grid.Row="1" Grid.Column="0" Width="Auto" Margin="8"
                      HorizontalAlignment="Left" m:HintAssist.Hint="{l:Translate ListName}" />
 
-            <StackPanel Orientation="Horizontal" Grid.Row="2">
-                <TextBox x:Name="DefaultSeasonTitleTextBox" m:HintAssist.Hint="{l:Translate DefaultSeasonTitle}" />
+            <ComboBox x:Name="CultureInfoComboBox" Grid.Row="1" Grid.Column="1" Width="Auto" MinWidth="300"
+                      HorizontalAlignment="Left" DisplayMemberPath="EnglishName" Margin="8"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                      m:HintAssist.Hint="{l:Translate TitleLanguage}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True"
+                                                VirtualizingPanel.VirtualizationMode="Recycling" />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
 
-                <TextBox x:Name="DefaultSeasonOriginalTitleTextBox"
-                         m:HintAssist.Hint="{l:Translate DefaultSeasonOriginalTitle}" />
+            <TextBox x:Name="DefaultSeasonTitleTextBox" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" 
+                     m:HintAssist.Hint="{l:Translate DefaultSeasonTitle}" />
+
+            <TextBox x:Name="DefaultSeasonOriginalTitleTextBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"
+                     m:HintAssist.Hint="{l:Translate DefaultSeasonOriginalTitle}" />
+
+            <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="32,8,8,8">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignCaptionTextBlock}">
+                        <Setter Property="Margin" Value="2" />
+                        <Setter Property="HorizontalAlignment" Value="Left" />
+                        <Setter Property="Foreground" Value="Gray" />
+                    </Style>
+
+                    <Style TargetType="{x:Type m:PackIcon}">
+                        <Setter Property="Kind" Value="InfoCircle" />
+                        <Setter Property="Height" Value="10" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Foreground" Value="Gray" />
+                    </Style>
+                </StackPanel.Resources>
+
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <m:PackIcon />
+                    <TextBlock Text="{l:Translate ListNameHint}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <m:PackIcon />
+                    <TextBlock Text="{l:Translate TitleLanguageHint}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <m:PackIcon />
+                    <TextBlock Text="{l:Translate DefaultSeasonTitleHint}" />
+                </StackPanel>
             </StackPanel>
         </Grid>
     </DockPanel>

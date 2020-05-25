@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -21,10 +23,17 @@ namespace MovieList.Views.Forms.Preferences
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
+                this.CultureInfoComboBox.ItemsSource = CultureInfo.GetCultures(CultureTypes.AllCultures)
+                    .OrderBy(culture => culture.EnglishName)
+                    .ToList();
+
                 this.Bind(this.ViewModel, vm => vm.ListName, v => v.ListNameTextBox.Text)
                     .DisposeWith(disposables);
 
                 this.ListNameTextBox.ValidateWith(this.ViewModel.ListNameRule);
+
+                this.Bind(this.ViewModel, vm => vm.CultureInfo, v => v.CultureInfoComboBox.SelectedItem)
+                    .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.DefaultSeasonTitle, v => v.DefaultSeasonTitleTextBox.Text)
                     .DisposeWith(disposables);
