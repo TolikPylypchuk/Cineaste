@@ -180,6 +180,27 @@
   <data name="CloseFormTitle" xml:space="preserve">
     <value>Close Form</value>
   </data>
+  <data name="ColorForNotReleasedMovies" xml:space="preserve">
+    <value>Color for not yet released movies</value>
+  </data>
+  <data name="ColorForNotReleasedSeries" xml:space="preserve">
+    <value>Color for not yet released series</value>
+  </data>
+  <data name="ColorForNotWatchedMovies" xml:space="preserve">
+    <value>Color for not watched movies</value>
+  </data>
+  <data name="ColorForNotWatchedSeries" xml:space="preserve">
+    <value>Color for not watched series</value>
+  </data>
+  <data name="ColorForWatchedMovies" xml:space="preserve">
+    <value>Color for watched movies</value>
+  </data>
+  <data name="ColorForWatchedSeries" xml:space="preserve">
+    <value>Color for watched series</value>
+  </data>
+  <data name="ColorHexValue" xml:space="preserve">
+    <value>Color HEX value</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
@@ -217,7 +238,7 @@
     <value>Default season title</value>
   </data>
   <data name="DefaultSeasonTitleHint" xml:space="preserve">
-    <value>Use the # character in default season titles as a substiture for the actual season number</value>
+    <value>Use the # character in default season titles as a substitute for the actual season number</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -309,6 +330,12 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="Kind" xml:space="preserve">
     <value>Kind</value>
+  </data>
+  <data name="KindName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Kinds" xml:space="preserve">
+    <value>Kinds</value>
   </data>
   <data name="ListName" xml:space="preserve">
     <value>List name</value>
@@ -539,10 +566,13 @@ This will detach all entries without deleting them.</value>
     <value>Title language</value>
   </data>
   <data name="TitleLanguageHint" xml:space="preserve">
-    <value>If the title language is changed, it takes effect after reopening the list file</value>
+    <value>The title language is used for sorting titles - if it is changed, it takes effect after reopening the list file</value>
   </data>
   <data name="ValidationChannelEmpty" xml:space="preserve">
     <value>The channel must not be empty</value>
+  </data>
+  <data name="ValidationHexColorInvalid" xml:space="preserve">
+    <value>Invalid color HEX value</value>
   </data>
   <data name="ValidationImdbLinkInvalid" xml:space="preserve">
     <value>The IMDb link is invalid</value>

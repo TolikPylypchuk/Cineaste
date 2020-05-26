@@ -250,6 +250,69 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color for not yet released movies.
+        /// </summary>
+        public static string ColorForNotReleasedMovies {
+            get {
+                return ResourceManager.GetString("ColorForNotReleasedMovies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for not yet released series.
+        /// </summary>
+        public static string ColorForNotReleasedSeries {
+            get {
+                return ResourceManager.GetString("ColorForNotReleasedSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for not watched movies.
+        /// </summary>
+        public static string ColorForNotWatchedMovies {
+            get {
+                return ResourceManager.GetString("ColorForNotWatchedMovies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for not watched series.
+        /// </summary>
+        public static string ColorForNotWatchedSeries {
+            get {
+                return ResourceManager.GetString("ColorForNotWatchedSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for watched movies.
+        /// </summary>
+        public static string ColorForWatchedMovies {
+            get {
+                return ResourceManager.GetString("ColorForWatchedMovies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for watched series.
+        /// </summary>
+        public static string ColorForWatchedSeries {
+            get {
+                return ResourceManager.GetString("ColorForWatchedSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color HEX value.
+        /// </summary>
+        public static string ColorHexValue {
+            get {
+                return ResourceManager.GetString("ColorHexValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -358,7 +421,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the # character in default season titles as a substiture for the actual season number.
+        ///   Looks up a localized string similar to Use the # character in default season titles as a substitute for the actual season number.
         /// </summary>
         public static string DefaultSeasonTitleHint {
             get {
@@ -634,6 +697,24 @@ namespace MovieList.Properties {
         public static string Kind {
             get {
                 return ResourceManager.GetString("Kind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string KindName {
+            get {
+                return ResourceManager.GetString("KindName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kinds.
+        /// </summary>
+        public static string Kinds {
+            get {
+                return ResourceManager.GetString("Kinds", resourceCulture);
             }
         }
         
@@ -1322,7 +1403,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the title language is changed, it takes effect after reopening the list file.
+        ///   Looks up a localized string similar to The title language is used for sorting titles - if it is changed, it takes effect after reopening the list file.
         /// </summary>
         public static string TitleLanguageHint {
             get {
@@ -1336,6 +1417,15 @@ namespace MovieList.Properties {
         public static string ValidationChannelEmpty {
             get {
                 return ResourceManager.GetString("ValidationChannelEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid color HEX value.
+        /// </summary>
+        public static string ValidationHexColorInvalid {
+            get {
+                return ResourceManager.GetString("ValidationHexColorInvalid", resourceCulture);
             }
         }
         

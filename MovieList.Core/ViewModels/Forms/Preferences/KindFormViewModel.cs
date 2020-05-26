@@ -1,24 +1,37 @@
 using System;
+using System.Linq.Expressions;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using MovieList.Data.Models;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI.Fody.Helpers;
+using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
 
 namespace MovieList.ViewModels.Forms.Preferences
 {
     public sealed class KindFormViewModel : ReactiveForm<Kind, KindFormViewModel>
     {
+        private static readonly Regex HexString = new Regex(@"\A\b[0-9a-fA-F]+\b\Z", RegexOptions.Compiled);
+
         public KindFormViewModel(Kind kind, ResourceManager? resourceManager, IScheduler? scheduler)
             : base(resourceManager, scheduler)
         {
             this.Kind = kind;
-
             this.CopyProperties();
+
+            this.ColorForWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForWatchedMovie);
+            this.ColorForNotWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForNotWatchedMovie);
+            this.ColorForNotReleasedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForNotReleasedMovie);
+            this.ColorForWatchedSeriesRule = this.ValidationRuleForColor(vm => vm.ColorForWatchedSeries);
+            this.ColorForNotWatchedSeriesRule = this.ValidationRuleForColor(vm => vm.ColorForNotWatchedSeries);
+            this.ColorForNotReleasedSeriesRule = this.ValidationRuleForColor(vm => vm.ColorForNotReleasedSeries);
+
             this.CanDeleteWhen(Observable.Return(kind.Movies.Count == 0 && kind.Series.Count == 0));
             this.EnableChangeTracking();
         }
@@ -45,6 +58,13 @@ namespace MovieList.ViewModels.Forms.Preferences
 
         [Reactive]
         public string ColorForNotReleasedSeries { get; set; } = String.Empty;
+
+        public ValidationHelper ColorForWatchedMovieRule { get; }
+        public ValidationHelper ColorForNotWatchedMovieRule { get; }
+        public ValidationHelper ColorForNotReleasedMovieRule { get; }
+        public ValidationHelper ColorForWatchedSeriesRule { get; }
+        public ValidationHelper ColorForNotWatchedSeriesRule { get; }
+        public ValidationHelper ColorForNotReleasedSeriesRule { get; }
 
         public override bool IsNew
             => this.Kind.Id == default;
@@ -91,5 +111,11 @@ namespace MovieList.ViewModels.Forms.Preferences
             this.ColorForNotReleasedMovie = this.Kind.ColorForNotReleasedMovie;
             this.ColorForNotReleasedSeries = this.Kind.ColorForNotReleasedSeries;
         }
+
+        private ValidationHelper ValidationRuleForColor(Expression<Func<KindFormViewModel, string>> vmProperty)
+            => this.ValidationRule(vmProperty, this.IsArgbString, "HexColorInvalid");
+
+        private bool IsArgbString(string color)
+            => color.Length == 9 && color.StartsWith('#') && HexString.IsMatch(color[1..]);
     }
 }

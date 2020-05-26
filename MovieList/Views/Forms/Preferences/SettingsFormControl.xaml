@@ -23,75 +23,83 @@
                     HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
         </StackPanel>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{l:Translate Settings}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                       Margin="8,16" FontSize="36" />
+                <TextBlock Text="{l:Translate Settings}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                       Margin="8,16" Style="{StaticResource MaterialDesignHeadline1TextBlock}" />
 
-            <TextBox x:Name="ListNameTextBox" Grid.Row="1" Grid.Column="0" Width="Auto" Margin="8"
+                <TextBox x:Name="ListNameTextBox" Grid.Row="1" Grid.Column="0" Width="Auto" Margin="8"
                      HorizontalAlignment="Left" m:HintAssist.Hint="{l:Translate ListName}" />
 
-            <ComboBox x:Name="CultureInfoComboBox" Grid.Row="1" Grid.Column="1" Width="Auto" MinWidth="300"
+                <ComboBox x:Name="CultureInfoComboBox" Grid.Row="1" Grid.Column="1" Width="Auto" MinWidth="300"
                       HorizontalAlignment="Left" DisplayMemberPath="EnglishName" Margin="8"
                       Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                       m:HintAssist.Hint="{l:Translate TitleLanguage}">
-                <ComboBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True"
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True"
                                                 VirtualizingPanel.VirtualizationMode="Recycling" />
-                    </ItemsPanelTemplate>
-                </ComboBox.ItemsPanel>
-            </ComboBox>
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                </ComboBox>
 
-            <TextBox x:Name="DefaultSeasonTitleTextBox" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" 
+                <TextBox x:Name="DefaultSeasonTitleTextBox" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" 
                      m:HintAssist.Hint="{l:Translate DefaultSeasonTitle}" />
 
-            <TextBox x:Name="DefaultSeasonOriginalTitleTextBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"
+                <TextBox x:Name="DefaultSeasonOriginalTitleTextBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"
                      m:HintAssist.Hint="{l:Translate DefaultSeasonOriginalTitle}" />
 
-            <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="32,8,8,8">
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignCaptionTextBlock}">
-                        <Setter Property="Margin" Value="2" />
-                        <Setter Property="HorizontalAlignment" Value="Left" />
-                        <Setter Property="Foreground" Value="Gray" />
-                    </Style>
+                <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="32,8,8,8">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignCaptionTextBlock}">
+                            <Setter Property="Margin" Value="2" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="Foreground" Value="Gray" />
+                        </Style>
 
-                    <Style TargetType="{x:Type m:PackIcon}">
-                        <Setter Property="Kind" Value="InfoCircle" />
-                        <Setter Property="Height" Value="10" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                        <Setter Property="Foreground" Value="Gray" />
-                    </Style>
-                </StackPanel.Resources>
+                        <Style TargetType="{x:Type m:PackIcon}">
+                            <Setter Property="Kind" Value="InfoCircle" />
+                            <Setter Property="Height" Value="10" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Foreground" Value="Gray" />
+                        </Style>
+                    </StackPanel.Resources>
 
-                <StackPanel Orientation="Horizontal" Margin="2">
-                    <m:PackIcon />
-                    <TextBlock Text="{l:Translate ListNameHint}" />
+                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <m:PackIcon />
+                        <TextBlock Text="{l:Translate ListNameHint}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <m:PackIcon />
+                        <TextBlock Text="{l:Translate TitleLanguageHint}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <m:PackIcon />
+                        <TextBlock Text="{l:Translate DefaultSeasonTitleHint}" />
+                    </StackPanel>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="2">
-                    <m:PackIcon />
-                    <TextBlock Text="{l:Translate TitleLanguageHint}" />
-                </StackPanel>
+                <TextBlock Text="{l:Translate Kinds}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
+                       Margin="8,16" Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
 
-                <StackPanel Orientation="Horizontal" Margin="2">
-                    <m:PackIcon />
-                    <TextBlock Text="{l:Translate DefaultSeasonTitleHint}" />
-                </StackPanel>
-            </StackPanel>
-        </Grid>
+                <ItemsControl x:Name="Kinds" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="8" />
+            </Grid>
+        </ScrollViewer>
     </DockPanel>
 </local:SettingsFormControlBase>

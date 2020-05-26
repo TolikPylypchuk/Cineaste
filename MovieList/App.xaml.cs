@@ -99,12 +99,14 @@ namespace MovieList
 
             Locator.CurrentMutable.RegisterConstant(Messages.ResourceManager, typeof(ResourceManager));
 
-            Locator.CurrentMutable.RegisterConstant(new SeriesWatchStatusConverter(), typeof(IBindingTypeConverter));
-            Locator.CurrentMutable.RegisterConstant(new SeriesReleaseStatusConverter(), typeof(IBindingTypeConverter));
-            Locator.CurrentMutable.RegisterConstant(new SeasonWatchStatusConverter(), typeof(IBindingTypeConverter));
-            Locator.CurrentMutable.RegisterConstant(new SeasonReleaseStatusConverter(), typeof(IBindingTypeConverter));
-            Locator.CurrentMutable.RegisterConstant(
-                new BooleanToVisibilityTypeConverter(), typeof(IBindingTypeConverter));
+            this.RegisterBindingConverters(
+                new SeriesWatchStatusConverter(),
+                new SeriesReleaseStatusConverter(),
+                new SeasonWatchStatusConverter(),
+                new SeasonReleaseStatusConverter(),
+                new BrushToHexConverter(),
+                new ColorToBrushConverter(),
+                new BooleanToVisibilityTypeConverter());
 
             var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
                 .Catch(Observable.FromAsync(this.CreateDefaultPreferencesAsync));
@@ -119,6 +121,14 @@ namespace MovieList
                 .WriteTo.Debug()
                 .WriteTo.File(preferences.Logging.LogPath)
                 .CreateLogger());
+        }
+
+        private void RegisterBindingConverters(params IBindingTypeConverter[] converters)
+        {
+            foreach (var converter in converters)
+            {
+                Locator.CurrentMutable.RegisterConstant(converter, typeof(IBindingTypeConverter));
+            }
         }
 
         private async Task<UserPreferences> CreateDefaultPreferencesAsync()
@@ -146,14 +156,14 @@ namespace MovieList
 
         private List<Kind> CreateDefaultKinds()
         {
-            const string black = "#000000";
-            const string indigo = "#3949AB";
-            const string green = "#43A047";
-            const string blue = "#1E88E5";
-            const string purple = "#5E35B1";
+            const string black = "#FF000000";
+            const string indigo = "#FF3949AB";
+            const string green = "#FF43A047";
+            const string blue = "#FF1E88E5";
+            const string purple = "#FF5E35B1";
 
-            const string red = "#E35953";
-            const string darkRed = "#B71C1C";
+            const string red = "#FFE35953";
+            const string darkRed = "#FFB71C1C";
 
             return new List<Kind>
             {

@@ -1,7 +1,64 @@
 <local:KindFormControlBase x:Class="MovieList.Views.Forms.Preferences.KindFormControl"
                            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                           xmlns:local="clr-namespace:MovieList.Views.Forms.Preferences">
+                           xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
+                           xmlns:local="clr-namespace:MovieList.Views.Forms.Preferences"
+                           xmlns:views="clr-namespace:MovieList.Views"
+                           xmlns:l="clr-namespace:MovieList.Localization">
+    <local:KindFormControlBase.Resources>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <Setter Property="views:Properties.TripleClickSelectAll" Value="True" />
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="MinWidth" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="8" />
+        </Style>
+
+        <Style TargetType="{x:Type views:ColorPicker}">
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignSubtitle1TextBlock}">
+            <Setter Property="Margin" Value="4,16,4,4" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </local:KindFormControlBase.Resources>
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="320" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="320" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="480" />
+            <ColumnDefinition Width="480" />
+            <ColumnDefinition Width="480" />
+        </Grid.ColumnDefinitions>
+
+        <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                 m:HintAssist.Hint="{l:Translate KindName}" />
+
+        <TextBlock Text="{l:Translate ColorForWatchedMovies}" Grid.Row="1" Grid.Column="0" />
+        <TextBlock Text="{l:Translate ColorForNotWatchedMovies}" Grid.Row="1" Grid.Column="1" />
+        <TextBlock Text="{l:Translate ColorForNotReleasedMovies}" Grid.Row="1" Grid.Column="2" />
+
+        <views:ColorPicker x:Name="WatchedMovieColorPicker" Grid.Row="2" Grid.Column="0" />
+        <views:ColorPicker x:Name="NotWatchedMovieColorPicker" Grid.Row="2" Grid.Column="1" />
+        <views:ColorPicker x:Name="NotReleasedMovieColorPicker" Grid.Row="2" Grid.Column="2" />
+
+        <TextBlock Text="{l:Translate ColorForWatchedSeries}" Grid.Row="3" Grid.Column="0" />
+        <TextBlock Text="{l:Translate ColorForNotWatchedSeries}" Grid.Row="3" Grid.Column="1" />
+        <TextBlock Text="{l:Translate ColorForNotReleasedSeries}" Grid.Row="3" Grid.Column="2" />
+
+        <views:ColorPicker x:Name="WatchedSeriesColorPicker" Grid.Row="4" Grid.Column="0" />
+        <views:ColorPicker x:Name="NotWatchedSeriesColorPicker" Grid.Row="4" Grid.Column="1" />
+        <views:ColorPicker x:Name="NotReleasedSeriesColorPicker" Grid.Row="4" Grid.Column="2" />
     </Grid>
 </local:KindFormControlBase>
