@@ -250,7 +250,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Color for not yet released movies.
+        ///   Looks up a localized string similar to Color for not released movies.
         /// </summary>
         public static string ColorForNotReleasedMovies {
             get {
@@ -259,7 +259,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Color for not yet released series.
+        ///   Looks up a localized string similar to Color for not released series.
         /// </summary>
         public static string ColorForNotReleasedSeries {
             get {

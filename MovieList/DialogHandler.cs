@@ -84,7 +84,29 @@ namespace MovieList
 
             var result = await DialogHost.Show(view);
 
-            ctx.SetOutput(result is string value ? value : null);
+            ctx.SetOutput(result as string);
+        }
+
+        public async Task ShowColorDialogAsync(InteractionContext<ColorModel, string?> ctx)
+        {
+            if (this.Host.IsOpen)
+            {
+                ctx.SetOutput(null);
+                return;
+            }
+
+            var viewModel = new ColorModel(
+                ctx.Input.Message.Localized(),
+                ctx.Input.Title.Localized(),
+                ctx.Input.ConfirmText?.Localized() ?? Messages.Confirm,
+                ctx.Input.CancelText?.Localized() ?? Messages.Cancel);
+
+            var view = ViewLocator.Current.ResolveView(viewModel);
+            view.ViewModel = viewModel;
+
+            var result = await DialogHost.Show(view);
+
+            ctx.SetOutput(result as string);
         }
 
         public async Task ShowSaveFileDialogAsync(InteractionContext<string, string?> ctx)

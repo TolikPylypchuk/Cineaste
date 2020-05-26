@@ -181,10 +181,10 @@
     <value>Close Form</value>
   </data>
   <data name="ColorForNotReleasedMovies" xml:space="preserve">
-    <value>Color for not yet released movies</value>
+    <value>Color for not released movies</value>
   </data>
   <data name="ColorForNotReleasedSeries" xml:space="preserve">
-    <value>Color for not yet released series</value>
+    <value>Color for not released series</value>
   </data>
   <data name="ColorForNotWatchedMovies" xml:space="preserve">
     <value>Color for not watched movies</value>

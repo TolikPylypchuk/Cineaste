@@ -14,7 +14,7 @@
             <Setter Property="Margin" Value="8" />
         </Style>
 
-        <Style TargetType="{x:Type views:ColorPicker}">
+        <Style TargetType="{x:Type Rectangle}">
             <Setter Property="Margin" Value="4" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -31,15 +31,16 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="320" />
+            <RowDefinition Height="160" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="320" />
+            <RowDefinition Height="160" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="480" />
-            <ColumnDefinition Width="480" />
-            <ColumnDefinition Width="480" />
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="16" />
         </Grid.ColumnDefinitions>
 
         <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
@@ -49,16 +50,16 @@
         <TextBlock Text="{l:Translate ColorForNotWatchedMovies}" Grid.Row="1" Grid.Column="1" />
         <TextBlock Text="{l:Translate ColorForNotReleasedMovies}" Grid.Row="1" Grid.Column="2" />
 
-        <views:ColorPicker x:Name="WatchedMovieColorPicker" Grid.Row="2" Grid.Column="0" />
-        <views:ColorPicker x:Name="NotWatchedMovieColorPicker" Grid.Row="2" Grid.Column="1" />
-        <views:ColorPicker x:Name="NotReleasedMovieColorPicker" Grid.Row="2" Grid.Column="2" />
+        <Rectangle x:Name="WatchedMovieColorRectangle" Grid.Row="2" Grid.Column="0" />
+        <Rectangle x:Name="NotWatchedMovieColorRectangle" Grid.Row="2" Grid.Column="1" />
+        <Rectangle x:Name="NotReleasedMovieColorRectangle" Grid.Row="2" Grid.Column="2" />
 
         <TextBlock Text="{l:Translate ColorForWatchedSeries}" Grid.Row="3" Grid.Column="0" />
         <TextBlock Text="{l:Translate ColorForNotWatchedSeries}" Grid.Row="3" Grid.Column="1" />
         <TextBlock Text="{l:Translate ColorForNotReleasedSeries}" Grid.Row="3" Grid.Column="2" />
 
-        <views:ColorPicker x:Name="WatchedSeriesColorPicker" Grid.Row="4" Grid.Column="0" />
-        <views:ColorPicker x:Name="NotWatchedSeriesColorPicker" Grid.Row="4" Grid.Column="1" />
-        <views:ColorPicker x:Name="NotReleasedSeriesColorPicker" Grid.Row="4" Grid.Column="2" />
+        <Rectangle x:Name="WatchedSeriesColorRectangle" Grid.Row="4" Grid.Column="0" />
+        <Rectangle x:Name="NotWatchedSeriesColorRectangle" Grid.Row="4" Grid.Column="1" />
+        <Rectangle x:Name="NotReleasedSeriesColorRectangle" Grid.Row="4" Grid.Column="2" />
     </Grid>
 </local:KindFormControlBase>

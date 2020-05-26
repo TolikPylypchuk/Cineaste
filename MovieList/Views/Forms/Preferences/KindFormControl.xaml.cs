@@ -20,46 +20,46 @@ namespace MovieList.Views.Forms.Preferences
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
+                this.OneWayBind(
+                        this.ViewModel,
+                        vm => vm.Name,
+                        v => v.NameTextBox.Text)
                     .DisposeWith(disposables);
 
-                this.Bind(
+                this.OneWayBind(
                         this.ViewModel,
                         vm => vm.ColorForWatchedMovie,
-                        v => v.WatchedMovieColorPicker.ColorTextBox.Text)
+                        v => v.WatchedMovieColorRectangle.Fill)
                     .DisposeWith(disposables);
 
-                this.Bind(
+                this.OneWayBind(
                         this.ViewModel,
                         vm => vm.ColorForNotWatchedMovie,
-                        v => v.NotWatchedMovieColorPicker.ColorTextBox.Text)
+                        v => v.NotWatchedMovieColorRectangle.Fill)
                     .DisposeWith(disposables);
 
-                this.Bind(
+                this.OneWayBind(
                         this.ViewModel,
                         vm => vm.ColorForNotReleasedMovie,
-                        v => v.NotReleasedMovieColorPicker.ColorTextBox.Text)
+                        v => v.NotReleasedMovieColorRectangle.Fill)
                     .DisposeWith(disposables);
 
-                this.Bind(
+                this.OneWayBind(
                         this.ViewModel,
                         vm => vm.ColorForWatchedSeries,
-                        v => v.WatchedSeriesColorPicker.ColorTextBox.Text)
+                        v => v.WatchedSeriesColorRectangle.Fill)
                     .DisposeWith(disposables);
 
-                this.Bind(
+                this.OneWayBind(
                         this.ViewModel,
                         vm => vm.ColorForNotWatchedSeries,
-                        v => v.NotWatchedSeriesColorPicker.ColorTextBox.Text)
+                        v => v.NotWatchedSeriesColorRectangle.Fill)
                     .DisposeWith(disposables);
 
-                this.Bind(
+                this.OneWayBind(
                         this.ViewModel,
                         vm => vm.ColorForNotReleasedSeries,
-                        v => v.NotReleasedSeriesColorPicker.ColorTextBox.Text)
-                    .DisposeWith(disposables);
-
-                this.WatchedMovieColorPicker.ColorTextBox.ValidateWith(this.ViewModel.ColorForNotWatchedMovieRule)
+                        v => v.NotReleasedSeriesColorRectangle.Fill)
                     .DisposeWith(disposables);
             });
         }
