@@ -1,8 +1,7 @@
 using System;
 using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
-
-using Microsoft.Data.Sqlite;
 
 using Splat;
 
@@ -15,9 +14,9 @@ namespace MovieList.Data.Services.Implementations
         protected ServiceBase(string file)
             => this.DatabasePath = file;
 
-        protected async Task WithTransactionAsync(Func<SqliteConnection, IDbTransaction, Task> action)
+        protected async Task WithTransactionAsync(Func<DbConnection, IDbTransaction, Task> action)
         {
-            await using var connection = this.GetSqliteConnection();
+            await using var connection = this.GetConnection();
             await connection.OpenAsync();
             await using var transaction = await connection.BeginTransactionAsync();
 
@@ -34,9 +33,9 @@ namespace MovieList.Data.Services.Implementations
         }
 
         protected async Task<TResult> WithTransactionAsync<TResult>(
-            Func<SqliteConnection, IDbTransaction, Task<TResult>> action)
+            Func<DbConnection, IDbTransaction, Task<TResult>> action)
         {
-            await using var connection = this.GetSqliteConnection();
+            await using var connection = this.GetConnection();
             await connection.OpenAsync();
             await using var transaction = await connection.BeginTransactionAsync();
 
@@ -54,7 +53,7 @@ namespace MovieList.Data.Services.Implementations
             }
         }
 
-        private SqliteConnection GetSqliteConnection()
-            => Locator.Current.GetService<SqliteConnection>(this.DatabasePath);
+        private DbConnection GetConnection()
+            => Locator.Current.GetService<DbConnection>(this.DatabasePath);
     }
 }

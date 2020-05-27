@@ -1,10 +1,9 @@
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
-
-using Microsoft.Data.Sqlite;
 
 using MovieList.Data.Models;
 
@@ -24,15 +23,16 @@ namespace MovieList.Data.Services.Implementations
                     : this.UpdateAsync(entity, connection, transaction));
 
         public Task DeleteAsync(TEntity entity)
-            => this.WithTransactionAsync((connection, transaction) => this.DeleteAsync(entity, connection, transaction));
+            => this.WithTransactionAsync((connection, transaction) =>
+                this.DeleteAsync(entity, connection, transaction));
 
-        protected abstract Task InsertAsync(TEntity entity, SqliteConnection connection, IDbTransaction transaction);
-        protected abstract Task UpdateAsync(TEntity entity, SqliteConnection connection, IDbTransaction transaction);
-        protected abstract Task DeleteAsync(TEntity entity, SqliteConnection connection, IDbTransaction transaction);
+        protected abstract Task InsertAsync(TEntity entity, DbConnection connection, IDbTransaction transaction);
+        protected abstract Task UpdateAsync(TEntity entity, DbConnection connection, IDbTransaction transaction);
+        protected abstract Task DeleteAsync(TEntity entity, DbConnection connection, IDbTransaction transaction);
 
         protected async Task DeleteMovieSeriesEntryAsync(
             MovieSeriesEntry movieSeriesEntry,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
             await connection.DeleteAsync(movieSeriesEntry, transaction);

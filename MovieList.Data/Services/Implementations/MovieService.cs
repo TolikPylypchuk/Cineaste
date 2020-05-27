@@ -1,9 +1,8 @@
 using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
-
-using Microsoft.Data.Sqlite;
 
 using MovieList.Data.Models;
 
@@ -15,7 +14,7 @@ namespace MovieList.Data.Services.Implementations
             : base(fileName)
         { }
 
-        protected override async Task InsertAsync(Movie movie, SqliteConnection connection, IDbTransaction transaction)
+        protected override async Task InsertAsync(Movie movie, DbConnection connection, IDbTransaction transaction)
         {
             movie.KindId = movie.Kind.Id;
 
@@ -39,7 +38,7 @@ namespace MovieList.Data.Services.Implementations
             }
         }
 
-        protected override async Task UpdateAsync(Movie movie, SqliteConnection connection, IDbTransaction transaction)
+        protected override async Task UpdateAsync(Movie movie, DbConnection connection, IDbTransaction transaction)
         {
             await connection.UpdateAsync(movie, transaction);
 
@@ -55,7 +54,7 @@ namespace MovieList.Data.Services.Implementations
             }
         }
 
-        protected override async Task DeleteAsync(Movie movie, SqliteConnection connection, IDbTransaction transaction)
+        protected override async Task DeleteAsync(Movie movie, DbConnection connection, IDbTransaction transaction)
         {
             await connection.DeleteAsync(movie.Titles, transaction);
 

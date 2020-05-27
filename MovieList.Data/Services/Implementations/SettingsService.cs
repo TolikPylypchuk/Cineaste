@@ -21,7 +21,7 @@ namespace MovieList.Data.Services.Implementations
 
         public async Task<Settings> GetSettingsAsync()
         {
-            this.Log().Debug("Getting all settings.");
+            this.Log().Debug("Getting all settings");
 
             return await this.WithTransactionAsync(async (connection, transaction) =>
             {
@@ -38,7 +38,7 @@ namespace MovieList.Data.Services.Implementations
 
         public async Task UpdateSettingsAsync(Settings settings)
         {
-            this.Log().Debug("Saving settings.");
+            this.Log().Debug("Saving settings");
 
             await this.WithTransactionAsync(async (connection, transaction) =>
             {

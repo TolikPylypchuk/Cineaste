@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -7,8 +8,6 @@ using System.Threading.Tasks;
 
 using Dapper;
 using Dapper.Contrib.Extensions;
-
-using Microsoft.Data.Sqlite;
 
 using MovieList.Data.Models;
 
@@ -35,11 +34,11 @@ namespace MovieList.Data.Services.Implementations
             Justification = "SQL comes from a database creation script")]
         public async Task CreateDatabaseAsync(Settings settings, IEnumerable<Kind> initialKinds)
         {
-            this.Log().Debug($"Creating a new database: {this.DatabasePath}.");
+            this.Log().Debug($"Creating a new database: {this.DatabasePath}");
 
             if (File.Exists(this.DatabasePath))
             {
-                this.Log().Warn($"{this.DatabasePath} already exists.");
+                this.Log().Warn($"{this.DatabasePath} already exists");
                 return;
             }
             
@@ -55,7 +54,7 @@ namespace MovieList.Data.Services.Implementations
 
         public async Task<bool> ValidateDatabaseAsync()
         {
-            this.Log().Debug($"Validating the database: {this.DatabasePath}.");
+            this.Log().Debug($"Validating the database: {this.DatabasePath}");
 
             bool isSqliteFile = await this.CheckIfSqliteDatabaseAsync();
 
@@ -64,14 +63,14 @@ namespace MovieList.Data.Services.Implementations
                 return false;
             }
 
-            this.Log().Debug($"Checking the database schema: {this.DatabasePath}.");
+            this.Log().Debug($"Checking the database schema: {this.DatabasePath}");
 
             return true;
         }
 
-        private async Task InitSettingsAsync(SqliteConnection connection, IDbTransaction transaction, Settings settings)
+        private async Task InitSettingsAsync(DbConnection connection, IDbTransaction transaction, Settings settings)
         {
-            this.Log().Debug($"Initializing settings for the database: {this.DatabasePath}.");
+            this.Log().Debug($"Initializing settings for the database: {this.DatabasePath}");
 
             var settingsList = new List<Setting>
             {
@@ -110,11 +109,11 @@ namespace MovieList.Data.Services.Implementations
 
         private async Task<bool> CheckIfSqliteDatabaseAsync()
         {
-            this.Log().Debug($"Checking if the file is an SQLite database: {this.DatabasePath}.");
+            this.Log().Debug($"Checking if the file is an SQLite database: {this.DatabasePath}");
 
             if (!File.Exists(this.DatabasePath))
             {
-                this.Log().Error($"{this.DatabasePath} doesn't exist.");
+                this.Log().Error($"{this.DatabasePath} doesn't exist");
                 return false;
             }
 
@@ -130,7 +129,7 @@ namespace MovieList.Data.Services.Implementations
 
             if (!isSqliteFile)
             {
-                this.Log().Error($"{this.DatabasePath} is not an SQLite file.");
+                this.Log().Error($"{this.DatabasePath} is not an SQLite file");
             }
 
             return isSqliteFile;

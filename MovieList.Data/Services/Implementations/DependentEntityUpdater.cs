@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
-
-using Microsoft.Data.Sqlite;
 
 using MovieList.Data.Models;
 
@@ -14,10 +13,10 @@ namespace MovieList.Data.Services.Implementations
 {
     internal sealed class DependentEntityUpdater
     {
-        private readonly SqliteConnection connection;
+        private readonly DbConnection connection;
         private readonly IDbTransaction transaction;
 
-        public DependentEntityUpdater(SqliteConnection connection, IDbTransaction transaction)
+        public DependentEntityUpdater(DbConnection connection, IDbTransaction transaction)
         {
             this.connection = connection;
             this.transaction = transaction;

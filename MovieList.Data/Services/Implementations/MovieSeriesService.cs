@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
-
-using Microsoft.Data.Sqlite;
 
 using MovieList.Data.Models;
 
@@ -19,7 +18,7 @@ namespace MovieList.Data.Services.Implementations
 
         protected override async Task InsertAsync(
             MovieSeries movieSeries,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
             movieSeries.Id = await connection.InsertAsync(movieSeries, transaction);
@@ -46,7 +45,7 @@ namespace MovieList.Data.Services.Implementations
 
         protected override async Task UpdateAsync(
             MovieSeries movieSeries,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
             await connection.UpdateAsync(movieSeries, transaction);
@@ -75,7 +74,7 @@ namespace MovieList.Data.Services.Implementations
 
         protected override async Task DeleteAsync(
             MovieSeries movieSeries,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
             await connection.DeleteAsync(movieSeries.Titles, transaction);
@@ -106,7 +105,7 @@ namespace MovieList.Data.Services.Implementations
         private async Task InsertEntriesAsync(
             IEnumerable<MovieSeriesEntry> entries,
             int movieSeriesId,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
             foreach (var entry in entries)

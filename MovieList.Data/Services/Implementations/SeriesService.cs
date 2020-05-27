@@ -1,10 +1,9 @@
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
-
-using Microsoft.Data.Sqlite;
 
 using MovieList.Data.Models;
 
@@ -16,7 +15,7 @@ namespace MovieList.Data.Services.Implementations
             : base(fileName)
         { }
 
-        protected override async Task InsertAsync(Series series, SqliteConnection connection, IDbTransaction transaction)
+        protected override async Task InsertAsync(Series series, DbConnection connection, IDbTransaction transaction)
         {
             series.KindId = series.Kind.Id;
 
@@ -54,7 +53,7 @@ namespace MovieList.Data.Services.Implementations
             }
         }
 
-        protected override async Task UpdateAsync(Series series, SqliteConnection connection, IDbTransaction transaction)
+        protected override async Task UpdateAsync(Series series, DbConnection connection, IDbTransaction transaction)
         {
             await connection.UpdateAsync(series, transaction);
 
@@ -103,7 +102,7 @@ namespace MovieList.Data.Services.Implementations
             }
         }
 
-        protected override async Task DeleteAsync(Series series, SqliteConnection connection, IDbTransaction transaction)
+        protected override async Task DeleteAsync(Series series, DbConnection connection, IDbTransaction transaction)
         {
             await connection.DeleteAsync(series.Titles, transaction);
 
@@ -124,7 +123,7 @@ namespace MovieList.Data.Services.Implementations
 
         private async Task InsertSeasonDependentEntities(
             Season season,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
             foreach (var title in season.Titles)
@@ -142,7 +141,7 @@ namespace MovieList.Data.Services.Implementations
 
         private async Task DeleteSeasonDependentEntities(
             Season season,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
             await connection.DeleteAsync(season.Periods, transaction);
@@ -151,7 +150,7 @@ namespace MovieList.Data.Services.Implementations
 
         private async Task InsertSpecialEpisodeDependentEntities(
             SpecialEpisode episode,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
             foreach (var title in episode.Titles)
@@ -163,7 +162,7 @@ namespace MovieList.Data.Services.Implementations
 
         private async Task DeleteSpecialEpisodeDependentEntities(
             SpecialEpisode episode,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
             await connection.DeleteAsync(episode.Titles, transaction);

@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
-
-using Microsoft.Data.Sqlite;
 
 using MovieList.Data.Models;
 
@@ -25,10 +24,10 @@ namespace MovieList.Data.Services.Implementations
 
         private async Task<MovieList> GetListAsync(
             IList<Kind> kinds,
-            SqliteConnection connection,
+            DbConnection connection,
             IDbTransaction transaction)
         {
-            this.Log().Debug("Getting the full list of movies, series and movie series.");
+            this.Log().Debug("Getting the full list of movies, series and movie series");
 
             var titles = await connection.GetAllAsync<Title>(transaction).ToListAsync();
             var entries = await connection.GetAllAsync<MovieSeriesEntry>(transaction).ToListAsync();
