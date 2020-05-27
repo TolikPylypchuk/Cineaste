@@ -313,6 +313,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a color or input its HEX value.
+        /// </summary>
+        public static string ColorPickerMessage {
+            get {
+                return ResourceManager.GetString("ColorPickerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick the color.
+        /// </summary>
+        public static string ColorPickerTitle {
+            get {
+                return ResourceManager.GetString("ColorPickerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {

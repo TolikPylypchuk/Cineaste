@@ -3,10 +3,10 @@ using System.Linq.Expressions;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using MovieList.Data.Models;
+using MovieList.Validation;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI.Fody.Helpers;
@@ -17,8 +17,6 @@ namespace MovieList.ViewModels.Forms.Preferences
 {
     public sealed class KindFormViewModel : ReactiveForm<Kind, KindFormViewModel>
     {
-        private static readonly Regex HexString = new Regex(@"\A\b[0-9a-fA-F]+\b\Z", RegexOptions.Compiled);
-
         public KindFormViewModel(Kind kind, ResourceManager? resourceManager, IScheduler? scheduler)
             : base(resourceManager, scheduler)
         {
@@ -113,9 +111,6 @@ namespace MovieList.ViewModels.Forms.Preferences
         }
 
         private ValidationHelper ValidationRuleForColor(Expression<Func<KindFormViewModel, string>> vmProperty)
-            => this.ValidationRule(vmProperty, this.IsArgbString, "HexColorInvalid");
-
-        private bool IsArgbString(string color)
-            => color.Length == 9 && color.StartsWith('#') && HexString.IsMatch(color[1..]);
+            => this.ValidationRule(vmProperty, HexColorValidator.IsArgbString, "HexColorInvalid");
     }
 }

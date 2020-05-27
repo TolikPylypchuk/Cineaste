@@ -7,21 +7,30 @@
                        xmlns:v="clr-namespace:MovieList.Validation">
     <Grid Margin="16">
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="320" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="160" />
-            <ColumnDefinition />
+            <ColumnDefinition Width="320" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 8 0 8"
-                   Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 8">
+            <TextBlock x:Name="TitleTextBlock" Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-        <TextBlock x:Name="MessageTextBlock" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 8 0 0" />
+            <Button x:Name="CloseButton" DockPanel.Dock="Right" HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignIconButton}" Padding="0" Width="25" Height="25"
+                    Command="{x:Static m:DialogHost.CloseDialogCommand}" CommandParameter="{x:Null}">
+                <m:PackIcon Kind="Close" Margin="0" Width="25" Height="25" />
+            </Button>
+        </DockPanel>
+
+        <TextBlock x:Name="MessageTextBlock" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 8"
+                   Style="{StaticResource MaterialDesignBody2TextBlock}" />
 
         <DockPanel Grid.Row="2" Grid.Column="0">
             <TextBox x:Name="ColorTextBox" Margin="2 0 10 2" DockPanel.Dock="Top"

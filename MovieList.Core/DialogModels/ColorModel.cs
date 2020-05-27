@@ -1,10 +1,16 @@
 using System;
 
+using MovieList.Validation;
+
 using ReactiveUI.Fody.Helpers;
+using ReactiveUI.Validation.Abstractions;
+using ReactiveUI.Validation.Contexts;
+using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
 
 namespace MovieList.DialogModels
 {
-    public sealed class ColorModel : DialogModelBase
+    public sealed class ColorModel : DialogModelBase, IValidatableViewModel
     {
         public ColorModel(
             string message,
@@ -15,6 +21,10 @@ namespace MovieList.DialogModels
         {
             this.ConfirmText = confirmButtonText;
             this.CancelText = cancelButtonText;
+
+            this.ValidationContext = new ValidationContext();
+
+            this.ColorRule = this.ValidationRule(vm => vm.Color, HexColorValidator.IsArgbString, "HexColorInvalid");
         }
 
         [Reactive]
@@ -25,5 +35,9 @@ namespace MovieList.DialogModels
 
         [Reactive]
         public string Color { get; set; } = String.Empty;
+
+        public ValidationHelper ColorRule { get; }
+
+        public ValidationContext ValidationContext { get; }
     }
 }

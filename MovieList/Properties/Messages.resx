@@ -201,6 +201,12 @@
   <data name="ColorHexValue" xml:space="preserve">
     <value>Color HEX value</value>
   </data>
+  <data name="ColorPickerMessage" xml:space="preserve">
+    <value>Select a color or input its HEX value</value>
+  </data>
+  <data name="ColorPickerTitle" xml:space="preserve">
+    <value>Pick the color</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>

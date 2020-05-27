@@ -253,6 +253,7 @@ namespace MovieList
             Dialog.ShowMessage.RegisterHandler(handler.ShowMessageDialogAsync);
             Dialog.Confirm.RegisterHandler(handler.ShowConfirmDialogAsync);
             Dialog.Input.RegisterHandler(handler.ShowInputDialogAsync);
+            Dialog.ColorPicker.RegisterHandler(handler.ShowColorDialogAsync);
             Dialog.SaveFile.RegisterHandler(handler.ShowSaveFileDialogAsync);
             Dialog.OpenFile.RegisterHandler(handler.ShowOpenFileDialogAsync);
         }

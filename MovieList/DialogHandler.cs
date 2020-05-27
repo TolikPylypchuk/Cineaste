@@ -99,7 +99,11 @@ namespace MovieList
                 ctx.Input.Message.Localized(),
                 ctx.Input.Title.Localized(),
                 ctx.Input.ConfirmText?.Localized() ?? Messages.Confirm,
-                ctx.Input.CancelText?.Localized() ?? Messages.Cancel);
+                ctx.Input.CancelText?.Localized() ?? Messages.Cancel)
+            {
+                Color = ctx.Input.Color
+            };
+
 
             var view = ViewLocator.Current.ResolveView(viewModel);
             view.ViewModel = viewModel;

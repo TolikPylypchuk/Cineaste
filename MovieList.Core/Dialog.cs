@@ -16,6 +16,8 @@ namespace MovieList
 
         public static readonly Interaction<InputModel, string?> Input = new Interaction<InputModel, string?>();
 
+        public static readonly Interaction<ColorModel, string?> ColorPicker = new Interaction<ColorModel, string?>();
+
         public static readonly Interaction<string, string?> SaveFile = new Interaction<string, string?>();
 
         public static readonly Interaction<Unit, string?> OpenFile = new Interaction<Unit, string?>();

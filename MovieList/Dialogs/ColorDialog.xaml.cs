@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using MovieList.DialogModels;
 
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
 
 namespace MovieList.Dialogs
 {
@@ -38,6 +39,10 @@ namespace MovieList.Dialogs
 
                 this.OneWayBind(
                         this.ViewModel, vm => vm.CancelText, v => v.CancelButton.Content, text => text?.ToUpper())
+                    .DisposeWith(disposables);
+
+                this.ViewModel.IsValid()
+                    .BindTo(this, v => v.ConfirmButton.IsEnabled)
                     .DisposeWith(disposables);
             });
         }
