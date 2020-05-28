@@ -1,7 +1,5 @@
 using System;
 using System.Data;
-using System.Data.Common;
-using System.Threading.Tasks;
 
 using Splat;
 
@@ -14,46 +12,56 @@ namespace MovieList.Data.Services.Implementations
         protected ServiceBase(string file)
             => this.DatabasePath = file;
 
-        protected async Task WithTransactionAsync(Func<DbConnection, IDbTransaction, Task> action)
+        protected void WithTransaction(Action<IDbConnection, IDbTransaction> action)
         {
-            await using var connection = this.GetConnection();
-            await connection.OpenAsync();
-            await using var transaction = await connection.BeginTransactionAsync();
+            using var connection = this.GetConnection();
+            connection.Open();
+            using var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
 
             try
             {
-                await action(connection, transaction);
-                await transaction.CommitAsync();
+                action(connection, transaction);
+                transaction.Commit();
             } catch (Exception e)
             {
-                await transaction.RollbackAsync();
+                transaction.Rollback();
                 this.Log().Error(e);
                 throw;
+            } finally
+            {
+                connection.Close();
             }
         }
 
-        protected async Task<TResult> WithTransactionAsync<TResult>(
-            Func<DbConnection, IDbTransaction, Task<TResult>> action)
+        protected TResult WithTransaction<TResult>(Func<IDbConnection, IDbTransaction, TResult> action)
         {
-            await using var connection = this.GetConnection();
-            await connection.OpenAsync();
-            await using var transaction = await connection.BeginTransactionAsync();
+            using var connection = this.GetConnection();
+            connection.Open();
+
+            var walCommand = connection.CreateCommand();
+            walCommand.CommandText = @"PRAGMA journal_mode = 'wal'";
+            walCommand.ExecuteNonQuery();
+
+            using var transaction = connection.BeginTransaction();
 
             try
             {
-                var result = await action(connection, transaction);
-                await transaction.CommitAsync();
+                var result = action(connection, transaction);
+                transaction.Commit();
 
                 return result;
             } catch (Exception e)
             {
-                await transaction.RollbackAsync();
+                transaction.Rollback();
                 this.Log().Error(e);
                 throw;
+            } finally
+            {
+                connection.Close();
             }
         }
 
-        private DbConnection GetConnection()
-            => Locator.Current.GetService<DbConnection>(this.DatabasePath);
+        private IDbConnection GetConnection()
+            => Locator.Current.GetService<IDbConnection>(this.DatabasePath);
     }
 }

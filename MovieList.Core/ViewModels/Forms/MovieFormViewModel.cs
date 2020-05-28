@@ -113,7 +113,7 @@ namespace MovieList.ViewModels.Forms
             this.Movie.ImdbLink = this.ImdbLink.NullIfEmpty();
             this.Movie.PosterUrl = this.PosterUrl.NullIfEmpty();
 
-            await this.movieService.SaveAsync(this.Movie);
+            this.movieService.Save(this.Movie);
 
             return this.Movie;
         }
@@ -124,7 +124,7 @@ namespace MovieList.ViewModels.Forms
 
             if (shouldDelete)
             {
-                await this.movieService.DeleteAsync(this.Movie);
+                this.movieService.Delete(this.Movie);
                 return this.Movie;
             }
 

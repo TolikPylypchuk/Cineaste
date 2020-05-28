@@ -112,8 +112,8 @@ namespace MovieList.ViewModels.Forms.Preferences
             this.SettingsModel.Kinds.Clear();
             this.SettingsModel.Kinds.AddRange(this.kindsSource.Items);
 
-            await this.settingsService.UpdateSettingsAsync(this.SettingsModel.Settings);
-            await this.kindService.UpdateKindsAsync(this.SettingsModel.Kinds);
+            this.settingsService.UpdateSettings(this.SettingsModel.Settings);
+            this.kindService.UpdateKinds(this.SettingsModel.Kinds);
 
             return this.SettingsModel;
         }

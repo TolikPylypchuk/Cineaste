@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
 
@@ -17,29 +16,26 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public async Task<IEnumerable<Kind>> GetAllKindsAsync()
+        public IEnumerable<Kind> GetAllKinds()
         {
             this.Log().Debug("Getting all kinds");
-
-            return await this.WithTransactionAsync(
-                (connection, transaction) => connection.GetAllAsync<Kind>(transaction));
+            return this.WithTransaction((connection, transaction) => connection.GetAll<Kind>(transaction));
         }
 
-        public Task UpdateKindsAsync(IEnumerable<Kind> kinds)
-            => this.WithTransactionAsync(async (connection, transaction) =>
+        public void UpdateKinds(IEnumerable<Kind> kinds)
+            => this.WithTransaction((connection, transaction) =>
             {
                 this.Log().Debug("Updating kinds");
 
                 var kindsList = kinds.ToList();
 
-                var dbKinds = (await connection.GetAllAsync<Kind>(transaction)).ToList();
+                var dbKinds = connection.GetAll<Kind>(transaction).ToList();
 
-                await connection.UpdateAsync(
-                    kindsList.Intersect(dbKinds, IdEqualityComparer<Kind>.Instance), transaction);
+                connection.Update(kindsList.Intersect(dbKinds, IdEqualityComparer<Kind>.Instance), transaction);
 
                 foreach (var kindToInsert in kindsList.Except(dbKinds, IdEqualityComparer<Kind>.Instance))
                 {
-                    kindToInsert.Id = await connection.InsertAsync(kindToInsert, transaction);
+                    kindToInsert.Id = (int)connection.Insert(kindToInsert, transaction);
                 }
 
                 var kindsToDelete = dbKinds.Except(kindsList, IdEqualityComparer<Kind>.Instance).ToList();
@@ -50,7 +46,7 @@ namespace MovieList.Data.Services.Implementations
                         "Cannot delete kinds that have movies or series attached to them");
                 }
 
-                await connection.DeleteAsync(kindsToDelete, transaction);
+                connection.Delete(kindsToDelete, transaction);
             });
     }
 }

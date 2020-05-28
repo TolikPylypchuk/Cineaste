@@ -103,7 +103,7 @@ namespace MovieList.ViewModels.Forms
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
-            this.AddSeason = ReactiveCommand.CreateFromTask(this.AddSeasonAsync);
+            this.AddSeason = ReactiveCommand.Create(this.OnAddSeason);
             this.AddSpecialEpisode = ReactiveCommand.Create(this.OnAddSpecialEpisode);
             this.ConvertToMiniseries = ReactiveCommand.Create(() => { }, this.CanConvertToMiniseries);
 
@@ -189,42 +189,6 @@ namespace MovieList.ViewModels.Forms
                         .Select(count => count == 0))
                 .AllTrue();
 
-        public async Task AddSeasonAsync()
-        {
-            int seasonNumber = this.Seasons.Count + 1;
-
-            var previousComponent = this.ComponentForms.Count != 0 ? this.ComponentForms[^1] : null;
-            int year = previousComponent?.GetNextYear() ?? SeriesDefaultYear;
-
-            var period = new Period
-            {
-                StartMonth = 1,
-                StartYear = year,
-                EndMonth = 1,
-                EndYear = year,
-                NumberOfEpisodes = 1
-            };
-
-            var settings = await this.settingsService.GetSettingsAsync();
-
-            var season = new Season
-            {
-                Titles = new List<Title>
-                {
-                    new Title { Name = settings.GetSeasonTitle(seasonNumber), Priority = 1, IsOriginal = false },
-                    new Title { Name = settings.GetSeasonOriginalTitle(seasonNumber), Priority = 1, IsOriginal = true }
-                },
-                Series = this.Series,
-                Periods = new List<Period> { period },
-                SequenceNumber = this.Components.Count + 1,
-                Channel = previousComponent?.Channel ?? String.Empty
-            };
-
-            period.Season = season;
-
-            this.componentsSource.Add(season);
-        }
-
         protected override void EnableChangeTracking()
         {
             this.TrackChanges(vm => vm.WatchStatus, vm => vm.Series.WatchStatus);
@@ -264,7 +228,7 @@ namespace MovieList.ViewModels.Forms
             this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
             this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
 
-            await this.seriesService.SaveAsync(this.Series);
+            this.seriesService.Save(this.Series);
 
             return this.Series;
         }
@@ -275,7 +239,7 @@ namespace MovieList.ViewModels.Forms
 
             if (shouldDelete)
             {
-                await this.seriesService.DeleteAsync(this.Series);
+                this.seriesService.Delete(this.Series);
                 return this.Series;
             }
 
@@ -303,6 +267,42 @@ namespace MovieList.ViewModels.Forms
 
         protected override void AttachTitle(Title title)
             => title.Series = this.Series;
+
+        private void OnAddSeason()
+        {
+            int seasonNumber = this.Seasons.Count + 1;
+
+            var previousComponent = this.ComponentForms.Count != 0 ? this.ComponentForms[^1] : null;
+            int year = previousComponent?.GetNextYear() ?? SeriesDefaultYear;
+
+            var period = new Period
+            {
+                StartMonth = 1,
+                StartYear = year,
+                EndMonth = 1,
+                EndYear = year,
+                NumberOfEpisodes = 1
+            };
+
+            var settings = this.settingsService.GetSettings();
+
+            var season = new Season
+            {
+                Titles = new List<Title>
+                {
+                    new Title { Name = settings.GetSeasonTitle(seasonNumber), Priority = 1, IsOriginal = false },
+                    new Title { Name = settings.GetSeasonOriginalTitle(seasonNumber), Priority = 1, IsOriginal = true }
+                },
+                Series = this.Series,
+                Periods = new List<Period> { period },
+                SequenceNumber = this.Components.Count + 1,
+                Channel = previousComponent?.Channel ?? String.Empty
+            };
+
+            period.Season = season;
+
+            this.componentsSource.Add(season);
+        }
 
         private void OnAddSpecialEpisode()
         {

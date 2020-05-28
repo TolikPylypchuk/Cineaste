@@ -1,4 +1,4 @@
-using System.Data.Common;
+using System.Data;
 
 using Microsoft.Data.Sqlite;
 
@@ -28,7 +28,7 @@ namespace MovieList.Data
                 resolver.RegisterLazySingleton(() => new SettingsService(file), typeof(ISettingsService), file);
 
                 resolver.RegisterLazySingleton(
-                    () => new SqliteConnection($"Data Source={file}"), typeof(DbConnection), file);
+                    () => new SqliteConnection($"Data Source={file}"), typeof(IDbConnection), file);
             }
         }
 
@@ -46,7 +46,7 @@ namespace MovieList.Data
                 resolver.UnregisterCurrent(typeof(IKindService), file);
                 resolver.UnregisterCurrent(typeof(ISettingsService), file);
 
-                resolver.UnregisterCurrent(typeof(SqliteConnection), file);
+                resolver.UnregisterCurrent(typeof(IDbConnection), file);
             }
         }
     }

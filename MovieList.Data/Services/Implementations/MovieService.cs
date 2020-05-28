@@ -1,6 +1,4 @@
 using System.Data;
-using System.Data.Common;
-using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
 
@@ -14,16 +12,16 @@ namespace MovieList.Data.Services.Implementations
             : base(fileName)
         { }
 
-        protected override async Task InsertAsync(Movie movie, DbConnection connection, IDbTransaction transaction)
+        protected override void Insert(Movie movie, IDbConnection connection, IDbTransaction transaction)
         {
             movie.KindId = movie.Kind.Id;
 
-            movie.Id = await connection.InsertAsync(movie, transaction);
+            movie.Id = (int)connection.Insert(movie, transaction);
 
             foreach (var title in movie.Titles)
             {
                 title.MovieId = movie.Id;
-                title.Id = await connection.InsertAsync(title, transaction);
+                title.Id = (int)connection.Insert(title, transaction);
             }
 
             if (movie.Entry != null)
@@ -31,18 +29,18 @@ namespace MovieList.Data.Services.Implementations
                 var entry = movie.Entry;
                 entry.MovieId = movie.Id;
                 entry.ParentSeriesId = entry.ParentSeries.Id;
-                entry.Id = await connection.InsertAsync(entry, transaction);
+                entry.Id = (int)connection.Insert(entry, transaction);
                 entry.ParentSeries.Entries.Add(entry);
 
                 this.UpdateMergedDisplayNumbers(entry.ParentSeries);
             }
         }
 
-        protected override async Task UpdateAsync(Movie movie, DbConnection connection, IDbTransaction transaction)
+        protected override void Update(Movie movie, IDbConnection connection, IDbTransaction transaction)
         {
-            await connection.UpdateAsync(movie, transaction);
+            connection.Update(movie, transaction);
 
-            await new DependentEntityUpdater(connection, transaction).UpdateDependentEntitiesAsync(
+            new DependentEntityUpdater(connection, transaction).UpdateDependentEntities(
                 movie,
                 movie.Titles,
                 title => title.MovieId,
@@ -50,20 +48,20 @@ namespace MovieList.Data.Services.Implementations
 
             if (movie.Entry != null)
             {
-                await connection.UpdateAsync(movie.Entry, transaction);
+                connection.Update(movie.Entry, transaction);
             }
         }
 
-        protected override async Task DeleteAsync(Movie movie, DbConnection connection, IDbTransaction transaction)
+        protected override void Delete(Movie movie, IDbConnection connection, IDbTransaction transaction)
         {
-            await connection.DeleteAsync(movie.Titles, transaction);
+            connection.Delete(movie.Titles, transaction);
 
             if (movie.Entry != null)
             {
-                await this.DeleteMovieSeriesEntryAsync(movie.Entry, connection, transaction);
+                this.DeleteMovieSeriesEntry(movie.Entry, connection, transaction);
             }
 
-            await connection.DeleteAsync(movie, transaction);
+            connection.Delete(movie, transaction);
         }
     }
 }

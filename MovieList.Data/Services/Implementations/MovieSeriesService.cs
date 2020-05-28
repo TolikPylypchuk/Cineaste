@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
 
@@ -16,69 +14,60 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        protected override async Task InsertAsync(
-            MovieSeries movieSeries,
-            DbConnection connection,
-            IDbTransaction transaction)
+        protected override void Insert(MovieSeries movieSeries, IDbConnection connection, IDbTransaction transaction)
         {
-            movieSeries.Id = await connection.InsertAsync(movieSeries, transaction);
+            movieSeries.Id = (int)connection.Insert(movieSeries, transaction);
 
             foreach (var title in movieSeries.Titles)
             {
                 title.MovieSeriesId = movieSeries.Id;
-                title.Id = await connection.InsertAsync(title, transaction);
+                title.Id = (int)connection.Insert(title, transaction);
             }
 
-            await this.InsertEntriesAsync(movieSeries.Entries, movieSeries.Id, connection, transaction);
+            this.InsertEntries(movieSeries.Entries, movieSeries.Id, connection, transaction);
 
             if (movieSeries.Entry != null)
             {
                 var entry = movieSeries.Entry;
                 entry.MovieSeriesId = movieSeries.Id;
                 entry.ParentSeriesId = entry.ParentSeries.Id;
-                entry.Id = await connection.InsertAsync(entry, transaction);
+                entry.Id = (int)connection.Insert(entry, transaction);
                 entry.ParentSeries.Entries.Add(entry);
 
                 this.UpdateMergedDisplayNumbers(movieSeries);
             }
         }
 
-        protected override async Task UpdateAsync(
-            MovieSeries movieSeries,
-            DbConnection connection,
-            IDbTransaction transaction)
+        protected override void Update(MovieSeries movieSeries, IDbConnection connection, IDbTransaction transaction)
         {
-            await connection.UpdateAsync(movieSeries, transaction);
+            connection.Update(movieSeries, transaction);
 
             if (movieSeries.Entry != null)
             {
-                await connection.UpdateAsync(movieSeries.Entry, transaction);
+                connection.Update(movieSeries.Entry, transaction);
                 this.UpdateMergedDisplayNumbers(movieSeries);
             }
 
-            await new DependentEntityUpdater(connection, transaction).UpdateDependentEntitiesAsync(
+            new DependentEntityUpdater(connection, transaction).UpdateDependentEntities(
                 movieSeries,
                 movieSeries.Titles,
                 title => title.MovieSeriesId,
                 (title, movieSeriesId) => title.MovieSeriesId = movieSeriesId);
 
-            await this.InsertEntriesAsync(
+            this.InsertEntries(
                 movieSeries.Entries.Where(entry => entry.Id == default), movieSeries.Id, connection, transaction);
 
-            await new DependentEntityUpdater(connection, transaction).UpdateDependentEntitiesAsync(
+            new DependentEntityUpdater(connection, transaction).UpdateDependentEntities(
                 movieSeries,
                 movieSeries.Entries,
                 entry => entry.ParentSeriesId,
                 (entry, movieSeriesId) => entry.ParentSeriesId = movieSeriesId);
         }
 
-        protected override async Task DeleteAsync(
-            MovieSeries movieSeries,
-            DbConnection connection,
-            IDbTransaction transaction)
+        protected override void Delete(MovieSeries movieSeries, IDbConnection connection, IDbTransaction transaction)
         {
-            await connection.DeleteAsync(movieSeries.Titles, transaction);
-            await connection.DeleteAsync(movieSeries.Entries, transaction);
+            connection.DeleteAsync(movieSeries.Titles, transaction);
+            connection.DeleteAsync(movieSeries.Entries, transaction);
 
             foreach (var entry in movieSeries.Entries)
             {
@@ -96,16 +85,16 @@ namespace MovieList.Data.Services.Implementations
 
             if (movieSeries.Entry != null)
             {
-                await this.DeleteMovieSeriesEntryAsync(movieSeries.Entry, connection, transaction);
+                this.DeleteMovieSeriesEntry(movieSeries.Entry, connection, transaction);
             }
 
-            await connection.DeleteAsync(movieSeries, transaction);
+            connection.Delete(movieSeries, transaction);
         }
 
-        private async Task InsertEntriesAsync(
+        private void InsertEntries(
             IEnumerable<MovieSeriesEntry> entries,
             int movieSeriesId,
-            DbConnection connection,
+            IDbConnection connection,
             IDbTransaction transaction)
         {
             foreach (var entry in entries)
@@ -123,7 +112,7 @@ namespace MovieList.Data.Services.Implementations
                     entry.MovieSeriesId = entry.MovieSeries.Id;
                 }
 
-                entry.Id = await connection.InsertAsync(entry, transaction);
+                entry.Id = (int)connection.Insert(entry, transaction);
 
                 if (entry.Movie != null)
                 {

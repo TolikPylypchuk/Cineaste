@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
 
@@ -18,27 +16,26 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public Task<MovieList> GetListAsync(IList<Kind> kinds)
-            => this.WithTransactionAsync((connection, transaction) =>
-                this.GetListAsync(kinds, connection, transaction));
+        public MovieList GetList(IList<Kind> kinds)
+            => this.WithTransaction((connection, transaction) => this.GetList(kinds, connection, transaction));
 
-        private async Task<MovieList> GetListAsync(
+        private MovieList GetList(
             IList<Kind> kinds,
-            DbConnection connection,
+            IDbConnection connection,
             IDbTransaction transaction)
         {
             this.Log().Debug("Getting the full list of movies, series and movie series");
 
-            var titles = await connection.GetAllAsync<Title>(transaction).ToListAsync();
-            var entries = await connection.GetAllAsync<MovieSeriesEntry>(transaction).ToListAsync();
+            var titles = connection.GetAll<Title>(transaction).ToList();
+            var entries = connection.GetAll<MovieSeriesEntry>(transaction).ToList();
 
-            var seasons = await connection.GetAllAsync<Season>(transaction).ToListAsync();
-            var periods = await connection.GetAllAsync<Period>(transaction).ToListAsync();
-            var specialEpisodes = await connection.GetAllAsync<SpecialEpisode>(transaction).ToListAsync();
+            var seasons = connection.GetAll<Season>(transaction).ToList();
+            var periods = connection.GetAll<Period>(transaction).ToList();
+            var specialEpisodes = connection.GetAll<SpecialEpisode>(transaction).ToList();
 
-            var movies = await connection.GetAllAsync<Movie>(transaction).ToListAsync();
-            var series = await connection.GetAllAsync<Series>(transaction).ToListAsync();
-            var movieSeries = await connection.GetAllAsync<MovieSeries>(transaction).ToListAsync();
+            var movies = connection.GetAll<Movie>(transaction).ToList();
+            var series = connection.GetAll<Series>(transaction).ToList();
+            var movieSeries = connection.GetAll<MovieSeries>(transaction).ToList();
 
             return new MovieList(
                 movies

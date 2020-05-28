@@ -196,7 +196,7 @@ namespace MovieList.ViewModels.Forms
             this.MovieSeries.MergeDisplayNumbers = this.MergeDisplayNumbers;
             this.MovieSeries.PosterUrl = this.PosterUrl.NullIfEmpty();
 
-            await this.movieSeriesService.SaveAsync(this.MovieSeries);
+            this.movieSeriesService.Save(this.MovieSeries);
 
             return this.MovieSeries;
         }
@@ -207,7 +207,7 @@ namespace MovieList.ViewModels.Forms
 
             if (shouldDelete)
             {
-                await this.movieSeriesService.DeleteAsync(this.MovieSeries);
+                this.movieSeriesService.Delete(this.MovieSeries);
                 return this.MovieSeries;
             }
 

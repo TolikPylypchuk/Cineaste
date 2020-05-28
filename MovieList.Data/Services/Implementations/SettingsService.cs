@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
 
@@ -19,13 +18,13 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public async Task<Settings> GetSettingsAsync()
+        public Settings GetSettings()
         {
             this.Log().Debug("Getting all settings");
 
-            return await this.WithTransactionAsync(async (connection, transaction) =>
+            return this.WithTransaction((connection, transaction) =>
             {
-                var settings = (await connection.GetAllAsync<Setting>()).ToDictionary(s => s.Key, s => s.Value);
+                var settings = connection.GetAll<Setting>().ToDictionary(s => s.Key, s => s.Value);
 
                 return new Settings(
                     settings[SettingsListNameKey],
@@ -36,13 +35,12 @@ namespace MovieList.Data.Services.Implementations
             });
         }
 
-        public async Task UpdateSettingsAsync(Settings settings)
-        {
-            this.Log().Debug("Saving settings");
-
-            await this.WithTransactionAsync(async (connection, transaction) =>
+        public void UpdateSettings(Settings settings)
+            => this.WithTransaction((connection, transaction) =>
             {
-                var dbSettings = await connection.GetAllAsync<Setting>(transaction);
+                this.Log().Debug("Saving settings");
+
+                var dbSettings = connection.GetAll<Setting>(transaction);
 
                 var settingsDictionary = this.ToDictionary(settings);
 
@@ -52,11 +50,10 @@ namespace MovieList.Data.Services.Implementations
                         settingsDictionary[setting.Key] != setting.Value)
                     {
                         setting.Value = settingsDictionary[setting.Key];
-                        await connection.UpdateAsync(setting, transaction);
+                        connection.Update(setting, transaction);
                     }
                 }
             });
-        }
 
         private Dictionary<string, string> ToDictionary(Settings settings)
             => new Dictionary<string, string>

@@ -1,7 +1,5 @@
 using System.Data;
-using System.Data.Common;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
 
@@ -15,30 +13,30 @@ namespace MovieList.Data.Services.Implementations
             : base(fileName)
         { }
 
-        protected override async Task InsertAsync(Series series, DbConnection connection, IDbTransaction transaction)
+        protected override void Insert(Series series, IDbConnection connection, IDbTransaction transaction)
         {
             series.KindId = series.Kind.Id;
 
-            series.Id = await connection.InsertAsync(series, transaction);
+            series.Id = (int)connection.Insert(series, transaction);
 
             foreach (var title in series.Titles)
             {
                 title.SeriesId = series.Id;
-                title.Id = await connection.InsertAsync(title, transaction);
+                title.Id = (int)connection.Insert(title, transaction);
             }
 
             foreach (var season in series.Seasons)
             {
                 season.SeriesId = series.Id;
-                season.Id = await connection.InsertAsync(season, transaction);
-                await this.InsertSeasonDependentEntities(season, connection, transaction);
+                season.Id = (int)connection.Insert(season, transaction);
+                this.InsertSeasonDependentEntities(season, connection, transaction);
             }
 
             foreach (var episode in series.SpecialEpisodes)
             {
                 episode.SeriesId = series.Id;
-                episode.Id = await connection.InsertAsync(episode, transaction);
-                await this.InsertSpecialEpisodeDependentEntities(episode, connection, transaction);
+                episode.Id = (int)connection.Insert(episode, transaction);
+                this.InsertSpecialEpisodeDependentEntities(episode, connection, transaction);
             }
 
             if (series.Entry != null)
@@ -46,26 +44,26 @@ namespace MovieList.Data.Services.Implementations
                 var entry = series.Entry;
                 entry.SeriesId = series.Id;
                 entry.ParentSeriesId = entry.ParentSeries.Id;
-                entry.Id = await connection.InsertAsync(entry, transaction);
+                entry.Id = (int)connection.Insert(entry, transaction);
                 entry.ParentSeries.Entries.Add(entry);
 
                 this.UpdateMergedDisplayNumbers(entry.ParentSeries);
             }
         }
 
-        protected override async Task UpdateAsync(Series series, DbConnection connection, IDbTransaction transaction)
+        protected override void Update(Series series, IDbConnection connection, IDbTransaction transaction)
         {
-            await connection.UpdateAsync(series, transaction);
+            connection.Update(series, transaction);
 
             var updater = new DependentEntityUpdater(connection, transaction);
 
-            await updater.UpdateDependentEntitiesAsync(
+            updater.UpdateDependentEntities(
                 series,
                 series.Titles,
                 title => title.SeriesId,
                 (title, seriesId) => title.SeriesId = seriesId);
 
-            await updater.UpdateDependentEntitiesAsync(
+            updater.UpdateDependentEntities(
                 series,
                 series.Seasons,
                 season => season.SeriesId,
@@ -75,20 +73,20 @@ namespace MovieList.Data.Services.Implementations
 
             foreach (var season in series.Seasons)
             {
-                await updater.UpdateDependentEntitiesAsync(
+                updater.UpdateDependentEntities(
                     season,
                     season.Periods,
                     period => period.SeasonId,
                     (period, seasonId) => period.SeasonId = seasonId);
 
-                await updater.UpdateDependentEntitiesAsync(
+                updater.UpdateDependentEntities(
                     season,
                     season.Titles,
                     title => title.SeasonId,
                     (title, seasonId) => title.SeasonId = seasonId);
             }
 
-            await updater.UpdateDependentEntitiesAsync(
+            updater.UpdateDependentEntities(
                 series,
                 series.SpecialEpisodes,
                 episode => episode.SeriesId,
@@ -98,74 +96,68 @@ namespace MovieList.Data.Services.Implementations
 
             if (series.Entry != null)
             {
-                await connection.UpdateAsync(series.Entry, transaction);
+                connection.Update(series.Entry, transaction);
             }
         }
 
-        protected override async Task DeleteAsync(Series series, DbConnection connection, IDbTransaction transaction)
+        protected override void Delete(Series series, IDbConnection connection, IDbTransaction transaction)
         {
-            await connection.DeleteAsync(series.Titles, transaction);
+            connection.Delete(series.Titles, transaction);
 
-            await connection.DeleteAsync(series.Seasons.SelectMany(season => season.Periods), transaction);
-            await connection.DeleteAsync(series.Seasons.SelectMany(season => season.Titles), transaction);
-            await connection.DeleteAsync(series.Seasons, transaction);
+            connection.Delete(series.Seasons.SelectMany(season => season.Periods), transaction);
+            connection.Delete(series.Seasons.SelectMany(season => season.Titles), transaction);
+            connection.Delete(series.Seasons, transaction);
 
-            await connection.DeleteAsync(series.SpecialEpisodes.SelectMany(episode => episode.Titles), transaction);
-            await connection.DeleteAsync(series.SpecialEpisodes, transaction);
+            connection.Delete(series.SpecialEpisodes.SelectMany(episode => episode.Titles), transaction);
+            connection.Delete(series.SpecialEpisodes, transaction);
 
             if (series.Entry != null)
             {
-                await this.DeleteMovieSeriesEntryAsync(series.Entry, connection, transaction);
+                this.DeleteMovieSeriesEntry(series.Entry, connection, transaction);
             }
 
-            await connection.DeleteAsync(series, transaction);
+            connection.Delete(series, transaction);
         }
 
-        private async Task InsertSeasonDependentEntities(
-            Season season,
-            DbConnection connection,
-            IDbTransaction transaction)
+        private void InsertSeasonDependentEntities(Season season, IDbConnection connection, IDbTransaction transaction)
         {
             foreach (var title in season.Titles)
             {
                 title.SeasonId = season.Id;
-                title.Id = await connection.InsertAsync(title, transaction);
+                title.Id = (int)connection.Insert(title, transaction);
             }
 
             foreach (var period in season.Periods)
             {
                 period.SeasonId = season.Id;
-                period.Id = await connection.InsertAsync(period, transaction);
+                period.Id = (int)connection.Insert(period, transaction);
             }
         }
 
-        private async Task DeleteSeasonDependentEntities(
-            Season season,
-            DbConnection connection,
-            IDbTransaction transaction)
+        private void DeleteSeasonDependentEntities(Season season, IDbConnection connection, IDbTransaction transaction)
         {
-            await connection.DeleteAsync(season.Periods, transaction);
-            await connection.DeleteAsync(season.Titles, transaction);
+            connection.Delete(season.Periods, transaction);
+            connection.Delete(season.Titles, transaction);
         }
 
-        private async Task InsertSpecialEpisodeDependentEntities(
+        private void InsertSpecialEpisodeDependentEntities(
             SpecialEpisode episode,
-            DbConnection connection,
+            IDbConnection connection,
             IDbTransaction transaction)
         {
             foreach (var title in episode.Titles)
             {
                 title.SpecialEpisodeId = episode.Id;
-                title.Id = await connection.InsertAsync(title, transaction);
+                title.Id = (int)connection.Insert(title, transaction);
             }
         }
 
-        private async Task DeleteSpecialEpisodeDependentEntities(
+        private void DeleteSpecialEpisodeDependentEntities(
             SpecialEpisode episode,
-            DbConnection connection,
+            IDbConnection connection,
             IDbTransaction transaction)
         {
-            await connection.DeleteAsync(episode.Titles, transaction);
+            connection.Delete(episode.Titles, transaction);
         }
     }
 }

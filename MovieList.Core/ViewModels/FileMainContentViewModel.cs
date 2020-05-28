@@ -466,7 +466,7 @@ namespace MovieList.ViewModels
 
             if (seriesForm.Seasons.Count == 0)
             {
-                await seriesForm.AddSeasonAsync();
+                await seriesForm.AddSeason.Execute();
             }
 
             var seasonForm = seriesForm.Seasons[0];

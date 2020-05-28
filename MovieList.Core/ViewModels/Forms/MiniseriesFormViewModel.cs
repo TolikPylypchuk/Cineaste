@@ -143,7 +143,7 @@ namespace MovieList.ViewModels.Forms
 
             if (this.Series.Seasons.Count == 0)
             {
-                var settings = await this.settingsService.GetSettingsAsync();
+                var settings = this.settingsService.GetSettings();
 
                 this.Series.Seasons.Add(new Season
                 {
@@ -165,7 +165,7 @@ namespace MovieList.ViewModels.Forms
 
             this.Series.Seasons[0].Channel = this.Channel;
 
-            await this.seriesService.SaveAsync(this.Series);
+            this.seriesService.Save(this.Series);
 
             return this.Series;
         }
@@ -176,7 +176,7 @@ namespace MovieList.ViewModels.Forms
 
             if (shouldDelete)
             {
-                await this.seriesService.DeleteAsync(this.Series);
+                this.seriesService.Delete(this.Series);
                 return this.Series;
             }
 

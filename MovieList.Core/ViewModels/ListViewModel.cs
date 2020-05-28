@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 
 using DynamicData;
 
@@ -38,11 +37,9 @@ namespace MovieList.ViewModels
 
             this.source = new SourceCache<ListItem, string>(item => item.Id);
 
-            this.source.PopulateFrom(
-                Observable.FromAsync(() => Task.Run(() => listService.GetListAsync(kinds)))
-                    .Do(list => this.MovieList = list)
-                    .Select(list => list.ToListItems())
-                    .Do(items => this.Log().Debug($"Loaded the list of {items.Count} items")));
+            this.MovieList = listService.GetList(kinds);
+            this.source.AddOrUpdate(this.MovieList.ToListItems());
+            this.Log().Debug($"Loaded the list of {this.source.Count} items");
 
             this.source.Connect()
                 .Filter(item => !String.IsNullOrEmpty(item.Title))
@@ -74,7 +71,7 @@ namespace MovieList.ViewModels
             => this.items;
 
         [Reactive]
-        public Data.MovieList MovieList { get; private set; } = null!;
+        public Data.MovieList MovieList { get; private set; }
 
         [Reactive]
         public ListItemViewModel? SelectedItem { get; set; }

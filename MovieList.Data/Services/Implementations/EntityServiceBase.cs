@@ -1,7 +1,5 @@
 using System.Data;
-using System.Data.Common;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Dapper.Contrib.Extensions;
 
@@ -16,26 +14,31 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public Task SaveAsync(TEntity entity)
-            => this.WithTransactionAsync(
-                (connection, transaction) => entity.Id == default
-                    ? this.InsertAsync(entity, connection, transaction)
-                    : this.UpdateAsync(entity, connection, transaction));
+        public void Save(TEntity entity)
+            => this.WithTransaction((connection, transaction) =>
+            {
+                if (entity.Id == default)
+                {
+                    this.Insert(entity, connection, transaction);
+                } else
+                {
+                    this.Update(entity, connection, transaction);
+                }
+            });
 
-        public Task DeleteAsync(TEntity entity)
-            => this.WithTransactionAsync((connection, transaction) =>
-                this.DeleteAsync(entity, connection, transaction));
+        public void Delete(TEntity entity)
+            => this.WithTransaction((connection, transaction) => this.Delete(entity, connection, transaction));
 
-        protected abstract Task InsertAsync(TEntity entity, DbConnection connection, IDbTransaction transaction);
-        protected abstract Task UpdateAsync(TEntity entity, DbConnection connection, IDbTransaction transaction);
-        protected abstract Task DeleteAsync(TEntity entity, DbConnection connection, IDbTransaction transaction);
+        protected abstract void Insert(TEntity entity, IDbConnection connection, IDbTransaction transaction);
+        protected abstract void Update(TEntity entity, IDbConnection connection, IDbTransaction transaction);
+        protected abstract void Delete(TEntity entity, IDbConnection connection, IDbTransaction transaction);
 
-        protected async Task DeleteMovieSeriesEntryAsync(
+        protected void DeleteMovieSeriesEntry(
             MovieSeriesEntry movieSeriesEntry,
-            DbConnection connection,
+            IDbConnection connection,
             IDbTransaction transaction)
         {
-            await connection.DeleteAsync(movieSeriesEntry, transaction);
+            connection.Delete(movieSeriesEntry, transaction);
 
             var parentSeries = movieSeriesEntry.ParentSeries;
 
@@ -49,18 +52,18 @@ namespace MovieList.Data.Services.Implementations
                     entry.DisplayNumber--;
                 }
 
-                await connection.UpdateAsync(entry, transaction);
+                connection.Update(entry, transaction);
             }
 
             parentSeries.Entries.Remove(movieSeriesEntry);
 
             if (parentSeries.Entries.Count == 0)
             {
-                await connection.DeleteAsync(parentSeries, transaction);
+                connection.Delete(parentSeries, transaction);
 
                 if (parentSeries.Entry != null)
                 {
-                    await this.DeleteMovieSeriesEntryAsync(parentSeries.Entry, connection, transaction);
+                    this.DeleteMovieSeriesEntry(parentSeries.Entry, connection, transaction);
                 }
             } else
             {
