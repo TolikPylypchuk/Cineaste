@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using System.Resources;
 
 using DynamicData;
@@ -44,7 +43,6 @@ namespace MovieList.ViewModels
             this.kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
 
             this.kindsSource.Connect()
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.kinds)
                 .DisposeMany()
                 .Subscribe();
@@ -65,12 +63,12 @@ namespace MovieList.ViewModels
                 scheduler,
                 settingsService, kindService);
 
-            this.Settings.Save.InvokeCommand(this.UpdateSettings);
-
             this.SwitchToList = ReactiveCommand.Create(() => { this.Content = this.MainContent; });
             this.SwitchToStats = ReactiveCommand.Create(() => { });
             this.SwitchToSettings = ReactiveCommand.Create(() => { this.Content = this.Settings; });
             this.UpdateSettings = ReactiveCommand.Create<SettingsModel, SettingsModel>(this.OnUpdateSettings);
+
+            this.Settings.Save.InvokeCommand(this.UpdateSettings);
 
             this.WhenAnyValue(vm => vm.ListName)
                 .BindTo(this.Header, h => h.ListName);
