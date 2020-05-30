@@ -27,8 +27,7 @@ namespace MovieList.Data
                 resolver.RegisterLazySingleton(() => new KindService(file), typeof(IKindService), file);
                 resolver.RegisterLazySingleton(() => new SettingsService(file), typeof(ISettingsService), file);
 
-                resolver.RegisterLazySingleton(
-                    () => new SqliteConnection($"Data Source={file}"), typeof(IDbConnection), file);
+                resolver.Register(() => new SqliteConnection($"Data Source={file}"), typeof(IDbConnection), file);
             }
         }
 

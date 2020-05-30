@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Resources;
 
 using DynamicData;
 
-using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.Models;
@@ -28,8 +27,6 @@ namespace MovieList.ViewModels
         public FileViewModel(
             string fileName,
             string listName,
-            List<Kind> kinds,
-            Settings settings,
             IKindService? kindService = null,
             ISettingsService? settingsService = null,
             ResourceManager? resourceManager = null,
@@ -46,24 +43,46 @@ namespace MovieList.ViewModels
             this.kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
 
             this.kindsSource.Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.kinds)
                 .DisposeMany()
                 .Subscribe();
 
-            this.kindsSource.AddOrUpdate(kinds);
+            var getKinds = Observable.Start(kindService.GetAllKinds, RxApp.TaskpoolScheduler)
+                .Do(this.kindsSource.AddOrUpdate)
+                .Publish();
 
-            this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
-            this.Content = this.MainContent;
+            getKinds
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(kinds =>
+                {
+                    this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
+                    this.Content ??= this.MainContent;
+                });
 
-            this.Settings = new SettingsFormViewModel(
-                this.FileName, settings, kinds, settingsService, kindService, resourceManager, scheduler);
+            Observable.Start(settingsService.GetSettings, RxApp.TaskpoolScheduler)
+                .ForkJoin(getKinds, (settings, kinds) => (Settings: settings, Kinds: kinds))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(data =>
+                {
+                    this.Settings = new SettingsFormViewModel(
+                        this.FileName,
+                        data.Settings,
+                        data.Kinds,
+                        settingsService,
+                        kindService,
+                        resourceManager,
+                        scheduler);
+
+                    this.Settings.Save.InvokeCommand(this.UpdateSettings);
+                });
+
+            getKinds.Connect();
 
             this.SwitchToList = ReactiveCommand.Create(() => { this.Content = this.MainContent; });
             this.SwitchToStats = ReactiveCommand.Create(() => { });
             this.SwitchToSettings = ReactiveCommand.Create(() => { this.Content = this.Settings; });
             this.UpdateSettings = ReactiveCommand.Create<SettingsModel, SettingsModel>(this.OnUpdateSettings);
-
-            this.Settings.Save.InvokeCommand(this.UpdateSettings);
 
             this.WhenAnyValue(vm => vm.ListName)
                 .BindTo(this.Header, h => h.ListName);
@@ -77,10 +96,10 @@ namespace MovieList.ViewModels
         public FileHeaderViewModel Header { get; }
 
         [Reactive]
-        public ReactiveObject Content { get; set; }
+        public ReactiveObject Content { get; set; } = null!;
 
-        public FileMainContentViewModel MainContent { get; private set; }
-        public SettingsFormViewModel Settings { get; private set; }
+        public FileMainContentViewModel MainContent { get; private set; } = null!;
+        public SettingsFormViewModel Settings { get; private set; } = null!;
 
         public ReadOnlyObservableCollection<Kind> Kinds
             => this.kinds;

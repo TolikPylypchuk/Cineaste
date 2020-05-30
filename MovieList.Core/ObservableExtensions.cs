@@ -29,6 +29,16 @@ namespace MovieList
         public static IObservable<bool> Invert(this IObservable<bool> observable)
             => observable.Select(value => !value);
 
+        public static IObservable<T> DoAsync<T, TAny>(this IObservable<T> observable, Func<T, IObservable<TAny>> action)
+            => observable.SelectMany(result => action(result).Select(_ => result));
+
+        public static IObservable<T> Eager<T>(this IObservable<T> observable)
+        {
+            var connectableObservable = observable.Publish();
+            connectableObservable.Connect();
+            return connectableObservable;
+        }
+
         public static IDisposable Subscribe(this IObservable<Unit> observable, Action observer)
             => observable.Subscribe(_ => observer());
 

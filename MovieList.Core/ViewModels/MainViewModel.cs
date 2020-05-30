@@ -6,7 +6,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 
 using Akavache;
 
@@ -53,12 +52,14 @@ namespace MovieList.ViewModels
 
             this.Files = fileViewModels;
 
-            this.CreateFile = ReactiveCommand.CreateFromTask<CreateFileModel, CreateFileModel?>(this.OnCreateFileAsync);
-            this.OpenFile = ReactiveCommand.CreateFromTask<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
-            this.CloseFile = ReactiveCommand.CreateFromTask<string, string>(this.OnCloseFileAsync);
-            this.Shutdown = ReactiveCommand.CreateFromTask(this.OnShutdownAsync);
-            this.ShowAbout = ReactiveCommand.CreateFromTask(async () => await Dialog.ShowMessage.Handle(
-                new MessageModel("AboutText", "AboutTitle")));
+            this.CreateFile = ReactiveCommand.CreateFromObservable<CreateFileModel, CreateFileModel?>(
+                this.OnCreateFile);
+            this.OpenFile = ReactiveCommand.CreateFromObservable<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
+            this.CloseFile = ReactiveCommand.CreateFromObservable<string, string>(this.OnCloseFile);
+            this.Shutdown = ReactiveCommand.CreateFromObservable(this.OnShutdown);
+
+            this.ShowAbout = ReactiveCommand.CreateFromObservable(() =>
+                Dialog.ShowMessage.Handle(new MessageModel("AboutText", "AboutTitle")));
 
             this.HomePage.CreateFile
                 .WhereNotNull()
@@ -82,7 +83,7 @@ namespace MovieList.ViewModels
         public ReactiveCommand<Unit, Unit> Shutdown { get; }
         public ReactiveCommand<Unit, Unit> ShowAbout { get; }
 
-        private async Task<CreateFileModel?> OnCreateFileAsync(CreateFileModel model)
+        private IObservable<CreateFileModel?> OnCreateFile(CreateFileModel model)
         {
             this.Log().Debug($"Creating a file: {model.File}");
 
@@ -97,24 +98,21 @@ namespace MovieList.ViewModels
                 preferences.DefaultSeasonOriginalTitle,
                 preferences.DefaultCultureInfo);
 
-            await Task.Run(() =>
-                Locator.Current.GetService<IDatabaseService>(model.File)
-                    .CreateDatabase(settings, preferences.DefaultKinds))
-                .ConfigureAwait(false);
-
-            var settingsService = Locator.Current.GetService<ISettingsService>(model.File);
-            Locator.CurrentMutable.RegisterConstant(settingsService.GetSettings(), model.File);
-
-            await this.AddFileAsync(model.File, model.ListName);
-
-            return model;
+            return Observable.Start(
+                () => Locator.Current.GetService<IDatabaseService>(model.File)
+                    .CreateDatabase(settings, preferences.DefaultKinds),
+                RxApp.TaskpoolScheduler)
+                .SelectMany(_ => this.GetSettings(model.File))
+                .Do(dbSettings => Locator.CurrentMutable.RegisterConstant(dbSettings, model.File))
+                .Do(_ => this.AddFile(model.File, model.ListName))
+                .Select(_ => model);
         }
 
-        private async Task<OpenFileModel?> OnOpenFileAsync(OpenFileModel model)
+        private IObservable<OpenFileModel?> OnOpenFileAsync(OpenFileModel model)
         {
             if (String.IsNullOrEmpty(model.File))
             {
-                return model;
+                return Observable.Return(model);
             }
 
             int fileIndex = this.Files.TakeWhile(file => file.FileName != model.File).Count();
@@ -123,7 +121,7 @@ namespace MovieList.ViewModels
             {
                 this.Log().Debug($"The file is already opened: {model.File}. Opening its tab");
                 this.SelectedItemIndex = fileIndex + 1;
-                return model;
+                return Observable.Return(model);
             }
 
             this.Log().Debug($"Opening a file: {model.File}");
@@ -132,25 +130,25 @@ namespace MovieList.ViewModels
             var settingsService = Locator.Current.GetService<ISettingsService>(model.File);
             Locator.CurrentMutable.RegisterConstant(settingsService.GetSettings(), model.File);
 
-            bool isFileValid = await Task.Run(() =>
-                Locator.Current.GetService<IDatabaseService>(model.File).ValidateDatabase());
+            return Observable.Start(
+                () => Locator.Current.GetService<IDatabaseService>(model.File).ValidateDatabase(),
+                RxApp.TaskpoolScheduler)
+                .SelectMany(isFileValid =>
+                {
+                    if (!isFileValid)
+                    {
+                        this.Log().Debug($"Cancelling opening a file: {model.File}");
+                        Locator.CurrentMutable.UnregisterDatabaseServices(model.File);
+                        return Observable.Return<OpenFileModel?>(null);
+                    }
 
-            if (!isFileValid)
-            {
-                this.Log().Debug($"Cancelling opening a file: {model.File}");
-                Locator.CurrentMutable.UnregisterDatabaseServices(model.File);
-                return null;
-            }
-
-            var settings = await Task.Run(() => Locator.Current.GetService<ISettingsService>(model.File).GetSettings())
-                .ConfigureAwait(false);
-
-            await this.AddFileAsync(model.File, settings.ListName);
-
-            return model;
+                    return this.GetSettings(model.File)
+                        .Do(settings => this.AddFile(model.File, settings.ListName))
+                        .Select(_ => model);
+                });
         }
 
-        private async Task<string> OnCloseFileAsync(string file)
+        private IObservable<string> OnCloseFile(string file)
         {
             this.Log().Debug($"Closing a file: {file}");
 
@@ -163,37 +161,26 @@ namespace MovieList.ViewModels
 
             this.SelectedItemIndex = currentIndex == fileIndex ? fileIndex - 1 : currentIndex;
 
-            var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
-
-            await this.AddFileToRecentAsync(preferences, file, true);
-            await this.store.InsertObject(PreferencesKey, preferences);
-
-            Locator.CurrentMutable.UnregisterDatabaseServices(file);
-
-            return file;
+            return this.store.GetObject<UserPreferences>(PreferencesKey)
+                .DoAsync(preferences => this.AddFileToRecent(preferences, file, true))
+                .DoAsync(preferences => this.store.InsertObject(PreferencesKey, preferences).Eager())
+                .Select(_ => file)
+                .Do(Locator.CurrentMutable.UnregisterDatabaseServices)
+                .Eager();
         }
 
-        private async Task OnShutdownAsync()
+        private IObservable<Unit> OnShutdown()
+            => this.store.GetObject<UserPreferences>(PreferencesKey)
+                .DoAsync(preferences => this.Files
+                    .Select(file => this.AddFileToRecent(preferences, file.FileName, false))
+                    .Concat()
+                    .LastOrDefaultAsync())
+                .SelectMany(preferences => this.store.InsertObject(PreferencesKey, preferences).Eager())
+                .Eager();
+
+        private void AddFile(string fileName, string listName)
         {
-            var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
-
-            foreach (var file in this.Files)
-            {
-                await this.AddFileToRecentAsync(preferences, file.FileName, false);
-            }
-
-            await this.store.InsertObject(PreferencesKey, preferences);
-        }
-
-        private async Task AddFileAsync(string fileName, string listName)
-        {
-            var kindService = Locator.Current.GetService<IKindService>(fileName);
-            var settingsService = Locator.Current.GetService<ISettingsService>(fileName);
-
-            var kinds = await Task.Run(() => kindService.GetAllKinds().ToList()).ConfigureAwait(false);
-            var settings = await Task.Run(() => settingsService.GetSettings()).ConfigureAwait(false);
-
-            var fileViewModel = new FileViewModel(fileName, listName, kinds, settings);
+            var fileViewModel = new FileViewModel(fileName, listName);
 
             var subscriptions = new CompositeDisposable();
 
@@ -204,7 +191,8 @@ namespace MovieList.ViewModels
             fileViewModel.UpdateSettings
                 .Select(settingsModel => settingsModel.Settings.ListName)
                 .Where(name => name != listName)
-                .SubscribeAsync(name => this.UpdateRecentFileAsync(fileName, name));
+                .DoAsync(name => this.UpdateRecentFile(fileName, name))
+                .Subscribe();
 
             this.closeSubscriptions.Add(fileName, subscriptions);
 
@@ -213,7 +201,7 @@ namespace MovieList.ViewModels
             RxApp.MainThreadScheduler.Schedule(() => this.SelectedItemIndex = this.Files.Count);
         }
 
-        private async Task AddFileToRecentAsync(UserPreferences preferences, string file, bool notifyHomePage)
+        private IObservable<Unit> AddFileToRecent(UserPreferences preferences, string file, bool notifyHomePage)
         {
             var recentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file);
             RecentFile newRecentFile;
@@ -222,46 +210,49 @@ namespace MovieList.ViewModels
             {
                 newRecentFile = new RecentFile(recentFile.Name, recentFile.Path, this.scheduler.Now.LocalDateTime);
                 preferences.File.RecentFiles.Remove(recentFile);
-
-                if (notifyHomePage)
-                {
-                    await this.HomePage.RemoveRecentFile.Execute(recentFile);
-                }
             } else
             {
                 var settings = Locator.Current.GetService<ISettingsService>(file).GetSettings();
-
                 newRecentFile = new RecentFile(settings.ListName, file, this.scheduler.Now.LocalDateTime);
             }
 
             preferences.File.RecentFiles.Add(newRecentFile);
 
-            if (notifyHomePage)
-            {
-                await this.HomePage.AddRecentFile.Execute(newRecentFile);
-            }
+            return notifyHomePage
+                ? this.UpdateRecentFileInHomePage(recentFile, newRecentFile)
+                : Observable.Return(Unit.Default);
         }
 
-        private async Task UpdateRecentFileAsync(string file, string newName)
-        {
-            var preferences = await this.store.GetObject<UserPreferences>(PreferencesKey);
+        private IObservable<Unit> UpdateRecentFileInHomePage(RecentFile? oldRecentFile, RecentFile newRecentFile)
+            => Observable.CombineLatest(
+                    oldRecentFile != null
+                        ? this.HomePage.RemoveRecentFile.Execute(oldRecentFile)
+                        : Observable.Return(Unit.Default),
+                    this.HomePage.AddRecentFile.Execute(newRecentFile))
+                .Discard();
 
-            var recentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file);
+        private IObservable<Unit> UpdateRecentFile(string file, string newName)
+            => this.store.GetObject<UserPreferences>(PreferencesKey)
+                .Eager()
+                .Select(preferences => new
+                {
+                    Preferences = preferences,
+                    RecentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file)
+                })
+                .Where(data => data.RecentFile != null)
+                .Do(data => data.Preferences.File.RecentFiles.Remove(data.RecentFile))
+                .DoAsync(data => this.HomePage.RemoveRecentFile.Execute(data.RecentFile))
+                .Select(data => new
+                {
+                    data.Preferences,
+                    NewRecentFile = new RecentFile(newName, file, data.RecentFile.Closed)
+                })
+                .Do(data => data.Preferences.File.RecentFiles.Add(data.NewRecentFile))
+                .DoAsync(data => this.HomePage.AddRecentFile.Execute(data.NewRecentFile))
+                .SelectMany(data => this.store.InsertObject(PreferencesKey, data.Preferences).Eager());
 
-            if (recentFile == null)
-            {
-                return;
-            }
-
-            preferences.File.RecentFiles.Remove(recentFile);
-            await this.HomePage.RemoveRecentFile.Execute(recentFile);
-
-            var newRecentFile = new RecentFile(newName, file, recentFile.Closed);
-
-            preferences.File.RecentFiles.Add(newRecentFile);
-            await this.HomePage.AddRecentFile.Execute(newRecentFile);
-
-            await this.store.InsertObject(PreferencesKey, preferences);
-        }
+        private IObservable<Settings> GetSettings(string file)
+            => Observable.Start(
+                () => Locator.Current.GetService<ISettingsService>(file).GetSettings(), RxApp.TaskpoolScheduler);
     }
 }

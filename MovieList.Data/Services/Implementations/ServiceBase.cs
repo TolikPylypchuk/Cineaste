@@ -14,8 +14,7 @@ namespace MovieList.Data.Services.Implementations
 
         protected void WithTransaction(Action<IDbConnection, IDbTransaction> action)
         {
-            using var connection = this.GetConnection();
-            connection.Open();
+            using var connection = this.OpenConnection();
             using var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
 
             try
@@ -35,13 +34,7 @@ namespace MovieList.Data.Services.Implementations
 
         protected TResult WithTransaction<TResult>(Func<IDbConnection, IDbTransaction, TResult> action)
         {
-            using var connection = this.GetConnection();
-            connection.Open();
-
-            var walCommand = connection.CreateCommand();
-            walCommand.CommandText = @"PRAGMA journal_mode = 'wal'";
-            walCommand.ExecuteNonQuery();
-
+            using var connection = this.OpenConnection();
             using var transaction = connection.BeginTransaction();
 
             try
@@ -61,7 +54,16 @@ namespace MovieList.Data.Services.Implementations
             }
         }
 
-        private IDbConnection GetConnection()
-            => Locator.Current.GetService<IDbConnection>(this.DatabasePath);
+        private IDbConnection OpenConnection()
+        {
+            var connection = Locator.Current.GetService<IDbConnection>(this.DatabasePath);
+            connection.Open();
+
+            var walCommand = connection.CreateCommand();
+            walCommand.CommandText = @"PRAGMA journal_mode = 'wal'";
+            walCommand.ExecuteNonQuery();
+
+            return connection;
+        }
     }
 }
