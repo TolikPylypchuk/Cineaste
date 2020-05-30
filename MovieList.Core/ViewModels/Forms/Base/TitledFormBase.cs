@@ -84,8 +84,8 @@ namespace MovieList.ViewModels.Forms.Base
                 vm => vm.OriginalTitles,
                 vm => vm.ItemTitles.Where(title => title.IsOriginal).ToList()));
 
-            this.TrackValidation(this.IsCollectionValid<TitleFormViewModel, Title>(this.Titles));
-            this.TrackValidation(this.IsCollectionValid<TitleFormViewModel, Title>(this.OriginalTitles));
+            this.TrackValidation(this.IsCollectionValid(this.Titles));
+            this.TrackValidation(this.IsCollectionValid(this.OriginalTitles));
 
             base.EnableChangeTracking();
         }

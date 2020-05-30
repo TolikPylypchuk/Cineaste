@@ -23,6 +23,7 @@ namespace MovieList.ViewModels.Forms.Preferences
             this.Kind = kind;
             this.CopyProperties();
 
+            this.NameRule = this.ValidationRule(vm => vm.Name, name => !String.IsNullOrWhiteSpace(name), "NameEmpty");
             this.ColorForWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForWatchedMovie);
             this.ColorForNotWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForNotWatchedMovie);
             this.ColorForNotReleasedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForNotReleasedMovie);
@@ -57,6 +58,7 @@ namespace MovieList.ViewModels.Forms.Preferences
         [Reactive]
         public string ColorForNotReleasedSeries { get; set; } = String.Empty;
 
+        public ValidationHelper NameRule { get; }
         public ValidationHelper ColorForWatchedMovieRule { get; }
         public ValidationHelper ColorForNotWatchedMovieRule { get; }
         public ValidationHelper ColorForNotReleasedMovieRule { get; }
@@ -85,7 +87,7 @@ namespace MovieList.ViewModels.Forms.Preferences
 
         protected override Task<Kind> OnSaveAsync()
         {
-            this.Name = this.Kind.Name;
+            this.Kind.Name = this.Name;
             this.Kind.ColorForWatchedMovie = this.ColorForWatchedMovie;
             this.Kind.ColorForWatchedSeries = this.ColorForWatchedSeries;
             this.Kind.ColorForNotWatchedMovie = this.ColorForNotWatchedMovie;

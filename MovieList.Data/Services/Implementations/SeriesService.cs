@@ -53,6 +53,8 @@ namespace MovieList.Data.Services.Implementations
 
         protected override void Update(Series series, IDbConnection connection, IDbTransaction transaction)
         {
+            series.KindId = series.Kind.Id;
+
             connection.Update(series, transaction);
 
             var updater = new DependentEntityUpdater(connection, transaction);

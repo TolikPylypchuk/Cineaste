@@ -104,8 +104,15 @@
                     </StackPanel>
                 </WrapPanel>
 
-                <TextBlock Text="{l:Translate Kinds}" Grid.Row="2" Margin="8 16"
-                           Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <TextBlock Text="{l:Translate Kinds}" Margin="8 16"
+                               Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
+
+                    <Button x:Name="AddKindButton" Style="{StaticResource MaterialDesignIconButton}"
+                            Padding="0" Margin="32 0 0 0"  Width="40" Height="40" VerticalAlignment="Center">
+                        <m:PackIcon Kind="PlusCircleOutline" Margin="0" Width="40" Height="40" />
+                    </Button>
+                </StackPanel>
 
                 <ItemsControl x:Name="Kinds" Grid.Row="3" Margin="8">
                     <ItemsControl.ItemsPanel>

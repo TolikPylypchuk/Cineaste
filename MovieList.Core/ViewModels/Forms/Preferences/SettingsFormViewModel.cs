@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
@@ -16,6 +17,7 @@ using MovieList.Data.Services;
 using MovieList.Models;
 using MovieList.ViewModels.Forms.Base;
 
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
@@ -29,7 +31,7 @@ namespace MovieList.ViewModels.Forms.Preferences
         private readonly ISettingsService settingsService;
         private readonly IKindService kindService;
 
-        private readonly SourceCache<Kind, int> kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
+        private readonly SourceList<Kind> kindsSource = new SourceList<Kind>();
         private readonly ReadOnlyObservableCollection<KindFormViewModel> kinds;
 
         public SettingsFormViewModel(
@@ -48,12 +50,14 @@ namespace MovieList.ViewModels.Forms.Preferences
             this.kindService = kindService ?? Locator.Current.GetService<IKindService>(fileName);
 
             this.kindsSource.Connect()
-                .Transform(kind => new KindFormViewModel(kind, this.ResourceManager, this.Scheduler))
+                .Transform(this.CreateKindForm)
                 .Bind(out this.kinds)
                 .Subscribe();
 
             this.ListNameRule = this.ValidationRule(
                 vm => vm.ListName, name => !String.IsNullOrWhiteSpace(name), "ListNameEmpty");
+
+            this.AddKind = ReactiveCommand.Create(() => this.kindsSource.Add(new Kind()));
 
             this.CopyProperties();
             this.CanNeverDelete();
@@ -79,6 +83,8 @@ namespace MovieList.ViewModels.Forms.Preferences
 
         public ValidationHelper ListNameRule { get; }
 
+        public ReactiveCommand<Unit, Unit> AddKind { get; }
+
         public override bool IsNew
             => false;
 
@@ -93,6 +99,7 @@ namespace MovieList.ViewModels.Forms.Preferences
                 vm => vm.DefaultSeasonOriginalTitle, vm => vm.SettingsModel.Settings.DefaultSeasonOriginalTitle);
             this.TrackChanges(vm => vm.CultureInfo, vm => vm.SettingsModel.Settings.CultureInfo);
             this.TrackChanges(this.IsCollectionChanged(vm => vm.Kinds, vm => vm.SettingsModel.Kinds));
+            this.TrackValidation(this.IsCollectionValid(this.Kinds));
 
             base.EnableChangeTracking();
         }
@@ -131,8 +138,19 @@ namespace MovieList.ViewModels.Forms.Preferences
             this.kindsSource.Edit(list =>
             {
                 list.Clear();
-                list.AddOrUpdate(this.SettingsModel.Kinds);
+                list.AddRange(this.SettingsModel.Kinds);
             });
+        }
+
+        private KindFormViewModel CreateKindForm(Kind kind)
+        {
+            var form = new KindFormViewModel(kind, this.ResourceManager, this.Scheduler);
+
+            form.Delete
+                .WhereNotNull()
+                .Subscribe(k => this.kindsSource.Remove(k));
+
+            return form;
         }
     }
 }

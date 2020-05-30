@@ -1466,6 +1466,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name must not be empty.
+        /// </summary>
+        public static string ValidationNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to # of episodes is empty.
         /// </summary>
         public static string ValidationNumberOfEpisodesEmpty {

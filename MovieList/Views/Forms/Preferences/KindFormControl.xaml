@@ -44,8 +44,16 @@
             <ColumnDefinition Width="16" />
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
-                 m:HintAssist.Hint="{l:Translate KindName}" />
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
+            <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
+                    VerticalAlignment="Center" Padding="0" Width="25" Height="25" Margin="8 0 0 0"
+                    Foreground="{StaticResource SecondaryAccentBrush}">
+                <m:PackIcon Kind="CloseCircleOutline" Margin="0" Width="25" Height="25" />
+            </Button>
+
+            <TextBox x:Name="NameTextBox" DockPanel.Dock="Left" HorizontalAlignment="Left"
+                     m:HintAssist.Hint="{l:Translate KindName}" />
+        </DockPanel>
 
         <TextBlock Text="{l:Translate ColorForWatchedMovies}" Grid.Row="1" Grid.Column="0" />
         <TextBlock Text="{l:Translate ColorForNotWatchedMovies}" Grid.Row="1" Grid.Column="1" />

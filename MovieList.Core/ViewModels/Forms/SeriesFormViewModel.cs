@@ -205,9 +205,8 @@ namespace MovieList.ViewModels.Forms
                 this.TrackChanges(Observable.Return(true).Merge(this.Save.Select(_ => false)));
             }
 
-            this.TrackValidation(this.IsCollectionValid<SeasonFormViewModel, Season>(this.Seasons));
-            this.TrackValidation(this.IsCollectionValid<SpecialEpisodeFormViewModel, SpecialEpisode>(
-                this.SpecialEpisodes));
+            this.TrackValidation(this.IsCollectionValid(this.Seasons));
+            this.TrackValidation(this.IsCollectionValid(this.SpecialEpisodes));
 
             this.TrackValidationStrict(this.componentsSource.Connect().Count().Select(count => count > 0));
 

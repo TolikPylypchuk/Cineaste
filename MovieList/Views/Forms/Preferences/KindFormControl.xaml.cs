@@ -26,7 +26,17 @@ namespace MovieList.Views.Forms.Preferences
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.OneWayBind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
+                this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
+                    .DisposeWith(disposables);
+
+                this.NameTextBox.ValidateWith(this.ViewModel.NameRule)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
+                    .DisposeWith(disposables);
+
+                this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
+                    .BindTo(this, v => v.DeleteButton.Visibility)
                     .DisposeWith(disposables);
 
                 this.BindColors(disposables);

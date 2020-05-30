@@ -57,6 +57,9 @@ namespace MovieList.Views.Forms.Preferences
 
         private void BindCommands(CompositeDisposable disposables)
         {
+            this.BindCommand(this.ViewModel, vm => vm.AddKind, v => v.AddKindButton)
+                .DisposeWith(disposables);
+
             this.BindCommand(this.ViewModel, vm => vm.Save, v => v.SaveButton)
                 .DisposeWith(disposables);
 

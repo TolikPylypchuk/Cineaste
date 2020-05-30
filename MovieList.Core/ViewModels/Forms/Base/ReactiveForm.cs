@@ -22,9 +22,9 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms.Base
 {
-    public abstract class ReactiveForm<TModel, TViewModel> : ReactiveValidationObject<TViewModel>, IReactiveForm
+    public abstract class ReactiveForm<TModel, TForm> : ReactiveValidationObject<TForm>, IReactiveForm
         where TModel : class
-        where TViewModel : ReactiveForm<TModel, TViewModel>
+        where TForm : ReactiveForm<TModel, TForm>
     {
         private readonly BehaviorSubject<bool> formChangedSubject = new BehaviorSubject<bool>(false);
         private readonly BehaviorSubject<bool> validSubject = new BehaviorSubject<bool>(true);
@@ -68,7 +68,7 @@ namespace MovieList.ViewModels.Forms.Base
         protected ResourceManager ResourceManager { get; }
         protected IScheduler Scheduler { get; }
 
-        protected abstract TViewModel Self { get; }
+        protected abstract TForm Self { get; }
 
         public override IEnumerable GetErrors(string propertyName)
             => this.IsFormChanged ? base.GetErrors(propertyName) : Enumerable.Empty<string>();
@@ -76,7 +76,7 @@ namespace MovieList.ViewModels.Forms.Base
         protected void TrackChanges(IObservable<bool> changes)
             => this.changesToTrack.Add(changes.StartWith(false));
 
-        protected void TrackChanges<T>(Expression<Func<TViewModel, T>> property, Func<TViewModel, T> itemValue)
+        protected void TrackChanges<T>(Expression<Func<TForm, T>> property, Func<TForm, T> itemValue)
         {
             string propertyName = property.GetMemberName();
 
@@ -93,11 +93,11 @@ namespace MovieList.ViewModels.Forms.Base
         protected void TrackValidationStrict(IObservable<bool> validation)
             => this.validationsToTrack.Add(validation.StartWith(false));
 
-        protected IObservable<bool> IsCollectionChanged<TVm, TM>(
-            Expression<Func<TViewModel, ReadOnlyObservableCollection<TVm>>> property,
-            Func<TViewModel, ICollection<TM>> itemCollection)
-            where TVm : ReactiveForm<TM, TVm>
-            where TM : class
+        protected IObservable<bool> IsCollectionChanged<TOtherForm, TOtherModel>(
+            Expression<Func<TForm, ReadOnlyObservableCollection<TOtherForm>>> property,
+            Func<TForm, ICollection<TOtherModel>> itemCollection)
+            where TOtherForm : ReactiveForm<TOtherModel, TOtherForm>
+            where TOtherModel : class
         {
             string propertyName = property.GetMemberName();
 
@@ -112,9 +112,8 @@ namespace MovieList.ViewModels.Forms.Base
                     changed ? $"{propertyName} are changed" : $"{propertyName} are unchanged"));
         }
 
-        protected IObservable<bool> IsCollectionValid<TVm, TM>(ReadOnlyObservableCollection<TVm> viewModels)
-            where TVm : ReactiveForm<TM, TVm>
-            where TM : class
+        protected IObservable<bool> IsCollectionValid<TOtherForm>(ReadOnlyObservableCollection<TOtherForm> viewModels)
+            where TOtherForm : IReactiveForm
             => viewModels.ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.Valid)
                 .ToCollection()

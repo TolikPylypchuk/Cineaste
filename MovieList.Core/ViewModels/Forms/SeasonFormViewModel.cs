@@ -156,7 +156,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.SequenceNumber, vm => vm.Season.SequenceNumber);
             this.TrackChanges(this.IsCollectionChanged(vm => vm.Periods, vm => vm.Season.Periods));
 
-            this.TrackValidation(this.IsCollectionValid<PeriodFormViewModel, Period>(this.Periods));
+            this.TrackValidation(this.IsCollectionValid(this.Periods));
             this.TrackValidation(this.PeriodsNonOverlapping);
 
             base.EnableChangeTracking();
