@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
+using DynamicData.Binding;
+
 using MovieList.Models;
 using MovieList.Properties;
 using MovieList.ViewModels;
@@ -67,6 +69,8 @@ namespace MovieList
             });
 
             this.ViewModel.Files
+                .ToObservableChangeSet()
+                .ObserveOnDispatcher()
                 .ActOnEveryObject(
                     vm => this.MainTabControl.Items.Add(new TabItem
                     {

@@ -1,12 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Resources;
 
 using DynamicData;
 
+using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.Models;
@@ -27,10 +28,12 @@ namespace MovieList.ViewModels
         public FileViewModel(
             string fileName,
             string listName,
-            ResourceManager? resourceManager = null,
-            IScheduler? scheduler = null,
+            List<Kind> kinds,
+            Settings settings,
             IKindService? kindService = null,
-            ISettingsService? settingsService = null)
+            ISettingsService? settingsService = null,
+            ResourceManager? resourceManager = null,
+            IScheduler? scheduler = null)
         {
             this.FileName = fileName;
             this.ListName = listName;
@@ -47,21 +50,13 @@ namespace MovieList.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
-            var kinds = kindService.GetAllKinds().ToList();
             this.kindsSource.AddOrUpdate(kinds);
 
             this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
             this.Content = this.MainContent;
 
-            var settings = settingsService.GetSettings();
-
             this.Settings = new SettingsFormViewModel(
-                this.FileName,
-                settings,
-                kinds,
-                resourceManager,
-                scheduler,
-                settingsService, kindService);
+                this.FileName, settings, kinds, settingsService, kindService, resourceManager, scheduler);
 
             this.SwitchToList = ReactiveCommand.Create(() => { this.Content = this.MainContent; });
             this.SwitchToStats = ReactiveCommand.Create(() => { });
