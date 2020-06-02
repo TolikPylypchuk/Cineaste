@@ -98,10 +98,8 @@ namespace MovieList.ViewModels
                 preferences.DefaultSeasonOriginalTitle,
                 preferences.DefaultCultureInfo);
 
-            return Observable.Start(
-                () => Locator.Current.GetService<IDatabaseService>(model.File)
-                    .CreateDatabase(settings, preferences.DefaultKinds),
-                RxApp.TaskpoolScheduler)
+            return Locator.Current.GetService<IDatabaseService>(model.File)
+                .CreateDatabaseInTaskPool(settings, preferences.DefaultKinds)
                 .SelectMany(_ => this.GetSettings(model.File))
                 .Do(dbSettings => Locator.CurrentMutable.RegisterConstant(dbSettings, model.File))
                 .Do(_ => this.AddFile(model.File, model.ListName))
@@ -130,9 +128,8 @@ namespace MovieList.ViewModels
             var settingsService = Locator.Current.GetService<ISettingsService>(model.File);
             Locator.CurrentMutable.RegisterConstant(settingsService.GetSettings(), model.File);
 
-            return Observable.Start(
-                () => Locator.Current.GetService<IDatabaseService>(model.File).ValidateDatabase(),
-                RxApp.TaskpoolScheduler)
+            return Locator.Current.GetService<IDatabaseService>(model.File)
+                .ValidateDatabaseInTaskPool()
                 .SelectMany(isFileValid =>
                 {
                     if (!isFileValid)
@@ -204,23 +201,19 @@ namespace MovieList.ViewModels
         private IObservable<Unit> AddFileToRecent(UserPreferences preferences, string file, bool notifyHomePage)
         {
             var recentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file);
-            RecentFile newRecentFile;
 
-            if (recentFile != null)
-            {
-                newRecentFile = new RecentFile(recentFile.Name, recentFile.Path, this.scheduler.Now.LocalDateTime);
-                preferences.File.RecentFiles.Remove(recentFile);
-            } else
-            {
-                var settings = Locator.Current.GetService<ISettingsService>(file).GetSettings();
-                newRecentFile = new RecentFile(settings.ListName, file, this.scheduler.Now.LocalDateTime);
-            }
+            var newRecentFileObservable = recentFile != null
+                ? Observable.Return(
+                    new RecentFile(recentFile.Name, recentFile.Path, this.scheduler.Now.LocalDateTime))
+                    .Do(_ => preferences.File.RecentFiles.Remove(recentFile))
+                : this.GetSettings(file)
+                    .Select(settings => new RecentFile(settings.ListName, file, this.scheduler.Now.LocalDateTime));
 
-            preferences.File.RecentFiles.Add(newRecentFile);
-
-            return notifyHomePage
-                ? this.UpdateRecentFileInHomePage(recentFile, newRecentFile)
-                : Observable.Return(Unit.Default);
+            return newRecentFileObservable
+                .Do(preferences.File.RecentFiles.Add)
+                .SelectMany(newRecentFile => notifyHomePage
+                    ? this.UpdateRecentFileInHomePage(recentFile, newRecentFile)
+                    : Observable.Return(Unit.Default));
         }
 
         private IObservable<Unit> UpdateRecentFileInHomePage(RecentFile? oldRecentFile, RecentFile newRecentFile)
@@ -252,7 +245,6 @@ namespace MovieList.ViewModels
                 .SelectMany(data => this.store.InsertObject(PreferencesKey, data.Preferences).Eager());
 
         private IObservable<Settings> GetSettings(string file)
-            => Observable.Start(
-                () => Locator.Current.GetService<ISettingsService>(file).GetSettings(), RxApp.TaskpoolScheduler);
+            => Locator.Current.GetService<ISettingsService>(file).GetSettingsInTaskPool();
     }
 }

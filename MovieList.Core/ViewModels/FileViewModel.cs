@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 
 using DynamicData;
 
+using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 using MovieList.DialogModels;
@@ -48,7 +49,7 @@ namespace MovieList.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
-            Observable.Start(kindService.GetAllKinds, RxApp.TaskpoolScheduler)
+            kindService.GetAllKindsInTaskPool()
                 .Do(this.kindsSource.AddOrUpdate)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(kinds =>
@@ -126,7 +127,9 @@ namespace MovieList.ViewModels
                 : Observable.Return(true);
 
             return observable
-                .Select(canSwitch => canSwitch ? this.settingsService.GetSettings() : null)
+                .SelectMany(canSwitch => canSwitch
+                    ? this.settingsService.GetSettingsInTaskPool()
+                    : Observable.Return<Settings?>(null))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Do(settings =>
                 {
