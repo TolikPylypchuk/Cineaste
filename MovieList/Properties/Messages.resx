@@ -572,7 +572,7 @@ This will detach all entries without deleting them.</value>
     <value>Title language</value>
   </data>
   <data name="TitleLanguageHint" xml:space="preserve">
-    <value>The title language is used for sorting titles - if it is changed, it takes effect after reopening the list file</value>
+    <value>The title language is used for sorting titles</value>
   </data>
   <data name="ValidationChannelEmpty" xml:space="preserve">
     <value>The channel must not be empty</value>

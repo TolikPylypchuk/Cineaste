@@ -1421,7 +1421,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The title language is used for sorting titles - if it is changed, it takes effect after reopening the list file.
+        ///   Looks up a localized string similar to The title language is used for sorting titles.
         /// </summary>
         public static string TitleLanguageHint {
             get {

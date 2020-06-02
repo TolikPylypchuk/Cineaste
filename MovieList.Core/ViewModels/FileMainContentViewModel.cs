@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 using DynamicData;
@@ -25,10 +26,11 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels
 {
-    public sealed class FileMainContentViewModel : ReactiveObject
+    public sealed class FileMainContentViewModel : ReactiveObject, IDisposable
     {
         private readonly CompositeDisposable sideViewModelSubscriptions = new CompositeDisposable();
         private readonly CompositeDisposable sideViewModelSecondarySubscriptions = new CompositeDisposable();
+        private readonly BehaviorSubject<bool> areUnsavedChangesPresentSubject = new BehaviorSubject<bool>(false);
 
         private readonly SourceList<MovieSeriesEntry> movieSeriesAddableItemsSource =
             new SourceList<MovieSeriesEntry>();
@@ -53,7 +55,11 @@ namespace MovieList.ViewModels
                         entry.Movie?.Entry == null && entry.Series?.Entry == null && entry.MovieSeries?.Entry == null))
                 .Subscribe(this.movieSeriesAddableItemsSource.AddRange);
 
-            this.SelectItem = ReactiveCommand.CreateFromTask<ListItem?>(this.OnSelectItemAsync);
+            this.areUnsavedChangesPresentSubject.ToPropertyEx(this, vm => vm.AreUnsavedChangesPresent);
+
+            this.SelectItem = ReactiveCommand.CreateFromTask<ListItem?>(
+                this.OnSelectItemAsync, this.WhenAnyValue(vm => vm.CanSelectItem));
+
             this.Save = ReactiveCommand.Create(() => { });
 
             this.SideViewModel = this.CreateNewItemViewModel();
@@ -63,6 +69,11 @@ namespace MovieList.ViewModels
                 .InvokeCommand(this.SelectItem);
 
             this.Save.InvokeCommand(this.List.ForceSelectedItem);
+
+            this.WhenAnyValue(vm => vm.SideViewModel)
+                .OfType<NewItemViewModel>()
+                .Select(_ => false)
+                .Subscribe(this.areUnsavedChangesPresentSubject);
         }
         
         public ListViewModel List { get; }
@@ -77,16 +88,22 @@ namespace MovieList.ViewModels
         [Reactive]
         public ReactiveObject SideViewModel { get; private set; }
 
+        public bool AreUnsavedChangesPresent { [ObservableAsProperty] get; }
+
+        [Reactive]
+        public bool CanSelectItem { get; private set; } = true;
+
         public ReactiveCommand<ListItem?, Unit> SelectItem { get; }
         public ReactiveCommand<Unit, Unit> Save { get; }
+
+        public void Dispose()
+            => this.CanSelectItem = false;
 
         private async Task OnSelectItemAsync(ListItem? item)
         {
             bool canSelect = true;
 
-            if (this.SideViewModel is ISeriesComponentForm seriesComponentForm &&
-                (seriesComponentForm.IsFormChanged || seriesComponentForm.Parent.IsFormChanged) ||
-                this.SideViewModel is IReactiveForm form && form.IsFormChanged)
+            if (this.AreUnsavedChangesPresent)
             {
                 canSelect = await Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"));
             }
@@ -298,13 +315,13 @@ namespace MovieList.ViewModels
             return form;
         }
 
-        private void SubscribeToCommonCommands<TModel, TViewModel>(
-            MovieSeriesEntryFormBase<TModel, TViewModel> form,
+        private void SubscribeToCommonCommands<TModel, TForm>(
+            MovieSeriesEntryFormBase<TModel, TForm> form,
             ReactiveCommand<TModel, Unit> removeFromList,
             Func<TModel, ListItem> listItemSelector,
             Action<MovieSeriesEntry> entryRelationSetter)
             where TModel : class
-            where TViewModel : MovieSeriesEntryFormBase<TModel, TViewModel>
+            where TForm : MovieSeriesEntryFormBase<TModel, TForm>
         {
             form.Save
                 .Select(listItemSelector)
@@ -369,6 +386,10 @@ namespace MovieList.ViewModels
                 .Merge(form.CreateMovieSeries)
                 .InvokeCommand(this.List.ForceSelectedItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
+
+            form.Cancel.CanExecute
+                .Subscribe(this.areUnsavedChangesPresentSubject)
+                .DisposeWith(this.sideViewModelSubscriptions);
         }
 
         private void OpenSeasonForm(SeasonFormViewModel form, SeriesFormViewModel seriesForm)
@@ -389,11 +410,11 @@ namespace MovieList.ViewModels
             this.SideViewModel = form;
         }
 
-        private void SubscribeToSeriesComponentEvents<TM, TVm>(
-            SeriesComponentFormBase<TM, TVm> form,
+        private void SubscribeToSeriesComponentEvents<TModel, TForm>(
+            SeriesComponentFormBase<TModel, TForm> form,
             SeriesFormViewModel seriesForm)
-            where TM : EntityBase
-            where TVm : SeriesComponentFormBase<TM, TVm>
+            where TModel : EntityBase
+            where TForm : SeriesComponentFormBase<TModel, TForm>
         {
             form.Close
                 .Select<Unit, ListItem?>(_ => null)
@@ -411,6 +432,11 @@ namespace MovieList.ViewModels
 
             form.GoToSeries
                 .Subscribe(_ => this.sideViewModelSecondarySubscriptions.Clear())
+                .DisposeWith(this.sideViewModelSecondarySubscriptions);
+
+            form.Cancel.CanExecute
+                .CombineLatest(form.Parent.Cancel.CanExecute, (a, b) => a || b)
+                .Subscribe(this.areUnsavedChangesPresentSubject)
                 .DisposeWith(this.sideViewModelSecondarySubscriptions);
         }
 

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
-using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Resources;
 
 using DynamicData;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
+using MovieList.DialogModels;
 using MovieList.Models;
 using MovieList.ViewModels.Forms.Preferences;
 
@@ -23,20 +23,20 @@ namespace MovieList.ViewModels
     {
         private readonly SourceCache<Kind, int> kindsSource;
         private readonly ReadOnlyObservableCollection<Kind> kinds;
+        private readonly CompositeDisposable settingsFormSubscriptions = new CompositeDisposable();
+        private readonly ISettingsService settingsService;
 
         public FileViewModel(
             string fileName,
             string listName,
             IKindService? kindService = null,
-            ISettingsService? settingsService = null,
-            ResourceManager? resourceManager = null,
-            IScheduler? scheduler = null)
+            ISettingsService? settingsService = null)
         {
             this.FileName = fileName;
             this.ListName = listName;
 
             kindService ??= Locator.Current.GetService<IKindService>(fileName);
-            settingsService ??= Locator.Current.GetService<ISettingsService>(fileName);
+            this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
 
             this.Header = new FileHeaderViewModel(this.FileName, this.ListName);
 
@@ -48,11 +48,8 @@ namespace MovieList.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
-            var getKinds = Observable.Start(kindService.GetAllKinds, RxApp.TaskpoolScheduler)
+            Observable.Start(kindService.GetAllKinds, RxApp.TaskpoolScheduler)
                 .Do(this.kindsSource.AddOrUpdate)
-                .Publish();
-
-            getKinds
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(kinds =>
                 {
@@ -60,28 +57,9 @@ namespace MovieList.ViewModels
                     this.Content ??= this.MainContent;
                 });
 
-            Observable.Start(settingsService.GetSettings, RxApp.TaskpoolScheduler)
-                .ForkJoin(getKinds, (settings, kinds) => (Settings: settings, Kinds: kinds))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(data =>
-                {
-                    this.Settings = new SettingsFormViewModel(
-                        this.FileName,
-                        data.Settings,
-                        data.Kinds,
-                        settingsService,
-                        kindService,
-                        resourceManager,
-                        scheduler);
-
-                    this.Settings.Save.InvokeCommand(this.UpdateSettings);
-                });
-
-            getKinds.Connect();
-
-            this.SwitchToList = ReactiveCommand.Create(() => { this.Content = this.MainContent; });
+            this.SwitchToList = ReactiveCommand.CreateFromObservable(this.OnSwitchToList);
             this.SwitchToStats = ReactiveCommand.Create(() => { });
-            this.SwitchToSettings = ReactiveCommand.Create(() => { this.Content = this.Settings; });
+            this.SwitchToSettings = ReactiveCommand.CreateFromObservable(this.OnSwitchToSettings);
             this.UpdateSettings = ReactiveCommand.Create<SettingsModel, SettingsModel>(this.OnUpdateSettings);
 
             this.WhenAnyValue(vm => vm.ListName)
@@ -98,8 +76,8 @@ namespace MovieList.ViewModels
         [Reactive]
         public ReactiveObject Content { get; set; } = null!;
 
-        public FileMainContentViewModel MainContent { get; private set; } = null!;
-        public SettingsFormViewModel Settings { get; private set; } = null!;
+        public FileMainContentViewModel? MainContent { get; private set; }
+        public SettingsFormViewModel? Settings { get; private set; }
 
         public ReadOnlyObservableCollection<Kind> Kinds
             => this.kinds;
@@ -120,6 +98,48 @@ namespace MovieList.ViewModels
             this.Header.ListName = settingsModel.Settings.ListName;
 
             return settingsModel;
+        }
+
+        private IObservable<Unit> OnSwitchToList()
+        {
+            var observable = this.Settings?.IsFormChanged ?? false
+                ? Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"))
+                : Observable.Return(true);
+
+            return observable
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Do(canSwitch =>
+                {
+                    if (canSwitch)
+                    {
+                        this.settingsFormSubscriptions.Clear();
+                        this.Content = this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
+                    }
+                })
+                .Discard();
+        }
+
+        private IObservable<Unit> OnSwitchToSettings()
+        {
+            var observable = this.MainContent?.AreUnsavedChangesPresent ?? false
+                ? Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"))
+                : Observable.Return(true);
+
+            return observable
+                .Select(canSwitch => canSwitch ? this.settingsService.GetSettings() : null)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Do(settings =>
+                {
+                    if (settings != null)
+                    {
+                        this.MainContent?.Dispose();
+                        this.Content = this.Settings = new SettingsFormViewModel(this.FileName, settings, this.Kinds);
+                        this.Settings.Save
+                            .InvokeCommand(this.UpdateSettings)
+                            .DisposeWith(this.settingsFormSubscriptions);
+                    }
+                })
+                .Discard();
         }
     }
 }
