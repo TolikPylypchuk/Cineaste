@@ -6,7 +6,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using DynamicData;
 using DynamicData.Aggregation;
@@ -99,22 +98,28 @@ namespace MovieList.ViewModels.Forms.Base
 
         protected abstract void AttachTitle(Title title);
 
-        protected async Task SaveTitlesAsync()
+        protected IObservable<Unit> SaveTitles()
         {
-            foreach (var title in this.Titles.Union(this.OriginalTitles))
-            {
-                await title.Save.Execute();
-            }
+            var allTitles = this.Titles.Union(this.OriginalTitles).ToList();
 
-            foreach (var title in this.titlesSource.Items.Except(this.ItemTitles).ToList())
-            {
-                this.ItemTitles.Add(title);
-            }
+            return allTitles.Count == 0
+                ? Observable.Return(Unit.Default)
+                : allTitles
+                    .Select(title => title.Save.Execute())
+                    .ForkJoin()
+                    .Discard()
+                    .Do(() =>
+                    {
+                        foreach (var title in this.titlesSource.Items.Except(this.ItemTitles).ToList())
+                        {
+                            this.ItemTitles.Add(title);
+                        }
 
-            foreach (var title in this.ItemTitles.Except(this.titlesSource.Items).ToList())
-            {
-                this.ItemTitles.Remove(title);
-            }
+                        foreach (var title in this.ItemTitles.Except(this.titlesSource.Items).ToList())
+                        {
+                            this.ItemTitles.Remove(title);
+                        }
+                    });
         }
 
         protected void ClearTitles()

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 
 namespace MovieList
 {
@@ -36,9 +35,6 @@ namespace MovieList
         public static IObservable<bool> Invert(this IObservable<bool> observable)
             => observable.Select(value => !value);
 
-        public static IObservable<T> DoAsync<T, TAny>(this IObservable<T> observable, Func<T, IObservable<TAny>> action)
-            => observable.SelectMany(result => action(result).Select(_ => result));
-
         public static IObservable<T> Eager<T>(this IObservable<T> observable)
         {
             var connectableObservable = observable.Publish();
@@ -46,21 +42,44 @@ namespace MovieList
             return connectableObservable;
         }
 
+        public static IObservable<T> Select<T>(this IObservable<Unit> observable, Func<T> projection)
+            => observable.Select(_ => projection());
+
+        public static IObservable<T> SelectMany<T>(this IObservable<Unit> observable, Func<IObservable<T>> projection)
+            => observable.SelectMany(_ => projection());
+
+        public static IObservable<Unit> Do(this IObservable<Unit> observable, Action action)
+            => observable.Do(_ => action());
+
+        public static IObservable<Unit> DoAsync<TAny>(this IObservable<Unit> observable, Func<IObservable<TAny>> action)
+            => observable.SelectMany(_ => action().Select(_ => Unit.Default));
+
+        public static IObservable<T> DoAsync<T, TAny>(this IObservable<T> observable, Func<T, IObservable<TAny>> action)
+            => observable.SelectMany(result => action(result).Select(_ => result));
+
+        public static IObservable<bool> DoIfTrue(this IObservable<bool> observable, Action action)
+            => observable.Do(value =>
+            {
+                if (value)
+                {
+                    action();
+                }
+            });
+
+        public static IObservable<bool> DoIfTrueAsync<TAny>(
+            this IObservable<bool> observable,
+            Func<IObservable<TAny>> action)
+            => observable.SelectMany(value => value
+                ? action().Select(_ => value)
+                : Observable.Return(value));
+
         public static IDisposable Subscribe(this IObservable<Unit> observable, Action observer)
             => observable.Subscribe(_ => observer());
 
-        public static IDisposable SubscribeAsync<T>(this IObservable<T> observable, Func<T, Task> observer)
-            => observable.SelectMany(async x =>
-            {
-                await observer(x);
-                return Unit.Default;
-            }).Subscribe();
+        public static IDisposable SubscribeAsync<T>(this IObservable<T> observable, Func<T, IObservable<Unit>> observer)
+            => observable.SelectMany(value => observer(value)).Subscribe();
 
-        public static IDisposable SubscribeAsync(this IObservable<Unit> observable, Func<Task> observer)
-            => observable.SelectMany(async _ =>
-            {
-                await observer();
-                return Unit.Default;
-            }).Subscribe();
+        public static IDisposable SubscribeAsync(this IObservable<Unit> observable, Func<IObservable<Unit>> observer)
+            => observable.SelectMany(_ => observer()).Subscribe();
     }
 }

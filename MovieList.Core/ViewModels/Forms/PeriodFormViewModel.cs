@@ -1,9 +1,7 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using MovieList.Data.Models;
 using MovieList.ViewModels.Forms.Base;
@@ -115,7 +113,7 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override Task<Period> OnSaveAsync()
+        protected override IObservable<Period> OnSave()
         {
             this.Period.StartMonth = this.StartMonth;
             this.Period.StartYear = Int32.Parse(this.StartYear);
@@ -125,12 +123,11 @@ namespace MovieList.ViewModels.Forms
             this.Period.IsSingleDayRelease = this.IsSingleDayRelease;
             this.Period.PosterUrl = this.PosterUrl.NullIfEmpty();
 
-            return Task.FromResult(this.Period);
+            return Observable.Return(this.Period);
         }
 
-        [SuppressMessage("ReSharper", "RedundantCast")]
-        protected override Task<Period?> OnDeleteAsync()
-            => Task.FromResult((Period?)this.Period);
+        protected override IObservable<Period?> OnDelete()
+            => Observable.Return(this.Period);
 
         protected override void CopyProperties()
         {

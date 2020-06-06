@@ -1,10 +1,8 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using DynamicData.Aggregation;
 using DynamicData.Binding;
@@ -106,17 +104,16 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override Task<MovieSeriesEntry> OnSaveAsync()
+        protected override IObservable<MovieSeriesEntry> OnSave()
         {
             this.Entry.SequenceNumber = this.SequenceNumber;
             this.Entry.DisplayNumber = this.DisplayNumber;
 
-            return Task.FromResult(this.Entry);
+            return Observable.Return(this.Entry);
         }
 
-        [SuppressMessage("ReSharper", "RedundantCast")]
-        protected override Task<MovieSeriesEntry?> OnDeleteAsync()
-            => Task.FromResult((MovieSeriesEntry?)this.Entry);
+        protected override IObservable<MovieSeriesEntry?> OnDelete()
+            => Observable.Return(this.Entry);
 
         protected override void CopyProperties()
         {

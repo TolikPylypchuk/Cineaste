@@ -1,10 +1,8 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using MovieList.Data.Models;
 using MovieList.ViewModels.Forms.Base;
@@ -69,18 +67,17 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override Task<Title> OnSaveAsync()
+        protected override IObservable<Title> OnSave()
         {
             this.Name = this.Name.Trim().Replace(" - ", " – ");
             this.Title.Name = this.Name;
             this.Title.Priority = this.Priority;
 
-            return Task.FromResult(this.Title);
+            return Observable.Return(this.Title);
         }
 
-        [SuppressMessage("ReSharper", "RedundantCast")]
-        protected override Task<Title?> OnDeleteAsync()
-            => Task.FromResult((Title?)this.Title);
+        protected override IObservable<Title?> OnDelete()
+            => Observable.Return(this.Title);
 
         protected override void CopyProperties()
         {

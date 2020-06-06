@@ -7,7 +7,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using DynamicData;
 
@@ -104,29 +103,30 @@ namespace MovieList.ViewModels.Forms.Preferences
             base.EnableChangeTracking();
         }
 
-        protected override async Task<SettingsModel> OnSaveAsync()
+        protected override IObservable<SettingsModel> OnSave()
         {
             this.SettingsModel.Settings.ListName = this.ListName;
             this.SettingsModel.Settings.DefaultSeasonTitle = this.DefaultSeasonTitle;
             this.SettingsModel.Settings.DefaultSeasonOriginalTitle = this.DefaultSeasonOriginalTitle;
             this.SettingsModel.Settings.CultureInfo = this.CultureInfo;
 
-            foreach (var kindViewModel in this.Kinds)
-            {
-                await kindViewModel.Save.Execute();
-            }
+            return this.Kinds
+                .Select(kindViewModel => kindViewModel.Save.Execute())
+                .ForkJoin()
+                .Discard()
+                .Select(() =>
+                {
+                    this.SettingsModel.Kinds.Clear();
+                    this.SettingsModel.Kinds.AddRange(this.kindsSource.Items);
 
-            this.SettingsModel.Kinds.Clear();
-            this.SettingsModel.Kinds.AddRange(this.kindsSource.Items);
-
-            this.settingsService.UpdateSettings(this.SettingsModel.Settings);
-            this.kindService.UpdateKinds(this.SettingsModel.Kinds);
-
-            return this.SettingsModel;
+                    return this.SettingsModel;
+                })
+                .DoAsync(_ => this.settingsService.UpdateSettingsInTaskPool(this.SettingsModel.Settings))
+                .DoAsync(_ => this.kindService.UpdateKindsInTaskPool(this.SettingsModel.Kinds));
         }
 
-        protected override Task<SettingsModel?> OnDeleteAsync()
-            => Task.FromResult<SettingsModel?>(null);
+        protected override IObservable<SettingsModel?> OnDelete()
+            => Observable.Return<SettingsModel?>(null);
 
         protected override void CopyProperties()
         {

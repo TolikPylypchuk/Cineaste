@@ -3,7 +3,6 @@ using System.Linq.Expressions;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using MovieList.Data.Models;
 using MovieList.Validation;
@@ -85,7 +84,7 @@ namespace MovieList.ViewModels.Forms.Preferences
             base.EnableChangeTracking();
         }
 
-        protected override Task<Kind> OnSaveAsync()
+        protected override IObservable<Kind> OnSave()
         {
             this.Kind.Name = this.Name;
             this.Kind.ColorForWatchedMovie = this.ColorForWatchedMovie;
@@ -95,11 +94,11 @@ namespace MovieList.ViewModels.Forms.Preferences
             this.Kind.ColorForNotReleasedMovie = this.ColorForNotReleasedMovie;
             this.Kind.ColorForNotReleasedSeries = this.ColorForNotReleasedSeries;
 
-            return Task.FromResult(this.Kind);
+            return Observable.Return(this.Kind);
         }
 
-        protected override Task<Kind?> OnDeleteAsync()
-            => Task.FromResult((Kind?)this.Kind);
+        protected override IObservable<Kind?> OnDelete()
+            => Observable.Return(this.Kind);
 
         protected override void CopyProperties()
         {

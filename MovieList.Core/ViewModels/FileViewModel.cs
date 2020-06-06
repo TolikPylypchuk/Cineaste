@@ -103,19 +103,16 @@ namespace MovieList.ViewModels
 
         private IObservable<Unit> OnSwitchToList()
         {
-            var observable = this.Settings?.IsFormChanged ?? false
+            var canSwitch = this.Settings?.IsFormChanged ?? false
                 ? Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"))
                 : Observable.Return(true);
 
-            return observable
+            return canSwitch
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Do(canSwitch =>
+                .DoIfTrue(() =>
                 {
-                    if (canSwitch)
-                    {
-                        this.settingsFormSubscriptions.Clear();
-                        this.Content = this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
-                    }
+                    this.settingsFormSubscriptions.Clear();
+                    this.Content = this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
                 })
                 .Discard();
         }

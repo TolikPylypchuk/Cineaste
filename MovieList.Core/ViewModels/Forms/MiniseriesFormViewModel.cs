@@ -5,11 +5,9 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
-using MovieList.DialogModels;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
@@ -127,61 +125,15 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override async Task<Series> OnSaveAsync()
-        {
-            await this.SaveTitlesAsync();
+        protected override IObservable<Series> OnSave()
+            => this.SaveTitles()
+                .DoAsync(this.PeriodForm.Save.Execute)
+                .Select(this.CopyPropertiesIntoModel)
+                .DoAsync(this.seriesService.SaveInTaskPool);
 
-            await this.PeriodForm.Save.Execute();
-
-            this.Series.IsMiniseries = true;
-            this.Series.IsAnthology = this.IsAnthology;
-            this.Series.WatchStatus = this.WatchStatus;
-            this.Series.ReleaseStatus = this.ReleaseStatus;
-            this.Series.Kind = this.Kind;
-            this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
-            this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
-
-            if (this.Series.Seasons.Count == 0)
-            {
-                var settings = this.settingsService.GetSettings();
-
-                this.Series.Seasons.Add(new Season
-                {
-                    Series = this.Series,
-                    SequenceNumber = 1,
-                    Titles = new List<Title>
-                    {
-                        new Title { Name = settings.GetSeasonTitle(1), Priority = 1, IsOriginal = false },
-                        new Title { Name = settings.GetSeasonOriginalTitle(1), Priority = 1, IsOriginal = true }
-                    },
-                    Periods = new List<Period>
-                    {
-                        this.PeriodForm.Period
-                    }
-                });
-
-                this.PeriodForm.Period.Season = this.Series.Seasons[0];
-            }
-
-            this.Series.Seasons[0].Channel = this.Channel;
-
-            this.seriesService.Save(this.Series);
-
-            return this.Series;
-        }
-
-        protected override async Task<Series?> OnDeleteAsync()
-        {
-            bool shouldDelete = await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeries"));
-
-            if (shouldDelete)
-            {
-                this.seriesService.Delete(this.Series);
-                return this.Series;
-            }
-
-            return null;
-        }
+        protected override IObservable<Series?> OnDelete()
+            => this.PromptToDelete(
+                "DeleteSeries", () => this.seriesService.DeleteInTaskPool(this.Series).Select(() => this.Series));
 
         protected override void CopyProperties()
         {
@@ -215,5 +167,42 @@ namespace MovieList.ViewModels.Forms
 
         protected override void AttachTitle(Title title)
             => title.Series = this.Series;
+
+        private Series CopyPropertiesIntoModel()
+        {
+            this.Series.IsMiniseries = true;
+            this.Series.IsAnthology = this.IsAnthology;
+            this.Series.WatchStatus = this.WatchStatus;
+            this.Series.ReleaseStatus = this.ReleaseStatus;
+            this.Series.Kind = this.Kind;
+            this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
+            this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
+
+            if (this.Series.Seasons.Count == 0)
+            {
+                var settings = this.settingsService.GetSettings();
+
+                this.Series.Seasons.Add(new Season
+                {
+                    Series = this.Series,
+                    SequenceNumber = 1,
+                    Titles = new List<Title>
+                    {
+                        new Title { Name = settings.GetSeasonTitle(1), Priority = 1, IsOriginal = false },
+                        new Title { Name = settings.GetSeasonOriginalTitle(1), Priority = 1, IsOriginal = true }
+                    },
+                    Periods = new List<Period>
+                    {
+                        this.PeriodForm.Period
+                    }
+                });
+
+                this.PeriodForm.Period.Season = this.Series.Seasons[0];
+            }
+
+            this.Series.Seasons[0].Channel = this.Channel;
+
+            return this.Series;
+        }
     }
 }

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using MovieList.Data.Models;
-using MovieList.DialogModels;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
@@ -96,25 +94,23 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override async Task<SpecialEpisode> OnSaveAsync()
-        {
-            await this.SaveTitlesAsync();
+        protected override IObservable<SpecialEpisode> OnSave()
+            => this.SaveTitles()
+                .Select(() =>
+                {
+                    this.SpecialEpisode.Month = this.Month;
+                    this.SpecialEpisode.Year = Int32.Parse(this.Year);
+                    this.SpecialEpisode.IsWatched = this.IsWatched;
+                    this.SpecialEpisode.IsReleased = this.IsReleased;
+                    this.SpecialEpisode.Channel = this.Channel;
+                    this.SpecialEpisode.SequenceNumber = this.SequenceNumber;
+                    this.SpecialEpisode.PosterUrl = this.PosterUrl;
 
-            this.SpecialEpisode.Month = this.Month;
-            this.SpecialEpisode.Year = Int32.Parse(this.Year);
-            this.SpecialEpisode.IsWatched = this.IsWatched;
-            this.SpecialEpisode.IsReleased = this.IsReleased;
-            this.SpecialEpisode.Channel = this.Channel;
-            this.SpecialEpisode.SequenceNumber = this.SequenceNumber;
-            this.SpecialEpisode.PosterUrl = this.PosterUrl;
+                    return this.SpecialEpisode;
+                });
 
-            return this.SpecialEpisode;
-        }
-
-        protected override async Task<SpecialEpisode?> OnDeleteAsync()
-            => await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSpecialEpisode"))
-                ? this.SpecialEpisode
-                : null;
+        protected override IObservable<SpecialEpisode?> OnDelete()
+            => this.PromptToDelete("DeleteSpecialEpisode", () => Observable.Return(this.SpecialEpisode));
 
         protected override void CopyProperties()
         {

@@ -7,7 +7,6 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
-using System.Threading.Tasks;
 
 using DynamicData;
 using DynamicData.Aggregation;
@@ -15,7 +14,6 @@ using DynamicData.Binding;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
-using MovieList.DialogModels;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
@@ -213,37 +211,27 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override async Task<Series> OnSaveAsync()
-        {
-            await this.SaveTitlesAsync();
-            await this.SaveSeasonsAsync();
-            await this.SaveSpecialEpisodesAsync();
+        protected override IObservable<Series> OnSave()
+            => this.SaveTitles()
+                .DoAsync(this.SaveSeasons)
+                .DoAsync(this.SaveSpecialEpisodes)
+                .Select(() =>
+                {
+                    this.Series.IsMiniseries = false;
+                    this.Series.IsAnthology = this.IsAnthology;
+                    this.Series.WatchStatus = this.WatchStatus;
+                    this.Series.ReleaseStatus = this.ReleaseStatus;
+                    this.Series.Kind = this.Kind;
+                    this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
+                    this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
 
-            this.Series.IsMiniseries = false;
-            this.Series.IsAnthology = this.IsAnthology;
-            this.Series.WatchStatus = this.WatchStatus;
-            this.Series.ReleaseStatus = this.ReleaseStatus;
-            this.Series.Kind = this.Kind;
-            this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
-            this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
+                    return this.Series;
+                })
+                .DoAsync(this.seriesService.SaveInTaskPool);
 
-            this.seriesService.Save(this.Series);
-
-            return this.Series;
-        }
-
-        protected override async Task<Series?> OnDeleteAsync()
-        {
-            bool shouldDelete = await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeries"));
-
-            if (shouldDelete)
-            {
-                this.seriesService.Delete(this.Series);
-                return this.Series;
-            }
-
-            return null;
-        }
+        protected override IObservable<Series?> OnDelete()
+            => this.PromptToDelete(
+                "DeleteSeries", () => this.seriesService.DeleteInTaskPool(this.Series).Select(_ => this.Series));
 
         protected override void CopyProperties()
         {
@@ -362,13 +350,13 @@ namespace MovieList.ViewModels.Forms
                 .Select(_ => this.Components.First(component =>
                     component.SequenceNumber == componentForm.SequenceNumber + 1))
                 .Select(component => component.Form)
-                .SubscribeAsync(async form => await this.SelectComponent.Execute(form));
+                .SubscribeAsync(form => this.SelectComponent.Execute(form).Discard());
 
             componentForm.GoToPrevious
                 .Select(_ => this.Components.First(component =>
                     component.SequenceNumber == componentForm.SequenceNumber - 1))
                 .Select(component => component.Form)
-                .SubscribeAsync(async form => await this.SelectComponent.Execute(form));
+                .SubscribeAsync(form => this.SelectComponent.Execute(form).Discard());
 
             componentForm.WhenAnyValue(form => form.SequenceNumber)
                 .StartWith(componentForm.SequenceNumber)
@@ -391,50 +379,66 @@ namespace MovieList.ViewModels.Forms
             return component;
         }
 
-        private async Task SaveSeasonsAsync()
+        private IObservable<Unit> SaveSeasons()
         {
-            foreach (var season in this.Seasons)
+            if (this.Seasons.Count == 0)
             {
-                await season.Save.Execute();
+                this.Series.Seasons.Clear();
+                return Observable.Return(Unit.Default);
             }
 
-            foreach (var season in this.componentsSource.Items
-                .OfType<Season>()
-                .Except(this.Series.Seasons)
-                .ToList())
-            {
-                this.Series.Seasons.Add(season);
-            }
+            return this.Seasons
+                .Select(season => season.Save.Execute())
+                .ForkJoin()
+                .Discard()
+                .Do(() =>
+                {
+                    foreach (var season in this.componentsSource.Items
+                        .OfType<Season>()
+                        .Except(this.Series.Seasons)
+                        .ToList())
+                    {
+                        this.Series.Seasons.Add(season);
+                    }
 
-            foreach (var season in this.Series.Seasons
-                .Except(this.componentsSource.Items.OfType<Season>())
-                .ToList())
-            {
-                this.Series.Seasons.Remove(season);
-            }
+                    foreach (var season in this.Series.Seasons
+                        .Except(this.componentsSource.Items.OfType<Season>())
+                        .ToList())
+                    {
+                        this.Series.Seasons.Remove(season);
+                    }
+                });
         }
 
-        private async Task SaveSpecialEpisodesAsync()
+        private IObservable<Unit> SaveSpecialEpisodes()
         {
-            foreach (var episode in this.SpecialEpisodes)
+            if (this.SpecialEpisodes.Count == 0)
             {
-                await episode.Save.Execute();
+                this.Series.SpecialEpisodes.Clear();
+                return Observable.Return(Unit.Default);
             }
 
-            foreach (var episode in this.componentsSource.Items
-                .OfType<SpecialEpisode>()
-                .Except(this.Series.SpecialEpisodes)
-                .ToList())
-            {
-                this.Series.SpecialEpisodes.Add(episode);
-            }
+            return this.SpecialEpisodes
+                .Select(episode => episode.Save.Execute())
+                .ForkJoin()
+                .Discard()
+                .Do(() =>
+                {
+                    foreach (var episode in this.componentsSource.Items
+                        .OfType<SpecialEpisode>()
+                        .Except(this.Series.SpecialEpisodes)
+                        .ToList())
+                    {
+                        this.Series.SpecialEpisodes.Add(episode);
+                    }
 
-            foreach (var episode in this.Series.SpecialEpisodes
-                .Except(this.componentsSource.Items.OfType<SpecialEpisode>())
-                .ToList())
-            {
-                this.Series.SpecialEpisodes.Remove(episode);
-            }
+                    foreach (var episode in this.Series.SpecialEpisodes
+                        .Except(this.componentsSource.Items.OfType<SpecialEpisode>())
+                        .ToList())
+                    {
+                        this.Series.SpecialEpisodes.Remove(episode);
+                    }
+                });
         }
     }
 }

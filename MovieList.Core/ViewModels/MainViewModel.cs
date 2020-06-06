@@ -189,7 +189,8 @@ namespace MovieList.ViewModels
                 .Select(settingsModel => settingsModel.Settings.ListName)
                 .Where(name => name != listName)
                 .DoAsync(name => this.UpdateRecentFile(fileName, name))
-                .Subscribe();
+                .Subscribe()
+                .DisposeWith(subscriptions);
 
             this.closeSubscriptions.Add(fileName, subscriptions);
 
@@ -203,8 +204,7 @@ namespace MovieList.ViewModels
             var recentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file);
 
             var newRecentFileObservable = recentFile != null
-                ? Observable.Return(
-                    new RecentFile(recentFile.Name, recentFile.Path, this.scheduler.Now.LocalDateTime))
+                ? Observable.Return(new RecentFile(recentFile.Name, recentFile.Path, this.scheduler.Now.LocalDateTime))
                     .Do(_ => preferences.File.RecentFiles.Remove(recentFile))
                 : this.GetSettings(file)
                     .Select(settings => new RecentFile(settings.ListName, file, this.scheduler.Now.LocalDateTime));

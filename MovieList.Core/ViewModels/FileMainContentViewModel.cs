@@ -6,7 +6,6 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 
 using DynamicData;
 
@@ -57,8 +56,8 @@ namespace MovieList.ViewModels
 
             this.areUnsavedChangesPresentSubject.ToPropertyEx(this, vm => vm.AreUnsavedChangesPresent);
 
-            this.SelectItem = ReactiveCommand.CreateFromTask<ListItem?>(
-                this.OnSelectItemAsync, this.WhenAnyValue(vm => vm.CanSelectItem));
+            this.SelectItem = ReactiveCommand.CreateFromObservable<ListItem?, Unit>(
+                this.OnSelectItem, this.WhenAnyValue(vm => vm.CanSelectItem));
 
             this.Save = ReactiveCommand.Create(() => { });
 
@@ -99,28 +98,22 @@ namespace MovieList.ViewModels
         public void Dispose()
             => this.CanSelectItem = false;
 
-        private async Task OnSelectItemAsync(ListItem? item)
+        private IObservable<Unit> OnSelectItem(ListItem? item)
         {
-            bool canSelect = true;
+            var canSelectObservable = this.AreUnsavedChangesPresent
+                ? Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"))
+                : Observable.Return(true);
 
-            if (this.AreUnsavedChangesPresent)
-            {
-                canSelect = await Dialog.Confirm.Handle(new ConfirmationModel("CloseForm"));
-            }
-
-            if (!canSelect)
-            {
-                await this.List.ForceSelectedItem.Execute();
-                return;
-            }
-
-            bool shouldChangeSideViewModel = await this.List.SelectItem.Execute(item);
-
-            if (shouldChangeSideViewModel)
-            {
-                this.ClearSubscriptions();
-                this.SideViewModel = this.CreateSideViewModel(item);
-            }
+            return canSelectObservable
+                .SelectMany(canSelect => !canSelect
+                    ? this.List.ForceSelectedItem.Execute()
+                    : this.List.SelectItem.Execute(item)
+                        .DoIfTrue(() =>
+                        {
+                            this.ClearSubscriptions();
+                            this.SideViewModel = this.CreateSideViewModel(item);
+                        })
+                        .Discard());
         }
 
         private ReactiveObject CreateSideViewModel(ListItem? item)
@@ -228,7 +221,7 @@ namespace MovieList.ViewModels
 
             form.ConvertToSeries
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .SubscribeAsync(async () => await this.ConvertMiniseriesToSeriesAsync(form))
+                .SubscribeAsync(() => this.ConvertMiniseriesToSeries(form))
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             return form;
@@ -251,31 +244,17 @@ namespace MovieList.ViewModels
             form.Save
                 .Discard()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .SubscribeAsync(async item =>
+                .DoAsync(() => this.AttachEntries(attachedEntries))
+                .DoAsync(() => this.DetachEntries(detachedEntries))
+                .Subscribe(() =>
                 {
-                    foreach (var entry in attachedEntries)
-                    {
-                        await this.List.AddOrUpdate.Execute(this.List.EntryToListItem(entry));
-                        this.RemoveSameEntry(
-                            this.movieSeriesAddableItemsSource.Items,
-                            entry,
-                            this.movieSeriesAddableItemsSource.RemoveMany);
-                    }
-
-                    foreach (var entry in detachedEntries)
-                    {
-                        this.ClearEntryConnection(entry);
-                        await this.List.AddOrUpdate.Execute(this.List.EntryToListItem(entry));
-                        this.movieSeriesAddableItemsSource.Add(entry);
-                    }
-
                     attachedEntries.Clear();
                     detachedEntries.Clear();
                 })
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.SelectEntry
-                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
+                .SubscribeAsync(this.GoToMovieSeriesEntry)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.DetachEntry
@@ -315,6 +294,30 @@ namespace MovieList.ViewModels
             return form;
         }
 
+        private IObservable<Unit> AttachEntries(List<MovieSeriesEntry> entries)
+            => entries.Count == 0
+                ? Observable.Return(Unit.Default)
+                : entries
+                    .Select(entry => this.List.AddOrUpdate
+                        .Execute(this.List.EntryToListItem(entry))
+                        .Do(_ => this.RemoveSameEntry(
+                            this.movieSeriesAddableItemsSource.Items,
+                            entry,
+                            this.movieSeriesAddableItemsSource.RemoveMany)))
+                    .ForkJoin()
+                    .Discard();
+
+        private IObservable<Unit> DetachEntries(List<MovieSeriesEntry> entries)
+            => entries.Count == 0
+                ? Observable.Return(Unit.Default)
+                : entries
+                    .Do(this.ClearEntryConnection)
+                    .Select(entry => this.List.AddOrUpdate
+                        .Execute(this.List.EntryToListItem(entry))
+                        .Do(_ => this.movieSeriesAddableItemsSource.Add(entry)))
+                    .ForkJoin()
+                    .Discard();
+
         private void SubscribeToCommonCommands<TModel, TForm>(
             MovieSeriesEntryFormBase<TModel, TForm> form,
             ReactiveCommand<TModel, Unit> removeFromList,
@@ -351,12 +354,12 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToMovieSeries
-                .SubscribeAsync(this.GoToMovieSeriesAsync)
+                .SubscribeAsync(this.GoToMovieSeries)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToNext
                 .Merge(form.GoToPrevious)
-                .SubscribeAsync(this.GoToMovieSeriesEntryAsync)
+                .SubscribeAsync(this.GoToMovieSeriesEntry)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.CreateMovieSeries
@@ -475,7 +478,7 @@ namespace MovieList.ViewModels
             this.SideViewModel = miniseriesForm;
         }
 
-        private async Task ConvertMiniseriesToSeriesAsync(MiniseriesFormViewModel miniseriesForm)
+        private IObservable<Unit> ConvertMiniseriesToSeries(MiniseriesFormViewModel miniseriesForm)
         {
             this.Log().Debug($"Converting a miniseries to series: {miniseriesForm.Series}");
 
@@ -490,11 +493,17 @@ namespace MovieList.ViewModels
             seriesForm.ImdbLink = miniseriesForm.ImdbLink;
             seriesForm.PosterUrl = miniseriesForm.PosterUrl;
 
-            if (seriesForm.Seasons.Count == 0)
-            {
-                await seriesForm.AddSeason.Execute();
-            }
+            var seasonObservable = seriesForm.Seasons.Count == 0
+                ? seriesForm.AddSeason.Execute()
+                : Observable.Return(Unit.Default);
 
+            return seasonObservable
+                .Do(() => this.ConvertMiniseriesToSeason(miniseriesForm, seriesForm))
+                .Do(() => this.SideViewModel = seriesForm);
+        }
+
+        private void ConvertMiniseriesToSeason(MiniseriesFormViewModel miniseriesForm, SeriesFormViewModel seriesForm)
+        {
             var seasonForm = seriesForm.Seasons[0];
 
             seasonForm.Channel = miniseriesForm.Channel;
@@ -508,28 +517,26 @@ namespace MovieList.ViewModels
             periodForm.NumberOfEpisodes = miniseriesForm.PeriodForm.NumberOfEpisodes;
             periodForm.IsSingleDayRelease = miniseriesForm.PeriodForm.IsSingleDayRelease;
             periodForm.PosterUrl = miniseriesForm.PeriodForm.PosterUrl;
-
-            this.SideViewModel = seriesForm;
         }
 
-        private async Task GoToMovieSeriesAsync(MovieSeries movieSeries)
+        private IObservable<Unit> GoToMovieSeries(MovieSeries movieSeries)
         {
             this.ClearSubscriptions();
 
             this.SideViewModel = this.CreateMovieSeriesForm(movieSeries);
 
-            var listItem = new MovieSeriesListItem(movieSeries);
-            await this.SelectItem.Execute(listItem);
-            await this.List.ForceSelectedItem.Execute(Unit.Default);
+            return this.SelectItem.Execute(new MovieSeriesListItem(movieSeries))
+                .DoAsync(this.List.ForceSelectedItem.Execute);
         }
 
-        private async Task GoToMovieSeriesEntryAsync(MovieSeriesEntry entry)
+        private IObservable<Unit> GoToMovieSeriesEntry(MovieSeriesEntry entry)
         {
             var listItem = this.List.EntryToListItem(entry);
 
             this.SideViewModel = this.CreateSideViewModel(listItem);
-            await this.SelectItem.Execute(listItem);
-            await this.List.ForceSelectedItem.Execute(Unit.Default);
+
+            return this.SelectItem.Execute(listItem)
+                .DoAsync(this.List.ForceSelectedItem.Execute);
         }
 
         private Movie CreateMovieForMovieSeries(MovieSeries parentSeries, int displayNumber)

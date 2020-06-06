@@ -9,10 +9,11 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
-using System.Threading.Tasks;
 
 using DynamicData;
 using DynamicData.Binding;
+
+using MovieList.DialogModels;
 
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
@@ -46,9 +47,9 @@ namespace MovieList.ViewModels.Forms.Base
                     this.Valid)
                 .AllTrue();
 
-            this.Save = ReactiveCommand.CreateFromTask(this.OnSaveAsync, canSave);
+            this.Save = ReactiveCommand.CreateFromObservable(this.OnSave, canSave);
             this.Cancel = ReactiveCommand.Create(this.CopyProperties, this.formChangedSubject);
-            this.Delete = ReactiveCommand.CreateFromTask(this.OnDeleteAsync, this.canDeleteSubject);
+            this.Delete = ReactiveCommand.CreateFromObservable(this.OnDelete, this.canDeleteSubject);
         }
 
         public IObservable<bool> FormChanged
@@ -154,9 +155,13 @@ namespace MovieList.ViewModels.Forms.Base
                 .Subscribe(this.validSubject);
         }
 
-        protected abstract Task<TModel> OnSaveAsync();
+        protected IObservable<TModel?> PromptToDelete(string messageAndTitle, Func<IObservable<TModel>> onDelete)
+            => Dialog.Confirm.Handle(new ConfirmationModel(messageAndTitle))
+                .SelectMany(shouldDelete => shouldDelete ? onDelete() : Observable.Return<TModel?>(null));
 
-        protected abstract Task<TModel?> OnDeleteAsync();
+        protected abstract IObservable<TModel> OnSave();
+
+        protected abstract IObservable<TModel?> OnDelete();
 
         protected abstract void CopyProperties();
     }

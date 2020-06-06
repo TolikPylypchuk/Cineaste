@@ -8,7 +8,6 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using DynamicData;
 using DynamicData.Aggregation;
@@ -18,7 +17,6 @@ using MovieList.Comparers;
 using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
-using MovieList.DialogModels;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
@@ -172,47 +170,16 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override async Task<MovieSeries> OnSaveAsync()
-        {
-            await this.SaveTitlesAsync();
+        protected override IObservable<MovieSeries> OnSave()
+            => this.SaveTitles()
+                .DoAsync(this.SaveEntries)
+                .Select(this.CopyPropertiesIntoModel)
+                .DoAsync(this.movieSeriesService.SaveInTaskPool);
 
-            foreach (var entry in this.Entries)
-            {
-                await entry.Save.Execute();
-            }
-
-            foreach (var entry in this.entriesSource.Items.Except(this.MovieSeries.Entries).ToList())
-            {
-                this.MovieSeries.Entries.Add(entry);
-            }
-
-            foreach (var entry in this.MovieSeries.Entries.Except(this.entriesSource.Items).ToList())
-            {
-                this.MovieSeries.Entries.Remove(entry);
-            }
-
-            this.MovieSeries.ShowTitles = this.ShowTitles;
-            this.MovieSeries.IsLooselyConnected = this.IsLooselyConnected;
-            this.MovieSeries.MergeDisplayNumbers = this.MergeDisplayNumbers;
-            this.MovieSeries.PosterUrl = this.PosterUrl.NullIfEmpty();
-
-            this.movieSeriesService.Save(this.MovieSeries);
-
-            return this.MovieSeries;
-        }
-
-        protected override async Task<MovieSeries?> OnDeleteAsync()
-        {
-            bool shouldDelete = await Dialog.Confirm.Handle(new ConfirmationModel("DeleteMovieSeries"));
-
-            if (shouldDelete)
-            {
-                this.movieSeriesService.Delete(this.MovieSeries);
-                return this.MovieSeries;
-            }
-
-            return null;
-        }
+        protected override IObservable<MovieSeries?> OnDelete()
+            => this.PromptToDelete(
+                "DeleteMovieSeries",
+                () => this.movieSeriesService.DeleteInTaskPool(this.MovieSeries).Select(() => this.MovieSeries));
 
         protected override void CopyProperties()
         {
@@ -257,8 +224,6 @@ namespace MovieList.ViewModels.Forms
                 .Subscribe(_ => this.AdjustDisplayNumbers(this.GetFirstDisplayNumber()));
         }
 
-        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
-        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
         private string GetFormTitle(MovieSeries movieSeries)
         {
             string title = movieSeries.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name ?? String.Empty;
@@ -270,9 +235,7 @@ namespace MovieList.ViewModels.Forms
                 ? $"{this.GetFormTitle(this.MovieSeriesEntry.ParentSeries)}: {title}"
                 : title;
 
-        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
-        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
-        private async Task AddTitles()
+        private IObservable<Unit> AddTitles()
         {
             string titleName = this.MovieSeries.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name
                 ?? String.Empty;
@@ -280,11 +243,13 @@ namespace MovieList.ViewModels.Forms
             string originalTitleName = this.MovieSeries.ActualTitles.FirstOrDefault(t => t.IsOriginal)?.Name
                 ?? String.Empty;
 
-            await this.AddTitle.Execute();
-            await this.AddOriginalTitle.Execute();
-
-            this.Titles[0].Name = titleName;
-            this.OriginalTitles[0].Name = originalTitleName;
+            return this.AddTitle.Execute()
+                .DoAsync(this.AddOriginalTitle.Execute)
+                .Do(() =>
+                {
+                    this.Titles[0].Name = titleName;
+                    this.OriginalTitles[0].Name = originalTitleName;
+                });
         }
 
         private MovieSeriesEntryViewModel CreateEntryViewModel(MovieSeriesEntry entry)
@@ -449,6 +414,34 @@ namespace MovieList.ViewModels.Forms
 
             return this.GetNextDisplayNumber(entry.ParentSeries.Entries
                 .LastOrDefault(e => e.SequenceNumber < entry.SequenceNumber));
+        }
+
+        private IObservable<Unit> SaveEntries()
+            => this.Entries.Count == 0
+                ? Observable.Return(Unit.Default)
+                : this.Entries
+                    .Select(entry => entry.Save.Execute())
+                    .ForkJoin()
+                    .Discard();
+
+        private MovieSeries CopyPropertiesIntoModel()
+        {
+            foreach (var entry in this.entriesSource.Items.Except(this.MovieSeries.Entries).ToList())
+            {
+                this.MovieSeries.Entries.Add(entry);
+            }
+
+            foreach (var entry in this.MovieSeries.Entries.Except(this.entriesSource.Items).ToList())
+            {
+                this.MovieSeries.Entries.Remove(entry);
+            }
+
+            this.MovieSeries.ShowTitles = this.ShowTitles;
+            this.MovieSeries.IsLooselyConnected = this.IsLooselyConnected;
+            this.MovieSeries.MergeDisplayNumbers = this.MergeDisplayNumbers;
+            this.MovieSeries.PosterUrl = this.PosterUrl.NullIfEmpty();
+
+            return this.MovieSeries;
         }
     }
 }

@@ -4,11 +4,9 @@ using System.Collections.ObjectModel;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using MovieList.Data.Models;
 using MovieList.Data.Services;
-using MovieList.DialogModels;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
@@ -102,34 +100,24 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override async Task<Movie> OnSaveAsync()
-        {
-            await this.SaveTitlesAsync();
+        protected override IObservable<Movie> OnSave()
+            => this.SaveTitles()
+                .Select(() =>
+                {
+                    this.Movie.IsWatched = this.IsWatched;
+                    this.Movie.IsReleased = this.IsReleased;
+                    this.Movie.Year = Int32.Parse(this.Year);
+                    this.Movie.Kind = this.Kind;
+                    this.Movie.ImdbLink = this.ImdbLink.NullIfEmpty();
+                    this.Movie.PosterUrl = this.PosterUrl.NullIfEmpty();
 
-            this.Movie.IsWatched = this.IsWatched;
-            this.Movie.IsReleased = this.IsReleased;
-            this.Movie.Year = Int32.Parse(this.Year);
-            this.Movie.Kind = this.Kind;
-            this.Movie.ImdbLink = this.ImdbLink.NullIfEmpty();
-            this.Movie.PosterUrl = this.PosterUrl.NullIfEmpty();
+                    return this.Movie;
+                })
+                .DoAsync(this.movieService.SaveInTaskPool);
 
-            this.movieService.Save(this.Movie);
-
-            return this.Movie;
-        }
-
-        protected override async Task<Movie?> OnDeleteAsync()
-        {
-            bool shouldDelete = await Dialog.Confirm.Handle(new ConfirmationModel("DeleteMovie"));
-
-            if (shouldDelete)
-            {
-                this.movieService.Delete(this.Movie);
-                return this.Movie;
-            }
-
-            return null;
-        }
+        protected override IObservable<Movie?> OnDelete()
+            => this.PromptToDelete(
+                "DeleteMovie", () => this.movieService.DeleteInTaskPool(this.Movie).Select(() => this.Movie));
 
         protected override void CopyProperties()
         {

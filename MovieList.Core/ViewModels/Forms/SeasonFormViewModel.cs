@@ -6,14 +6,12 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-using System.Threading.Tasks;
 
 using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
 using MovieList.Data.Models;
-using MovieList.DialogModels;
 using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
@@ -162,25 +160,23 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override async Task<Season> OnSaveAsync()
-        {
-            await this.SaveTitlesAsync();
-            await this.SavePeriodsAsync();
+        protected override IObservable<Season> OnSave()
+            => this.SaveTitles()
+                .DoAsync(this.SavePeriods)
+                .Select(() =>
+                {
+                    this.Season.WatchStatus = this.WatchStatus;
+                    this.Season.ReleaseStatus = this.ReleaseStatus;
+                    this.Season.Channel = this.Channel;
+                    this.Season.SequenceNumber = this.SequenceNumber;
 
-            this.Season.WatchStatus = this.WatchStatus;
-            this.Season.ReleaseStatus = this.ReleaseStatus;
-            this.Season.Channel = this.Channel;
-            this.Season.SequenceNumber = this.SequenceNumber;
+                    this.SetCurrentPosterIndexToFirst();
 
-            this.SetCurrentPosterIndexToFirst();
+                    return this.Season;
+                });
 
-            return this.Season;
-        }
-
-        protected override async Task<Season?> OnDeleteAsync()
-            => await Dialog.Confirm.Handle(new ConfirmationModel("DeleteSeason"))
-                ? this.Season
-                : null;
+        protected override IObservable<Season?> OnDelete()
+            => this.PromptToDelete("DeleteSeason", () => Observable.Return(this.Season));
 
         protected override void CopyProperties()
         {
@@ -240,23 +236,23 @@ namespace MovieList.ViewModels.Forms
             });
         }
 
-        private async Task SavePeriodsAsync()
-        {
-            foreach (var period in this.Periods)
-            {
-                await period.Save.Execute();
-            }
+        private IObservable<Unit> SavePeriods()
+            => this.Periods
+                .Select(period => period.Save.Execute())
+                .ForkJoin()
+                .Discard()
+                .Do(() =>
+                {
+                    foreach (var period in this.periodsSource.Items.Except(this.Season.Periods).ToList())
+                    {
+                        this.Season.Periods.Add(period);
+                    }
 
-            foreach (var period in this.periodsSource.Items.Except(this.Season.Periods).ToList())
-            {
-                this.Season.Periods.Add(period);
-            }
-
-            foreach (var period in this.Season.Periods.Except(this.periodsSource.Items).ToList())
-            {
-                this.Season.Periods.Remove(period);
-            }
-        }
+                    foreach (var period in this.Season.Periods.Except(this.periodsSource.Items).ToList())
+                    {
+                        this.Season.Periods.Remove(period);
+                    }
+                });
 
         private void SetCurrentPosterIndexToFirst()
         {
