@@ -34,9 +34,9 @@ namespace MovieList.Infrastructure
             bool beforeChanged = false,
             bool suppressWarnings = false)
         {
-            var foo = (FrameworkElement)sender;
+            var element = (FrameworkElement)sender;
             return Observable.Return(
-                    new ObservedChange<object, object>(sender, expression), new DispatcherScheduler(foo.Dispatcher))
+                    new ObservedChange<object, object>(sender, expression), new DispatcherScheduler(element.Dispatcher))
                 .Concat(Observable.Never<IObservedChange<object, object>>());
         }
     }

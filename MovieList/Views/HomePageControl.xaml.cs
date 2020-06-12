@@ -36,7 +36,7 @@ namespace MovieList.Views
                 this.BindCommand(this.ViewModel, vm => vm.RemoveSelectedRecentFiles, v => v.RemoveButton)
                     .DisposeWith(disposables);
 
-                this.WhenAnyObservable(v => v.ViewModel.RemoveSelectedRecentFiles.CanExecute)
+                this.ViewModel.RemoveSelectedRecentFiles.CanExecute
                     .BindTo(this, v => v.RemoveButton.Visibility);
 
                 this.BindCommand(this.ViewModel, vm => vm.CreateFile, v => v.CreateListButton)

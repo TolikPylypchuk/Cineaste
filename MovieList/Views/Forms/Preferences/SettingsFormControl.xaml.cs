@@ -66,9 +66,7 @@ namespace MovieList.Views.Forms.Preferences
             this.BindCommand(this.ViewModel, vm => vm.Cancel, v => v.CancelButton)
                 .DisposeWith(disposables);
 
-            Observable.CombineLatest(
-                    this.WhenAnyObservable(v => v.ViewModel.Save.CanExecute),
-                    this.WhenAnyObservable(v => v.ViewModel.Cancel.CanExecute))
+            Observable.CombineLatest(this.ViewModel.Save.CanExecute, this.ViewModel.Cancel.CanExecute)
                 .AnyTrue()
                 .BindTo(this, v => v.ActionPanel.Visibility)
                 .DisposeWith(disposables);

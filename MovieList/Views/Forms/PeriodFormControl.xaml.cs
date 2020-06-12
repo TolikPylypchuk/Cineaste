@@ -37,7 +37,7 @@ namespace MovieList.Views.Forms
                 this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
                     .DisposeWith(disposables);
 
-                this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
+                this.ViewModel.Delete.CanExecute
                     .BindTo(this, v => v.DeleteButton.Visibility)
                     .DisposeWith(disposables);
             });
@@ -123,7 +123,7 @@ namespace MovieList.Views.Forms
             this.ShowValidationMessage(this.ViewModel.PeriodRule, v => v.InvalidFormTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.PeriodRule.ValidationChanged)
+            this.ViewModel.PeriodRule.ValidationChanged
                 .Select(state => !state.IsValid)
                 .BindTo(this, v => v.InvalidFormTextBlock.Visibility)
                 .DisposeWith(disposables);

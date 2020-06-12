@@ -38,35 +38,35 @@ namespace MovieList.Views.Forms
                 this.BindCommand(this.ViewModel, vm => vm.MoveUp, v => v.MoveUpMenuItem)
                     .DisposeWith(disposables);
 
-                this.WhenAnyObservable(v => v.ViewModel.MoveUp.CanExecute)
+                this.ViewModel.MoveUp.CanExecute
                     .BindTo(this, v => v.MoveUpMenuItem.Visibility)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.MoveDown, v => v.MoveDownMenuItem)
                     .DisposeWith(disposables);
 
-                this.WhenAnyObservable(v => v.ViewModel.MoveDown.CanExecute)
+                this.ViewModel.MoveDown.CanExecute
                     .BindTo(this, v => v.MoveDownMenuItem.Visibility)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.HideDisplayNumber, v => v.HideDisplayNumberMenuItem)
                     .DisposeWith(disposables);
 
-                this.WhenAnyObservable(v => v.ViewModel.HideDisplayNumber.CanExecute)
+                this.ViewModel.HideDisplayNumber.CanExecute
                     .BindTo(this, v => v.HideDisplayNumberMenuItem.Visibility)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.ShowDisplayNumber, v => v.ShowDisplayNumberMenuItem)
                     .DisposeWith(disposables);
 
-                this.WhenAnyObservable(v => v.ViewModel.ShowDisplayNumber.CanExecute)
+                this.ViewModel.ShowDisplayNumber.CanExecute
                     .BindTo(this, v => v.ShowDisplayNumberMenuItem.Visibility)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DetachMenuItem)
                     .DisposeWith(disposables);
 
-                this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
+                this.ViewModel.Delete.CanExecute
                     .BindTo(this, v => v.DetachMenuItem.Visibility)
                     .DisposeWith(disposables);
             });

@@ -35,14 +35,14 @@ namespace MovieList.Views.Forms
                 this.BindCommand(this.ViewModel, vm => vm.MoveUp, v => v.MoveUpMenuItem)
                     .DisposeWith(disposables);
 
-                this.WhenAnyObservable(v => v.ViewModel.MoveUp.CanExecute)
+                this.ViewModel.MoveUp.CanExecute
                     .BindTo(this, v => v.MoveUpMenuItem.Visibility)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.MoveDown, v => v.MoveDownMenuItem)
                     .DisposeWith(disposables);
 
-                this.WhenAnyObservable(v => v.ViewModel.MoveDown.CanExecute)
+                this.ViewModel.MoveDown.CanExecute
                     .BindTo(this, v => v.MoveDownMenuItem.Visibility)
                     .DisposeWith(disposables);
             });

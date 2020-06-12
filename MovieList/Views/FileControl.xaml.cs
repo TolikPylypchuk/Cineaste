@@ -57,11 +57,9 @@ namespace MovieList.Views
                 IsSelectable = true
             };
 
-            this.OneWayBind(
-                    this.ViewModel,
-                    vm => vm.Content,
-                    v => v.ListItem.IsSelected,
-                    content => content == this.ViewModel.MainContent)
+            this.WhenAnyValue(v => v.ViewModel.Content)
+                .Select(content => content == this.ViewModel.MainContent)
+                .Subscribe(shouldSelectList => this.ListItem.IsSelected = shouldSelectList)
                 .DisposeWith(disposables);
 
             this.StatsItem = new FirstLevelNavigationItem
@@ -78,11 +76,9 @@ namespace MovieList.Views
                 IsSelectable = true
             };
 
-            this.OneWayBind(
-                    this.ViewModel,
-                    vm => vm.Content,
-                    v => v.SettingsItem.IsSelected,
-                    content => content == this.ViewModel.Settings)
+            this.WhenAnyValue(v => v.ViewModel.Content)
+                .Select(content => content == this.ViewModel.Settings)
+                .Subscribe(shouldSelectSettings => this.SettingsItem.IsSelected = shouldSelectSettings)
                 .DisposeWith(disposables);
 
             this.Navigation.Items = new List<INavigationItem>

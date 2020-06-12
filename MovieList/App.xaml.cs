@@ -73,6 +73,8 @@ namespace MovieList
 
             this.DispatcherUnhandledException += this.OnDispatcherUnhandledException;
 
+            this.Log().Info("MovieList app started");
+
             if (e.Args.Length > 0)
             {
                 await mainViewModel.OpenFile.Execute(new OpenFileModel(e.Args[0]));
@@ -149,7 +151,7 @@ namespace MovieList
 
             await BlobCache.UserAccount.InsertObject(PreferencesKey, preferences);
 
-            this.Log().Debug("No preferences found. Created default preferences.");
+            this.Log().Info("No preferences found. Created default preferences");
 
             return preferences;
         }

@@ -60,88 +60,86 @@ namespace MovieList.Views.Forms
             this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.GoToMovieSeries.CanExecute)
+            this.ViewModel.GoToMovieSeries.CanExecute
                 .BindTo(this, v => v.GoToMovieSeriesButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesArrowButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.GoToMovieSeries.CanExecute)
+            this.ViewModel.GoToMovieSeries.CanExecute
                 .BindTo(this, v => v.GoToMovieSeriesArrowButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.GoToNext, v => v.GoToNextButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.GoToNext.CanExecute)
+            this.ViewModel.GoToNext.CanExecute
                 .BindTo(this, v => v.GoToNextButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.GoToPrevious, v => v.GoToPreviousButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.GoToPrevious.CanExecute)
+            this.ViewModel.GoToPrevious.CanExecute
                 .BindTo(this, v => v.GoToPreviousButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddMovie, v => v.AddMovieButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.AddMovie.CanExecute)
+            this.ViewModel.AddMovie.CanExecute
                 .BindTo(this, v => v.AddMovieButton.Visibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddSeries, v => v.AddSeriesButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.AddSeries.CanExecute)
+            this.ViewModel.AddSeries.CanExecute
                 .BindTo(this, v => v.AddSeriesButton.Visibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddMovieSeries, v => v.AddMovieSeriesButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.AddMovieSeries.CanExecute)
+            this.ViewModel.AddMovieSeries.CanExecute
                 .BindTo(this, v => v.AddMovieSeriesButton.Visibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.CreateMovieSeries, v => v.CreateMovieSeriesButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.CreateMovieSeries.CanExecute)
+            this.ViewModel.CreateMovieSeries.CanExecute
                 .BindTo(this, v => v.CreateMovieSeriesButton.Visibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.Delete.CanExecute)
+            this.ViewModel.Delete.CanExecute
                 .BindTo(this, v => v.DeleteButton.Visibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddTitle, v => v.AddTitleButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.AddTitle.CanExecute)
+            this.ViewModel.AddTitle.CanExecute
                 .BindTo(this, v => v.AddTitleButton.Visibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.AddOriginalTitle, v => v.AddOriginalTitleButton)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.AddOriginalTitle.CanExecute)
+            this.ViewModel.AddOriginalTitle.CanExecute
                 .BindTo(this, v => v.AddOriginalTitleButton.Visibility)
                 .DisposeWith(disposables);
 
-            Observable.CombineLatest(
-                    this.WhenAnyObservable(v => v.ViewModel.Save.CanExecute),
-                    this.WhenAnyObservable(v => v.ViewModel.Cancel.CanExecute))
+            Observable.CombineLatest(this.ViewModel.Save.CanExecute, this.ViewModel.Cancel.CanExecute)
                 .AnyTrue()
                 .BindTo(this, v => v.ActionPanel.Visibility)
                 .DisposeWith(disposables);
 
-            this.WhenAnyObservable(v => v.ViewModel.Save)
+            this.ViewModel.Save
                 .Subscribe(_ => this.LoadPoster())
                 .DisposeWith(disposables);
 
@@ -171,7 +169,8 @@ namespace MovieList.Views.Forms
                 .BindTo(this, v => v.ShowInListCheckBox.IsEnabled)
                 .DisposeWith(disposables);
 
-            this.ViewModel.Entries.ToObservableChangeSet()
+            this.ViewModel.Entries
+                .ToObservableChangeSet()
                 .AutoRefresh(vm => vm.DisplayNumber)
                 .ToCollection()
                 .Select(vms => vms.All(vm => vm.DisplayNumber.HasValue))

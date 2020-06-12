@@ -24,11 +24,8 @@ namespace MovieList.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.OneWayBind(this.ViewModel, vm => vm.File.Name, v => v.ListNameTextBlock.Text)
-                    .DisposeWith(disposables);
-
-                this.OneWayBind(this.ViewModel, vm => vm.File.Path, v => v.ListPathTextBlock.Text)
-                    .DisposeWith(disposables);
+                this.ListNameTextBlock.Text = this.ViewModel.File.Name;
+                this.ListPathTextBlock.Text = this.ViewModel.File.Path;
 
                 this.Bind(this.ViewModel, vm => vm.IsSelected, v => v.IsSelectedCheckBox.IsChecked)
                     .DisposeWith(disposables);
