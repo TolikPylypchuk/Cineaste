@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 
 using MovieList.Data.Models;
 
@@ -12,7 +13,7 @@ namespace MovieList.Preferences
             string defaultSeasonTitle,
             string defaultSeasonOriginalTitle,
             List<Kind> defaultKinds,
-            string defaultCultureInfo)
+            CultureInfo defaultCultureInfo)
         {
             this.DefaultSeasonTitle = defaultSeasonTitle;
             this.DefaultSeasonOriginalTitle = defaultSeasonOriginalTitle;
@@ -23,6 +24,6 @@ namespace MovieList.Preferences
         public string DefaultSeasonTitle { get; set; }
         public string DefaultSeasonOriginalTitle { get; set; }
         public List<Kind> DefaultKinds { get; set; }
-        public string DefaultCultureInfo { get; set; }
+        public CultureInfo DefaultCultureInfo { get; set; }
     }
 }

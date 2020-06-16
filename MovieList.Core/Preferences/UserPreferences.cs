@@ -1,8 +1,13 @@
+using System.Collections.Generic;
+using System.Globalization;
+
+using MovieList.Data.Models;
+
 namespace MovieList.Preferences
 {
     [ToString]
     [Equals(DoNotAddEqualityOperators = true)]
-    public sealed class UserPreferences
+    public sealed class UserPreferences : ISettings
     {
         public UserPreferences(FilePreferences file, DefaultsPreferences defaults, LoggingPreferences logging)
         {
@@ -14,5 +19,26 @@ namespace MovieList.Preferences
         public FilePreferences File { get; }
         public DefaultsPreferences Defaults { get; }
         public LoggingPreferences Logging { get; }
+
+        string ISettings.DefaultSeasonTitle
+        {
+            get => this.Defaults.DefaultSeasonTitle;
+            set => this.Defaults.DefaultSeasonTitle = value;
+        }
+
+        string ISettings.DefaultSeasonOriginalTitle
+        {
+            get => this.Defaults.DefaultSeasonOriginalTitle;
+            set => this.Defaults.DefaultSeasonOriginalTitle = value;
+        }
+
+        CultureInfo ISettings.CultureInfo
+        {
+            get => this.Defaults.DefaultCultureInfo;
+            set => this.Defaults.DefaultCultureInfo = value;
+        }
+
+        List<Kind> ISettings.Kinds
+            => this.Defaults.DefaultKinds;
     }
 }

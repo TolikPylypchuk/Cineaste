@@ -96,7 +96,7 @@ namespace MovieList.ViewModels
                 ListFileVersion,
                 preferences.DefaultSeasonTitle,
                 preferences.DefaultSeasonOriginalTitle,
-                preferences.DefaultCultureInfo);
+                preferences.DefaultCultureInfo.ToString());
 
             return Locator.Current.GetService<IDatabaseService>(model.File)
                 .CreateDatabaseInTaskPool(settings, preferences.DefaultKinds)

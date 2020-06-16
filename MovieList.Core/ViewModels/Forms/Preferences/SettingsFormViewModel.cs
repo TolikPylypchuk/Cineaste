@@ -1,14 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
-
-using DynamicData;
 
 using MovieList.Data;
 using MovieList.Data.Models;
@@ -16,7 +11,6 @@ using MovieList.Data.Services;
 using MovieList.Models;
 using MovieList.ViewModels.Forms.Base;
 
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
@@ -25,13 +19,10 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms.Preferences
 {
-    public sealed class SettingsFormViewModel : ReactiveForm<SettingsModel, SettingsFormViewModel>
+    public sealed class SettingsFormViewModel : SettingsFormBase<SettingsModel, SettingsFormViewModel>
     {
         private readonly ISettingsService settingsService;
         private readonly IKindService kindService;
-
-        private readonly SourceList<Kind> kindsSource = new SourceList<Kind>();
-        private readonly ReadOnlyObservableCollection<KindFormViewModel> kinds;
 
         public SettingsFormViewModel(
             string fileName,
@@ -41,88 +32,40 @@ namespace MovieList.ViewModels.Forms.Preferences
             IKindService? kindService = null,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
-            : base(resourceManager, scheduler)
+            : base(new SettingsModel(settings, kinds.ToList()), resourceManager, scheduler)
         {
-            this.SettingsModel = new SettingsModel(settings, kinds.ToList());
-
             this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
             this.kindService = kindService ?? Locator.Current.GetService<IKindService>(fileName);
 
-            this.kindsSource.Connect()
-                .Transform(this.CreateKindForm)
-                .Bind(out this.kinds)
-                .Subscribe();
-
             this.ListNameRule = this.ValidationRule(
                 vm => vm.ListName, name => !String.IsNullOrWhiteSpace(name), "ListNameEmpty");
-
-            this.AddKind = ReactiveCommand.Create(() => this.kindsSource.Add(new Kind()));
 
             this.CopyProperties();
             this.CanNeverDelete();
             this.EnableChangeTracking();
         }
 
-        public SettingsModel SettingsModel { get; }
-
         [Reactive]
         public string ListName { get; set; } = String.Empty;
 
-        [Reactive]
-        public string DefaultSeasonTitle { get; set; } = String.Empty;
-
-        [Reactive]
-        public string DefaultSeasonOriginalTitle { get; set; } = String.Empty;
-
-        [Reactive]
-        public CultureInfo CultureInfo { get; set; } = null!;
-
-        public ReadOnlyObservableCollection<KindFormViewModel> Kinds
-            => this.kinds;
-
         public ValidationHelper ListNameRule { get; }
-
-        public ReactiveCommand<Unit, Unit> AddKind { get; }
-
-        public override bool IsNew
-            => false;
 
         protected override SettingsFormViewModel Self
             => this;
 
         protected override void EnableChangeTracking()
         {
-            this.TrackChanges(vm => vm.ListName, vm => vm.SettingsModel.Settings.ListName);
-            this.TrackChanges(vm => vm.DefaultSeasonTitle, vm => vm.SettingsModel.Settings.DefaultSeasonTitle);
-            this.TrackChanges(
-                vm => vm.DefaultSeasonOriginalTitle, vm => vm.SettingsModel.Settings.DefaultSeasonOriginalTitle);
-            this.TrackChanges(vm => vm.CultureInfo, vm => vm.SettingsModel.Settings.CultureInfo);
-            this.TrackChanges(this.IsCollectionChanged(vm => vm.Kinds, vm => vm.SettingsModel.Kinds));
-            this.TrackValidation(this.IsCollectionValid(this.Kinds));
-
+            this.TrackChanges(vm => vm.ListName, vm => vm.Model.Settings.ListName);
             base.EnableChangeTracking();
         }
 
         protected override IObservable<SettingsModel> OnSave()
         {
-            this.SettingsModel.Settings.ListName = this.ListName;
-            this.SettingsModel.Settings.DefaultSeasonTitle = this.DefaultSeasonTitle;
-            this.SettingsModel.Settings.DefaultSeasonOriginalTitle = this.DefaultSeasonOriginalTitle;
-            this.SettingsModel.Settings.CultureInfo = this.CultureInfo;
+            this.Model.Settings.ListName = this.ListName;
 
-            return this.Kinds
-                .Select(kindViewModel => kindViewModel.Save.Execute())
-                .ForkJoin()
-                .Discard()
-                .Select(() =>
-                {
-                    this.SettingsModel.Kinds.Clear();
-                    this.SettingsModel.Kinds.AddRange(this.kindsSource.Items);
-
-                    return this.SettingsModel;
-                })
-                .DoAsync(_ => this.settingsService.UpdateSettingsInTaskPool(this.SettingsModel.Settings))
-                .DoAsync(_ => this.kindService.UpdateKindsInTaskPool(this.SettingsModel.Kinds));
+            return base.OnSave()
+                .DoAsync(_ => this.settingsService.UpdateSettingsInTaskPool(this.Model.Settings))
+                .DoAsync(_ => this.kindService.UpdateKindsInTaskPool(this.Model.Kinds));
         }
 
         protected override IObservable<SettingsModel?> OnDelete()
@@ -130,27 +73,8 @@ namespace MovieList.ViewModels.Forms.Preferences
 
         protected override void CopyProperties()
         {
-            this.ListName = this.SettingsModel.Settings.ListName;
-            this.DefaultSeasonTitle = this.SettingsModel.Settings.DefaultSeasonTitle;
-            this.DefaultSeasonOriginalTitle = this.SettingsModel.Settings.DefaultSeasonOriginalTitle;
-            this.CultureInfo = this.SettingsModel.Settings.CultureInfo;
-
-            this.kindsSource.Edit(list =>
-            {
-                list.Clear();
-                list.AddRange(this.SettingsModel.Kinds);
-            });
-        }
-
-        private KindFormViewModel CreateKindForm(Kind kind)
-        {
-            var form = new KindFormViewModel(kind, this.ResourceManager, this.Scheduler);
-
-            form.Delete
-                .WhereNotNull()
-                .Subscribe(k => this.kindsSource.Remove(k));
-
-            return form;
+            this.ListName = this.Model.Settings.ListName;
+            base.CopyProperties();
         }
     }
 }

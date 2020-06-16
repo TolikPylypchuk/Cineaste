@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Resources;
@@ -141,7 +142,7 @@ namespace MovieList
                 Messages.DefaultDefaultSeasonTitle,
                 Messages.DefaultDefaultSeasonOriginalTitle,
                 this.CreateDefaultKinds(),
-                "uk-UA");
+                CultureInfo.GetCultureInfo("uk-UA"));
 
             var loggingPreferences = new LoggingPreferences(
                 $"{Assembly.GetExecutingAssembly().GetName().Name}.log",

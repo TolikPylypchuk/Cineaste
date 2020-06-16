@@ -160,6 +160,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Advanced Preferences.
+        /// </summary>
+        public static string AdvancedPreferences {
+            get {
+                return ResourceManager.GetString("AdvancedPreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All FIles.
         /// </summary>
         public static string AllExtensionsDescription {
@@ -444,6 +453,15 @@ namespace MovieList.Properties {
         public static string DefaultSeasonTitleHint {
             get {
                 return ResourceManager.GetString("DefaultSeasonTitleHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Settings.
+        /// </summary>
+        public static string DefaultSettings {
+            get {
+                return ResourceManager.GetString("DefaultSettings", resourceCulture);
             }
         }
         
@@ -1075,6 +1093,15 @@ namespace MovieList.Properties {
         public static string OriginalTitleHeader {
             get {
                 return ResourceManager.GetString("OriginalTitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other Preferences.
+        /// </summary>
+        public static string OtherPreferences {
+            get {
+                return ResourceManager.GetString("OtherPreferences", resourceCulture);
             }
         }
         
