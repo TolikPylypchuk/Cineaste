@@ -169,6 +169,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changing these preferences takes effect after restarting the app.
+        /// </summary>
+        public static string AdvancedPreferencesHint {
+            get {
+                return ResourceManager.GetString("AdvancedPreferencesHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All FIles.
         /// </summary>
         public static string AllExtensionsDescription {
@@ -782,6 +791,69 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Debug.
+        /// </summary>
+        public static string LogLevelDebug {
+            get {
+                return ResourceManager.GetString("LogLevelDebug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string LogLevelError {
+            get {
+                return ResourceManager.GetString("LogLevelError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fatal.
+        /// </summary>
+        public static string LogLevelFatal {
+            get {
+                return ResourceManager.GetString("LogLevelFatal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        public static string LogLevelInformation {
+            get {
+                return ResourceManager.GetString("LogLevelInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verbose.
+        /// </summary>
+        public static string LogLevelVerbose {
+            get {
+                return ResourceManager.GetString("LogLevelVerbose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string LogLevelWarning {
+            get {
+                return ResourceManager.GetString("LogLevelWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log path.
+        /// </summary>
+        public static string LogPath {
+            get {
+                return ResourceManager.GetString("LogPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loosely connected.
         /// </summary>
         public static string LooselyConnected {
@@ -814,6 +886,15 @@ namespace MovieList.Properties {
         public static string MergeDisplayNumbers {
             get {
                 return ResourceManager.GetString("MergeDisplayNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum log level.
+        /// </summary>
+        public static string MinLogLevel {
+            get {
+                return ResourceManager.GetString("MinLogLevel", resourceCulture);
             }
         }
         
@@ -1390,6 +1471,15 @@ namespace MovieList.Properties {
         public static string ShowDisplayNumber {
             get {
                 return ResourceManager.GetString("ShowDisplayNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show recent files.
+        /// </summary>
+        public static string ShowRecentFiles {
+            get {
+                return ResourceManager.GetString("ShowRecentFiles", resourceCulture);
             }
         }
         

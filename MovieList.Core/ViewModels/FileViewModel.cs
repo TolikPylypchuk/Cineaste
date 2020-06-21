@@ -39,7 +39,7 @@ namespace MovieList.ViewModels
             kindService ??= Locator.Current.GetService<IKindService>(fileName);
             this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
 
-            this.Header = new FileHeaderViewModel(this.FileName, this.ListName);
+            this.Header = new TabHeaderViewModel(this.FileName, this.ListName);
 
             this.kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
 
@@ -64,7 +64,7 @@ namespace MovieList.ViewModels
             this.UpdateSettings = ReactiveCommand.Create<SettingsModel, SettingsModel>(this.OnUpdateSettings);
 
             this.WhenAnyValue(vm => vm.ListName)
-                .BindTo(this.Header, h => h.ListName);
+                .BindTo(this.Header, h => h.TabName);
         }
 
         public string FileName { get; }
@@ -72,7 +72,7 @@ namespace MovieList.ViewModels
         [Reactive]
         public string ListName { get; set; }
 
-        public FileHeaderViewModel Header { get; }
+        public TabHeaderViewModel Header { get; }
 
         [Reactive]
         public ReactiveObject Content { get; set; } = null!;
@@ -96,7 +96,7 @@ namespace MovieList.ViewModels
                 list.AddOrUpdate(settingsModel.Kinds);
             });
 
-            this.Header.ListName = settingsModel.Settings.ListName;
+            this.Header.TabName = settingsModel.Settings.ListName;
 
             return settingsModel;
         }

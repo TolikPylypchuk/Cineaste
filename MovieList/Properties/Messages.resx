@@ -153,6 +153,9 @@
   <data name="AdvancedPreferences" xml:space="preserve">
     <value>Advanced Preferences</value>
   </data>
+  <data name="AdvancedPreferencesHint" xml:space="preserve">
+    <value>Changing these preferences takes effect after restarting the app</value>
+  </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All FIles</value>
   </data>
@@ -358,6 +361,27 @@ This will detach all entries without deleting them.</value>
   <data name="LiveAction" xml:space="preserve">
     <value>Live-Action</value>
   </data>
+  <data name="LogLevelDebug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="LogLevelError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="LogLevelFatal" xml:space="preserve">
+    <value>Fatal</value>
+  </data>
+  <data name="LogLevelInformation" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="LogLevelVerbose" xml:space="preserve">
+    <value>Verbose</value>
+  </data>
+  <data name="LogLevelWarning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="LogPath" xml:space="preserve">
+    <value>Log path</value>
+  </data>
   <data name="LooselyConnected" xml:space="preserve">
     <value>Loosely connected</value>
   </data>
@@ -369,6 +393,9 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="MergeDisplayNumbers" xml:space="preserve">
     <value>Merge display numbers</value>
+  </data>
+  <data name="MinLogLevel" xml:space="preserve">
+    <value>Minimum log level</value>
   </data>
   <data name="Month" xml:space="preserve">
     <value>Month</value>
@@ -561,6 +588,9 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="ShowDisplayNumber" xml:space="preserve">
     <value>Show display number</value>
+  </data>
+  <data name="ShowRecentFiles" xml:space="preserve">
+    <value>Show recent files</value>
   </data>
   <data name="SingleDayRelease" xml:space="preserve">
     <value>Single-Day Release</value>

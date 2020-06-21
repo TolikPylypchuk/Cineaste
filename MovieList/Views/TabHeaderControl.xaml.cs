@@ -6,11 +6,11 @@ using ReactiveUI;
 
 namespace MovieList.Views
 {
-    public abstract class FileHaderControlBase : ReactiveUserControl<FileHeaderViewModel> { }
+    public abstract class TabHeaderControlBase : ReactiveUserControl<TabHeaderViewModel> { }
 
-    public partial class FileHeaderControl : FileHaderControlBase
+    public partial class TabHeaderControl : TabHeaderControlBase
     {
-        public FileHeaderControl()
+        public TabHeaderControl()
         {
             this.InitializeComponent();
 
@@ -20,7 +20,7 @@ namespace MovieList.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.OneWayBind(this.ViewModel, vm => vm.ListName, v => v.NameTextBlock.Text)
+                this.OneWayBind(this.ViewModel, vm => vm.TabName, v => v.NameTextBlock.Text)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.Close, v => v.CloseButton)

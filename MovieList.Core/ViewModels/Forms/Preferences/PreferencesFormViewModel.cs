@@ -1,6 +1,5 @@
 using System;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using System.Resources;
 
 using Akavache;
@@ -29,6 +28,9 @@ namespace MovieList.ViewModels.Forms.Preferences
         {
             this.store = store ?? Locator.Current.GetService<IBlobCache>(StoreKey);
 
+            this.Header = new TabHeaderViewModel(
+                String.Empty, this.ResourceManager.GetString("Preferences") ?? String.Empty);
+
             this.CopyProperties();
             this.CanNeverDelete();
             this.EnableChangeTracking();
@@ -43,8 +45,19 @@ namespace MovieList.ViewModels.Forms.Preferences
         [Reactive]
         public int MinLogLevel { get; set; }
 
+        public TabHeaderViewModel Header { get; }
+
         protected override PreferencesFormViewModel Self
             => this;
+
+        protected override void EnableChangeTracking()
+        {
+            this.TrackChanges(vm => vm.ShowRecentFiles, vm => vm.Model.File.ShowRecentFiles);
+            this.TrackChanges(vm => vm.LogPath, vm => vm.Model.Logging.LogPath);
+            this.TrackChanges(vm => vm.MinLogLevel, vm => vm.Model.Logging.MinLogLevel);
+
+            base.EnableChangeTracking();
+        }
 
         protected override IObservable<UserPreferences> OnSave()
         {

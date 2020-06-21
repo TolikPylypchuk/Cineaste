@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using MovieList.Converters;
+using MovieList.Properties;
 using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
@@ -13,6 +15,8 @@ namespace MovieList.Views.Forms.Preferences
 
     public partial class PreferencesFormControl : PreferencesFormControlBase
     {
+        private static readonly LogLevelConverter LogLevelConverter = new LogLevelConverter();
+
         public PreferencesFormControl()
         {
             this.InitializeComponent();
@@ -47,6 +51,28 @@ namespace MovieList.Views.Forms.Preferences
                     this.ViewModel,
                     vm => vm.DefaultSeasonOriginalTitle,
                     v => v.DefaultSeasonOriginalTitleTextBox.Text)
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.ShowRecentFiles, v => v.ShowRecentFilesCheckBox.IsChecked)
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.LogPath, v => v.LogPathTextBox.Text)
+                .DisposeWith(disposables);
+
+            this.MinLogLevelComboBox.Items.Add(Messages.LogLevelVerbose);
+            this.MinLogLevelComboBox.Items.Add(Messages.LogLevelDebug);
+            this.MinLogLevelComboBox.Items.Add(Messages.LogLevelInformation);
+            this.MinLogLevelComboBox.Items.Add(Messages.LogLevelWarning);
+            this.MinLogLevelComboBox.Items.Add(Messages.LogLevelError);
+            this.MinLogLevelComboBox.Items.Add(Messages.LogLevelFatal);
+
+            this.Bind(
+                this.ViewModel,
+                vm => vm.MinLogLevel,
+                v => v.MinLogLevelComboBox.SelectedItem,
+                null,
+                LogLevelConverter,
+                LogLevelConverter)
                 .DisposeWith(disposables);
         }
 

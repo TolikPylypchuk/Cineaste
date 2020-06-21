@@ -5,12 +5,12 @@ using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.ViewModels
 {
-    public class FileHeaderViewModel : ReactiveObject
+    public class TabHeaderViewModel : ReactiveObject
     {
-        public FileHeaderViewModel(string fileName, string listName)
+        public TabHeaderViewModel(string fileName, string tabName)
         {
             this.FileName = fileName;
-            this.ListName = listName;
+            this.TabName = tabName;
 
             this.Close = ReactiveCommand.Create<Unit, string>(_ => this.FileName);
         }
@@ -18,7 +18,7 @@ namespace MovieList.ViewModels
         public string FileName { get; }
 
         [Reactive]
-        public string ListName { get; set; }
+        public string TabName { get; set; }
 
         public ReactiveCommand<Unit, string> Close { get; }
     }

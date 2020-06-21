@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -10,6 +11,7 @@ using DynamicData.Binding;
 using MovieList.Models;
 using MovieList.Properties;
 using MovieList.ViewModels;
+using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 
@@ -83,6 +85,19 @@ namespace MovieList
                         .First(item => vm.FileName.Equals(item.Tag))))
                 .DisposeWith(disposables);
 
+            this.WhenAnyValue(v => v.ViewModel.Preferences)
+                .ObserveOnDispatcher()
+                .Subscribe(vm =>
+                {
+                    if (vm != null)
+                    {
+                        this.OnOpenPreferences(vm);
+                    } else
+                    {
+                        this.OnClosePreferences();
+                    }
+                });
+
             this.Bind(this.ViewModel, vm => vm.SelectedItemIndex, v => v.MainTabControl.SelectedIndex)
                 .DisposeWith(disposables);
         }
@@ -141,6 +156,9 @@ namespace MovieList
             this.BindCommand(this.ViewModel, vm => vm.ShowAbout, v => v.AboutMenuItem)
                 .DisposeWith(disposables);
 
+            this.BindCommand(this.ViewModel, vm => vm.OpenPreferences, v => v.PreferencesMenuItem)
+                .DisposeWith(disposables);
+
             this.Events().KeyUp
                 .Where(e => e.Key == Key.F1)
                 .Discard()
@@ -164,6 +182,27 @@ namespace MovieList
             this.Topmost = true;
             this.Topmost = false;
             this.Focus();
+        }
+
+        private void OnOpenPreferences(PreferencesFormViewModel vm)
+            => this.MainTabControl.Items.Add(new TabItem
+            {
+                Header = new ViewModelViewHost { ViewModel = vm.Header },
+                Content = new ViewModelViewHost { ViewModel = vm },
+                Tag = String.Empty
+            });
+
+        private void OnClosePreferences()
+        {
+            var preferencesTab = this.MainTabControl.Items
+                .Cast<TabItem>()
+                .Where(item => item.Tag != null)
+                .FirstOrDefault(item => String.IsNullOrEmpty(item.Tag.ToString()));
+
+            if (preferencesTab != null)
+            {
+                this.MainTabControl.Items.Remove(preferencesTab);
+            }
         }
 
         private bool IsDown(params ModifierKeys[] keys)

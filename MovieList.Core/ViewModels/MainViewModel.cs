@@ -16,6 +16,7 @@ using MovieList.Data.Services;
 using MovieList.DialogModels;
 using MovieList.Models;
 using MovieList.Preferences;
+using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -35,6 +36,7 @@ namespace MovieList.ViewModels
         private readonly SourceCache<FileViewModel, string> fileViewModelsSource;
 
         private readonly Dictionary<string, IDisposable> closeSubscriptions = new Dictionary<string, IDisposable>();
+        private readonly CompositeDisposable preferencesSubscriptions = new CompositeDisposable();
 
         public MainViewModel(IBlobCache? store = null, IScheduler? scheduler = null)
         {
@@ -54,12 +56,15 @@ namespace MovieList.ViewModels
 
             this.CreateFile = ReactiveCommand.CreateFromObservable<CreateFileModel, CreateFileModel?>(
                 this.OnCreateFile);
-            this.OpenFile = ReactiveCommand.CreateFromObservable<OpenFileModel, OpenFileModel?>(this.OnOpenFileAsync);
+            this.OpenFile = ReactiveCommand.CreateFromObservable<OpenFileModel, OpenFileModel?>(this.OnOpenFile);
             this.CloseFile = ReactiveCommand.CreateFromObservable<string, string>(this.OnCloseFile);
             this.Shutdown = ReactiveCommand.CreateFromObservable(this.OnShutdown);
 
             this.ShowAbout = ReactiveCommand.CreateFromObservable(() =>
                 Dialog.ShowMessage.Handle(new MessageModel("AboutText", "AboutTitle")));
+
+            this.OpenPreferences = ReactiveCommand.CreateFromObservable(this.OnOpenPreferences);
+            this.ClosePreferences = ReactiveCommand.Create(this.OnClosePreferences);
 
             this.HomePage.CreateFile
                 .WhereNotNull()
@@ -75,6 +80,9 @@ namespace MovieList.ViewModels
         public ReadOnlyObservableCollection<FileViewModel> Files { get; }
 
         [Reactive]
+        public PreferencesFormViewModel? Preferences { get; set; }
+
+        [Reactive]
         public int SelectedItemIndex { get; set; }
 
         public ReactiveCommand<CreateFileModel, CreateFileModel?> CreateFile { get; }
@@ -82,6 +90,9 @@ namespace MovieList.ViewModels
         public ReactiveCommand<string, string> CloseFile { get; }
         public ReactiveCommand<Unit, Unit> Shutdown { get; }
         public ReactiveCommand<Unit, Unit> ShowAbout { get; }
+
+        public ReactiveCommand<Unit, Unit> OpenPreferences { get; }
+        public ReactiveCommand<Unit, Unit> ClosePreferences { get; }
 
         private IObservable<CreateFileModel?> OnCreateFile(CreateFileModel model)
         {
@@ -106,7 +117,7 @@ namespace MovieList.ViewModels
                 .Select(_ => model);
         }
 
-        private IObservable<OpenFileModel?> OnOpenFileAsync(OpenFileModel model)
+        private IObservable<OpenFileModel?> OnOpenFile(OpenFileModel model)
         {
             if (String.IsNullOrEmpty(model.File))
             {
@@ -175,6 +186,31 @@ namespace MovieList.ViewModels
                 .SelectMany(preferences => this.store.InsertObject(PreferencesKey, preferences).Eager())
                 .Eager();
 
+        private IObservable<Unit> OnOpenPreferences()
+        {
+            if (this.Preferences != null)
+            {
+                RxApp.MainThreadScheduler.Schedule(() => this.SelectedItemIndex = this.Files.Count + 1);
+            }
+
+            return this.store.GetObject<UserPreferences>(PreferencesKey)
+                .Select(preferences => new PreferencesFormViewModel(preferences, this.store))
+                .Do(this.OpenPreferencesForm)
+                .Discard()
+                .Eager();
+        }
+
+        private void OnClosePreferences()
+        {
+            if (this.SelectedItemIndex > this.Files.Count)
+            {
+                this.SelectedItemIndex = this.Files.Count;
+            }
+
+            this.preferencesSubscriptions.Clear();
+            this.Preferences = null;
+        }
+
         private void AddFile(string fileName, string listName)
         {
             var fileViewModel = new FileViewModel(fileName, listName);
@@ -188,8 +224,7 @@ namespace MovieList.ViewModels
             fileViewModel.UpdateSettings
                 .Select(settingsModel => settingsModel.Settings.ListName)
                 .Where(name => name != listName)
-                .DoAsync(name => this.UpdateRecentFile(fileName, name))
-                .Subscribe()
+                .SubscribeAsync(name => this.UpdateRecentFile(fileName, name))
                 .DisposeWith(subscriptions);
 
             this.closeSubscriptions.Add(fileName, subscriptions);
@@ -201,6 +236,11 @@ namespace MovieList.ViewModels
 
         private IObservable<Unit> AddFileToRecent(UserPreferences preferences, string file, bool notifyHomePage)
         {
+            if (!preferences.File.ShowRecentFiles)
+            {
+                return Observable.Return(Unit.Default);
+            }
+
             var recentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file);
 
             var newRecentFileObservable = recentFile != null
@@ -246,5 +286,17 @@ namespace MovieList.ViewModels
 
         private IObservable<Settings> GetSettings(string file)
             => Locator.Current.GetService<ISettingsService>(file).GetSettingsInTaskPool();
+
+        private void OpenPreferencesForm(PreferencesFormViewModel form)
+        {
+            form.Header.Close
+                .Discard()
+                .InvokeCommand(this.ClosePreferences)
+                .DisposeWith(this.preferencesSubscriptions);
+
+            this.Preferences = form;
+
+            RxApp.MainThreadScheduler.Schedule(() => this.SelectedItemIndex = this.Files.Count + 1);
+        }
     }
 }

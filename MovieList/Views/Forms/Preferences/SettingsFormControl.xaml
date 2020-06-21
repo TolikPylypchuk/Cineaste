@@ -24,18 +24,11 @@
         </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+            <StackPanel>
+                <TextBlock Text="{l:Translate Settings}" Margin="8 16"
+                           Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
 
-                <TextBlock Text="{l:Translate Settings}" Grid.Row="0" Margin="8 16"
-                           Style="{StaticResource MaterialDesignHeadline1TextBlock}" />
-
-                <WrapPanel Grid.Row="1">
+                <WrapPanel>
                     <Grid Margin="0 0 24 0">
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -104,24 +97,24 @@
                     </StackPanel>
                 </WrapPanel>
 
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{l:Translate Kinds}" Margin="8 16"
-                               Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
+                               Style="{StaticResource MaterialDesignHeadline4TextBlock}" />
 
                     <Button x:Name="AddKindButton" Style="{StaticResource MaterialDesignIconButton}"
-                            Padding="0" Margin="32 0 0 0"  Width="40" Height="40" VerticalAlignment="Center">
-                        <m:PackIcon Kind="PlusCircleOutline" Margin="0" Width="40" Height="40" />
+                            Padding="0" Margin="32 0 0 0"  Width="30" Height="30" VerticalAlignment="Center">
+                        <m:PackIcon Kind="PlusCircleOutline" Margin="0" Width="30" Height="30" />
                     </Button>
                 </StackPanel>
 
-                <ItemsControl x:Name="Kinds" Grid.Row="3" Margin="8">
+                <ItemsControl x:Name="Kinds" Margin="0 8">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
-            </Grid>
+            </StackPanel>
         </ScrollViewer>
     </DockPanel>
 </local:SettingsFormControlBase>
