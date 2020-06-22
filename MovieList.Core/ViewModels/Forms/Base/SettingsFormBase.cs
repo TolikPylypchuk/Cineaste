@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Resources;
 
 using DynamicData;
@@ -111,13 +114,28 @@ namespace MovieList.ViewModels.Forms.Base
             });
         }
 
+        protected abstract bool InitialKindIsNewValue(Kind kind);
+
         private KindFormViewModel CreateKindForm(Kind kind)
         {
-            var form = new KindFormViewModel(kind, this.ResourceManager, this.Scheduler);
+            var isKindNew = new BehaviorSubject<bool>(this.InitialKindIsNewValue(kind));
+            var formSubscriptions = new CompositeDisposable();
+
+            var form = new KindFormViewModel(kind, isKindNew.AsObservable(), this.ResourceManager, this.Scheduler);
+
+            form.Save
+                .Select(_ => false)
+                .Subscribe(isKindNew)
+                .DisposeWith(formSubscriptions);
 
             form.Delete
                 .WhereNotNull()
-                .Subscribe(k => this.kindsSource.Remove(k));
+                .Subscribe(k =>
+                {
+                    this.kindsSource.Remove(k);
+                    formSubscriptions.Dispose();
+                })
+                .DisposeWith(formSubscriptions);
 
             return form;
         }

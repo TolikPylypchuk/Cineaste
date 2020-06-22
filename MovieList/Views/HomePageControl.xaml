@@ -24,10 +24,10 @@
                     Content="{l:Translate OpenList, ToUpper=True}" />
         </StackPanel>
 
-        <TextBlock Grid.Row="2" Text="{l:Translate RecentlyOpenedFiles}" HorizontalAlignment="Center"
-                   Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
+        <TextBlock x:Name="RecentlyOpenedFilesTextBlock" Grid.Row="2" Text="{l:Translate RecentlyOpenedFiles}"
+                   HorizontalAlignment="Center" Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
 
-        <DockPanel Grid.Row="3" VerticalAlignment="Top">
+        <DockPanel x:Name="RecentlyOpenedFilesPanel" Grid.Row="3" VerticalAlignment="Top">
             <Button x:Name="RemoveButton" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="8,8,8,16"
                     Style="{StaticResource MaterialDesignRaisedAccentButton}"
                     Content="{l:Translate RemoveFromList, ToUpper=True}" />

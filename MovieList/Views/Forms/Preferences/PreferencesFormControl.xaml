@@ -45,7 +45,7 @@
         </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel Margin="200 0">
+            <StackPanel Margin="200 0 200 50">
                 <TextBlock Text="{l:Translate Preferences}" Margin="8 16"
                            Style="{StaticResource MaterialDesignHeadline2TextBlock}" />
 

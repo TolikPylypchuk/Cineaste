@@ -4,6 +4,7 @@ using System.Resources;
 
 using Akavache;
 
+using MovieList.Data.Models;
 using MovieList.Preferences;
 using MovieList.ViewModels.Forms.Base;
 
@@ -84,5 +85,8 @@ namespace MovieList.ViewModels.Forms.Preferences
 
             base.CopyProperties();
         }
+
+        protected override bool InitialKindIsNewValue(Kind kind)
+            => !this.Model.Defaults.DefaultKinds.Contains(kind);
     }
 }

@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Akavache;
 
@@ -38,12 +39,14 @@ namespace MovieList.ViewModels
         private readonly Dictionary<string, IDisposable> closeSubscriptions = new Dictionary<string, IDisposable>();
         private readonly CompositeDisposable preferencesSubscriptions = new CompositeDisposable();
 
+        private readonly Subject<bool> showRecentFiles = new Subject<bool>();
+
         public MainViewModel(IBlobCache? store = null, IScheduler? scheduler = null)
         {
             this.store = store ?? Locator.Current.GetService<IBlobCache>(StoreKey);
             this.scheduler = scheduler ?? Scheduler.Default;
 
-            this.HomePage = new HomePageViewModel();
+            this.HomePage = new HomePageViewModel(showRecentFiles);
 
             this.fileViewModelsSource = new SourceCache<FileViewModel, string>(x => x.FileName);
 
@@ -289,6 +292,12 @@ namespace MovieList.ViewModels
 
         private void OpenPreferencesForm(PreferencesFormViewModel form)
         {
+            form.Save
+                .Select(preferences => preferences.File.ShowRecentFiles)
+                .DistinctUntilChanged()
+                .Subscribe(this.showRecentFiles)
+                .DisposeWith(this.preferencesSubscriptions);
+
             form.Header.Close
                 .Discard()
                 .InvokeCommand(this.ClosePreferences)

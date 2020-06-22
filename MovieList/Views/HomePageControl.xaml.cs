@@ -1,4 +1,5 @@
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 
 using MovieList.ViewModels;
 
@@ -27,10 +28,15 @@ namespace MovieList.Views
                     .DisposeWith(disposables);
 
                 this.OneWayBind(
-                        this.ViewModel,
-                        vm => vm.RecentFilesPresent,
-                        v => v.NoRecentlyOpenedFilesTextBlock.Visibility,
-                        BooleanToVisibilityHint.Inverse)
+                    this.ViewModel, vm => vm.ShowRecentFiles, v => v.RecentlyOpenedFilesTextBlock.Visibility)
+                    .DisposeWith(disposables);
+
+                this.OneWayBind(this.ViewModel, vm => vm.ShowRecentFiles, v => v.RecentlyOpenedFilesPanel.Visibility)
+                    .DisposeWith(disposables);
+
+                this.WhenAnyValue(
+                    v => v.ViewModel.ShowRecentFiles, v => v.ViewModel.RecentFilesPresent, (a, b) => a && !b)
+                    .BindTo(this, v => v.NoRecentlyOpenedFilesTextBlock.Visibility)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.RemoveSelectedRecentFiles, v => v.RemoveButton)

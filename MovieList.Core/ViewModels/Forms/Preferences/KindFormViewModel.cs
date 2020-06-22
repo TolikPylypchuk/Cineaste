@@ -2,6 +2,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Resources;
 
 using MovieList.Data.Models;
@@ -16,7 +17,13 @@ namespace MovieList.ViewModels.Forms.Preferences
 {
     public sealed class KindFormViewModel : ReactiveForm<Kind, KindFormViewModel>
     {
-        public KindFormViewModel(Kind kind, ResourceManager? resourceManager, IScheduler? scheduler)
+        private readonly BehaviorSubject<bool> isNew = new BehaviorSubject<bool>(true);
+
+        public KindFormViewModel(
+            Kind kind,
+            IObservable<bool> isNew,
+            ResourceManager? resourceManager,
+            IScheduler? scheduler)
             : base(resourceManager, scheduler)
         {
             this.Kind = kind;
@@ -29,6 +36,8 @@ namespace MovieList.ViewModels.Forms.Preferences
             this.ColorForWatchedSeriesRule = this.ValidationRuleForColor(vm => vm.ColorForWatchedSeries);
             this.ColorForNotWatchedSeriesRule = this.ValidationRuleForColor(vm => vm.ColorForNotWatchedSeries);
             this.ColorForNotReleasedSeriesRule = this.ValidationRuleForColor(vm => vm.ColorForNotReleasedSeries);
+
+            isNew.Subscribe(this.isNew);
 
             this.CanDeleteWhen(Observable.Return(kind.Movies.Count == 0 && kind.Series.Count == 0));
             this.EnableChangeTracking();
@@ -66,7 +75,7 @@ namespace MovieList.ViewModels.Forms.Preferences
         public ValidationHelper ColorForNotReleasedSeriesRule { get; }
 
         public override bool IsNew
-            => this.Kind.Id == default;
+            => this.isNew.Value;
 
         protected override KindFormViewModel Self
             => this;

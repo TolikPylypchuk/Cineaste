@@ -76,5 +76,8 @@ namespace MovieList.ViewModels.Forms.Preferences
             this.ListName = this.Model.Settings.ListName;
             base.CopyProperties();
         }
+
+        protected override bool InitialKindIsNewValue(Kind kind)
+            => kind.Id == default;
     }
 }

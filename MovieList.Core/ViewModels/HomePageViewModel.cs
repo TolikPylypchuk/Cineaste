@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Akavache;
 
@@ -30,7 +31,7 @@ namespace MovieList.ViewModels
         private readonly SourceCache<RecentFileViewModel, string> recentFilesSource
             = new SourceCache<RecentFileViewModel, string>(vm => vm.File.Path);
 
-        public HomePageViewModel(IBlobCache? store = null)
+        public HomePageViewModel(IObservable<bool> showRecentFiles, IBlobCache? store = null)
         {
             this.store = store ?? Locator.Current.GetService<IBlobCache>(StoreKey);
 
@@ -41,10 +42,17 @@ namespace MovieList.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
-            this.store.GetObject<UserPreferences>(PreferencesKey)
+            var preferencesObservable = this.store.GetObject<UserPreferences>(PreferencesKey);
+
+            preferencesObservable
                 .SelectMany(preferences => preferences.File.RecentFiles)
                 .Select(file => new RecentFileViewModel(file, this))
                 .Subscribe(recentFilesSource.AddOrUpdate);
+
+            preferencesObservable
+                .Select(preferences => preferences.File.ShowRecentFiles)
+                .Merge(showRecentFiles)
+                .ToPropertyEx(this, vm => vm.ShowRecentFiles, initialValue: false);
 
             this.WhenAnyValue(vm => vm.RecentFiles.Count)
                 .Select(count => count != 0)
@@ -76,6 +84,7 @@ namespace MovieList.ViewModels
         public ReadOnlyObservableCollection<RecentFileViewModel> RecentFiles
             => this.recentFiles;
 
+        public bool ShowRecentFiles { [ObservableAsProperty] get; }
         public bool RecentFilesPresent { [ObservableAsProperty] get; }
 
         public ReactiveCommand<Unit, CreateFileModel?> CreateFile { get; }
