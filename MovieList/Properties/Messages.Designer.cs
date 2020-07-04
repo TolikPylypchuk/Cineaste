@@ -250,6 +250,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are unsaved changes. Are you sure you want to close the file?.
+        /// </summary>
+        public static string CloseFileQuestion {
+            get {
+                return ResourceManager.GetString("CloseFileQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close File.
+        /// </summary>
+        public static string CloseFileTitle {
+            get {
+                return ResourceManager.GetString("CloseFileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are unsaved changes. Are you sure you want to close the form?.
         /// </summary>
         public static string CloseFormQuestion {

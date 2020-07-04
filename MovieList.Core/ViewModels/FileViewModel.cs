@@ -43,6 +43,13 @@ namespace MovieList.ViewModels
 
             this.kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
 
+            this.WhenAnyValue(vm => vm.Content)
+                .Select(content => content is FileMainContentViewModel
+                    ? this.WhenAnyValue(vm => vm.MainContent!.AreUnsavedChangesPresent)
+                    : this.WhenAnyValue(vm => vm.Settings!.IsFormChanged))
+                .Switch()
+                .ToPropertyEx(this, vm => vm.AreUnsavedChangesPresent, initialValue: false);
+
             this.kindsSource.Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.kinds)
@@ -83,6 +90,8 @@ namespace MovieList.ViewModels
         public ReadOnlyObservableCollection<Kind> Kinds
             => this.kinds;
 
+        public bool AreUnsavedChangesPresent { [ObservableAsProperty] get; }
+
         public ReactiveCommand<Unit, Unit> SwitchToList { get; }
         public ReactiveCommand<Unit, Unit> SwitchToStats { get; }
         public ReactiveCommand<Unit, Unit> SwitchToSettings { get; }
@@ -112,6 +121,7 @@ namespace MovieList.ViewModels
                 .DoIfTrue(() =>
                 {
                     this.settingsFormSubscriptions.Clear();
+                    this.Settings = null;
                     this.Content = this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
                 })
                 .Discard();
@@ -133,6 +143,7 @@ namespace MovieList.ViewModels
                     if (settings != null)
                     {
                         this.MainContent?.Dispose();
+                        this.MainContent = null;
                         this.Content = this.Settings = new SettingsFormViewModel(this.FileName, settings, this.Kinds);
                         this.Settings.Save
                             .InvokeCommand(this.UpdateSettings)

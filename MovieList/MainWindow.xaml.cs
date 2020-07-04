@@ -148,7 +148,9 @@ namespace MovieList
             this.SaveMenuItem.IsEnabled = false;
             this.SaveAsMenuItem.IsEnabled = false;
             this.SettingsMenuItem.IsEnabled = false;
-            this.CloseMenuItem.IsEnabled = false;
+
+            this.BindCommand(this.ViewModel, vm => vm.CloseCurrentTab, v => v.CloseMenuItem)
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.Shutdown, v => v.ExitMenuItem)
                 .DisposeWith(disposables);

@@ -180,6 +180,12 @@
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="CloseFileQuestion" xml:space="preserve">
+    <value>There are unsaved changes. Are you sure you want to close the file?</value>
+  </data>
+  <data name="CloseFileTitle" xml:space="preserve">
+    <value>Close File</value>
+  </data>
   <data name="CloseFormQuestion" xml:space="preserve">
     <value>There are unsaved changes. Are you sure you want to close the form?</value>
   </data>
