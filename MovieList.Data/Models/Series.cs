@@ -16,6 +16,7 @@ namespace MovieList.Data.Models
         public SeriesReleaseStatus ReleaseStatus { get; set; } = SeriesReleaseStatus.NotStarted;
 
         public string? ImdbLink { get; set; }
+        public string? RottenTomatoesLink { get; set; }
         public string? PosterUrl { get; set; }
 
         public int KindId { get; set; }

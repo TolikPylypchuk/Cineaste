@@ -42,6 +42,8 @@ namespace MovieList.ViewModels.Forms
 
             this.YearRule = this.ValidationRule(vm => vm.Year, MovieMinYear, MovieMaxYear);
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
+            this.RottenTomatoesLinkRule = this.ValidationRule(
+                vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.InitializeValueDependencies();
@@ -67,13 +69,17 @@ namespace MovieList.ViewModels.Forms
         public bool IsReleased { get; set; }
 
         [Reactive]
-        public string ImdbLink { get; set; } = null!;
+        public string ImdbLink { get; set; } = String.Empty;
 
         [Reactive]
-        public string PosterUrl { get; set; } = null!;
+        public string RottenTomatoesLink { get; set; } = String.Empty;
+
+        [Reactive]
+        public string PosterUrl { get; set; } = String.Empty;
 
         public ValidationHelper YearRule { get; }
         public ValidationHelper ImdbLinkRule { get; }
+        public ValidationHelper RottenTomatoesLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
 
         public override bool IsNew
@@ -95,6 +101,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.IsWatched, vm => vm.Movie.IsWatched);
             this.TrackChanges(vm => vm.IsReleased, vm => vm.Movie.IsReleased);
             this.TrackChanges(vm => vm.ImdbLink, vm => vm.Movie.ImdbLink.EmptyIfNull());
+            this.TrackChanges(vm => vm.RottenTomatoesLink, vm => vm.Movie.RottenTomatoesLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Movie.PosterUrl.EmptyIfNull());
 
             base.EnableChangeTracking();
@@ -109,6 +116,7 @@ namespace MovieList.ViewModels.Forms
                     this.Movie.Year = Int32.Parse(this.Year);
                     this.Movie.Kind = this.Kind;
                     this.Movie.ImdbLink = this.ImdbLink.NullIfEmpty();
+                    this.Movie.RottenTomatoesLink = this.RottenTomatoesLink.NullIfEmpty();
                     this.Movie.PosterUrl = this.PosterUrl.NullIfEmpty();
 
                     return this.Movie;
@@ -128,6 +136,7 @@ namespace MovieList.ViewModels.Forms
             this.IsWatched = this.Movie.IsWatched;
             this.IsReleased = this.Movie.IsReleased;
             this.ImdbLink = this.Movie.ImdbLink.EmptyIfNull();
+            this.RottenTomatoesLink = this.Movie.RottenTomatoesLink.EmptyIfNull();
             this.PosterUrl = this.Movie.PosterUrl.EmptyIfNull();
         }
 

@@ -35,6 +35,9 @@ namespace MovieList.ViewModels.Forms
 
             this.YearRule = this.ValidationRule(vm => vm.Year, SeriesMinYear, SeriesMaxYear);
 
+            this.RottenTomatoesLinkRule = this.ValidationRule(
+                vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
+
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.InitializeValueDependencies();
@@ -60,10 +63,14 @@ namespace MovieList.ViewModels.Forms
         public override string Channel { get; set; } = String.Empty;
 
         [Reactive]
+        public string? RottenTomatoesLink { get; set; }
+
+        [Reactive]
         public string? PosterUrl { get; set; }
 
         public ValidationHelper ChannelRule { get; }
         public ValidationHelper YearRule { get; }
+        public ValidationHelper RottenTomatoesLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
 
         public override bool IsNew
@@ -89,6 +96,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.IsReleased, vm => vm.SpecialEpisode.IsReleased);
             this.TrackChanges(vm => vm.Channel, vm => vm.SpecialEpisode.Channel);
             this.TrackChanges(vm => vm.SequenceNumber, vm => vm.SpecialEpisode.SequenceNumber);
+            this.TrackChanges(vm => vm.RottenTomatoesLink, vm => vm.SpecialEpisode.RottenTomatoesLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.SpecialEpisode.PosterUrl.EmptyIfNull());
 
             base.EnableChangeTracking();
@@ -104,7 +112,8 @@ namespace MovieList.ViewModels.Forms
                     this.SpecialEpisode.IsReleased = this.IsReleased;
                     this.SpecialEpisode.Channel = this.Channel;
                     this.SpecialEpisode.SequenceNumber = this.SequenceNumber;
-                    this.SpecialEpisode.PosterUrl = this.PosterUrl;
+                    this.SpecialEpisode.RottenTomatoesLink = this.RottenTomatoesLink.NullIfEmpty();
+                    this.SpecialEpisode.PosterUrl = this.PosterUrl.NullIfEmpty();
 
                     return this.SpecialEpisode;
                 });
@@ -122,7 +131,8 @@ namespace MovieList.ViewModels.Forms
             this.IsReleased = this.SpecialEpisode.IsReleased;
             this.Channel = this.SpecialEpisode.Channel;
             this.SequenceNumber = this.SpecialEpisode.SequenceNumber;
-            this.PosterUrl = this.SpecialEpisode.PosterUrl;
+            this.RottenTomatoesLink = this.SpecialEpisode.RottenTomatoesLink.EmptyIfNull();
+            this.PosterUrl = this.SpecialEpisode.PosterUrl.EmptyIfNull();
         }
 
         protected override void AttachTitle(Title title)

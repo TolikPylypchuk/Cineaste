@@ -36,8 +36,9 @@ namespace MovieList.Views.Forms
                 this.LoadPoster();
 
                 this.BindCommands(disposables);
-                this.BindFields(disposables);
                 this.BindCheckboxes(disposables);
+                this.BindLink(disposables);
+                this.BindFields(disposables);
 
                 this.AddValidation(disposables);
             });
@@ -110,6 +111,17 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
         }
 
+        private void BindLink(CompositeDisposable disposables)
+        {
+            this.OneWayBind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLink.NavigateUri)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.RottenTomatoesLink)
+                .Select(link => !String.IsNullOrWhiteSpace(link))
+                .BindTo(this, v => v.RottenTomatoesLinkTextBlock.Visibility)
+                .DisposeWith(disposables);
+        }
+
         private void BindFields(CompositeDisposable disposables)
         {
             this.OneWayBind(this.ViewModel, vm => vm.Titles, v => v.Titles.ItemsSource)
@@ -130,6 +142,9 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Text)
+                .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkTextBox.Text)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
@@ -170,6 +185,9 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.YearTextBox.ValidateWith(this.ViewModel.YearRule)
+                .DisposeWith(disposables);
+
+            this.RottenTomatoesLinkTextBox.ValidateWith(this.ViewModel.RottenTomatoesLinkRule)
                 .DisposeWith(disposables);
 
             this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)

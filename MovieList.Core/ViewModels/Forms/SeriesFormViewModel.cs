@@ -99,6 +99,8 @@ namespace MovieList.ViewModels.Forms
             this.CopyProperties();
 
             this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
+            this.RottenTomatoesLinkRule = this.ValidationRule(
+                vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.AddSeason = ReactiveCommand.Create(this.OnAddSeason);
@@ -148,9 +150,13 @@ namespace MovieList.ViewModels.Forms
         public string ImdbLink { get; set; } = String.Empty;
 
         [Reactive]
+        public string RottenTomatoesLink { get; set; } = String.Empty;
+
+        [Reactive]
         public string PosterUrl { get; set; } = String.Empty;
 
         public ValidationHelper ImdbLinkRule { get; }
+        public ValidationHelper RottenTomatoesLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
 
         public ReactiveCommand<Unit, Unit> AddSeason { get; }
@@ -194,6 +200,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.Kind, vm => vm.Series.Kind);
             this.TrackChanges(vm => vm.IsAnthology, vm => vm.Series.IsAnthology);
             this.TrackChanges(vm => vm.ImdbLink, vm => vm.Series.ImdbLink.EmptyIfNull());
+            this.TrackChanges(vm => vm.RottenTomatoesLink, vm => vm.Series.RottenTomatoesLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Series.PosterUrl.EmptyIfNull());
             this.TrackChanges(this.IsCollectionChanged(vm => vm.Seasons, vm => vm.Series.Seasons));
             this.TrackChanges(this.IsCollectionChanged(vm => vm.SpecialEpisodes, vm => vm.Series.SpecialEpisodes));
@@ -223,6 +230,7 @@ namespace MovieList.ViewModels.Forms
                     this.Series.ReleaseStatus = this.ReleaseStatus;
                     this.Series.Kind = this.Kind;
                     this.Series.ImdbLink = this.ImdbLink.NullIfEmpty();
+                    this.Series.RottenTomatoesLink = this.RottenTomatoesLink.NullIfEmpty();
                     this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
 
                     return this.Series;
@@ -249,6 +257,7 @@ namespace MovieList.ViewModels.Forms
             this.WatchStatus = this.Series.WatchStatus;
             this.ReleaseStatus = this.Series.ReleaseStatus;
             this.ImdbLink = this.Series.ImdbLink.EmptyIfNull();
+            this.RottenTomatoesLink = this.Series.RottenTomatoesLink.EmptyIfNull();
             this.PosterUrl = this.Series.PosterUrl.EmptyIfNull();
         }
 

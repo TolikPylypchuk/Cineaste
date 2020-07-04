@@ -77,6 +77,14 @@
                         </Button>
                     </DockPanel>
 
+                    <TextBlock x:Name="RottenTomatoesLinkTextBlock" Margin="4,0" HorizontalAlignment="Center">
+                        <Hyperlink x:Name="RottenTomatoesLink" v:Properties.IsExternal="True">
+                            <Hyperlink.Inlines>
+                                <Run Text="{l:Translate RottenTomatoes}" />
+                            </Hyperlink.Inlines>
+                        </Hyperlink>
+                    </TextBlock>
+
                     <ItemsControl x:Name="Titles" />
 
                     <ItemsControl x:Name="OriginalTitles" />
@@ -103,6 +111,9 @@
 
                     <TextBlock x:Name="PeriodsOverlapTextBlock" Foreground="{DynamicResource ValidationErrorBrush}"
                                Text="{l:Translate ValidationPeriodsOverlap}" />
+
+                    <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                             m:HintAssist.Hint="{l:Translate RottenTomatoesLink}" />
 
                     <Grid Margin="0,8">
                         <Grid.ColumnDefinitions>

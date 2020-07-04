@@ -65,13 +65,22 @@
 
                     <Image x:Name="Poster" />
 
-                    <TextBlock x:Name="ImdbLinkTextBlock" Margin="0,8,0,0" HorizontalAlignment="Center">
-                        <Hyperlink x:Name="ImdbLink" v:Properties.IsExternal="True">
-                            <Hyperlink.Inlines>
-                                <Run x:Name="ImdbLinkRun" />
-                            </Hyperlink.Inlines>
-                        </Hyperlink>
-                    </TextBlock>
+                    <WrapPanel Margin="0,8,0,0" HorizontalAlignment="Center">
+                        <TextBlock x:Name="ImdbLinkTextBlock" Margin="4,0" HorizontalAlignment="Center">
+                            <Hyperlink x:Name="ImdbLink" v:Properties.IsExternal="True">
+                                <Hyperlink.Inlines>
+                                    <Run Text="{l:Translate Imdb}" />
+                                </Hyperlink.Inlines>
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock x:Name="RottenTomatoesLinkTextBlock" Margin="4,0" HorizontalAlignment="Center">
+                            <Hyperlink x:Name="RottenTomatoesLink" v:Properties.IsExternal="True">
+                                <Hyperlink.Inlines>
+                                    <Run Text="{l:Translate RottenTomatoes}" />
+                                </Hyperlink.Inlines>
+                            </Hyperlink>
+                        </TextBlock>
+                    </WrapPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
                         <CheckBox x:Name="IsWatchedCheckBox" Content="{l:Translate Watched}" Margin="0,0,4,0" />
@@ -98,6 +107,9 @@
 
                     <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
                              m:HintAssist.Hint="{l:Translate ImdbLink}" />
+
+                    <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                             m:HintAssist.Hint="{l:Translate RottenTomatoesLink}" />
 
                     <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
                              m:HintAssist.Hint="{l:Translate PosterUrl}" />

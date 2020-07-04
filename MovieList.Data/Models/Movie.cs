@@ -14,6 +14,7 @@ namespace MovieList.Data.Models
         public bool IsReleased { get; set; } = true;
 
         public string? ImdbLink { get; set; }
+        public string? RottenTomatoesLink { get; set; }
         public string? PosterUrl { get; set; }
 
         public int KindId { get; set; }

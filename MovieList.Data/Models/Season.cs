@@ -16,6 +16,8 @@ namespace MovieList.Data.Models
 
         public int SequenceNumber { get; set; }
 
+        public string? RottenTomatoesLink { get; set; }
+
         public int SeriesId { get; set; }
 
         [Write(false)]

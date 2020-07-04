@@ -32,7 +32,7 @@ namespace MovieList.Views.Forms
                 this.LoadPoster();
 
                 this.BindCommands(disposables);
-                this.BindLink(disposables);
+                this.BindLinks(disposables);
                 this.BindFields(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Components, v => v.Components.ItemsSource)
@@ -134,17 +134,22 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
         }
 
-        private void BindLink(CompositeDisposable disposables)
+        private void BindLinks(CompositeDisposable disposables)
         {
             this.OneWayBind(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLink.NavigateUri)
-                .DisposeWith(disposables);
-
-            this.OneWayBind(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLinkRun.Text)
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.ImdbLink)
                 .Select(link => !String.IsNullOrWhiteSpace(link))
                 .BindTo(this, v => v.ImdbLinkTextBlock.Visibility)
+                .DisposeWith(disposables);
+
+            this.OneWayBind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLink.NavigateUri)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.RottenTomatoesLink)
+                .Select(link => !String.IsNullOrWhiteSpace(link))
+                .BindTo(this, v => v.RottenTomatoesLinkTextBlock.Visibility)
                 .DisposeWith(disposables);
         }
 
@@ -182,6 +187,9 @@ namespace MovieList.Views.Forms
             this.Bind(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLinkTextBox.Text)
                 .DisposeWith(disposables);
 
+            this.Bind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkTextBox.Text)
+                .DisposeWith(disposables);
+
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
                 .DisposeWith(disposables);
 
@@ -192,6 +200,9 @@ namespace MovieList.Views.Forms
         private void AddValidation(CompositeDisposable disposables)
         {
             this.ImdbLinkTextBox.ValidateWith(this.ViewModel.ImdbLinkRule)
+                .DisposeWith(disposables);
+
+            this.RottenTomatoesLinkTextBox.ValidateWith(this.ViewModel.RottenTomatoesLinkRule)
                 .DisposeWith(disposables);
 
             this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)

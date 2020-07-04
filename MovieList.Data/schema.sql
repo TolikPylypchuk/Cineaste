@@ -15,6 +15,7 @@ CREATE TABLE "Movies" (
     "IsWatched" INTEGER(1) NOT NULL,
     "IsReleased" INTEGER(1) NOT NULL,
     "ImdbLink" TEXT,
+    "RottenTomatoesLink" TEXT,
     "PosterUrl" TEXT,
     "KindId" INTEGER NOT NULL,
 
@@ -33,6 +34,7 @@ CREATE TABLE "Series" (
     "WatchStatus" INTEGER NOT NULL,
     "ReleaseStatus" INTEGER NOT NULL,
     "ImdbLink" TEXT,
+    "RottenTomatoesLink" TEXT,
     "PosterUrl" TEXT,
     "KindId" INTEGER NOT NULL,
 
@@ -48,6 +50,7 @@ CREATE TABLE "Seasons" (
     "ReleaseStatus" INTEGER NOT NULL,
     "Channel" TEXT NOT NULL,
     "SequenceNumber" INTEGER NOT NULL,
+    "RottenTomatoesLink" TEXT,
     "SeriesId" INTEGER NOT NULL,
 
     FOREIGN KEY ("SeriesId")
@@ -83,6 +86,7 @@ CREATE TABLE "SpecialEpisodes" (
     "IsReleased" INTEGER(1) NOT NULL,
     "Channel" TEXT NOT NULL,
     "SequenceNumber" INTEGER NOT NULL,
+    "RottenTomatoesLink" TEXT,
     "PosterUrl" TEXT,
     "SeriesId" INTEGER NOT NULL,
 

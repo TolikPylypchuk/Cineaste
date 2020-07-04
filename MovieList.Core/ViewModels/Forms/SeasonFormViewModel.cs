@@ -58,6 +58,9 @@ namespace MovieList.ViewModels.Forms
             this.ChannelRule = this.ValidationRule(
                 vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
 
+            this.RottenTomatoesLinkRule = this.ValidationRule(
+                vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
+
             this.PeriodsNonOverlapping =
                 this.periods.ToObservableChangeSet()
                     .AutoRefreshOnObservable(pvm => pvm.Changed)
@@ -113,6 +116,9 @@ namespace MovieList.ViewModels.Forms
         [Reactive]
         public override string Channel { get; set; } = String.Empty;
 
+        [Reactive]
+        public string RottenTomatoesLink { get; set; } = String.Empty;
+
         public ReadOnlyObservableCollection<PeriodFormViewModel> Periods
             => this.periods;
 
@@ -123,6 +129,7 @@ namespace MovieList.ViewModels.Forms
         public int CurrentPosterIndex { get; private set; }
 
         public ValidationHelper ChannelRule { get; }
+        public ValidationHelper RottenTomatoesLinkRule { get; }
 
         public IObservable<bool> PeriodsNonOverlapping { get; }
 
@@ -152,6 +159,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.ReleaseStatus, vm => vm.Season.ReleaseStatus);
             this.TrackChanges(vm => vm.Channel, vm => vm.Season.Channel);
             this.TrackChanges(vm => vm.SequenceNumber, vm => vm.Season.SequenceNumber);
+            this.TrackChanges(vm => vm.RottenTomatoesLink, vm => vm.Season.RottenTomatoesLink.EmptyIfNull());
             this.TrackChanges(this.IsCollectionChanged(vm => vm.Periods, vm => vm.Season.Periods));
 
             this.TrackValidation(this.IsCollectionValid(this.Periods));
@@ -169,6 +177,7 @@ namespace MovieList.ViewModels.Forms
                     this.Season.ReleaseStatus = this.ReleaseStatus;
                     this.Season.Channel = this.Channel;
                     this.Season.SequenceNumber = this.SequenceNumber;
+                    this.Season.RottenTomatoesLink = this.RottenTomatoesLink.NullIfEmpty();
 
                     this.SetCurrentPosterIndexToFirst();
 
@@ -192,6 +201,7 @@ namespace MovieList.ViewModels.Forms
             this.ReleaseStatus = this.Season.ReleaseStatus;
             this.Channel = this.Season.Channel;
             this.SequenceNumber = this.Season.SequenceNumber;
+            this.RottenTomatoesLink = this.Season.RottenTomatoesLink.EmptyIfNull();
 
             this.SetCurrentPosterIndexToFirst();
         }

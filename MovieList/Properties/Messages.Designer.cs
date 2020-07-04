@@ -701,6 +701,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to IMDb.
+        /// </summary>
+        public static string Imdb {
+            get {
+                return ResourceManager.GetString("Imdb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IMDb Link.
         /// </summary>
         public static string ImdbLink {
@@ -1259,6 +1268,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes.
+        /// </summary>
+        public static string RottenTomatoes {
+            get {
+                return ResourceManager.GetString("RottenTomatoes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes Link.
+        /// </summary>
+        public static string RottenTomatoesLink {
+            get {
+                return ResourceManager.GetString("RottenTomatoesLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -1633,6 +1660,15 @@ namespace MovieList.Properties {
         public static string ValidationPosterUrlInvalid {
             get {
                 return ResourceManager.GetString("ValidationPosterUrlInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Rotten Tomatoes Link is invalid.
+        /// </summary>
+        public static string ValidationRottenTomatoesLinkInvalid {
+            get {
+                return ResourceManager.GetString("ValidationRottenTomatoesLinkInvalid", resourceCulture);
             }
         }
         

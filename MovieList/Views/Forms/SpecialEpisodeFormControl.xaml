@@ -65,6 +65,14 @@
 
                     <Image x:Name="Poster" />
 
+                    <TextBlock x:Name="RottenTomatoesLinkTextBlock" Margin="4,0" HorizontalAlignment="Center">
+                        <Hyperlink x:Name="RottenTomatoesLink" v:Properties.IsExternal="True">
+                            <Hyperlink.Inlines>
+                                <Run Text="{l:Translate RottenTomatoes}" />
+                            </Hyperlink.Inlines>
+                        </Hyperlink>
+                    </TextBlock>
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
                         <CheckBox x:Name="IsWatchedCheckBox" Content="{l:Translate Watched}" Margin="0,0,4,0" />
                         <CheckBox x:Name="IsReleasedCheckBox" Content="{l:Translate Released}" Margin="4,0,0,0" />
@@ -90,6 +98,9 @@
                         <TextBox x:Name="YearTextBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8,8,0,8"
                                  m:HintAssist.Hint="{l:Translate Year}" />
                     </Grid>
+
+                    <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                             m:HintAssist.Hint="{l:Translate RottenTomatoesLink}" />
 
                     <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
                              m:HintAssist.Hint="{l:Translate PosterUrl}" />

@@ -38,6 +38,7 @@ namespace MovieList.Views.Forms
                 this.LoadPoster(disposables);
 
                 this.BindCommands(disposables);
+                this.BindLink(disposables);
                 this.BindFields(disposables);
 
                 this.AddValidation(disposables);
@@ -135,6 +136,17 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
         }
 
+        private void BindLink(CompositeDisposable disposables)
+        {
+            this.OneWayBind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLink.NavigateUri)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.RottenTomatoesLink)
+                .Select(link => !String.IsNullOrWhiteSpace(link))
+                .BindTo(this, v => v.RottenTomatoesLinkTextBlock.Visibility)
+                .DisposeWith(disposables);
+        }
+
         private void BindFields(CompositeDisposable disposables)
         {
             this.OneWayBind(this.ViewModel, vm => vm.Titles, v => v.Titles.ItemsSource)
@@ -166,6 +178,9 @@ namespace MovieList.Views.Forms
 
             this.OneWayBind(this.ViewModel, vm => vm.Periods, v => v.Periods.ItemsSource)
                 .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkTextBox.Text)
+                .DisposeWith(disposables);
         }
 
         private void AddValidation(CompositeDisposable disposables)
@@ -182,6 +197,9 @@ namespace MovieList.Views.Forms
                 .CombineLatest(allPeriodsValid, (a, b) => !a && b)
                 .ObserveOnDispatcher()
                 .BindTo(this, v => v.PeriodsOverlapTextBlock.Visibility)
+                .DisposeWith(disposables);
+
+            this.RottenTomatoesLinkTextBox.ValidateWith(this.ViewModel.RottenTomatoesLinkRule)
                 .DisposeWith(disposables);
         }
 
