@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -11,6 +12,7 @@ using System.Reactive.Subjects;
 using Akavache;
 
 using DynamicData;
+using DynamicData.Binding;
 
 using MovieList.Data;
 using MovieList.Data.Services;
@@ -61,11 +63,31 @@ namespace MovieList.ViewModels
                 this.OnCreateFile);
             this.OpenFile = ReactiveCommand.CreateFromObservable<OpenFileModel, OpenFileModel?>(this.OnOpenFile);
 
-            var canCloseCurrentFile = this.WhenAnyValue(vm => vm.SelectedItemIndex)
-                .Select(index => index != 0);
+            var canSave = this.CanSave();
+
+            var canSaveAs = this.WhenAnyValue(vm => vm.SelectedItemIndex)
+                .DistinctUntilChanged()
+                .Select(index => index > 0 && index != this.Files.Count + 1)
+                .CombineLatest(canSave, (a, b) => a && !b)
+                .ObserveOn(RxApp.MainThreadScheduler);
+
+            this.Save = ReactiveCommand.Create<Unit, int>(_ => this.SelectedItemIndex, canSave);
+            this.SaveAs = ReactiveCommand.CreateFromObservable(this.OnSaveFileAs, canSaveAs);
+
+            var canOpenSettings = this.WhenAnyValue(vm => vm.SelectedItemIndex)
+                .DistinctUntilChanged()
+                .Select(index => index > 0 && index != this.Files.Count + 1)
+                .ObserveOn(RxApp.MainThreadScheduler);
+
+            this.OpenSettings = ReactiveCommand.Create(() => { }, canOpenSettings);
+
+            var canCloseCurrentTab = this.WhenAnyValue(vm => vm.SelectedItemIndex)
+                .DistinctUntilChanged()
+                .Select(index => index > 0)
+                .ObserveOn(RxApp.MainThreadScheduler);
 
             this.CloseFile = ReactiveCommand.CreateFromObservable<string, Unit>(this.OnCloseFile);
-            this.CloseCurrentTab = ReactiveCommand.Create<Unit, int>(_ => this.SelectedItemIndex, canCloseCurrentFile);
+            this.CloseCurrentTab = ReactiveCommand.Create<Unit, int>(_ => this.SelectedItemIndex, canCloseCurrentTab);
 
             this.Shutdown = ReactiveCommand.CreateFromObservable(this.OnShutdown);
             this.ShowAbout = ReactiveCommand.CreateFromObservable(() =>
@@ -74,24 +96,7 @@ namespace MovieList.ViewModels
             this.OpenPreferences = ReactiveCommand.CreateFromObservable(this.OnOpenPreferences);
             this.ClosePreferences = ReactiveCommand.CreateFromObservable(this.OnClosePreferences);
 
-            this.HomePage.CreateFile
-                .WhereNotNull()
-                .InvokeCommand(this.CreateFile);
-
-            this.HomePage.OpenFile
-                .WhereNotNull()
-                .Select(file => new OpenFileModel(file))
-                .InvokeCommand(this.OpenFile);
-
-            this.CloseCurrentTab
-                .Where(index => index != this.Files.Count + 1)
-                .Select(index => this.Files[index - 1].FileName)
-                .InvokeCommand(this.CloseFile);
-
-            this.CloseCurrentTab
-                .Where(index => index == this.Files.Count + 1)
-                .Discard()
-                .InvokeCommand(this.ClosePreferences);
+            this.InitializeCommandDependencies();
         }
 
         public HomePageViewModel HomePage { get; set; }
@@ -105,6 +110,10 @@ namespace MovieList.ViewModels
 
         public ReactiveCommand<CreateFileModel, CreateFileModel?> CreateFile { get; }
         public ReactiveCommand<OpenFileModel, OpenFileModel?> OpenFile { get; }
+
+        public ReactiveCommand<Unit, int> Save { get; }
+        public ReactiveCommand<Unit, Unit> SaveAs { get; }
+        public ReactiveCommand<Unit, Unit> OpenSettings { get; }
 
         public ReactiveCommand<string, Unit> CloseFile { get; }
         public ReactiveCommand<Unit, int> CloseCurrentTab { get; }
@@ -150,7 +159,7 @@ namespace MovieList.ViewModels
             if (fileIndex != this.Files.Count)
             {
                 this.Log().Debug($"The file is already opened: {model.File}. Opening its tab");
-                this.SelectedItemIndex = fileIndex + 1;
+                this.SetSelectedItemIndex(fileIndex + 1);
                 return Observable.Return(model);
             }
 
@@ -177,6 +186,22 @@ namespace MovieList.ViewModels
                 });
         }
 
+        private IObservable<Unit> OnSaveFileAs()
+        {
+            var currentFile = this.Files[this.SelectedItemIndex - 1];
+
+            return Dialog.SaveFile.Handle(Path.GetFileName(currentFile.FileName))
+                .SelectMany(newFileName => newFileName != null
+                    ? this.OnSaveFileAsCore(currentFile.FileName, newFileName)
+                    : Observable.Return(Unit.Default));
+        }
+
+        private IObservable<Unit> OnSaveFileAsCore(string fileName, string newFileName)
+        {
+            File.Copy(fileName, newFileName);
+            return this.OpenFile.Execute(new OpenFileModel(newFileName)).Discard();
+        }
+
         private IObservable<Unit> OnCloseFile(string file)
         {
             var fileViewModel = this.Files.First(f => f.FileName == file);
@@ -201,7 +226,7 @@ namespace MovieList.ViewModels
             this.closeSubscriptions[file].Dispose();
             this.closeSubscriptions.Remove(file);
 
-            this.SetSelectedIndex(currentIndex == fileIndex ? fileIndex - 1 : currentIndex);
+            this.SetSelectedItemIndex(currentIndex == fileIndex ? fileIndex - 1 : currentIndex);
 
             return this.store.GetObject<UserPreferences>(PreferencesKey)
                 .DoAsync(preferences => this.AddFileToRecent(preferences, file, true))
@@ -225,7 +250,7 @@ namespace MovieList.ViewModels
         {
             if (this.Preferences != null)
             {
-                this.SetSelectedIndex(this.Files.Count + 1);
+                this.SetSelectedItemIndex(this.Files.Count + 1);
             }
 
             return this.store.GetObject<UserPreferences>(PreferencesKey)
@@ -247,7 +272,7 @@ namespace MovieList.ViewModels
                     {
                         if (this.SelectedItemIndex > this.Files.Count)
                         {
-                            this.SetSelectedIndex(this.Files.Count);
+                            this.SetSelectedItemIndex(this.Files.Count);
                         }
 
                         this.preferencesSubscriptions.Clear();
@@ -277,7 +302,7 @@ namespace MovieList.ViewModels
 
             this.fileViewModelsSource.AddOrUpdate(fileViewModel);
 
-            this.SetSelectedIndex(this.Files.Count);
+            this.SetSelectedItemIndex(this.Files.Count);
         }
 
         private IObservable<Unit> AddFileToRecent(UserPreferences preferences, string file, bool notifyHomePage)
@@ -348,10 +373,69 @@ namespace MovieList.ViewModels
 
             this.Preferences = form;
 
-            this.SetSelectedIndex(this.Files.Count + 1);
+            this.SetSelectedItemIndex(this.Files.Count + 1);
         }
 
-        private void SetSelectedIndex(int index)
+        private IObservable<bool> CanSave()
+        {
+            var autoRefreshedFiles = this.Files.ToObservableChangeSet()
+                .AutoRefresh(file => file.AreUnsavedChangesPresent)
+                .ToCollection();
+
+            var canSaveFile = this.WhenAnyValue(vm => vm.SelectedItemIndex)
+                .DistinctUntilChanged()
+                .Select(index => index > 0 && index != this.Files.Count + 1
+                    ? autoRefreshedFiles.Select(files =>
+                        this.SelectedItemIndex > 0 &&
+                        this.SelectedItemIndex != this.Files.Count + 1 &&
+                        files.ToList()[this.SelectedItemIndex - 1].AreUnsavedChangesPresent)
+                    : Observable.Return(false))
+                .Switch()
+                .ObserveOn(RxApp.MainThreadScheduler);
+
+            var canSavePreferences = this.WhenAnyValue(vm => vm.SelectedItemIndex)
+                .DistinctUntilChanged()
+                .Select(index => index == this.Files.Count + 1)
+                .CombineLatest(
+                    this.WhenAnyValue(vm => vm.Preferences)
+                        .Select(p => p != null ? p.Save.CanExecute : Observable.Return(false))
+                        .Switch(),
+                    (a, b) => a && b)
+                .ObserveOn(RxApp.MainThreadScheduler);
+
+            return Observable.CombineLatest(canSaveFile, canSavePreferences, (a, b) => a || b)
+                .ObserveOn(RxApp.MainThreadScheduler);
+        }
+
+        private void InitializeCommandDependencies()
+        {
+            this.HomePage.CreateFile
+                .WhereNotNull()
+                .InvokeCommand(this.CreateFile);
+
+            this.HomePage.OpenFile
+                .WhereNotNull()
+                .Select(file => new OpenFileModel(file))
+                .InvokeCommand(this.OpenFile);
+
+            this.Save
+                .SelectMany(index => index != this.Files.Count + 1
+                    ? this.Files[index - 1].Save.Execute()
+                    : this.Preferences!.Save.Execute().Discard())
+                .Subscribe();
+
+            this.OpenSettings
+                .SelectMany(() => this.Files[this.SelectedItemIndex - 1].SwitchToSettings.Execute())
+                .Subscribe();
+
+            this.CloseCurrentTab
+                .SelectMany(index => index != this.Files.Count + 1
+                    ? this.CloseFile.Execute(this.Files[index - 1].FileName)
+                    : this.ClosePreferences.Execute())
+                .Subscribe();
+        }
+
+        private void SetSelectedItemIndex(int index)
             => RxApp.MainThreadScheduler.Schedule(() => this.SelectedItemIndex = index);
     }
 }

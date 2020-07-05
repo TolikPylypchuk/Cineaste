@@ -59,7 +59,8 @@ namespace MovieList.ViewModels
             this.SelectItem = ReactiveCommand.CreateFromObservable<ListItem?, Unit>(
                 this.OnSelectItem, this.WhenAnyValue(vm => vm.CanSelectItem));
 
-            this.Save = ReactiveCommand.Create(() => { });
+            this.TunnelSave = ReactiveCommand.Create(() => { });
+            this.BubbleSave = ReactiveCommand.Create(() => { });
 
             this.SideViewModel = this.CreateNewItemViewModel();
 
@@ -67,7 +68,7 @@ namespace MovieList.ViewModels
                 .Select(vm => vm.Item)
                 .InvokeCommand(this.SelectItem);
 
-            this.Save.InvokeCommand(this.List.ForceSelectedItem);
+            this.BubbleSave.InvokeCommand(this.List.ForceSelectedItem);
 
             this.WhenAnyValue(vm => vm.SideViewModel)
                 .OfType<NewItemViewModel>()
@@ -93,7 +94,8 @@ namespace MovieList.ViewModels
         public bool CanSelectItem { get; private set; } = true;
 
         public ReactiveCommand<ListItem?, Unit> SelectItem { get; }
-        public ReactiveCommand<Unit, Unit> Save { get; }
+        public ReactiveCommand<Unit, Unit> TunnelSave { get; }
+        public ReactiveCommand<Unit, Unit> BubbleSave { get; }
 
         public void Dispose()
             => this.CanSelectItem = false;
@@ -105,6 +107,7 @@ namespace MovieList.ViewModels
                 : Observable.Return(true);
 
             return canSelectObservable
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .SelectMany(canSelect => !canSelect
                     ? this.List.ForceSelectedItem.Execute()
                     : this.List.SelectItem.Execute(item)
@@ -326,6 +329,10 @@ namespace MovieList.ViewModels
             where TModel : class
             where TForm : FranchiseEntryFormBase<TModel, TForm>
         {
+            this.TunnelSave
+                .InvokeCommand(form.Save)
+                .DisposeWith(this.sideViewModelSubscriptions);
+
             form.Save
                 .Select(listItemSelector)
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -334,7 +341,7 @@ namespace MovieList.ViewModels
 
             form.Save
                 .Discard()
-                .InvokeCommand(this.Save)
+                .InvokeCommand(this.BubbleSave)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.Close

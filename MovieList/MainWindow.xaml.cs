@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -104,13 +105,18 @@ namespace MovieList
 
         private void InitializeMenu(CompositeDisposable disposables)
         {
-            this.BindCommand(this.ViewModel, vm => vm.HomePage.CreateFile, v => v.NewMenuItem)
-                .DisposeWith(disposables);
+            this.InitializeMainMenu(disposables);
+            this.InitializeFileMenu(disposables);
+            this.InitializeEditMenu(disposables);
+            this.InitializeHelpMenu(disposables);
+        }
 
-            this.Events().KeyUp
-                .Where(e => e.Key == Key.N && this.IsDown(ModifierKeys.Control))
-                .Discard()
-                .InvokeCommand(this.ViewModel.HomePage.CreateFile)
+        private void InitializeMainMenu(CompositeDisposable disposables)
+        {
+            this.BindCommand(this.ViewModel, vm => vm.HomePage.CreateFile, v => v.NewMenuItem)
+                   .DisposeWith(disposables);
+
+            this.BindKeyToCommand(Key.N, ModifierKeys.Control, this.ViewModel.HomePage.CreateFile)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.HomePage.OpenFile, v => v.OpenMenuItem)
@@ -145,28 +151,66 @@ namespace MovieList
                     count => count > 0)
                 .DisposeWith(disposables);
 
-            this.SaveMenuItem.IsEnabled = false;
-            this.SaveAsMenuItem.IsEnabled = false;
-            this.SettingsMenuItem.IsEnabled = false;
+            this.BindCommand(this.ViewModel, vm => vm.Shutdown, v => v.ExitMenuItem)
+                .DisposeWith(disposables);
+        }
+
+        private void InitializeFileMenu(CompositeDisposable disposables)
+        {
+            this.BindCommand(this.ViewModel, vm => vm.Save, v => v.SaveMenuItem)
+                .DisposeWith(disposables);
+
+            this.BindKeyToCommand(Key.S, ModifierKeys.Control, this.ViewModel.Save)
+                .DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel, vm => vm.SaveAs, v => v.SaveAsMenuItem)
+                .DisposeWith(disposables);
+
+            this.BindKeyToCommand(Key.S, ModifierKeys.Control | ModifierKeys.Shift, this.ViewModel.SaveAs)
+                .DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel, vm => vm.OpenSettings, v => v.SettingsMenuItem)
+                .DisposeWith(disposables);
+
+            this.BindKeyToCommand(Key.P, ModifierKeys.Control, this.ViewModel.OpenSettings)
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.CloseCurrentTab, v => v.CloseMenuItem)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.Shutdown, v => v.ExitMenuItem)
+            this.BindKeyToCommand(Key.W, ModifierKeys.Control, this.ViewModel.CloseCurrentTab)
                 .DisposeWith(disposables);
+        }
 
-            this.BindCommand(this.ViewModel, vm => vm.ShowAbout, v => v.AboutMenuItem)
-                .DisposeWith(disposables);
-
+        private void InitializeEditMenu(CompositeDisposable disposables)
+        {
             this.BindCommand(this.ViewModel, vm => vm.OpenPreferences, v => v.PreferencesMenuItem)
                 .DisposeWith(disposables);
 
-            this.Events().KeyUp
-                .Where(e => e.Key == Key.F1)
-                .Discard()
-                .InvokeCommand(this.ViewModel.ShowAbout)
+            this.BindKeyToCommand(Key.P, ModifierKeys.Control | ModifierKeys.Shift, this.ViewModel.OpenPreferences)
                 .DisposeWith(disposables);
         }
+
+        private void InitializeHelpMenu(CompositeDisposable disposables)
+        {
+            this.BindCommand(this.ViewModel, vm => vm.ShowAbout, v => v.AboutMenuItem)
+                .DisposeWith(disposables);
+
+            this.BindKeyToCommand(Key.F1, this.ViewModel.ShowAbout)
+                .DisposeWith(disposables);
+        }
+
+        private IDisposable BindKeyToCommand<T>(Key key, ReactiveCommand<Unit, T> command)
+            => this.Events().KeyUp
+                .Where(e => e.Key == key)
+                .Discard()
+                .InvokeCommand(command);
+
+        private IDisposable BindKeyToCommand<T>(Key key, ModifierKeys modifierKeys, ReactiveCommand<Unit, T> command)
+            => this.Events().KeyUp
+                .Where(e => e.Key == key && this.IsDown(modifierKeys))
+                .Discard()
+                .InvokeCommand(command);
 
         private void OnOpenFileExternally()
         {

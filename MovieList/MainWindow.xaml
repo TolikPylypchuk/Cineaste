@@ -30,7 +30,11 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem x:Name="OpenRecentMenuItem" Header="{l:Translate OpenRecent}" />
+                    <MenuItem x:Name="OpenRecentMenuItem" Header="{l:Translate OpenRecent}">
+                        <MenuItem.Icon>
+                            <m:PackIcon Kind="FolderOpenOutline" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
                     <Separator />
 
@@ -52,7 +56,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem x:Name="CloseMenuItem" Header="{l:Translate Close}" InputGestureText="Ctrl+Shift+S">
+                    <MenuItem x:Name="CloseMenuItem" Header="{l:Translate Close}" InputGestureText="Ctrl+W">
                         <MenuItem.Icon>
                             <m:PackIcon Kind="FileRemove" />
                         </MenuItem.Icon>

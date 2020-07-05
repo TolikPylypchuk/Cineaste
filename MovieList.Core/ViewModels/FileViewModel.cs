@@ -24,7 +24,7 @@ namespace MovieList.ViewModels
     {
         private readonly SourceCache<Kind, int> kindsSource;
         private readonly ReadOnlyObservableCollection<Kind> kinds;
-        private readonly CompositeDisposable settingsFormSubscriptions = new CompositeDisposable();
+        private readonly CompositeDisposable currentContentSubscriptions = new CompositeDisposable();
         private readonly ISettingsService settingsService;
 
         public FileViewModel(
@@ -58,17 +58,15 @@ namespace MovieList.ViewModels
 
             kindService.GetAllKindsInTaskPool()
                 .Do(this.kindsSource.AddOrUpdate)
+                .Discard()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(kinds =>
-                {
-                    this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
-                    this.Content ??= this.MainContent;
-                });
+                .Subscribe(this.SwitchCurrentContentToMain);
 
             this.SwitchToList = ReactiveCommand.CreateFromObservable(this.OnSwitchToList);
             this.SwitchToStats = ReactiveCommand.Create(() => { });
             this.SwitchToSettings = ReactiveCommand.CreateFromObservable(this.OnSwitchToSettings);
             this.UpdateSettings = ReactiveCommand.Create<SettingsModel, SettingsModel>(this.OnUpdateSettings);
+            this.Save = ReactiveCommand.Create(() => { });
 
             this.WhenAnyValue(vm => vm.ListName)
                 .BindTo(this.Header, h => h.TabName);
@@ -96,6 +94,7 @@ namespace MovieList.ViewModels
         public ReactiveCommand<Unit, Unit> SwitchToStats { get; }
         public ReactiveCommand<Unit, Unit> SwitchToSettings { get; }
         public ReactiveCommand<SettingsModel, SettingsModel> UpdateSettings { get; }
+        public ReactiveCommand<Unit, Unit> Save { get; }
 
         private SettingsModel OnUpdateSettings(SettingsModel settingsModel)
         {
@@ -118,13 +117,20 @@ namespace MovieList.ViewModels
 
             return canSwitch
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .DoIfTrue(() =>
-                {
-                    this.settingsFormSubscriptions.Clear();
-                    this.Settings = null;
-                    this.Content = this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
-                })
+                .DoIfTrue(this.SwitchCurrentContentToMain)
                 .Discard();
+        }
+
+        private void SwitchCurrentContentToMain()
+        {
+            this.currentContentSubscriptions.Clear();
+            this.Settings = null;
+
+            this.Content = this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
+
+            this.Save
+                .InvokeCommand(this.MainContent.TunnelSave)
+                .DisposeWith(this.currentContentSubscriptions);
         }
 
         private IObservable<Unit> OnSwitchToSettings()
@@ -138,19 +144,30 @@ namespace MovieList.ViewModels
                     ? this.settingsService.GetSettingsInTaskPool()
                     : Observable.Return<Settings?>(null))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Do(settings =>
-                {
-                    if (settings != null)
-                    {
-                        this.MainContent?.Dispose();
-                        this.MainContent = null;
-                        this.Content = this.Settings = new SettingsFormViewModel(this.FileName, settings, this.Kinds);
-                        this.Settings.Save
-                            .InvokeCommand(this.UpdateSettings)
-                            .DisposeWith(this.settingsFormSubscriptions);
-                    }
-                })
+                .Do(this.SwitchCurrentContentToSettings)
                 .Discard();
+        }
+
+        private void SwitchCurrentContentToSettings(Settings? settings)
+        {
+            if (settings == null)
+            {
+                return;
+            }
+
+            this.currentContentSubscriptions.Clear();
+            this.MainContent?.Dispose();
+            this.MainContent = null;
+
+            this.Content = this.Settings = new SettingsFormViewModel(this.FileName, settings, this.Kinds);
+
+            this.Save
+                .InvokeCommand(this.Settings.Save)
+                .DisposeWith(this.currentContentSubscriptions);
+
+            this.Settings.Save
+                .InvokeCommand(this.UpdateSettings)
+                .DisposeWith(this.currentContentSubscriptions);
         }
     }
 }
