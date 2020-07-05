@@ -22,7 +22,7 @@ namespace MovieList.Data
                 resolver.RegisterLazySingleton(() => new MovieService(file), typeof(IEntityService<Movie>), file);
                 resolver.RegisterLazySingleton(() => new SeriesService(file), typeof(IEntityService<Series>), file);
                 resolver.RegisterLazySingleton(
-                    () => new MovieSeriesService(file), typeof(IEntityService<MovieSeries>), file);
+                    () => new FranchiseService(file), typeof(IEntityService<Franchise>), file);
 
                 resolver.RegisterLazySingleton(() => new KindService(file), typeof(IKindService), file);
                 resolver.RegisterLazySingleton(() => new SettingsService(file), typeof(ISettingsService), file);
@@ -40,7 +40,7 @@ namespace MovieList.Data
 
                 resolver.UnregisterCurrent(typeof(IEntityService<Movie>), file);
                 resolver.UnregisterCurrent(typeof(IEntityService<Series>), file);
-                resolver.UnregisterCurrent(typeof(IEntityService<MovieSeries>), file);
+                resolver.UnregisterCurrent(typeof(IEntityService<Franchise>), file);
 
                 resolver.UnregisterCurrent(typeof(IKindService), file);
                 resolver.UnregisterCurrent(typeof(ISettingsService), file);

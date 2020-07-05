@@ -17,16 +17,16 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MovieSeriesEntryViewModel : ReactiveForm<MovieSeriesEntry, MovieSeriesEntryViewModel>
+    public sealed class FranchiseEntryViewModel : ReactiveForm<FranchiseEntry, FranchiseEntryViewModel>
     {
-        public MovieSeriesEntryViewModel(
-            MovieSeriesEntry entry,
-            MovieSeriesFormViewModel parentForm,
+        public FranchiseEntryViewModel(
+            FranchiseEntry entry,
+            FranchiseFormViewModel parentForm,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
             : base(resourceManager, scheduler)
         {
-            this.Log().Debug($"Creating a view model for an entry inside the movie series form: {entry}");
+            this.Log().Debug($"Creating a view model for an entry inside the franchise form: {entry}");
 
             this.Entry = entry;
             this.ParentForm = parentForm;
@@ -37,7 +37,7 @@ namespace MovieList.ViewModels.Forms
                 .Select(num => num != 1);
 
             var canMoveDown = this.WhenAnyValue(vm => vm.SequenceNumber)
-                .Select(num => num < this.Entry.ParentSeries.Entries.Count);
+                .Select(num => num < this.Entry.ParentFranchise.Entries.Count);
 
             this.MoveUp = ReactiveCommand.Create(() => { }, canMoveUp);
             this.MoveDown = ReactiveCommand.Create(() => { }, canMoveDown);
@@ -67,9 +67,9 @@ namespace MovieList.ViewModels.Forms
             this.EnableChangeTracking();
         }
 
-        public MovieSeriesEntry Entry { get; }
+        public FranchiseEntry Entry { get; }
 
-        public MovieSeriesFormViewModel ParentForm { get; }
+        public FranchiseFormViewModel ParentForm { get; }
 
         public string Title { get; private set; } = String.Empty;
         public string Years { get; private set; } = String.Empty;
@@ -93,7 +93,7 @@ namespace MovieList.ViewModels.Forms
         public override bool IsNew
             => this.Entry.Id == default;
 
-        protected override MovieSeriesEntryViewModel Self
+        protected override FranchiseEntryViewModel Self
             => this;
 
         protected override void EnableChangeTracking()
@@ -104,7 +104,7 @@ namespace MovieList.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override IObservable<MovieSeriesEntry> OnSave()
+        protected override IObservable<FranchiseEntry> OnSave()
         {
             this.Entry.SequenceNumber = this.SequenceNumber;
             this.Entry.DisplayNumber = this.DisplayNumber;
@@ -112,7 +112,7 @@ namespace MovieList.ViewModels.Forms
             return Observable.Return(this.Entry);
         }
 
-        protected override IObservable<MovieSeriesEntry?> OnDelete()
+        protected override IObservable<FranchiseEntry?> OnDelete()
             => Observable.Return(this.Entry);
 
         protected override void CopyProperties()

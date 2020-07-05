@@ -43,11 +43,11 @@ namespace MovieList.Data.Services.Implementations
             {
                 var entry = series.Entry;
                 entry.SeriesId = series.Id;
-                entry.ParentSeriesId = entry.ParentSeries.Id;
+                entry.ParentFranchiseId = entry.ParentFranchise.Id;
                 entry.Id = (int)connection.Insert(entry, transaction);
-                entry.ParentSeries.Entries.Add(entry);
+                entry.ParentFranchise.Entries.Add(entry);
 
-                this.UpdateMergedDisplayNumbers(entry.ParentSeries);
+                this.UpdateMergedDisplayNumbers(entry.ParentFranchise);
             }
         }
 
@@ -115,7 +115,7 @@ namespace MovieList.Data.Services.Implementations
 
             if (series.Entry != null)
             {
-                this.DeleteMovieSeriesEntry(series.Entry, connection, transaction);
+                this.DeleteFranchiseEntry(series.Entry, connection, transaction);
             }
 
             connection.Delete(series, transaction);

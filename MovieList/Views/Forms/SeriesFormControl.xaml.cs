@@ -58,18 +58,18 @@ namespace MovieList.Views.Forms
             this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesButton)
+            this.BindCommand(this.ViewModel, vm => vm.GoToFranchise, v => v.GoToFranchiseButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.GoToMovieSeries.CanExecute
-                .BindTo(this, v => v.GoToMovieSeriesButton.Visibility, useHidden)
+            this.ViewModel.GoToFranchise.CanExecute
+                .BindTo(this, v => v.GoToFranchiseButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesArrowButton)
+            this.BindCommand(this.ViewModel, vm => vm.GoToFranchise, v => v.GoToFranchiseArrowButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.GoToMovieSeries.CanExecute
-                .BindTo(this, v => v.GoToMovieSeriesArrowButton.Visibility, useHidden)
+            this.ViewModel.GoToFranchise.CanExecute
+                .BindTo(this, v => v.GoToFranchiseArrowButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.GoToNext, v => v.GoToNextButton)
@@ -86,11 +86,11 @@ namespace MovieList.Views.Forms
                 .BindTo(this, v => v.GoToPreviousButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.CreateMovieSeries, v => v.CreateMovieSeriesButton)
+            this.BindCommand(this.ViewModel, vm => vm.CreateFranchise, v => v.CreateFranchiseButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.CreateMovieSeries.CanExecute
-                .BindTo(this, v => v.CreateMovieSeriesButton.Visibility)
+            this.ViewModel.CreateFranchise.CanExecute
+                .BindTo(this, v => v.CreateFranchiseButton.Visibility)
                 .DisposeWith(disposables);
 
             this.ViewModel.Delete.CanExecute

@@ -7,11 +7,11 @@ using ReactiveUI;
 
 namespace MovieList.Views.Forms
 {
-    public abstract class MovieSeriesEntryControlBase : ReactiveUserControl<MovieSeriesEntryViewModel> { }
+    public abstract class FranchiseEntryControlBase : ReactiveUserControl<FranchiseEntryViewModel> { }
 
-    public partial class MovieSeriesEntryControl : MovieSeriesEntryControlBase
+    public partial class FranchiseEntryControl : FranchiseEntryControlBase
     {
-        public MovieSeriesEntryControl()
+        public FranchiseEntryControl()
         {
             this.InitializeComponent();
 

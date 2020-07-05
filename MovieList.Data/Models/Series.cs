@@ -25,7 +25,7 @@ namespace MovieList.Data.Models
         public Kind Kind { get; set; } = null!;
 
         [Write(false)]
-        public MovieSeriesEntry? Entry { get; set; }
+        public FranchiseEntry? Entry { get; set; }
 
         [Write(false)]
         public IList<Title> Titles { get; set; } = new List<Title>();

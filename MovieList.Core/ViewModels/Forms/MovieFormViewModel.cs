@@ -20,7 +20,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MovieFormViewModel : MovieSeriesEntryFormBase<Movie, MovieFormViewModel>
+    public sealed class MovieFormViewModel : FranchiseEntryFormBase<Movie, MovieFormViewModel>
     {
         private readonly IEntityService<Movie> movieService;
 
@@ -48,7 +48,7 @@ namespace MovieList.ViewModels.Forms
 
             this.InitializeValueDependencies();
             this.CanDeleteWhenNotChanged();
-            this.CanCreateMovieSeries();
+            this.CanCreateFranchise();
             this.EnableChangeTracking();
         }
 

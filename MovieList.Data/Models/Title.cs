@@ -35,10 +35,10 @@ namespace MovieList.Data.Models
         [Write(false)]
         public SpecialEpisode? SpecialEpisode { get; set; }
 
-        public int? MovieSeriesId { get; set; }
+        public int? FranchiseId { get; set; }
 
         [Write(false)]
-        public MovieSeries? MovieSeries { get; set; }
+        public Franchise? Franchise { get; set; }
 
         public static string ToString(IEnumerable<Title> titles)
         {

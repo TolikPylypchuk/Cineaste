@@ -51,11 +51,11 @@ namespace MovieList.Views.Forms
             this.BindCommand(this.ViewModel, vm => vm.Close, v => v.CloseButton)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesButton)
+            this.BindCommand(this.ViewModel, vm => vm.GoToFranchise, v => v.GoToFranchiseButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.GoToMovieSeries.CanExecute
-                .BindTo(this, v => v.GoToMovieSeriesButton.Visibility, useHidden)
+            this.ViewModel.GoToFranchise.CanExecute
+                .BindTo(this, v => v.GoToFranchiseButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.GoToNext, v => v.GoToNextButton)

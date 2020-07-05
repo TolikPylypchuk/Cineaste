@@ -6,15 +6,15 @@ namespace MovieList.Data
 {
     public sealed class MovieList
     {
-        public MovieList(IEnumerable<Movie> movies, IEnumerable<Series> series, IEnumerable<MovieSeries> movieSeries)
+        public MovieList(IEnumerable<Movie> movies, IEnumerable<Series> series, IEnumerable<Franchise> franchise)
         {
             this.Movies = movies;
             this.Series = series;
-            this.MovieSeries = movieSeries;
+            this.Franchise = franchise;
         }
 
         public IEnumerable<Movie> Movies { get; }
         public IEnumerable<Series> Series { get; }
-        public IEnumerable<MovieSeries> MovieSeries { get; }
+        public IEnumerable<Franchise> Franchise { get; }
     }
 }

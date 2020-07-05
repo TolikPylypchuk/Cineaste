@@ -33,17 +33,17 @@ namespace MovieList.Data.Services.Implementations
         protected abstract void Update(TEntity entity, IDbConnection connection, IDbTransaction transaction);
         protected abstract void Delete(TEntity entity, IDbConnection connection, IDbTransaction transaction);
 
-        protected void DeleteMovieSeriesEntry(
-            MovieSeriesEntry movieSeriesEntry,
+        protected void DeleteFranchiseEntry(
+            FranchiseEntry franchiseEntry,
             IDbConnection connection,
             IDbTransaction transaction)
         {
-            connection.Delete(movieSeriesEntry, transaction);
+            connection.Delete(franchiseEntry, transaction);
 
-            var parentSeries = movieSeriesEntry.ParentSeries;
+            var parentFranchise = franchiseEntry.ParentFranchise;
 
-            foreach (var entry in parentSeries.Entries
-                .Where(entry => entry.SequenceNumber > movieSeriesEntry.SequenceNumber))
+            foreach (var entry in parentFranchise.Entries
+                .Where(entry => entry.SequenceNumber > franchiseEntry.SequenceNumber))
             {
                 entry.SequenceNumber--;
 
@@ -55,40 +55,40 @@ namespace MovieList.Data.Services.Implementations
                 connection.Update(entry, transaction);
             }
 
-            parentSeries.Entries.Remove(movieSeriesEntry);
+            parentFranchise.Entries.Remove(franchiseEntry);
 
-            if (parentSeries.Entries.Count == 0)
+            if (parentFranchise.Entries.Count == 0)
             {
-                connection.Delete(parentSeries, transaction);
+                connection.Delete(parentFranchise, transaction);
 
-                if (parentSeries.Entry != null)
+                if (parentFranchise.Entry != null)
                 {
-                    this.DeleteMovieSeriesEntry(parentSeries.Entry, connection, transaction);
+                    this.DeleteFranchiseEntry(parentFranchise.Entry, connection, transaction);
                 }
             } else
             {
-                this.UpdateMergedDisplayNumbers(movieSeriesEntry.MovieSeries ?? parentSeries);
+                this.UpdateMergedDisplayNumbers(franchiseEntry.Franchise ?? parentFranchise);
             }
         }
 
-        protected void UpdateMergedDisplayNumbers(MovieSeries movieSeries)
+        protected void UpdateMergedDisplayNumbers(Franchise franchise)
         {
-            if (movieSeries.Entry == null)
+            if (franchise.Entry == null)
             {
                 return;
             }
 
-            int maxDisplayNumber = movieSeries.Entries.Select(entry => entry.DisplayNumber).Max() ?? 0;
+            int maxDisplayNumber = franchise.Entries.Select(entry => entry.DisplayNumber).Max() ?? 0;
 
-            movieSeries.Entry.ParentSeries.Entries
+            franchise.Entry.ParentFranchise.Entries
                 .OrderBy(entry => entry.SequenceNumber)
-                .SkipWhile(entry => entry.SequenceNumber <= movieSeries.Entry.SequenceNumber)
-                .TakeWhile(entry => entry.MovieSeries != null && entry.MovieSeries.MergeDisplayNumbers)
+                .SkipWhile(entry => entry.SequenceNumber <= franchise.Entry.SequenceNumber)
+                .TakeWhile(entry => entry.Franchise != null && entry.Franchise.MergeDisplayNumbers)
                 .Aggregate(maxDisplayNumber + 1, this.UpdateMergedDisplayNumbers);
         }
 
-        private int UpdateMergedDisplayNumbers(int firstDisplayNumber, MovieSeriesEntry entry)
-            => entry.MovieSeries!.Entries
+        private int UpdateMergedDisplayNumbers(int firstDisplayNumber, FranchiseEntry entry)
+            => entry.Franchise!.Entries
                 .OrderBy(e => e.SequenceNumber)
                 .Aggregate(firstDisplayNumber, (num, e) =>
                 {

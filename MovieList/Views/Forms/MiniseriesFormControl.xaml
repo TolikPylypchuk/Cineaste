@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
-            <Button x:Name="GoToMovieSeriesButton" DockPanel.Dock="Left" HorizontalAlignment="Left"
+            <Button x:Name="GoToFranchiseButton" DockPanel.Dock="Left" HorizontalAlignment="Left"
                     Style="{StaticResource MaterialDesignIconButton}" Padding="0" Width="25" Height="25">
                 <m:PackIcon Kind="ChevronUp" Margin="0" Width="25" Height="25" />
             </Button>

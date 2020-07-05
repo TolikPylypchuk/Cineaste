@@ -129,8 +129,8 @@
   <data name="AddNewMovie" xml:space="preserve">
     <value>Add new movie</value>
   </data>
-  <data name="AddNewMovieSeries" xml:space="preserve">
-    <value>Add new movie series</value>
+  <data name="AddNewFranchise" xml:space="preserve">
+    <value>Add new franchise</value>
   </data>
   <data name="AddNewSeries" xml:space="preserve">
     <value>Add new series</value>
@@ -237,8 +237,8 @@
   <data name="CreateListTitle" xml:space="preserve">
     <value>Create a List</value>
   </data>
-  <data name="CreateMovieSeries" xml:space="preserve">
-    <value>Create movie series</value>
+  <data name="CreateFranchise" xml:space="preserve">
+    <value>Create franchise</value>
   </data>
   <data name="December" xml:space="preserve">
     <value>December</value>
@@ -267,12 +267,12 @@
   <data name="DeleteMovieQuestion" xml:space="preserve">
     <value>Are you sure you want to delete the movie?</value>
   </data>
-  <data name="DeleteMovieSeriesQuestion" xml:space="preserve">
-    <value>Are you sure you want to delete the movie series?
+  <data name="DeleteFranchiseQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete the franchise?
 This will detach all entries without deleting them.</value>
   </data>
-  <data name="DeleteMovieSeriesTitle" xml:space="preserve">
-    <value>Delete Movie Series</value>
+  <data name="DeleteFranchiseTitle" xml:space="preserve">
+    <value>Delete Franchise</value>
   </data>
   <data name="DeleteMovieTitle" xml:space="preserve">
     <value>Delete Movie</value>
@@ -322,8 +322,8 @@ This will detach all entries without deleting them.</value>
   <data name="FileExtensionDescription" xml:space="preserve">
     <value>Movie List</value>
   </data>
-  <data name="GoToMovieSeries" xml:space="preserve">
-    <value>Go to movie series</value>
+  <data name="GoToFranchise" xml:space="preserve">
+    <value>Go to franchise</value>
   </data>
   <data name="GoToSeries" xml:space="preserve">
     <value>Go to series</value>
@@ -421,16 +421,16 @@ This will detach all entries without deleting them.</value>
   <data name="MovieList" xml:space="preserve">
     <value>Movie List</value>
   </data>
-  <data name="MovieSeries" xml:space="preserve">
-    <value>Movie series</value>
+  <data name="Franchise" xml:space="preserve">
+    <value>Franchise</value>
   </data>
-  <data name="MovieSeriesAddExistingItem" xml:space="preserve">
+  <data name="FranchiseAddExistingItem" xml:space="preserve">
     <value>Add an existing item</value>
   </data>
-  <data name="MovieSeriesHasTitles" xml:space="preserve">
+  <data name="FranchiseHasTitles" xml:space="preserve">
     <value>Has titles</value>
   </data>
-  <data name="MovieSeriesShowInList" xml:space="preserve">
+  <data name="FranchiseShowInList" xml:space="preserve">
     <value>Show in the list</value>
   </data>
   <data name="NavigationList" xml:space="preserve">
@@ -451,8 +451,8 @@ This will detach all entries without deleting them.</value>
   <data name="NewMovie" xml:space="preserve">
     <value>New Movie</value>
   </data>
-  <data name="NewMovieSeries" xml:space="preserve">
-    <value>New Movie Series</value>
+  <data name="NewFranchise" xml:space="preserve">
+    <value>New Franchise</value>
   </data>
   <data name="NewSeason" xml:space="preserve">
     <value>New Season</value>

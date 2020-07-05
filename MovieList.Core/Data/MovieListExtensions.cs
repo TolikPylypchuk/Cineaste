@@ -12,13 +12,13 @@ namespace MovieList.Data
             => list.Movies.Select(movie => new MovieListItem(movie))
                 .Cast<ListItem>()
                 .Concat(list.Series.Select(series => new SeriesListItem(series)))
-                .Concat(list.MovieSeries.Select(movieSeries => new MovieSeriesListItem(movieSeries)))
+                .Concat(list.Franchise.Select(franchise => new FranchiseListItem(franchise)))
                 .ToList();
 
-        public static List<MovieSeriesEntry> ToEntries(this MovieList list)
-            => list.Movies.Select(movie => new MovieSeriesEntry { Movie = movie })
-                .Concat(list.Series.Select(series => new MovieSeriesEntry { Series = series }))
-                .Concat(list.MovieSeries.Select(movieSeries => new MovieSeriesEntry { MovieSeries = movieSeries }))
+        public static List<FranchiseEntry> ToEntries(this MovieList list)
+            => list.Movies.Select(movie => new FranchiseEntry { Movie = movie })
+                .Concat(list.Series.Select(series => new FranchiseEntry { Series = series }))
+                .Concat(list.Franchise.Select(franchise => new FranchiseEntry { Franchise = franchise }))
                 .ToList();
     }
 }

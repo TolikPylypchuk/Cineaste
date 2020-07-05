@@ -62,7 +62,7 @@ namespace MovieList.ViewModels
             this.AddOrUpdate = ReactiveCommand.Create<ListItem, ListItem>(this.OnAddOrUpdate);
             this.RemoveMovie = ReactiveCommand.Create<Movie>(this.OnRemoveMovie);
             this.RemoveSeries = ReactiveCommand.Create<Series>(this.OnRemoveSeries);
-            this.RemoveMovieSeries = ReactiveCommand.Create<MovieSeries>(this.OnRemoveMovieSeries);
+            this.RemoveFranchise = ReactiveCommand.Create<Franchise>(this.OnRemoveFranchise);
 
             this.AddOrUpdate.InvokeCommand(this.SelectItem);
         }
@@ -84,14 +84,14 @@ namespace MovieList.ViewModels
 
         public ReactiveCommand<Movie, Unit> RemoveMovie { get; }
         public ReactiveCommand<Series, Unit> RemoveSeries { get; }
-        public ReactiveCommand<MovieSeries, Unit> RemoveMovieSeries { get; }
+        public ReactiveCommand<Franchise, Unit> RemoveFranchise { get; }
 
-        public ListItem EntryToListItem(MovieSeriesEntry entry)
+        public ListItem EntryToListItem(FranchiseEntry entry)
             => entry.Movie != null
                 ? new MovieListItem(entry.Movie)
                 : entry.Series != null
                     ? (ListItem)new SeriesListItem(entry.Series)
-                    : new MovieSeriesListItem(entry.MovieSeries!);
+                    : new FranchiseListItem(entry.Franchise!);
 
         private bool OnSelectItem(ListItem? item)
         {
@@ -108,15 +108,15 @@ namespace MovieList.ViewModels
             {
                 list.AddOrUpdate(item);
 
-                var movieSeries = this.GetMovieSeries(item);
+                var franchise = this.GetFranchise(item);
 
-                if (movieSeries != null)
+                if (franchise != null)
                 {
-                    movieSeries.Entries
+                    franchise.Entries
                         .Select(this.EntryToListItem)
                         .ForEach(list.AddOrUpdate);
 
-                    this.UpdateParentSeries(movieSeries, list);
+                    this.UpdateParentFranchise(franchise, list);
                 }
             });
 
@@ -125,12 +125,12 @@ namespace MovieList.ViewModels
             return item;
         }
 
-        private MovieSeries? GetMovieSeries(ListItem item)
+        private Franchise? GetFranchise(ListItem item)
             => item switch
             {
-                MovieListItem movieItem when movieItem.Movie.Entry != null => movieItem.Movie.Entry.ParentSeries,
-                SeriesListItem seriesItem when seriesItem.Series.Entry != null => seriesItem.Series.Entry.ParentSeries,
-                MovieSeriesListItem movieSeriesItem => movieSeriesItem.MovieSeries,
+                MovieListItem movieItem when movieItem.Movie.Entry != null => movieItem.Movie.Entry.ParentFranchise,
+                SeriesListItem seriesItem when seriesItem.Series.Entry != null => seriesItem.Series.Entry.ParentFranchise,
+                FranchiseListItem franchiseItem => franchiseItem.Franchise,
                 _ => null
             };
 
@@ -142,7 +142,7 @@ namespace MovieList.ViewModels
 
                 if (movie.Entry != null)
                 {
-                    this.RemoveMovieSeriesEntry(movie.Entry, list);
+                    this.RemoveFranchiseEntry(movie.Entry, list);
                 }
             });
 
@@ -157,25 +157,25 @@ namespace MovieList.ViewModels
 
                 if (series.Entry != null)
                 {
-                    this.RemoveMovieSeriesEntry(series.Entry, list);
+                    this.RemoveFranchiseEntry(series.Entry, list);
                 }
             });
 
             this.Resort();
         }
 
-        private void OnRemoveMovieSeries(MovieSeries movieSeries)
+        private void OnRemoveFranchise(Franchise franchise)
         {
             this.source.Edit(list =>
             {
-                list.RemoveKey(new MovieSeriesListItem(movieSeries).Id);
+                list.RemoveKey(new FranchiseListItem(franchise).Id);
 
-                if (movieSeries.Entry != null)
+                if (franchise.Entry != null)
                 {
-                    this.RemoveMovieSeriesEntry(movieSeries.Entry, list);
+                    this.RemoveFranchiseEntry(franchise.Entry, list);
                 }
 
-                foreach (var entry in movieSeries.Entries)
+                foreach (var entry in franchise.Entries)
                 {
                     list.AddOrUpdate(this.EntryToListItem(entry));
                 }
@@ -184,25 +184,25 @@ namespace MovieList.ViewModels
             this.Resort();
         }
 
-        private void RemoveMovieSeriesEntry(MovieSeriesEntry movieSeriesEntry, ISourceUpdater<ListItem, string> list)
+        private void RemoveFranchiseEntry(FranchiseEntry franchiseEntry, ISourceUpdater<ListItem, string> list)
         {
-            var movieSeries = movieSeriesEntry.ParentSeries;
+            var franchise = franchiseEntry.ParentFranchise;
 
-            movieSeries.Entries
+            franchise.Entries
                 .OrderBy(entry => entry.SequenceNumber)
-                .SkipWhile(entry => entry.SequenceNumber < movieSeriesEntry.SequenceNumber)
+                .SkipWhile(entry => entry.SequenceNumber < franchiseEntry.SequenceNumber)
                 .Select(this.EntryToListItem)
                 .ForEach(list.AddOrUpdate);
 
-            this.UpdateParentSeries(movieSeries, list);
+            this.UpdateParentFranchise(franchise, list);
 
-            if (movieSeries.Entries.Count == 0 && movieSeries.ShowTitles)
+            if (franchise.Entries.Count == 0 && franchise.ShowTitles)
             {
-                list.RemoveKey(new MovieSeriesListItem(movieSeries).Id);
+                list.RemoveKey(new FranchiseListItem(franchise).Id);
 
-                if (movieSeries.Entry != null)
+                if (franchise.Entry != null)
                 {
-                    this.RemoveMovieSeriesEntry(movieSeries.Entry, list);
+                    this.RemoveFranchiseEntry(franchise.Entry, list);
                 }
             }
         }
@@ -210,13 +210,13 @@ namespace MovieList.ViewModels
         private void Resort()
             => this.resort.OnNext(Unit.Default);
 
-        private void UpdateParentSeries(MovieSeries movieSeries, ISourceUpdater<ListItem, string> list)
+        private void UpdateParentFranchise(Franchise franchise, ISourceUpdater<ListItem, string> list)
         {
-            movieSeries.Entry?.ParentSeries.Entries
+            franchise.Entry?.ParentFranchise.Entries
                 .OrderBy(entry => entry.SequenceNumber)
-                .SkipWhile(entry => entry.SequenceNumber <= movieSeries.Entry.SequenceNumber)
-                .TakeWhile(entry => entry.MovieSeries != null && entry.MovieSeries.MergeDisplayNumbers)
-                .SelectMany(entry => entry.MovieSeries!.Entries)
+                .SkipWhile(entry => entry.SequenceNumber <= franchise.Entry.SequenceNumber)
+                .TakeWhile(entry => entry.Franchise != null && entry.Franchise.MergeDisplayNumbers)
+                .SelectMany(entry => entry.Franchise!.Entries)
                 .Select(this.EntryToListItem)
                 .ForEach(list.AddOrUpdate);
         }

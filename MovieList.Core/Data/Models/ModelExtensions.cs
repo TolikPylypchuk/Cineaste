@@ -9,9 +9,9 @@ namespace MovieList.Data.Models
 {
     public static class ModelExtensions
     {
-        public static string GetNumberToDisplay(this MovieSeriesEntry? entry)
+        public static string GetNumberToDisplay(this FranchiseEntry? entry)
             => entry != null
-                ? entry.ParentSeries.IsLooselyConnected
+                ? entry.ParentFranchise.IsLooselyConnected
                     ? $"({entry.DisplayNumber})"
                     : entry.DisplayNumber?.ToString() ?? NoDisplayNumberPlaceholder
                 : String.Empty;
@@ -35,61 +35,61 @@ namespace MovieList.Data.Models
                     ? series.Kind.ColorForNotWatchedSeries
                     : series.Kind.ColorForNotReleasedSeries;
 
-        public static string GetActiveColor(this MovieSeries movieSeries)
+        public static string GetActiveColor(this Franchise franchise)
         {
-            var firstEntry = movieSeries.GetFirstEntry();
+            var firstEntry = franchise.GetFirstEntry();
             return firstEntry != null
                 ? firstEntry.Movie?.GetActiveColor() ?? firstEntry.Series!.GetActiveColor()
                 : String.Empty;
         }
 
-        public static Title? GetTitle(this MovieSeries movieSeries)
-            => movieSeries.Titles.Count > 0 ? movieSeries.Title! : movieSeries.GetFirstEntry()?.GetTitle();
+        public static Title? GetTitle(this Franchise franchise)
+            => franchise.Titles.Count > 0 ? franchise.Title! : franchise.GetFirstEntry()?.GetTitle();
 
-        public static Title? GetOriginalTitle(this MovieSeries movieSeries)
-            => movieSeries.Titles.Count > 0
-                ? movieSeries.OriginalTitle!
-                : movieSeries.GetFirstEntry()?.GetOriginalTitle();
+        public static Title? GetOriginalTitle(this Franchise franchise)
+            => franchise.Titles.Count > 0
+                ? franchise.OriginalTitle!
+                : franchise.GetFirstEntry()?.GetOriginalTitle();
 
-        public static Title? GetListTitle(this MovieSeries movieSeries)
-            => movieSeries.ShowTitles ? movieSeries.Title! : movieSeries.GetFirstEntry()?.GetTitle();
+        public static Title? GetListTitle(this Franchise franchise)
+            => franchise.ShowTitles ? franchise.Title! : franchise.GetFirstEntry()?.GetTitle();
 
-        public static Title? GetTitle(this MovieSeriesEntry entry)
-            => entry.Movie?.Title ?? entry.Series?.Title ?? entry.MovieSeries!.GetTitle();
+        public static Title? GetTitle(this FranchiseEntry entry)
+            => entry.Movie?.Title ?? entry.Series?.Title ?? entry.Franchise!.GetTitle();
 
-        public static Title? GetOriginalTitle(this MovieSeriesEntry entry)
-            => entry.Movie?.OriginalTitle ?? entry.Series?.OriginalTitle ?? entry.MovieSeries!.GetOriginalTitle();
+        public static Title? GetOriginalTitle(this FranchiseEntry entry)
+            => entry.Movie?.OriginalTitle ?? entry.Series?.OriginalTitle ?? entry.Franchise!.GetOriginalTitle();
 
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
-        public static MovieSeriesEntry? GetFirstEntry(this MovieSeries movieSeries)
+        public static FranchiseEntry? GetFirstEntry(this Franchise franchise)
         {
-            var firstEntry = movieSeries.Entries.OrderBy(entry => entry.SequenceNumber).FirstOrDefault();
+            var firstEntry = franchise.Entries.OrderBy(entry => entry.SequenceNumber).FirstOrDefault();
             return firstEntry != null
-                ? firstEntry.MovieSeries == null ? firstEntry : firstEntry.MovieSeries.GetFirstEntry()
+                ? firstEntry.Franchise == null ? firstEntry : firstEntry.Franchise.GetFirstEntry()
                 : null;
         }
 
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
-        public static MovieSeriesEntry? GetLastEntry(this MovieSeries movieSeries)
+        public static FranchiseEntry? GetLastEntry(this Franchise franchise)
         {
-            var lastEntry = movieSeries.Entries.OrderByDescending(entry => entry.SequenceNumber).FirstOrDefault();
+            var lastEntry = franchise.Entries.OrderByDescending(entry => entry.SequenceNumber).FirstOrDefault();
             return lastEntry != null
-                ? lastEntry.MovieSeries == null ? lastEntry : lastEntry.MovieSeries.GetLastEntry()
+                ? lastEntry.Franchise == null ? lastEntry : lastEntry.Franchise.GetLastEntry()
                 : null;
         }
 
-        public static MovieSeries GetRootSeries(this MovieSeries movieSeries)
-            => movieSeries.Entry == null ? movieSeries : movieSeries.Entry.ParentSeries.GetRootSeries();
+        public static Franchise GetRootSeries(this Franchise franchise)
+            => franchise.Entry == null ? franchise : franchise.Entry.ParentFranchise.GetRootSeries();
 
-        public static bool IsDescendantOf(this MovieSeries? movieSeries, MovieSeries potentialAncestor)
-            => movieSeries != null &&
-                (movieSeries.Id == potentialAncestor.Id ||
-                    (movieSeries.Entry?.ParentSeries.IsDescendantOf(potentialAncestor) ?? false));
+        public static bool IsDescendantOf(this Franchise? franchise, Franchise potentialAncestor)
+            => franchise != null &&
+                (franchise.Id == potentialAncestor.Id ||
+                    (franchise.Entry?.ParentFranchise.IsDescendantOf(potentialAncestor) ?? false));
 
-        public static bool IsStrictDescendantOf(this MovieSeries? movieSeries, MovieSeries potentialAncestor)
-            => movieSeries != potentialAncestor && movieSeries.IsDescendantOf(potentialAncestor);
+        public static bool IsStrictDescendantOf(this Franchise? franchise, Franchise potentialAncestor)
+            => franchise != potentialAncestor && franchise.IsDescendantOf(potentialAncestor);
 
-        public static IEnumerable<MovieSeries> GetAllAncestors(this MovieSeries? series)
+        public static IEnumerable<Franchise> GetAllAncestors(this Franchise? series)
         {
             if (series == null)
             {
@@ -98,7 +98,7 @@ namespace MovieList.Data.Models
 
             if (series.Entry != null)
             {
-                foreach (var ancestor in series.Entry.ParentSeries.GetAllAncestors())
+                foreach (var ancestor in series.Entry.ParentFranchise.GetAllAncestors())
                 {
                     yield return ancestor;
                 }
@@ -107,29 +107,29 @@ namespace MovieList.Data.Models
             yield return series;
         }
 
-        public static (MovieSeries, MovieSeries) GetDistinctAncestors(this MovieSeries series1, MovieSeries series2)
+        public static (Franchise, Franchise) GetDistinctAncestors(this Franchise series1, Franchise series2)
             => series1.GetAllAncestors()
                 .Zip(series2.GetAllAncestors(), (a, b) => (Series1: a, Series2: b))
                 .First(ancestors => ancestors.Series1.Id != ancestors.Series2.Id);
 
-        public static int GetStartYear(this MovieSeries movieSeries)
-            => movieSeries.GetFirstEntry()?.GetStartYear() ?? default;
+        public static int GetStartYear(this Franchise franchise)
+            => franchise.GetFirstEntry()?.GetStartYear() ?? default;
 
-        public static int GetStartYear(this MovieSeriesEntry entry)
-            => entry.Movie?.Year ?? entry.Series?.StartYear ?? entry.MovieSeries!.GetStartYear();
+        public static int GetStartYear(this FranchiseEntry entry)
+            => entry.Movie?.Year ?? entry.Series?.StartYear ?? entry.Franchise!.GetStartYear();
 
-        public static int GetEndYear(this MovieSeries movieSeries)
-            => movieSeries.GetLastEntry()?.GetEndYear() ?? default;
+        public static int GetEndYear(this Franchise franchise)
+            => franchise.GetLastEntry()?.GetEndYear() ?? default;
 
-        public static int GetEndYear(this MovieSeriesEntry entry)
-            => entry.Movie?.Year ?? entry.Series?.EndYear ?? entry.MovieSeries!.GetEndYear();
+        public static int GetEndYear(this FranchiseEntry entry)
+            => entry.Movie?.Year ?? entry.Series?.EndYear ?? entry.Franchise!.GetEndYear();
 
-        public static string GetYears(this MovieSeriesEntry entry)
+        public static string GetYears(this FranchiseEntry entry)
             => entry.Movie != null
                 ? entry.Movie.Year.ToString()
                 : entry.Series != null
                     ? entry.Series.GetYears()
-                    : entry.MovieSeries!.GetYears();
+                    : entry.Franchise!.GetYears();
         
         public static string GetYears(this Series series)
         {
@@ -138,10 +138,10 @@ namespace MovieList.Data.Models
             return startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";
         }
 
-        public static string GetYears(this MovieSeries movieSeries)
+        public static string GetYears(this Franchise franchise)
         {
-            int startYear = movieSeries.GetStartYear();
-            int endYear = movieSeries.GetEndYear();
+            int startYear = franchise.GetStartYear();
+            int endYear = franchise.GetEndYear();
             return startYear == default
                 ? "-"
                 : startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";

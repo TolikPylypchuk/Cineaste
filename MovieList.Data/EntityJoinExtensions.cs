@@ -45,7 +45,7 @@ namespace MovieList.Data
                     return movie;
                 });
 
-        public static IEnumerable<Movie> Join(this IEnumerable<Movie> movies, IEnumerable<MovieSeriesEntry> entries)
+        public static IEnumerable<Movie> Join(this IEnumerable<Movie> movies, IEnumerable<FranchiseEntry> entries)
             => movies.GroupJoin(
                 entries.Where(entry => entry.MovieId != null),
                 movie => movie.Id,
@@ -120,7 +120,9 @@ namespace MovieList.Data
                     return series;
                 });
 
-        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<SpecialEpisode> episodes)
+        public static IEnumerable<Series> Join(
+            this IEnumerable<Series> seriesList,
+            IEnumerable<SpecialEpisode> episodes)
             => seriesList.GroupJoin(
                 episodes,
                 series => series.Id,
@@ -138,7 +140,7 @@ namespace MovieList.Data
                     return series;
                 });
 
-        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<MovieSeriesEntry> entries)
+        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<FranchiseEntry> entries)
             => seriesList.GroupJoin(
                 entries.Where(entry => entry.SeriesId != null),
                 movie => movie.Id,
@@ -193,7 +195,9 @@ namespace MovieList.Data
                     return season;
                 });
 
-        public static IEnumerable<SpecialEpisode> Join(this IEnumerable<SpecialEpisode> episodes, IEnumerable<Title> titles)
+        public static IEnumerable<SpecialEpisode> Join(
+            this IEnumerable<SpecialEpisode> episodes,
+            IEnumerable<Title> titles)
             => episodes.GroupJoin(
                 titles.Where(title => title.SpecialEpisodeId != null),
                 episode => episode.Id,
@@ -211,58 +215,58 @@ namespace MovieList.Data
                     return episode;
                 });
 
-        public static IEnumerable<MovieSeries> Join(this IEnumerable<MovieSeries> movieSeriesList, IEnumerable<Title> titles)
-            => movieSeriesList.GroupJoin(
-                titles.Where(title => title.MovieSeriesId != null),
-                movieSeries => movieSeries.Id,
-                title => title.MovieSeriesId,
-                (movieSeries, movieSeriesTitles) =>
+        public static IEnumerable<Franchise> Join(this IEnumerable<Franchise> franchises, IEnumerable<Title> titles)
+            => franchises.GroupJoin(
+                titles.Where(title => title.FranchiseId != null),
+                franchise => franchise.Id,
+                title => title.FranchiseId,
+                (franchise, franchiseTitles) =>
                 {
-                    movieSeries.Titles = movieSeriesTitles.ToList();
+                    franchise.Titles = franchiseTitles.ToList();
 
-                    foreach (var title in movieSeries.Titles)
+                    foreach (var title in franchise.Titles)
                     {
-                        title.MovieSeries = movieSeries;
-                        title.MovieSeriesId = movieSeries.Id;
+                        title.Franchise = franchise;
+                        title.FranchiseId = franchise.Id;
                     }
 
-                    return movieSeries;
+                    return franchise;
                 });
 
-        public static IEnumerable<MovieSeries> Join(this IEnumerable<MovieSeries> movieSeriesList, IList<MovieSeriesEntry> entries)
-            => movieSeriesList
+        public static IEnumerable<Franchise> Join(this IEnumerable<Franchise> franchises, IList<FranchiseEntry> entries)
+            => franchises
                 .GroupJoin(
-                    entries.Where(entry => entry.MovieSeriesId != null),
-                    movieSeries => movieSeries.Id,
-                    entry => entry.MovieSeriesId,
-                    (movieSeries, movieSeriesEntries) =>
+                    entries.Where(entry => entry.FranchiseId != null),
+                    franchise => franchise.Id,
+                    entry => entry.FranchiseId,
+                    (franchise, franchiseEntries) =>
                     {
-                        var entry = movieSeriesEntries.FirstOrDefault();
+                        var entry = franchiseEntries.FirstOrDefault();
 
                         if (entry != null)
                         {
-                            movieSeries.Entry = entry;
-                            entry.MovieSeries = movieSeries;
-                            entry.MovieSeriesId = movieSeries.Id;
+                            franchise.Entry = entry;
+                            entry.Franchise = franchise;
+                            entry.FranchiseId = franchise.Id;
                         }
 
-                        return movieSeries;
+                        return franchise;
                     })
                 .GroupJoin(
                     entries,
-                    movieSeries => movieSeries.Id,
-                    entry => entry.ParentSeriesId,
-                    (movieSeries, entriesOfMovieSeries) =>
+                    franchise => franchise.Id,
+                    entry => entry.ParentFranchiseId,
+                    (franchise, franchiseEntries) =>
                     {
-                        movieSeries.Entries = entriesOfMovieSeries.ToList();
+                        franchise.Entries = franchiseEntries.ToList();
 
-                        foreach (var entry in movieSeries.Entries)
+                        foreach (var entry in franchise.Entries)
                         {
-                            entry.ParentSeries = movieSeries;
-                            entry.ParentSeriesId = movieSeries.Id;
+                            entry.ParentFranchise = franchise;
+                            entry.ParentFranchiseId = franchise.Id;
                         }
 
-                        return movieSeries;
+                        return franchise;
                     });
     }
 }

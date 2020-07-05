@@ -5,17 +5,17 @@ using MovieList.Data.Models;
 
 namespace MovieList.Comparers
 {
-    public class MovieSeriesEntryTitleComparer : NullableComparerBase<MovieSeriesEntry>
+    public class FranchiseEntryTitleComparer : NullableComparerBase<FranchiseEntry>
     {
         private readonly TitleComparer titleComparer;
 
-        public MovieSeriesEntryTitleComparer(
+        public FranchiseEntryTitleComparer(
             CultureInfo culture,
             NullComparison nullComparison = NullComparison.NullsFirst)
             : base(nullComparison)
             => this.titleComparer = new TitleComparer(culture);
 
-        protected override int CompareSafe(MovieSeriesEntry left, MovieSeriesEntry right)
+        protected override int CompareSafe(FranchiseEntry left, FranchiseEntry right)
         {
             int result = this.titleComparer.Compare(this.GetTitleName(left), this.GetTitleName(right));
 
@@ -29,7 +29,7 @@ namespace MovieList.Comparers
             return result != 0 ? result : left.GetEndYear().CompareTo(right.GetEndYear());
         }
 
-        private string GetTitleName(MovieSeriesEntry entry)
+        private string GetTitleName(FranchiseEntry entry)
             => entry.GetTitle()?.Name ?? String.Empty;
     }
 }

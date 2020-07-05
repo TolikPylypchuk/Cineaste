@@ -11,7 +11,7 @@ namespace MovieList.ListItems
     {
         private protected ListItem(
             string id,
-            MovieSeriesEntry? entry,
+            FranchiseEntry? entry,
             string title,
             string originalTitle,
             string year,
@@ -31,7 +31,7 @@ namespace MovieList.ListItems
 
         public string Id { get; }
 
-        public abstract MovieSeriesEntry? Entry { get; }
+        public abstract FranchiseEntry? Entry { get; }
 
         [Reactive]
         public string DisplayNumber { get; set; }

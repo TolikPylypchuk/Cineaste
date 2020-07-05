@@ -97,11 +97,11 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add new movie series.
+        ///   Looks up a localized string similar to Add new franchise.
         /// </summary>
-        public static string AddNewMovieSeries {
+        public static string AddNewFranchise {
             get {
-                return ResourceManager.GetString("AddNewMovieSeries", resourceCulture);
+                return ResourceManager.GetString("AddNewFranchise", resourceCulture);
             }
         }
         
@@ -421,11 +421,11 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create movie series.
+        ///   Looks up a localized string similar to Create franchise.
         /// </summary>
-        public static string CreateMovieSeries {
+        public static string CreateFranchise {
             get {
-                return ResourceManager.GetString("CreateMovieSeries", resourceCulture);
+                return ResourceManager.GetString("CreateFranchise", resourceCulture);
             }
         }
         
@@ -511,21 +511,21 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete the movie series?
+        ///   Looks up a localized string similar to Are you sure you want to delete the franchise?
         ///This will detach all entries without deleting them..
         /// </summary>
-        public static string DeleteMovieSeriesQuestion {
+        public static string DeleteFranchiseQuestion {
             get {
-                return ResourceManager.GetString("DeleteMovieSeriesQuestion", resourceCulture);
+                return ResourceManager.GetString("DeleteFranchiseQuestion", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete Movie Series.
+        ///   Looks up a localized string similar to Delete Franchise.
         /// </summary>
-        public static string DeleteMovieSeriesTitle {
+        public static string DeleteFranchiseTitle {
             get {
-                return ResourceManager.GetString("DeleteMovieSeriesTitle", resourceCulture);
+                return ResourceManager.GetString("DeleteFranchiseTitle", resourceCulture);
             }
         }
         
@@ -674,11 +674,11 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go to movie series.
+        ///   Looks up a localized string similar to Go to franchise.
         /// </summary>
-        public static string GoToMovieSeries {
+        public static string GoToFranchise {
             get {
-                return ResourceManager.GetString("GoToMovieSeries", resourceCulture);
+                return ResourceManager.GetString("GoToFranchise", resourceCulture);
             }
         }
         
@@ -971,38 +971,38 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Movie series.
+        ///   Looks up a localized string similar to Franchise.
         /// </summary>
-        public static string MovieSeries {
+        public static string Franchise {
             get {
-                return ResourceManager.GetString("MovieSeries", resourceCulture);
+                return ResourceManager.GetString("Franchise", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Add an existing item.
         /// </summary>
-        public static string MovieSeriesAddExistingItem {
+        public static string FranchiseAddExistingItem {
             get {
-                return ResourceManager.GetString("MovieSeriesAddExistingItem", resourceCulture);
+                return ResourceManager.GetString("FranchiseAddExistingItem", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Has titles.
         /// </summary>
-        public static string MovieSeriesHasTitles {
+        public static string FranchiseHasTitles {
             get {
-                return ResourceManager.GetString("MovieSeriesHasTitles", resourceCulture);
+                return ResourceManager.GetString("FranchiseHasTitles", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Show in the list.
         /// </summary>
-        public static string MovieSeriesShowInList {
+        public static string FranchiseShowInList {
             get {
-                return ResourceManager.GetString("MovieSeriesShowInList", resourceCulture);
+                return ResourceManager.GetString("FranchiseShowInList", resourceCulture);
             }
         }
         
@@ -1061,11 +1061,11 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Movie Series.
+        ///   Looks up a localized string similar to New Franchise.
         /// </summary>
-        public static string NewMovieSeries {
+        public static string NewFranchise {
             get {
-                return ResourceManager.GetString("NewMovieSeries", resourceCulture);
+                return ResourceManager.GetString("NewFranchise", resourceCulture);
             }
         }
         

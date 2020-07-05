@@ -21,7 +21,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MiniseriesFormViewModel : MovieSeriesEntryFormBase<Series, MiniseriesFormViewModel>
+    public sealed class MiniseriesFormViewModel : FranchiseEntryFormBase<Series, MiniseriesFormViewModel>
     {
         private readonly IEntityService<Series> seriesService;
         private readonly ISettingsService settingsService;
@@ -55,7 +55,7 @@ namespace MovieList.ViewModels.Forms
             this.ConvertToSeries = ReactiveCommand.Create(() => { });
 
             this.CanDeleteWhenNotChanged();
-            this.CanCreateMovieSeries();
+            this.CanCreateFranchise();
             this.EnableChangeTracking();
         }
 

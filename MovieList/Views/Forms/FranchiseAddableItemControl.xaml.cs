@@ -6,11 +6,11 @@ using ReactiveUI;
 
 namespace MovieList.Views.Forms
 {
-    public abstract class MovieSeriesAddableItemControlBase : ReactiveUserControl<MovieSeriesAddableItemViewModel> { }
+    public abstract class FranchiseAddableItemControlBase : ReactiveUserControl<FranchiseAddableItemViewModel> { }
 
-    public partial class MovieSeriesAddableItemControl : MovieSeriesAddableItemControlBase
+    public partial class FranchiseAddableItemControl : FranchiseAddableItemControlBase
     {
-        public MovieSeriesAddableItemControl()
+        public FranchiseAddableItemControl()
         {
             this.InitializeComponent();
 

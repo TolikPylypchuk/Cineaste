@@ -31,10 +31,10 @@ namespace MovieList.ViewModels
         private readonly CompositeDisposable sideViewModelSecondarySubscriptions = new CompositeDisposable();
         private readonly BehaviorSubject<bool> areUnsavedChangesPresentSubject = new BehaviorSubject<bool>(false);
 
-        private readonly SourceList<MovieSeriesEntry> movieSeriesAddableItemsSource =
-            new SourceList<MovieSeriesEntry>();
+        private readonly SourceList<FranchiseEntry> franchiseAddableItemsSource =
+            new SourceList<FranchiseEntry>();
 
-        private readonly ReadOnlyObservableCollection<MovieSeriesEntry> movieSeriesAddableItems;
+        private readonly ReadOnlyObservableCollection<FranchiseEntry> franchiseAddableItems;
 
         public FileMainContentViewModel(string fileName, ReadOnlyObservableCollection<Kind> kinds)
         {
@@ -43,16 +43,16 @@ namespace MovieList.ViewModels
 
             this.List = new ListViewModel(fileName, kinds);
 
-            this.movieSeriesAddableItemsSource.Connect()
-                .Bind(out this.movieSeriesAddableItems)
+            this.franchiseAddableItemsSource.Connect()
+                .Bind(out this.franchiseAddableItems)
                 .Subscribe();
 
             this.WhenAnyValue(vm => vm.List.MovieList)
                 .WhereNotNull()
                 .Select(list => list.ToEntries())
                 .Select(entries => entries.Where(entry =>
-                        entry.Movie?.Entry == null && entry.Series?.Entry == null && entry.MovieSeries?.Entry == null))
-                .Subscribe(this.movieSeriesAddableItemsSource.AddRange);
+                        entry.Movie?.Entry == null && entry.Series?.Entry == null && entry.Franchise?.Entry == null))
+                .Subscribe(this.franchiseAddableItemsSource.AddRange);
 
             this.areUnsavedChangesPresentSubject.ToPropertyEx(this, vm => vm.AreUnsavedChangesPresent);
 
@@ -79,8 +79,8 @@ namespace MovieList.ViewModels
 
         public string FileName { get; }
 
-        public ReadOnlyObservableCollection<MovieSeriesEntry> MovieSeriesAddableItems
-            => this.movieSeriesAddableItems;
+        public ReadOnlyObservableCollection<FranchiseEntry> FranchiseAddableItems
+            => this.franchiseAddableItems;
 
         public ReadOnlyObservableCollection<Kind> Kinds { get; }
 
@@ -127,8 +127,8 @@ namespace MovieList.ViewModels
                     this.CreateSeriesForm(seriesItem.Series),
                 SeriesListItem seriesItem when seriesItem.Series.IsMiniseries =>
                     this.CreateMiniseriesForm(seriesItem.Series),
-                MovieSeriesListItem movieSeriesItem =>
-                    this.CreateMovieSeriesForm(movieSeriesItem.MovieSeries),
+                FranchiseListItem franchiseItem =>
+                    this.CreateFranchiseForm(franchiseItem.Franchise),
                 _ =>
                     throw new NotSupportedException("List item type not supported")
             };
@@ -227,19 +227,19 @@ namespace MovieList.ViewModels
             return form;
         }
 
-        private MovieSeriesFormViewModel CreateMovieSeriesForm(MovieSeries movieSeries)
+        private FranchiseFormViewModel CreateFranchiseForm(Franchise franchise)
         {
-            this.Log().Debug($"Creating a form for movie series: {movieSeries}");
+            this.Log().Debug($"Creating a form for franchise: {franchise}");
 
-            var form = new MovieSeriesFormViewModel(movieSeries, this.FileName, this.MovieSeriesAddableItems);
-            var attachedEntries = new List<MovieSeriesEntry>();
-            var detachedEntries = new List<MovieSeriesEntry>();
+            var form = new FranchiseFormViewModel(franchise, this.FileName, this.FranchiseAddableItems);
+            var attachedEntries = new List<FranchiseEntry>();
+            var detachedEntries = new List<FranchiseEntry>();
 
             this.SubscribeToCommonCommands(
                 form,
-                this.List.RemoveMovieSeries,
-                ms => new MovieSeriesListItem(ms),
-                e => e.MovieSeries = form.MovieSeries);
+                this.List.RemoveFranchise,
+                f => new FranchiseListItem(f),
+                e => e.Franchise = form.Franchise);
 
             form.Save
                 .Discard()
@@ -254,7 +254,7 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.SelectEntry
-                .SubscribeAsync(this.GoToMovieSeriesEntry)
+                .SubscribeAsync(this.GoToFranchiseEntry)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.DetachEntry
@@ -266,20 +266,20 @@ namespace MovieList.ViewModels
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.AddMovie
-                .Select(displayNumber => this.CreateMovieForMovieSeries(form.MovieSeries, displayNumber))
+                .Select(displayNumber => this.CreateMovieForFranchise(form.Franchise, displayNumber))
                 .Select(movie => new MovieListItem(movie))
                 .InvokeCommand<ListItem>(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.AddSeries
-                .Select(displayNumber => this.CreateSeriesForMovieSeries(form.MovieSeries, displayNumber))
+                .Select(displayNumber => this.CreateSeriesForFranchise(form.Franchise, displayNumber))
                 .Select(series => new SeriesListItem(series))
                 .InvokeCommand<ListItem>(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
-            form.AddMovieSeries
-                .Select(displayNumber => this.CreateMovieSeriesForMovieSeries(form.MovieSeries, displayNumber))
-                .Select(ms => new MovieSeriesListItem(ms))
+            form.AddFranchise
+                .Select(displayNumber => this.CreateFranchiseForFranchise(form.Franchise, displayNumber))
+                .Select(f => new FranchiseListItem(f))
                 .InvokeCommand<ListItem>(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
@@ -294,37 +294,37 @@ namespace MovieList.ViewModels
             return form;
         }
 
-        private IObservable<Unit> AttachEntries(List<MovieSeriesEntry> entries)
+        private IObservable<Unit> AttachEntries(List<FranchiseEntry> entries)
             => entries.Count == 0
                 ? Observable.Return(Unit.Default)
                 : entries
                     .Select(entry => this.List.AddOrUpdate
                         .Execute(this.List.EntryToListItem(entry))
                         .Do(_ => this.RemoveSameEntry(
-                            this.movieSeriesAddableItemsSource.Items,
+                            this.franchiseAddableItemsSource.Items,
                             entry,
-                            this.movieSeriesAddableItemsSource.RemoveMany)))
+                            this.franchiseAddableItemsSource.RemoveMany)))
                     .ForkJoin()
                     .Discard();
 
-        private IObservable<Unit> DetachEntries(List<MovieSeriesEntry> entries)
+        private IObservable<Unit> DetachEntries(List<FranchiseEntry> entries)
             => entries.Count == 0
                 ? Observable.Return(Unit.Default)
                 : entries
                     .Do(this.ClearEntryConnection)
                     .Select(entry => this.List.AddOrUpdate
                         .Execute(this.List.EntryToListItem(entry))
-                        .Do(_ => this.movieSeriesAddableItemsSource.Add(entry)))
+                        .Do(_ => this.franchiseAddableItemsSource.Add(entry)))
                     .ForkJoin()
                     .Discard();
 
         private void SubscribeToCommonCommands<TModel, TForm>(
-            MovieSeriesEntryFormBase<TModel, TForm> form,
+            FranchiseEntryFormBase<TModel, TForm> form,
             ReactiveCommand<TModel, Unit> removeFromList,
             Func<TModel, ListItem> listItemSelector,
-            Action<MovieSeriesEntry> entryRelationSetter)
+            Action<FranchiseEntry> entryRelationSetter)
             where TModel : class
-            where TForm : MovieSeriesEntryFormBase<TModel, TForm>
+            where TForm : FranchiseEntryFormBase<TModel, TForm>
         {
             form.Save
                 .Select(listItemSelector)
@@ -353,40 +353,40 @@ namespace MovieList.ViewModels
                 .InvokeCommand(form.Close)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
-            form.GoToMovieSeries
-                .SubscribeAsync(this.GoToMovieSeries)
+            form.GoToFranchise
+                .SubscribeAsync(this.GoToFranchise)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
             form.GoToNext
                 .Merge(form.GoToPrevious)
-                .SubscribeAsync(this.GoToMovieSeriesEntry)
+                .SubscribeAsync(this.GoToFranchiseEntry)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
-            form.CreateMovieSeries
+            form.CreateFranchise
                 .Select(_ =>
                 {
-                    var movieSeries = new MovieSeries();
-                    var entry = new MovieSeriesEntry
+                    var franchise = new Franchise();
+                    var entry = new FranchiseEntry
                     {
                         SequenceNumber = 1,
                         DisplayNumber = 1,
-                        ParentSeries = movieSeries
+                        ParentFranchise = franchise
                     };
 
                     entryRelationSetter(entry);
-                    movieSeries.Entries.Add(entry);
+                    franchise.Entries.Add(entry);
 
-                    return movieSeries;
+                    return franchise;
                 })
-                .Select(ms => new MovieSeriesListItem(ms))
+                .Select(f => new FranchiseListItem(f))
                 .InvokeCommand<ListItem>(this.SelectItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
-            form.GoToMovieSeries
+            form.GoToFranchise
                 .Discard()
                 .Merge(form.GoToNext.Discard())
                 .Merge(form.GoToPrevious.Discard())
-                .Merge(form.CreateMovieSeries)
+                .Merge(form.CreateFranchise)
                 .InvokeCommand(this.List.ForceSelectedItem)
                 .DisposeWith(this.sideViewModelSubscriptions);
 
@@ -519,17 +519,17 @@ namespace MovieList.ViewModels
             periodForm.PosterUrl = miniseriesForm.PeriodForm.PosterUrl;
         }
 
-        private IObservable<Unit> GoToMovieSeries(MovieSeries movieSeries)
+        private IObservable<Unit> GoToFranchise(Franchise franchise)
         {
             this.ClearSubscriptions();
 
-            this.SideViewModel = this.CreateMovieSeriesForm(movieSeries);
+            this.SideViewModel = this.CreateFranchiseForm(franchise);
 
-            return this.SelectItem.Execute(new MovieSeriesListItem(movieSeries))
+            return this.SelectItem.Execute(new FranchiseListItem(franchise))
                 .DoAsync(this.List.ForceSelectedItem.Execute);
         }
 
-        private IObservable<Unit> GoToMovieSeriesEntry(MovieSeriesEntry entry)
+        private IObservable<Unit> GoToFranchiseEntry(FranchiseEntry entry)
         {
             var listItem = this.List.EntryToListItem(entry);
 
@@ -539,9 +539,9 @@ namespace MovieList.ViewModels
                 .DoAsync(this.List.ForceSelectedItem.Execute);
         }
 
-        private Movie CreateMovieForMovieSeries(MovieSeries parentSeries, int displayNumber)
+        private Movie CreateMovieForFranchise(Franchise parentFranchise, int displayNumber)
         {
-            var entry = this.CreateEntryForMovieSeries(parentSeries, displayNumber);
+            var entry = this.CreateEntryForFranchise(parentFranchise, displayNumber);
 
             var movie = new Movie
             {
@@ -560,9 +560,9 @@ namespace MovieList.ViewModels
             return movie;
         }
 
-        private Series CreateSeriesForMovieSeries(MovieSeries parentSeries, int displayNumber)
+        private Series CreateSeriesForFranchise(Franchise parentFranchise, int displayNumber)
         {
-            var entry = this.CreateEntryForMovieSeries(parentSeries, displayNumber);
+            var entry = this.CreateEntryForFranchise(parentFranchise, displayNumber);
 
             var series = new Series
             {
@@ -580,30 +580,30 @@ namespace MovieList.ViewModels
             return series;
         }
 
-        private MovieSeries CreateMovieSeriesForMovieSeries(MovieSeries parentSeries, int displayNumber)
+        private Franchise CreateFranchiseForFranchise(Franchise parentFranchise, int displayNumber)
         {
-            var entry = this.CreateEntryForMovieSeries(parentSeries, displayNumber);
+            var entry = this.CreateEntryForFranchise(parentFranchise, displayNumber);
 
-            var movieSeries = new MovieSeries { Entry = entry };
+            var franchise = new Franchise { Entry = entry };
 
-            entry.MovieSeries = movieSeries;
+            entry.Franchise = franchise;
 
-            return movieSeries;
+            return franchise;
         }
 
-        private MovieSeriesEntry CreateEntryForMovieSeries(MovieSeries parentSeries, int displayNumber)
-            => new MovieSeriesEntry
+        private FranchiseEntry CreateEntryForFranchise(Franchise parentFranchise, int displayNumber)
+            => new FranchiseEntry
             {
-                ParentSeries = parentSeries,
-                SequenceNumber = parentSeries.Entries.Count == 0
+                ParentFranchise = parentFranchise,
+                SequenceNumber = parentFranchise.Entries.Count == 0
                     ? 1
-                    : parentSeries.Entries.Select(e => e.SequenceNumber).Max() + 1,
-                DisplayNumber = parentSeries.Entries.Count == 0
+                    : parentFranchise.Entries.Select(e => e.SequenceNumber).Max() + 1,
+                DisplayNumber = parentFranchise.Entries.Count == 0
                     ? displayNumber
-                    : (parentSeries.Entries.Select(e => e.DisplayNumber).Max() ?? (displayNumber - 1)) + 1
+                    : (parentFranchise.Entries.Select(e => e.DisplayNumber).Max() ?? (displayNumber - 1)) + 1
             };
 
-        private void ClearEntryConnection(MovieSeriesEntry entry)
+        private void ClearEntryConnection(FranchiseEntry entry)
         {
             if (entry.Movie != null)
             {
@@ -611,9 +611,9 @@ namespace MovieList.ViewModels
             } else if (entry.Series != null)
             {
                 entry.Series.Entry = null;
-            } else if (entry.MovieSeries != null)
+            } else if (entry.Franchise != null)
             {
-                entry.MovieSeries.Entry = null;
+                entry.Franchise.Entry = null;
             }
         }
 
@@ -624,12 +624,12 @@ namespace MovieList.ViewModels
         }
 
         private void RemoveSameEntry(
-            IEnumerable<MovieSeriesEntry> entries,
-            MovieSeriesEntry entry,
-            Action<IEnumerable<MovieSeriesEntry>> remove)
+            IEnumerable<FranchiseEntry> entries,
+            FranchiseEntry entry,
+            Action<IEnumerable<FranchiseEntry>> remove)
             => remove(entries.Where(e =>
                 (e.Movie != null && e.Movie == entry.Movie) ||
                 (e.Series != null && e.Series == entry.Series) ||
-                (e.MovieSeries != null && e.MovieSeries == entry.MovieSeries)));
+                (e.Franchise != null && e.Franchise == entry.Franchise)));
     }
 }

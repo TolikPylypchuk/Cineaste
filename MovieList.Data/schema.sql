@@ -99,7 +99,7 @@ CREATE TABLE "SpecialEpisodes" (
 
 CREATE INDEX "Idx_SpecialEpisodes_SeriesId" ON "SpecialEpisodes" ("SeriesId");
 
-CREATE TABLE "MovieSeries" (
+CREATE TABLE "Franchise" (
     "Id" INTEGER PRIMARY KEY,
     "ShowTitles" INTEGER(1) NOT NULL,
     "IsLooselyConnected" INTEGER(1) NOT NULL,
@@ -107,14 +107,14 @@ CREATE TABLE "MovieSeries" (
     "PosterUrl" TEXT
 );
 
-CREATE TABLE "MovieSeriesEntries" (
+CREATE TABLE "FranchiseEntries" (
     "Id" INTEGER PRIMARY KEY,
     "SequenceNumber" INTEGER NOT NULL,
     "DisplayNumber" INTEGER,
     "MovieId" INTEGER,
     "SeriesId" INTEGER,
-    "MovieSeriesId" INTEGER,
-    "ParentSeriesId" INTEGER NOT NULL,
+    "FranchiseId" INTEGER,
+    "ParentFranchiseId" INTEGER NOT NULL,
 
     FOREIGN KEY ("MovieId")
         REFERENCES "Movies" ("Id")
@@ -124,19 +124,19 @@ CREATE TABLE "MovieSeriesEntries" (
         REFERENCES "Series" ("Id")
         ON DELETE CASCADE,
 
-    FOREIGN KEY ("MovieSeriesId")
-        REFERENCES "MovieSeries" ("Id")
+    FOREIGN KEY ("FranchiseId")
+        REFERENCES "Franchise" ("Id")
         ON DELETE CASCADE,
 
-    FOREIGN KEY ("ParentSeriesId")
-        REFERENCES "MovieSeries" ("Id")
+    FOREIGN KEY ("ParentFranchiseId")
+        REFERENCES "Franchise" ("Id")
         ON DELETE CASCADE
 );
 
-CREATE INDEX "Idx_MovieSeriesEntries_MovieId" ON "MovieSeriesEntries" ("MovieId");
-CREATE INDEX "Idx_MovieSeriesEntries_SeriesId" ON "MovieSeriesEntries" ("SeriesId");
-CREATE INDEX "Idx_MovieSeriesEntries_MovieSeriesId" ON "MovieSeriesEntries" ("MovieSeriesId");
-CREATE INDEX "Idx_MovieSeriesEntries_ParentSeriesId" ON "MovieSeriesEntries" ("ParentSeriesId");
+CREATE INDEX "Idx_FranchiseEntries_MovieId" ON "FranchiseEntries" ("MovieId");
+CREATE INDEX "Idx_FranchiseEntries_SeriesId" ON "FranchiseEntries" ("SeriesId");
+CREATE INDEX "Idx_FranchiseEntries_FranchiseId" ON "FranchiseEntries" ("FranchiseId");
+CREATE INDEX "Idx_FranchiseEntries_ParentFranchiseId" ON "FranchiseEntries" ("ParentFranchiseId");
 
 CREATE TABLE "Titles" (
     "Id" INTEGER PRIMARY KEY,
@@ -147,7 +147,7 @@ CREATE TABLE "Titles" (
     "SeriesId" INTEGER,
     "SeasonId" INTEGER,
     "SpecialEpisodeId" INTEGER,
-    "MovieSeriesId" INTEGER,
+    "FranchiseId" INTEGER,
 
     FOREIGN KEY ("MovieId")
         REFERENCES "Movies" ("Id")
@@ -165,8 +165,8 @@ CREATE TABLE "Titles" (
         REFERENCES "SpecialEpisodes" ("Id")
         ON DELETE CASCADE,
         
-    FOREIGN KEY ("MovieSeriesId")
-        REFERENCES "MovieSeries" ("Id")
+    FOREIGN KEY ("FranchiseId")
+        REFERENCES "Franchise" ("Id")
         ON DELETE CASCADE,
 
     CHECK ("Priority" >= 1 AND "Priority" <= 10)
@@ -176,7 +176,7 @@ CREATE INDEX "Idx_Titles_MovieId" ON "Titles" ("MovieId");
 CREATE INDEX "Idx_Titles_SeriesId" ON "Titles" ("SeriesId");
 CREATE INDEX "Idx_Titles_SeasonId" ON "Titles" ("SeasonId");
 CREATE INDEX "Idx_Titles_SpecialEpisodeId" ON "Titles" ("SpecialEpisodeId");
-CREATE INDEX "Idx_Titles_MovieSeriesId" ON "Titles" ("MovieSeriesId");
+CREATE INDEX "Idx_Titles_FranchiseId" ON "Titles" ("FranchiseId");
 
 CREATE TABLE "Settings" (
     "Id" INTEGER PRIMARY KEY,

@@ -6,9 +6,9 @@ using ReactiveUI;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MovieSeriesAddableItemViewModel : ReactiveObject
+    public sealed class FranchiseAddableItemViewModel : ReactiveObject
     {
-        public MovieSeriesAddableItemViewModel(MovieSeriesEntry entry)
+        public FranchiseAddableItemViewModel(FranchiseEntry entry)
         {
             this.Entry = entry;
             this.Title = entry.GetTitle()?.Name ?? String.Empty;
@@ -16,10 +16,10 @@ namespace MovieList.ViewModels.Forms
             this.Year = entry.GetYears();
             this.Tag = entry.Movie != null
                 ? nameof(Movie)
-                : entry.Series != null ? nameof(Series) : nameof(MovieSeries);
+                : entry.Series != null ? nameof(Series) : nameof(Franchise);
         }
 
-        public MovieSeriesEntry Entry { get; }
+        public FranchiseEntry Entry { get; }
 
         public string Title { get; }
         public string OriginalTitle { get; }

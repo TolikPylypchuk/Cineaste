@@ -28,47 +28,47 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms
 {
-    public sealed class MovieSeriesFormViewModel : MovieSeriesEntryFormBase<MovieSeries, MovieSeriesFormViewModel>
+    public sealed class FranchiseFormViewModel : FranchiseEntryFormBase<Franchise, FranchiseFormViewModel>
     {
-        private readonly IEntityService<MovieSeries> movieSeriesService;
+        private readonly IEntityService<Franchise> franchiseService;
 
-        private readonly SourceList<MovieSeriesEntry> entriesSource = new SourceList<MovieSeriesEntry>();
-        private readonly ReadOnlyObservableCollection<MovieSeriesEntryViewModel> entries;
+        private readonly SourceList<FranchiseEntry> entriesSource = new SourceList<FranchiseEntry>();
+        private readonly ReadOnlyObservableCollection<FranchiseEntryViewModel> entries;
 
-        private readonly SourceList<MovieSeriesEntry> addableItemsSource = new SourceList<MovieSeriesEntry>();
-        private readonly ReadOnlyObservableCollection<MovieSeriesAddableItemViewModel> addableItems;
+        private readonly SourceList<FranchiseEntry> addableItemsSource = new SourceList<FranchiseEntry>();
+        private readonly ReadOnlyObservableCollection<FranchiseAddableItemViewModel> addableItems;
 
         [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
         [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
-        public MovieSeriesFormViewModel(
-            MovieSeries movieSeries,
+        public FranchiseFormViewModel(
+            Franchise franchise,
             string fileName,
-            IEnumerable<MovieSeriesEntry> addableItems,
+            IEnumerable<FranchiseEntry> addableItems,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null,
-            IEntityService<MovieSeries>? movieSeriesService = null,
+            IEntityService<Franchise>? franchiseService = null,
             Settings? settings = null)
-            : base(movieSeries.Entry, resourceManager, scheduler)
+            : base(franchise.Entry, resourceManager, scheduler)
         {
-            this.MovieSeries = movieSeries;
+            this.Franchise = franchise;
             settings ??= Locator.Current.GetService<Settings>(fileName);
 
-            this.movieSeriesService = movieSeriesService ??
-                Locator.Current.GetService<IEntityService<MovieSeries>>(fileName);
+            this.franchiseService = franchiseService ??
+                Locator.Current.GetService<IEntityService<Franchise>>(fileName);
             
             this.entriesSource.Connect()
                 .Transform(this.CreateEntryViewModel)
                 .AutoRefresh(vm => vm.SequenceNumber)
-                .Sort(SortExpressionComparer<MovieSeriesEntryViewModel>.Ascending(vm => vm.SequenceNumber))
+                .Sort(SortExpressionComparer<FranchiseEntryViewModel>.Ascending(vm => vm.SequenceNumber))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.entries)
                 .Subscribe();
 
             this.addableItemsSource.Connect()
-                .Filter(entry => entry.MovieSeries != this.MovieSeries)
-                .Transform(item => new MovieSeriesAddableItemViewModel(item))
-                .Sort(new PropertyComparer<MovieSeriesAddableItemViewModel, MovieSeriesEntry>(
-                        vm => vm.Entry, new MovieSeriesEntryTitleComparer(settings.CultureInfo)))
+                .Filter(entry => entry.Franchise != this.Franchise)
+                .Transform(item => new FranchiseAddableItemViewModel(item))
+                .Sort(new PropertyComparer<FranchiseAddableItemViewModel, FranchiseEntry>(
+                        vm => vm.Entry, new FranchiseEntryTitleComparer(settings.CultureInfo)))
                 .Bind(out this.addableItems)
                 .Subscribe();
 
@@ -78,7 +78,7 @@ namespace MovieList.ViewModels.Forms
                 this.FormTitle
                     .Select(this.GetFullFormTitle)
                     .StartWith(this.GetFullFormTitle(
-                        this.GetFormTitle(this.MovieSeries.ActualTitles.FirstOrDefault()?.Name ?? String.Empty)));
+                        this.GetFormTitle(this.Franchise.ActualTitles.FirstOrDefault()?.Name ?? String.Empty)));
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
@@ -89,10 +89,10 @@ namespace MovieList.ViewModels.Forms
 
             var canSelectEntry = this.FormChanged.Invert();
 
-            this.SelectEntry = ReactiveCommand.Create<MovieSeriesEntryViewModel, MovieSeriesEntry>(
+            this.SelectEntry = ReactiveCommand.Create<FranchiseEntryViewModel, FranchiseEntry>(
                 vm => vm.Entry, canSelectEntry);
 
-            this.DetachEntry = ReactiveCommand.Create<MovieSeriesEntry, MovieSeriesEntry>(this.OnDetachEntry);
+            this.DetachEntry = ReactiveCommand.Create<FranchiseEntry, FranchiseEntry>(this.OnDetachEntry);
 
             var canAddEntry = Observable.CombineLatest(
                     Observable.Return(!this.IsNew).Merge(this.Save.Select(_ => true)),
@@ -101,22 +101,22 @@ namespace MovieList.ViewModels.Forms
 
             this.AddMovie = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
             this.AddSeries = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
-            this.AddMovieSeries = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
-            this.AddExistingItem = ReactiveCommand.Create<MovieSeriesEntry, MovieSeriesEntry>(this.OnAddExistingItem);
+            this.AddFranchise = ReactiveCommand.Create(this.GetFirstDisplayNumber, canAddEntry);
+            this.AddExistingItem = ReactiveCommand.Create<FranchiseEntry, FranchiseEntry>(this.OnAddExistingItem);
 
             this.InitializeValueDependencies();
             this.CopyProperties();
             this.CanDeleteWhenNotChanged();
-            this.CanCreateMovieSeries();
+            this.CanCreateFranchise();
             this.EnableChangeTracking();
         }
 
-        public MovieSeries MovieSeries { get; }
+        public Franchise Franchise { get; }
 
-        public ReadOnlyObservableCollection<MovieSeriesEntryViewModel> Entries
+        public ReadOnlyObservableCollection<FranchiseEntryViewModel> Entries
             => this.entries;
 
-        public ReadOnlyObservableCollection<MovieSeriesAddableItemViewModel> AddableItems
+        public ReadOnlyObservableCollection<FranchiseAddableItemViewModel> AddableItems
             => this.addableItems;
 
         [Reactive]
@@ -138,48 +138,48 @@ namespace MovieList.ViewModels.Forms
 
         public bool CanShowTitles { [ObservableAsProperty] get; }
 
-        public ReactiveCommand<MovieSeriesEntryViewModel, MovieSeriesEntry> SelectEntry { get; }
-        public ReactiveCommand<MovieSeriesEntry, MovieSeriesEntry> DetachEntry { get; }
+        public ReactiveCommand<FranchiseEntryViewModel, FranchiseEntry> SelectEntry { get; }
+        public ReactiveCommand<FranchiseEntry, FranchiseEntry> DetachEntry { get; }
         public ReactiveCommand<Unit, int> AddMovie { get; }
         public ReactiveCommand<Unit, int> AddSeries { get; }
-        public ReactiveCommand<Unit, int> AddMovieSeries { get; }
-        public ReactiveCommand<MovieSeriesEntry, MovieSeriesEntry> AddExistingItem { get; }
+        public ReactiveCommand<Unit, int> AddFranchise { get; }
+        public ReactiveCommand<FranchiseEntry, FranchiseEntry> AddExistingItem { get; }
 
         public override bool IsNew
-            => this.MovieSeries.Id == default;
+            => this.Franchise.Id == default;
 
-        protected override MovieSeriesFormViewModel Self
+        protected override FranchiseFormViewModel Self
             => this;
 
         protected override ICollection<Title> ItemTitles
-            => this.MovieSeries.Titles;
+            => this.Franchise.Titles;
 
         protected override string NewItemKey
-            => "NewMovieSeries";
+            => "NewFranchise";
 
         protected override void EnableChangeTracking()
         {
-            this.TrackChanges(vm => vm.HasTitles, vm => vm.MovieSeries.Titles.Count > 0);
-            this.TrackChanges(vm => vm.ShowTitles, vm => vm.MovieSeries.ShowTitles);
-            this.TrackChanges(vm => vm.IsLooselyConnected, vm => vm.MovieSeries.IsLooselyConnected);
-            this.TrackChanges(vm => vm.MergeDisplayNumbers, vm => vm.MovieSeries.MergeDisplayNumbers);
-            this.TrackChanges(vm => vm.PosterUrl, vm => vm.MovieSeries.PosterUrl.EmptyIfNull());
+            this.TrackChanges(vm => vm.HasTitles, vm => vm.Franchise.Titles.Count > 0);
+            this.TrackChanges(vm => vm.ShowTitles, vm => vm.Franchise.ShowTitles);
+            this.TrackChanges(vm => vm.IsLooselyConnected, vm => vm.Franchise.IsLooselyConnected);
+            this.TrackChanges(vm => vm.MergeDisplayNumbers, vm => vm.Franchise.MergeDisplayNumbers);
+            this.TrackChanges(vm => vm.PosterUrl, vm => vm.Franchise.PosterUrl.EmptyIfNull());
 
-            this.TrackChanges(this.IsCollectionChanged(vm => vm.Entries, vm => vm.MovieSeries.Entries));
+            this.TrackChanges(this.IsCollectionChanged(vm => vm.Entries, vm => vm.Franchise.Entries));
 
             base.EnableChangeTracking();
         }
 
-        protected override IObservable<MovieSeries> OnSave()
+        protected override IObservable<Franchise> OnSave()
             => this.SaveTitles()
                 .DoAsync(this.SaveEntries)
                 .Select(this.CopyPropertiesIntoModel)
-                .DoAsync(this.movieSeriesService.SaveInTaskPool);
+                .DoAsync(this.franchiseService.SaveInTaskPool);
 
-        protected override IObservable<MovieSeries?> OnDelete()
+        protected override IObservable<Franchise?> OnDelete()
             => this.PromptToDelete(
-                "DeleteMovieSeries",
-                () => this.movieSeriesService.DeleteInTaskPool(this.MovieSeries).Select(() => this.MovieSeries));
+                "DeleteFranchise",
+                () => this.franchiseService.DeleteInTaskPool(this.Franchise).Select(() => this.Franchise));
 
         protected override void CopyProperties()
         {
@@ -188,18 +188,18 @@ namespace MovieList.ViewModels.Forms
             this.entriesSource.Edit(list =>
             {
                 list.Clear();
-                list.AddRange(this.MovieSeries.Entries);
+                list.AddRange(this.Franchise.Entries);
             });
 
-            this.HasTitles = this.MovieSeries.Titles.Count > 0;
-            this.ShowTitles = this.MovieSeries.ShowTitles;
-            this.IsLooselyConnected = this.MovieSeries.IsLooselyConnected;
-            this.MergeDisplayNumbers = this.MovieSeries.MergeDisplayNumbers;
-            this.PosterUrl = this.MovieSeries.PosterUrl.EmptyIfNull();
+            this.HasTitles = this.Franchise.Titles.Count > 0;
+            this.ShowTitles = this.Franchise.ShowTitles;
+            this.IsLooselyConnected = this.Franchise.IsLooselyConnected;
+            this.MergeDisplayNumbers = this.Franchise.MergeDisplayNumbers;
+            this.PosterUrl = this.Franchise.PosterUrl.EmptyIfNull();
         }
 
         protected override void AttachTitle(Title title)
-            => title.MovieSeries = this.MovieSeries;
+            => title.Franchise = this.Franchise;
 
         private void InitializeValueDependencies()
         {
@@ -224,23 +224,23 @@ namespace MovieList.ViewModels.Forms
                 .Subscribe(_ => this.AdjustDisplayNumbers(this.GetFirstDisplayNumber()));
         }
 
-        private string GetFormTitle(MovieSeries movieSeries)
+        private string GetFormTitle(Franchise franchise)
         {
-            string title = movieSeries.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name ?? String.Empty;
-            return movieSeries.Entry == null ? title : $"{this.GetFormTitle(movieSeries.Entry.ParentSeries)}: {title}";
+            string title = franchise.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name ?? String.Empty;
+            return franchise.Entry == null ? title : $"{this.GetFormTitle(franchise.Entry.ParentFranchise)}: {title}";
         }
 
         private string GetFullFormTitle(string title)
-            => this.MovieSeriesEntry != null
-                ? $"{this.GetFormTitle(this.MovieSeriesEntry.ParentSeries)}: {title}"
+            => this.FranchiseEntry != null
+                ? $"{this.GetFormTitle(this.FranchiseEntry.ParentFranchise)}: {title}"
                 : title;
 
         private IObservable<Unit> AddTitles()
         {
-            string titleName = this.MovieSeries.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name
+            string titleName = this.Franchise.ActualTitles.FirstOrDefault(t => !t.IsOriginal)?.Name
                 ?? String.Empty;
 
-            string originalTitleName = this.MovieSeries.ActualTitles.FirstOrDefault(t => t.IsOriginal)?.Name
+            string originalTitleName = this.Franchise.ActualTitles.FirstOrDefault(t => t.IsOriginal)?.Name
                 ?? String.Empty;
 
             return this.AddTitle.Execute()
@@ -252,9 +252,9 @@ namespace MovieList.ViewModels.Forms
                 });
         }
 
-        private MovieSeriesEntryViewModel CreateEntryViewModel(MovieSeriesEntry entry)
+        private FranchiseEntryViewModel CreateEntryViewModel(FranchiseEntry entry)
         {
-            var viewModel = new MovieSeriesEntryViewModel(entry, this, this.ResourceManager, this.Scheduler);
+            var viewModel = new FranchiseEntryViewModel(entry, this, this.ResourceManager, this.Scheduler);
             var subsciptions = new CompositeDisposable();
 
             viewModel.Select
@@ -296,13 +296,13 @@ namespace MovieList.ViewModels.Forms
             return viewModel;
         }
 
-        private void MoveEntryUp(MovieSeriesEntryViewModel vm)
+        private void MoveEntryUp(FranchiseEntryViewModel vm)
             => this.SwapEntryNumbers(this.Entries.First(e => e.SequenceNumber == vm.SequenceNumber - 1), vm);
 
-        private void MoveEntryDown(MovieSeriesEntryViewModel vm)
+        private void MoveEntryDown(FranchiseEntryViewModel vm)
             => this.SwapEntryNumbers(vm, this.Entries.First(e => e.SequenceNumber == vm.SequenceNumber + 1));
 
-        private void SwapEntryNumbers(MovieSeriesEntryViewModel first, MovieSeriesEntryViewModel second)
+        private void SwapEntryNumbers(FranchiseEntryViewModel first, FranchiseEntryViewModel second)
         {
             first.SequenceNumber++;
             second.SequenceNumber--;
@@ -318,7 +318,7 @@ namespace MovieList.ViewModels.Forms
             }
         }
 
-        private MovieSeriesEntry OnDetachEntry(MovieSeriesEntry entry)
+        private FranchiseEntry OnDetachEntry(FranchiseEntry entry)
         {
             this.DecrementNumbers(entry.SequenceNumber);
 
@@ -332,14 +332,14 @@ namespace MovieList.ViewModels.Forms
             return entry;
         }
 
-        private MovieSeriesEntry OnAddExistingItem(MovieSeriesEntry entry)
+        private FranchiseEntry OnAddExistingItem(FranchiseEntry entry)
         {
-            var newEntry = new MovieSeriesEntry
+            var newEntry = new FranchiseEntry
             {
                 Movie = entry.Movie,
                 Series = entry.Series,
-                MovieSeries = entry.MovieSeries,
-                ParentSeries = this.MovieSeries,
+                Franchise = entry.Franchise,
+                ParentFranchise = this.Franchise,
                 SequenceNumber = this.Entries
                     .OrderByDescending(e => e.SequenceNumber)
                     .Select(e => e.SequenceNumber)
@@ -357,13 +357,13 @@ namespace MovieList.ViewModels.Forms
             return newEntry;
         }
 
-        private void HideDisplayNumber(MovieSeriesEntryViewModel vm)
+        private void HideDisplayNumber(FranchiseEntryViewModel vm)
         {
             vm.DisplayNumber = null;
             this.DecrementNumbers(vm.SequenceNumber);
         }
 
-        private void ShowDisplayNumber(MovieSeriesEntryViewModel vm)
+        private void ShowDisplayNumber(FranchiseEntryViewModel vm)
         {
             vm.DisplayNumber = (this.Entries
                 .Where(entry => entry.SequenceNumber < vm.SequenceNumber && entry.DisplayNumber.HasValue)
@@ -386,8 +386,8 @@ namespace MovieList.ViewModels.Forms
 
         private int GetFirstDisplayNumber()
             => this.MergeDisplayNumbers
-                ? this.GetNextDisplayNumber(this.MovieSeriesEntry?.ParentSeries.Entries
-                    .LastOrDefault(entry => entry.SequenceNumber < this.MovieSeriesEntry.SequenceNumber))
+                ? this.GetNextDisplayNumber(this.FranchiseEntry?.ParentFranchise.Entries
+                    .LastOrDefault(entry => entry.SequenceNumber < this.FranchiseEntry.SequenceNumber))
                 : 1;
 
         private void AdjustDisplayNumbers(int firstNumber)
@@ -395,7 +395,7 @@ namespace MovieList.ViewModels.Forms
                 .Where(entry => entry.DisplayNumber != null)
                 .ForEach((entry, index) => entry.DisplayNumber = index + firstNumber);
 
-        private int GetNextDisplayNumber(MovieSeriesEntry? entry)
+        private int GetNextDisplayNumber(FranchiseEntry? entry)
         {
             if (entry == null)
             {
@@ -407,12 +407,12 @@ namespace MovieList.ViewModels.Forms
                 return entry.DisplayNumber.Value + 1;
             }
 
-            if (entry.MovieSeries != null)
+            if (entry.Franchise != null)
             {
-                return (entry.MovieSeries.Entries.Select(e => e.DisplayNumber).Max() ?? 0) + 1;
+                return (entry.Franchise.Entries.Select(e => e.DisplayNumber).Max() ?? 0) + 1;
             }
 
-            return this.GetNextDisplayNumber(entry.ParentSeries.Entries
+            return this.GetNextDisplayNumber(entry.ParentFranchise.Entries
                 .LastOrDefault(e => e.SequenceNumber < entry.SequenceNumber));
         }
 
@@ -424,24 +424,24 @@ namespace MovieList.ViewModels.Forms
                     .ForkJoin()
                     .Discard();
 
-        private MovieSeries CopyPropertiesIntoModel()
+        private Franchise CopyPropertiesIntoModel()
         {
-            foreach (var entry in this.entriesSource.Items.Except(this.MovieSeries.Entries).ToList())
+            foreach (var entry in this.entriesSource.Items.Except(this.Franchise.Entries).ToList())
             {
-                this.MovieSeries.Entries.Add(entry);
+                this.Franchise.Entries.Add(entry);
             }
 
-            foreach (var entry in this.MovieSeries.Entries.Except(this.entriesSource.Items).ToList())
+            foreach (var entry in this.Franchise.Entries.Except(this.entriesSource.Items).ToList())
             {
-                this.MovieSeries.Entries.Remove(entry);
+                this.Franchise.Entries.Remove(entry);
             }
 
-            this.MovieSeries.ShowTitles = this.ShowTitles;
-            this.MovieSeries.IsLooselyConnected = this.IsLooselyConnected;
-            this.MovieSeries.MergeDisplayNumbers = this.MergeDisplayNumbers;
-            this.MovieSeries.PosterUrl = this.PosterUrl.NullIfEmpty();
+            this.Franchise.ShowTitles = this.ShowTitles;
+            this.Franchise.IsLooselyConnected = this.IsLooselyConnected;
+            this.Franchise.MergeDisplayNumbers = this.MergeDisplayNumbers;
+            this.Franchise.PosterUrl = this.PosterUrl.NullIfEmpty();
 
-            return this.MovieSeries;
+            return this.Franchise;
         }
     }
 }

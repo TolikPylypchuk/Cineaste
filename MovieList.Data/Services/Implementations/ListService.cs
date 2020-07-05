@@ -24,10 +24,10 @@ namespace MovieList.Data.Services.Implementations
             IDbConnection connection,
             IDbTransaction transaction)
         {
-            this.Log().Debug("Getting the full list of movies, series and movie series");
+            this.Log().Debug("Getting the full list of movies, series and franchise");
 
             var titles = connection.GetAll<Title>(transaction).ToList();
-            var entries = connection.GetAll<MovieSeriesEntry>(transaction).ToList();
+            var entries = connection.GetAll<FranchiseEntry>(transaction).ToList();
 
             var seasons = connection.GetAll<Season>(transaction).ToList();
             var periods = connection.GetAll<Period>(transaction).ToList();
@@ -35,7 +35,7 @@ namespace MovieList.Data.Services.Implementations
 
             var movies = connection.GetAll<Movie>(transaction).ToList();
             var series = connection.GetAll<Series>(transaction).ToList();
-            var movieSeries = connection.GetAll<MovieSeries>(transaction).ToList();
+            var franchise = connection.GetAll<Franchise>(transaction).ToList();
 
             return new MovieList(
                 movies
@@ -50,7 +50,7 @@ namespace MovieList.Data.Services.Implementations
                     .Join(specialEpisodes.Join(titles))
                     .Join(entries)
                     .ToList(),
-                movieSeries
+                franchise
                     .Join(titles)
                     .Join(entries)
                     .ToList());

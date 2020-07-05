@@ -24,7 +24,7 @@ namespace MovieList.ListItems
 
         public Series Series { get; }
 
-        public override MovieSeriesEntry? Entry
+        public override FranchiseEntry? Entry
             => this.Series.Entry;
     }
 }

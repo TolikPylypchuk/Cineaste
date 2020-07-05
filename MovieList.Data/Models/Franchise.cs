@@ -6,8 +6,8 @@ using Dapper.Contrib.Extensions;
 
 namespace MovieList.Data.Models
 {
-    [Table("MovieSeries")]
-    public sealed class MovieSeries : EntityBase
+    [Table("Franchise")]
+    public sealed class Franchise : EntityBase
     {
         public bool ShowTitles { get; set; }
         public bool IsLooselyConnected { get; set; }
@@ -16,10 +16,10 @@ namespace MovieList.Data.Models
         public string? PosterUrl { get; set; }
 
         [Write(false)]
-        public MovieSeriesEntry? Entry { get; set; }
+        public FranchiseEntry? Entry { get; set; }
 
         [Write(false)]
-        public IList<MovieSeriesEntry> Entries { get; set; } = new List<MovieSeriesEntry>();
+        public IList<FranchiseEntry> Entries { get; set; } = new List<FranchiseEntry>();
 
         [Write(false)]
         public IList<Title> Titles { get; set; } = new List<Title>();
@@ -47,6 +47,6 @@ namespace MovieList.Data.Models
                 .FirstOrDefault();
 
         public override string ToString()
-            => $"Movie Series #{this.Id}: {Title.ToString(this.ActualTitles)}";
+            => $"Franchise #{this.Id}: {Title.ToString(this.ActualTitles)}";
     }
 }

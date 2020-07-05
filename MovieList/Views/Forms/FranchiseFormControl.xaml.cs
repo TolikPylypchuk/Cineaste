@@ -15,11 +15,11 @@ using ReactiveUI;
 
 namespace MovieList.Views.Forms
 {
-    public abstract class MovieSeriesFormControlBase : ReactiveUserControl<MovieSeriesFormViewModel> { }
+    public abstract class FranchiseFormControlBase : ReactiveUserControl<FranchiseFormViewModel> { }
 
-    public partial class MovieSeriesFormControl : MovieSeriesFormControlBase
+    public partial class FranchiseFormControl : FranchiseFormControlBase
     {
-        public MovieSeriesFormControl()
+        public FranchiseFormControl()
         {
             this.InitializeComponent();
 
@@ -57,18 +57,18 @@ namespace MovieList.Views.Forms
             this.BindCommand(this.ViewModel, vm => vm.Close, v => v.CloseButton)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesButton)
+            this.BindCommand(this.ViewModel, vm => vm.GoToFranchise, v => v.GoToFranchiseButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.GoToMovieSeries.CanExecute
-                .BindTo(this, v => v.GoToMovieSeriesButton.Visibility, useHidden)
+            this.ViewModel.GoToFranchise.CanExecute
+                .BindTo(this, v => v.GoToFranchiseButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.GoToMovieSeries, v => v.GoToMovieSeriesArrowButton)
+            this.BindCommand(this.ViewModel, vm => vm.GoToFranchise, v => v.GoToFranchiseArrowButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.GoToMovieSeries.CanExecute
-                .BindTo(this, v => v.GoToMovieSeriesArrowButton.Visibility, useHidden)
+            this.ViewModel.GoToFranchise.CanExecute
+                .BindTo(this, v => v.GoToFranchiseArrowButton.Visibility, useHidden)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.GoToNext, v => v.GoToNextButton)
@@ -99,18 +99,18 @@ namespace MovieList.Views.Forms
                 .BindTo(this, v => v.AddSeriesButton.Visibility)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.AddMovieSeries, v => v.AddMovieSeriesButton)
+            this.BindCommand(this.ViewModel, vm => vm.AddFranchise, v => v.AddFranchiseButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.AddMovieSeries.CanExecute
-                .BindTo(this, v => v.AddMovieSeriesButton.Visibility)
+            this.ViewModel.AddFranchise.CanExecute
+                .BindTo(this, v => v.AddFranchiseButton.Visibility)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.CreateMovieSeries, v => v.CreateMovieSeriesButton)
+            this.BindCommand(this.ViewModel, vm => vm.CreateFranchise, v => v.CreateFranchiseButton)
                 .DisposeWith(disposables);
 
-            this.ViewModel.CreateMovieSeries.CanExecute
-                .BindTo(this, v => v.CreateMovieSeriesButton.Visibility)
+            this.ViewModel.CreateFranchise.CanExecute
+                .BindTo(this, v => v.CreateFranchiseButton.Visibility)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
@@ -212,7 +212,7 @@ namespace MovieList.Views.Forms
 
             this.AddableItemsComboBox.Events()
                 .SelectionChanged
-                .Select(e => e.AddedItems.OfType<MovieSeriesAddableItemViewModel>().FirstOrDefault())
+                .Select(e => e.AddedItems.OfType<FranchiseAddableItemViewModel>().FirstOrDefault())
                 .WhereNotNull()
                 .Select(vm => vm.Entry)
                 .InvokeCommand(this.ViewModel.AddExistingItem);
