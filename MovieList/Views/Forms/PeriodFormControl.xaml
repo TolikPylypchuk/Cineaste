@@ -18,6 +18,8 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -25,27 +27,40 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="StartMonthComboBox" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"
+        <TextBlock x:Name="RottenTomatoesLinkTextBlock" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="4,0"
+                   HorizontalAlignment="Center">
+            <Hyperlink x:Name="RottenTomatoesLink" v:Properties.IsExternal="True">
+                <Hyperlink.Inlines>
+                    <Run Text="{l:Translate RottenTomatoes}" />
+                </Hyperlink.Inlines>
+            </Hyperlink>
+        </TextBlock>
+
+        <ComboBox x:Name="StartMonthComboBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"
                   Margin="0,8,8,8" Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
-        <TextBox x:Name="StartYearTextBox" Grid.Row="0" Grid.Column="1" Margin="8,8,0,8" />
+        <TextBox x:Name="StartYearTextBox" Grid.Row="1" Grid.Column="1" Margin="8,8,0,8" />
 
-        <ComboBox x:Name="EndMonthComboBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"
+        <ComboBox x:Name="EndMonthComboBox" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch"
                   Margin="0,8,8,8" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                   m:HintAssist.Hint="{l:Translate EndMonth}" />
 
-        <TextBox x:Name="EndYearTextBox" Grid.Row="1" Grid.Column="1" Margin="8,8,0,8"
+        <TextBox x:Name="EndYearTextBox" Grid.Row="2" Grid.Column="1" Margin="8,8,0,8"
                  m:HintAssist.Hint="{l:Translate EndYEar}" />
 
-        <TextBox x:Name="NumberOfEpisodesTextBox" Grid.Row="2" Grid.Column="0" Margin="0,8,8,8"
+        <TextBox x:Name="NumberOfEpisodesTextBox" Grid.Row="3" Grid.Column="0" Margin="0,8,8,8"
                  m:HintAssist.Hint="{l:Translate NumberOfEpisodes}" />
 
-        <CheckBox x:Name="IsSingleDayReleaseCheckBox" Grid.Row="2" Grid.Column="1"
+        <CheckBox x:Name="IsSingleDayReleaseCheckBox" Grid.Row="3" Grid.Column="1"
                   Margin="8,0,0,0" VerticalAlignment="Center">
             <TextBlock Text="{l:Translate SingleDayRelease}" TextWrapping="Wrap" />
         </CheckBox>
 
-        <DockPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+        <TextBox x:Name="RottenTomatoesLinkTextBox" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                 HorizontalAlignment="Stretch" Margin="0,8"
+                 m:HintAssist.Hint="{l:Translate RottenTomatoesLinkForSeason}" />
+
+        <DockPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
             <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
                     VerticalAlignment="Center" Padding="0" Width="20" Height="20" Margin="8,8,0,8"
                     Foreground="{StaticResource SecondaryAccentBrush}">
@@ -55,7 +70,7 @@
             <TextBox x:Name="PosterUrlTextBox" Margin="0,8" m:HintAssist.Hint="{l:Translate PosterUrl}" />
         </DockPanel>
 
-        <TextBlock x:Name="InvalidFormTextBlock" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+        <TextBlock x:Name="InvalidFormTextBlock" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
                    Foreground="{DynamicResource ValidationErrorBrush}" />
     </Grid>
 </local:PeriodFormControlBase>

@@ -682,4 +682,10 @@ This will detach all entries without deleting them.</value>
   <data name="YearHeader" xml:space="preserve">
     <value>Year</value>
   </data>
+  <data name="RottenTomatoesLinkForSeason" xml:space="preserve">
+    <value>Rotten Tomatoes link for season</value>
+  </data>
+  <data name="RottenTomatoesLinkForSeries" xml:space="preserve">
+    <value>Rotten Tomatoes link for series</value>
+  </data>
 </root>

@@ -15,6 +15,8 @@ namespace MovieList.Data.Models
 
         public int NumberOfEpisodes { get; set; }
 
+        public string? RottenTomatoesLink { get; set; }
+
         public string? PosterUrl { get; set; }
 
         public int SeasonId { get; set; }

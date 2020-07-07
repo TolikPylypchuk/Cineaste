@@ -37,6 +37,9 @@ namespace MovieList.ViewModels.Forms
                 PeriodMinNumberOfEpisodes,
                 PeriodMaxNumberOfEpisodes);
 
+            this.RottenTomatoesLinkRule = this.ValidationRule(
+                vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
+
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             var periodValid = this.WhenAnyValue(
@@ -83,6 +86,9 @@ namespace MovieList.ViewModels.Forms
         public bool IsSingleDayRelease { get; set; }
 
         [Reactive]
+        public string RottenTomatoesLink { get; set; } = String.Empty;
+
+        [Reactive]
         public string PosterUrl { get; set; } = String.Empty;
 
         [Reactive]
@@ -91,6 +97,7 @@ namespace MovieList.ViewModels.Forms
         public ValidationHelper StartYearRule { get; }
         public ValidationHelper EndYearRule { get; }
         public ValidationHelper NumberOfEpisodesRule { get; }
+        public ValidationHelper RottenTomatoesLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
         public ValidationHelper PeriodRule { get; }
 
@@ -108,6 +115,7 @@ namespace MovieList.ViewModels.Forms
             this.TrackChanges(vm => vm.EndYear, vm => vm.Period.EndYear.ToString());
             this.TrackChanges(vm => vm.NumberOfEpisodes, vm => vm.Period.NumberOfEpisodes.ToString());
             this.TrackChanges(vm => vm.IsSingleDayRelease, vm => vm.Period.IsSingleDayRelease);
+            this.TrackChanges(vm => vm.RottenTomatoesLink, vm => vm.Period.RottenTomatoesLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Period.PosterUrl.EmptyIfNull());
 
             base.EnableChangeTracking();
@@ -121,6 +129,7 @@ namespace MovieList.ViewModels.Forms
             this.Period.EndYear = Int32.Parse(this.EndYear);
             this.Period.NumberOfEpisodes = Int32.Parse(this.NumberOfEpisodes);
             this.Period.IsSingleDayRelease = this.IsSingleDayRelease;
+            this.Period.RottenTomatoesLink = this.RottenTomatoesLink.NullIfEmpty();
             this.Period.PosterUrl = this.PosterUrl.NullIfEmpty();
 
             return Observable.Return(this.Period);
@@ -137,6 +146,7 @@ namespace MovieList.ViewModels.Forms
             this.EndYear = this.Period.EndYear.ToString();
             this.NumberOfEpisodes = this.Period.NumberOfEpisodes.ToString();
             this.IsSingleDayRelease = this.Period.IsSingleDayRelease;
+            this.RottenTomatoesLink = this.Period.RottenTomatoesLink.EmptyIfNull();
             this.PosterUrl = this.Period.PosterUrl.EmptyIfNull();
         }
 

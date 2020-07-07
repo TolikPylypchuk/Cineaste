@@ -50,7 +50,6 @@ CREATE TABLE "Seasons" (
     "ReleaseStatus" INTEGER NOT NULL,
     "Channel" TEXT NOT NULL,
     "SequenceNumber" INTEGER NOT NULL,
-    "RottenTomatoesLink" TEXT,
     "SeriesId" INTEGER NOT NULL,
 
     FOREIGN KEY ("SeriesId")
@@ -68,6 +67,7 @@ CREATE TABLE "Periods" (
     "EndYear" INTEGER NOT NULL,
     "IsSingleDayRelease" INTEGER(1) NOT NULL,
     "NumberOfEpisodes" INTEGER NOT NULL,
+    "RottenTomatoesLink" TEXT,
     "PosterUrl" TEXT,
     "SeasonId" INTEGER NOT NULL,
 

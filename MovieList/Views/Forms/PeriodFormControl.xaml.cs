@@ -31,6 +31,7 @@ namespace MovieList.Views.Forms
                     this.EndMonthComboBox.Items.Add(month);
                 }
 
+                this.BindLink(disposables);
                 this.BindFields(disposables);
                 this.AddValidation(disposables);
 
@@ -41,6 +42,17 @@ namespace MovieList.Views.Forms
                     .BindTo(this, v => v.DeleteButton.Visibility)
                     .DisposeWith(disposables);
             });
+        }
+
+        private void BindLink(CompositeDisposable disposables)
+        {
+            this.OneWayBind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLink.NavigateUri)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.RottenTomatoesLink)
+                .Select(link => !String.IsNullOrWhiteSpace(link))
+                .BindTo(this, v => v.RottenTomatoesLinkTextBlock.Visibility)
+                .DisposeWith(disposables);
         }
 
         public void BindFields(CompositeDisposable disposables)
@@ -101,6 +113,9 @@ namespace MovieList.Views.Forms
                 .BindTo(this, v => v.IsSingleDayReleaseCheckBox.IsEnabled)
                 .DisposeWith(disposables);
 
+            this.Bind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkTextBox.Text)
+                .DisposeWith(disposables);
+
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
                 .DisposeWith(disposables);
 
@@ -115,6 +130,9 @@ namespace MovieList.Views.Forms
                 .DisposeWith(disposables);
 
             this.NumberOfEpisodesTextBox.ValidateWith(this.ViewModel.NumberOfEpisodesRule)
+                .DisposeWith(disposables);
+
+            this.RottenTomatoesLinkTextBox.ValidateWith(this.ViewModel.RottenTomatoesLinkRule)
                 .DisposeWith(disposables);
 
             this.PosterUrlTextBox.ValidateWith(this.ViewModel.PosterUrlRule)

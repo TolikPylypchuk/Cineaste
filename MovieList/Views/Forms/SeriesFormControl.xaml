@@ -148,7 +148,7 @@
                              m:HintAssist.Hint="{l:Translate ImdbLink}" />
 
                     <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
-                             m:HintAssist.Hint="{l:Translate RottenTomatoesLink}" />
+                             m:HintAssist.Hint="{l:Translate RottenTomatoesLinkForSeries}" />
 
                     <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
                              m:HintAssist.Hint="{l:Translate PosterUrl}" />
