@@ -1,1 +1,11 @@
+title: MovieList
+email: pylypchuk.tolik@gmail.com
+description: An app which keeps track of the movies and TV series I've watched or would like to watch
+baseurl: ""
+url: ""
+github_username:  TolikPylypchuk
+
 theme: jekyll-theme-slate
+
+plugins:
+  - jekyll-feed
