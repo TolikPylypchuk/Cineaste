@@ -6,7 +6,7 @@ using Dapper.Contrib.Extensions;
 
 namespace MovieList.Data.Models
 {
-    [Table("Franchise")]
+    [Table("Franchises")]
     public sealed class Franchise : EntityBase
     {
         public bool ShowTitles { get; set; }
