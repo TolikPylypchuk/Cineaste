@@ -1,7 +1,7 @@
 title: MovieList
 email: pylypchuk.tolik@gmail.com
 description: An app which keeps track of the movies and TV series you have watched or would like to watch
-baseurl: ""
+baseurl: MovieList
 url: ""
 github_username:  TolikPylypchuk
 
