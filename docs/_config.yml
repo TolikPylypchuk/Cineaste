@@ -1,11 +1,24 @@
-title: MovieList
+title: Movie List
 email: pylypchuk.tolik@gmail.com
-description: An app which keeps track of the movies and TV series you have watched or would like to watch
+description: Movie List
 baseurl: MovieList
 url: ""
 github_username:  TolikPylypchuk
 
-theme: jekyll-theme-slate
+theme: just-the-docs
+remote_theme: pmarsceill/just-the-docs
 
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
+
+heading_anchors: true
+
+aux_links:
+  "View on GitHub":
+    - "https://github.com/TolikPylypchuk/MovieList"
+
+aux_links_new_tab: true
+
+back_to_top: true
+back_to_top_text: "Back to top"
