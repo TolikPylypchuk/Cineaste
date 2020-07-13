@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-nav_order: 2
+nav_order: 3
 ---
 
 # About Movie List
@@ -11,7 +11,7 @@ of all these movies and series in a Word document because cumbersome since now t
 (I watch a lot of movies). Thus I've decided to create an app so that the list can be more structured and so that I can
 analyze the data somehow. Also, this is a fun side project.
 
-## Project status
+## Project Status
 
 I've been working on this app for a year and a half (as of July 2020) and it's not nearly done. I'm going to release
 version 0.1 soon, because now the app is a least usable, although it lacks lots of features yet. Versions 0.x should

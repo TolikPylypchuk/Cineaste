@@ -5,7 +5,6 @@ baseurl: MovieList
 url: ""
 github_username:  TolikPylypchuk
 
-theme: just-the-docs
 remote_theme: pmarsceill/just-the-docs
 
 plugins:
