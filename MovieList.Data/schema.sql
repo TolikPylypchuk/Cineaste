@@ -99,7 +99,7 @@ CREATE TABLE "SpecialEpisodes" (
 
 CREATE INDEX "Idx_SpecialEpisodes_SeriesId" ON "SpecialEpisodes" ("SeriesId");
 
-CREATE TABLE "Franchise" (
+CREATE TABLE "Franchises" (
     "Id" INTEGER PRIMARY KEY,
     "ShowTitles" INTEGER(1) NOT NULL,
     "IsLooselyConnected" INTEGER(1) NOT NULL,

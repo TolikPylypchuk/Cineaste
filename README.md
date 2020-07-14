@@ -12,7 +12,7 @@ personal project - I'm writing this app for myself, at my own pace, and accordin
 
 ![Screen with movie](/docs/assets/images/screen-movie.png)
 
-## Project status
+## Project Status
 
 I've been working on this app for a year and a half (as of July 2020) and it's not nearly done. I'm going to release
 version 0.1 soon, because now the app is a least usable, although it lacks lots of features yet. Versions 0.x should
