@@ -47,6 +47,10 @@ The list has four columns:
 The majority of popular contemporary movies are in English, so if your native language is English, then the title
 will often be the same as the original title.
 
+All item types can have multiple titles and original titles since different translations exist or the item is marketed
+differently in different markets. Only the first title and original title is shown in the list. Every item can have
+up to 10 titles and up to 10 original titles, although even that is too much in my opinion.
+
 ### Kinds
 
 Every item can be of a certain kind. Kinds are used to color-code items in the list. Every kind has six
