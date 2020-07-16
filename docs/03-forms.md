@@ -15,6 +15,7 @@ types of forms:
 - Series
 - Season (part of the series form)
 - Special episode (part of the series form)
+- Miniseries
 - Franchise
 
 All list items can contain posters. None of them are stored in the list file however. Only their URLs are stored - the

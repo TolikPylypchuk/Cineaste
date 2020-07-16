@@ -39,7 +39,8 @@ before the current year, it's obvious that the movie is already released. Conver
 current year, it's obvious that the movie was not released yet.
 
 If you check the 'watched' check-box, and the 'released' check-box is unchecked, it becomes checked as well. It doesn't
-make sense that you can watch an unreleased movie (yes, there are exceptions, but those are rare).
+make sense that you can watch an unreleased movie (yes, there are exceptions, but those are rare). If you uncheck the
+'released' check-box, the 'watched' check-box becomes unchecked as well.
 
 You can add titles with the 'Add title' and 'Add original title' buttons. If there are multiple titles, you can delete
 them by pressing the 'delete' button on the right side of the title field. You can't change the order of the titles.
