@@ -8,7 +8,7 @@ has_children: true
 
 # Forms
 
-You can add, edit, and delete list items through forms which appear on the right side of the main section. There are five
+You can add, edit, and delete list items through forms which appear on the right side of the main section. There are six
 types of forms:
 
 - Movie
