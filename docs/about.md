@@ -7,7 +7,7 @@ permalink: about
 # About Movie List
 
 A long time ago I started keeping a list of movies and TV series I've watched and would like to watch. Keeping track
-of all these movies and series in a Word document because cumbersome since now there are more than a thousand entries
+of all these movies and series in a Word document because cumbersome since now there are more than a thousand items
 (I watch a lot of movies). Thus I've decided to create an app so that the list can be more structured and so that I can
 analyze the data somehow. Also, this is a fun side project.
 

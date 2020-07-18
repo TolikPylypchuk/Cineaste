@@ -8,15 +8,14 @@ parent: Forms
 
 # The Series Form
 
-This is a big one. And it will take much more effort to add a series than it is to add a movie. Here's how a series
-form looks:
+This is a big one. It takes much more effort to add a series than it is to add a movie. Here's how a series form looks:
 
 ![Screen with series form](/assets/images/screen-series-form.png)
 
 The series form consists of the following parts:
 
 - Header which contains the first title, the 'close' button, and a few other buttons if the series is a part of a
-franchise (which will be discussed in the article on franchises)
+franchise (which are discussed in the article on franchises)
 - Poster (or logo) and links, if present
 - Main form fields
 - The list of components: seasons and special episodes
@@ -45,7 +44,7 @@ Since watching the series is more of a continuous process (unless you binge it),
 - Not watched, if you haven't started watching the series yet
 - Watching, if you are currenly watching the series or waiting for new seasons
 - Watched, if you watched the series in its entirety
-- Stopped watching, if you desided that the series is not worth your time anymore
+- Stopped watching, if you decided that the series is not worth your time anymore
 
 Like watch status, there's more to the release status than simply 'released' or 'not released'. Here's the possible
 release statuses:
@@ -57,7 +56,7 @@ release statuses:
 - Don't know/don't care, if you stopped watching the series and you don't want to track it in the app anymore
 
 You can specify that a series is an anthology series if its seasons or even individual episodes have separate
-storylines.
+storylines (e.g. Fargo or Black Mirror).
 
 You can select any kind from the list of kinds which you specify in the file's settings.
 
@@ -145,13 +144,13 @@ and adding the possibility of multiple channels will only make it more complicat
 
 Seasons don't have separate IMDb pages.
 
-### Season Releae Periods
+### Season Release Periods
 
-Unlike movies, where releases are tracked up to a year, series components are tracked up to a months. Seasons could
-have a start and end date, but it's not that simple. A single season may be released in parts during different periods
-(like the last season of Breaking Bad or the last season of the Sopranos). It wouldn't really represent the truth
-if you said that those seasons lasted for a year - they didn't. They lasted for a few weeks, had a hiatus and then
-for a few weeks next year. That's why season may contain multiple release periods. Every period has its own set of
+Unlike movies, where releases are tracked up to a year, series components are tracked up to a month. Seasons could
+have a start and end date directly, but it's not that simple. A single season may be released in parts during different
+periods (like the last season of Breaking Bad or the last season of The Sopranos). It wouldn't really represent the
+truth if you said that those seasons lasted for a year - they didn't. They lasted for a few weeks, had a hiatus and then
+for a few weeks next year. That's why seasons may contain multiple release periods. Every period has its own set of
 fields inside the season form. Obviously, every season requires at least one period, and there is no upper bound for
 the number of periods.
 
@@ -166,8 +165,8 @@ The period subform consists of the following fields (all fields except links are
 - Rotten Tomatoes link
 - Poster URL
 
-The year of the release can be between 1950 and 2100. The period must be valid - the end date cannot be before the
-start date.
+The year of the release can be between 1950 and 2100. The periods must be valid - the end date cannot be before the
+start date and the periods cannot be interleaved.
 
 The number of episodes for a single period can be between 1 and 50.
 
@@ -175,7 +174,7 @@ If it's a single-day release, you don't select the end month/year, becuase they 
 month/year.
 
 Rotten Tomatoes tracks scores for individual seasons, but it may have multiple pages per season (the only series I've
-seen have multiple pages per seasons is The Sopranos). Thus the main part of the season form doesn't contain the RT
+seen have multiple pages per season is The Sopranos). Thus the main part of the season form doesn't contain the RT
 link. Instead, the period subform has it, and that's why the link to RT is at the top of the period subform, and not
 directly below the poster, like in other forms.
 
@@ -184,19 +183,21 @@ different posters for different parts. If the season has multiple posters, you c
 arrow buttons below the poster.
 
 You can add a period by clicking the 'Add period' button at the bottom of the season form. If you want to remove a
-period, click the 'close' button in the lower right corner of the period subform. You can't delete a period if there's
+period, click the 'delete' button in the lower right corner of the period subform. You can't delete a period if there's
 only one present.
 
 ### Other Season Actions
 
-The season form has several other action buttons:
+The season form has a couple other action buttons at the bottom of the form:
 
 - Delete the season
-- Go to series (the arrow button at the top and the button at the bottom are equivalent)
+- Go to series
+
+It also has action buttons in the form header:
+
+- Go to series
 - Go to the next series component (if the season is not the last component)
 - Go to the previous series component (if the season is not the first component)
-
-When you finish viewing or editing the season, you can go back to the series form.
 
 You can delete the season only when the form doesn't contain changes.
 

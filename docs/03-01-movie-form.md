@@ -15,7 +15,7 @@ The movie form is the simplest and most straightforward of the forms. Here's how
 The form consists of the following sections:
 
 - Header which contains the first title, the 'close' button, and a few other buttons if the movie is a part of a
-franchise (which will be discussed in the article on franchises)
+franchise (which are discussed in the article on franchises)
 - Poster and links, if present
 - The form fields
 - Buttons for various actions
@@ -47,7 +47,7 @@ them by pressing the 'delete' button on the right side of the title field. You c
 If you decide that the second title should become the first and the first - second, you should change them manually.
 
 The minimum value for the year is 1850 and maximum value is 2100. The reason that the movie form includes only a year,
-and not a full release date is because the movie can have multiple release dates: premieres are on different dates in
+and not a full release date is because the movie can have multiple release dates: premieres can be on different dates in
 different markets, and movies can be shown at festivals ahead of their release.
 
 You can select any kind from the list of kinds which you specify in the file's settings.

@@ -22,7 +22,7 @@ miniseries.
 The miniseries form consists of the following parts:
 
 - Header which contains the first title, the 'close' button, and a few other buttons if the miniseries is a part of a
-franchise (which will be discussed in the article on franchises)
+franchise (which are discussed in the article on franchises)
 - Poster and links, if present
 - Main form fields
 - The period subform
@@ -40,10 +40,12 @@ The miniseries form contains the following main fields:
 - Check-box which indicates whether the miniseries is an anthology
 - Kind (required)
 
+These fields are basically the same as in the full series form.
+
 ## The Period Subform
 
-The miniseries contains a single period subform which looks and behaves exactly like period subforms in season forms.
-Look at the series form article to learn more about period subforms.
+The miniseries form contains a single period subform which looks and behaves exactly like period subforms in season
+forms. Look at the series form article to learn more about period subforms.
 
 ## Additional Form Fields
 
