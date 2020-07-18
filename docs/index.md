@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Home Page
-nav_order: 1
+nav_order: 0
 ---
 
 # Movie List
