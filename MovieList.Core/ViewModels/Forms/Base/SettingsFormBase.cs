@@ -11,6 +11,7 @@ using System.Reactive.Subjects;
 using System.Resources;
 
 using DynamicData;
+using DynamicData.Aggregation;
 
 using MovieList.Data.Models;
 using MovieList.Preferences;
@@ -121,7 +122,12 @@ namespace MovieList.ViewModels.Forms.Base
             var isKindNew = new BehaviorSubject<bool>(this.InitialKindIsNewValue(kind));
             var formSubscriptions = new CompositeDisposable();
 
-            var form = new KindFormViewModel(kind, isKindNew.AsObservable(), this.ResourceManager, this.Scheduler);
+            var canDeleteKind = this.kindsSource.Connect()
+                .Count()
+                .Select(count => count > 1);
+
+            var form = new KindFormViewModel(
+                kind, isKindNew.AsObservable(), canDeleteKind, this.ResourceManager, this.Scheduler);
 
             form.Save
                 .Select(_ => false)

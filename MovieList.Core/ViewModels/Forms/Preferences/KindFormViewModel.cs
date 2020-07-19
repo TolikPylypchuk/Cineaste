@@ -22,6 +22,7 @@ namespace MovieList.ViewModels.Forms.Preferences
         public KindFormViewModel(
             Kind kind,
             IObservable<bool> isNew,
+            IObservable<bool> canDelete,
             ResourceManager? resourceManager,
             IScheduler? scheduler)
             : base(resourceManager, scheduler)
@@ -39,7 +40,9 @@ namespace MovieList.ViewModels.Forms.Preferences
 
             isNew.Subscribe(this.isNew);
 
-            this.CanDeleteWhen(Observable.Return(kind.Movies.Count == 0 && kind.Series.Count == 0));
+            bool hasItems = kind.Movies.Count != 0 || kind.Series.Count != 0;
+
+            this.CanDeleteWhen(hasItems ? Observable.Return(false) : canDelete);
             this.EnableChangeTracking();
         }
 
