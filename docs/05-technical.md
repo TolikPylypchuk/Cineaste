@@ -85,7 +85,7 @@ of the log file, as well as the minimum log level can be set in preferences, in 
 location of the log file is in the user's app data folder. Here's the list of supported log levels (from lowest to
 highest):
 
-- Verbose: log everything (this level is not used directly and and setting it is the same as setting 'Debug' as the
+- Verbose: log everything (this level is not used directly and setting it is the same as setting 'Debug' as the
 minimum level)
 - Debug: log the details of the app's internal workflow
 - Info: log general information
