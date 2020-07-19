@@ -151,8 +151,12 @@ namespace MovieList.ViewModels.Forms
             this.WhenAnyValue(vm => vm.Year)
                 .Where(_ => this.YearRule.IsValid)
                 .Select(Int32.Parse)
-                .Where(year => year != this.Scheduler.Now.Year)
-                .Subscribe(year => this.IsReleased = year < this.Scheduler.Now.Year);
+                .CombineLatest(this.WhenAnyValue(vm => vm.Month), (year, month) => new DateTime(year, month, 1))
+                .Where(date => date.Year != this.Scheduler.Now.Year ||
+                    date.Year == this.Scheduler.Now.Year && date.Month != this.Scheduler.Now.Month)
+                .Subscribe(date => this.IsReleased =
+                    date.Year < this.Scheduler.Now.Year ||
+                    date.Year == this.Scheduler.Now.Year && date.Month < this.Scheduler.Now.Month);
         }
     }
 }
