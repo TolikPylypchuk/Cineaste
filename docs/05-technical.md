@@ -52,7 +52,7 @@ The file make-up is quite straightforward. Just look at table definitions in DB 
 their structure and relations.
 
 The only table which should be elaborated on is the 'Settings' table. It contains key-value pairs for some general file
-settings which don't fit into other settings. Currently each file contains five such key-value pairs:
+settings which don't fit into other places. Currently each file contains five such key-value pairs:
 
 - List name (list.name)
 - List version (list.version)
@@ -61,20 +61,20 @@ settings which don't fit into other settings. Currently each file contains five 
 - The language used for sorting titles (list.culture)
 
 The app ignores any other rows in this table and will not be able to read the file if any one of the aforementioned rows
-is missing.
+are missing.
 
 The list version is currently always set to 1 and will be incremented every time a new version of the app introduces
-breaking changes to the file format. Not that the 0.x versions are pre-release versions which definitely will introduce
-breaking changes to files, but won't increment its version. The file version will be incremented after the app reaches
-version 1.0. I haven't yet figured out what the strategy of dealing with multiple file version will be. All breaking
-changes will be documented, but if you're using this app before version 1.0, you have to figure out how to migrate files
-on your own.
+breaking changes to the file format. Note that the 0.x versions are pre-release versions and they will definitely
+introduce breaking changes to files, but won't increment its version. The file version will be incremented after the
+app reaches version 1.0. I haven't yet figured out what the strategy for dealing with multiple file version will be.
+All breaking changes will be documented, but if you're using this app before version 1.0, you have to figure out how to
+migrate files on your own.
 
 ## Preferences
 
-Preferences are stored in the user's app data, under the 'MovieList' directory. Also, the cache of downloaded posters
-is stored in the user's local app data (also under the 'MovieList' directory). If you want to uninstall this app
-completely, you should delete these folders manually.
+Preferences are stored in the user's app data folder, under the 'MovieList' directory. Also, the cache of downloaded
+posters is stored in the user's local app data folder (also under the 'MovieList' directory). If you want to uninstall
+this app completely, you should delete these folders manually.
 
 This app uses [Akavache](https://github.com/reactiveui/Akavache) as the engine for storing settings and cache.
 
@@ -85,7 +85,8 @@ of the log file, as well as the minimum log level can be set in preferences, in 
 location of the log file is in the user's app data folder. Here's the list of supported log levels (from lowest to
 highest):
 
-- Verbose: log everything
+- Verbose: log everything (this level is not used directly and and setting it is the same as setting 'Debug' as the
+minimum level)
 - Debug: log the details of the app's internal workflow
 - Info: log general information
 - Warning: log warnings about unwanted but manageable events
