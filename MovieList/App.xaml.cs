@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Resources;
@@ -144,15 +145,18 @@ namespace MovieList
                 this.CreateDefaultKinds(),
                 CultureInfo.GetCultureInfo("uk-UA"));
 
+            string appName = Assembly.GetExecutingAssembly()?.GetName().Name ?? String.Empty;
+
             var loggingPreferences = new LoggingPreferences(
-                $"{Assembly.GetExecutingAssembly().GetName().Name}.log",
-                (int)LogEventLevel.Information);
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    appName,
+                    $"{appName}.log"),
+                (int)LogEventLevel.Warning);
 
             var preferences = new UserPreferences(filePreferences, defaultsPreferences, loggingPreferences);
 
             await BlobCache.UserAccount.InsertObject(PreferencesKey, preferences);
-
-            this.Log().Info("No preferences found. Created default preferences");
 
             return preferences;
         }
