@@ -70,7 +70,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Movie List. Version 1.0. Created by Tolik Pylypchuk.
+        ///   Looks up a localized string similar to Movie List. Version 0.1. Created by Tolik Pylypchuk.
         /// </summary>
         public static string AboutText {
             get {
