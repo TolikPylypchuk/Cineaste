@@ -72,9 +72,6 @@ namespace MovieList.Views.Forms
             this.Bind(this.ViewModel, vm => vm.StartYear, v => v.StartYearTextBox.Text)
                 .DisposeWith(disposables);
 
-            this.StartYearTextBox.ValidateWith(this.ViewModel.StartYearRule)
-                .DisposeWith(disposables);
-
             this.WhenAnyValue(v => v.ViewModel.IsSingleDayRelease)
                 .Subscribe(isSingleDayRelease => HintAssist.SetHint(
                     this.StartYearTextBox, isSingleDayRelease ? Messages.Year : Messages.StartYear));
@@ -126,6 +123,9 @@ namespace MovieList.Views.Forms
 
         public void AddValidation(CompositeDisposable disposables)
         {
+            this.StartYearTextBox.ValidateWith(this.ViewModel.StartYearRule)
+                .DisposeWith(disposables);
+
             this.EndYearTextBox.ValidateWith(this.ViewModel.EndYearRule)
                 .DisposeWith(disposables);
 

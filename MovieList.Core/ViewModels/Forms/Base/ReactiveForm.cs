@@ -72,7 +72,7 @@ namespace MovieList.ViewModels.Forms.Base
         protected abstract TForm Self { get; }
 
         public override IEnumerable GetErrors(string propertyName)
-            => this.IsFormChanged ? base.GetErrors(propertyName) : Enumerable.Empty<string>();
+            => Enumerable.Empty<string>();
 
         protected void TrackChanges(IObservable<bool> changes)
             => this.changesToTrack.Add(changes.StartWith(false));

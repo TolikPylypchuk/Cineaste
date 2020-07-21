@@ -4,8 +4,7 @@
                              xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                              xmlns:local="clr-namespace:MovieList.Views.Forms"
                              xmlns:l="clr-namespace:MovieList.Localization"
-                             xmlns:v="clr-namespace:MovieList.Views"
-                             Validation.ErrorTemplate="{x:Null}">
+                             xmlns:v="clr-namespace:MovieList.Views">
     <local:PeriodFormControlBase.Resources>
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
             <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
@@ -28,8 +27,8 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="RottenTomatoesLinkTextBlock" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="4,0"
-                   HorizontalAlignment="Center">
+        <TextBlock x:Name="RottenTomatoesLinkTextBlock" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                   Margin="4,6,4,0" HorizontalAlignment="Center">
             <Hyperlink x:Name="RottenTomatoesLink" v:Properties.IsExternal="True">
                 <Hyperlink.Inlines>
                     <Run Text="{l:Translate RottenTomatoes}" />
