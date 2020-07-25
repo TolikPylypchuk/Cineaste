@@ -120,8 +120,8 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="AboutText" xml:space="preserve">
-    <value>Movie List. Version 0.1. Created by Tolik Pylypchuk</value>
+  <data name="AboutTextFormat" xml:space="preserve">
+    <value>Movie List. Version {0}. Created by Tolik Pylypchuk</value>
   </data>
   <data name="AboutTitle" xml:space="preserve">
     <value>About</value>
@@ -687,5 +687,11 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="RottenTomatoesLinkForSeries" xml:space="preserve">
     <value>Rotten Tomatoes link for series</value>
+  </data>
+  <data name="DocsLink" xml:space="preserve">
+    <value>https://tolikpylypchuk.github.io/MovieList</value>
+  </data>
+  <data name="ViewDocumentation" xml:space="preserve">
+    <value>View the documentation</value>
   </data>
 </root>

@@ -70,11 +70,11 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Movie List. Version 0.1. Created by Tolik Pylypchuk.
+        ///   Looks up a localized string similar to Movie List. Version {0}. Created by Tolik Pylypchuk.
         /// </summary>
-        public static string AboutText {
+        public static string AboutTextFormat {
             get {
-                return ResourceManager.GetString("AboutText", resourceCulture);
+                return ResourceManager.GetString("AboutTextFormat", resourceCulture);
             }
         }
         
@@ -598,6 +598,15 @@ namespace MovieList.Properties {
         public static string Detach {
             get {
                 return ResourceManager.GetString("Detach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://tolikpylypchuk.github.io/MovieList.
+        /// </summary>
+        public static string DocsLink {
+            get {
+                return ResourceManager.GetString("DocsLink", resourceCulture);
             }
         }
         
@@ -1732,6 +1741,15 @@ namespace MovieList.Properties {
         public static string ValidationYearInvalid {
             get {
                 return ResourceManager.GetString("ValidationYearInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View the documentation.
+        /// </summary>
+        public static string ViewDocumentation {
+            get {
+                return ResourceManager.GetString("ViewDocumentation", resourceCulture);
             }
         }
         

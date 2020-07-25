@@ -147,5 +147,21 @@ namespace MovieList
 
             ctx.SetOutput(result == null || result.Canceled ? null : result.File);
         }
+
+        public async Task ShowAboutDialogAsync(InteractionContext<AboutModel, Unit> ctx)
+        {
+            if (this.Host.IsOpen)
+            {
+                ctx.SetOutput(Unit.Default);
+                return;
+            }
+
+            var view = ViewLocator.Current.ResolveView(ctx.Input);
+            view.ViewModel = ctx.Input;
+
+            await DialogHost.Show(view);
+
+            ctx.SetOutput(Unit.Default);
+        }
     }
 }

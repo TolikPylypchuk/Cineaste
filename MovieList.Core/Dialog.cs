@@ -21,5 +21,7 @@ namespace MovieList
         public static readonly Interaction<string, string?> SaveFile = new Interaction<string, string?>();
 
         public static readonly Interaction<Unit, string?> OpenFile = new Interaction<Unit, string?>();
+
+        public static readonly Interaction<AboutModel, Unit> ShowAbout = new Interaction<AboutModel, Unit>();
     }
 }

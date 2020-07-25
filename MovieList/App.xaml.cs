@@ -263,6 +263,7 @@ namespace MovieList
             Dialog.ColorPicker.RegisterHandler(handler.ShowColorDialogAsync);
             Dialog.SaveFile.RegisterHandler(handler.ShowSaveFileDialogAsync);
             Dialog.OpenFile.RegisterHandler(handler.ShowOpenFileDialogAsync);
+            Dialog.ShowAbout.RegisterHandler(handler.ShowAboutDialogAsync);
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

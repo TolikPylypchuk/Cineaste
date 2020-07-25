@@ -8,6 +8,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reflection;
 
 using Akavache;
 
@@ -42,6 +43,8 @@ namespace MovieList.ViewModels
         private readonly CompositeDisposable preferencesSubscriptions = new CompositeDisposable();
 
         private readonly Subject<bool> showRecentFiles = new Subject<bool>();
+
+        private readonly Version Version = Assembly.GetEntryAssembly()!.GetName()!.Version!;
 
         public MainViewModel(IBlobCache? store = null, IScheduler? scheduler = null)
         {
@@ -91,7 +94,7 @@ namespace MovieList.ViewModels
 
             this.Shutdown = ReactiveCommand.CreateFromObservable(this.OnShutdown);
             this.ShowAbout = ReactiveCommand.CreateFromObservable(() =>
-                Dialog.ShowMessage.Handle(new MessageModel("AboutText", "AboutTitle")));
+                Dialog.ShowAbout.Handle(new AboutModel { Version = $"{this.Version.Major}.{this.Version.Minor}" }));
 
             this.OpenPreferences = ReactiveCommand.CreateFromObservable(this.OnOpenPreferences);
             this.ClosePreferences = ReactiveCommand.CreateFromObservable(this.OnClosePreferences);
