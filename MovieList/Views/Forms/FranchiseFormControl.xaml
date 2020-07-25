@@ -44,17 +44,17 @@
         </DockPanel>
 
         <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                   Margin="16,8" TextWrapping="Wrap" />
+                   Margin="16 8" TextWrapping="Wrap" />
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <DockPanel>
                 <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" DockPanel.Dock="Bottom" />
 
-                <StackPanel Margin="16,8,16,0">
+                <StackPanel Margin="16 8 16 0">
                     <StackPanel.Resources>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
-                            <Setter Property="Margin" Value="8,8,0,0" />
+                            <Setter Property="Margin" Value="8 8 0 0" />
                             <Setter Property="Padding" Value="0" />
                             <Setter Property="Width" Value="20" />
                             <Setter Property="Height" Value="20" />
@@ -65,17 +65,17 @@
 
                     <Image x:Name="Poster" />
 
-                    <WrapPanel HorizontalAlignment="Center" Margin="0,8,0,0">
-                        <CheckBox x:Name="HasTitlesCheckBox" Margin="4,0"
+                    <WrapPanel HorizontalAlignment="Center" Margin="0 8 0 0">
+                        <CheckBox x:Name="HasTitlesCheckBox" Margin="4 0"
                                   Content="{l:Translate FranchiseHasTitles}" />
-                        <CheckBox x:Name="ShowInListCheckBox" Margin="4,0"
+                        <CheckBox x:Name="ShowInListCheckBox" Margin="4 0"
                                   Content="{l:Translate FranchiseShowInList}" />
                     </WrapPanel>
 
-                    <WrapPanel HorizontalAlignment="Center" Margin="0,8,0,0">
-                        <CheckBox x:Name="IsLooselyConnectedCheckBox" Margin="4,0"
+                    <WrapPanel HorizontalAlignment="Center" Margin="0 8 0 0">
+                        <CheckBox x:Name="IsLooselyConnectedCheckBox" Margin="4 0"
                                   Content="{l:Translate LooselyConnected}" />
-                        <CheckBox x:Name="MergeDisplayNumbersCheckBox" Margin="4,0"
+                        <CheckBox x:Name="MergeDisplayNumbersCheckBox" Margin="4 0"
                                   Content="{l:Translate MergeDisplayNumbers}" />
                     </WrapPanel>
 
@@ -83,12 +83,12 @@
 
                     <ItemsControl x:Name="OriginalTitles" />
 
-                    <ItemsControl x:Name="Entries" Margin="0,8" Grid.IsSharedSizeScope="True" />
+                    <ItemsControl x:Name="Entries" Margin="0 8" Grid.IsSharedSizeScope="True" />
 
-                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate PosterUrl}" />
 
-                    <Grid Margin="0,8">
+                    <Grid Margin="0 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -98,7 +98,7 @@
                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                                 <Setter Property="FontSize" Value="12" />
-                                <Setter Property="Margin" Value="4,0" />
+                                <Setter Property="Margin" Value="4 0" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="MinHeight" Value="32" />
                             </Style>
@@ -121,7 +121,7 @@
                                    TextWrapping="Wrap" />
                     </Button>
 
-                    <Grid Margin="0,8">
+                    <Grid Margin="0 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -131,7 +131,7 @@
                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                                 <Setter Property="FontSize" Value="12" />
-                                <Setter Property="Margin" Value="4,0" />
+                                <Setter Property="Margin" Value="4 0" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="MinHeight" Value="32" />
                             </Style>

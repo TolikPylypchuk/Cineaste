@@ -6,13 +6,13 @@
                             xmlns:v="clr-namespace:MovieList.Views">
     <DockPanel>
         <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
-                VerticalAlignment="Center" Padding="0" Width="20" Height="20" Margin="8,0,0,0"
+                VerticalAlignment="Center" Padding="0" Width="20" Height="20" Margin="8 0 0 0"
                 Foreground="{StaticResource SecondaryAccentBrush}">
             <m:PackIcon Kind="CloseCircleOutline" Margin="0" Width="20" Height="20" />
         </Button>
 
         <TextBox x:Name="NameTextBox" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                 TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLines="10" Margin="0,8"
+                 TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLines="10" Margin="0 8"
                  v:Properties.TripleClickSelectAll="True" />
     </DockPanel>
 </local:TitleFormControlBase>

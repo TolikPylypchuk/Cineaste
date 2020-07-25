@@ -7,7 +7,7 @@
         <StackPanel.Resources>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">
                 <Setter Property="Height" Value="50" />
-                <Setter Property="Margin" Value="32,16" />
+                <Setter Property="Margin" Value="32 16" />
                 <Setter Property="HorizontalAlignment" Value="Stretch" />
             </Style>
         </StackPanel.Resources>

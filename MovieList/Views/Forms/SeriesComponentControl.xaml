@@ -5,7 +5,7 @@
                                   xmlns:local="clr-namespace:MovieList.Views.Forms"
                                   xmlns:l="clr-namespace:MovieList.Localization">
     <Border HorizontalAlignment="Stretch" BorderBrush="{DynamicResource MaterialDesignDivider}"
-            BorderThickness="0,0,0,1" Padding="8" Background="Transparent" Cursor="Hand">
+            BorderThickness="0 0 0 1" Padding="8" Background="Transparent" Cursor="Hand">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -14,7 +14,7 @@
 
             <TextBlock x:Name="TitleTextBlock" Grid.Column="0" TextAlignment="Center" TextWrapping="Wrap"
                        VerticalAlignment="Center" />
-            <TextBlock x:Name="YearsTextBlock" Grid.Column="1" Margin="4,0,0,0" TextAlignment="Right"
+            <TextBlock x:Name="YearsTextBlock" Grid.Column="1" Margin="4 0 0 0" TextAlignment="Right"
                        VerticalAlignment="Center" />
         </Grid>
 

@@ -44,17 +44,17 @@
         </DockPanel>
 
         <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                   Margin="16,8" TextWrapping="Wrap" />
+                   Margin="16 8" TextWrapping="Wrap" />
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <DockPanel>
                 <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" DockPanel.Dock="Bottom" />
 
-                <StackPanel Margin="16,8,16,0">
+                <StackPanel Margin="16 8 16 0">
                     <StackPanel.Resources>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
-                            <Setter Property="Margin" Value="8,8,0,0" />
+                            <Setter Property="Margin" Value="8 8 0 0" />
                             <Setter Property="Padding" Value="0" />
                             <Setter Property="Width" Value="20" />
                             <Setter Property="Height" Value="20" />
@@ -65,15 +65,15 @@
 
                     <Image x:Name="Poster" />
 
-                    <WrapPanel Margin="0,8,0,0" HorizontalAlignment="Center">
-                        <TextBlock x:Name="ImdbLinkTextBlock" Margin="4,0" HorizontalAlignment="Center">
+                    <WrapPanel Margin="0 8 0 0" HorizontalAlignment="Center">
+                        <TextBlock x:Name="ImdbLinkTextBlock" Margin="4 0" HorizontalAlignment="Center">
                             <Hyperlink x:Name="ImdbLink" v:Properties.IsExternal="True">
                                 <Hyperlink.Inlines>
                                     <Run Text="{l:Translate Imdb}" />
                                 </Hyperlink.Inlines>
                             </Hyperlink>
                         </TextBlock>
-                        <TextBlock x:Name="RottenTomatoesLinkTextBlock" Margin="4,0" HorizontalAlignment="Center">
+                        <TextBlock x:Name="RottenTomatoesLinkTextBlock" Margin="4 0" HorizontalAlignment="Center">
                             <Hyperlink x:Name="RottenTomatoesLink" v:Properties.IsExternal="True">
                                 <Hyperlink.Inlines>
                                     <Run Text="{l:Translate RottenTomatoes}" />
@@ -86,38 +86,38 @@
 
                     <ItemsControl x:Name="OriginalTitles" />
 
-                    <Grid Margin="0,8">
+                    <Grid Margin="0 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
                         <ComboBox x:Name="WatchStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch"
-                                  Margin="0,0,8,0" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  Margin="0 0 8 0" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   m:HintAssist.Hint="{l:Translate WatchStatus}" />
 
                         <CheckBox x:Name="IsAnthologyCheckBox" Grid.Column="1" Content="{l:Translate Anthology}"
-                                  Margin="8,0,0,0" VerticalAlignment="Center" />
+                                  Margin="8 0 0 0" VerticalAlignment="Center" />
                     </Grid>
 
-                    <Grid Margin="0,8">
+                    <Grid Margin="0 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
                         <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch"
-                                  Margin="0,0,8,0" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  Margin="0 0 8 0" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   m:HintAssist.Hint="{l:Translate ReleaseStatus}" />
 
-                        <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8,0,0,0"
+                        <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8 0 0 0"
                                   DisplayMemberPath="Name" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   m:HintAssist.Hint="{l:Translate Kind}" />
                     </Grid>
 
-                    <ItemsControl x:Name="Components" Margin="0,8" Grid.IsSharedSizeScope="True" />
+                    <ItemsControl x:Name="Components" Margin="0 8" Grid.IsSharedSizeScope="True" />
 
-                    <Grid Margin="0,8">
+                    <Grid Margin="0 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -127,7 +127,7 @@
                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                                 <Setter Property="FontSize" Value="12" />
-                                <Setter Property="Margin" Value="4,0" />
+                                <Setter Property="Margin" Value="4 0" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="MinHeight" Value="32" />
                             </Style>
@@ -144,16 +144,16 @@
                         </Button>
                     </Grid>
 
-                    <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                    <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate ImdbLink}" />
 
-                    <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                    <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate RottenTomatoesLinkForSeries}" />
 
-                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate PosterUrl}" />
 
-                    <Grid Margin="0,8">
+                    <Grid Margin="0 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -163,7 +163,7 @@
                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                                 <Setter Property="FontSize" Value="12" />
-                                <Setter Property="Margin" Value="4,0" />
+                                <Setter Property="Margin" Value="4 0" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="MinHeight" Value="32" />
                             </Style>

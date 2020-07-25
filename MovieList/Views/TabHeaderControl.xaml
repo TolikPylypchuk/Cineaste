@@ -6,7 +6,7 @@
                             xmlns:local="clr-namespace:MovieList.Views">
     <DockPanel HorizontalAlignment="Stretch">
         <Button x:Name="CloseButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
-                VerticalAlignment="Center" Padding="0" Width="15" Height="15" Margin="10,0,0,0">
+                VerticalAlignment="Center" Padding="0" Width="15" Height="15" Margin="10 0 0 0">
             <m:PackIcon Kind="WindowClose" Margin="0" Width="15" Height="15" Foreground="{Binding
                             Path=(me:TabControlAssist.TabHeaderForeground),
                             RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabItem}}}" />

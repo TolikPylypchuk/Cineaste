@@ -16,11 +16,11 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="36">
             <Button x:Name="CreateListButton" Style="{StaticResource MaterialDesignRaisedButton}"
-                    Width="150" Height="50" HorizontalAlignment="Center" Margin="0,0,12,0"
+                    Width="150" Height="50" HorizontalAlignment="Center" Margin="0 0 12 0"
                     Content="{l:Translate CreateList, ToUpper=True}" />
 
             <Button x:Name="OpenListButton" Style="{StaticResource MaterialDesignRaisedButton}"
-                    Width="150" Height="50" HorizontalAlignment="Center" Margin="12,0,0,0"
+                    Width="150" Height="50" HorizontalAlignment="Center" Margin="12 0 0 0"
                     Content="{l:Translate OpenList, ToUpper=True}" />
         </StackPanel>
 
@@ -28,7 +28,7 @@
                    HorizontalAlignment="Center" Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
 
         <DockPanel x:Name="RecentlyOpenedFilesPanel" Grid.Row="3" VerticalAlignment="Top">
-            <Button x:Name="RemoveButton" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="8,8,8,16"
+            <Button x:Name="RemoveButton" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="8 8 8 16"
                     Style="{StaticResource MaterialDesignRaisedAccentButton}"
                     Content="{l:Translate RemoveFromList, ToUpper=True}" />
 
@@ -38,7 +38,7 @@
         </DockPanel>
 
         <TextBlock x:Name="NoRecentlyOpenedFilesTextBlock" Grid.Row="3" HorizontalAlignment="Center"
-                   Text="{l:Translate NoRecentlyOpenedFiles}" Margin="0,16,0,0"
+                   Text="{l:Translate NoRecentlyOpenedFiles}" Margin="0 16 0 0"
                    Style="{StaticResource MaterialDesignBody1TextBlock}" />
     </Grid>
 </local:HomePageControlBase>

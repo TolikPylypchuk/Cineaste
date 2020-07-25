@@ -44,17 +44,17 @@
         </DockPanel>
 
         <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                   Margin="16,8" TextWrapping="Wrap" />
+                   Margin="16 8" TextWrapping="Wrap" />
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <DockPanel>
                 <Button x:Name="DeleteButton" Content="{l:Translate Delete, ToUpper=True}" HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" DockPanel.Dock="Bottom" />
 
-                <StackPanel Margin="16,8,16,0">
+                <StackPanel Margin="16 8 16 0">
                     <StackPanel.Resources>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
-                            <Setter Property="Margin" Value="8,8,0,0" />
+                            <Setter Property="Margin" Value="8 8 0 0" />
                             <Setter Property="Padding" Value="0" />
                             <Setter Property="Width" Value="20" />
                             <Setter Property="Height" Value="20" />
@@ -65,7 +65,7 @@
 
                     <Image x:Name="Poster" />
 
-                    <TextBlock x:Name="RottenTomatoesLinkTextBlock" Margin="4,0" HorizontalAlignment="Center">
+                    <TextBlock x:Name="RottenTomatoesLinkTextBlock" Margin="4 0" HorizontalAlignment="Center">
                         <Hyperlink x:Name="RottenTomatoesLink" v:Properties.IsExternal="True">
                             <Hyperlink.Inlines>
                                 <Run Text="{l:Translate RottenTomatoes}" />
@@ -73,16 +73,16 @@
                         </Hyperlink>
                     </TextBlock>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
-                        <CheckBox x:Name="IsWatchedCheckBox" Content="{l:Translate Watched}" Margin="0,0,4,0" />
-                        <CheckBox x:Name="IsReleasedCheckBox" Content="{l:Translate Released}" Margin="4,0,0,0" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 8 0 0">
+                        <CheckBox x:Name="IsWatchedCheckBox" Content="{l:Translate Watched}" Margin="0 0 4 0" />
+                        <CheckBox x:Name="IsReleasedCheckBox" Content="{l:Translate Released}" Margin="4 0 0 0" />
                     </StackPanel>
 
                     <ItemsControl x:Name="Titles" />
 
                     <ItemsControl x:Name="OriginalTitles" />
 
-                    <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                    <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate Channel}" />
 
                     <Grid>
@@ -92,20 +92,20 @@
                         </Grid.ColumnDefinitions>
 
                         <ComboBox x:Name="MonthComboBox" Grid.Column="0" HorizontalAlignment="Stretch"
-                                  Margin="0,8,8,8" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  Margin="0 8 8 8" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   m:HintAssist.Hint="{l:Translate Month}" />
 
-                        <TextBox x:Name="YearTextBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8,8,0,8"
+                        <TextBox x:Name="YearTextBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8 8 0 8"
                                  m:HintAssist.Hint="{l:Translate Year}" />
                     </Grid>
 
-                    <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                    <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate RottenTomatoesLink}" />
 
-                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0,8"
+                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate PosterUrl}" />
 
-                    <Grid Margin="0,8">
+                    <Grid Margin="0 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -115,7 +115,7 @@
                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                                 <Setter Property="FontSize" Value="12" />
-                                <Setter Property="Margin" Value="4,0" />
+                                <Setter Property="Margin" Value="4 0" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="MinHeight" Value="32" />
                             </Style>
