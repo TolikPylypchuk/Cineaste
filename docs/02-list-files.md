@@ -11,8 +11,8 @@ Here's what the app looks like when you create a new file:
 
 ![Screen with new file](/assets/images/screen-new-file.png)
 
-The files are contain three main sections: the list itself, stats, and settings. You can switch between them using the
-left-side bar.
+The file tabs are composed of three main sections: the list itself, stats, and settings. You can switch between them
+using the left-side bar.
 
 When you open a file, you can close it via the 'close' button in the tab's header, through the File > Close menu item,
 or by pressing Ctrl+W.
@@ -115,7 +115,7 @@ in your native language, and sorting rules may be different for different langua
 Default season title and original title are used to generate titles for newly created seasons for series. The # symbol
 will be replaced with the actual season number. For example, if the default season title is 'Season #' and you create
 two seasons, their default names will be 'Season 1' and 'Season 2' respectively. Same for season original titles. You
-can learn more about the season form in the next article.
+can learn more about the season form in the article on series.
 
 ### Kind Settings
 
@@ -127,7 +127,7 @@ clicking on them and by editing the color in the modal window.
 ![Screen with color modal](/assets/images/screen-settings-color.png)
 
 You can select a color in the color picker or enter its HEX color value. Mind that the HEX value field uses ARGB instead
-of RGB! You can add 'FF' in the beginning to convert an RGB value into an ARGB value.
+of RGB. You can add 'FF' in the beginning to convert an RGB value into an ARGB value.
 
 You can have as many kinds as you like (but more than zero). You can't delete kinds that have items of that kind in the
 list. If you want to delete a kind, you should manually edit its every item to have a different kind.

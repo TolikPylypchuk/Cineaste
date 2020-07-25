@@ -29,7 +29,7 @@ another franchise
 
 ## Form Fields
 
-The miniseries form contains the following main fields:
+The franchise form contains the following main fields:
 
 - Check-box which indicates whether the franchise has its own titles
 - Check-box which indicates whether the franchise should be shown as an item in the list
@@ -60,7 +60,7 @@ When you add a new entry, its respective form is opened. There's nothing differe
 from creating a standalone item. When you save it, it is added to the franchise entry list. If you cancel, you are taken
 back to the franchise form.
 
-If you click on a franchise entry, a context menu will apper which has the following actions:
+If you right-click on a franchise entry, a context menu will apper which has the following actions:
 
 - Move up (if the entry is not the first one)
 - Move down (if the entry is not the last one)
@@ -92,13 +92,13 @@ limited to two levels only though.
 
 Merging display numbers can be better explained with an example. Suppose you created a franchise called Star Wars which
 contains three other franchises: The Original Trilogy, The Prequel Trilogy and The Sequel Trilogy, each of which
-contains three movies, for a total of nine movies (anthology films notwithstanding). If you open any of the child
-franchises, you'll see that every movie is numbered 1, 2, and 3. This may not be desirable, because all of these movies
-are part of one big Star Wars franchise, and so it would be better to say that e.g. The Revenge of the Sith is the sixth
-movie overall, and not just the third movie of the Prequel Trilogy. You can do that by merging the display numbers.
-If you check the 'merge display numbers' check-box in the child franchises (the trilogies), then the Prequel Trilogy
-will continue numbering its movies after the Original Trilogy (so, 4, 5, and 6) and the Sequel Trilogy will continue
-numbering its movies after the Prequel Trilogy (so, 7, 8, and 9).
+contains three movies, for a total of nine movies (anthology films and series notwithstanding). If you open any of the
+child franchises, you'll see that every movie is numbered 1, 2, and 3. This may not be desirable, because all of these
+movies are part of one big Star Wars franchise, and so it would be better to say that e.g. The Revenge of the Sith is
+the sixth movie overall, and not just the third movie of the Prequel Trilogy. You can do that by merging the display
+numbers. If you check the 'merge display numbers' check-box in the child franchises (the trilogies), then the Prequel
+Trilogy will continue numbering its movies after the Original Trilogy (so, 4, 5, and 6) and the Sequel Trilogy will
+continue numbering its movies after the Prequel Trilogy (so, 7, 8, and 9).
 
 ## Franchise Navigation Actions
 

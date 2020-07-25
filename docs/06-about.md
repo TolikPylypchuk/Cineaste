@@ -14,8 +14,9 @@ analyze the data somehow. Also, this is a fun side project.
 
 ## Project Status
 
-I've been working on this app for a year and a half (as of July 2020) and it's not nearly done. I'm going to release
-version 0.1 soon, because now the app is a least usable, although it lacks lots of features yet. Versions 0.x should
-be considered pre-release and as such probably shouldn't be used in general since there will be breaking changes.
+I've been working on this app for a year and a half (as of July 2020) and it's not nearly done. I've released version
+0.1, because now the app is a least usable, although it lacks lots of features yet. Versions 0.x should be considered
+pre-release and as such probably shouldn't be used in general since there will be breaking changes.
 
-I'm currently working on the documentation (these very pages) so expect more of this in the coming days/weeks.
+I'm actively working on the app, although sometimes a take breaks to work on other projects, so expect more versions
+soon.

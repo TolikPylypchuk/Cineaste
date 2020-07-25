@@ -42,11 +42,11 @@ Since watching the series is more of a continuous process (unless you binge it),
 'watched' or 'not watched'. Here are the possible watch statuses:
 
 - Not watched, if you haven't started watching the series yet
-- Watching, if you are currenly watching the series or waiting for new seasons
-- Watched, if you watched the series in its entirety
+- Watching, if you are currenly watching the series or waiting for new episodes
+- Watched, if you have watched the series in its entirety
 - Stopped watching, if you decided that the series is not worth your time anymore
 
-Like watch status, there's more to the release status than simply 'released' or 'not released'. Here's the possible
+Like watch status, there's more to the release status than simply 'released' or 'not released'. Here are the possible
 release statuses:
 
 - Not started
@@ -96,7 +96,7 @@ When you add a new season or click on an existing one in the series form, a seas
 
 ![Screen with season form](/assets/images/screen-season-form.png)
 
-Unlike the movie and series forms, the season form is not independent - it's considered to be part fo the series form.
+Unlike the movie and series forms, the season form is not independent - it's considered to be part of the series form.
 You can't save a season directly; to save a season, go back to the series form and save the whole series. You can cancel
 any changes in the season form directly. If you cancel changes in the series form, all changes in all seasons will be
 cancelled as well (and new seasons will be deleted).
@@ -125,7 +125,7 @@ As with series, there are several watch statuses:
 
 - Not watched, if you haven't started watching the season
 - Watching, if you are currently watching it, or waiting for new episodes
-- Watched, if you finished watching the full season
+- Watched, if you have finished watching the full season
 - Hiatus, if the season is on a hiatus, or you decided to take a break from watching it
 - Stopped watching, if you lost interest in the series, haven't finished the season, and don't plan to finish it
 
@@ -222,6 +222,8 @@ The special episode form consists of the following parts:
 - Buttons for various actions
 
 ### Special Episode Form Fields
+
+The special episode form contains the following fields:
 
 - Check-box which indicates whether you watched the episode
 - Check-box which indicates whether the episode is released

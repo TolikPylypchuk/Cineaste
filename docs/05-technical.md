@@ -13,7 +13,7 @@ technical aspects.
 
 ## UI
 
-This app is a desktop app. I've contemplated writing a web-app, but decided against it, partly because it's easier,
+This app is a desktop app. I've contemplated writing a web app, but decided against it, partly because it's easier,
 and because it makes more sense to store lists in files on user's machines instead of some sort of centralized database.
 
 The UI is written using [WPF](https://github.com/dotnet/wpf), and styled with
@@ -30,12 +30,13 @@ unlikely.
 At the beginning of the app's developement, I didn't use any libraries for styling at all, thinking I will write styles
 myself. That proved to be a horrible idea, and I started using [HandyControl](https://github.com/HandyOrg/HandyControl)
 and then switched to my own fork of the library (which I've since deleted completely, so some very old commits cannot
-even be built anymore). I have since decided to completely rewrite the app, and to use Material Design for UI.
+even be built anymore). I have since decided to completely rewrite the app, and to use Material Design for UI. You can
+find this old version under the ['old' git tag](https://github.com/TolikPylypchuk/MovieList/releases/tag/old).
 
 ## Core Logic
 
 I'm using [ReactiveUI](https://www.reactiveui.net) as the MVVM framework for the core logic, and I must say that it's a
-real pleasure to use this framework.
+real pleasure to use this framework. Also, [Splat](https://github.com/reactiveui/splat) is used for service location.
 
 In the beginning I rolled my own MVVM stuff, but it quickly became bloated and extremely unwieldy in code, and the
 performance became horrible. So I've scrapped everyhing, and started from scratch using ReactiveUI (and changed the UI
@@ -80,10 +81,10 @@ This app uses [Akavache](https://github.com/reactiveui/Akavache) as the engine f
 
 ## Logging
 
-This app uses a plain-text log file to log the stuff it's doing and errors it encounters along the way. The location
-of the log file, as well as the minimum log level can be set in preferences, in the advanced section. The default
-location of the log file is in the user's app data folder. Here's the list of supported log levels (from lowest to
-highest):
+This app uses a plain-text log file to log the stuff it's doing and errors it encounters along the way.
+[Serilog](https://serilog.net) is used as the logging library. The location of the log file, as well as the minimum
+log level can be set in preferences, in the advanced section. The default location of the log file is in the user's
+app data folder. Here's the list of supported log levels (from lowest to highest):
 
 - Verbose: log everything (this level is not used directly and setting it is the same as setting 'Debug' as the
 minimum level)
@@ -109,5 +110,7 @@ These articles are built using [Jekyll](https://jekyllrb.com) and [GitHub Pages]
 
 If you want to build your own version of this app, you simply need .NET Core 3.1. That's it, there are no special
 prerequisites.
+
+Run the `Publish-App` script to create a zipped app which you can then extract to anywhere.
 
 If you also want to build the docs locally, you need Jekyll.

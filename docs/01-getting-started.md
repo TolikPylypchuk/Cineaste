@@ -10,10 +10,8 @@ permalink: getting-started
 ## How to Get the App
 
 The Movie List app works only on Windows (and only tested on Windows 10). Currently the only way to get this app is to
-build it from source, but version 0.1 will be released shortly.
-
-Once built, extract it to anywhere and run it. On the first run it will create the necessary configuration which is
-stored in the user's app data folder.
+download it from the 'releases' section on GitHub (there's a link to that on the home page of these docs) and extract it
+manually. The latest version is 0.1.
 
 ## Files and Tabs
 
@@ -33,21 +31,21 @@ The app's home page contains several features for working with files.
 
 Firstly, you can create a list file. When you click on the 'Create a list' button, a 'Save file' dialog is opened.
 Enter the file name and select the location, click save, and an empty list file will be created and opened in a new
-tab. This is also available through the menu item File > New, or by pressing Ctrl+N.
+tab. This is also available through the File > New menu item, or by pressing Ctrl+N.
 
 Secondly, you can open an existing list file. There are several ways to do that. You can click the 'Open a list' button
-and select the file in the 'Open file' dialog. Or you can use the menu item File > Open, or press Ctrl+O. Also, you can
+and select the file in the 'Open file' dialog. Or you can use the File > Open menu item, or press Ctrl+O. Also, you can
 drop a file into any area inside the app window to open a new file. Lastly, you can open the file through the File
 Explorer if you had Windows bind the file extension to this app.
 
 Thirdly, you can view and open any files that you've recently opened. Simply double-click on any 'Recently opened files'
-entry to open it. You can also go to File > Open Recent... > {file name} to open a recent file. To remove a file from
-the recently opened files list, click on the check-box on the left side of the entry, and click the 'Remove from list'
-button.
+entry to open it. You can also go to the File > Open Recent... > {file name} menu item to open a recent file. To remove
+a file from the recently opened files list, click on the check-box on the left side of the entry, and click the 'Remove
+from list' button.
 
 ## Other Menu Items
 
-You can learn about other menu items in the following sections.
+You can learn about feature-specific menu items in the following articles.
 
 The following menu items don't belong to specific features:
 
