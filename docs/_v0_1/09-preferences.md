@@ -28,7 +28,7 @@ settings you can find if you open a file's settings. The only difference is that
 Currently the only setting in this section is a check-box which indicates whether to show recent files in the home page,
 or not. If you uncheck it, the app will clear the recent files list, and won't track which files were opened.
 
-## Advances Preferences
+## Advanced Preferences
 
 You probably shouldn't touch these. Currently they only control the app's logging level and log location. You can read
 more in the article on technical stuff if you so wish. Unlike other preferences, if you change these settings, it will
