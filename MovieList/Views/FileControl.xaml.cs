@@ -35,12 +35,12 @@ namespace MovieList.Views
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.InitializeSideNavigation(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Content, v => v.ContentHost.ViewModel)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
             });
         }
 
@@ -57,10 +57,10 @@ namespace MovieList.Views
                 IsSelectable = true
             };
 
-            this.WhenAnyValue(v => v.ViewModel.Content)
-                .Select(content => content == this.ViewModel.MainContent)
+            this.WhenAnyValue(v => v.ViewModel!.Content)
+                .Select(content => content == this.ViewModel!.MainContent)
                 .Subscribe(shouldSelectList => this.ListItem.IsSelected = shouldSelectList)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.StatsItem = new FirstLevelNavigationItem
             {
@@ -76,10 +76,10 @@ namespace MovieList.Views
                 IsSelectable = true
             };
 
-            this.WhenAnyValue(v => v.ViewModel.Content)
-                .Select(content => content == this.ViewModel.Settings)
+            this.WhenAnyValue(v => v.ViewModel!.Content)
+                .Select(content => content == this.ViewModel!.Settings)
                 .Subscribe(shouldSelectSettings => this.SettingsItem.IsSelected = shouldSelectSettings)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.Navigation.Items = new List<INavigationItem>
             {
@@ -95,13 +95,13 @@ namespace MovieList.Views
         {
             if (selectedItem == this.ListItem)
             {
-                await this.ViewModel.SwitchToList.Execute();
+                await this.ViewModel!.SwitchToList.Execute();
             } else if (selectedItem == this.StatsItem)
             {
-                await this.ViewModel.SwitchToStats.Execute();
+                await this.ViewModel!.SwitchToStats.Execute();
             } else if (selectedItem == this.SettingsItem)
             {
-                await this.ViewModel.SwitchToSettings.Execute();
+                await this.ViewModel!.SwitchToSettings.Execute();
             }
 
             return true;

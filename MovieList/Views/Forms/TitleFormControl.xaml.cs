@@ -21,24 +21,24 @@ namespace MovieList.Views.Forms
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
-                this.NameTextBox.ValidateWith(this.ViewModel.NameRule)
-                    .DisposeWith(disposables);
+                this.NameTextBox.ValidateWith(this.ViewModel!.NameRule)
+                    ?.DisposeWith(disposables);
 
                 HintAssist.SetHint(
                     this.NameTextBox,
                     this.ViewModel.Title.IsOriginal ? Messages.OriginalTitle : Messages.Title);
 
-                this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
-                    .DisposeWith(disposables);
+                this.BindCommand(this.ViewModel!, vm => vm.Delete, v => v.DeleteButton)
+                    ?.DisposeWith(disposables);
 
                 this.ViewModel.Delete.CanExecute
                     .BindTo(this, v => v.DeleteButton.Visibility)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
             });
         }
     }

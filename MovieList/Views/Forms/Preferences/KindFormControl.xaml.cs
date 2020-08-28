@@ -24,20 +24,20 @@ namespace MovieList.Views.Forms.Preferences
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
-                this.NameTextBox.ValidateWith(this.ViewModel.NameRule)
-                    .DisposeWith(disposables);
+                this.NameTextBox.ValidateWith(this.ViewModel!.NameRule)
+                    ?.DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.ViewModel.Delete.CanExecute
                     .BindTo(this, v => v.DeleteButton.Visibility)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.BindColors(disposables);
                 this.EnablePickingNewColors(disposables);
@@ -50,58 +50,58 @@ namespace MovieList.Views.Forms.Preferences
                     this.ViewModel,
                     vm => vm.ColorForWatchedMovie,
                     v => v.WatchedMovieColorRectangle.Fill)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotWatchedMovie,
                     v => v.NotWatchedMovieColorRectangle.Fill)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotReleasedMovie,
                     v => v.NotReleasedMovieColorRectangle.Fill)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForWatchedSeries,
                     v => v.WatchedSeriesColorRectangle.Fill)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotWatchedSeries,
                     v => v.NotWatchedSeriesColorRectangle.Fill)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotReleasedSeries,
                     v => v.NotReleasedSeriesColorRectangle.Fill)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
         }
 
         private void EnablePickingNewColors(CompositeDisposable disposables)
         {
             this.PickNewColorOnClick(this.WatchedMovieColorRectangle, vm => vm.ColorForWatchedMovie)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.NotWatchedMovieColorRectangle, vm => vm.ColorForNotWatchedMovie)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.NotReleasedMovieColorRectangle, vm => vm.ColorForNotReleasedMovie)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.WatchedSeriesColorRectangle, vm => vm.ColorForWatchedSeries)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.NotWatchedSeriesColorRectangle, vm => vm.ColorForNotWatchedSeries)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.NotReleasedSeriesColorRectangle, vm => vm.ColorForNotReleasedSeries)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
         }
 
         private IDisposable PickNewColorOnClick(
@@ -110,10 +110,10 @@ namespace MovieList.Views.Forms.Preferences
         {
             var getColor = colorProperty.Compile();
             return element.Events().MouseLeftButtonUp
-                .SelectMany(_ => this.PickNewColor(getColor(this.ViewModel)))
+                .SelectMany(_ => this.PickNewColor(getColor(this.ViewModel!)))
                 .WhereNotNull()
                 .ObserveOnDispatcher()
-                .BindTo(this.ViewModel, colorProperty);
+                .BindTo(this.ViewModel!, colorProperty);
         }
 
         private IObservable<string?> PickNewColor(string color)

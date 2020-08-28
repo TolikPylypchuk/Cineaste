@@ -1,5 +1,4 @@
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 
 using MovieList.ViewModels;
 
@@ -19,37 +18,37 @@ namespace MovieList.Views
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.RecentFiles, v => v.RecentFilesList.ItemsSource)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.RecentFilesPresent, v => v.RecentFilesList.Visibility)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.OneWayBind(
                     this.ViewModel, vm => vm.ShowRecentFiles, v => v.RecentlyOpenedFilesTextBlock.Visibility)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.ShowRecentFiles, v => v.RecentlyOpenedFilesPanel.Visibility)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.WhenAnyValue(
-                    v => v.ViewModel.ShowRecentFiles, v => v.ViewModel.RecentFilesPresent, (a, b) => a && !b)
+                    v => v.ViewModel!.ShowRecentFiles, v => v.ViewModel!.RecentFilesPresent, (a, b) => a && !b)
                     .BindTo(this, v => v.NoRecentlyOpenedFilesTextBlock.Visibility)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
-                this.BindCommand(this.ViewModel, vm => vm.RemoveSelectedRecentFiles, v => v.RemoveButton)
-                    .DisposeWith(disposables);
+                this.BindCommand(this.ViewModel!, vm => vm.RemoveSelectedRecentFiles, v => v.RemoveButton)
+                    ?.DisposeWith(disposables);
 
-                this.ViewModel.RemoveSelectedRecentFiles.CanExecute
+                this.ViewModel!.RemoveSelectedRecentFiles.CanExecute
                     .BindTo(this, v => v.RemoveButton.Visibility);
 
-                this.BindCommand(this.ViewModel, vm => vm.CreateFile, v => v.CreateListButton)
-                    .DisposeWith(disposables);
+                this.BindCommand(this.ViewModel!, vm => vm.CreateFile, v => v.CreateListButton)
+                    ?.DisposeWith(disposables);
 
-                this.BindCommand(this.ViewModel, vm => vm.OpenFile, v => v.OpenListButton)
-                    .DisposeWith(disposables);
+                this.BindCommand(this.ViewModel!, vm => vm.OpenFile, v => v.OpenListButton)
+                    ?.DisposeWith(disposables);
             });
         }
     }

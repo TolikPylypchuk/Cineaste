@@ -12,8 +12,10 @@ using ReactiveUI;
 
 namespace MovieList.ViewModels.Forms.Base
 {
+#nullable disable
     public abstract class FranchiseEntryFormBase<TModel, TViewModel>
         : TitledFormBase<TModel, TViewModel>, IFranchiseEntryForm
+#nullable enable
         where TModel : class
         where TViewModel : FranchiseEntryFormBase<TModel, TViewModel>
     {

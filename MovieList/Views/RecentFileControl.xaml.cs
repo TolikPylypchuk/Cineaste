@@ -22,25 +22,26 @@ namespace MovieList.Views
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
-                this.ListNameTextBlock.Text = this.ViewModel.File.Name;
-                this.ListPathTextBlock.Text = this.ViewModel.File.Path;
+                this.ListNameTextBlock.Text = this.ViewModel!.File.Name;
+                this.ListPathTextBlock.Text = this.ViewModel!.File.Path;
 
                 this.Bind(this.ViewModel, vm => vm.IsSelected, v => v.IsSelectedCheckBox.IsChecked)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.Events().MouseLeftButtonDown
                     .Where(e => e.ClickCount == 2)
                     .Select(e => this.ViewModel.File.Path)
                     .ObserveOnDispatcher()
-                    .InvokeCommand(this.ViewModel.HomePage.OpenRecentFile);
+                    .InvokeCommand(this.ViewModel.HomePage.OpenRecentFile)
+                    ?.DisposeWith(disposables);
 
-                this.WhenAnyValue(v => v.ViewModel.IsSelected)
+                this.WhenAnyValue(v => v.ViewModel!.IsSelected)
                     .Subscribe(isSelected => this.Border.Background = isSelected
-                        ? (Brush)this.FindResource("MaterialDesignSelection")
+                         ? (Brush)this.FindResource("MaterialDesignSelection")
                         : Brushes.Transparent)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
             });
         }
     }

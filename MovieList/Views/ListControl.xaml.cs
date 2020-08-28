@@ -20,29 +20,30 @@ namespace MovieList.Views
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Items, v => v.List.ItemsSource)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.List.SelectedItem)
                     .WhereNotNull()
-                    .InvokeCommand(this.ViewModel.PreviewSelectItem)
-                    .DisposeWith(disposables);
+                    .InvokeCommand(this.ViewModel!.PreviewSelectItem)
+                    ?.DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.List.SelectedItem)
                     .WhereNotNull()
                     .ObserveOnDispatcher()
-                    .Subscribe(this.List.ScrollIntoView);
+                    .Subscribe(this.List.ScrollIntoView)
+                    ?.DisposeWith(disposables);
 
-                this.WhenAnyValue(v => v.ViewModel.SelectedItem)
+                this.WhenAnyValue(v => v.ViewModel!.SelectedItem)
                     .Where(item => item == null)
                     .Subscribe(_ => this.List.SelectedItem = null)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.ViewModel.ForceSelectedItem
                     .Subscribe(() => this.List.SelectedItem = this.ViewModel.SelectedItem)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
             });
         }
     }

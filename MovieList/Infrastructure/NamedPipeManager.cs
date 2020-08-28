@@ -15,10 +15,10 @@ namespace MovieList.Infrastructure
 
         private readonly Subject<string> receivedString = new Subject<string>();
 
-        public NamedPipeManager(string? name)
+        public NamedPipeManager(string name)
             => this.NamedPipeName = name;
 
-        public string? NamedPipeName { get; }
+        public string NamedPipeName { get; }
 
         public IObservable<string> ReceivedString
             => this.receivedString.AsObservable();

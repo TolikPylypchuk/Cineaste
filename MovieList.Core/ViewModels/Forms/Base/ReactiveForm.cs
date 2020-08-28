@@ -23,7 +23,9 @@ using Splat;
 
 namespace MovieList.ViewModels.Forms.Base
 {
+#nullable disable
     public abstract class ReactiveForm<TModel, TForm> : ReactiveValidationObject<TForm>, IReactiveForm
+#nullable enable
         where TModel : class
         where TForm : ReactiveForm<TModel, TForm>
     {

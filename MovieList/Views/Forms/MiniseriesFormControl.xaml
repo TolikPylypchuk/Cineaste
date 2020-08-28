@@ -1,6 +1,7 @@
 <local:MiniseriesFormControlBase x:Class="MovieList.Views.Forms.MiniseriesFormControl"
                                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                 xmlns:rx="http://reactiveui.net"
                                  xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                                  xmlns:local="clr-namespace:MovieList.Views.Forms"
                                  xmlns:v="clr-namespace:MovieList.Views"
@@ -118,8 +119,8 @@
                     <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate Channel}" />
 
-                    <v:ViewModelViewHost x:Name="PeriodViewHost" HorizontalAlignment="Stretch"
-                                         HorizontalContentAlignment="Stretch" />
+                    <rx:ViewModelViewHost x:Name="PeriodViewHost" HorizontalAlignment="Stretch"
+                                          HorizontalContentAlignment="Stretch" />
 
                     <TextBox x:Name="ImdbLinkTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate ImdbLink}" />

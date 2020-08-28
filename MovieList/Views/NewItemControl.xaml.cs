@@ -18,13 +18,13 @@ namespace MovieList.Views
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
-                this.BindCommand(this.ViewModel, vm => vm.AddNewMovie, v => v.AddNewMovieButton)
-                    .DisposeWith(disposables);
+                this.BindCommand(this.ViewModel!, vm => vm.AddNewMovie, v => v.AddNewMovieButton)
+                    ?.DisposeWith(disposables);
 
-                this.BindCommand(this.ViewModel, vm => vm.AddNewSeries, v => v.AddNewSeriesButton)
-                    .DisposeWith(disposables);
+                this.BindCommand(this.ViewModel!, vm => vm.AddNewSeries, v => v.AddNewSeriesButton)
+                    ?.DisposeWith(disposables);
             });
         }
     }

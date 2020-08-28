@@ -16,8 +16,6 @@ using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 
-using ViewModelViewHost = MovieList.Views.ViewModelViewHost;
-
 namespace MovieList
 {
     public abstract class MainWindowBase : ReactiveWindow<MainViewModel> { }
@@ -32,34 +30,36 @@ namespace MovieList
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.InitializeMainTabControl(disposables);
                 this.InitializeMenu(disposables);
 
-                this.ViewModel.OpenFile
+                this.ViewModel!.OpenFile
                     .WhereNotNull()
                     .Where(model => model.IsExternal)
                     .Discard()
                     .ObserveOnDispatcher()
                     .Subscribe(this.OnOpenFileExternally)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.Events().Drop
                     .Where(e => e.Data.GetDataPresent(DataFormats.FileDrop))
                     .SelectMany(e => (string[])e.Data.GetData(DataFormats.FileDrop))
                     .Select(file => new OpenFileModel(file, true))
-                    .InvokeCommand(this.ViewModel.OpenFile);
+                    .InvokeCommand(this.ViewModel.OpenFile)
+                    ?.DisposeWith(disposables);
 
                 this.Events().Closing
                     .Do(e => e.Cancel = true)
                     .Discard()
                     .InvokeCommand(this.ViewModel.Shutdown)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.ViewModel.Shutdown
                     .Do(unit => disposables.Dispose())
-                    .Subscribe(this.Close);
+                    .Subscribe(this.Close)
+                    ?.DisposeWith(disposables);
             });
         }
 
@@ -68,10 +68,10 @@ namespace MovieList
             this.MainTabControl.Items.Add(new TabItem
             {
                 Header = Messages.HomePage,
-                Content = new ViewModelViewHost { ViewModel = this.ViewModel.HomePage }
+                Content = new ViewModelViewHost { ViewModel = this.ViewModel!.HomePage }
             });
 
-            this.ViewModel.Files
+            this.ViewModel!.Files
                 .ToObservableChangeSet()
                 .ObserveOnDispatcher()
                 .ActOnEveryObject(
@@ -84,9 +84,9 @@ namespace MovieList
                     vm => this.MainTabControl.Items.Remove(this.MainTabControl.Items
                         .Cast<TabItem>()
                         .First(item => vm.FileName.Equals(item.Tag))))
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ViewModel.Preferences)
+            this.WhenAnyValue(v => v.ViewModel!.Preferences)
                 .ObserveOnDispatcher()
                 .Subscribe(vm =>
                 {
@@ -100,7 +100,7 @@ namespace MovieList
                 });
 
             this.Bind(this.ViewModel, vm => vm.SelectedItemIndex, v => v.MainTabControl.SelectedIndex)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
         }
 
         private void InitializeMenu(CompositeDisposable disposables)
@@ -113,20 +113,20 @@ namespace MovieList
 
         private void InitializeMainMenu(CompositeDisposable disposables)
         {
-            this.BindCommand(this.ViewModel, vm => vm.HomePage.CreateFile, v => v.NewMenuItem)
-                   .DisposeWith(disposables);
+            this.BindCommand(this.ViewModel!, vm => vm.HomePage.CreateFile, v => v.NewMenuItem)
+                ?.DisposeWith(disposables);
 
-            this.BindKeyToCommand(Key.N, ModifierKeys.Control, this.ViewModel.HomePage.CreateFile)
-                .DisposeWith(disposables);
+            this.BindKeyToCommand(Key.N, ModifierKeys.Control, this.ViewModel!.HomePage.CreateFile)
+                ?.DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.HomePage.OpenFile, v => v.OpenMenuItem)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.Events().KeyUp
                 .Where(e => e.Key == Key.O && this.IsDown(ModifierKeys.Control))
                 .Select(e => (string?)null)
                 .InvokeCommand(this.ViewModel.HomePage.OpenFile)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.ViewModel.HomePage.RecentFiles
                 .ActOnEveryObject(
@@ -142,62 +142,62 @@ namespace MovieList
                     file => this.OpenRecentMenuItem.Items.Remove(this.OpenRecentMenuItem.Items
                         .Cast<MenuItem>()
                         .First(item => file.File.Path.Equals(item.Tag))))
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.HomePage.RecentFiles.Count,
                     v => v.OpenRecentMenuItem.IsEnabled,
                     count => count > 0)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.Shutdown, v => v.ExitMenuItem)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
         }
 
         private void InitializeFileMenu(CompositeDisposable disposables)
         {
-            this.BindCommand(this.ViewModel, vm => vm.Save, v => v.SaveMenuItem)
-                .DisposeWith(disposables);
+            this.BindCommand(this.ViewModel!, vm => vm.Save, v => v.SaveMenuItem)
+                ?.DisposeWith(disposables);
 
-            this.BindKeyToCommand(Key.S, ModifierKeys.Control, this.ViewModel.Save)
-                .DisposeWith(disposables);
+            this.BindKeyToCommand(Key.S, ModifierKeys.Control, this.ViewModel!.Save)
+                ?.DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.SaveAs, v => v.SaveAsMenuItem)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.BindKeyToCommand(Key.S, ModifierKeys.Control | ModifierKeys.Shift, this.ViewModel.SaveAs)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.OpenSettings, v => v.SettingsMenuItem)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.BindKeyToCommand(Key.P, ModifierKeys.Control, this.ViewModel.OpenSettings)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel, vm => vm.CloseCurrentTab, v => v.CloseMenuItem)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.BindKeyToCommand(Key.W, ModifierKeys.Control, this.ViewModel.CloseCurrentTab)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
         }
 
         private void InitializeEditMenu(CompositeDisposable disposables)
         {
-            this.BindCommand(this.ViewModel, vm => vm.OpenPreferences, v => v.PreferencesMenuItem)
-                .DisposeWith(disposables);
+            this.BindCommand(this.ViewModel!, vm => vm.OpenPreferences, v => v.PreferencesMenuItem)
+                ?.DisposeWith(disposables);
 
-            this.BindKeyToCommand(Key.P, ModifierKeys.Control | ModifierKeys.Shift, this.ViewModel.OpenPreferences)
-                .DisposeWith(disposables);
+            this.BindKeyToCommand(Key.P, ModifierKeys.Control | ModifierKeys.Shift, this.ViewModel!.OpenPreferences)
+                ?.DisposeWith(disposables);
         }
 
         private void InitializeHelpMenu(CompositeDisposable disposables)
         {
-            this.BindCommand(this.ViewModel, vm => vm.ShowAbout, v => v.AboutMenuItem)
-                .DisposeWith(disposables);
+            this.BindCommand(this.ViewModel!, vm => vm.ShowAbout, v => v.AboutMenuItem)
+                ?.DisposeWith(disposables);
 
-            this.BindKeyToCommand(Key.F1, this.ViewModel.ShowAbout)
-                .DisposeWith(disposables);
+            this.BindKeyToCommand(Key.F1, this.ViewModel!.ShowAbout)
+                ?.DisposeWith(disposables);
         }
 
         private IDisposable BindKeyToCommand<T>(Key key, ReactiveCommand<Unit, T> command)

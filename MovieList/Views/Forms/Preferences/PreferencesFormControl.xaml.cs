@@ -25,13 +25,13 @@ namespace MovieList.Views.Forms.Preferences
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
 
                 this.BindFields(disposables);
                 this.BindCommands(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.Kinds.ItemsSource)
-                    .DisposeWith(disposables);
+                    ?.DisposeWith(disposables);
             });
         }
 
@@ -42,22 +42,22 @@ namespace MovieList.Views.Forms.Preferences
                 .ToList();
 
             this.Bind(this.ViewModel, vm => vm.CultureInfo, v => v.CultureInfoComboBox.SelectedItem)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.DefaultSeasonTitle, v => v.DefaultSeasonTitleTextBox.Text)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.Bind(
                     this.ViewModel,
                     vm => vm.DefaultSeasonOriginalTitle,
                     v => v.DefaultSeasonOriginalTitleTextBox.Text)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.ShowRecentFiles, v => v.ShowRecentFilesCheckBox.IsChecked)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.LogPath, v => v.LogPathTextBox.Text)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
 
             this.MinLogLevelComboBox.Items.Add(Messages.LogLevelVerbose);
             this.MinLogLevelComboBox.Items.Add(Messages.LogLevelDebug);
@@ -73,24 +73,24 @@ namespace MovieList.Views.Forms.Preferences
                 null,
                 LogLevelConverter,
                 LogLevelConverter)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
         }
 
         private void BindCommands(CompositeDisposable disposables)
         {
-            this.BindCommand(this.ViewModel, vm => vm.AddKind, v => v.AddKindButton)
-                .DisposeWith(disposables);
+            this.BindCommand(this.ViewModel!, vm => vm.AddKind, v => v.AddKindButton)
+                ?.DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.Save, v => v.SaveButton)
-                .DisposeWith(disposables);
+            this.BindCommand(this.ViewModel!, vm => vm.Save, v => v.SaveButton)
+                ?.DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel, vm => vm.Cancel, v => v.CancelButton)
-                .DisposeWith(disposables);
+            this.BindCommand(this.ViewModel!, vm => vm.Cancel, v => v.CancelButton)
+                ?.DisposeWith(disposables);
 
-            Observable.CombineLatest(this.ViewModel.Save.CanExecute, this.ViewModel.Cancel.CanExecute)
+            Observable.CombineLatest(this.ViewModel!.Save.CanExecute, this.ViewModel.Cancel.CanExecute)
                 .AnyTrue()
                 .BindTo(this, v => v.ActionPanel.Visibility)
-                .DisposeWith(disposables);
+                ?.DisposeWith(disposables);
         }
     }
 }

@@ -1,6 +1,7 @@
 <local:FileControlBase x:Class="MovieList.Views.FileControl"
                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:rx="http://reactiveui.net"
                        xmlns:me="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
                        xmlns:local="clr-namespace:MovieList.Views">
     <Grid>
@@ -11,6 +12,6 @@
 
         <me:SideNavigation x:Name="Navigation" Grid.Column="0" />
 
-        <local:ViewModelViewHost x:Name="ContentHost" Grid.Column="1" />
+        <rx:ViewModelViewHost x:Name="ContentHost" Grid.Column="1" />
     </Grid>
 </local:FileControlBase>

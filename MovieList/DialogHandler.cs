@@ -35,7 +35,8 @@ namespace MovieList
                 ctx.Input.Title.Localized(),
                 ctx.Input.CloseText?.Localized() ?? Messages.OK);
 
-            var view = ViewLocator.Current.ResolveView(viewModel);
+            var view = ViewLocator.Current.ResolveView(viewModel)
+                ?? throw new InvalidOperationException($"Cannot find the view for {nameof(MessageModel)}");
             view.ViewModel = viewModel;
 
             await DialogHost.Show(view);
@@ -57,7 +58,8 @@ namespace MovieList
                 ctx.Input.ConfirmText?.Localized() ?? Messages.Confirm,
                 ctx.Input.CancelText?.Localized() ?? Messages.Cancel);
 
-            var view = ViewLocator.Current.ResolveView(viewModel);
+            var view = ViewLocator.Current.ResolveView(viewModel)
+                ?? throw new InvalidOperationException($"Cannot find the view for {nameof(ConfirmationModel)}");
             view.ViewModel = viewModel;
 
             var result = await DialogHost.Show(view);
@@ -79,7 +81,8 @@ namespace MovieList
                 ctx.Input.ConfirmText?.Localized() ?? Messages.Confirm,
                 ctx.Input.CancelText?.Localized() ?? Messages.Cancel);
 
-            var view = ViewLocator.Current.ResolveView(viewModel);
+            var view = ViewLocator.Current.ResolveView(viewModel)
+                ?? throw new InvalidOperationException($"Cannot find the view for {nameof(InputModel)}");
             view.ViewModel = viewModel;
 
             var result = await DialogHost.Show(view);
@@ -105,7 +108,8 @@ namespace MovieList
             };
 
 
-            var view = ViewLocator.Current.ResolveView(viewModel);
+            var view = ViewLocator.Current.ResolveView(viewModel)
+                ?? throw new InvalidOperationException($"Cannot find the view for {nameof(ColorModel)}");
             view.ViewModel = viewModel;
 
             var result = await DialogHost.Show(view);
@@ -156,7 +160,8 @@ namespace MovieList
                 return;
             }
 
-            var view = ViewLocator.Current.ResolveView(ctx.Input);
+            var view = ViewLocator.Current.ResolveView(ctx.Input)
+                ?? throw new InvalidOperationException($"Cannot find the view for {nameof(AboutModel)}");
             view.ViewModel = ctx.Input;
 
             await DialogHost.Show(view);

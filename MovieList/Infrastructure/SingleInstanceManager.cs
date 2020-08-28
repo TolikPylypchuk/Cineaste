@@ -28,10 +28,10 @@ namespace MovieList.Infrastructure
         {
             try
             {
-                var namedPipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly().FullName);
+                var namedPipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly()?.FullName ?? String.Empty);
 
                 string message = Environment.GetCommandLineArgs().Length > 1
-                    ? Environment.GetCommandLineArgs()[1]
+                     ? Environment.GetCommandLineArgs()[1]
                     : String.Empty;
 
                 namedPipeManager.Write(message);

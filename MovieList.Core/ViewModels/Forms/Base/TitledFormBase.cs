@@ -38,7 +38,7 @@ namespace MovieList.ViewModels.Forms.Base
                 .AutoRefresh(vm => vm.Name)
                 .AutoRefresh(vm => vm.Priority)
                 .ToCollection()
-                .Select(vms => vms.OrderBy(vm => vm.Priority).Select(vm => vm.Name).FirstOrDefault())
+                .Select(vms => vms.OrderBy(vm => vm.Priority).Select(vm => vm.Name).FirstOrDefault().EmptyIfNull())
                 .Select(this.GetFormTitle)
                 .ObserveOn(RxApp.MainThreadScheduler);
 

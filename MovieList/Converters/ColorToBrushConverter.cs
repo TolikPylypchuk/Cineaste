@@ -13,7 +13,7 @@ namespace MovieList.Converters
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
             => value is Color color ? new SolidColorBrush(color) : Binding.DoNothing;
 
-        public object? ConvertBack(object value, Type targetType, object? parameter, CultureInfo? culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
             => value is SolidColorBrush brush ? brush.Color : Binding.DoNothing;
 
         public int GetAffinityForObjects(Type fromType, Type toType)
@@ -26,7 +26,7 @@ namespace MovieList.Converters
                 _ => 0
             };
 
-        public bool TryConvert(object from, Type toType, object conversionHint, out object? result)
+        public bool TryConvert(object? from, Type toType, object? conversionHint, out object? result)
         {
             result = toType == typeof(Color)
                 ? this.Convert(from, toType, conversionHint, null)

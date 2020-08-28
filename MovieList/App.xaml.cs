@@ -42,7 +42,7 @@ namespace MovieList
         public App()
         {
             this.mutex = SingleInstanceManager.TryAcquireMutex();
-            this.namedPipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly().FullName);
+            this.namedPipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly()?.FullName ?? String.Empty);
 
             var autoSuspendHelper = new AutoSuspendHelper(this);
             GC.KeepAlive(autoSuspendHelper);
