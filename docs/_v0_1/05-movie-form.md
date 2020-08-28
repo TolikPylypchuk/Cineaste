@@ -1,16 +1,11 @@
 ---
-layout: default
 title: The Movie Form
-nav_order: 1
-permalink: movie-form
-parent: Forms
+permalink: /v0.1/movie-form
 ---
-
-# The Movie Form
 
 The movie form is the simplest and most straightforward of the forms. Here's how it looks:
 
-![Screen with movie form](/assets/images/screen-movie-form.png)
+![Screen with movie form]({{ '/assets/v0.1/images/screen-movie-form.png' | absolute_url }})
 
 The form consists of the following sections:
 

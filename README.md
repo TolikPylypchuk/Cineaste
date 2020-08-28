@@ -10,7 +10,7 @@ analyze the data somehow. Also, this is a fun side project.
 If you want to use this app to track movies and series, you can certainly do so, but bear in mind that this is a
 personal project - I'm writing this app for myself, at my own pace, and according to my own needs.
 
-![Screen with movie](/docs/assets/images/screen-movie.png)
+![Screen with movie](/docs/0.1/assets/images/screen-movie.png)
 
 ## Docs
 

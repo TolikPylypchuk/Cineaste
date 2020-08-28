@@ -1,17 +1,12 @@
 ---
-layout: default
 title: The Miniseries Form
-nav_order: 3
-permalink: miniseries-form
-parent: Forms
+permalink: /v0.1/miniseries-form
 ---
-
-# The Miniseries Form
 
 The miniseries form describes series which are limited in nature. In the context of this app, a miniseries has only one
 season, which in turn has only one release period, and no special episodes. Here's how a miniseries form looks:
 
-![Screen with miniseries form](/assets/images/screen-miniseries-form.png)
+![Screen with miniseries form]({{ '/assets/v0.1/images/screen-miniseries-form.png' | absolute_url }})
 
 As you can see, the miniseries forms are much simpler than the full series forms as they don't contain other separate
 forms.

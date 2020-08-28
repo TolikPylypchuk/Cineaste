@@ -1,11 +1,7 @@
 ---
-layout: default
 title: Technical Stuff
-nav_order: 5
-permalink: technical
+permalink: /v0.1/technical
 ---
-
-# Technical Stuff
 
 The Movie List app is written with [C#](https://github.com/dotnet/csharplang) and
 [.NET Core 3.1](https://github.com/dotnet/core). Following is the list of technologies used in this app and some other
@@ -104,7 +100,9 @@ happen.
 ## Docs
 
 These articles are built using [Jekyll](https://jekyllrb.com) and [GitHub Pages](https://pages.github.com), and use the
-[Just the Docs](https://pmarsceill.github.io/just-the-docs) theme.
+[Minimal Mistakes theme](https://mmistakes.github.io/minimal-mistakes). The first version of the docs used the
+[Just the Docs theme](https://pmarsceill.github.io/just-the-docs) but it doesn't support multiple versions of the docs
+so I moved away from it.
 
 ## Building from Source
 

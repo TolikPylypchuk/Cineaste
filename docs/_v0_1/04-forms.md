@@ -1,12 +1,7 @@
 ---
-layout: default
 title: Forms
-nav_order: 3
-permalink: forms
-has_children: true
+permalink: /v0.1/forms
 ---
-
-# Forms
 
 You can add, edit, and delete list items through forms which appear on the right side of the main section. There are six
 types of forms:

@@ -1,17 +1,12 @@
 ---
-layout: default
 title: Getting Started
-nav_order: 1
-permalink: getting-started
+permalink: /v0.1/getting-started
 ---
-
-# Getting Started
 
 ## How to Get the App
 
 The Movie List app works only on Windows (and only tested on Windows 10). Currently the only way to get this app is to
-download it from the 'releases' section on GitHub (there's a link to that on the home page of these docs) and extract it
-manually. The latest version is 0.1.
+download it from the 'releases' section on GitHub and extract it manually. The latest version is 0.1.
 
 ## Files and Tabs
 
@@ -25,7 +20,7 @@ a new tab.
 
 ## The Home Page
 
-![Screen with home page](/assets/images/screen-home-page.png)
+![Screen with home page]({{ '/assets/v0.1/images/screen-home-page.png' | absolute_url }})
 
 The app's home page contains several features for working with files.
 

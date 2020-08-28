@@ -1,16 +1,13 @@
 ---
-layout: default
-title: Home Page
-nav_order: 0
+layout: single
+title: Movie List
 ---
-
-# Movie List
 
 An app which keeps track of the movies and TV series you have watched or would like to watch.
 
-If you want to use this app to track movies and series, you can certainly do so, but bear in mind that this is a
-personal project - I'm writing this app for myself, at my own pace, and according to my own needs.
+Select the version you want to view.
 
-[Get the app](https://github.com/TolikPylypchuk/MovieList/releases){: .btn .btn-purple }
+[Version 0.1]({% link _v0_1/01-index.md %}){: .btn .btn--inverse .btn--x-large}
 
-![Screen with movie](/assets/images/screen-movie.png)
+**Note:** The app is currently not ready for general use.
+{: .notice--warning}

@@ -1,11 +1,8 @@
 ---
-layout: default
-title: About
-nav_order: 6
-permalink: about
+title: About Movie List
+permalink: /v0.1/about
+toc: false
 ---
-
-# About Movie List
 
 A long time ago I started keeping a list of movies and TV series I've watched and would like to watch. Keeping track
 of all these movies and series in a Word document because cumbersome since now there are more than a thousand items
