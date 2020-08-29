@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
@@ -26,10 +25,6 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        [SuppressMessage(
-            "Security",
-            "CA2100:Review SQL queries for security vulnerabilities",
-            Justification = "SQL comes from a database creation script")]
         public void CreateDatabase(Settings settings, IEnumerable<Kind> initialKinds)
         {
             this.Log().Debug($"Creating a new database: {this.DatabasePath}");

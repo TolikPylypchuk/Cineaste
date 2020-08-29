@@ -178,6 +178,78 @@ CREATE INDEX "Idx_Titles_SeasonId" ON "Titles" ("SeasonId");
 CREATE INDEX "Idx_Titles_SpecialEpisodeId" ON "Titles" ("SpecialEpisodeId");
 CREATE INDEX "Idx_Titles_FranchiseId" ON "Titles" ("FranchiseId");
 
+CREATE TABLE "Tags" (
+    "Id" INTEGER PRIMARY KEY,
+    "Name" TEXT NOT NULL,
+    "Category" TEXT NOT NULL,
+    "Description" TEXT NOT NULL,
+    "Color" TEXT NOT NULL,
+
+    UNIQUE ("Name", "Category")
+);
+
+CREATE TABLE "TagImplications" (
+    "PremiseId" INTEGER,
+    "ConsequenceId" INTEGER,
+
+    PRIMARY KEY ("PremiseId", "ConsequenceId"),
+    
+    FOREIGN KEY ("PremiseId")
+        REFERENCES "Tags" ("Id")
+        ON DELETE CASCADE,
+        
+    FOREIGN KEY ("ConsequenceId")
+        REFERENCES "Tags" ("Id")
+        ON DELETE CASCADE,
+
+    CHECK ("PremiseId" <> "ConsequenceId")
+);
+
+CREATE TABLE "MovieTags" (
+    "MovieId" INTEGER,
+    "TagId" INTEGER,
+
+    PRIMARY KEY ("MovieId", "TagId"),
+    
+    FOREIGN KEY ("MovieId")
+        REFERENCES "Movies" ("Id")
+        ON DELETE CASCADE,
+        
+    FOREIGN KEY ("TagId")
+        REFERENCES "Tags" ("Id")
+        ON DELETE CASCADE
+);
+
+CREATE TABLE "SeriesTags" (
+    "SeriesId" INTEGER,
+    "TagId" INTEGER,
+
+    PRIMARY KEY ("SeriesId", "TagId"),
+    
+    FOREIGN KEY ("SeriesId")
+        REFERENCES "Series" ("Id")
+        ON DELETE CASCADE,
+        
+    FOREIGN KEY ("TagId")
+        REFERENCES "Tags" ("Id")
+        ON DELETE CASCADE
+);
+
+CREATE TABLE "FranchiseTags" (
+    "FranchiseId" INTEGER,
+    "TagId" INTEGER,
+
+    PRIMARY KEY ("FranchiseId", "TagId"),
+    
+    FOREIGN KEY ("FranchiseId")
+        REFERENCES "Franchises" ("Id")
+        ON DELETE CASCADE,
+        
+    FOREIGN KEY ("TagId")
+        REFERENCES "Tags" ("Id")
+        ON DELETE CASCADE
+);
+
 CREATE TABLE "Settings" (
     "Id" INTEGER PRIMARY KEY,
     "Key" TEXT UNIQUE NOT NULL,

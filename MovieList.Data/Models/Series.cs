@@ -28,13 +28,16 @@ namespace MovieList.Data.Models
         public FranchiseEntry? Entry { get; set; }
 
         [Write(false)]
-        public IList<Title> Titles { get; set; } = new List<Title>();
+        public List<Title> Titles { get; set; } = new();
 
         [Write(false)]
-        public IList<Season> Seasons { get; set; } = new List<Season>();
+        public List<Season> Seasons { get; set; } = new();
 
         [Write(false)]
-        public IList<SpecialEpisode> SpecialEpisodes { get; set; } = new List<SpecialEpisode>();
+        public List<SpecialEpisode> SpecialEpisodes { get; set; } = new();
+
+        [Write(false)]
+        public HashSet<Tag> Tags { get; set; } = new();
 
         [Computed]
         public Title Title

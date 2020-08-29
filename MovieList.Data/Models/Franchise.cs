@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Dapper.Contrib.Extensions;
@@ -19,18 +18,19 @@ namespace MovieList.Data.Models
         public FranchiseEntry? Entry { get; set; }
 
         [Write(false)]
-        public IList<FranchiseEntry> Entries { get; set; } = new List<FranchiseEntry>();
+        public List<FranchiseEntry> Entries { get; set; } = new();
 
         [Write(false)]
-        public IList<Title> Titles { get; set; } = new List<Title>();
+        public List<Title> Titles { get; set; } = new();
+
+        [Write(false)]
+        public HashSet<Tag> Tags { get; set; } = new();
 
         [Computed]
-        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
-        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
-        public IList<Title> ActualTitles
+        public List<Title> ActualTitles
             => this.Titles.Count != 0
                 ? this.Titles
-                : this.Entries.OrderBy(e => e.SequenceNumber).FirstOrDefault()?.Titles ?? new List<Title>();
+                : this.Entries.OrderBy(e => e.SequenceNumber).FirstOrDefault()?.Titles ?? new();
 
         [Computed]
         public Title? Title

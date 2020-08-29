@@ -22,10 +22,10 @@ namespace MovieList.Data.Models
         public Series Series { get; set; } = null!;
 
         [Write(false)]
-        public IList<Title> Titles { get; set; } = new List<Title>();
+        public List<Title> Titles { get; set; } = new();
 
         [Write(false)]
-        public IList<Period> Periods { get; set; } = new List<Period>();
+        public List<Period> Periods { get; set; } = new();
 
         [Computed]
         public Title Title

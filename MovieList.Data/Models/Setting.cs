@@ -9,5 +9,8 @@ namespace MovieList.Data.Models
     {
         public string Key { get; set; } = String.Empty;
         public string Value { get; set; } = String.Empty;
+
+        public override string ToString()
+            => $"Setting #{this.Id}: {this.Key} - {this.Value}";
     }
 }

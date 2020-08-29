@@ -22,10 +22,10 @@ namespace MovieList.Data.Models
         public string ColorForNotReleasedSeries { get; set; } = DefaultNewKindColor;
 
         [Write(false)]
-        public IList<Movie> Movies { get; set; } = new List<Movie>();
+        public List<Movie> Movies { get; set; } = new();
 
         [Write(false)]
-        public IList<Series> Series { get; set; } = new List<Series>();
+        public List<Series> Series { get; set; } = new();
 
         public override string ToString()
             => $"Kind #{this.Id}: {this.Name}";
