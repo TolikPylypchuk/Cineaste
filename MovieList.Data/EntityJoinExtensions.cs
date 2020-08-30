@@ -64,6 +64,24 @@ namespace MovieList.Data
                     return movie;
                 });
 
+        public static IEnumerable<Movie> Join(
+            this IEnumerable<Movie> movies,
+            IEnumerable<MovieTag> movieTags,
+            IDictionary<int, Tag> tagsById)
+            => movies.GroupJoin(
+                movieTags,
+                movie => movie.Id,
+                movieTag => movieTag.MovieId,
+                (movie, movieTags) =>
+                {
+                    movie.Tags = movieTags
+                        .Select(movieTag => tagsById[movieTag.TagId])
+                        .Do(tag => tag.Movies.Add(movie))
+                        .ToHashSet();
+
+                    return movie;
+                });
+
         public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<Kind> kinds)
             => kinds
                 .GroupJoin(
@@ -215,6 +233,24 @@ namespace MovieList.Data
                     return episode;
                 });
 
+        public static IEnumerable<Series> Join(
+            this IEnumerable<Series> seriesList,
+            IEnumerable<SeriesTag> seriesTags,
+            IDictionary<int, Tag> tagsById)
+            => seriesList.GroupJoin(
+                seriesTags,
+                series => series.Id,
+                seriesTag => seriesTag.SeriesId,
+                (series, seriesTags) =>
+                {
+                    series.Tags = seriesTags
+                        .Select(seriesTag => tagsById[seriesTag.TagId])
+                        .Do(tag => tag.Series.Add(series))
+                        .ToHashSet();
+
+                    return series;
+                });
+
         public static IEnumerable<Franchise> Join(this IEnumerable<Franchise> franchises, IEnumerable<Title> titles)
             => franchises.GroupJoin(
                 titles.Where(title => title.FranchiseId != null),
@@ -268,5 +304,24 @@ namespace MovieList.Data
 
                         return franchise;
                     });
+
+        public static IEnumerable<Franchise> Join(
+            this IEnumerable<Franchise> franchises,
+            IEnumerable<FranchiseTag> franchiseTags,
+            IDictionary<int, Tag> tagsById)
+            => franchises.GroupJoin(
+                franchiseTags,
+                franchise => franchise.Id,
+                franchiseTag => franchiseTag.FranchiseId,
+                (franchise, franchiseTags) =>
+                {
+                    franchise.Tags = franchiseTags
+                        .Select(franchiseTag => tagsById[franchiseTag.TagId])
+                        .Do(tag => tag.Franchises.Add(franchise))
+                        .ToHashSet();
+
+                    return franchise;
+                });
+
     }
 }

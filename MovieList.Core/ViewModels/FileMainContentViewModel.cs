@@ -36,12 +36,15 @@ namespace MovieList.ViewModels
 
         private readonly ReadOnlyObservableCollection<FranchiseEntry> franchiseAddableItems;
 
-        public FileMainContentViewModel(string fileName, ReadOnlyObservableCollection<Kind> kinds)
+        public FileMainContentViewModel(
+            string fileName,
+            ReadOnlyObservableCollection<Kind> kinds,
+            ReadOnlyObservableCollection<Tag> tags)
         {
             this.FileName = fileName;
             this.Kinds = kinds;
 
-            this.List = new ListViewModel(fileName, kinds);
+            this.List = new ListViewModel(fileName, kinds, tags);
 
             this.franchiseAddableItemsSource.Connect()
                 .Bind(out this.franchiseAddableItems)

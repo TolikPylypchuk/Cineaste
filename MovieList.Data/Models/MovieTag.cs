@@ -3,12 +3,9 @@ using Dapper.Contrib.Extensions;
 namespace MovieList.Data.Models
 {
     [Table("MovieTags")]
-    public sealed class MovieTag
+    internal sealed class MovieTag : EntityBase
     {
-        [ExplicitKey]
         public int MovieId { get; set; }
-
-        [ExplicitKey]
         public int TagId { get; set; }
     }
 }

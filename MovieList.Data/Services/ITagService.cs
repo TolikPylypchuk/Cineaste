@@ -4,8 +4,8 @@ using MovieList.Data.Models;
 
 namespace MovieList.Data.Services
 {
-    public interface IListService
+    public interface ITagService
     {
-        MovieList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags);
+        IEnumerable<Tag> GetAllTags();
     }
 }

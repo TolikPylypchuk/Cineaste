@@ -29,6 +29,7 @@ namespace MovieList.ViewModels
         public ListViewModel(
             string fileName,
             ReadOnlyObservableCollection<Kind> kinds,
+            ReadOnlyObservableCollection<Tag> tags,
             Settings? settings = null,
             IListService? listService = null)
         {
@@ -37,7 +38,7 @@ namespace MovieList.ViewModels
 
             this.source = new SourceCache<ListItem, string>(item => item.Id);
 
-            this.MovieList = listService.GetList(kinds);
+            this.MovieList = listService.GetList(kinds, tags);
             this.source.AddOrUpdate(this.MovieList.ToListItems());
             this.Log().Debug($"Loaded the list of {this.source.Count} items");
 

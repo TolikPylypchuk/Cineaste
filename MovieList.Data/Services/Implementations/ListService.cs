@@ -16,15 +16,16 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public MovieList GetList(IList<Kind> kinds)
-            => this.WithTransaction((connection, transaction) => this.GetList(kinds, connection, transaction));
+        public MovieList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags)
+            => this.WithTransaction((connection, transaction) => this.GetList(kinds, tags, connection, transaction));
 
         private MovieList GetList(
-            IList<Kind> kinds,
+            IEnumerable<Kind> kinds,
+            IEnumerable<Tag> tags,
             IDbConnection connection,
             IDbTransaction transaction)
         {
-            this.Log().Debug("Getting the full list of movies, series and franchise");
+            this.Log().Debug("Getting the full list of movies, series and franchises");
 
             var titles = connection.GetAll<Title>(transaction).ToList();
             var entries = connection.GetAll<FranchiseEntry>(transaction).ToList();
@@ -35,13 +36,20 @@ namespace MovieList.Data.Services.Implementations
 
             var movies = connection.GetAll<Movie>(transaction).ToList();
             var series = connection.GetAll<Series>(transaction).ToList();
-            var franchise = connection.GetAll<Franchise>(transaction).ToList();
+            var franchises = connection.GetAll<Franchise>(transaction).ToList();
+
+            var movieTags = connection.GetAll<MovieTag>(transaction).ToList();
+            var seriesTags = connection.GetAll<SeriesTag>(transaction).ToList();
+            var franchiseTags = connection.GetAll<FranchiseTag>(transaction).ToList();
+
+            var tagsById = tags.ToDictionary(tag => tag.Id, tag => tag);
 
             return new MovieList(
                 movies
                     .Join(kinds)
                     .Join(titles)
                     .Join(entries)
+                    .Join(movieTags, tagsById)
                     .ToList(),
                 series
                     .Join(kinds)
@@ -49,10 +57,12 @@ namespace MovieList.Data.Services.Implementations
                     .Join(seasons.Join(periods).Join(titles))
                     .Join(specialEpisodes.Join(titles))
                     .Join(entries)
+                    .Join(seriesTags, tagsById)
                     .ToList(),
-                franchise
+                franchises
                     .Join(titles)
                     .Join(entries)
+                    .Join(franchiseTags, tagsById)
                     .ToList());
         }
     }

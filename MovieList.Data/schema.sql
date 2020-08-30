@@ -189,10 +189,9 @@ CREATE TABLE "Tags" (
 );
 
 CREATE TABLE "TagImplications" (
+    "Id" INTEGER PRIMARY KEY,
     "PremiseId" INTEGER,
     "ConsequenceId" INTEGER,
-
-    PRIMARY KEY ("PremiseId", "ConsequenceId"),
     
     FOREIGN KEY ("PremiseId")
         REFERENCES "Tags" ("Id")
@@ -206,10 +205,9 @@ CREATE TABLE "TagImplications" (
 );
 
 CREATE TABLE "MovieTags" (
+    "Id" INTEGER PRIMARY KEY,
     "MovieId" INTEGER,
     "TagId" INTEGER,
-
-    PRIMARY KEY ("MovieId", "TagId"),
     
     FOREIGN KEY ("MovieId")
         REFERENCES "Movies" ("Id")
@@ -221,10 +219,9 @@ CREATE TABLE "MovieTags" (
 );
 
 CREATE TABLE "SeriesTags" (
+    "Id" INTEGER PRIMARY KEY,
     "SeriesId" INTEGER,
     "TagId" INTEGER,
-
-    PRIMARY KEY ("SeriesId", "TagId"),
     
     FOREIGN KEY ("SeriesId")
         REFERENCES "Series" ("Id")
@@ -236,10 +233,9 @@ CREATE TABLE "SeriesTags" (
 );
 
 CREATE TABLE "FranchiseTags" (
+    "Id" INTEGER PRIMARY KEY,
     "FranchiseId" INTEGER,
     "TagId" INTEGER,
-
-    PRIMARY KEY ("FranchiseId", "TagId"),
     
     FOREIGN KEY ("FranchiseId")
         REFERENCES "Franchises" ("Id")

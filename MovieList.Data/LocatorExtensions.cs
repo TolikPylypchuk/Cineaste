@@ -25,6 +25,7 @@ namespace MovieList.Data
                     () => new FranchiseService(file), typeof(IEntityService<Franchise>), file);
 
                 resolver.RegisterLazySingleton(() => new KindService(file), typeof(IKindService), file);
+                resolver.RegisterLazySingleton(() => new TagService(file), typeof(ITagService), file);
                 resolver.RegisterLazySingleton(() => new SettingsService(file), typeof(ISettingsService), file);
 
                 resolver.Register(() => new SqliteConnection($"Data Source={file}"), typeof(IDbConnection), file);
@@ -43,6 +44,7 @@ namespace MovieList.Data
                 resolver.UnregisterCurrent(typeof(IEntityService<Franchise>), file);
 
                 resolver.UnregisterCurrent(typeof(IKindService), file);
+                resolver.UnregisterCurrent(typeof(ITagService), file);
                 resolver.UnregisterCurrent(typeof(ISettingsService), file);
 
                 resolver.UnregisterCurrent(typeof(IDbConnection), file);

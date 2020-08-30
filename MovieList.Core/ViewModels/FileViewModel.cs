@@ -24,6 +24,10 @@ namespace MovieList.ViewModels
     {
         private readonly SourceCache<Kind, int> kindsSource;
         private readonly ReadOnlyObservableCollection<Kind> kinds;
+
+        private readonly SourceCache<Tag, int> tagsSource;
+        private readonly ReadOnlyObservableCollection<Tag> tags;
+
         private readonly CompositeDisposable currentContentSubscriptions = new CompositeDisposable();
         private readonly ISettingsService settingsService;
 
@@ -31,17 +35,20 @@ namespace MovieList.ViewModels
             string fileName,
             string listName,
             IKindService? kindService = null,
+            ITagService? tagService = null,
             ISettingsService? settingsService = null)
         {
             this.FileName = fileName;
             this.ListName = listName;
 
             kindService ??= Locator.Current.GetService<IKindService>(fileName);
+            tagService ??= Locator.Current.GetService<ITagService>(fileName);
             this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
 
             this.Header = new TabHeaderViewModel(this.FileName, this.ListName);
 
             this.kindsSource = new SourceCache<Kind, int>(kind => kind.Id);
+            this.tagsSource = new SourceCache<Tag, int>(tag => tag.Id);
 
             this.WhenAnyValue(vm => vm.Content)
                 .Select(content => content is FileMainContentViewModel
@@ -56,10 +63,23 @@ namespace MovieList.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
-            kindService.GetAllKindsInTaskPool()
+            this.tagsSource.Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out this.tags)
+                .DisposeMany()
+                .Subscribe();
+
+            var kinds = kindService.GetAllKindsInTaskPool()
                 .Do(this.kindsSource.AddOrUpdate)
                 .Discard()
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler);
+
+            var tags = tagService.GetAllTagsInTaskPool()
+                .Do(this.tagsSource.AddOrUpdate)
+                .Discard()
+                .ObserveOn(RxApp.MainThreadScheduler);
+
+            kinds.CombineLatest(tags, (k, t) => Unit.Default)
                 .Subscribe(this.SwitchCurrentContentToMain);
 
             this.SwitchToList = ReactiveCommand.CreateFromObservable(this.OnSwitchToList);
@@ -87,6 +107,9 @@ namespace MovieList.ViewModels
 
         public ReadOnlyObservableCollection<Kind> Kinds
             => this.kinds;
+
+        public ReadOnlyObservableCollection<Tag> Tags
+            => this.tags;
 
         public bool AreUnsavedChangesPresent { [ObservableAsProperty] get; }
 
@@ -126,7 +149,7 @@ namespace MovieList.ViewModels
             this.currentContentSubscriptions.Clear();
             this.Settings = null;
 
-            this.Content = this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds);
+            this.Content = this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds, this.Tags);
 
             this.Save
                 .InvokeCommand(this.MainContent.TunnelSave)

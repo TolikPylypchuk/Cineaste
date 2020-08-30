@@ -30,8 +30,14 @@ namespace MovieList.Data.Services
         public static IObservable<Unit> UpdateKindsInTaskPool(this IKindService service, IEnumerable<Kind> kinds)
             => Observable.Start(() => service.UpdateKinds(kinds), RxApp.TaskpoolScheduler);
 
-        public static IObservable<MovieList> GetListInTaskPool(this IListService service, IList<Kind> kinds)
-            => Observable.Start(() => service.GetList(kinds), RxApp.TaskpoolScheduler);
+        public static IObservable<IEnumerable<Tag>> GetAllTagsInTaskPool(this ITagService service)
+            => Observable.Start(service.GetAllTags, RxApp.TaskpoolScheduler);
+
+        public static IObservable<MovieList> GetListInTaskPool(
+            this IListService service,
+            IEnumerable<Kind> kinds,
+            IEnumerable<Tag> tags)
+            => Observable.Start(() => service.GetList(kinds, tags), RxApp.TaskpoolScheduler);
 
         public static IObservable<Settings> GetSettingsInTaskPool(this ISettingsService service)
             => Observable.Start(service.GetSettings, RxApp.TaskpoolScheduler);
