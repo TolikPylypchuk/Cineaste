@@ -80,7 +80,7 @@ namespace MovieList.Data.Services.Implementations
 
             int maxDisplayNumber = franchise.Entries.Select(entry => entry.DisplayNumber).Max() ?? 0;
 
-            franchise.Entry.ParentFranchise.Entries
+            _ = franchise.Entry.ParentFranchise.Entries
                 .OrderBy(entry => entry.SequenceNumber)
                 .SkipWhile(entry => entry.SequenceNumber <= franchise.Entry.SequenceNumber)
                 .TakeWhile(entry => entry.Franchise != null && entry.Franchise.MergeDisplayNumbers)

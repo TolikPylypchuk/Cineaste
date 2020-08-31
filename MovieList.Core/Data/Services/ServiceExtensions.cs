@@ -24,14 +24,15 @@ namespace MovieList.Data.Services
         public static IObservable<Unit> DeleteInTaskPool<TEntity>(this IEntityService<TEntity> service, TEntity entity)
             => Observable.Start(() => service.Delete(entity), RxApp.TaskpoolScheduler);
 
-        public static IObservable<IEnumerable<Kind>> GetAllKindsInTaskPool(this IKindService service)
-            => Observable.Start(service.GetAllKinds, RxApp.TaskpoolScheduler);
+        public static IObservable<IEnumerable<TEntity>> GetAllInTaskPool<TEntity>(
+            this ISettingsEntityService<TEntity> service)
+            where TEntity : EntityBase
+            => Observable.Start(service.GetAll, RxApp.TaskpoolScheduler);
 
-        public static IObservable<Unit> UpdateKindsInTaskPool(this IKindService service, IEnumerable<Kind> kinds)
-            => Observable.Start(() => service.UpdateKinds(kinds), RxApp.TaskpoolScheduler);
-
-        public static IObservable<IEnumerable<Tag>> GetAllTagsInTaskPool(this ITagService service)
-            => Observable.Start(service.GetAllTags, RxApp.TaskpoolScheduler);
+        public static IObservable<Unit> UpdateAllInTaskPool<TEntity>(
+            this ISettingsEntityService<TEntity> service, IEnumerable<TEntity> entities)
+            where TEntity : EntityBase
+            => Observable.Start(() => service.UpdateAll(entities), RxApp.TaskpoolScheduler);
 
         public static IObservable<MovieList> GetListInTaskPool(
             this IListService service,

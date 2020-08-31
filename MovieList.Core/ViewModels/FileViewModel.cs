@@ -34,15 +34,15 @@ namespace MovieList.ViewModels
         public FileViewModel(
             string fileName,
             string listName,
-            IKindService? kindService = null,
-            ITagService? tagService = null,
+            ISettingsEntityService<Kind>? kindService = null,
+            ISettingsEntityService<Tag>? tagService = null,
             ISettingsService? settingsService = null)
         {
             this.FileName = fileName;
             this.ListName = listName;
 
-            kindService ??= Locator.Current.GetService<IKindService>(fileName);
-            tagService ??= Locator.Current.GetService<ITagService>(fileName);
+            kindService ??= Locator.Current.GetService<ISettingsEntityService<Kind>>(fileName);
+            tagService ??= Locator.Current.GetService<ISettingsEntityService<Tag>>(fileName);
             this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
 
             this.Header = new TabHeaderViewModel(this.FileName, this.ListName);
@@ -69,12 +69,12 @@ namespace MovieList.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
-            var kinds = kindService.GetAllKindsInTaskPool()
+            var kinds = kindService.GetAllInTaskPool()
                 .Do(this.kindsSource.AddOrUpdate)
                 .Discard()
                 .ObserveOn(RxApp.MainThreadScheduler);
 
-            var tags = tagService.GetAllTagsInTaskPool()
+            var tags = tagService.GetAllInTaskPool()
                 .Do(this.tagsSource.AddOrUpdate)
                 .Discard()
                 .ObserveOn(RxApp.MainThreadScheduler);

@@ -22,20 +22,20 @@ namespace MovieList.ViewModels.Forms.Preferences
     public sealed class SettingsFormViewModel : SettingsFormBase<SettingsModel, SettingsFormViewModel>
     {
         private readonly ISettingsService settingsService;
-        private readonly IKindService kindService;
+        private readonly ISettingsEntityService<Kind> kindService;
 
         public SettingsFormViewModel(
             string fileName,
             Settings settings,
             IEnumerable<Kind> kinds,
             ISettingsService? settingsService = null,
-            IKindService? kindService = null,
+            ISettingsEntityService<Kind>? kindService = null,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
             : base(new SettingsModel(settings, kinds.ToList()), resourceManager, scheduler)
         {
             this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
-            this.kindService = kindService ?? Locator.Current.GetService<IKindService>(fileName);
+            this.kindService = kindService ?? Locator.Current.GetService<ISettingsEntityService<Kind>>(fileName);
 
             this.ListNameRule = this.ValidationRule(
                 vm => vm.ListName, name => !String.IsNullOrWhiteSpace(name), "ListNameEmpty");
@@ -65,7 +65,7 @@ namespace MovieList.ViewModels.Forms.Preferences
 
             return base.OnSave()
                 .DoAsync(_ => this.settingsService.UpdateSettingsInTaskPool(this.Model.Settings))
-                .DoAsync(_ => this.kindService.UpdateKindsInTaskPool(this.Model.Kinds));
+                .DoAsync(_ => this.kindService.UpdateAllInTaskPool(this.Model.Kinds));
         }
 
         protected override IObservable<SettingsModel?> OnDelete()

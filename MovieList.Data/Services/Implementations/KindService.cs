@@ -1,52 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Dapper.Contrib.Extensions;
 
 using MovieList.Data.Models;
 
-using Splat;
-
 namespace MovieList.Data.Services.Implementations
 {
-    internal sealed class KindService : ServiceBase, IKindService
+    internal sealed class KindService : SettingsEntityServiceBase<Kind>
     {
         public KindService(string file)
             : base(file)
         { }
 
-        public IEnumerable<Kind> GetAllKinds()
-        {
-            this.Log().Debug("Getting all kinds");
-            return this.WithTransaction((connection, transaction) => connection.GetAll<Kind>(transaction));
-        }
+        protected override string GetAllMessage
+            => "Getting all kinds";
 
-        public void UpdateKinds(IEnumerable<Kind> kinds)
-            => this.WithTransaction((connection, transaction) =>
-            {
-                this.Log().Debug("Updating kinds");
+        protected override string UpdateAllMessage
+            => "Updating all kinds";
 
-                var kindsList = kinds.ToList();
+        protected override string DeleteExceptionMessage
+            => "Cannot delete kinds that have movies or series attached to them";
 
-                var dbKinds = connection.GetAll<Kind>(transaction).ToList();
-
-                connection.Update(kindsList.Intersect(dbKinds, IdEqualityComparer<Kind>.Instance), transaction);
-
-                foreach (var kindToInsert in kindsList.Except(dbKinds, IdEqualityComparer<Kind>.Instance))
-                {
-                    kindToInsert.Id = (int)connection.Insert(kindToInsert, transaction);
-                }
-
-                var kindsToDelete = dbKinds.Except(kindsList, IdEqualityComparer<Kind>.Instance).ToList();
-
-                if (kindsToDelete.Any(kind => kind.Movies.Count != 0 || kind.Series.Count != 0))
-                {
-                    throw new InvalidOperationException(
-                        "Cannot delete kinds that have movies or series attached to them");
-                }
-
-                connection.Delete(kindsToDelete, transaction);
-            });
+        protected override bool CanDelete(Kind kind)
+            => kind.Movies.Count == 0 && kind.Series.Count == 0;
     }
 }
