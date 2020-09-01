@@ -125,11 +125,11 @@ CREATE TABLE "FranchiseEntries" (
         ON DELETE CASCADE,
 
     FOREIGN KEY ("FranchiseId")
-        REFERENCES "Franchise" ("Id")
+        REFERENCES "Franchises" ("Id")
         ON DELETE CASCADE,
 
     FOREIGN KEY ("ParentFranchiseId")
-        REFERENCES "Franchise" ("Id")
+        REFERENCES "Franchises" ("Id")
         ON DELETE CASCADE
 );
 
@@ -166,7 +166,7 @@ CREATE TABLE "Titles" (
         ON DELETE CASCADE,
         
     FOREIGN KEY ("FranchiseId")
-        REFERENCES "Franchise" ("Id")
+        REFERENCES "Franchises" ("Id")
         ON DELETE CASCADE,
 
     CHECK ("Priority" >= 1 AND "Priority" <= 10)

@@ -48,6 +48,29 @@ namespace MovieList.Data.Services.Implementations
             return tags;
         }
 
+        protected override void AfterSave(Tag tag, IDbConnection connection, IDbTransaction transaction)
+        {
+            var implications = tag.ImpliedTags
+                .Select(impliedTag => new TagImplication { PremiseId = tag.Id, ConsequenceId = impliedTag.Id })
+                .Union(tag.InferredTags
+                    .Select(inferredTag => new TagImplication { PremiseId = inferredTag.Id, ConsequenceId = tag.Id }))
+                .ToList();
+
+            var dbImplications = connection.Query<TagImplication>(
+                $"SELECT * FROM TagImplications WHERE PremiseId = @Id OR ConsequenceId = @Id",
+                new { tag.Id },
+                transaction);
+
+            foreach (var implicationToInsert in implications.Except(
+                dbImplications, CompositeIdEqualityComparer.TagImplication))
+            {
+                implicationToInsert.Id = (int)connection.Insert(implicationToInsert, transaction);
+            }
+
+            var tagsToDelete = dbImplications.Except(implications, CompositeIdEqualityComparer.TagImplication).ToList();
+            connection.Delete(tagsToDelete, transaction);
+        }
+
         protected override void BeforeDelete(Tag tag, IDbConnection connection, IDbTransaction transaction)
         {
             base.BeforeDelete(tag, connection, transaction);

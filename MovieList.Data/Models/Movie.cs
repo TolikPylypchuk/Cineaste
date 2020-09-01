@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,5 +48,10 @@ namespace MovieList.Data.Models
 
         public override string ToString()
             => $"Movie #{this.Id}: {Title.ToString(this.Titles)} ({this.Year})";
+
+        internal object Select(Func<object, MovieTag> p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

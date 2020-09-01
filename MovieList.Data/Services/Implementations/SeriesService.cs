@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -7,10 +8,10 @@ using MovieList.Data.Models;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal sealed class SeriesService : EntityServiceBase<Series>
+    internal sealed class SeriesService : EntityServiceBase<Series, SeriesTag>
     {
         public SeriesService(string fileName)
-            : base(fileName)
+            : base(fileName, CompositeIdEqualityComparer.SeriesTag)
         { }
 
         protected override void Insert(Series series, IDbConnection connection, IDbTransaction transaction)
@@ -120,6 +121,11 @@ namespace MovieList.Data.Services.Implementations
 
             connection.Delete(series, transaction);
         }
+
+        protected override List<SeriesTag> GetTags(Series series)
+            => series.Tags
+                .Select(tag => new SeriesTag { SeriesId = series.Id, TagId = tag.Id })
+                .ToList();
 
         private void InsertSeasonDependentEntities(Season season, IDbConnection connection, IDbTransaction transaction)
         {

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 using Dapper.Contrib.Extensions;
 
@@ -6,10 +8,10 @@ using MovieList.Data.Models;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal sealed class MovieService : EntityServiceBase<Movie>
+    internal sealed class MovieService : EntityServiceBase<Movie, MovieTag>
     {
         public MovieService(string fileName)
-            : base(fileName)
+            : base(fileName, CompositeIdEqualityComparer.MovieTag)
         { }
 
         protected override void Insert(Movie movie, IDbConnection connection, IDbTransaction transaction)
@@ -65,5 +67,10 @@ namespace MovieList.Data.Services.Implementations
 
             connection.Delete(movie, transaction);
         }
+
+        protected override List<MovieTag> GetTags(Movie movie)
+            => movie.Tags
+                .Select(tag => new MovieTag { MovieId = movie.Id, TagId = tag.Id })
+                .ToList();
     }
 }

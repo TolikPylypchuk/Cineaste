@@ -46,11 +46,19 @@ namespace MovieList.Data.Services.Implementations
 
             var dbEntities = connection.GetAll<TEntity>(transaction).ToList();
 
-            connection.Update(entityList.Intersect(dbEntities, IdEqualityComparer<TEntity>.Instance), transaction);
+            var entitiesToUpdate = entityList.Intersect(dbEntities, IdEqualityComparer<TEntity>.Instance);
+
+            connection.Update(entitiesToUpdate, transaction);
+
+            foreach (var entityToUpdate in entitiesToUpdate)
+            {
+                this.AfterSave(entityToUpdate, connection, transaction);
+            }
 
             foreach (var entityToInsert in entityList.Except(dbEntities, IdEqualityComparer<TEntity>.Instance))
             {
                 entityToInsert.Id = (int)connection.Insert(entityToInsert, transaction);
+                this.AfterSave(entityToInsert, connection, transaction);
             }
 
             var entitiesToDelete = dbEntities.Except(entityList, IdEqualityComparer<TEntity>.Instance).ToList();
@@ -67,6 +75,9 @@ namespace MovieList.Data.Services.Implementations
 
             connection.Delete(entitiesToDelete, transaction);
         }
+
+        protected virtual void AfterSave(TEntity entity, IDbConnection connection, IDbTransaction transaction)
+        { }
 
         protected virtual void BeforeDelete(TEntity entity, IDbConnection connection, IDbTransaction transaction)
         { }
