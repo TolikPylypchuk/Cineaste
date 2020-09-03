@@ -2,7 +2,7 @@ using System.Reactive;
 
 using ReactiveUI;
 
-namespace MovieList.ViewModels
+namespace MovieList.Core.ViewModels
 {
     public sealed class NewItemViewModel : ReactiveObject
     {

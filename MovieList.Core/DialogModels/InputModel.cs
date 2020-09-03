@@ -2,7 +2,7 @@ using System;
 
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.DialogModels
+namespace MovieList.Core.DialogModels
 {
     public class InputModel : DialogModelBase
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace MovieList.Preferences
+namespace MovieList.Core.Preferences
 {
     [ToString]
     [Equals(DoNotAddEqualityOperators = true)]

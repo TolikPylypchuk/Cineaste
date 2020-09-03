@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-using MovieList.ViewModels;
+using MovieList.Core.ViewModels;
 
 using ReactiveUI;
 

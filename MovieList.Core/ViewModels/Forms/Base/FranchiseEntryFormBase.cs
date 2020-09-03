@@ -10,7 +10,7 @@ using MovieList.Data.Models;
 
 using ReactiveUI;
 
-namespace MovieList.ViewModels.Forms.Base
+namespace MovieList.Core.ViewModels.Forms.Base
 {
 #nullable disable
     public abstract class FranchiseEntryFormBase<TModel, TViewModel>

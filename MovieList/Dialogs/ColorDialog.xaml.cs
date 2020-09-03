@@ -1,6 +1,6 @@
 using System.Reactive.Disposables;
 
-using MovieList.DialogModels;
+using MovieList.Core.DialogModels;
 
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;

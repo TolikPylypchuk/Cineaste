@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 
+using MovieList.Core.Preferences;
 using MovieList.Data;
 using MovieList.Data.Models;
-using MovieList.Preferences;
 
-namespace MovieList.Models
+namespace MovieList.Core.Models
 {
     public class SettingsModel : ISettings
     {

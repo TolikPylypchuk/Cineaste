@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MovieList.Comparers
+namespace MovieList.Core.Comparers
 {
     public sealed class TitleComparer : NullableComparerBase<string>
     {

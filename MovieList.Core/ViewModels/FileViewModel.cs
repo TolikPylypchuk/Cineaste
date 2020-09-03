@@ -6,19 +6,20 @@ using System.Reactive.Linq;
 
 using DynamicData;
 
+using MovieList.Core.Data.Services;
+using MovieList.Core.DialogModels;
+using MovieList.Core.Models;
+using MovieList.Core.ViewModels.Forms.Preferences;
 using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
-using MovieList.DialogModels;
-using MovieList.Models;
-using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-namespace MovieList.ViewModels
+namespace MovieList.Core.ViewModels
 {
     public sealed class FileViewModel : ReactiveObject
     {

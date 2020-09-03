@@ -1,6 +1,6 @@
 using System.Reactive.Disposables;
 
-using MovieList.ViewModels;
+using MovieList.Core.ViewModels;
 
 using ReactiveUI;
 

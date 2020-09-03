@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace MovieList
+namespace MovieList.Core
 {
     public static class Extensions
     {

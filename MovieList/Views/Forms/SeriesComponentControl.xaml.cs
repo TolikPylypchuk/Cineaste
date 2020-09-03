@@ -1,7 +1,8 @@
 using System.Reactive.Disposables;
 using System.Windows.Controls;
 
-using MovieList.ViewModels.Forms;
+using MovieList.Core;
+using MovieList.Core.ViewModels.Forms;
 
 using ReactiveUI;
 

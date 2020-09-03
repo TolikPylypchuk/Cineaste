@@ -6,9 +6,10 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 
+using MovieList.Core.Data.Services;
+using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
-using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -19,7 +20,7 @@ using Splat;
 
 using static MovieList.Data.Constants;
 
-namespace MovieList.ViewModels.Forms
+namespace MovieList.Core.ViewModels.Forms
 {
     public sealed class MiniseriesFormViewModel : FranchiseEntryFormBase<Series, MiniseriesFormViewModel>
     {

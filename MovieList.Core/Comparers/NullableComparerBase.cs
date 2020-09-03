@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MovieList.Comparers
+namespace MovieList.Core.Comparers
 {
     public enum NullComparison { NullsFirst, NullsLast }
 

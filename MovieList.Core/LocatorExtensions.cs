@@ -1,10 +1,10 @@
-using MovieList.State;
+using MovieList.Core.State;
 
 using ReactiveUI;
 
 using Splat;
 
-namespace MovieList
+namespace MovieList.Core
 {
     public static class LocatorExtensions
     {

@@ -1,8 +1,8 @@
-using MovieList.ListItems;
+using MovieList.Core.ListItems;
 
 using ReactiveUI;
 
-namespace MovieList.ViewModels
+namespace MovieList.Core.ViewModels
 {
     public sealed class ListItemViewModel : ReactiveObject
     {

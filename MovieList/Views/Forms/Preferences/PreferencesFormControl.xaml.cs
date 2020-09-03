@@ -4,8 +4,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using MovieList.Converters;
+using MovieList.Core;
+using MovieList.Core.ViewModels.Forms.Preferences;
 using MovieList.Properties;
-using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 

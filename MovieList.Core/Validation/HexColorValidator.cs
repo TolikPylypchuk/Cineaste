@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace MovieList.Validation
+namespace MovieList.Core.Validation
 {
     public static class HexColorValidator
     {

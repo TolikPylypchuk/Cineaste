@@ -1,6 +1,6 @@
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.DialogModels
+namespace MovieList.Core.DialogModels
 {
     public sealed class ConfirmationModel : DialogModelBase
     {

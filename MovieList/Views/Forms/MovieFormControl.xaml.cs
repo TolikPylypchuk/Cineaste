@@ -4,7 +4,8 @@ using System.Reactive.Linq;
 
 using Akavache;
 
-using MovieList.ViewModels.Forms;
+using MovieList.Core;
+using MovieList.Core.ViewModels.Forms;
 
 using ReactiveUI;
 

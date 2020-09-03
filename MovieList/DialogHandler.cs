@@ -6,12 +6,12 @@ using MaterialDesignExtensions.Controls;
 
 using MaterialDesignThemes.Wpf;
 
-using MovieList.DialogModels;
+using MovieList.Core.DialogModels;
 using MovieList.Properties;
 
 using ReactiveUI;
 
-using static MovieList.Constants;
+using static MovieList.Core.Constants;
 
 namespace MovieList
 {

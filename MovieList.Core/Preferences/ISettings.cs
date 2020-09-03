@@ -3,7 +3,7 @@ using System.Globalization;
 
 using MovieList.Data.Models;
 
-namespace MovieList.Preferences
+namespace MovieList.Core.Preferences
 {
     public interface ISettings
     {

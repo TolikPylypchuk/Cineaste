@@ -15,22 +15,23 @@ using Akavache;
 using DynamicData;
 using DynamicData.Binding;
 
+using MovieList.Core.Data.Services;
+using MovieList.Core.DialogModels;
+using MovieList.Core.Models;
+using MovieList.Core.Preferences;
+using MovieList.Core.ViewModels.Forms.Preferences;
 using MovieList.Data;
 using MovieList.Data.Services;
-using MovieList.DialogModels;
-using MovieList.Models;
-using MovieList.Preferences;
-using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-using static MovieList.Constants;
+using static MovieList.Core.Constants;
 using static MovieList.Data.Constants;
 
-namespace MovieList.ViewModels
+namespace MovieList.Core.ViewModels
 {
     public sealed class MainViewModel : ReactiveObject, IEnableLogger
     {

@@ -9,7 +9,8 @@ using Akavache;
 using DynamicData;
 using DynamicData.Binding;
 
-using MovieList.ViewModels.Forms;
+using MovieList.Core;
+using MovieList.Core.ViewModels.Forms;
 
 using ReactiveUI;
 

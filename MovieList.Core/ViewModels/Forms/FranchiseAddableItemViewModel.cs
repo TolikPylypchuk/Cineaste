@@ -1,10 +1,11 @@
 using System;
 
+using MovieList.Core.Data.Models;
 using MovieList.Data.Models;
 
 using ReactiveUI;
 
-namespace MovieList.ViewModels.Forms
+namespace MovieList.Core.ViewModels.Forms
 {
     public sealed class FranchiseAddableItemViewModel : ReactiveObject
     {

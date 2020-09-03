@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MovieList.Preferences
+namespace MovieList.Core.Preferences
 {
     [ToString]
     [Equals(DoNotAddEqualityOperators = true)]

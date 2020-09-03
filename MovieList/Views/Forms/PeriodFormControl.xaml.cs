@@ -4,8 +4,9 @@ using System.Reactive.Linq;
 
 using MaterialDesignThemes.Wpf;
 
+using MovieList.Core;
+using MovieList.Core.ViewModels.Forms;
 using MovieList.Properties;
-using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
 

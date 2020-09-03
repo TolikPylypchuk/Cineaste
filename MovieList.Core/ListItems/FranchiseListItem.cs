@@ -1,8 +1,9 @@
 using System;
 
+using MovieList.Core.Data.Models;
 using MovieList.Data.Models;
 
-namespace MovieList.ListItems
+namespace MovieList.Core.ListItems
 {
     public class FranchiseListItem : ListItem
     {

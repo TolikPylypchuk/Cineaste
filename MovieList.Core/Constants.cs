@@ -1,4 +1,4 @@
-namespace MovieList
+namespace MovieList.Core
 {
     public static class Constants
     {

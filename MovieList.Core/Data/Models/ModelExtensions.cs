@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
+using MovieList.Data.Models;
 
 using static MovieList.Data.Constants;
 
-namespace MovieList.Data.Models
+namespace MovieList.Core.Data.Models
 {
     public static class ModelExtensions
     {
@@ -60,7 +61,6 @@ namespace MovieList.Data.Models
         public static Title? GetOriginalTitle(this FranchiseEntry entry)
             => entry.Movie?.OriginalTitle ?? entry.Series?.OriginalTitle ?? entry.Franchise!.GetOriginalTitle();
 
-        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
         public static FranchiseEntry? GetFirstEntry(this Franchise franchise)
         {
             var firstEntry = franchise.Entries.OrderBy(entry => entry.SequenceNumber).FirstOrDefault();
@@ -69,7 +69,6 @@ namespace MovieList.Data.Models
                 : null;
         }
 
-        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
         public static FranchiseEntry? GetLastEntry(this Franchise franchise)
         {
             var lastEntry = franchise.Entries.OrderByDescending(entry => entry.SequenceNumber).FirstOrDefault();

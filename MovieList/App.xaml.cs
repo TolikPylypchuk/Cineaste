@@ -13,13 +13,14 @@ using System.Windows.Threading;
 using Akavache;
 
 using MovieList.Converters;
+using MovieList.Core;
+using MovieList.Core.Models;
+using MovieList.Core.Preferences;
+using MovieList.Core.State;
+using MovieList.Core.ViewModels;
 using MovieList.Data.Models;
 using MovieList.Infrastructure;
-using MovieList.Models;
-using MovieList.Preferences;
 using MovieList.Properties;
-using MovieList.State;
-using MovieList.ViewModels;
 
 using ReactiveUI;
 
@@ -30,7 +31,7 @@ using Serilog.Events;
 using Splat;
 using Splat.Serilog;
 
-using static MovieList.Constants;
+using static MovieList.Core.Constants;
 
 namespace MovieList
 {

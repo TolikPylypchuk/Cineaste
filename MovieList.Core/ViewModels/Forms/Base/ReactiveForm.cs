@@ -13,7 +13,7 @@ using System.Resources;
 using DynamicData;
 using DynamicData.Binding;
 
-using MovieList.DialogModels;
+using MovieList.Core.DialogModels;
 
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
@@ -21,7 +21,7 @@ using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
-namespace MovieList.ViewModels.Forms.Base
+namespace MovieList.Core.ViewModels.Forms.Base
 {
 #nullable disable
     public abstract class ReactiveForm<TModel, TForm> : ReactiveValidationObject<TForm>, IReactiveForm

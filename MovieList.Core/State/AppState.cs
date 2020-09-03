@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace MovieList.State
+namespace MovieList.Core.State
 {
     [DataContract]
     public class AppState

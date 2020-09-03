@@ -7,18 +7,19 @@ using System.Reactive.Subjects;
 
 using DynamicData;
 
-using MovieList.Comparers;
+using MovieList.Core.Comparers;
+using MovieList.Core.Data;
+using MovieList.Core.ListItems;
 using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
-using MovieList.ListItems;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-namespace MovieList.ViewModels
+namespace MovieList.Core.ViewModels
 {
     public sealed class ListViewModel : ReactiveObject
     {
@@ -72,7 +73,7 @@ namespace MovieList.ViewModels
             => this.items;
 
         [Reactive]
-        public Data.MovieList MovieList { get; private set; }
+        public WholeList MovieList { get; private set; }
 
         [Reactive]
         public ListItemViewModel? SelectedItem { get; set; }

@@ -10,18 +10,18 @@ using Akavache;
 using DynamicData;
 using DynamicData.Binding;
 
-using MovieList.DialogModels;
-using MovieList.Models;
-using MovieList.Preferences;
+using MovieList.Core.DialogModels;
+using MovieList.Core.Models;
+using MovieList.Core.Preferences;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-using static MovieList.Constants;
+using static MovieList.Core.Constants;
 
-namespace MovieList.ViewModels
+namespace MovieList.Core.ViewModels
 {
     public sealed class HomePageViewModel : ReactiveObject
     {

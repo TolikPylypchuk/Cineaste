@@ -5,11 +5,12 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 
+using MovieList.Core.Data.Services;
+using MovieList.Core.Models;
+using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
-using MovieList.Models;
-using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
@@ -17,7 +18,7 @@ using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
-namespace MovieList.ViewModels.Forms.Preferences
+namespace MovieList.Core.ViewModels.Forms.Preferences
 {
     public sealed class SettingsFormViewModel : SettingsFormBase<SettingsModel, SettingsFormViewModel>
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 
-namespace MovieList
+namespace MovieList.Core
 {
     public static class ObservableExtensions
     {

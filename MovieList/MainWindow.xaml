@@ -5,7 +5,6 @@
                       xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                       xmlns:local="clr-namespace:MovieList"
                       xmlns:l="clr-namespace:MovieList.Localization"
-                      xmlns:v="clr-namespace:MovieList.Views"
                       WindowStartupLocation="CenterScreen"
                       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                       TextElement.FontWeight="Regular" TextElement.FontSize="13"

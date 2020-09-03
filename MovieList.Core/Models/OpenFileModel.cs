@@ -1,4 +1,4 @@
-namespace MovieList.Models
+namespace MovieList.Core.Models
 {
     public sealed class OpenFileModel
     {

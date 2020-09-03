@@ -9,10 +9,11 @@ using System.Windows.Input;
 
 using DynamicData.Binding;
 
-using MovieList.Models;
+using MovieList.Core;
+using MovieList.Core.Models;
+using MovieList.Core.ViewModels;
+using MovieList.Core.ViewModels.Forms.Preferences;
 using MovieList.Properties;
-using MovieList.ViewModels;
-using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 

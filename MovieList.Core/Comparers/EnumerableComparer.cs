@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MovieList.Comparers
+namespace MovieList.Core.Comparers
 {
     public sealed class EnumerableComparer<T> : NullableComparerBase<IEnumerable<T>>
     {

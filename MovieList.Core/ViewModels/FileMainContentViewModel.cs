@@ -9,12 +9,12 @@ using System.Reactive.Subjects;
 
 using DynamicData;
 
-using MovieList.Data;
+using MovieList.Core.Data;
+using MovieList.Core.DialogModels;
+using MovieList.Core.ListItems;
+using MovieList.Core.ViewModels.Forms;
+using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
-using MovieList.DialogModels;
-using MovieList.ListItems;
-using MovieList.ViewModels.Forms;
-using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -23,7 +23,7 @@ using Splat;
 
 using static MovieList.Data.Constants;
 
-namespace MovieList.ViewModels
+namespace MovieList.Core.ViewModels
 {
     public sealed class FileMainContentViewModel : ReactiveObject, IDisposable
     {

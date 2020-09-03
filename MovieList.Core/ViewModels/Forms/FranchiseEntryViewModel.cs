@@ -7,15 +7,16 @@ using System.Resources;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
+using MovieList.Core.Data.Models;
+using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
-using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-namespace MovieList.ViewModels.Forms
+namespace MovieList.Core.ViewModels.Forms
 {
     public sealed class FranchiseEntryViewModel : ReactiveForm<FranchiseEntry, FranchiseEntryViewModel>
     {

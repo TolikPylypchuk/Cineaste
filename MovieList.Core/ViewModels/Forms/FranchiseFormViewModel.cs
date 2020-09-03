@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -13,11 +12,12 @@ using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
-using MovieList.Comparers;
+using MovieList.Core.Comparers;
+using MovieList.Core.Data.Services;
+using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
-using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -26,7 +26,7 @@ using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
-namespace MovieList.ViewModels.Forms
+namespace MovieList.Core.ViewModels.Forms
 {
     public sealed class FranchiseFormViewModel : FranchiseEntryFormBase<Franchise, FranchiseFormViewModel>
     {
@@ -38,8 +38,6 @@ namespace MovieList.ViewModels.Forms
         private readonly SourceList<FranchiseEntry> addableItemsSource = new SourceList<FranchiseEntry>();
         private readonly ReadOnlyObservableCollection<FranchiseAddableItemViewModel> addableItems;
 
-        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
-        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
         public FranchiseFormViewModel(
             Franchise franchise,
             string fileName,

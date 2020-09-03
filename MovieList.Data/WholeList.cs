@@ -4,9 +4,9 @@ using MovieList.Data.Models;
 
 namespace MovieList.Data
 {
-    public sealed class MovieList
+    public sealed class WholeList
     {
-        public MovieList(IEnumerable<Movie> movies, IEnumerable<Series> series, IEnumerable<Franchise> franchise)
+        public WholeList(IEnumerable<Movie> movies, IEnumerable<Series> series, IEnumerable<Franchise> franchise)
         {
             this.Movies = movies;
             this.Series = series;

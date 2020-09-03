@@ -2,8 +2,8 @@ using System.Reactive.Disposables;
 
 using MaterialDesignThemes.Wpf;
 
+using MovieList.Core.ViewModels.Forms;
 using MovieList.Properties;
-using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
 

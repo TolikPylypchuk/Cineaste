@@ -2,7 +2,8 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using MovieList.ViewModels;
+using MovieList.Core;
+using MovieList.Core.ViewModels;
 
 using ReactiveUI;
 

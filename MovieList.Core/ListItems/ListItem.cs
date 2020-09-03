@@ -1,11 +1,12 @@
 using System;
 
+using MovieList.Core.Data.Models;
 using MovieList.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.ListItems
+namespace MovieList.Core.ListItems
 {
     public abstract class ListItem : ReactiveObject, IEquatable<ListItem>
     {

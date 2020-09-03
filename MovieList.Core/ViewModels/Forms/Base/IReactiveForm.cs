@@ -2,7 +2,7 @@ using System;
 
 using ReactiveUI;
 
-namespace MovieList.ViewModels.Forms.Base
+namespace MovieList.Core.ViewModels.Forms.Base
 {
     public interface IReactiveForm : IReactiveObject
     {

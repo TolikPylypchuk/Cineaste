@@ -3,7 +3,8 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using MovieList.ViewModels.Forms.Preferences;
+using MovieList.Core;
+using MovieList.Core.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 

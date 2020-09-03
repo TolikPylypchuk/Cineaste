@@ -13,14 +13,14 @@ using System.Resources;
 using DynamicData;
 using DynamicData.Aggregation;
 
+using MovieList.Core.Preferences;
+using MovieList.Core.ViewModels.Forms.Preferences;
 using MovieList.Data.Models;
-using MovieList.Preferences;
-using MovieList.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.ViewModels.Forms.Base
+namespace MovieList.Core.ViewModels.Forms.Base
 {
     public abstract class SettingsFormBase<TSettings, TForm> : ReactiveForm<TSettings, TForm>
         where TSettings : class, ISettings

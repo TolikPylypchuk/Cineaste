@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 
+using MovieList.Data;
 using MovieList.Data.Models;
+using MovieList.Data.Services;
 
 using ReactiveUI;
 
-namespace MovieList.Data.Services
+namespace MovieList.Core.Data.Services
 {
     public static class ServiceExtensions
     {
@@ -34,7 +36,7 @@ namespace MovieList.Data.Services
             where TEntity : EntityBase
             => Observable.Start(() => service.UpdateAll(entities), RxApp.TaskpoolScheduler);
 
-        public static IObservable<MovieList> GetListInTaskPool(
+        public static IObservable<WholeList> GetListInTaskPool(
             this IListService service,
             IEnumerable<Kind> kinds,
             IEnumerable<Tag> tags)

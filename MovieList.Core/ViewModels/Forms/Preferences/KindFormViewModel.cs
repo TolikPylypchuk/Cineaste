@@ -5,15 +5,15 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 
+using MovieList.Core.Validation;
+using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
-using MovieList.Validation;
-using MovieList.ViewModels.Forms.Base;
 
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-namespace MovieList.ViewModels.Forms.Preferences
+namespace MovieList.Core.ViewModels.Forms.Preferences
 {
     public sealed class KindFormViewModel : ReactiveForm<Kind, KindFormViewModel>
     {

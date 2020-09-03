@@ -5,7 +5,7 @@ using Akavache;
 
 using ReactiveUI;
 
-namespace MovieList.State
+namespace MovieList.Core.State
 {
     public sealed class AkavacheSuspensionDriver<TAppState> : ISuspensionDriver where TAppState : class
     {

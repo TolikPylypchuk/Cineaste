@@ -1,10 +1,10 @@
 using System.Reactive;
 
-using MovieList.DialogModels;
+using MovieList.Core.DialogModels;
 
 using ReactiveUI;
 
-namespace MovieList
+namespace MovieList.Core
 {
     public static class Dialog
     {

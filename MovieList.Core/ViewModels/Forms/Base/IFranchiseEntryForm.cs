@@ -2,7 +2,7 @@ using MovieList.Data.Models;
 
 using ReactiveUI;
 
-namespace MovieList.ViewModels.Forms.Base
+namespace MovieList.Core.ViewModels.Forms.Base
 {
     public interface IFranchiseEntryForm : IReactiveObject
     {

@@ -2,10 +2,11 @@ using System;
 using System.Globalization;
 using System.Linq;
 
+using MovieList.Core.Data.Models;
+using MovieList.Core.ListItems;
 using MovieList.Data.Models;
-using MovieList.ListItems;
 
-namespace MovieList.Comparers
+namespace MovieList.Core.Comparers
 {
     public sealed class ListItemTitleComparer : NullableComparerBase<ListItem>
     {

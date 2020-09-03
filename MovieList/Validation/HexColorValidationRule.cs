@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Windows.Controls;
 
+using MovieList.Core.Validation;
 using MovieList.Properties;
 
 namespace MovieList.Validation

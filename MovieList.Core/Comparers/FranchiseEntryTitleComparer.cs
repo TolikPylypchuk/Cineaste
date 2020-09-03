@@ -1,9 +1,10 @@
 using System;
 using System.Globalization;
 
+using MovieList.Core.Data.Models;
 using MovieList.Data.Models;
 
-namespace MovieList.Comparers
+namespace MovieList.Core.Comparers
 {
     public class FranchiseEntryTitleComparer : NullableComparerBase<FranchiseEntry>
     {

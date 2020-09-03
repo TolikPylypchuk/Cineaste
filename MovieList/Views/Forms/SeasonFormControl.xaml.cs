@@ -10,8 +10,9 @@ using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
+using MovieList.Core;
+using MovieList.Core.ViewModels.Forms;
 using MovieList.Properties;
-using MovieList.ViewModels.Forms;
 
 using ReactiveUI;
 

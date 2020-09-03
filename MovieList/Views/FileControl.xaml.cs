@@ -9,8 +9,8 @@ using MaterialDesignExtensions.Model;
 
 using MaterialDesignThemes.Wpf;
 
+using MovieList.Core.ViewModels;
 using MovieList.Properties;
-using MovieList.ViewModels;
 
 using ReactiveUI;
 

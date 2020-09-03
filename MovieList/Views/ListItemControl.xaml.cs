@@ -1,7 +1,7 @@
 using System.Reactive.Disposables;
 using System.Windows.Media;
 
-using MovieList.ViewModels;
+using MovieList.Core.ViewModels;
 
 using ReactiveUI;
 

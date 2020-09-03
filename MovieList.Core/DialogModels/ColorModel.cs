@@ -1,6 +1,6 @@
 using System;
 
-using MovieList.Validation;
+using MovieList.Core.Validation;
 
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Abstractions;
@@ -8,7 +8,7 @@ using ReactiveUI.Validation.Contexts;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-namespace MovieList.DialogModels
+namespace MovieList.Core.DialogModels
 {
     public sealed class ColorModel : DialogModelBase, IValidatableViewModel
     {

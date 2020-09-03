@@ -16,10 +16,10 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public MovieList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags)
+        public WholeList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags)
             => this.WithTransaction((connection, transaction) => this.GetList(kinds, tags, connection, transaction));
 
-        private MovieList GetList(
+        private WholeList GetList(
             IEnumerable<Kind> kinds,
             IEnumerable<Tag> tags,
             IDbConnection connection,
@@ -44,7 +44,7 @@ namespace MovieList.Data.Services.Implementations
 
             var tagsById = tags.ToDictionary(tag => tag.Id, tag => tag);
 
-            return new MovieList(
+            return new WholeList(
                 movies
                     .Join(kinds)
                     .Join(titles)
