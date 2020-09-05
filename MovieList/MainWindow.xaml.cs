@@ -58,8 +58,11 @@ namespace MovieList
                     ?.DisposeWith(disposables);
 
                 this.ViewModel.Shutdown
-                    .Do(unit => disposables.Dispose())
-                    .Subscribe(this.Close)
+                    .Subscribe(() =>
+                    {
+                        disposables.Dispose();
+                        this.Close();
+                    })
                     ?.DisposeWith(disposables);
             });
         }

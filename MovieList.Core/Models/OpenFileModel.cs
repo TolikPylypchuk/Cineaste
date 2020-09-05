@@ -1,14 +1,9 @@
 namespace MovieList.Core.Models
 {
-    public sealed class OpenFileModel
-    {
-        public OpenFileModel(string file, bool isExternal = false)
-        {
-            this.File = file;
-            this.IsExternal = isExternal;
-        }
+#pragma warning disable IDE0060 // Remove unused parameter
 
-        public string File { get; }
-        public bool IsExternal { get; }
-    }
+    public sealed record OpenFileModel(string File, bool IsExternal = false)
+    { }
+
+#pragma warning restore IDE0060 // Remove unused parameter
 }

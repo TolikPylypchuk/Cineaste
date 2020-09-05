@@ -7,17 +7,8 @@ using MovieList.Data.Models;
 
 namespace MovieList.Core.Models
 {
-    public class SettingsModel : ISettings
+    public sealed record SettingsModel(Settings Settings, List<Kind> Kinds) : ISettings
     {
-        public SettingsModel(Settings settings, List<Kind> kinds)
-        {
-            this.Settings = settings;
-            this.Kinds = kinds;
-        }
-
-        public Settings Settings { get; }
-        public List<Kind> Kinds { get; }
-
         string ISettings.DefaultSeasonTitle
         {
             get => this.Settings.DefaultSeasonTitle;
