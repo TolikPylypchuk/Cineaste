@@ -8,17 +8,17 @@
     <local:KindFormControlBase.Resources>
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
             <Setter Property="views:Properties.TripleClickSelectAll" Value="True" />
-            <Setter Property="Width" Value="Auto" />
-            <Setter Property="MinWidth" Value="300" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Margin" Value="8" />
+            <Setter Property="MaxWidth" Value="400" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
-        <Style TargetType="{x:Type Rectangle}">
+        <Style TargetType="{x:Type m:Chip}">
             <Setter Property="Margin" Value="4" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="VerticalAlignment" Value="Stretch" />
             <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Icon" Value=" " />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
         </Style>
 
         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignSubtitle1TextBlock}">
@@ -28,22 +28,7 @@
         </Style>
     </local:KindFormControlBase.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="160" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="160" />
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="240" />
-            <ColumnDefinition Width="240" />
-            <ColumnDefinition Width="240" />
-            <ColumnDefinition Width="16" />
-        </Grid.ColumnDefinitions>
-
+    <StackPanel Margin="0 0 16 4">
         <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
             <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
                     VerticalAlignment="Center" Padding="0" Width="25" Height="25" Margin="8 0 0 0"
@@ -51,24 +36,21 @@
                 <m:PackIcon Kind="CloseCircleOutline" Margin="0" Width="25" Height="25" />
             </Button>
 
-            <TextBox x:Name="NameTextBox" DockPanel.Dock="Left" HorizontalAlignment="Left"
-                     m:HintAssist.Hint="{l:Translate KindName}" />
+            <TextBox x:Name="NameTextBox" m:HintAssist.Hint="{l:Translate KindName}" />
         </DockPanel>
 
-        <TextBlock Text="{l:Translate ColorForWatchedMovies}" Grid.Row="1" Grid.Column="0" />
-        <TextBlock Text="{l:Translate ColorForNotWatchedMovies}" Grid.Row="1" Grid.Column="1" />
-        <TextBlock Text="{l:Translate ColorForNotReleasedMovies}" Grid.Row="1" Grid.Column="2" />
+        <StackPanel Orientation="Horizontal">
+            <StackPanel>
+                <m:Chip x:Name="WatchedMovieChip" Content="{l:Translate ColorForWatchedMovies}" />
+                <m:Chip x:Name="NotWatchedMovieChip" Content="{l:Translate ColorForNotWatchedMovies}" />
+                <m:Chip x:Name="NotReleasedMovieChip" Content="{l:Translate ColorForNotReleasedMovies}" />
+            </StackPanel>
 
-        <Rectangle x:Name="WatchedMovieColorRectangle" Grid.Row="2" Grid.Column="0" />
-        <Rectangle x:Name="NotWatchedMovieColorRectangle" Grid.Row="2" Grid.Column="1" />
-        <Rectangle x:Name="NotReleasedMovieColorRectangle" Grid.Row="2" Grid.Column="2" />
-
-        <TextBlock Text="{l:Translate ColorForWatchedSeries}" Grid.Row="3" Grid.Column="0" />
-        <TextBlock Text="{l:Translate ColorForNotWatchedSeries}" Grid.Row="3" Grid.Column="1" />
-        <TextBlock Text="{l:Translate ColorForNotReleasedSeries}" Grid.Row="3" Grid.Column="2" />
-
-        <Rectangle x:Name="WatchedSeriesColorRectangle" Grid.Row="4" Grid.Column="0" />
-        <Rectangle x:Name="NotWatchedSeriesColorRectangle" Grid.Row="4" Grid.Column="1" />
-        <Rectangle x:Name="NotReleasedSeriesColorRectangle" Grid.Row="4" Grid.Column="2" />
-    </Grid>
+            <StackPanel>
+                <m:Chip x:Name="WatchedSeriesChip" Content="{l:Translate ColorForWatchedSeries}" />
+                <m:Chip x:Name="NotWatchedSeriesChip" Content="{l:Translate ColorForNotWatchedSeries}" />
+                <m:Chip x:Name="NotReleasedSeriesChip" Grid.Row="2" Content="{l:Translate ColorForNotReleasedSeries}" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
 </local:KindFormControlBase>

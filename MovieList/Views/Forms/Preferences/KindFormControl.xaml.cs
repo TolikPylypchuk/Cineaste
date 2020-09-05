@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 
 using MovieList.Core;
 using MovieList.Core.DialogModels;
@@ -40,77 +41,118 @@ namespace MovieList.Views.Forms.Preferences
                     .BindTo(this, v => v.DeleteButton.Visibility)
                     ?.DisposeWith(disposables);
 
-                this.BindColors(disposables);
+                this.BindChipIconColors(disposables);
+                this.BindChipTextColors(disposables);
                 this.EnablePickingNewColors(disposables);
             });
         }
 
-        private void BindColors(CompositeDisposable disposables)
+        private void BindChipIconColors(CompositeDisposable disposables)
         {
             this.OneWayBind(
-                    this.ViewModel,
-                    vm => vm.ColorForWatchedMovie,
-                    v => v.WatchedMovieColorRectangle.Fill)
+                this.ViewModel,
+                vm => vm.ColorForWatchedMovie,
+                v => v.WatchedMovieChip.IconBackground)
                 ?.DisposeWith(disposables);
 
             this.OneWayBind(
-                    this.ViewModel,
-                    vm => vm.ColorForNotWatchedMovie,
-                    v => v.NotWatchedMovieColorRectangle.Fill)
+                this.ViewModel,
+                vm => vm.ColorForNotWatchedMovie,
+                v => v.NotWatchedMovieChip.IconBackground)
                 ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotReleasedMovie,
-                    v => v.NotReleasedMovieColorRectangle.Fill)
+                    v => v.NotReleasedMovieChip.IconBackground)
                 ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForWatchedSeries,
-                    v => v.WatchedSeriesColorRectangle.Fill)
+                    v => v.WatchedSeriesChip.IconBackground)
                 ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotWatchedSeries,
-                    v => v.NotWatchedSeriesColorRectangle.Fill)
+                    v => v.NotWatchedSeriesChip.IconBackground)
                 ?.DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotReleasedSeries,
-                    v => v.NotReleasedSeriesColorRectangle.Fill)
+                    v => v.NotReleasedSeriesChip.IconBackground)
+                ?.DisposeWith(disposables);
+        }
+
+        private void BindChipTextColors(CompositeDisposable disposables)
+        {
+            this.OneWayBind(
+                this.ViewModel,
+                vm => vm.ColorForWatchedMovie,
+                v => v.WatchedMovieChip.Foreground)
+                ?.DisposeWith(disposables);
+
+            this.OneWayBind(
+                this.ViewModel,
+                vm => vm.ColorForNotWatchedMovie,
+                v => v.NotWatchedMovieChip.Foreground)
+                ?.DisposeWith(disposables);
+
+            this.OneWayBind(
+                    this.ViewModel,
+                    vm => vm.ColorForNotReleasedMovie,
+                    v => v.NotReleasedMovieChip.Foreground)
+                ?.DisposeWith(disposables);
+
+            this.OneWayBind(
+                    this.ViewModel,
+                    vm => vm.ColorForWatchedSeries,
+                    v => v.WatchedSeriesChip.Foreground)
+                ?.DisposeWith(disposables);
+
+            this.OneWayBind(
+                    this.ViewModel,
+                    vm => vm.ColorForNotWatchedSeries,
+                    v => v.NotWatchedSeriesChip.Foreground)
+                ?.DisposeWith(disposables);
+
+            this.OneWayBind(
+                    this.ViewModel,
+                    vm => vm.ColorForNotReleasedSeries,
+                    v => v.NotReleasedSeriesChip.Foreground)
                 ?.DisposeWith(disposables);
         }
 
         private void EnablePickingNewColors(CompositeDisposable disposables)
         {
-            this.PickNewColorOnClick(this.WatchedMovieColorRectangle, vm => vm.ColorForWatchedMovie)
+            this.PickNewColorOnClick(this.WatchedMovieChip, vm => vm.ColorForWatchedMovie)
                 ?.DisposeWith(disposables);
 
-            this.PickNewColorOnClick(this.NotWatchedMovieColorRectangle, vm => vm.ColorForNotWatchedMovie)
+            this.PickNewColorOnClick(this.NotWatchedMovieChip, vm => vm.ColorForNotWatchedMovie)
                 ?.DisposeWith(disposables);
 
-            this.PickNewColorOnClick(this.NotReleasedMovieColorRectangle, vm => vm.ColorForNotReleasedMovie)
+            this.PickNewColorOnClick(this.NotReleasedMovieChip, vm => vm.ColorForNotReleasedMovie)
                 ?.DisposeWith(disposables);
 
-            this.PickNewColorOnClick(this.WatchedSeriesColorRectangle, vm => vm.ColorForWatchedSeries)
+            this.PickNewColorOnClick(this.WatchedSeriesChip, vm => vm.ColorForWatchedSeries)
                 ?.DisposeWith(disposables);
 
-            this.PickNewColorOnClick(this.NotWatchedSeriesColorRectangle, vm => vm.ColorForNotWatchedSeries)
+            this.PickNewColorOnClick(this.NotWatchedSeriesChip, vm => vm.ColorForNotWatchedSeries)
                 ?.DisposeWith(disposables);
 
-            this.PickNewColorOnClick(this.NotReleasedSeriesColorRectangle, vm => vm.ColorForNotReleasedSeries)
+            this.PickNewColorOnClick(this.NotReleasedSeriesChip, vm => vm.ColorForNotReleasedSeries)
                 ?.DisposeWith(disposables);
         }
 
         private IDisposable PickNewColorOnClick(
-            FrameworkElement element,
+            ButtonBase element,
             Expression<Func<KindFormViewModel, string>> colorProperty)
         {
             var getColor = colorProperty.Compile();
-            return element.Events().MouseLeftButtonUp
+            return Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
+                h => element.Click += h, h => element.Click -= h)
                 .SelectMany(_ => this.PickNewColor(getColor(this.ViewModel!)))
                 .WhereNotNull()
                 .ObserveOnDispatcher()
