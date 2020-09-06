@@ -1619,11 +1619,29 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The category must not be empty.
+        /// </summary>
+        public static string ValidationCategoryEmpty {
+            get {
+                return ResourceManager.GetString("ValidationCategoryEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The channel must not be empty.
         /// </summary>
         public static string ValidationChannelEmpty {
             get {
                 return ResourceManager.GetString("ValidationChannelEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The description must not be empty.
+        /// </summary>
+        public static string ValidationDescriptionEmpty {
+            get {
+                return ResourceManager.GetString("ValidationDescriptionEmpty", resourceCulture);
             }
         }
         

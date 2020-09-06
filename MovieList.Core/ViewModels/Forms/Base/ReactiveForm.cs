@@ -14,6 +14,7 @@ using DynamicData;
 using DynamicData.Binding;
 
 using MovieList.Core.DialogModels;
+using MovieList.Core.Validation;
 
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
@@ -160,6 +161,9 @@ namespace MovieList.Core.ViewModels.Forms.Base
         protected IObservable<TModel?> PromptToDelete(string messageAndTitle, Func<IObservable<TModel>> onDelete)
             => Dialog.Confirm.Handle(new ConfirmationModel(messageAndTitle))
                 .SelectMany(shouldDelete => shouldDelete ? onDelete() : Observable.Return<TModel?>(null));
+
+        protected ValidationHelper ValidationRuleForColor(Expression<Func<TForm, string>> vmProperty)
+            => this.Self.ValidationRule(vmProperty, HexColorValidator.IsArgbString, "HexColorInvalid");
 
         protected abstract IObservable<TModel> OnSave();
 

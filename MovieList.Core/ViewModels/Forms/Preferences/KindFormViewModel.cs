@@ -1,11 +1,9 @@
 using System;
-using System.Linq.Expressions;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 
-using MovieList.Core.Validation;
 using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
 
@@ -122,8 +120,5 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.ColorForNotReleasedMovie = this.Kind.ColorForNotReleasedMovie;
             this.ColorForNotReleasedSeries = this.Kind.ColorForNotReleasedSeries;
         }
-
-        private ValidationHelper ValidationRuleForColor(Expression<Func<KindFormViewModel, string>> vmProperty)
-            => this.ValidationRule(vmProperty, HexColorValidator.IsArgbString, "HexColorInvalid");
     }
 }

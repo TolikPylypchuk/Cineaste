@@ -7,8 +7,6 @@ using Dapper.Contrib.Extensions;
 
 using MovieList.Data.Models;
 
-using Splat;
-
 namespace MovieList.Data.Services.Implementations
 {
     internal class TagService : SettingsEntityServiceBase<Tag>
