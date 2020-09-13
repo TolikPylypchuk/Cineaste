@@ -11,14 +11,16 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Margin="0 8 0 8" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
+        <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Margin="0 8 0 8"
+                   Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
 
         <TextBlock x:Name="MessageTextBlock" Grid.Row="1" Margin="0 8 0 0" />
 
         <TextBox x:Name="ValueTextBox" Grid.Row="2" Margin="0 8 0 0" />
 
         <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0 16 0 0" HorizontalAlignment="Right">
-            <Button x:Name="CancelButton" IsCancel="True" Margin="8 0 0 0" Style="{DynamicResource MaterialDesignFlatButton}"
+            <Button x:Name="CancelButton" IsCancel="True" Margin="8 0 0 0"
+                    Style="{DynamicResource MaterialDesignFlatButton}"
                     Command="{x:Static m:DialogHost.CloseDialogCommand}" CommandParameter="{x:Null}" />
 
             <Button x:Name="ConfirmButton" IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}"

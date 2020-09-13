@@ -1,8 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
@@ -25,7 +25,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         private readonly BehaviorSubject<bool> isNew = new BehaviorSubject<bool>(true);
 
         private readonly SourceList<Tag> impliedTagsSource = new SourceList<Tag>();
-        private readonly ReadOnlyObservableCollection<TagFormViewModel> impliedTags;
+        private readonly ReadOnlyObservableCollection<TagItemViewModel> impliedTags;
 
         public TagFormViewModel(
             Tag tag,
@@ -38,8 +38,10 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.CopyProperties();
 
             this.impliedTagsSource.Connect()
-                .Transform(tag => new TagFormViewModel(tag, Observable.Return(false)))
-                .Sort(SortExpressionComparer<TagFormViewModel>.Ascending(vm => vm.Name))
+                .Transform(this.CreateTagItemViewModel)
+                .Sort(SortExpressionComparer<TagItemViewModel>
+                    .Ascending(vm => vm.Category)
+                    .ThenByAscending(vm => vm.Name))
                 .Bind(out this.impliedTags)
                 .DisposeMany()
                 .Subscribe();
@@ -50,8 +52,6 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.DescriptionRule = this.ValidationRule(vm => vm.Description, notEmpty, "DescriptionEmpty");
             this.CategoryRule = this.ValidationRule(vm => vm.Category, notEmpty, "CategoryEmpty");
             this.ColorRule = this.ValidationRuleForColor(vm => vm.Color);
-
-            this.Select = ReactiveCommand.Create(() => { });
 
             isNew.Subscribe(this.isNew);
 
@@ -73,15 +73,13 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         [Reactive]
         public string Color { get; set; } = String.Empty;
 
-        public ReadOnlyObservableCollection<TagFormViewModel> ImpliedTags
+        public ReadOnlyObservableCollection<TagItemViewModel> ImpliedTags
             => this.impliedTags;
 
         public ValidationHelper NameRule { get; }
         public ValidationHelper DescriptionRule { get; }
         public ValidationHelper CategoryRule { get; }
         public ValidationHelper ColorRule { get; }
-
-        public ReactiveCommand<Unit, Unit> Select { get; }
 
         public override bool IsNew
             => this.isNew.Value;
@@ -95,7 +93,16 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.TrackChanges(vm => vm.Description, vm => vm.Tag.Description);
             this.TrackChanges(vm => vm.Category, vm => vm.Tag.Category);
             this.TrackChanges(vm => vm.Color, vm => vm.Tag.Color);
-            this.TrackChanges(this.IsCollectionChanged(vm => vm.ImpliedTags, vm => vm.Tag.ImpliedTags));
+
+            var impliedTagsChanged = this.impliedTagsSource.Connect()
+                .ToCollection()
+                .Select(tags => tags
+                    .OrderBy(t => t.Category)
+                    .ThenBy(t => t.Name)
+                    .SequenceEqual(this.Tag.ImpliedTags.OrderBy(t => t.Category).ThenBy(t => t.Name)))
+                .Invert();
+
+            this.TrackChanges(impliedTagsChanged);
 
             base.EnableChangeTracking();
         }
@@ -128,6 +135,23 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
                 list.Clear();
                 list.AddRange(this.Tag.ImpliedTags);
             });
+        }
+
+        private TagItemViewModel CreateTagItemViewModel(Tag tag)
+        {
+            var viewModel = new TagItemViewModel(tag, canSelect: false, canDelete: true);
+
+            var subscriptions = new CompositeDisposable();
+
+            viewModel.Delete
+                .Subscribe(() =>
+                {
+                    this.impliedTagsSource.Remove(tag);
+                    subscriptions.Dispose();
+                })
+                .DisposeWith(subscriptions);
+
+            return viewModel;
         }
     }
 }
