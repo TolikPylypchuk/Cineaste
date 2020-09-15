@@ -47,7 +47,7 @@ namespace MovieList
                 this.Events().Drop
                     .Where(e => e.Data.GetDataPresent(DataFormats.FileDrop))
                     .SelectMany(e => (string[])e.Data.GetData(DataFormats.FileDrop))
-                    .Select(file => new OpenFileModel(file, true))
+                    .Select(file => new OpenFileModel(file) { IsExternal = true })
                     .InvokeCommand(this.ViewModel.OpenFile)
                     ?.DisposeWith(disposables);
 
@@ -86,7 +86,7 @@ namespace MovieList
                         Tag = vm.FileName
                     }),
                     vm => this.MainTabControl.Items.Remove(this.MainTabControl.Items
-                        .Cast<TabItem>()
+                        .OfType<TabItem>()
                         .First(item => vm.FileName.Equals(item.Tag))))
                 ?.DisposeWith(disposables);
 
@@ -144,7 +144,7 @@ namespace MovieList
                             Tag = file.File.Path
                         }),
                     file => this.OpenRecentMenuItem.Items.Remove(this.OpenRecentMenuItem.Items
-                        .Cast<MenuItem>()
+                        .OfType<MenuItem>()
                         .First(item => file.File.Path.Equals(item.Tag))))
                 ?.DisposeWith(disposables);
 
@@ -245,7 +245,7 @@ namespace MovieList
         private void OnClosePreferences()
         {
             var preferencesTab = this.MainTabControl.Items
-                .Cast<TabItem>()
+                .OfType<TabItem>()
                 .Where(item => item.Tag != null)
                 .FirstOrDefault(item => String.IsNullOrEmpty(item.Tag.ToString()));
 

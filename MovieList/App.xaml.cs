@@ -69,7 +69,7 @@ namespace MovieList
 
             this.namedPipeManager.StartServer();
             this.namedPipeManager.ReceivedString
-                .Select(file => new OpenFileModel(file, true))
+                .Select(file => new OpenFileModel(file) { IsExternal = true })
                 .InvokeCommand(mainViewModel.OpenFile);
 
             this.SetUpDialogs(new DialogHandler(mainWindow.MainDialogHost));

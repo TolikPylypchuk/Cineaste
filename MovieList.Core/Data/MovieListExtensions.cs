@@ -11,7 +11,7 @@ namespace MovieList.Core.Data
     {
         public static List<ListItem> ToListItems(this WholeList list)
             => list.Movies.Select(movie => new MovieListItem(movie))
-                .Cast<ListItem>()
+                .OfType<ListItem>()
                 .Concat(list.Series.Select(series => new SeriesListItem(series)))
                 .Concat(list.Franchise.Select(franchise => new FranchiseListItem(franchise)))
                 .ToList();

@@ -7,6 +7,13 @@ using MovieList.Data.Models;
 
 namespace MovieList.Core.Models
 {
+    public sealed record CreateFileModel(string File, string ListName);
+
+    public sealed record OpenFileModel(string File)
+    {
+        public bool IsExternal { get; init; }
+    }
+
     public sealed record SettingsModel(Settings Settings, List<Kind> Kinds) : ISettings
     {
         string ISettings.DefaultSeasonTitle
