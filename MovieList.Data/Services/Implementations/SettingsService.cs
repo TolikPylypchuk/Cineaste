@@ -61,7 +61,8 @@ namespace MovieList.Data.Services.Implementations
                 [SettingsListNameKey] = settings.ListName,
                 [SettingsListVersionKey] = settings.ListVersion.ToString(),
                 [SettingsDefaultSeasonTitleKey] = settings.DefaultSeasonTitle,
-                [SettingsDefaultSeasonOriginalTitleKey] = settings.DefaultSeasonOriginalTitle
+                [SettingsDefaultSeasonOriginalTitleKey] = settings.DefaultSeasonOriginalTitle,
+                [SettingsListCultureKey] = settings.CultureInfo.ToString()
             };
     }
 }
