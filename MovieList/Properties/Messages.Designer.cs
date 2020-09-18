@@ -232,6 +232,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        public static string Category {
+            get {
+                return ResourceManager.GetString("Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Channel.
         /// </summary>
         public static string Channel {
@@ -589,6 +598,15 @@ namespace MovieList.Properties {
         public static string DeleteSpecialEpisodeTitle {
             get {
                 return ResourceManager.GetString("DeleteSpecialEpisodeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
             }
         }
         
@@ -1102,6 +1120,15 @@ namespace MovieList.Properties {
         public static string NewSpecialEpisode {
             get {
                 return ResourceManager.GetString("NewSpecialEpisode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Tag.
+        /// </summary>
+        public static string NewTag {
+            get {
+                return ResourceManager.GetString("NewTag", resourceCulture);
             }
         }
         

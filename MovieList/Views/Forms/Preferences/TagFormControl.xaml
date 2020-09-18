@@ -2,7 +2,75 @@
                           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                           xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
-                          xmlns:local="clr-namespace:MovieList.Views.Forms.Preferences">
-    <Grid>
+                          xmlns:local="clr-namespace:MovieList.Views.Forms.Preferences"
+                          xmlns:views="clr-namespace:MovieList.Views"
+                          xmlns:l="clr-namespace:MovieList.Localization"
+                          xmlns:v="clr-namespace:MovieList.Validation">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="320" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320" />
+            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="320" />
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 8">
+            <TextBlock x:Name="TitleTextBlock" Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+            <Button x:Name="CloseButton" DockPanel.Dock="Right" HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignIconButton}" Padding="0" Width="25" Height="25"
+                    Command="{x:Static m:DialogHost.CloseDialogCommand}" CommandParameter="{x:Null}">
+                <m:PackIcon Kind="Close" Margin="0" Width="25" Height="25" />
+            </Button>
+        </DockPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <Setter Property="views:Properties.TripleClickSelectAll" Value="True" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="8" />
+                </Style>
+            </StackPanel.Resources>
+            
+            <TextBox x:Name="NameTextBox" m:HintAssist.Hint="{l:Translate Name}" />
+            <TextBox x:Name="DescriptionTextBox" m:HintAssist.Hint="{l:Translate Description}" />
+            <TextBox x:Name="CategoryTextBox" m:HintAssist.Hint="{l:Translate Category}" />
+        </StackPanel>
+
+        <DockPanel Grid.Row="1" Grid.Column="1">
+            <TextBox x:Name="ColorTextBox" Margin="2 0 10 2" DockPanel.Dock="Top"
+                     Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                     m:HintAssist.Hint="{l:Translate ColorHexValue}">
+                <TextBox.Text>
+                    <Binding Path="Color" ElementName="MaterialColorPicker" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <v:HexColorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <Rectangle Margin="2 0 10 2" Fill="{Binding
+                Path=Color,
+                ElementName=MaterialColorPicker,
+                Converter={StaticResource ColorToBrushConverter}}" />
+        </DockPanel>
+
+        <m:ColorPicker x:Name="MaterialColorPicker" Grid.Row="1" Grid.Column="2" />
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 16 0 0"
+                    HorizontalAlignment="Right">
+            <Button x:Name="SaveButton" Content="{l:Translate Save, ToUpper=True}" Margin="8"
+                    HorizontalAlignment="Center" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel, ToUpper=True}" Margin="8"
+                    HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
+        </StackPanel>
     </Grid>
 </local:TagFormControlBase>

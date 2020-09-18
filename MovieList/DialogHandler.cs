@@ -7,6 +7,7 @@ using MaterialDesignExtensions.Controls;
 using MaterialDesignThemes.Wpf;
 
 using MovieList.Core.DialogModels;
+using MovieList.Core.ViewModels.Forms.Preferences;
 using MovieList.Properties;
 
 using ReactiveUI;
@@ -107,7 +108,6 @@ namespace MovieList
                 Color = ctx.Input.Color
             };
 
-
             var view = ViewLocator.Current.ResolveView(viewModel)
                 ?? throw new InvalidOperationException($"Cannot find the view for {nameof(ColorModel)}");
             view.ViewModel = viewModel;
@@ -115,6 +115,23 @@ namespace MovieList
             var result = await DialogHost.Show(view);
 
             ctx.SetOutput(result as string);
+        }
+
+        public async Task ShowTagFormDialogAsync(InteractionContext<TagFormViewModel, TagFormViewModel?> ctx)
+        {
+            if (this.Host.IsOpen)
+            {
+                ctx.SetOutput(null);
+                return;
+            }
+
+            var view = ViewLocator.Current.ResolveView(ctx.Input)
+                ?? throw new InvalidOperationException($"Cannot find the view for {nameof(TagFormViewModel)}");
+            view.ViewModel = ctx.Input;
+
+            var result = await DialogHost.Show(view);
+
+            ctx.SetOutput(result as TagFormViewModel);
         }
 
         public async Task ShowSaveFileDialogAsync(InteractionContext<string, string?> ctx)

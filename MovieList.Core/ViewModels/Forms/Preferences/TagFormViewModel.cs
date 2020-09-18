@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -48,6 +49,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
             static bool notEmpty(string str) => !String.IsNullOrWhiteSpace(str);
 
+            this.Close = ReactiveCommand.Create(() => { });
+
             this.NameRule = this.ValidationRule(vm => vm.Name, notEmpty, "NameEmpty");
             this.DescriptionRule = this.ValidationRule(vm => vm.Description, notEmpty, "DescriptionEmpty");
             this.CategoryRule = this.ValidationRule(vm => vm.Category, notEmpty, "CategoryEmpty");
@@ -55,11 +58,19 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
             isNew.Subscribe(this.isNew);
 
+            this.WhenAnyValue(vm => vm.Name)
+                .Select(name => this.IsNew && String.IsNullOrWhiteSpace(name)
+                    ? this.ResourceManager.GetString("NewTag") ?? String.Empty
+                    : name)
+                .ToPropertyEx(this, vm => vm.FormTitle);
+
             this.CanAlwaysDelete();
             this.EnableChangeTracking();
         }
 
         public Tag Tag { get; }
+
+        public string FormTitle { [ObservableAsProperty] get; } = String.Empty;
 
         [Reactive]
         public string Name { get; set; } = String.Empty;
@@ -75,6 +86,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
         public ReadOnlyObservableCollection<TagItemViewModel> ImpliedTags
             => this.impliedTags;
+
+        public ReactiveCommand<Unit, Unit> Close { get; }
 
         public ValidationHelper NameRule { get; }
         public ValidationHelper DescriptionRule { get; }
