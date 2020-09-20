@@ -117,11 +117,11 @@ namespace MovieList
             ctx.SetOutput(result as string);
         }
 
-        public async Task ShowTagFormDialogAsync(InteractionContext<TagFormViewModel, TagFormViewModel?> ctx)
+        public async Task ShowTagFormDialogAsync(InteractionContext<TagFormViewModel, bool> ctx)
         {
             if (this.Host.IsOpen)
             {
-                ctx.SetOutput(null);
+                ctx.SetOutput(false);
                 return;
             }
 
@@ -131,7 +131,7 @@ namespace MovieList
 
             var result = await DialogHost.Show(view);
 
-            ctx.SetOutput(result as TagFormViewModel);
+            ctx.SetOutput(result is bool boolResult && boolResult);
         }
 
         public async Task ShowSaveFileDialogAsync(InteractionContext<string, string?> ctx)

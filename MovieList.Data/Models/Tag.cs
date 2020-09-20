@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using Dapper.Contrib.Extensions;
 
+using static MovieList.Data.Constants;
+
 namespace MovieList.Data.Models
 {
     [Table("Tags")]
@@ -11,7 +13,7 @@ namespace MovieList.Data.Models
         public string Name { get; set; } = String.Empty;
         public string Category { get; set; } = String.Empty;
         public string Description { get; set; } = String.Empty;
-        public string Color { get; set; } = String.Empty;
+        public string Color { get; set; } = DefaultNewTagColor;
 
         [Write(false)]
         public HashSet<Movie> Movies { get; set; } = new();

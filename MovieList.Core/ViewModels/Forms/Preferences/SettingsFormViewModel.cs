@@ -24,19 +24,23 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
     {
         private readonly ISettingsService settingsService;
         private readonly ISettingsEntityService<Kind> kindService;
+        private readonly ISettingsEntityService<Tag> tagService;
 
         public SettingsFormViewModel(
             string fileName,
             Settings settings,
             IEnumerable<Kind> kinds,
+            IEnumerable<Tag> tags,
             ISettingsService? settingsService = null,
             ISettingsEntityService<Kind>? kindService = null,
+            ISettingsEntityService<Tag>? tagService = null,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
-            : base(new SettingsModel(settings, kinds.ToList()), resourceManager, scheduler)
+            : base(new SettingsModel(settings, kinds.ToList(), tags.ToList()), resourceManager, scheduler)
         {
             this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
             this.kindService = kindService ?? Locator.Current.GetService<ISettingsEntityService<Kind>>(fileName);
+            this.tagService = tagService ?? Locator.Current.GetService<ISettingsEntityService<Tag>>(fileName);
 
             this.ListNameRule = this.ValidationRule(
                 vm => vm.ListName, name => !String.IsNullOrWhiteSpace(name), "ListNameEmpty");
@@ -66,7 +70,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
             return base.OnSave()
                 .DoAsync(_ => this.settingsService.UpdateSettingsInTaskPool(this.Model.Settings))
-                .DoAsync(_ => this.kindService.UpdateAllInTaskPool(this.Model.Kinds));
+                .DoAsync(_ => this.kindService.UpdateAllInTaskPool(this.Model.Kinds))
+                .DoAsync(_ => this.tagService.UpdateAllInTaskPool(this.Model.Tags));
         }
 
         protected override IObservable<SettingsModel?> OnDelete()

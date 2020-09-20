@@ -14,7 +14,7 @@ namespace MovieList.Core.Models
         public bool IsExternal { get; init; }
     }
 
-    public sealed record SettingsModel(Settings Settings, List<Kind> Kinds) : ISettings
+    public sealed record SettingsModel(Settings Settings, List<Kind> Kinds, List<Tag> Tags) : ISettings
     {
         string ISettings.DefaultSeasonTitle
         {
@@ -33,8 +33,5 @@ namespace MovieList.Core.Models
             get => this.Settings.CultureInfo;
             set => this.Settings.CultureInfo = value;
         }
-
-        List<Kind> ISettings.Kinds
-            => this.Kinds;
     }
 }

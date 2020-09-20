@@ -1,3 +1,4 @@
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -42,9 +43,6 @@ namespace MovieList.Views.Forms.Preferences
             this.Bind(this.ViewModel, vm => vm.Description, v => v.DescriptionTextBox.Text)
                 ?.DisposeWith(disposables);
 
-            this.DescriptionTextBox.ValidateWith(this.ViewModel!.DescriptionRule)
-                .DisposeWith(disposables);
-
             this.Bind(this.ViewModel, vm => vm.Category, v => v.CategoryTextBox.Text)
                 ?.DisposeWith(disposables);
 
@@ -60,21 +58,18 @@ namespace MovieList.Views.Forms.Preferences
 
         private void BindCommands(CompositeDisposable disposables)
         {
-            this.BindCommand(this.ViewModel!, vm => vm.Save, v => v.SaveButton)
-                ?.DisposeWith(disposables);
+            this.SaveButton.Command = DialogHost.CloseDialogCommand;
+            this.SaveButton.CommandParameter = true;
 
-            this.BindCommand(this.ViewModel!, vm => vm.Cancel, v => v.CancelButton)
-                ?.DisposeWith(disposables);
+            this.CancelButton.Command = DialogHost.CloseDialogCommand;
+            this.CancelButton.CommandParameter = false;
 
-            this.ViewModel?.Save
-                .Select(_ => this.ViewModel)
-                .InvokeCommand(DialogHost.CloseDialogCommand)
-                ?.DisposeWith(disposables);
+            this.CloseButton.Command = DialogHost.CloseDialogCommand;
+            this.CloseButton.CommandParameter = false;
 
-            this.ViewModel?.Cancel
-                .Select(_ => (TagFormViewModel?)null)
-                .InvokeCommand(DialogHost.CloseDialogCommand)
-                ?.DisposeWith(disposables);
+            this.ViewModel!.Save.CanExecute
+                .BindTo(this, v => v.SaveButton.IsEnabled)
+                .DisposeWith(disposables);
         }
     }
 }

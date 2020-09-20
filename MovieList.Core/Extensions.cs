@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace MovieList.Core
@@ -10,6 +11,13 @@ namespace MovieList.Core
 
         public static string EmptyIfNull(this string? str)
             => String.IsNullOrEmpty(str) ? String.Empty : str;
+
+        public static void DisposeAndRemove<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+            where TValue : IDisposable
+        {
+            dictionary[key].Dispose();
+            dictionary.Remove(key);
+        }
 
         public static string GetMemberName(this Expression expression)
             => expression is LambdaExpression lambda && lambda.Body is MemberExpression member

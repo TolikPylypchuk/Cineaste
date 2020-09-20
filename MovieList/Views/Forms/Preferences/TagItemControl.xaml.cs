@@ -1,3 +1,4 @@
+using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -33,7 +34,9 @@ namespace MovieList.Views.Forms.Preferences
                 Observable.CombineLatest(
                     this.WhenAnyValue(v => v.ViewModel!.Category),
                     this.WhenAnyValue(v => v.ViewModel!.Description),
-                    (category, description) => $"{category} | {description}")
+                    (category, description) => !String.IsNullOrEmpty(description)
+                        ? $"{category} | {description}"
+                        : category)
                     .BindTo(this, v => v.Chip.ToolTip)
                     ?.DisposeWith(disposables);
 

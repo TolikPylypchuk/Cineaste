@@ -26,6 +26,7 @@ namespace MovieList.Data
         public static readonly string NoDisplayNumberPlaceholder = "-";
 
         public static readonly string DefaultNewKindColor = "#FF000000";
+        public static readonly string DefaultNewTagColor = "#FFFFFFFF";
 
         internal const string SettingsListNameKey = "list.name";
         internal const string SettingsListVersionKey = "list.version";

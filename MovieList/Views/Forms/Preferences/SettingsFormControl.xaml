@@ -97,23 +97,74 @@
                     </StackPanel>
                 </WrapPanel>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{l:Translate Kinds}" Margin="8 16"
-                               Style="{StaticResource MaterialDesignHeadline4TextBlock}" />
+                <Grid>
+                    <Grid.Resources>
+                        <Style x:Key="TitleTextBlock" TargetType="{x:Type TextBlock}"
+                               BasedOn="{StaticResource MaterialDesignHeadline4TextBlock}">
+                            <Setter Property="Margin" Value="8 16" />
+                        </Style>
 
-                    <Button x:Name="AddKindButton" Style="{StaticResource MaterialDesignIconButton}"
-                            Padding="0" Margin="32 0 0 0"  Width="30" Height="30" VerticalAlignment="Center">
-                        <m:PackIcon Kind="PlusCircleOutline" Margin="0" Width="30" Height="30" />
+                        <Style x:Key="PlusButton" TargetType="{x:Type Button}"
+                               BasedOn="{StaticResource MaterialDesignIconButton}">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Margin" Value="32 0 0 0" />
+                            <Setter Property="Margin" Value="32 0 0 0" />
+                            <Setter Property="Width" Value="30" />
+                            <Setter Property="Height" Value="30" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+
+                        <Style x:Key="PlusIcon" TargetType="{x:Type m:PackIcon}">
+                            <Setter Property="Kind" Value="PlusCircleOutline" />
+                            <Setter Property="Margin" Value="0" />
+                            <Setter Property="Width" Value="30" />
+                            <Setter Property="Height" Value="30" />
+                        </Style>
+                    </Grid.Resources>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{l:Translate Kinds}"
+                               Style="{StaticResource TitleTextBlock}" />
+
+                    <Button x:Name="AddKindButton" Grid.Row="0" Grid.Column="1" Style="{StaticResource PlusButton}">
+                        <m:PackIcon Style="{StaticResource PlusIcon}" />
                     </Button>
-                </StackPanel>
 
-                <ItemsControl x:Name="Kinds" Margin="0 8">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                    <ItemsControl x:Name="Kinds" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 8">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{l:Translate Tags}"
+                               Style="{StaticResource TitleTextBlock}" />
+
+                    <Button x:Name="AddTagButton" Grid.Row="2" Grid.Column="1" Style="{StaticResource PlusButton}">
+                        <m:PackIcon Style="{StaticResource PlusIcon}" />
+                    </Button>
+
+                    <ItemsControl x:Name="Tags" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 8">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Grid>
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

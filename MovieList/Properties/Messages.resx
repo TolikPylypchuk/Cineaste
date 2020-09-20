@@ -709,4 +709,7 @@ This will detach all entries without deleting them.</value>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
 </root>

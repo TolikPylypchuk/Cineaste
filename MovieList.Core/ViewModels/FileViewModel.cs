@@ -183,7 +183,7 @@ namespace MovieList.Core.ViewModels
             this.MainContent?.Dispose();
             this.MainContent = null;
 
-            this.Content = this.Settings = new SettingsFormViewModel(this.FileName, settings, this.Kinds);
+            this.Content = this.Settings = new SettingsFormViewModel(this.FileName, settings, this.Kinds, this.Tags);
 
             this.Save
                 .InvokeCommand(this.Settings.Save)

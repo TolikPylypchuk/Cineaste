@@ -5,7 +5,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Resources;
 
 using DynamicData;
@@ -23,16 +22,10 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 {
     public sealed class TagFormViewModel : ReactiveForm<Tag, TagFormViewModel>
     {
-        private readonly BehaviorSubject<bool> isNew = new BehaviorSubject<bool>(true);
-
         private readonly SourceList<Tag> impliedTagsSource = new SourceList<Tag>();
         private readonly ReadOnlyObservableCollection<TagItemViewModel> impliedTags;
 
-        public TagFormViewModel(
-            Tag tag,
-            IObservable<bool> isNew,
-            ResourceManager? resourceManager = null,
-            IScheduler? scheduler = null)
+        public TagFormViewModel(Tag tag, ResourceManager? resourceManager = null, IScheduler? scheduler = null)
             : base(resourceManager, scheduler)
         {
             this.Tag = tag;
@@ -52,11 +45,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.Close = ReactiveCommand.Create(() => { });
 
             this.NameRule = this.ValidationRule(vm => vm.Name, notEmpty, "NameEmpty");
-            this.DescriptionRule = this.ValidationRule(vm => vm.Description, notEmpty, "DescriptionEmpty");
             this.CategoryRule = this.ValidationRule(vm => vm.Category, notEmpty, "CategoryEmpty");
             this.ColorRule = this.ValidationRuleForColor(vm => vm.Color);
-
-            isNew.Subscribe(this.isNew);
 
             this.WhenAnyValue(vm => vm.Name)
                 .Select(name => this.IsNew && String.IsNullOrWhiteSpace(name)
@@ -90,12 +80,11 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         public ReactiveCommand<Unit, Unit> Close { get; }
 
         public ValidationHelper NameRule { get; }
-        public ValidationHelper DescriptionRule { get; }
         public ValidationHelper CategoryRule { get; }
         public ValidationHelper ColorRule { get; }
 
         public override bool IsNew
-            => this.isNew.Value;
+            => this.Tag.Id == default;
 
         protected override TagFormViewModel Self
             => this;
@@ -122,10 +111,10 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
         protected override IObservable<Tag> OnSave()
         {
-            this.Tag.Name = this.Name;
-            this.Tag.Description = this.Description;
-            this.Tag.Category = this.Category;
-            this.Tag.Color = this.Color;
+            this.Tag.Name = this.Name = this.Name.EmptyIfNull().Trim();
+            this.Tag.Description = this.Description = this.Description.EmptyIfNull().Trim();
+            this.Tag.Category = this.Category = this.Category.EmptyIfNull().Trim();
+            this.Tag.Color = this.Color = this.Color.EmptyIfNull().Trim();
 
             this.Tag.ImpliedTags.Clear();
             this.impliedTagsSource.Items.ForEach(tag => this.Tag.ImpliedTags.Add(tag));

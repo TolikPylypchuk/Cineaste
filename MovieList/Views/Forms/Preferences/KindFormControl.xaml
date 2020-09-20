@@ -31,7 +31,7 @@
     <StackPanel Margin="0 0 16 4">
         <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
             <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
-                    VerticalAlignment="Center" Padding="0" Width="25" Height="25" Margin="8 0 0 0"
+                    VerticalAlignment="Center" Padding="0" Width="25" Height="25"
                     Foreground="{StaticResource SecondaryAccentBrush}">
                 <m:PackIcon Kind="CloseCircleOutline" Margin="0" Width="25" Height="25" />
             </Button>

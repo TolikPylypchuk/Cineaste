@@ -38,7 +38,7 @@ namespace MovieList.Views.Forms.Preferences
                     ?.DisposeWith(disposables);
 
                 this.ViewModel.Delete.CanExecute
-                    .BindTo(this, v => v.DeleteButton.Visibility)
+                    .BindTo(this, v => v.DeleteButton.Visibility, BooleanToVisibilityHint.UseHidden)
                     ?.DisposeWith(disposables);
 
                 this.BindChipIconColors(disposables);

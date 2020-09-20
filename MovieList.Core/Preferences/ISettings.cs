@@ -11,6 +11,6 @@ namespace MovieList.Core.Preferences
         string DefaultSeasonOriginalTitle { get; set; }
         CultureInfo CultureInfo { get; set; }
         List<Kind> Kinds { get; }
-
+        List<Tag> Tags { get; }
     }
 }

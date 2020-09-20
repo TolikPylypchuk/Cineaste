@@ -100,7 +100,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
         protected IObservable<bool> IsCollectionChanged<TOtherForm, TOtherModel>(
             Expression<Func<TForm, ReadOnlyObservableCollection<TOtherForm>>> property,
             Func<TForm, ICollection<TOtherModel>> itemCollection)
-            where TOtherForm : ReactiveForm<TOtherModel, TOtherForm>
+            where TOtherForm : IReactiveForm
             where TOtherModel : class
         {
             string propertyName = property.GetMemberName();

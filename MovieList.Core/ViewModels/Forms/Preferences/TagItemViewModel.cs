@@ -12,7 +12,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
     {
         public TagItemViewModel(Tag tag, bool canSelect, bool canDelete)
         {
-            this.Tag = tag;
+            this.Form = new TagFormViewModel(tag);
             this.CanSelect = canSelect;
             this.CanDelete = canDelete;
             this.SetProperties();
@@ -22,7 +22,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.Delete = ReactiveCommand.Create(() => { }, Observable.Return(canDelete));
         }
 
-        public Tag Tag { get; }
+        public TagFormViewModel Form { get; }
 
         [Reactive]
         public string Name { get; set; } = null!;
@@ -45,9 +45,10 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
         private void SetProperties()
         {
-            this.Name = this.Tag.Name;
-            this.Category = this.Tag.Category;
-            this.Description = this.Tag.Description;
+            this.Name = this.Form.Name;
+            this.Category = this.Form.Category;
+            this.Description = this.Form.Description;
+            this.Color = this.Form.Color;
         }
     }
 }
