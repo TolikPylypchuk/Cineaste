@@ -74,6 +74,15 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         [Reactive]
         public string Color { get; set; } = String.Empty;
 
+        [Reactive]
+        public bool IsApplicableToMovies { get; set; }
+
+        [Reactive]
+        public bool IsApplicableToSeries { get; set; }
+
+        [Reactive]
+        public bool IsApplicableToFranchises { get; set; }
+
         public ReadOnlyObservableCollection<TagItemViewModel> ImpliedTags
             => this.impliedTags;
 
@@ -115,6 +124,9 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.Tag.Description = this.Description = this.Description.EmptyIfNull().Trim();
             this.Tag.Category = this.Category = this.Category.EmptyIfNull().Trim();
             this.Tag.Color = this.Color = this.Color.EmptyIfNull().Trim();
+            this.Tag.IsApplicableToMovies = this.IsApplicableToMovies;
+            this.Tag.IsApplicableToSeries = this.IsApplicableToSeries;
+            this.Tag.IsApplicableToFranchises = this.IsApplicableToFranchises;
 
             this.Tag.ImpliedTags.Clear();
             this.impliedTagsSource.Items.ForEach(tag => this.Tag.ImpliedTags.Add(tag));
@@ -131,6 +143,9 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.Description = this.Tag.Description;
             this.Category = this.Tag.Category;
             this.Color = this.Tag.Color;
+            this.IsApplicableToMovies = this.Tag.IsApplicableToMovies;
+            this.IsApplicableToSeries = this.Tag.IsApplicableToSeries;
+            this.IsApplicableToFranchises = this.Tag.IsApplicableToFranchises;
 
             this.impliedTagsSource.Edit(list =>
             {

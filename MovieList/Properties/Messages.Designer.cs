@@ -205,6 +205,33 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applicable to franchises.
+        /// </summary>
+        public static string ApplicableToFranchises {
+            get {
+                return ResourceManager.GetString("ApplicableToFranchises", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applicable to movies.
+        /// </summary>
+        public static string ApplicableToMovies {
+            get {
+                return ResourceManager.GetString("ApplicableToMovies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applicable to series.
+        /// </summary>
+        public static string ApplicableToSeries {
+            get {
+                return ResourceManager.GetString("ApplicableToSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to April.
         /// </summary>
         public static string April {

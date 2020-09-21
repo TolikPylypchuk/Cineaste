@@ -15,6 +15,10 @@ namespace MovieList.Data.Models
         public string Description { get; set; } = String.Empty;
         public string Color { get; set; } = DefaultNewTagColor;
 
+        public bool IsApplicableToMovies { get; set; } = true;
+        public bool IsApplicableToSeries { get; set; } = true;
+        public bool IsApplicableToFranchises { get; set; } = true;
+
         [Write(false)]
         public HashSet<Movie> Movies { get; set; } = new();
 

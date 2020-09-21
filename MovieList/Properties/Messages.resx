@@ -712,4 +712,13 @@ This will detach all entries without deleting them.</value>
   <data name="Tags" xml:space="preserve">
     <value>Tags</value>
   </data>
+  <data name="ApplicableToFranchises" xml:space="preserve">
+    <value>Applicable to franchises</value>
+  </data>
+  <data name="ApplicableToMovies" xml:space="preserve">
+    <value>Applicable to movies</value>
+  </data>
+  <data name="ApplicableToSeries" xml:space="preserve">
+    <value>Applicable to series</value>
+  </data>
 </root>

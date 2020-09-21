@@ -35,13 +35,21 @@
                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
                     <Setter Property="views:Properties.TripleClickSelectAll" Value="True" />
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
-                    <Setter Property="Margin" Value="8" />
+                    <Setter Property="Margin" Value="0 8" />
+                </Style>
+                
+                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <Setter Property="Margin" Value="0 4" />
                 </Style>
             </StackPanel.Resources>
             
             <TextBox x:Name="NameTextBox" m:HintAssist.Hint="{l:Translate Name}" />
             <TextBox x:Name="DescriptionTextBox" m:HintAssist.Hint="{l:Translate Description}" />
-            <TextBox x:Name="CategoryTextBox" m:HintAssist.Hint="{l:Translate Category}" />
+            <TextBox x:Name="CategoryTextBox" m:HintAssist.Hint="{l:Translate Category}" Margin="0 8 0 16" />
+            
+            <CheckBox x:Name="IsApplicableToMoviesCheckBox" Content="{l:Translate ApplicableToMovies}" />
+            <CheckBox x:Name="IsApplicableToSeriesCheckBox" Content="{l:Translate ApplicableToSeries}" />
+            <CheckBox x:Name="IsApplicableToFranchisesCheckBox" Content="{l:Translate ApplicableToFranchises}" />
         </StackPanel>
 
         <DockPanel Grid.Row="1" Grid.Column="1">

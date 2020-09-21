@@ -54,6 +54,18 @@ namespace MovieList.Views.Forms.Preferences
 
             this.ColorTextBox.ValidateWith(this.ViewModel!.ColorRule)
                 .DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.IsApplicableToMovies, v => v.IsApplicableToMoviesCheckBox.IsChecked)
+                ?.DisposeWith(disposables);
+
+            this.Bind(this.ViewModel, vm => vm.IsApplicableToSeries, v => v.IsApplicableToSeriesCheckBox.IsChecked)
+                ?.DisposeWith(disposables);
+
+            this.Bind(
+                this.ViewModel,
+                vm => vm.IsApplicableToFranchises,
+                v => v.IsApplicableToFranchisesCheckBox.IsChecked)
+                ?.DisposeWith(disposables);
         }
 
         private void BindCommands(CompositeDisposable disposables)

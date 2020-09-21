@@ -65,8 +65,11 @@ namespace MovieList.Data.Services.Implementations
                 implicationToInsert.Id = (int)connection.Insert(implicationToInsert, transaction);
             }
 
-            var tagsToDelete = dbImplications.Except(implications, CompositeIdEqualityComparer.TagImplication).ToList();
-            connection.Delete(tagsToDelete, transaction);
+            var implicationsToDelete = dbImplications
+                .Except(implications, CompositeIdEqualityComparer.TagImplication)
+                .ToList();
+
+            connection.Delete(implicationsToDelete, transaction);
         }
 
         protected override void BeforeDelete(Tag tag, IDbConnection connection, IDbTransaction transaction)

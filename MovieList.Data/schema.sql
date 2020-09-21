@@ -184,6 +184,9 @@ CREATE TABLE "Tags" (
     "Category" TEXT NOT NULL,
     "Description" TEXT NOT NULL,
     "Color" TEXT NOT NULL,
+    "IsApplicableToMovies" INTEGER(1) NOT NULL,
+    "IsApplicableToSeries" INTEGER(1) NOT NULL,
+    "IsApplicableToFranchises" INTEGER(1) NOT NULL,
 
     UNIQUE ("Name", "Category")
 );
