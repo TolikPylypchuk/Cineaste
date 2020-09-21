@@ -230,7 +230,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
             return Dialog.TagForm.Handle(vm.Form)
                 .Do(_ => this.tagFormSubscriptions.DisposeAndRemove(vm.Form.Tag))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .SelectMany(saved => saved ? vm.Refresh.Execute() : Observable.Return(Unit.Default));
+                .SelectMany(saved => saved ? vm.Refresh.Execute() : vm.Form.Cancel.Execute());
         }
 
         private IObservable<Unit> OnAddTag()
