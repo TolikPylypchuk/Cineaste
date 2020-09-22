@@ -1,7 +1,10 @@
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 
 using MaterialDesignThemes.Wpf;
 
+using MovieList.Core;
 using MovieList.Core.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
@@ -68,17 +71,20 @@ namespace MovieList.Views.Forms.Preferences
 
         private void BindCommands(CompositeDisposable disposables)
         {
-            this.SaveButton.Command = DialogHost.CloseDialogCommand;
-            this.SaveButton.CommandParameter = true;
+            this.BindCommand(this.ViewModel!, vm => vm.Save, v => v.SaveButton)
+                ?.DisposeWith(disposables);
 
-            this.CancelButton.Command = DialogHost.CloseDialogCommand;
-            this.CancelButton.CommandParameter = false;
+            this.BindCommand(this.ViewModel!, vm => vm.Cancel, v => v.CancelButton)
+                ?.DisposeWith(disposables);
 
-            this.CloseButton.Command = DialogHost.CloseDialogCommand;
-            this.CloseButton.CommandParameter = false;
+            this.BindCommand(this.ViewModel!, vm => vm.Close, v => v.CloseButton)
+                ?.DisposeWith(disposables);
 
-            this.ViewModel!.Save.CanExecute
-                .BindTo(this, v => v.SaveButton.IsEnabled)
+            this.ViewModel!.Save
+                .Discard()
+                .Merge(this.ViewModel.Cancel)
+                .Merge(this.ViewModel.Close)
+                .InvokeCommand(DialogHost.CloseDialogCommand)
                 .DisposeWith(disposables);
         }
     }

@@ -1,54 +1,91 @@
+using System;
+using System.Collections.Generic;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Resources;
 
+using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.Core.ViewModels.Forms.Preferences
 {
-    public class TagItemViewModel : ReactiveObject
+    public class TagItemViewModel : TagFormBase<Tag, TagItemViewModel>
     {
-        public TagItemViewModel(Tag tag, bool canSelect, bool canDelete)
+        public TagItemViewModel(
+            Tag tag,
+            bool canSelect,
+            ResourceManager? resourceManager = null, IScheduler? scheduler = null)
+            : base(resourceManager, scheduler)
         {
-            this.Form = new TagFormViewModel(tag);
+            this.Tag = tag;
             this.CanSelect = canSelect;
-            this.CanDelete = canDelete;
-            this.SetProperties();
+            this.CopyProperties();
 
             this.Select = ReactiveCommand.Create(() => { }, Observable.Return(canSelect));
-            this.Refresh = ReactiveCommand.Create(this.SetProperties);
-            this.Delete = ReactiveCommand.Create(() => { }, Observable.Return(canDelete));
+
+            this.CanAlwaysDelete();
+            this.EnableChangeTracking();
         }
 
-        public TagFormViewModel Form { get; }
-
-        [Reactive]
-        public string Name { get; set; } = null!;
-
-        [Reactive]
-        public string Category { get; set; } = null!;
-
-        [Reactive]
-        public string Description { get; set; } = null!;
-
-        [Reactive]
-        public string Color { get; set; } = null!;
+        public Tag Tag { get; }
 
         public bool CanSelect { get; }
-        public bool CanDelete { get; }
 
         public ReactiveCommand<Unit, Unit> Select { get; }
-        public ReactiveCommand<Unit, Unit> Refresh { get; }
-        public ReactiveCommand<Unit, Unit> Delete { get; }
 
-        private void SetProperties()
+        public override bool IsNew
+            => this.Tag.Id == default;
+
+        protected override TagItemViewModel Self
+            => this;
+
+        public void UpdateImpliedTags(IEnumerable<Tag> tags)
+            => this.ImpliedTagsSource.Edit(list =>
+            {
+                list.Clear();
+                list.AddRange(tags);
+            });
+
+        protected override void EnableChangeTracking()
         {
-            this.Name = this.Form.Name;
-            this.Category = this.Form.Category;
-            this.Description = this.Form.Description;
-            this.Color = this.Form.Color;
+            this.TrackChanges(vm => vm.Name, vm => vm.Tag.Name);
+            this.TrackChanges(vm => vm.Description, vm => vm.Tag.Description);
+            this.TrackChanges(vm => vm.Category, vm => vm.Tag.Category);
+            this.TrackChanges(vm => vm.Color, vm => vm.Tag.Color);
+
+            this.TrackChanges(this.IsCollectionChanged(vm => vm.ImpliedTags, vm => vm.Tag.ImpliedTags));
+
+            base.EnableChangeTracking();
+        }
+
+        protected override IObservable<Tag> OnSave()
+        {
+            this.Tag.Name = this.Name;
+            this.Tag.Category = this.Category;
+            this.Tag.Description = this.Description;
+            this.Tag.Color = this.Color;
+            this.Tag.IsApplicableToMovies = this.IsApplicableToMovies;
+            this.Tag.IsApplicableToSeries = this.IsApplicableToSeries;
+            this.Tag.IsApplicableToFranchises = this.IsApplicableToFranchises;
+
+            return Observable.Return(this.Tag);
+        }
+
+        protected override IObservable<Tag?> OnDelete()
+            => Observable.Return(this.Tag);
+
+        protected override void CopyProperties()
+        {
+            this.Name = this.Tag.Name;
+            this.Category = this.Tag.Category;
+            this.Description = this.Tag.Description;
+            this.Color = this.Tag.Color;
+            this.IsApplicableToMovies = this.Tag.IsApplicableToMovies;
+            this.IsApplicableToSeries = this.Tag.IsApplicableToSeries;
+            this.IsApplicableToFranchises = this.Tag.IsApplicableToFranchises;
         }
     }
 }

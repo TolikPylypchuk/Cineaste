@@ -117,11 +117,11 @@ namespace MovieList
             ctx.SetOutput(result as string);
         }
 
-        public async Task ShowTagFormDialogAsync(InteractionContext<TagFormViewModel, bool> ctx)
+        public async Task ShowTagFormDialogAsync(InteractionContext<TagFormViewModel, Unit> ctx)
         {
             if (this.Host.IsOpen)
             {
-                ctx.SetOutput(false);
+                ctx.SetOutput(Unit.Default);
                 return;
             }
 
@@ -129,9 +129,9 @@ namespace MovieList
                 ?? throw new InvalidOperationException($"Cannot find the view for {nameof(TagFormViewModel)}");
             view.ViewModel = ctx.Input;
 
-            var result = await DialogHost.Show(view);
+            await DialogHost.Show(view);
 
-            ctx.SetOutput(result is bool boolResult && boolResult);
+            ctx.SetOutput(Unit.Default);
         }
 
         public async Task ShowSaveFileDialogAsync(InteractionContext<string, string?> ctx)

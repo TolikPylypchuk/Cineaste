@@ -629,6 +629,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the tag?.
+        /// </summary>
+        public static string DeleteTagQuestion {
+            get {
+                return ResourceManager.GetString("DeleteTagQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Tag.
+        /// </summary>
+        public static string DeleteTagTitle {
+            get {
+                return ResourceManager.GetString("DeleteTagTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {

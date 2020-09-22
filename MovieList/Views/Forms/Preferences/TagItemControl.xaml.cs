@@ -44,25 +44,16 @@ namespace MovieList.Views.Forms.Preferences
                 {
                     this.Chip.Cursor = Cursors.Hand;
 
-                    Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
-                        h => this.Chip.Click += h,
-                        h => this.Chip.Click -= h)
-                        .Discard()
-                        .InvokeCommand(this.ViewModel.Select)
+                    this.BindCommand(this.ViewModel, vm => vm.Select, v => v.Chip)
                         ?.DisposeWith(disposables);
                 }
 
-                if (this.ViewModel.CanDelete)
-                {
-                    this.Chip.IsDeletable = true;
-
-                    Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
+                Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
                         h => this.Chip.DeleteClick += h,
                         h => this.Chip.DeleteClick -= h)
                         .Discard()
                         .InvokeCommand(this.ViewModel.Delete)
                         ?.DisposeWith(disposables);
-                }
             });
         }
     }

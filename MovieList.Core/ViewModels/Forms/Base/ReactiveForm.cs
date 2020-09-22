@@ -158,9 +158,10 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .Subscribe(this.validSubject);
         }
 
-        protected IObservable<TModel?> PromptToDelete(string messageAndTitle, Func<IObservable<TModel>> onDelete)
+        protected IObservable<T?> PromptToDelete<T>(string messageAndTitle, Func<IObservable<T>> onDelete)
+            where T : class
             => Dialog.Confirm.Handle(new ConfirmationModel(messageAndTitle))
-                .SelectMany(shouldDelete => shouldDelete ? onDelete() : Observable.Return<TModel?>(null));
+                .SelectMany(shouldDelete => shouldDelete ? onDelete() : Observable.Return<T?>(null));
 
         protected ValidationHelper ValidationRuleForColor(Expression<Func<TForm, string>> vmProperty)
             => this.Self.ValidationRule(vmProperty, HexColorValidator.IsArgbString, "HexColorInvalid");

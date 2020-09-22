@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace MovieList.Core
@@ -17,6 +18,13 @@ namespace MovieList.Core
         {
             dictionary[key].Dispose();
             dictionary.Remove(key);
+        }
+
+        public static void DisposeAndClear<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
+            where TValue : IDisposable
+        {
+            dictionary.Values.ForEach(value => value.Dispose());
+            dictionary.Clear();
         }
 
         public static string GetMemberName(this Expression expression)

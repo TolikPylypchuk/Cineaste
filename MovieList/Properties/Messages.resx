@@ -721,4 +721,10 @@ This will detach all entries without deleting them.</value>
   <data name="ApplicableToSeries" xml:space="preserve">
     <value>Applicable to series</value>
   </data>
+  <data name="DeleteTagQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete the tag?</value>
+  </data>
+  <data name="DeleteTagTitle" xml:space="preserve">
+    <value>Delete Tag</value>
+  </data>
 </root>

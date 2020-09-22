@@ -27,15 +27,11 @@ namespace MovieList.Core.ViewModels.Forms.Base
         where TSettings : class, ISettings
         where TForm : SettingsFormBase<TSettings, TForm>
     {
-        private readonly SourceList<Kind> kindsSource = new SourceList<Kind>();
+        private readonly SourceList<Kind> kindsSource = new();
         private readonly ReadOnlyObservableCollection<KindFormViewModel> kinds;
 
-        private readonly SourceList<TagItemViewModel> tagsSource = new SourceList<TagItemViewModel>();
+        private readonly SourceList<TagItemViewModel> tagsSource = new();
         private readonly ReadOnlyObservableCollection<TagItemViewModel> tags;
-        private readonly ReadOnlyObservableCollection<TagFormViewModel> tagForms;
-
-        private readonly Dictionary<Tag, CompositeDisposable> tagItemSubscriptions = new();
-        private readonly Dictionary<Tag, CompositeDisposable> tagFormSubscriptions = new();
 
         protected SettingsFormBase(
             TSettings settings,
@@ -62,17 +58,9 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .DisposeMany()
                 .Subscribe();
 
-            this.tags.ToObservableChangeSet()
-                .Transform(vm => vm.Form)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out this.tagForms)
-                .DisposeMany()
-                .Subscribe();
-
             this.AddKind = ReactiveCommand.Create(() => this.kindsSource.Add(new Kind()));
             this.AddTag = ReactiveCommand.CreateFromObservable(this.OnAddTag);
             this.OpenTagForm = ReactiveCommand.CreateFromObservable<TagItemViewModel, Unit>(this.OnOpenTagForm);
-            this.DeleteTag = ReactiveCommand.Create<Tag>(this.OnDeleteTag);
 
             this.DefaultSeasonTitle = String.Empty;
             this.DefaultSeasonOriginalTitle = String.Empty;
@@ -96,13 +84,9 @@ namespace MovieList.Core.ViewModels.Forms.Base
         public ReadOnlyObservableCollection<TagItemViewModel> Tags
             => this.tags;
 
-        public ReadOnlyObservableCollection<TagFormViewModel> TagForms
-            => this.tagForms;
-
         public ReactiveCommand<Unit, Unit> AddKind { get; }
         public ReactiveCommand<Unit, Unit> AddTag { get; }
         public ReactiveCommand<TagItemViewModel, Unit> OpenTagForm { get; }
-        public ReactiveCommand<Tag, Unit> DeleteTag { get; }
 
         public override bool IsNew
             => false;
@@ -114,7 +98,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 vm => vm.DefaultSeasonOriginalTitle, vm => vm.Model.DefaultSeasonOriginalTitle);
             this.TrackChanges(vm => vm.CultureInfo, vm => vm.Model.CultureInfo);
             this.TrackChanges(this.IsCollectionChanged(vm => vm.Kinds, vm => vm.Model.Kinds));
-            this.TrackChanges(this.IsCollectionChanged(vm => vm.TagForms, vm => vm.Model.Tags));
+            this.TrackChanges(this.IsCollectionChanged(vm => vm.Tags, vm => vm.Model.Tags));
             this.TrackValidation(this.IsCollectionValid(this.Kinds));
 
             base.EnableChangeTracking();
@@ -130,7 +114,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .Select(kindViewModel => kindViewModel.Save.Execute())
                 .ForkJoin();
 
-            var saveTags = this.TagForms
+            var saveTags = this.Tags
                 .Select(tagViewModel => tagViewModel.Save.Execute())
                 .ForkJoin();
 
@@ -141,7 +125,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
                     this.Model.Kinds.AddRange(this.kindsSource.Items);
 
                     this.Model.Tags.Clear();
-                    this.Model.Tags.AddRange(this.tagsSource.Items.Select(vm => vm.Form.Tag));
+                    this.Model.Tags.AddRange(this.tagsSource.Items.Select(vm => vm.Tag));
 
                     return this.Model;
                 });
@@ -202,7 +186,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
 
         private TagItemViewModel CreateTagItem(Tag tag)
         {
-            var vm = new TagItemViewModel(tag, canSelect: true, canDelete: false);
+            var vm = new TagItemViewModel(tag, canSelect: true);
 
             var subscriptions = new CompositeDisposable();
 
@@ -211,53 +195,39 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .InvokeCommand(this.OpenTagForm)
                 .DisposeWith(subscriptions);
 
-            this.tagItemSubscriptions.Add(tag, subscriptions);
+            vm.Delete
+                .WhereNotNull()
+                .SelectMany(tag => this.PromptToDelete("DeleteTag", () => Observable.Return(tag)))
+                .WhereNotNull()
+                .Subscribe(_ =>
+                {
+                    this.tagsSource.Remove(vm);
+                    subscriptions.Dispose();
+                })
+                .DisposeWith(subscriptions);
 
             return vm;
         }
 
         private IObservable<Unit> OnOpenTagForm(TagItemViewModel vm)
-        {
-            var subscriptions = new CompositeDisposable();
-
-            vm.Form.Delete
-                .WhereNotNull()
-                .InvokeCommand(this.DeleteTag)
-                .DisposeWith(subscriptions);
-
-            this.tagFormSubscriptions.Add(vm.Form.Tag, subscriptions);
-
-            return Dialog.TagForm.Handle(vm.Form)
-                .Do(_ => this.tagFormSubscriptions.DisposeAndRemove(vm.Form.Tag))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .SelectMany(saved => saved ? vm.Refresh.Execute() : vm.Form.Cancel.Execute());
-        }
+            => Dialog.TagForm.Handle(new TagFormViewModel(vm))
+                .ObserveOn(RxApp.MainThreadScheduler);
 
         private IObservable<Unit> OnAddTag()
         {
             var tag = new Tag();
             var vm = this.CreateTagItem(tag);
+            var form = new TagFormViewModel(vm);
 
-            return Dialog.TagForm.Handle(vm.Form)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .SelectMany(saved => saved ? vm.Refresh.Execute().Select(() => saved) : Observable.Return(saved))
-                .Do(saved =>
-                {
-                    if (saved)
-                    {
-                        this.tagsSource.Add(vm);
-                    } else
-                    {
-                        this.tagItemSubscriptions.DisposeAndRemove(tag);
-                    }
-                })
-                .Discard();
-        }
+            var subscriptions = new CompositeDisposable();
 
-        private void OnDeleteTag(Tag tag)
-        {
-            this.tagItemSubscriptions.DisposeAndRemove(tag);
-            this.tagsSource.Remove(this.tagsSource.Items.First(vm => vm.Form.Tag == tag));
+            form.Save
+                .Subscribe(_ => this.tagsSource.Add(vm))
+                .DisposeWith(subscriptions);
+
+            return Dialog.TagForm.Handle(form)
+                .Do(_ => subscriptions.Dispose())
+                .ObserveOn(RxApp.MainThreadScheduler);
         }
     }
 }
