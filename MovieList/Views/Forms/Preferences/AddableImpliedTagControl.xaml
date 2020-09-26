@@ -1,0 +1,11 @@
+<local:AddableImpliedTagControlBase x:Class="MovieList.Views.Forms.Preferences.AddableImpliedTagControl"
+                                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                    xmlns:local="clr-namespace:MovieList.Views.Forms.Preferences">
+    <WrapPanel>
+        <TextBlock x:Name="NameTextBlock" TextWrapping="Wrap" Style="{StaticResource MaterialDesignBody2TextBlock}" />
+
+        <TextBlock x:Name="CategoryTextBlock" TextWrapping="Wrap" Margin="8 0 0 0"
+                   Style="{StaticResource MaterialDesignBody2TextBlock}" />
+    </WrapPanel>
+</local:AddableImpliedTagControlBase>

@@ -214,7 +214,7 @@
     <value>Color HEX value</value>
   </data>
   <data name="ColorPickerMessage" xml:space="preserve">
-    <value>Select a color or input its HEX value</value>
+    <value>Select a color or input its HEX value (mind that the HEX value is an ARGB value, not RGB)</value>
   </data>
   <data name="ColorPickerTitle" xml:space="preserve">
     <value>Pick the color</value>
@@ -726,5 +726,11 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="DeleteTagTitle" xml:space="preserve">
     <value>Delete Tag</value>
+  </data>
+  <data name="ImpliedTags" xml:space="preserve">
+    <value>Implied Tags</value>
+  </data>
+  <data name="AddImpliedTag" xml:space="preserve">
+    <value>Add implied tag</value>
   </data>
 </root>

@@ -1,6 +1,11 @@
-using System.Reactive;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows.Controls;
+
+using DynamicData;
+using DynamicData.Aggregation;
+using DynamicData.Binding;
 
 using MaterialDesignThemes.Wpf;
 
@@ -26,6 +31,7 @@ namespace MovieList.Views.Forms.Preferences
                     ?.DisposeWith(disposables);
 
                 this.BindFields(disposables);
+                this.BindImpliedTags(disposables);
                 this.BindCommands(disposables);
             });
         }
@@ -69,6 +75,31 @@ namespace MovieList.Views.Forms.Preferences
                 ?.DisposeWith(disposables);
         }
 
+        private void BindImpliedTags(CompositeDisposable disposables)
+        {
+            this.OneWayBind(this.ViewModel, vm => vm.ImpliedTags, v => v.ImpliedTags.ItemsSource)
+                ?.DisposeWith(disposables);
+
+            this.OneWayBind(this.ViewModel, vm => vm.AddableImpliedTags, v => v.AddableImpliedTagsComboBox.ItemsSource)
+                ?.DisposeWith(disposables);
+
+            this.AddableImpliedTagsComboBox.Events()
+                .SelectionChanged
+                .Select(e => e.AddedItems.OfType<AddableImpliedTagViewModel>().FirstOrDefault())
+                .WhereNotNull()
+                .Select(vm => vm.Tag.Tag)
+                .InvokeCommand(this.ViewModel!.AddImpliedTag)
+                ?.DisposeWith(disposables);
+
+            this.ViewModel!.AddableImpliedTags
+                .ToObservableChangeSet()
+                .Count()
+                .StartWith(this.ViewModel.AddableImpliedTags.Count)
+                .Select(count => count > 0)
+                .BindTo(this, v => v.AddableImpliedTagsComboBox.IsEnabled)
+                ?.DisposeWith(disposables);
+        }
+
         private void BindCommands(CompositeDisposable disposables)
         {
             this.BindCommand(this.ViewModel!, vm => vm.Save, v => v.SaveButton)
@@ -86,6 +117,10 @@ namespace MovieList.Views.Forms.Preferences
                 .Merge(this.ViewModel.Close)
                 .InvokeCommand(DialogHost.CloseDialogCommand)
                 .DisposeWith(disposables);
+
+            this.ViewModel.AddImpliedTag
+                .Subscribe(() => this.AddableImpliedTagsComboBox.SelectedItem = null)
+                ?.DisposeWith(disposables);
         }
     }
 }

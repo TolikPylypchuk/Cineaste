@@ -52,13 +52,13 @@ namespace MovieList.Data.Services.Implementations
 
             foreach (var entityToUpdate in entitiesToUpdate)
             {
-                this.AfterSave(entityToUpdate, connection, transaction);
+                this.AfterSave(entityToUpdate, entityList, connection, transaction);
             }
 
             foreach (var entityToInsert in entityList.Except(dbEntities, IdEqualityComparer<TEntity>.Instance))
             {
                 entityToInsert.Id = (int)connection.Insert(entityToInsert, transaction);
-                this.AfterSave(entityToInsert, connection, transaction);
+                this.AfterSave(entityToInsert, entityList, connection, transaction);
             }
 
             var entitiesToDelete = dbEntities.Except(entityList, IdEqualityComparer<TEntity>.Instance).ToList();
@@ -70,16 +70,24 @@ namespace MovieList.Data.Services.Implementations
 
             foreach (var entity in entitiesToDelete)
             {
-                this.BeforeDelete(entity, connection, transaction);
+                this.BeforeDelete(entity, entityList, connection, transaction);
             }
 
             connection.Delete(entitiesToDelete, transaction);
         }
 
-        protected virtual void AfterSave(TEntity entity, IDbConnection connection, IDbTransaction transaction)
+        protected virtual void AfterSave(
+            TEntity entity,
+            List<TEntity> allEntities,
+            IDbConnection connection,
+            IDbTransaction transaction)
         { }
 
-        protected virtual void BeforeDelete(TEntity entity, IDbConnection connection, IDbTransaction transaction)
+        protected virtual void BeforeDelete(
+            TEntity entity,
+            List<TEntity> allEntities,
+            IDbConnection connection,
+            IDbTransaction transaction)
         { }
 
         protected abstract bool CanDelete(TEntity entity);

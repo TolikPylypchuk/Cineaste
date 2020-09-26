@@ -216,7 +216,8 @@ namespace MovieList.Views.Forms
                 .Select(e => e.AddedItems.OfType<FranchiseAddableItemViewModel>().FirstOrDefault())
                 .WhereNotNull()
                 .Select(vm => vm.Entry)
-                .InvokeCommand(this.ViewModel!.AddExistingItem);
+                .InvokeCommand(this.ViewModel!.AddExistingItem)
+                ?.DisposeWith(disposables);
         }
 
         private void AddValidation(CompositeDisposable disposables)

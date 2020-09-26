@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Resources;
 
 using DynamicData;
+using DynamicData.Binding;
 
 using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
@@ -20,17 +23,40 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 {
     public sealed class TagFormViewModel : TagFormBase<TagItemViewModel, TagFormViewModel>
     {
+        private readonly SourceList<TagItemViewModel> addableImpliedTagsSource = new();
+        private readonly ReadOnlyObservableCollection<AddableImpliedTagViewModel> addableImpliedTags;
+
         public TagFormViewModel(
             TagItemViewModel tag,
+            IReadOnlyDictionary<Tag, TagItemViewModel> allTags,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
-            : base(resourceManager, scheduler)
+            : base(allTags, resourceManager, scheduler)
         {
             this.Tag = tag;
             this.CopyProperties();
 
+            this.addableImpliedTagsSource.Connect()
+                .Transform(tag => new AddableImpliedTagViewModel(tag))
+                .Sort(SortExpressionComparer<AddableImpliedTagViewModel>
+                    .Ascending(vm => vm.Category)
+                    .ThenByAscending(vm => vm.Name))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out this.addableImpliedTags)
+                .DisposeMany()
+                .Subscribe();
+
+            this.addableImpliedTagsSource.AddRange(allTags.Values
+                .Except(this.ImpliedTags)
+                .Where(t => !t.GetImpliedTagsClosure().Contains(tag)));
+
+            this.ImpliedTags.ActOnEveryObject(
+                onAdd: vm => this.addableImpliedTagsSource.Remove(vm),
+                onRemove: this.addableImpliedTagsSource.Add);
+
             static bool notEmpty(string str) => !String.IsNullOrWhiteSpace(str);
 
+            this.AddImpliedTag = ReactiveCommand.Create<Tag>(this.ImpliedTagsSource.Add);
             this.Close = ReactiveCommand.Create(() => { });
 
             this.NameRule = this.ValidationRule(vm => vm.Name, notEmpty, "NameEmpty");
@@ -49,8 +75,12 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
         public TagItemViewModel Tag { get; }
 
+        public ReadOnlyObservableCollection<AddableImpliedTagViewModel> AddableImpliedTags
+            => this.addableImpliedTags;
+
         public string FormTitle { [ObservableAsProperty] get; } = String.Empty;
 
+        public ReactiveCommand<Tag, Unit> AddImpliedTag { get; }
         public ReactiveCommand<Unit, Unit> Close { get; }
 
         public ValidationHelper NameRule { get; }

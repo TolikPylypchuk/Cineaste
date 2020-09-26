@@ -46,35 +46,53 @@ namespace MovieList.Data.Services.Implementations
             return tags;
         }
 
-        protected override void AfterSave(Tag tag, IDbConnection connection, IDbTransaction transaction)
+        protected override void AfterSave(
+            Tag tag,
+            List<Tag> allTags,
+            IDbConnection connection,
+            IDbTransaction transaction)
         {
             var implications = tag.ImpliedTags
                 .Select(impliedTag => new TagImplication { PremiseId = tag.Id, ConsequenceId = impliedTag.Id })
-                .Union(tag.InferredTags
-                    .Select(inferredTag => new TagImplication { PremiseId = inferredTag.Id, ConsequenceId = tag.Id }))
                 .ToList();
 
+            var allTagsById = allTags.ToDictionary(t => t.Id, t => t);
+
             var dbImplications = connection.Query<TagImplication>(
-                $"SELECT * FROM TagImplications WHERE PremiseId = @Id OR ConsequenceId = @Id",
-                new { tag.Id },
-                transaction);
+                $"SELECT * FROM TagImplications WHERE PremiseId = @Id", new { tag.Id }, transaction);
 
             foreach (var implicationToInsert in implications.Except(
                 dbImplications, CompositeIdEqualityComparer.TagImplication))
             {
                 implicationToInsert.Id = (int)connection.Insert(implicationToInsert, transaction);
+                allTagsById[implicationToInsert.ConsequenceId].InferredTags.Add(tag);
             }
 
             var implicationsToDelete = dbImplications
                 .Except(implications, CompositeIdEqualityComparer.TagImplication)
                 .ToList();
 
+            foreach (var implicationToDelete in implicationsToDelete)
+            {
+                allTagsById[implicationToDelete.ConsequenceId].InferredTags.Remove(tag);
+            }
+
             connection.Delete(implicationsToDelete, transaction);
         }
 
-        protected override void BeforeDelete(Tag tag, IDbConnection connection, IDbTransaction transaction)
+        protected override void BeforeDelete(
+            Tag tag,
+            List<Tag> allTags,
+            IDbConnection connection,
+            IDbTransaction transaction)
         {
-            base.BeforeDelete(tag, connection, transaction);
+            base.BeforeDelete(tag, allTags, connection, transaction);
+
+            foreach (var otherTag in allTags)
+            {
+                otherTag.ImpliedTags.Remove(tag);
+                otherTag.InferredTags.Remove(tag);
+            }
 
             connection.Execute(
                 "DELETE FROM TagImplications WHERE PremiseId = @Id OR ConsequenceId = @Id",

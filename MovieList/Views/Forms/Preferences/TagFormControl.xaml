@@ -30,7 +30,7 @@
             </Button>
         </DockPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="0">
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
                     <Setter Property="views:Properties.TripleClickSelectAll" Value="True" />
@@ -52,6 +52,26 @@
             <CheckBox x:Name="IsApplicableToMoviesCheckBox" Content="{l:Translate ApplicableToMovies}" />
             <CheckBox x:Name="IsApplicableToSeriesCheckBox" Content="{l:Translate ApplicableToSeries}" />
             <CheckBox x:Name="IsApplicableToFranchisesCheckBox" Content="{l:Translate ApplicableToFranchises}" />
+
+            <TextBlock Text="{l:Translate ImpliedTags}" Margin="0 4"
+                       Style="{StaticResource MaterialDesignBody2TextBlock}" />
+
+            <ComboBox x:Name="AddableImpliedTagsComboBox" Margin="0 4 16 4"
+                      m:HintAssist.Hint="{l:Translate AddImpliedTag}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
+
+            <ItemsControl x:Name="ImpliedTags" Margin="0 8">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
         </StackPanel>
 
         <DockPanel Grid.Row="1" Grid.Column="1">
@@ -75,7 +95,7 @@
 
         <m:ColorPicker x:Name="MaterialColorPicker" Grid.Row="1" Grid.Column="2" />
 
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 16 0 0"
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 16 0 0"
                     HorizontalAlignment="Right">
             <Button x:Name="SaveButton" Content="{l:Translate Save, ToUpper=True}" Margin="8"
                     HorizontalAlignment="Center" />

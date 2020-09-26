@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -16,9 +17,10 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
     {
         public TagItemViewModel(
             Tag tag,
+            IReadOnlyDictionary<Tag, TagItemViewModel> allTags,
             bool canSelect,
             ResourceManager? resourceManager = null, IScheduler? scheduler = null)
-            : base(resourceManager, scheduler)
+            : base(allTags, resourceManager, scheduler)
         {
             this.Tag = tag;
             this.CanSelect = canSelect;
@@ -49,6 +51,9 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
                 list.AddRange(tags);
             });
 
+        public IEnumerable<TagItemViewModel> GetImpliedTagsClosure()
+            => GetClosure(new[] { this });
+
         protected override void EnableChangeTracking()
         {
             this.TrackChanges(vm => vm.Name, vm => vm.Tag.Name);
@@ -71,6 +76,9 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.Tag.IsApplicableToSeries = this.IsApplicableToSeries;
             this.Tag.IsApplicableToFranchises = this.IsApplicableToFranchises;
 
+            this.Tag.ImpliedTags.Clear();
+            this.ImpliedTagsSource.Items.ForEach(t => this.Tag.ImpliedTags.Add(t));
+
             return Observable.Return(this.Tag);
         }
 
@@ -87,5 +95,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.IsApplicableToSeries = this.Tag.IsApplicableToSeries;
             this.IsApplicableToFranchises = this.Tag.IsApplicableToFranchises;
         }
+
+        private static IEnumerable<TagItemViewModel> GetClosure(IEnumerable<TagItemViewModel> tags)
+            => tags.Union(tags.SelectMany(tag => GetClosure(tag.ImpliedTags)));
     }
 }

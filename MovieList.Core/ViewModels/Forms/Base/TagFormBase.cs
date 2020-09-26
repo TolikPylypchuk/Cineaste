@@ -22,18 +22,24 @@ namespace MovieList.Core.ViewModels.Forms.Base
         where TModel : class
         where TForm : TagFormBase<TModel, TForm>
     {
+        private readonly IReadOnlyDictionary<Tag, TagItemViewModel> allTags;
         private readonly ReadOnlyObservableCollection<TagItemViewModel> impliedTags;
 
-        public TagFormBase(ResourceManager? resourceManager = null, IScheduler? scheduler = null)
+        public TagFormBase(
+            IReadOnlyDictionary<Tag, TagItemViewModel> allTags,
+            ResourceManager? resourceManager = null,
+            IScheduler? scheduler = null)
             : base(resourceManager, scheduler)
         {
+            this.allTags = allTags;
+
             this.Name = String.Empty;
             this.Description = String.Empty;
             this.Category = String.Empty;
             this.Color = String.Empty;
 
             this.ImpliedTagsSource.Connect()
-                .Transform(this.CreateTagItemViewModel)
+                .Transform(this.GetTagItemViewModel)
                 .Sort(SortExpressionComparer<TagItemViewModel>
                     .Ascending(vm => vm.Category)
                     .ThenByAscending(vm => vm.Name))
@@ -68,9 +74,9 @@ namespace MovieList.Core.ViewModels.Forms.Base
 
         protected SourceList<Tag> ImpliedTagsSource { get; } = new();
 
-        private TagItemViewModel CreateTagItemViewModel(Tag tag)
+        private TagItemViewModel GetTagItemViewModel(Tag tag)
         {
-            var viewModel = new TagItemViewModel(tag, canSelect: false);
+            var viewModel = this.allTags[tag];
 
             var subscriptions = new CompositeDisposable();
 

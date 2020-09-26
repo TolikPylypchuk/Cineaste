@@ -88,6 +88,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add implied tag.
+        /// </summary>
+        public static string AddImpliedTag {
+            get {
+                return ResourceManager.GetString("AddImpliedTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new franchise.
         /// </summary>
         public static string AddNewFranchise {
@@ -385,7 +394,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a color or input its HEX value.
+        ///   Looks up a localized string similar to Select a color or input its HEX value (mind that the HEX value is an ARGB value, not RGB).
         /// </summary>
         public static string ColorPickerMessage {
             get {
@@ -841,6 +850,15 @@ namespace MovieList.Properties {
         public static string ImdbLink {
             get {
                 return ResourceManager.GetString("ImdbLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implied Tags.
+        /// </summary>
+        public static string ImpliedTags {
+            get {
+                return ResourceManager.GetString("ImpliedTags", resourceCulture);
             }
         }
         

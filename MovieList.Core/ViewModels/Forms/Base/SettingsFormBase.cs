@@ -33,6 +33,8 @@ namespace MovieList.Core.ViewModels.Forms.Base
         private readonly SourceList<TagItemViewModel> tagsSource = new();
         private readonly ReadOnlyObservableCollection<TagItemViewModel> tags;
 
+        private readonly Dictionary<Tag, TagItemViewModel> allTagItemsByTag = new();
+
         protected SettingsFormBase(
             TSettings settings,
             ResourceManager? resourceManager = null,
@@ -57,6 +59,11 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .Bind(out this.tags)
                 .DisposeMany()
                 .Subscribe();
+
+            this.tagsSource.Connect()
+                .ActOnEveryObject(
+                    onAdd: vm => this.allTagItemsByTag.Add(vm.Tag, vm),
+                    onRemove: vm => this.allTagItemsByTag.Remove(vm.Tag));
 
             this.AddKind = ReactiveCommand.Create(() => this.kindsSource.Add(new Kind()));
             this.AddTag = ReactiveCommand.CreateFromObservable(this.OnAddTag);
@@ -151,6 +158,9 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 list.Clear();
                 list.AddRange(this.Model.Tags.Select(this.CreateTagItem));
             });
+
+            RxApp.MainThreadScheduler.Schedule(() =>
+                this.Tags.ForEach(tag => tag.UpdateImpliedTags(tag.Tag.ImpliedTags)));
         }
 
         protected abstract bool InitialKindIsNewValue(Kind kind);
@@ -186,7 +196,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
 
         private TagItemViewModel CreateTagItem(Tag tag)
         {
-            var vm = new TagItemViewModel(tag, canSelect: true);
+            var vm = new TagItemViewModel(tag, this.allTagItemsByTag, canSelect: true);
 
             var subscriptions = new CompositeDisposable();
 
@@ -210,14 +220,14 @@ namespace MovieList.Core.ViewModels.Forms.Base
         }
 
         private IObservable<Unit> OnOpenTagForm(TagItemViewModel vm)
-            => Dialog.TagForm.Handle(new TagFormViewModel(vm))
+            => Dialog.TagForm.Handle(new TagFormViewModel(vm, this.allTagItemsByTag))
                 .ObserveOn(RxApp.MainThreadScheduler);
 
         private IObservable<Unit> OnAddTag()
         {
             var tag = new Tag();
             var vm = this.CreateTagItem(tag);
-            var form = new TagFormViewModel(vm);
+            var form = new TagFormViewModel(vm, this.allTagItemsByTag);
 
             var subscriptions = new CompositeDisposable();
 
