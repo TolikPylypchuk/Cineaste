@@ -55,7 +55,7 @@ namespace MovieList.Views.Forms.Preferences
             this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.Kinds.ItemsSource)
                 ?.DisposeWith(disposables);
 
-            this.OneWayBind(this.ViewModel, vm => vm.Tags, v => v.Tags.ItemsSource)
+            this.OneWayBind(this.ViewModel, vm => vm.TagItems, v => v.Tags.ItemsSource)
                 ?.DisposeWith(disposables);
         }
 

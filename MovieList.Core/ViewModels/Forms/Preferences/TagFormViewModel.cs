@@ -5,14 +5,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Resources;
 
 using DynamicData;
 using DynamicData.Binding;
 
+using MovieList.Core.Models;
 using MovieList.Core.ViewModels.Forms.Base;
-using MovieList.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -21,42 +22,57 @@ using ReactiveUI.Validation.Helpers;
 
 namespace MovieList.Core.ViewModels.Forms.Preferences
 {
-    public sealed class TagFormViewModel : TagFormBase<TagItemViewModel, TagFormViewModel>
+    public sealed class TagFormViewModel : ReactiveForm<TagModel, TagFormViewModel>
     {
-        private readonly SourceList<TagItemViewModel> addableImpliedTagsSource = new();
+        private readonly SourceList<TagModel> impliedTagsSource = new();
+        private readonly SourceList<TagModel> addableImpliedTagsSource = new();
+
+        private readonly ReadOnlyObservableCollection<TagItemViewModel> impliedTags;
         private readonly ReadOnlyObservableCollection<AddableImpliedTagViewModel> addableImpliedTags;
 
         public TagFormViewModel(
-            TagItemViewModel tag,
-            IReadOnlyDictionary<Tag, TagItemViewModel> allTags,
+            TagModel tagModel,
+            IEnumerable<TagModel> allTags,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
-            : base(allTags, resourceManager, scheduler)
+            : base(resourceManager, scheduler)
         {
-            this.Tag = tag;
+            this.TagModel = tagModel;
             this.CopyProperties();
+
+            this.impliedTagsSource.Connect()
+                .Transform(this.CreateTagItemViewModel)
+                .Sort(SortExpressionComparer<TagItemViewModel>
+                    .Ascending(vm => vm.Category)
+                    .ThenByAscending(vm => vm.Name))
+                .AutoRefresh(vm => vm.Name)
+                .AutoRefresh(vm => vm.Category)
+                .Bind(out this.impliedTags)
+                .DisposeMany()
+                .Subscribe();
 
             this.addableImpliedTagsSource.Connect()
                 .Transform(tag => new AddableImpliedTagViewModel(tag))
                 .Sort(SortExpressionComparer<AddableImpliedTagViewModel>
                     .Ascending(vm => vm.Category)
                     .ThenByAscending(vm => vm.Name))
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .AutoRefresh(vm => vm.Name)
+                .AutoRefresh(vm => vm.Category)
                 .Bind(out this.addableImpliedTags)
                 .DisposeMany()
                 .Subscribe();
 
-            this.addableImpliedTagsSource.AddRange(allTags.Values
-                .Except(this.ImpliedTags)
-                .Where(t => !t.GetImpliedTagsClosure().Contains(tag)));
+            this.addableImpliedTagsSource.AddRange(allTags
+                .Where(tag => !tag.GetImpliedTagsClosure().Contains(tagModel)));
 
-            this.ImpliedTags.ActOnEveryObject(
-                onAdd: vm => this.addableImpliedTagsSource.Remove(vm),
-                onRemove: this.addableImpliedTagsSource.Add);
+            this.impliedTagsSource.Connect()
+                .ActOnEveryObject(
+                    onAdd: t => this.addableImpliedTagsSource.Remove(t),
+                    onRemove: this.addableImpliedTagsSource.Add);
 
             static bool notEmpty(string str) => !String.IsNullOrWhiteSpace(str);
 
-            this.AddImpliedTag = ReactiveCommand.Create<Tag>(this.ImpliedTagsSource.Add);
+            this.AddImpliedTag = ReactiveCommand.Create<TagModel>(this.impliedTagsSource.Add);
             this.Close = ReactiveCommand.Create(() => { });
 
             this.NameRule = this.ValidationRule(vm => vm.Name, notEmpty, "NameEmpty");
@@ -73,14 +89,38 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.EnableChangeTracking();
         }
 
-        public TagItemViewModel Tag { get; }
+        public TagModel TagModel { get; }
+
+        [Reactive]
+        public string Name { get; set; } = String.Empty;
+
+        [Reactive]
+        public string Description { get; set; } = String.Empty;
+
+        [Reactive]
+        public string Category { get; set; } = String.Empty;
+
+        [Reactive]
+        public string Color { get; set; } = String.Empty;
+
+        [Reactive]
+        public bool IsApplicableToMovies { get; set; }
+
+        [Reactive]
+        public bool IsApplicableToSeries { get; set; }
+
+        [Reactive]
+        public bool IsApplicableToFranchises { get; set; }
+
+        public ReadOnlyObservableCollection<TagItemViewModel> ImpliedTags
+            => this.impliedTags;
 
         public ReadOnlyObservableCollection<AddableImpliedTagViewModel> AddableImpliedTags
             => this.addableImpliedTags;
 
         public string FormTitle { [ObservableAsProperty] get; } = String.Empty;
 
-        public ReactiveCommand<Tag, Unit> AddImpliedTag { get; }
+        public ReactiveCommand<TagModel, Unit> AddImpliedTag { get; }
         public ReactiveCommand<Unit, Unit> Close { get; }
 
         public ValidationHelper NameRule { get; }
@@ -88,56 +128,76 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         public ValidationHelper ColorRule { get; }
 
         public override bool IsNew
-            => this.Tag.IsNew;
+            => this.TagModel.Tag.Id == default;
 
         protected override TagFormViewModel Self
             => this;
 
         protected override void EnableChangeTracking()
         {
-            this.TrackChanges(vm => vm.Name, vm => vm.Tag.Name);
-            this.TrackChanges(vm => vm.Description, vm => vm.Tag.Description);
-            this.TrackChanges(vm => vm.Category, vm => vm.Tag.Category);
-            this.TrackChanges(vm => vm.Color, vm => vm.Tag.Color);
+            this.TrackChanges(vm => vm.Name, vm => vm.TagModel.Name);
+            this.TrackChanges(vm => vm.Description, vm => vm.TagModel.Description);
+            this.TrackChanges(vm => vm.Category, vm => vm.TagModel.Category);
+            this.TrackChanges(vm => vm.Color, vm => vm.TagModel.Color);
 
-            this.TrackChanges(this.IsCollectionChanged(vm => vm.ImpliedTags, vm => vm.Tag.ImpliedTags));
+            this.TrackChanges(this.impliedTagsSource.Connect()
+                .ToCollection()
+                .Select(impliedTags => !new HashSet<TagModel>(impliedTags).SetEquals(this.TagModel.ImpliedTags)));
 
             base.EnableChangeTracking();
         }
 
-        protected override IObservable<TagItemViewModel> OnSave()
+        protected override IObservable<TagModel> OnSave()
         {
-            this.Tag.Name = this.Name = this.Name.EmptyIfNull().Trim();
-            this.Tag.Description = this.Description = this.Description.EmptyIfNull().Trim();
-            this.Tag.Category = this.Category = this.Category.EmptyIfNull().Trim();
-            this.Tag.Color = this.Color = this.Color.EmptyIfNull().Trim();
-            this.Tag.IsApplicableToMovies = this.IsApplicableToMovies;
-            this.Tag.IsApplicableToSeries = this.IsApplicableToSeries;
-            this.Tag.IsApplicableToFranchises = this.IsApplicableToFranchises;
+            this.TagModel.Name = this.Name = this.Name.EmptyIfNull().Trim();
+            this.TagModel.Description = this.Description = this.Description.EmptyIfNull().Trim();
+            this.TagModel.Category = this.Category = this.Category.EmptyIfNull().Trim();
+            this.TagModel.Color = this.Color = this.Color.EmptyIfNull().Trim();
+            this.TagModel.IsApplicableToMovies = this.IsApplicableToMovies;
+            this.TagModel.IsApplicableToSeries = this.IsApplicableToSeries;
+            this.TagModel.IsApplicableToFranchises = this.IsApplicableToFranchises;
 
-            this.Tag.UpdateImpliedTags(this.ImpliedTagsSource.Items);
+            this.TagModel.ImpliedTags.Clear();
+            this.TagModel.ImpliedTags.AddRange(this.impliedTagsSource.Items);
 
-            return Observable.Return(this.Tag);
+            return Observable.Return(this.TagModel);
         }
 
-        protected override IObservable<TagItemViewModel?> OnDelete()
-            => Observable.Return(this.Tag);
+        protected override IObservable<TagModel?> OnDelete()
+            => Observable.Return(this.TagModel);
 
         protected override void CopyProperties()
         {
-            this.Name = this.Tag.Name;
-            this.Description = this.Tag.Description;
-            this.Category = this.Tag.Category;
-            this.Color = this.Tag.Color;
-            this.IsApplicableToMovies = this.Tag.IsApplicableToMovies;
-            this.IsApplicableToSeries = this.Tag.IsApplicableToSeries;
-            this.IsApplicableToFranchises = this.Tag.IsApplicableToFranchises;
+            this.Name = this.TagModel.Name;
+            this.Description = this.TagModel.Description;
+            this.Category = this.TagModel.Category;
+            this.Color = this.TagModel.Color;
+            this.IsApplicableToMovies = this.TagModel.IsApplicableToMovies;
+            this.IsApplicableToSeries = this.TagModel.IsApplicableToSeries;
+            this.IsApplicableToFranchises = this.TagModel.IsApplicableToFranchises;
 
-            this.ImpliedTagsSource.Edit(list =>
+            this.impliedTagsSource.Edit(list =>
             {
                 list.Clear();
-                list.AddRange(this.Tag.ImpliedTags.Select(vm => vm.Tag));
+                list.AddRange(this.TagModel.ImpliedTags);
             });
+        }
+
+        private TagItemViewModel CreateTagItemViewModel(TagModel tagModel)
+        {
+            var viewModel = new TagItemViewModel(tagModel, canSelect: false);
+
+            var subscriptions = new CompositeDisposable();
+
+            viewModel.Delete
+                .Subscribe(_ =>
+                {
+                    this.impliedTagsSource.Remove(tagModel);
+                    subscriptions.Dispose();
+                })
+                .DisposeWith(subscriptions);
+
+            return viewModel;
         }
     }
 }

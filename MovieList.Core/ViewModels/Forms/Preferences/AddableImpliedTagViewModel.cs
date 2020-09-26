@@ -1,17 +1,19 @@
+using MovieList.Core.Models;
+
 using ReactiveUI;
 
 namespace MovieList.Core.ViewModels.Forms.Preferences
 {
     public sealed class AddableImpliedTagViewModel : ReactiveObject
     {
-        public AddableImpliedTagViewModel(TagItemViewModel tag)
+        public AddableImpliedTagViewModel(TagModel tagModel)
         {
-            this.Tag = tag;
-            this.Name = tag.Name;
-            this.Category = tag.Category;
+            this.TagModel = tagModel;
+            this.Name = tagModel.Name;
+            this.Category = tagModel.Category;
         }
 
-        public TagItemViewModel Tag { get; }
+        public TagModel TagModel { get; }
 
         public string Name { get; }
         public string Category { get; }
