@@ -62,7 +62,9 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
                 .DisposeMany()
                 .Subscribe();
 
-            this.addableImpliedTagsSource.AddRange(allTags
+            var allTagsList = allTags.ToList();
+
+            this.addableImpliedTagsSource.AddRange(allTagsList
                 .Where(tag => !tag.GetImpliedTagsClosure().Contains(tagModel)));
 
             this.impliedTagsSource.Connect()
@@ -78,6 +80,22 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.NameRule = this.ValidationRule(vm => vm.Name, notEmpty, "NameEmpty");
             this.CategoryRule = this.ValidationRule(vm => vm.Category, notEmpty, "CategoryEmpty");
             this.ColorRule = this.ValidationRuleForColor(vm => vm.Color);
+
+            var nameAndCategoryAreUnique = Observable.CombineLatest(
+                this.WhenAnyValue(vm => vm.Name),
+                this.WhenAnyValue(vm => vm.Category),
+                (name, category) => (Name: name, Category: category))
+                .Select(item => !allTagsList.Any(tag =>
+                    tag != this.TagModel && tag.Name == item.Name && tag.Category == item.Category));
+
+            this.UniqueRule = this.ValidationRule(
+                _ => nameAndCategoryAreUnique,
+                (vm, isValid) => isValid
+                    ? String.Empty
+                    : String.Format(
+                        this.ResourceManager.GetString("ValidationTagNotUniqueFormat") ?? String.Empty,
+                        vm.Name,
+                        vm.Category));
 
             this.WhenAnyValue(vm => vm.Name)
                 .Select(name => this.IsNew && String.IsNullOrWhiteSpace(name)
@@ -126,6 +144,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         public ValidationHelper NameRule { get; }
         public ValidationHelper CategoryRule { get; }
         public ValidationHelper ColorRule { get; }
+        public ValidationHelper UniqueRule { get; }
 
         public override bool IsNew
             => this.TagModel.Tag.Id == default;

@@ -1835,6 +1835,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There&apos;s already a tag named &apos;{0}&apos; in the &apos;{1}&apos; category.
+        /// </summary>
+        public static string ValidationTagNotUniqueFormat {
+            get {
+                return ResourceManager.GetString("ValidationTagNotUniqueFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The title must not be empty.
         /// </summary>
         public static string ValidationTitleNameEmpty {

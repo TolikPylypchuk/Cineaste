@@ -733,4 +733,7 @@ This will detach all entries without deleting them.</value>
   <data name="AddImpliedTag" xml:space="preserve">
     <value>Add implied tag</value>
   </data>
+  <data name="ValidationTagNotUniqueFormat" xml:space="preserve">
+    <value>There's already a tag named '{0}' in the '{1}' category</value>
+  </data>
 </root>

@@ -32,6 +32,7 @@ namespace MovieList.Views.Forms.Preferences
 
                 this.BindFields(disposables);
                 this.BindImpliedTags(disposables);
+                this.BindValidation(disposables);
                 this.BindCommands(disposables);
             });
         }
@@ -44,23 +45,14 @@ namespace MovieList.Views.Forms.Preferences
             this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
                 ?.DisposeWith(disposables);
 
-            this.NameTextBox.ValidateWith(this.ViewModel!.NameRule)
-                .DisposeWith(disposables);
-
             this.Bind(this.ViewModel, vm => vm.Description, v => v.DescriptionTextBox.Text)
                 ?.DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Category, v => v.CategoryTextBox.Text)
                 ?.DisposeWith(disposables);
 
-            this.CategoryTextBox.ValidateWith(this.ViewModel!.CategoryRule)
-                .DisposeWith(disposables);
-
             this.Bind(this.ViewModel, vm => vm.Color, v => v.ColorTextBox.Text)
                 ?.DisposeWith(disposables);
-
-            this.ColorTextBox.ValidateWith(this.ViewModel!.ColorRule)
-                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsApplicableToMovies, v => v.IsApplicableToMoviesCheckBox.IsChecked)
                 ?.DisposeWith(disposables);
@@ -97,6 +89,26 @@ namespace MovieList.Views.Forms.Preferences
                 .StartWith(this.ViewModel.AddableImpliedTags.Count)
                 .Select(count => count > 0)
                 .BindTo(this, v => v.AddableImpliedTagsComboBox.IsEnabled)
+                ?.DisposeWith(disposables);
+        }
+
+        private void BindValidation(CompositeDisposable disposables)
+        {
+            this.NameTextBox.ValidateWith(this.ViewModel!.NameRule)
+                .DisposeWith(disposables);
+
+            this.CategoryTextBox.ValidateWith(this.ViewModel!.CategoryRule)
+                .DisposeWith(disposables);
+
+            this.ColorTextBox.ValidateWith(this.ViewModel!.ColorRule)
+                .DisposeWith(disposables);
+
+            this.ShowValidationMessage(this.ViewModel.UniqueRule, v => v.InvalidFormTextBlock.Text)
+                ?.DisposeWith(disposables);
+
+            this.ViewModel.UniqueRule.ValidationChanged
+                .Select(state => !state.IsValid)
+                .BindTo(this, v => v.InvalidFormTextBlock.Visibility)
                 ?.DisposeWith(disposables);
         }
 

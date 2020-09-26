@@ -49,6 +49,9 @@
             <TextBox x:Name="DescriptionTextBox" m:HintAssist.Hint="{l:Translate Description}" TextWrapping="Wrap" />
             <TextBox x:Name="CategoryTextBox" m:HintAssist.Hint="{l:Translate Category}" Margin="0 8 8 16" />
 
+            <TextBlock x:Name="InvalidFormTextBlock" Margin="0 8 16 8" TextWrapping="Wrap"
+                       Foreground="{DynamicResource ValidationErrorBrush}" />
+
             <CheckBox x:Name="IsApplicableToMoviesCheckBox" Content="{l:Translate ApplicableToMovies}" />
             <CheckBox x:Name="IsApplicableToSeriesCheckBox" Content="{l:Translate ApplicableToSeries}" />
             <CheckBox x:Name="IsApplicableToFranchisesCheckBox" Content="{l:Translate ApplicableToFranchises}" />
