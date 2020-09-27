@@ -29,6 +29,9 @@ namespace MovieList.Views.Forms.Preferences
                     v => v.CategoryTextBlock.Text,
                     category => $"({category})")
                     ?.DisposeWith(disposables);
+
+                this.OneWayBind(this.ViewModel, vm => vm.Color, v => v.ColorCircle.Fill)
+                    ?.DisposeWith(disposables);
             });
         }
     }

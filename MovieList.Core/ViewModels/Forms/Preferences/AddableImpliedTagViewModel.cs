@@ -11,11 +11,13 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.TagModel = tagModel;
             this.Name = tagModel.Name;
             this.Category = tagModel.Category;
+            this.Color = tagModel.Color;
         }
 
         public TagModel TagModel { get; }
 
         public string Name { get; }
         public string Category { get; }
+        public string Color { get; }
     }
 }

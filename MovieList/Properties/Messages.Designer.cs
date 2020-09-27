@@ -385,7 +385,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Color HEX value.
+        ///   Looks up a localized string similar to Color ARGB value.
         /// </summary>
         public static string ColorHexValue {
             get {
@@ -394,7 +394,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a color or input its HEX value (mind that the HEX value is an ARGB value, not RGB).
+        ///   Looks up a localized string similar to Select a color or enter its ARGB value.
         /// </summary>
         public static string ColorPickerMessage {
             get {

@@ -211,10 +211,10 @@
     <value>Color for watched series</value>
   </data>
   <data name="ColorHexValue" xml:space="preserve">
-    <value>Color HEX value</value>
+    <value>Color ARGB value</value>
   </data>
   <data name="ColorPickerMessage" xml:space="preserve">
-    <value>Select a color or input its HEX value (mind that the HEX value is an ARGB value, not RGB)</value>
+    <value>Select a color or enter its ARGB value</value>
   </data>
   <data name="ColorPickerTitle" xml:space="preserve">
     <value>Pick the color</value>

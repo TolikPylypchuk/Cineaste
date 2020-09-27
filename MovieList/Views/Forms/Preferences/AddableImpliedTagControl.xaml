@@ -3,9 +3,12 @@
                                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                     xmlns:local="clr-namespace:MovieList.Views.Forms.Preferences">
     <WrapPanel>
-        <TextBlock x:Name="NameTextBlock" TextWrapping="Wrap" Style="{StaticResource MaterialDesignBody2TextBlock}" />
+        <Ellipse x:Name="ColorCircle" Width="15" Height="15" Margin="0 0 8 0" VerticalAlignment="Center" />
 
-        <TextBlock x:Name="CategoryTextBlock" TextWrapping="Wrap" Margin="8 0 0 0"
+        <TextBlock x:Name="NameTextBlock" TextWrapping="Wrap" VerticalAlignment="Center"
+                   Style="{StaticResource MaterialDesignBody2TextBlock}" />
+
+        <TextBlock x:Name="CategoryTextBlock" TextWrapping="Wrap" Margin="8 0 0 0" VerticalAlignment="Center"
                    Style="{StaticResource MaterialDesignBody2TextBlock}" />
     </WrapPanel>
 </local:AddableImpliedTagControlBase>
