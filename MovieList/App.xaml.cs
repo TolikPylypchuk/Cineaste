@@ -144,6 +144,7 @@ namespace MovieList
                 Messages.DefaultDefaultSeasonTitle,
                 Messages.DefaultDefaultSeasonOriginalTitle,
                 this.CreateDefaultKinds(),
+                new List<Tag>(),
                 CultureInfo.GetCultureInfo("uk-UA"));
 
             string appName = Assembly.GetExecutingAssembly()?.GetName().Name ?? String.Empty;

@@ -85,5 +85,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
         protected override bool InitialKindIsNewValue(Kind kind)
             => kind.Id == default;
+
+        protected override bool IsTagNew(TagModel tagModel)
+            => tagModel.Tag.Id == default;
     }
 }

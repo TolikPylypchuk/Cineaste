@@ -14,8 +14,12 @@ namespace MovieList.Core.Data.Services
     public static class ServiceExtensions
     {
         public static IObservable<Unit> CreateDatabaseInTaskPool(
-            this IDatabaseService service, Settings settings, IEnumerable<Kind> initialKinds)
-            => Observable.Start(() => service.CreateDatabase(settings, initialKinds), RxApp.TaskpoolScheduler);
+            this IDatabaseService service,
+            Settings settings,
+            IEnumerable<Kind> initialKinds,
+            IEnumerable<Tag> initialTags)
+            => Observable.Start(
+                () => service.CreateDatabase(settings, initialKinds, initialTags), RxApp.TaskpoolScheduler);
 
         public static IObservable<bool> ValidateDatabaseInTaskPool(this IDatabaseService service)
             => Observable.Start(service.ValidateDatabase, RxApp.TaskpoolScheduler);

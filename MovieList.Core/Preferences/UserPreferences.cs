@@ -42,6 +42,6 @@ namespace MovieList.Core.Preferences
             => this.Defaults.DefaultKinds;
 
         List<Tag> ISettings.Tags
-            => new List<Tag>();
+            => this.Defaults.DefaultTags;
     }
 }

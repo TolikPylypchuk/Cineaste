@@ -108,7 +108,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .AutoRefresh(tm => tm.Color)
                 .AutoRefreshOnObservable(tm => tm.ImpliedTags.ToObservableChangeSet())
                 .ToCollection()
-                .Select(tags => tags.Any(this.TagModelChanged)));
+                .Select(tags => tags.Count != this.Model.Tags.Count || tags.Any(this.TagModelChanged)));
 
             this.TrackValidation(this.IsCollectionValid(this.Kinds));
 
@@ -166,6 +166,8 @@ namespace MovieList.Core.ViewModels.Forms.Base
         }
 
         protected abstract bool InitialKindIsNewValue(Kind kind);
+
+        protected abstract bool IsTagNew(TagModel tagModel);
 
         private KindFormViewModel CreateKindForm(Kind kind)
         {
@@ -253,7 +255,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
         }
 
         private bool TagModelChanged(TagModel tagModel)
-            => tagModel.Tag.Id == default ||
+            => this.IsTagNew(tagModel) ||
                 tagModel.Name != tagModel.Tag.Name ||
                 tagModel.Description != tagModel.Tag.Description ||
                 tagModel.Category != tagModel.Tag.Category ||

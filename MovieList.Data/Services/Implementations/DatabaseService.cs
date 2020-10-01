@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 using Dapper;
@@ -25,7 +26,7 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public void CreateDatabase(Settings settings, IEnumerable<Kind> initialKinds)
+        public void CreateDatabase(Settings settings, IEnumerable<Kind> initialKinds, IEnumerable<Tag> initialTags)
         {
             this.Log().Debug($"Creating a new database: {this.DatabasePath}");
 
@@ -34,14 +35,17 @@ namespace MovieList.Data.Services.Implementations
                 this.Log().Warn($"{this.DatabasePath} already exists");
                 return;
             }
-            
+
             string sql = Resource.AsString(SchemaSql);
 
             this.WithTransaction((connection, transaction) =>
             {
                 connection.Execute(sql, transaction);
+
                 this.InitSettings(connection, transaction, settings);
-                connection.InsertAsync(initialKinds, transaction);
+
+                connection.Insert(initialKinds, transaction);
+                this.InsertTags(initialTags, connection, transaction);
             });
         }
 
@@ -59,6 +63,29 @@ namespace MovieList.Data.Services.Implementations
             this.Log().Debug($"Checking the database schema: {this.DatabasePath}");
 
             return true;
+        }
+
+        private void InsertTags(IEnumerable<Tag> initialTags, IDbConnection connection, IDbTransaction transaction)
+        {
+            foreach (var tag in initialTags)
+            {
+               tag.Id = (int)connection.Insert(tag, transaction);
+            }
+
+            var implications = initialTags
+                .SelectMany(tag => tag.ImpliedTags
+                    .Select(impliedTag => new TagImplication
+                    {
+                        PremiseId = tag.Id,
+                        ConsequenceId = impliedTag.Id
+                    }));
+
+            connection.Insert(implications, transaction);
+
+            foreach (var tag in initialTags)
+            {
+                tag.Id = default;
+            }
         }
 
         private void InitSettings(IDbConnection connection, IDbTransaction transaction, Settings settings)

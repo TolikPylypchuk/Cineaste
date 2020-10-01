@@ -145,7 +145,7 @@ namespace MovieList.Core.ViewModels
                 preferences.DefaultCultureInfo.ToString());
 
             return Locator.Current.GetService<IDatabaseService>(model.File)
-                .CreateDatabaseInTaskPool(settings, preferences.DefaultKinds)
+                .CreateDatabaseInTaskPool(settings, preferences.DefaultKinds, preferences.DefaultTags)
                 .SelectMany(_ => this.GetSettings(model.File))
                 .Do(dbSettings => Locator.CurrentMutable.RegisterConstant(dbSettings, model.File))
                 .Do(_ => this.AddFile(model.File, model.ListName))

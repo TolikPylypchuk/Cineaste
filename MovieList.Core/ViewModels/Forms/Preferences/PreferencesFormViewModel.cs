@@ -4,6 +4,7 @@ using System.Resources;
 
 using Akavache;
 
+using MovieList.Core.Models;
 using MovieList.Core.Preferences;
 using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
@@ -88,5 +89,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
         protected override bool InitialKindIsNewValue(Kind kind)
             => !this.Model.Defaults.DefaultKinds.Contains(kind);
+
+        protected override bool IsTagNew(TagModel tagModel)
+            => false;
     }
 }

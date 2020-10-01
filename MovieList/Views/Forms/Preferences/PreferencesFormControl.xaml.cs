@@ -30,9 +30,6 @@ namespace MovieList.Views.Forms.Preferences
 
                 this.BindFields(disposables);
                 this.BindCommands(disposables);
-
-                this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.Kinds.ItemsSource)
-                    ?.DisposeWith(disposables);
             });
         }
 
@@ -52,6 +49,12 @@ namespace MovieList.Views.Forms.Preferences
                     this.ViewModel,
                     vm => vm.DefaultSeasonOriginalTitle,
                     v => v.DefaultSeasonOriginalTitleTextBox.Text)
+                ?.DisposeWith(disposables);
+
+            this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.Kinds.ItemsSource)
+                ?.DisposeWith(disposables);
+
+            this.OneWayBind(this.ViewModel, vm => vm.TagItems, v => v.Tags.ItemsSource)
                 ?.DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.ShowRecentFiles, v => v.ShowRecentFilesCheckBox.IsChecked)
@@ -80,6 +83,9 @@ namespace MovieList.Views.Forms.Preferences
         private void BindCommands(CompositeDisposable disposables)
         {
             this.BindCommand(this.ViewModel!, vm => vm.AddKind, v => v.AddKindButton)
+                ?.DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel!, vm => vm.AddTag, v => v.AddTagButton)
                 ?.DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.Save, v => v.SaveButton)
