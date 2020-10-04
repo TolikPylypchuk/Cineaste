@@ -1,8 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reactive;
 using System.Reactive.Linq;
+
+using MovieList.Core.Validation;
+using MovieList.Core.ViewModels.Forms.Base;
+
+using ReactiveUI.Validation.Abstractions;
+using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
 
 namespace MovieList.Core
 {
@@ -81,5 +89,10 @@ namespace MovieList.Core
 
         public static IDisposable SubscribeAsync(this IObservable<Unit> observable, Func<IObservable<Unit>> observer)
             => observable.SelectMany(_ => observer()).Subscribe();
+
+        public static ValidationHelper ValidationRuleForColor<TForm>(
+            this TForm form, Expression<Func<TForm, string>> vmProperty)
+            where TForm : ReactiveValidationObject<TForm>, IReactiveForm
+            => form.ValidationRule(vmProperty, HexColorValidator.IsArgbString, "HexColorInvalid");
     }
 }

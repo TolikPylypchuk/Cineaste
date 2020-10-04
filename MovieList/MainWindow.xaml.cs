@@ -79,12 +79,23 @@ namespace MovieList
                 .ToObservableChangeSet()
                 .ObserveOnDispatcher()
                 .ActOnEveryObject(
-                    vm => this.MainTabControl.Items.Add(new TabItem
+                    vm =>
                     {
-                        Header = new ViewModelViewHost { ViewModel = vm.Header },
-                        Content = new ViewModelViewHost { ViewModel = vm },
-                        Tag = vm.FileName
-                    }),
+                        var tabItem = new TabItem
+                        {
+                            Header = new ViewModelViewHost { ViewModel = vm.Header },
+                            Content = new ViewModelViewHost { ViewModel = vm },
+                            Tag = vm.FileName
+                        };
+
+                        if (this.ViewModel.Preferences == null)
+                        {
+                            this.MainTabControl.Items.Add(tabItem);
+                        } else
+                        {
+                            this.MainTabControl.Items.Insert(this.MainTabControl.Items.Count - 1, tabItem);
+                        }
+                    },
                     vm => this.MainTabControl.Items.Remove(this.MainTabControl.Items
                         .OfType<TabItem>()
                         .First(item => vm.FileName.Equals(item.Tag))))

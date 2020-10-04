@@ -224,6 +224,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
             vm.Delete
                 .SelectMany(_ => this.PromptToDelete("DeleteTag", () => Observable.Return(tagModel)))
                 .WhereNotNull()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(tm =>
                 {
                     this.tagsSource.Remove(tm);
