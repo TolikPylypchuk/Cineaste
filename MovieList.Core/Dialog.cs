@@ -1,4 +1,6 @@
+using System;
 using System.Reactive;
+using System.Reactive.Linq;
 
 using MovieList.Core.DialogModels;
 using MovieList.Core.ViewModels.Forms.Preferences;
@@ -17,5 +19,10 @@ namespace MovieList.Core
         public static readonly Interaction<string, string?> SaveFile = new();
         public static readonly Interaction<Unit, string?> OpenFile = new();
         public static readonly Interaction<AboutModel, Unit> ShowAbout = new();
+
+        public static IObservable<T?> PromptToDelete<T>(string messageAndTitle, Func<IObservable<T>> onDelete)
+            where T : class
+            => Confirm.Handle(new ConfirmationModel(messageAndTitle))
+                .SelectMany(shouldDelete => shouldDelete ? onDelete() : Observable.Return<T?>(null));
     }
 }

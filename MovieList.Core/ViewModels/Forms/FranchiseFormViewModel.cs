@@ -175,7 +175,7 @@ namespace MovieList.Core.ViewModels.Forms
                 .DoAsync(this.franchiseService.SaveInTaskPool);
 
         protected override IObservable<Franchise?> OnDelete()
-            => this.PromptToDelete(
+            => Dialog.PromptToDelete(
                 "DeleteFranchise",
                 () => this.franchiseService.DeleteInTaskPool(this.Franchise).Select(() => this.Franchise));
 

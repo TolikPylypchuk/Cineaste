@@ -157,11 +157,6 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .Subscribe(this.validSubject);
         }
 
-        protected IObservable<T?> PromptToDelete<T>(string messageAndTitle, Func<IObservable<T>> onDelete)
-            where T : class
-            => Dialog.Confirm.Handle(new ConfirmationModel(messageAndTitle))
-                .SelectMany(shouldDelete => shouldDelete ? onDelete() : Observable.Return<T?>(null));
-
         protected abstract IObservable<TModel> OnSave();
 
         protected abstract IObservable<TModel?> OnDelete();

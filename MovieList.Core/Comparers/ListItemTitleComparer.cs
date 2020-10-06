@@ -115,7 +115,7 @@ namespace MovieList.Core.Comparers
                 (null, null) => this.CompareTitleOrYear(left, right),
                 (var entry, null) => this.Compare(new FranchiseListItem(entry.ParentFranchise.GetRootSeries()), right),
                 (null, var entry) => this.Compare(left, new FranchiseListItem(entry.ParentFranchise.GetRootSeries())),
-                var (entry1, entry2) => entry1.ParentFranchiseId == entry2.ParentFranchiseId
+                var (entry1, entry2) => entry1.ParentFranchise.Id == entry2.ParentFranchise.Id
                     ? entry1.SequenceNumber.CompareTo(entry2.SequenceNumber)
                     : this.CompareEntries(entry1, entry2)
             };
@@ -127,7 +127,7 @@ namespace MovieList.Core.Comparers
                 return this.CompareTitleOrYears(new FranchiseListItem(left.Franchise.GetRootSeries()), right);
             }
 
-            if (left.Franchise.Id == entry.ParentFranchiseId)
+            if (left.Franchise.Id == entry.ParentFranchise.Id)
             {
                 return -1;
             }
@@ -136,7 +136,7 @@ namespace MovieList.Core.Comparers
             {
                 return left.Franchise.GetAllAncestors()
                         .Where(f => f.Entry != null)
-                        .First(f => f.Entry!.ParentFranchiseId == entry.ParentFranchiseId)
+                        .First(f => f.Entry!.ParentFranchise.Id == entry.ParentFranchise.Id)
                         .Entry!
                     .SequenceNumber
                     .CompareTo(entry.SequenceNumber);
@@ -151,7 +151,7 @@ namespace MovieList.Core.Comparers
             {
                 return left.ParentFranchise.GetAllAncestors()
                         .Where(a => a.Entry != null)
-                        .First(a => a.Entry!.ParentFranchiseId == right.ParentFranchiseId)
+                        .First(a => a.Entry!.ParentFranchise.Id == right.ParentFranchise.Id)
                         .Entry!
                     .SequenceNumber
                     .CompareTo(right.SequenceNumber);
@@ -162,7 +162,7 @@ namespace MovieList.Core.Comparers
                 return left.SequenceNumber.CompareTo(
                     right.ParentFranchise.GetAllAncestors()
                         .Where(a => a.Entry != null)
-                        .First(a => a.Entry!.ParentFranchiseId == left.ParentFranchiseId)
+                        .First(a => a.Entry!.ParentFranchise.Id == left.ParentFranchise.Id)
                         .Entry!
                         .SequenceNumber);
             }

@@ -6,6 +6,24 @@ using Dapper.Contrib.Extensions;
 
 namespace MovieList.Data.Models
 {
+    public enum SeasonWatchStatus
+    {
+        NotWatched,
+        Watching,
+        Hiatus,
+        Watched,
+        StoppedWatching
+    }
+
+    public enum SeasonReleaseStatus
+    {
+        NotStarted,
+        Running,
+        Hiatus,
+        Finished,
+        Unknown
+    }
+
     [Table("Seasons")]
     public sealed class Season : EntityBase
     {

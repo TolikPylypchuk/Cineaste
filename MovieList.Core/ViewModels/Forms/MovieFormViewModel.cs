@@ -125,7 +125,7 @@ namespace MovieList.Core.ViewModels.Forms
                 .DoAsync(this.movieService.SaveInTaskPool);
 
         protected override IObservable<Movie?> OnDelete()
-            => this.PromptToDelete(
+            => Dialog.PromptToDelete(
                 "DeleteMovie", () => this.movieService.DeleteInTaskPool(this.Movie).Select(() => this.Movie));
 
         protected override void CopyProperties()

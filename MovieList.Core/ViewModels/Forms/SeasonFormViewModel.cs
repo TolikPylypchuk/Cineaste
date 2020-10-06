@@ -176,7 +176,7 @@ namespace MovieList.Core.ViewModels.Forms
                 });
 
         protected override IObservable<Season?> OnDelete()
-            => this.PromptToDelete("DeleteSeason", () => Observable.Return(this.Season));
+            => Dialog.PromptToDelete("DeleteSeason", () => Observable.Return(this.Season));
 
         protected override void CopyProperties()
         {

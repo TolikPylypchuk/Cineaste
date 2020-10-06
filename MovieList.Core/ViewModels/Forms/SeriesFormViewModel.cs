@@ -239,7 +239,7 @@ namespace MovieList.Core.ViewModels.Forms
                 .DoAsync(this.seriesService.SaveInTaskPool);
 
         protected override IObservable<Series?> OnDelete()
-            => this.PromptToDelete(
+            => Dialog.PromptToDelete(
                 "DeleteSeries", () => this.seriesService.DeleteInTaskPool(this.Series).Select(_ => this.Series));
 
         protected override void CopyProperties()

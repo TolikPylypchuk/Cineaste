@@ -225,7 +225,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .DisposeWith(subscriptions);
 
             vm.Delete
-                .SelectMany(_ => this.PromptToDelete("DeleteTag", () => Observable.Return(tagModel)))
+                .SelectMany(_ => Dialog.PromptToDelete("DeleteTag", () => Observable.Return(tagModel)))
                 .WhereNotNull()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(tm =>

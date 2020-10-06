@@ -119,7 +119,7 @@ namespace MovieList.Core.ViewModels.Forms
                 });
 
         protected override IObservable<SpecialEpisode?> OnDelete()
-            => this.PromptToDelete("DeleteSpecialEpisode", () => Observable.Return(this.SpecialEpisode));
+            => Dialog.PromptToDelete("DeleteSpecialEpisode", () => Observable.Return(this.SpecialEpisode));
 
         protected override void CopyProperties()
         {
