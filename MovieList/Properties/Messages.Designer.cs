@@ -1781,6 +1781,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The name is not unique.
+        /// </summary>
+        public static string ValidationNameNotUnique {
+            get {
+                return ResourceManager.GetString("ValidationNameNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to # of episodes is empty.
         /// </summary>
         public static string ValidationNumberOfEpisodesEmpty {

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -7,6 +9,7 @@ using System.Resources;
 using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
 
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
@@ -21,6 +24,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             Kind kind,
             IObservable<bool> isNew,
             IObservable<bool> canDelete,
+            IObservable<IReadOnlyCollection<KindFormViewModel>> allKinds,
             ResourceManager? resourceManager,
             IScheduler? scheduler)
             : base(resourceManager, scheduler)
@@ -28,7 +32,17 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.Kind = kind;
             this.CopyProperties();
 
-            this.NameRule = this.ValidationRule(vm => vm.Name, name => !String.IsNullOrWhiteSpace(name), "NameEmpty");
+            var isNameValid = Observable.CombineLatest(
+                allKinds,
+                this.WhenAnyValue(vm => vm.Name),
+                (kinds, name) => !String.IsNullOrWhiteSpace(name) && kinds.Count(k => k.Name == name) == 1);
+
+            this.NameRule = this.ValidationRule(
+                vm => isNameValid,
+                (vm, isValid) => isValid
+                    ? String.Empty
+                    : String.IsNullOrWhiteSpace(vm.Name) ? "NameEmpty" : "NameNotUnique");
+
             this.ColorForWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForWatchedMovie);
             this.ColorForNotWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForNotWatchedMovie);
             this.ColorForNotReleasedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForNotReleasedMovie);

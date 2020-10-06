@@ -181,8 +181,12 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .Count()
                 .Select(count => count > 1);
 
+            var allKindNames = this.Kinds.ToObservableChangeSet()
+                .AutoRefresh(kind => kind.Name)
+                .ToCollection();
+
             var form = new KindFormViewModel(
-                kind, isKindNew.AsObservable(), canDeleteKind, this.ResourceManager, this.Scheduler);
+                kind, isKindNew.AsObservable(), canDeleteKind, allKindNames, this.ResourceManager, this.Scheduler);
 
             form.Save
                 .Select(_ => false)

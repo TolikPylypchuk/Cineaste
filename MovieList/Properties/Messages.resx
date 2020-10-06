@@ -736,4 +736,7 @@ This will detach all entries without deleting them.</value>
   <data name="ValidationTagNotUniqueFormat" xml:space="preserve">
     <value>There's already a tag named '{0}' in the '{1}' category</value>
   </data>
+  <data name="ValidationNameNotUnique" xml:space="preserve">
+    <value>The name is not unique</value>
+  </data>
 </root>
