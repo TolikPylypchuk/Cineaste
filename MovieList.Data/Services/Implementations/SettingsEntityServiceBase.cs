@@ -46,13 +46,19 @@ namespace MovieList.Data.Services.Implementations
 
             var dbEntities = connection.GetAll<TEntity>(transaction).ToList();
 
-            var entitiesToUpdate = entityList.Intersect(dbEntities, IdEqualityComparer<TEntity>.Instance);
+            var entitiesToInsert = entityList.Except(dbEntities, IdEqualityComparer<TEntity>.Instance).ToList();
 
-            foreach (var entityToInsert in entityList.Except(dbEntities, IdEqualityComparer<TEntity>.Instance))
+            foreach (var entityToInsert in entitiesToInsert)
             {
                 entityToInsert.Id = (int)connection.Insert(entityToInsert, transaction);
+            }
+
+            foreach (var entityToInsert in entitiesToInsert)
+            {
                 this.AfterSave(entityToInsert, entityList, connection, transaction);
             }
+
+            var entitiesToUpdate = entityList.Intersect(dbEntities, IdEqualityComparer<TEntity>.Instance);
 
             connection.Update(entitiesToUpdate, transaction);
 

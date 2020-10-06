@@ -106,6 +106,9 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .AutoRefresh(tm => tm.Description)
                 .AutoRefresh(tm => tm.Category)
                 .AutoRefresh(tm => tm.Color)
+                .AutoRefresh(tm => tm.IsApplicableToMovies)
+                .AutoRefresh(tm => tm.IsApplicableToSeries)
+                .AutoRefresh(tm => tm.IsApplicableToFranchises)
                 .AutoRefreshOnObservable(tm => tm.ImpliedTags.ToObservableChangeSet())
                 .ToCollection()
                 .Select(tags => tags.Count != this.Model.Tags.Count || tags.Any(this.TagModelChanged)));
@@ -261,6 +264,9 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 tagModel.Description != tagModel.Tag.Description ||
                 tagModel.Category != tagModel.Tag.Category ||
                 tagModel.Color != tagModel.Tag.Color ||
+                tagModel.IsApplicableToMovies != tagModel.Tag.IsApplicableToMovies ||
+                tagModel.IsApplicableToSeries != tagModel.Tag.IsApplicableToSeries ||
+                tagModel.IsApplicableToFranchises != tagModel.Tag.IsApplicableToFranchises ||
                 !tagModel.ImpliedTags.Select(tm => tm.Tag).ToHashSet().SetEquals(tagModel.Tag.ImpliedTags);
 
         private void SaveTag(TagModel tagModel)
@@ -269,6 +275,9 @@ namespace MovieList.Core.ViewModels.Forms.Base
             tagModel.Tag.Description = tagModel.Description;
             tagModel.Tag.Category = tagModel.Category;
             tagModel.Tag.Color = tagModel.Color;
+            tagModel.Tag.IsApplicableToMovies = tagModel.IsApplicableToMovies;
+            tagModel.Tag.IsApplicableToSeries = tagModel.IsApplicableToSeries;
+            tagModel.Tag.IsApplicableToFranchises = tagModel.IsApplicableToFranchises;
 
             tagModel.Tag.ImpliedTags.Clear();
             tagModel.ImpliedTags.Select(tm => tm.Tag).ForEach(t => tagModel.Tag.ImpliedTags.Add(t));

@@ -158,6 +158,9 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.TrackChanges(vm => vm.Description, vm => vm.TagModel.Description);
             this.TrackChanges(vm => vm.Category, vm => vm.TagModel.Category);
             this.TrackChanges(vm => vm.Color, vm => vm.TagModel.Color);
+            this.TrackChanges(vm => vm.IsApplicableToMovies, vm => vm.TagModel.IsApplicableToMovies);
+            this.TrackChanges(vm => vm.IsApplicableToSeries, vm => vm.TagModel.IsApplicableToSeries);
+            this.TrackChanges(vm => vm.IsApplicableToFranchises, vm => vm.TagModel.IsApplicableToFranchises);
 
             this.TrackChanges(this.impliedTagsSource.Connect()
                 .ToCollection()
