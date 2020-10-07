@@ -128,6 +128,12 @@ namespace MovieList.Core.ViewModels
                 list.AddOrUpdate(settingsModel.Kinds);
             });
 
+            this.tagsSource.Edit(list =>
+            {
+                list.Clear();
+                list.AddOrUpdate(settingsModel.Tags);
+            });
+
             this.Header.TabName = settingsModel.Settings.ListName;
 
             return settingsModel;

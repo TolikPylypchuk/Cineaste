@@ -114,6 +114,8 @@ namespace MovieList.Core.ViewModels
 
                 if (franchise != null)
                 {
+                    list.AddOrUpdate(new FranchiseListItem(franchise));
+
                     franchise.Entries
                         .Select(this.EntryToListItem)
                         .ForEach(list.AddOrUpdate);

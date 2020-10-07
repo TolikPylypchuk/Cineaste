@@ -42,10 +42,11 @@ namespace MovieList.Views.Forms.Preferences
 
                 if (this.ViewModel!.CanSelect)
                 {
-                    this.Chip.Cursor = Cursors.Hand;
-
                     this.BindCommand(this.ViewModel, vm => vm.Select, v => v.Chip)
                         ?.DisposeWith(disposables);
+                } else
+                {
+                    this.Chip.Cursor = Cursors.Arrow;
                 }
 
                 Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
