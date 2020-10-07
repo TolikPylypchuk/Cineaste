@@ -77,9 +77,9 @@ namespace MovieList.Views.Forms.Preferences
 
             this.AddableImpliedTagsComboBox.Events()
                 .SelectionChanged
-                .Select(e => e.AddedItems.OfType<AddableImpliedTagViewModel>().FirstOrDefault())
+                .Select(e => e.AddedItems.OfType<AddableTagViewModel>().FirstOrDefault())
                 .WhereNotNull()
-                .Select(vm => vm.TagModel)
+                .Select(vm => vm.TagModel!)
                 .InvokeCommand(this.ViewModel!.AddImpliedTag)
                 ?.DisposeWith(disposables);
 

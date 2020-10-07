@@ -1,11 +1,17 @@
 using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows.Controls;
 
 using Akavache;
 
+using DynamicData.Aggregation;
+using DynamicData.Binding;
+
 using MovieList.Core;
 using MovieList.Core.ViewModels.Forms;
+using MovieList.Core.ViewModels.Forms.Preferences;
 using MovieList.Properties;
 
 using ReactiveUI;
@@ -35,6 +41,7 @@ namespace MovieList.Views.Forms
                 this.BindCommands(disposables);
                 this.BindLinks(disposables);
                 this.BindFields(disposables);
+                this.BindTags(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Components, v => v.Components.ItemsSource)
                     ?.DisposeWith(disposables);
@@ -207,6 +214,31 @@ namespace MovieList.Views.Forms
                 ?.DisposeWith(disposables);
 
             this.PosterUrlTextBox.ValidateWith(this.ViewModel!.PosterUrlRule)
+                ?.DisposeWith(disposables);
+        }
+
+        private void BindTags(CompositeDisposable disposables)
+        {
+            this.OneWayBind(this.ViewModel, vm => vm.Tags, v => v.Tags.ItemsSource)
+                ?.DisposeWith(disposables);
+
+            this.OneWayBind(this.ViewModel, vm => vm.AddableTags, v => v.AddableTagsComboBox.ItemsSource)
+                ?.DisposeWith(disposables);
+
+            this.AddableTagsComboBox.Events()
+                .SelectionChanged
+                .Select(e => e.AddedItems.OfType<AddableTagViewModel>().FirstOrDefault())
+                .WhereNotNull()
+                .Select(vm => vm.Tag)
+                .InvokeCommand(this.ViewModel!.AddTag)
+                ?.DisposeWith(disposables);
+
+            this.ViewModel!.AddableTags
+                .ToObservableChangeSet()
+                .Count()
+                .StartWith(this.ViewModel.AddableTags.Count)
+                .Select(count => count > 0)
+                .BindTo(this, v => v.AddableTagsComboBox.IsEnabled)
                 ?.DisposeWith(disposables);
         }
 

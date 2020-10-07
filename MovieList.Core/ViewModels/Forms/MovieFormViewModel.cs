@@ -28,11 +28,12 @@ namespace MovieList.Core.ViewModels.Forms
         public MovieFormViewModel(
             Movie movie,
             ReadOnlyObservableCollection<Kind> kinds,
+            ReadOnlyObservableCollection<Tag> tags,
             string fileName,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null,
             IEntityService<Movie>? movieService = null)
-            : base(movie.Entry, resourceManager, scheduler)
+            : base(movie.Entry, tags, resourceManager, scheduler)
         {
             this.Movie = movie;
             this.Kinds = kinds;
@@ -92,6 +93,9 @@ namespace MovieList.Core.ViewModels.Forms
         protected override ICollection<Title> ItemTitles
             => this.Movie.Titles;
 
+        protected override IEnumerable<Tag> ItemTags
+            => this.Movie.Tags;
+
         protected override string NewItemKey
             => "NewMovie";
 
@@ -120,6 +124,13 @@ namespace MovieList.Core.ViewModels.Forms
                     this.Movie.RottenTomatoesLink = this.RottenTomatoesLink.NullIfEmpty();
                     this.Movie.PosterUrl = this.PosterUrl.NullIfEmpty();
 
+                    this.Movie.Tags.Clear();
+
+                    foreach (var tag in this.TagsSource.Items)
+                    {
+                        this.Movie.Tags.Add(tag);
+                    }
+
                     return this.Movie;
                 })
                 .DoAsync(this.movieService.SaveInTaskPool);
@@ -143,6 +154,9 @@ namespace MovieList.Core.ViewModels.Forms
 
         protected override void AttachTitle(Title title)
             => title.Movie = this.Movie;
+
+        protected override bool IsTagApplicable(Tag tag)
+            => tag.IsApplicableToMovies;
 
         private void InitializeValueDependencies()
         {

@@ -43,6 +43,7 @@ namespace MovieList.Core.ViewModels
         {
             this.FileName = fileName;
             this.Kinds = kinds;
+            this.Tags = tags;
 
             this.List = new ListViewModel(fileName, kinds, tags);
 
@@ -87,6 +88,7 @@ namespace MovieList.Core.ViewModels
             => this.franchiseAddableItems;
 
         public ReadOnlyObservableCollection<Kind> Kinds { get; }
+        public ReadOnlyObservableCollection<Tag> Tags { get; }
 
         [Reactive]
         public ReactiveObject SideViewModel { get; private set; }
@@ -181,7 +183,7 @@ namespace MovieList.Core.ViewModels
         {
             this.Log().Debug($"Creating a form for movie: {movie}");
 
-            var form = new MovieFormViewModel(movie, this.Kinds, this.FileName);
+            var form = new MovieFormViewModel(movie, this.Kinds, this.Tags, this.FileName);
 
             this.SubscribeToCommonCommands(
                 form, this.List.RemoveMovie, m => new MovieListItem(m), e => e.Movie = form.Movie);
@@ -193,7 +195,7 @@ namespace MovieList.Core.ViewModels
         {
             this.Log().Debug($"Creating a form for series: {series}");
 
-            var form = new SeriesFormViewModel(series, this.Kinds, this.FileName);
+            var form = new SeriesFormViewModel(series, this.Kinds, this.Tags, this.FileName);
 
             this.SubscribeToCommonCommands(
                 form, this.List.RemoveSeries, s => new SeriesListItem(s), e => e.Series = form.Series);
@@ -220,7 +222,7 @@ namespace MovieList.Core.ViewModels
         {
             this.Log().Debug($"Creating a form for miniseries: {series}");
 
-            var form = new MiniseriesFormViewModel(series, this.Kinds, this.FileName);
+            var form = new MiniseriesFormViewModel(series, this.Kinds, this.Tags, this.FileName);
 
             this.SubscribeToCommonCommands(
                 form, this.List.RemoveSeries, s => new SeriesListItem(s), e => e.Series = form.Series);
@@ -237,7 +239,7 @@ namespace MovieList.Core.ViewModels
         {
             this.Log().Debug($"Creating a form for franchise: {franchise}");
 
-            var form = new FranchiseFormViewModel(franchise, this.FileName, this.FranchiseAddableItems);
+            var form = new FranchiseFormViewModel(franchise, this.FileName, this.FranchiseAddableItems, this.Tags);
             var attachedEntries = new List<FranchiseEntry>();
             var detachedEntries = new List<FranchiseEntry>();
 

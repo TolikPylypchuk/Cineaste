@@ -45,12 +45,13 @@ namespace MovieList.Core.ViewModels.Forms
         public SeriesFormViewModel(
             Series series,
             ReadOnlyObservableCollection<Kind> kinds,
+            ReadOnlyObservableCollection<Tag> tags,
             string fileName,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null,
             IEntityService<Series>? seriesService = null,
             ISettingsService? settingsService = null)
-            : base(series.Entry, resourceManager, scheduler)
+            : base(series.Entry, tags, resourceManager, scheduler)
         {
             this.Series = series;
             this.Kinds = kinds;
@@ -174,6 +175,9 @@ namespace MovieList.Core.ViewModels.Forms
         protected override ICollection<Title> ItemTitles
             => this.Series.Titles;
 
+        protected override IEnumerable<Tag> ItemTags
+            => this.Series.Tags;
+
         protected override string NewItemKey
             => "NewSeries";
 
@@ -234,6 +238,13 @@ namespace MovieList.Core.ViewModels.Forms
                     this.Series.RottenTomatoesLink = this.RottenTomatoesLink.NullIfEmpty();
                     this.Series.PosterUrl = this.PosterUrl.NullIfEmpty();
 
+                    this.Series.Tags.Clear();
+
+                    foreach (var tag in this.TagsSource.Items)
+                    {
+                        this.Series.Tags.Add(tag);
+                    }
+
                     return this.Series;
                 })
                 .DoAsync(this.seriesService.SaveInTaskPool);
@@ -264,6 +275,9 @@ namespace MovieList.Core.ViewModels.Forms
 
         protected override void AttachTitle(Title title)
             => title.Series = this.Series;
+
+        protected override bool IsTagApplicable(Tag tag)
+            => tag.IsApplicableToSeries;
 
         private void OnAddSeason()
         {

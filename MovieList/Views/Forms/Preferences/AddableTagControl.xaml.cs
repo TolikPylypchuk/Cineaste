@@ -6,11 +6,11 @@ using ReactiveUI;
 
 namespace MovieList.Views.Forms.Preferences
 {
-    public abstract class AddableImpliedTagControlBase : ReactiveUserControl<AddableImpliedTagViewModel> { }
+    public abstract class AddableTagControlBase : ReactiveUserControl<AddableTagViewModel> { }
 
-    public partial class AddableImpliedTagControl : AddableImpliedTagControlBase
+    public partial class AddableTagControl : AddableTagControlBase
     {
-        public AddableImpliedTagControl()
+        public AddableTagControl()
         {
             this.InitializeComponent();
 

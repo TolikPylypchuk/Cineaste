@@ -28,7 +28,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         private readonly SourceList<TagModel> addableImpliedTagsSource = new();
 
         private readonly ReadOnlyObservableCollection<TagItemViewModel> impliedTags;
-        private readonly ReadOnlyObservableCollection<AddableImpliedTagViewModel> addableImpliedTags;
+        private readonly ReadOnlyObservableCollection<AddableTagViewModel> addableImpliedTags;
 
         public TagFormViewModel(
             TagModel tagModel,
@@ -52,8 +52,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
                 .Subscribe();
 
             this.addableImpliedTagsSource.Connect()
-                .Transform(tag => new AddableImpliedTagViewModel(tag))
-                .Sort(SortExpressionComparer<AddableImpliedTagViewModel>
+                .Transform(tag => new AddableTagViewModel(tag))
+                .Sort(SortExpressionComparer<AddableTagViewModel>
                     .Ascending(vm => vm.Category)
                     .ThenByAscending(vm => vm.Name))
                 .AutoRefresh(vm => vm.Name)
@@ -133,7 +133,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         public ReadOnlyObservableCollection<TagItemViewModel> ImpliedTags
             => this.impliedTags;
 
-        public ReadOnlyObservableCollection<AddableImpliedTagViewModel> AddableImpliedTags
+        public ReadOnlyObservableCollection<AddableTagViewModel> AddableImpliedTags
             => this.addableImpliedTags;
 
         public string FormTitle { [ObservableAsProperty] get; } = String.Empty;

@@ -739,4 +739,7 @@ This will detach all entries without deleting them.</value>
   <data name="ValidationNameNotUnique" xml:space="preserve">
     <value>The name is not unique</value>
   </data>
+  <data name="AddTag" xml:space="preserve">
+    <value>Add tag</value>
+  </data>
 </root>

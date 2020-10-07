@@ -52,17 +52,6 @@
                         Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="8" DockPanel.Dock="Bottom" />
 
                 <StackPanel Margin="16 8 16 0">
-                    <StackPanel.Resources>
-                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignIconButton}">
-                            <Setter Property="Margin" Value="8 8 0 0" />
-                            <Setter Property="Padding" Value="0" />
-                            <Setter Property="Width" Value="20" />
-                            <Setter Property="Height" Value="20" />
-                            <Setter Property="HorizontalAlignment" Value="Right" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </StackPanel.Resources>
-
                     <Image x:Name="Poster" />
 
                     <WrapPanel Margin="0 8 0 0" HorizontalAlignment="Center">
@@ -152,6 +141,25 @@
 
                     <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate PosterUrl}" />
+
+                    <TextBlock Text="{l:Translate Tags}" Style="{StaticResource MaterialDesignBody2TextBlock}"
+                               Margin="0 8 0 0" />
+
+                    <ItemsControl x:Name="Tags" Margin="0 4">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+
+                    <ComboBox x:Name="AddableTagsComboBox" Margin="0 4" m:HintAssist.Hint="{l:Translate AddTag}">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
 
                     <Grid Margin="0 8">
                         <Grid.ColumnDefinitions>
