@@ -50,11 +50,11 @@ namespace MovieList.Core.ViewModels.Forms.Base
 
             this.tagsSource.Connect()
                 .Transform(this.CreateTagItem)
+                .AutoRefresh(vm => vm.Category)
+                .AutoRefresh(vm => vm.Name)
                 .Sort(SortExpressionComparer<TagItemViewModel>
                     .Ascending(vm => vm.Category)
                     .ThenByAscending(vm => vm.Name))
-                .AutoRefresh(vm => vm.Category)
-                .AutoRefresh(vm => vm.Name)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.tagItems)
                 .DisposeMany()
