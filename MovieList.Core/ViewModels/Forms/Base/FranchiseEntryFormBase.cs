@@ -63,7 +63,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .DisposeMany()
                 .Subscribe();
 
-            this.AddableTagsSource.AddOrUpdate(tags.Where(tag => tag.IsApplicableToMovies));
+            this.AddableTagsSource.AddOrUpdate(tags.Where(this.IsTagApplicable));
 
             this.tags.ActOnEveryObject(
                 onAdd: vm => this.AddableTagsSource.Remove(vm.Tag),
