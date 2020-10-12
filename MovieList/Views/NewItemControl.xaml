@@ -3,7 +3,7 @@
                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                           xmlns:local="clr-namespace:MovieList.Views"
                           xmlns:l="clr-namespace:MovieList.Localization">
-    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center">
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
         <StackPanel.Resources>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">
                 <Setter Property="Height" Value="50" />

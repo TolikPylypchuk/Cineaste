@@ -10,8 +10,10 @@ using System.Reactive.Subjects;
 using DynamicData;
 
 using MovieList.Core.Data;
+using MovieList.Core.Data.Models;
 using MovieList.Core.DialogModels;
 using MovieList.Core.ListItems;
+using MovieList.Core.ViewModels.Filters;
 using MovieList.Core.ViewModels.Forms;
 using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
@@ -45,7 +47,8 @@ namespace MovieList.Core.ViewModels
             this.Kinds = kinds;
             this.Tags = tags;
 
-            this.List = new ListViewModel(fileName, kinds, tags);
+            this.FilterViewModel = new ListFilterViewModel(tags);
+            this.List = new ListViewModel(fileName, this.FilterViewModel.ApplyFilter, kinds, tags);
 
             this.franchiseAddableItemsSource.Connect()
                 .Bind(out this.franchiseAddableItems)
@@ -81,6 +84,7 @@ namespace MovieList.Core.ViewModels
         }
         
         public ListViewModel List { get; }
+        public ListFilterViewModel FilterViewModel { get; }
 
         public string FileName { get; }
 
@@ -120,6 +124,7 @@ namespace MovieList.Core.ViewModels
                         {
                             this.ClearSubscriptions();
                             this.SideViewModel = this.CreateSideViewModel(item);
+                            this.FilterViewModel.IsAvailable = item == null;
                         })
                         .Discard());
         }
@@ -307,7 +312,7 @@ namespace MovieList.Core.ViewModels
                 ? Observable.Return(Unit.Default)
                 : entries
                     .Select(entry => this.List.AddOrUpdate
-                        .Execute(this.List.EntryToListItem(entry))
+                        .Execute(entry.ToListItem())
                         .Do(_ => this.RemoveSameEntry(
                             this.franchiseAddableItemsSource.Items,
                             entry,
@@ -321,7 +326,7 @@ namespace MovieList.Core.ViewModels
                 : entries
                     .Do(this.ClearEntryConnection)
                     .Select(entry => this.List.AddOrUpdate
-                        .Execute(this.List.EntryToListItem(entry))
+                        .Execute(entry.ToListItem())
                         .Do(_ => this.franchiseAddableItemsSource.Add(entry)))
                     .ForkJoin()
                     .Discard();
@@ -543,7 +548,7 @@ namespace MovieList.Core.ViewModels
 
         private IObservable<Unit> GoToFranchiseEntry(FranchiseEntry entry)
         {
-            var listItem = this.List.EntryToListItem(entry);
+            var listItem = entry.ToListItem();
 
             this.SideViewModel = this.CreateSideViewModel(listItem);
 

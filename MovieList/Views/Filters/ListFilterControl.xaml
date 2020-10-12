@@ -1,0 +1,22 @@
+<local:ListFilterControlBase x:Class="MovieList.Views.Filters.ListFilterControl"
+                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:local="clr-namespace:MovieList.Views.Filters"
+                             xmlns:rx="http://reactiveui.net"
+                             xmlns:l="clr-namespace:MovieList.Localization">
+    <DockPanel>
+        <TextBlock Text="{l:Translate Filter}" DockPanel.Dock="Top" Margin="8"
+                   Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <Button x:Name="ApplyFilterButton" Content="{l:Translate ApplyFilter, ToUpper=True}" Margin="8"
+                    HorizontalAlignment="Center" />
+            <Button x:Name="ClearFilterButton" Content="{l:Translate ClearFilter, ToUpper=True}" Margin="8"
+                    HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
+        </StackPanel>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+            <rx:ViewModelViewHost x:Name="FilterItemViewHost" Margin="4" />
+        </ScrollViewer>
+    </DockPanel>
+</local:ListFilterControlBase>

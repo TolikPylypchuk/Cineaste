@@ -19,6 +19,10 @@
         </Grid.ColumnDefinitions>
 
         <rx:ViewModelViewHost x:Name="ListViewHost" Grid.Column="0" />
-        <rx:ViewModelViewHost x:Name="SideViewHost" Grid.Column="1" Margin="2" />
+
+        <DockPanel Grid.Column="1" VerticalAlignment="Stretch">
+            <rx:ViewModelViewHost x:Name="SideViewHost" DockPanel.Dock="Top" Margin="2" />
+            <rx:ViewModelViewHost x:Name="FilterViewHost" Margin="2" />
+        </DockPanel>
     </Grid>
 </local:FileMainContentControlBase>

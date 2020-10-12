@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
+using MovieList.Core.ListItems;
 using MovieList.Data.Models;
 
 using static MovieList.Data.Constants;
@@ -146,5 +147,13 @@ namespace MovieList.Core.Data.Models
                 ? "-"
                 : startYear == endYear ? startYear.ToString() : $"{startYear}-{endYear}";
         }
+
+        public static ListItem ToListItem(this FranchiseEntry entry)
+            => entry.Movie != null
+                ? new MovieListItem(entry.Movie)
+                : entry.Series != null
+                    ? (ListItem)new SeriesListItem(entry.Series)
+                    : new FranchiseListItem(entry.Franchise!);
+
     }
 }

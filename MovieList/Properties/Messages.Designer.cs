@@ -250,6 +250,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply filter.
+        /// </summary>
+        public static string ApplyFilter {
+            get {
+                return ResourceManager.GetString("ApplyFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to April.
         /// </summary>
         public static string April {
@@ -291,6 +300,15 @@ namespace MovieList.Properties {
         public static string Channel {
             get {
                 return ResourceManager.GetString("Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear filter.
+        /// </summary>
+        public static string ClearFilter {
+            get {
+                return ResourceManager.GetString("ClearFilter", resourceCulture);
             }
         }
         
@@ -760,6 +778,195 @@ namespace MovieList.Properties {
         public static string FileExtensionDescription {
             get {
                 return ResourceManager.GetString("FileExtensionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is standalone.
+        /// </summary>
+        public static string FilterDescriptionStandalone {
+            get {
+                return ResourceManager.GetString("FilterDescriptionStandalone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tag category.
+        /// </summary>
+        public static string FilterDescriptionTagCategory {
+            get {
+                return ResourceManager.GetString("FilterDescriptionTagCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string FilterDescriptionTags {
+            get {
+                return ResourceManager.GetString("FilterDescriptionTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string FilterDescriptionTitle {
+            get {
+                return ResourceManager.GetString("FilterDescriptionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string FilterDescriptionYear {
+            get {
+                return ResourceManager.GetString("FilterDescriptionYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Between.
+        /// </summary>
+        public static string FilterOperationBetween {
+            get {
+                return ResourceManager.GetString("FilterOperationBetween", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ends with.
+        /// </summary>
+        public static string FilterOperationEndsWith {
+            get {
+                return ResourceManager.GetString("FilterOperationEndsWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclude.
+        /// </summary>
+        public static string FilterOperationExclude {
+            get {
+                return ResourceManager.GetString("FilterOperationExclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Greater than.
+        /// </summary>
+        public static string FilterOperationGreaterThan {
+            get {
+                return ResourceManager.GetString("FilterOperationGreaterThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Have category.
+        /// </summary>
+        public static string FilterOperationHaveCategory {
+            get {
+                return ResourceManager.GetString("FilterOperationHaveCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By.
+        /// </summary>
+        public static string FilterOperationHint {
+            get {
+                return ResourceManager.GetString("FilterOperationHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include.
+        /// </summary>
+        public static string FilterOperationInclude {
+            get {
+                return ResourceManager.GetString("FilterOperationInclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is.
+        /// </summary>
+        public static string FilterOperationIs {
+            get {
+                return ResourceManager.GetString("FilterOperationIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Less than.
+        /// </summary>
+        public static string FilterOperationLessThan {
+            get {
+                return ResourceManager.GetString("FilterOperationLessThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None of category.
+        /// </summary>
+        public static string FilterOperationNoneOfCategory {
+            get {
+                return ResourceManager.GetString("FilterOperationNoneOfCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starts with.
+        /// </summary>
+        public static string FilterOperationStartsWith {
+            get {
+                return ResourceManager.GetString("FilterOperationStartsWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        public static string FilterTypeHint {
+            get {
+                return ResourceManager.GetString("FilterTypeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standalone.
+        /// </summary>
+        public static string FilterTypeStandalone {
+            get {
+                return ResourceManager.GetString("FilterTypeStandalone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string FilterTypeTags {
+            get {
+                return ResourceManager.GetString("FilterTypeTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string FilterTypeTitle {
+            get {
+                return ResourceManager.GetString("FilterTypeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string FilterTypeYear {
+            get {
+                return ResourceManager.GetString("FilterTypeYear", resourceCulture);
             }
         }
         

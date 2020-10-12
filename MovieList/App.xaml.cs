@@ -109,6 +109,8 @@ namespace MovieList
                 new SeriesReleaseStatusConverter(),
                 new SeasonWatchStatusConverter(),
                 new SeasonReleaseStatusConverter(),
+                new FilterTypeConverter(),
+                new FilterOperationConverter(),
                 new BrushToHexConverter(),
                 new ColorToBrushConverter(),
                 new BooleanToVisibilityTypeConverter());

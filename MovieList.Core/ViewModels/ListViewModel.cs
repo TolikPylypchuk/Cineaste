@@ -9,6 +9,7 @@ using DynamicData;
 
 using MovieList.Core.Comparers;
 using MovieList.Core.Data;
+using MovieList.Core.Data.Models;
 using MovieList.Core.ListItems;
 using MovieList.Data;
 using MovieList.Data.Models;
@@ -29,6 +30,7 @@ namespace MovieList.Core.ViewModels
 
         public ListViewModel(
             string fileName,
+            IObservable<Func<ListItem, bool>> listFilter,
             ReadOnlyObservableCollection<Kind> kinds,
             ReadOnlyObservableCollection<Tag> tags,
             Settings? settings = null,
@@ -45,6 +47,7 @@ namespace MovieList.Core.ViewModels
 
             this.source.Connect()
                 .Filter(item => !String.IsNullOrEmpty(item.Title))
+                .Filter(listFilter.StartWith(item => true))
                 .AutoRefresh(item => item.DisplayNumber)
                 .AutoRefresh(item => item.Title)
                 .AutoRefresh(item => item.OriginalTitle)
@@ -88,13 +91,6 @@ namespace MovieList.Core.ViewModels
         public ReactiveCommand<Series, Unit> RemoveSeries { get; }
         public ReactiveCommand<Franchise, Unit> RemoveFranchise { get; }
 
-        public ListItem EntryToListItem(FranchiseEntry entry)
-            => entry.Movie != null
-                ? new MovieListItem(entry.Movie)
-                : entry.Series != null
-                    ? (ListItem)new SeriesListItem(entry.Series)
-                    : new FranchiseListItem(entry.Franchise!);
-
         private bool OnSelectItem(ListItem? item)
         {
             bool isSame = this.SelectedItem?.Item.Id == item?.Id;
@@ -117,7 +113,7 @@ namespace MovieList.Core.ViewModels
                     list.AddOrUpdate(new FranchiseListItem(franchise));
 
                     franchise.Entries
-                        .Select(this.EntryToListItem)
+                        .Select(entry => entry.ToListItem())
                         .ForEach(list.AddOrUpdate);
 
                     this.UpdateParentFranchise(franchise, list);
@@ -181,7 +177,7 @@ namespace MovieList.Core.ViewModels
 
                 foreach (var entry in franchise.Entries)
                 {
-                    list.AddOrUpdate(this.EntryToListItem(entry));
+                    list.AddOrUpdate(entry.ToListItem());
                 }
             });
 
@@ -195,7 +191,7 @@ namespace MovieList.Core.ViewModels
             franchise.Entries
                 .OrderBy(entry => entry.SequenceNumber)
                 .SkipWhile(entry => entry.SequenceNumber < franchiseEntry.SequenceNumber)
-                .Select(this.EntryToListItem)
+                .Select(entry => entry.ToListItem())
                 .ForEach(list.AddOrUpdate);
 
             this.UpdateParentFranchise(franchise, list);
@@ -221,7 +217,7 @@ namespace MovieList.Core.ViewModels
                 .SkipWhile(entry => entry.SequenceNumber <= franchise.Entry.SequenceNumber)
                 .TakeWhile(entry => entry.Franchise != null && entry.Franchise.MergeDisplayNumbers)
                 .SelectMany(entry => entry.Franchise!.Entries)
-                .Select(this.EntryToListItem)
+                .Select(entry => entry.ToListItem())
                 .ForEach(list.AddOrUpdate);
         }
     }
