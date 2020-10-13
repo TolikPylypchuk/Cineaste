@@ -7,6 +7,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Resources;
 
 using DynamicData;
@@ -81,16 +82,19 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.CategoryRule = this.ValidationRule(vm => vm.Category, notEmpty, "CategoryEmpty");
             this.ColorRule = this.ValidationRuleForColor(vm => vm.Color);
 
-            var nameAndCategoryAreUnique = Observable.CombineLatest(
+            var nameAndCategoryAreUnique = new BehaviorSubject<bool>(true);
+
+            Observable.CombineLatest(
                 this.WhenAnyValue(vm => vm.Name),
                 this.WhenAnyValue(vm => vm.Category),
                 (name, category) => (Name: name, Category: category))
                 .Select(item => !allTagsList.Any(tag =>
-                    tag != this.TagModel && tag.Name == item.Name && tag.Category == item.Category));
+                    tag != this.TagModel && tag.Name == item.Name && tag.Category == item.Category))
+                .Subscribe(nameAndCategoryAreUnique);
 
             this.UniqueRule = this.ValidationRule(
-                _ => nameAndCategoryAreUnique,
-                (vm, isValid) => isValid
+                vm => nameAndCategoryAreUnique,
+                vm => nameAndCategoryAreUnique.Value
                     ? String.Empty
                     : String.Format(
                         this.ResourceManager.GetString("ValidationTagNotUniqueFormat") ?? String.Empty,

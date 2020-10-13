@@ -32,14 +32,17 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.Kind = kind;
             this.CopyProperties();
 
-            var isNameValid = Observable.CombineLatest(
+            var isNameValid = new BehaviorSubject<bool>(true);
+
+            Observable.CombineLatest(
                 allKinds,
                 this.WhenAnyValue(vm => vm.Name),
-                (kinds, name) => !String.IsNullOrWhiteSpace(name) && kinds.Count(k => k.Name == name) == 1);
+                (kinds, name) => !String.IsNullOrWhiteSpace(name) && kinds.Count(k => k.Name == name) == 1)
+                .Subscribe(isNameValid);
 
             this.NameRule = this.ValidationRule(
                 vm => isNameValid,
-                (vm, isValid) => isValid
+                vm => isNameValid.Value
                     ? String.Empty
                     : String.IsNullOrWhiteSpace(vm.Name) ? "NameEmpty" : "NameNotUnique");
 

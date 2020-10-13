@@ -168,7 +168,8 @@
                 <TextBlock Text="{l:Translate OtherPreferences}" Margin="8 16"
                            Style="{StaticResource MaterialDesignHeadline4TextBlock}" />
 
-                <CheckBox x:Name="ShowRecentFilesCheckBox" Margin="8" Content="{l:Translate ShowRecentFiles}" />
+                <CheckBox x:Name="ShowRecentFilesCheckBox" Margin="8" Content="{l:Translate ShowRecentFiles}"
+                          HorizontalAlignment="Left" />
 
                 <TextBlock Text="{l:Translate AdvancedPreferences}" Margin="8 16"
                            Style="{StaticResource MaterialDesignHeadline4TextBlock}" />

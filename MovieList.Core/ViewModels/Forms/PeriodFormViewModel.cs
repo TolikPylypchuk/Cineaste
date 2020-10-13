@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Resources;
 
 using MovieList.Core.ViewModels.Forms.Base;
@@ -42,7 +43,9 @@ namespace MovieList.Core.ViewModels.Forms
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
-            var periodValid = this.WhenAnyValue(
+            var periodValid = new BehaviorSubject<bool>(true);
+
+            this.WhenAnyValue(
                     vm => vm.StartMonth,
                     vm => vm.StartYear,
                     vm => vm.EndMonth,
@@ -52,11 +55,12 @@ namespace MovieList.Core.ViewModels.Forms
                     Int32.TryParse(values.StartYear, out int startYear) &&
                     Int32.TryParse(values.EndYear, out int endYear) &&
                     (startYear < endYear || startYear == endYear && values.StartMonth <= values.EndMonth))
-                .ObserveOn(RxApp.MainThreadScheduler);
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(periodValid);
 
             this.PeriodRule = this.ValidationRule(
-                _ => periodValid.StartWith(true),
-                (vm, isValid) => isValid
+                vm => periodValid,
+                vm => periodValid.Value
                     ? String.Empty
                     : vm.ResourceManager.GetString("ValidationPeriodInvalid") ?? String.Empty);
 

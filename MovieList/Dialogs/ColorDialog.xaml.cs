@@ -41,7 +41,7 @@ namespace MovieList.Dialogs
                         this.ViewModel, vm => vm.CancelText, v => v.CancelButton.Content, text => text?.ToUpper())
                     ?.DisposeWith(disposables);
 
-                this.ViewModel.IsValid()
+                this.ViewModel!.IsValid()
                     ?.BindTo(this, v => v.ConfirmButton.IsEnabled)
                     ?.DisposeWith(disposables);
             });

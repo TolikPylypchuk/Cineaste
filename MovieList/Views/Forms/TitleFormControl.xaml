@@ -7,7 +7,7 @@
     <DockPanel>
         <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
                 VerticalAlignment="Center" Padding="0" Width="20" Height="20" Margin="8 0 0 0"
-                Foreground="{StaticResource SecondaryAccentBrush}">
+                Foreground="{StaticResource SecondaryHueMidBrush}">
             <m:PackIcon Kind="CloseCircleOutline" Margin="0" Width="20" Height="20" />
         </Button>
 
