@@ -25,12 +25,6 @@ namespace MovieList.Views
 
                 this.OneWayBind(this.ViewModel, vm => vm.SideViewModel, v => v.SideViewHost.ViewModel)
                     ?.DisposeWith(disposables);
-
-                this.OneWayBind(this.ViewModel, vm => vm.FilterViewModel, v => v.FilterViewHost.ViewModel)
-                    ?.DisposeWith(disposables);
-
-                this.OneWayBind(this.ViewModel, vm => vm.FilterViewModel.IsAvailable, v => v.FilterViewHost.Visibility)
-                    ?.DisposeWith(disposables);
             });
         }
     }

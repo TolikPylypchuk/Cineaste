@@ -926,6 +926,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} to.
+        /// </summary>
+        public static string FilterRangeEndDescriptionFormat {
+            get {
+                return ResourceManager.GetString("FilterRangeEndDescriptionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} from.
+        /// </summary>
+        public static string FilterRangeStartDescriptionFormat {
+            get {
+                return ResourceManager.GetString("FilterRangeStartDescriptionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter.
         /// </summary>
         public static string FilterTypeHint {

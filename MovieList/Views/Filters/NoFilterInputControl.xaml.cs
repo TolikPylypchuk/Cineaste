@@ -6,11 +6,11 @@ using ReactiveUI;
 
 namespace MovieList.Views.Filters
 {
-    public abstract class BooleanFilterInputControlBase : ReactiveUserControl<BooleanFilterInputViewModel> { }
+    public abstract class NoFilterInputControlBase : ReactiveUserControl<NoFilterInputViewModel> { }
 
-    public partial class BooleanFilterInputControl : BooleanFilterInputControlBase
+    public partial class NoFilterInputControl : NoFilterInputControlBase
     {
-        public BooleanFilterInputControl()
+        public NoFilterInputControl()
         {
             this.InitializeComponent();
 

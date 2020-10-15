@@ -13,7 +13,6 @@ using MovieList.Core.Data;
 using MovieList.Core.Data.Models;
 using MovieList.Core.DialogModels;
 using MovieList.Core.ListItems;
-using MovieList.Core.ViewModels.Filters;
 using MovieList.Core.ViewModels.Forms;
 using MovieList.Core.ViewModels.Forms.Base;
 using MovieList.Data.Models;
@@ -47,8 +46,14 @@ namespace MovieList.Core.ViewModels
             this.Kinds = kinds;
             this.Tags = tags;
 
-            this.FilterViewModel = new ListFilterViewModel(tags);
-            this.List = new ListViewModel(fileName, this.FilterViewModel.ApplyFilter, kinds, tags);
+            this.SelectItem = ReactiveCommand.CreateFromObservable<ListItem?, Unit>(
+                this.OnSelectItem, this.WhenAnyValue(vm => vm.CanSelectItem));
+
+            this.TunnelSave = ReactiveCommand.Create(() => { });
+            this.BubbleSave = ReactiveCommand.Create(() => { });
+
+            this.SideViewModel = this.ListActions = this.CreateListActionsViewModel();
+            this.List = new ListViewModel(fileName, this.ListActions.Filter.ApplyFilter, kinds, tags);
 
             this.franchiseAddableItemsSource.Connect()
                 .Bind(out this.franchiseAddableItems)
@@ -63,14 +68,6 @@ namespace MovieList.Core.ViewModels
 
             this.areUnsavedChangesPresentSubject.ToPropertyEx(this, vm => vm.AreUnsavedChangesPresent);
 
-            this.SelectItem = ReactiveCommand.CreateFromObservable<ListItem?, Unit>(
-                this.OnSelectItem, this.WhenAnyValue(vm => vm.CanSelectItem));
-
-            this.TunnelSave = ReactiveCommand.Create(() => { });
-            this.BubbleSave = ReactiveCommand.Create(() => { });
-
-            this.SideViewModel = this.CreateNewItemViewModel();
-
             this.List.PreviewSelectItem
                 .Select(vm => vm.Item)
                 .InvokeCommand(this.SelectItem);
@@ -78,13 +75,12 @@ namespace MovieList.Core.ViewModels
             this.BubbleSave.InvokeCommand(this.List.ForceSelectedItem);
 
             this.WhenAnyValue(vm => vm.SideViewModel)
-                .OfType<NewItemViewModel>()
+                .OfType<ListActionsViewModel>()
                 .Select(_ => false)
                 .Subscribe(this.areUnsavedChangesPresentSubject);
         }
         
         public ListViewModel List { get; }
-        public ListFilterViewModel FilterViewModel { get; }
 
         public string FileName { get; }
 
@@ -93,6 +89,8 @@ namespace MovieList.Core.ViewModels
 
         public ReadOnlyObservableCollection<Kind> Kinds { get; }
         public ReadOnlyObservableCollection<Tag> Tags { get; }
+
+        public ListActionsViewModel ListActions { get; private set; }
 
         [Reactive]
         public ReactiveObject SideViewModel { get; private set; }
@@ -124,7 +122,7 @@ namespace MovieList.Core.ViewModels
                         {
                             this.ClearSubscriptions();
                             this.SideViewModel = this.CreateSideViewModel(item);
-                            this.FilterViewModel.IsAvailable = item == null;
+                            this.ListActions.Filter.IsAvailable = item == null;
                         })
                         .Discard());
         }
@@ -133,7 +131,7 @@ namespace MovieList.Core.ViewModels
             => item switch
             {
                 null =>
-                    this.CreateNewItemViewModel(),
+                    this.ListActions,
                 MovieListItem movieItem =>
                     this.CreateMovieForm(movieItem.Movie),
                 SeriesListItem seriesItem when !seriesItem.Series.IsMiniseries =>
@@ -146,11 +144,9 @@ namespace MovieList.Core.ViewModels
                     throw new NotSupportedException("List item type not supported")
             };
 
-        private NewItemViewModel CreateNewItemViewModel()
+        private ListActionsViewModel CreateListActionsViewModel()
         {
-            var viewModel = new NewItemViewModel();
-
-            this.ClearSubscriptions();
+            var viewModel = new ListActionsViewModel(this.Tags);
 
             viewModel.AddNewMovie
                 .Select(_ => new Movie
@@ -164,8 +160,7 @@ namespace MovieList.Core.ViewModels
                     Kind = this.Kinds.First()
                 })
                 .Select(movie => new MovieListItem(movie))
-                .InvokeCommand<ListItem>(this.SelectItem)
-                .DisposeWith(this.sideViewModelSubscriptions);
+                .InvokeCommand<ListItem>(this.SelectItem);
 
             viewModel.AddNewSeries
                 .Select(_ => new Series
@@ -178,8 +173,7 @@ namespace MovieList.Core.ViewModels
                     Kind = this.Kinds.First()
                 })
                 .Select(series => new SeriesListItem(series))
-                .InvokeCommand<ListItem>(this.SelectItem)
-                .DisposeWith(this.sideViewModelSubscriptions);
+                .InvokeCommand<ListItem>(this.SelectItem);
 
             return viewModel;
         }

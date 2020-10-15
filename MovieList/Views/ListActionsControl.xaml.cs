@@ -6,11 +6,11 @@ using ReactiveUI;
 
 namespace MovieList.Views
 {
-    public abstract class NewItemControlBase : ReactiveUserControl<NewItemViewModel> { }
+    public abstract class ListActionsControlBase : ReactiveUserControl<ListActionsViewModel> { }
 
-    public partial class NewItemControl : NewItemControlBase
+    public partial class ListActionsControl : ListActionsControlBase
     {
-        public NewItemControl()
+        public ListActionsControl()
         {
             this.InitializeComponent();
 
@@ -24,6 +24,9 @@ namespace MovieList.Views
                     ?.DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.AddNewSeries, v => v.AddNewSeriesButton)
+                    ?.DisposeWith(disposables);
+
+                this.OneWayBind(this.ViewModel!, vm => vm.Filter, v => v.FilterViewHost.ViewModel)
                     ?.DisposeWith(disposables);
             });
         }

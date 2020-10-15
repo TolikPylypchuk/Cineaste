@@ -8,5 +8,7 @@ namespace MovieList.Core
         public const string TaskPoolKey = "Taskpool";
 
         public const string ListFileExtension = "mlist";
+
+        public const int DefaultFilterYearValue = 2000;
     }
 }

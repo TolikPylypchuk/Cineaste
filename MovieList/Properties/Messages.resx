@@ -811,4 +811,10 @@ This will detach all entries without deleting them.</value>
   <data name="ClearFilter" xml:space="preserve">
     <value>Clear filter</value>
   </data>
+  <data name="FilterRangeEndDescriptionFormat" xml:space="preserve">
+    <value>{0} to</value>
+  </data>
+  <data name="FilterRangeStartDescriptionFormat" xml:space="preserve">
+    <value>{0} from</value>
+  </data>
 </root>
