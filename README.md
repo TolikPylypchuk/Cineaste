@@ -23,13 +23,16 @@ I've been working on this app for a year and a half (as of July 2020) and it's n
 0.1, because now the app is at least usable, although it lacks lots of features yet. Versions 0.x should be considered
 pre-release and as such probably shouldn't be used in general since there will be breaking changes.
 
-I'm actively working on the app, although sometimes a take breaks to work on other projects, so expect more versions
+Currently I'm working on version 0.2 which will include the ability to search/filter/sort the list in various ways.
+Also, adding tags to movies and series will be available, to make searching/filtering more powerful.
+
+I'm actively working on the app, although sometimes I take breaks to work on other projects, so expect more versions
 soon.
 
 ## Building from Source
 
-If you want to build your own version of this app, you simply need
-[.NET Core 3.1](https://dotnet.microsoft.com/download). That's it, there are no special prerequisites.
+If you want to build your own version of this app, you simply need [.NET 5](https://dotnet.microsoft.com/download).
+That's it, there are no special prerequisites.
 
 Run the `Publish-App` script to create a zipped app which you can then extract to anywhere.
 
