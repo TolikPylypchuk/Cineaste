@@ -43,26 +43,22 @@ namespace MovieList.Core.ViewModels.Forms
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
-            var periodValid = new BehaviorSubject<bool>(true);
-
-            this.WhenAnyValue(
+            var periodValid =
+                this.WhenAnyValue(
                     vm => vm.StartMonth,
                     vm => vm.StartYear,
                     vm => vm.EndMonth,
                     vm => vm.EndYear)
-                .Throttle(TimeSpan.FromMilliseconds(250), this.Scheduler)
-                .Select(((int StartMonth, string StartYear, int EndMonth, string EndYear) values) =>
-                    Int32.TryParse(values.StartYear, out int startYear) &&
-                    Int32.TryParse(values.EndYear, out int endYear) &&
-                    (startYear < endYear || startYear == endYear && values.StartMonth <= values.EndMonth))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(periodValid);
+                    .Throttle(TimeSpan.FromMilliseconds(250), this.Scheduler)
+                    .Select(((int StartMonth, string StartYear, int EndMonth, string EndYear) values) =>
+                        Int32.TryParse(values.StartYear, out int startYear) &&
+                        Int32.TryParse(values.EndYear, out int endYear) &&
+                        (startYear < endYear || startYear == endYear && values.StartMonth <= values.EndMonth))
+                    .ObserveOn(RxApp.MainThreadScheduler);
 
             this.PeriodRule = this.ValidationRule(
-                vm => periodValid,
-                vm => periodValid.Value
-                    ? String.Empty
-                    : vm.ResourceManager.GetString("ValidationPeriodInvalid") ?? String.Empty);
+                periodValid,
+                this.ResourceManager.GetString("ValidationPeriodInvalid") ?? String.Empty);
 
             this.CanDeleteWhen(canDelete);
 

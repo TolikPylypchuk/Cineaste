@@ -8,7 +8,6 @@ using System.Reactive.Linq;
 using MovieList.Core.Validation;
 using MovieList.Core.ViewModels.Forms.Base;
 
-using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
@@ -92,7 +91,7 @@ namespace MovieList.Core
 
         public static ValidationHelper ValidationRuleForColor<TForm>(
             this TForm form, Expression<Func<TForm, string>> vmProperty)
-            where TForm : ReactiveValidationObject<TForm>, IReactiveForm
+            where TForm : ReactiveValidationObject, IReactiveForm
             => form.ValidationRule(vmProperty, HexColorValidator.IsArgbString, "HexColorInvalid");
     }
 }

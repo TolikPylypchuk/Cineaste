@@ -25,7 +25,7 @@
     <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
     <PackageReference Include="ReactiveUI" Version="11.5.35" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="11.5.35" />
-    <PackageReference Include="ReactiveUI.Validation" Version="1.6.4" />
+    <PackageReference Include="ReactiveUI.Validation" Version="1.7.1" />
     <PackageReference Include="ReactiveUI.WPF" Version="11.5.35" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.1" />

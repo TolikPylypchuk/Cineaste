@@ -7,7 +7,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Resources;
 
 using DynamicData;
@@ -82,24 +81,21 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.CategoryRule = this.ValidationRule(vm => vm.Category, notEmpty, "CategoryEmpty");
             this.ColorRule = this.ValidationRuleForColor(vm => vm.Color);
 
-            var nameAndCategoryAreUnique = new BehaviorSubject<bool>(true);
-
-            Observable.CombineLatest(
-                this.WhenAnyValue(vm => vm.Name),
-                this.WhenAnyValue(vm => vm.Category),
-                (name, category) => (Name: name, Category: category))
-                .Select(item => !allTagsList.Any(tag =>
-                    tag != this.TagModel && tag.Name == item.Name && tag.Category == item.Category))
-                .Subscribe(nameAndCategoryAreUnique);
+            var nameAndCategoryObservable = this.WhenAnyValue(
+                vm => vm.Name,
+                vm => vm.Category,
+                (name, category) => (Name: name, Category: category));
 
             this.UniqueRule = this.ValidationRule(
-                vm => nameAndCategoryAreUnique,
-                vm => nameAndCategoryAreUnique.Value
-                    ? String.Empty
-                    : String.Format(
-                        this.ResourceManager.GetString("ValidationTagNotUniqueFormat") ?? String.Empty,
-                        vm.Name,
-                        vm.Category));
+                nameAndCategoryObservable,
+                nameAndCategory => !allTagsList.Any(tag =>
+                    tag != this.TagModel &&
+                    tag.Name == nameAndCategory.Name &&
+                    tag.Category == nameAndCategory.Category),
+                nameAndCategory => String.Format(
+                    this.ResourceManager.GetString("ValidationTagNotUniqueFormat") ?? String.Empty,
+                    nameAndCategory.Name,
+                    nameAndCategory.Category));
 
             this.WhenAnyValue(vm => vm.Name)
                 .Select(name => this.IsNew && String.IsNullOrWhiteSpace(name)

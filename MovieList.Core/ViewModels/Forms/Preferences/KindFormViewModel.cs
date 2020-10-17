@@ -32,19 +32,17 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             this.Kind = kind;
             this.CopyProperties();
 
-            var isNameValid = new BehaviorSubject<bool>(true);
-
-            Observable.CombineLatest(
+            var nameAndKindsObservable = Observable.CombineLatest(
                 allKinds,
                 this.WhenAnyValue(vm => vm.Name),
-                (kinds, name) => !String.IsNullOrWhiteSpace(name) && kinds.Count(k => k.Name == name) == 1)
-                .Subscribe(isNameValid);
+                (kinds, name) => (Kinds: kinds, Name: name));
 
             this.NameRule = this.ValidationRule(
-                vm => isNameValid,
-                vm => isNameValid.Value
-                    ? String.Empty
-                    : String.IsNullOrWhiteSpace(vm.Name) ? "NameEmpty" : "NameNotUnique");
+                nameAndKindsObservable,
+                nameAndKinds =>
+                    !String.IsNullOrWhiteSpace(nameAndKinds.Name) &&
+                    nameAndKinds.Kinds.Count(k => k.Name == nameAndKinds.Name) == 1,
+                nameAndKinds => String.IsNullOrWhiteSpace(nameAndKinds.Name) ? "NameEmpty" : "NameNotUnique");
 
             this.ColorForWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForWatchedMovie);
             this.ColorForNotWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForNotWatchedMovie);
