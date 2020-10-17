@@ -6,12 +6,12 @@ namespace MovieList.Core.ViewModels.Filters
 {
     public sealed class SelectionFilterInputViewModel : FilterInput
     {
-        public SelectionFilterInputViewModel(ReadOnlyObservableCollection<string> elements)
-            => this.Elements = elements;
+        public SelectionFilterInputViewModel(ReadOnlyObservableCollection<string> items)
+            => this.Items = items;
 
-        public ReadOnlyObservableCollection<string> Elements { get; }
+        public ReadOnlyObservableCollection<string> Items { get; }
 
         [Reactive]
-        public string? SelectedElement { get; set; }
+        public string? SelectedItem { get; set; }
     }
 }

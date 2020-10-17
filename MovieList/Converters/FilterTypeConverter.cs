@@ -20,8 +20,11 @@ namespace MovieList.Converters
             {
                 [FilterType.Title] = Messages.FilterTypeTitle,
                 [FilterType.Year] = Messages.FilterTypeYear,
+                [FilterType.Kind] = Messages.FilterTypeKind,
                 [FilterType.Tags] = Messages.FilterTypeTags,
-                [FilterType.Standalone] = Messages.FilterTypeStandalone
+                [FilterType.Standalone] = Messages.FilterTypeStandalone,
+                [FilterType.Movie] = Messages.FilterTypeMovie,
+                [FilterType.Series] = Messages.FilterTypeSeries
             };
 
             this.stringToFilterType = filterTypeToString.ToDictionary(e => e.Value, e => e.Key);

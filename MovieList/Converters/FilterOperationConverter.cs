@@ -27,8 +27,7 @@ namespace MovieList.Converters
                 [FilterOperation.Between] = Messages.FilterOperationBetween,
                 [FilterOperation.Include] = Messages.FilterOperationInclude,
                 [FilterOperation.Exclude] = Messages.FilterOperationExclude,
-                [FilterOperation.HaveCategory] = Messages.FilterOperationHaveCategory,
-                [FilterOperation.NoneOfCategory] = Messages.FilterOperationNoneOfCategory
+                [FilterOperation.HaveCategory] = Messages.FilterOperationHaveCategory
             };
 
             this.stringToFilterType = filterTypeToString.ToDictionary(e => e.Value, e => e.Key);

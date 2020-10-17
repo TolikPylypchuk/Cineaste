@@ -6,8 +6,11 @@ namespace MovieList.Core.ViewModels.Filters
     {
         Title,
         Year,
+        Kind,
         Tags,
-        Standalone
+        Standalone,
+        Movie,
+        Series
     }
 
     public enum FilterOperation
@@ -21,8 +24,7 @@ namespace MovieList.Core.ViewModels.Filters
         Between,
         Include,
         Exclude,
-        HaveCategory,
-        NoneOfCategory
+        HaveCategory
     }
 
     [Flags]

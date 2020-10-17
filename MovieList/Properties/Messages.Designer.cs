@@ -782,6 +782,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string FilterDescriptionKind {
+            get {
+                return ResourceManager.GetString("FilterDescriptionKind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is standalone.
         /// </summary>
         public static string FilterDescriptionStandalone {
@@ -908,15 +917,6 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to None of category.
-        /// </summary>
-        public static string FilterOperationNoneOfCategory {
-            get {
-                return ResourceManager.GetString("FilterOperationNoneOfCategory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Starts with.
         /// </summary>
         public static string FilterOperationStartsWith {
@@ -949,6 +949,33 @@ namespace MovieList.Properties {
         public static string FilterTypeHint {
             get {
                 return ResourceManager.GetString("FilterTypeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string FilterTypeKind {
+            get {
+                return ResourceManager.GetString("FilterTypeKind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movies only.
+        /// </summary>
+        public static string FilterTypeMovie {
+            get {
+                return ResourceManager.GetString("FilterTypeMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Series only.
+        /// </summary>
+        public static string FilterTypeSeries {
+            get {
+                return ResourceManager.GetString("FilterTypeSeries", resourceCulture);
             }
         }
         

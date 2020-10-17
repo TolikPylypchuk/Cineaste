@@ -13,14 +13,14 @@ namespace MovieList.Core.ViewModels.Filters
 {
     public sealed class ListFilterViewModel : ReactiveObject
     {
-        public ListFilterViewModel(ReadOnlyObservableCollection<Tag> tags)
+        public ListFilterViewModel(ReadOnlyObservableCollection<Kind> kinds, ReadOnlyObservableCollection<Tag> tags)
         {
             this.ApplyFilter = ReactiveCommand.Create(() => this.FilterItem.CreateFilter());
             this.ClearFilter = ReactiveCommand.Create(() => { });
 
             this.ClearFilter
                 .StartWith(Unit.Default)
-                .Select(() => new FilterItemViewModel(tags))
+                .Select(() => new FilterItemViewModel(kinds, tags))
                 .ToPropertyEx(this, vm => vm.FilterItem);
 
             this.ClearFilter.InvokeCommand(this.ApplyFilter);

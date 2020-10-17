@@ -146,7 +146,7 @@ namespace MovieList.Core.ViewModels
 
         private ListActionsViewModel CreateListActionsViewModel()
         {
-            var viewModel = new ListActionsViewModel(this.Tags);
+            var viewModel = new ListActionsViewModel(this.Kinds, this.Tags);
 
             viewModel.AddNewMovie
                 .Select(_ => new Movie

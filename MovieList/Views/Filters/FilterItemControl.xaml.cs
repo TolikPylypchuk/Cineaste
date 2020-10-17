@@ -32,8 +32,11 @@ namespace MovieList.Views.Filters
 
                 this.FilterTypeComboBox.Items.Add(Messages.FilterTypeTitle);
                 this.FilterTypeComboBox.Items.Add(Messages.FilterTypeYear);
+                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeKind);
                 this.FilterTypeComboBox.Items.Add(Messages.FilterTypeTags);
                 this.FilterTypeComboBox.Items.Add(Messages.FilterTypeStandalone);
+                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeMovie);
+                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeSeries);
 
                 this.Bind(this.ViewModel, vm => vm.FilterType, v => v.FilterTypeComboBox.SelectedItem)
                     ?.DisposeWith(disposables);

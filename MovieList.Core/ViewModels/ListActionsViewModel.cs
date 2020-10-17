@@ -10,9 +10,9 @@ namespace MovieList.Core.ViewModels
 {
     public sealed class ListActionsViewModel : ReactiveObject
     {
-        public ListActionsViewModel(ReadOnlyObservableCollection<Tag> tags)
+        public ListActionsViewModel(ReadOnlyObservableCollection<Kind> kinds, ReadOnlyObservableCollection<Tag> tags)
         {
-            this.Filter = new ListFilterViewModel(tags);
+            this.Filter = new ListFilterViewModel(kinds, tags);
 
             this.AddNewMovie = ReactiveCommand.Create(() => { });
             this.AddNewSeries = ReactiveCommand.Create(() => { });

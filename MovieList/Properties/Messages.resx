@@ -784,9 +784,6 @@ This will detach all entries without deleting them.</value>
   <data name="FilterOperationLessThan" xml:space="preserve">
     <value>Less than</value>
   </data>
-  <data name="FilterOperationNoneOfCategory" xml:space="preserve">
-    <value>None of category</value>
-  </data>
   <data name="FilterOperationStartsWith" xml:space="preserve">
     <value>Starts with</value>
   </data>
@@ -816,5 +813,17 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="FilterRangeStartDescriptionFormat" xml:space="preserve">
     <value>{0} from</value>
+  </data>
+  <data name="FilterDescriptionKind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="FilterTypeKind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="FilterTypeMovie" xml:space="preserve">
+    <value>Movies only</value>
+  </data>
+  <data name="FilterTypeSeries" xml:space="preserve">
+    <value>Series only</value>
   </data>
 </root>
