@@ -12,7 +12,7 @@ using DynamicData.Binding;
 using MovieList.Core;
 using MovieList.Core.ViewModels.Forms;
 using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Properties;
+using MovieList.Data.Models;
 
 using ReactiveUI;
 
@@ -169,10 +169,7 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
                 ?.DisposeWith(disposables);
 
-            this.WatchStatusComboBox.Items.Add(Messages.SeriesNotWatched);
-            this.WatchStatusComboBox.Items.Add(Messages.SeriesWatching);
-            this.WatchStatusComboBox.Items.Add(Messages.SeriesWatched);
-            this.WatchStatusComboBox.Items.Add(Messages.SeriesStoppedWatching);
+            this.WatchStatusComboBox.AddEnumValues<SeriesWatchStatus>();
 
             this.Bind(this.ViewModel, vm => vm.WatchStatus, v => v.WatchStatusComboBox.SelectedItem)
                 ?.DisposeWith(disposables);
@@ -180,11 +177,7 @@ namespace MovieList.Views.Forms
             this.Bind(this.ViewModel, vm => vm.IsAnthology, v => v.IsAnthologyCheckBox.IsChecked)
                 ?.DisposeWith(disposables);
 
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesNotStarted);
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesRunning);
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesFinished);
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesCancelled);
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeriesUnknown);
+            this.ReleaseStatusComboBox.AddEnumValues<SeriesReleaseStatus>();
 
             this.Bind(this.ViewModel, vm => vm.ReleaseStatus, v => v.ReleaseStatusComboBox.SelectedItem)
                 ?.DisposeWith(disposables);

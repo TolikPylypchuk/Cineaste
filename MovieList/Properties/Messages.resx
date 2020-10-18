@@ -742,9 +742,6 @@ This will detach all entries without deleting them.</value>
   <data name="AddTag" xml:space="preserve">
     <value>Add tag</value>
   </data>
-  <data name="FilterDescriptionStandalone" xml:space="preserve">
-    <value>Is standalone</value>
-  </data>
   <data name="FilterDescriptionTagCategory" xml:space="preserve">
     <value>Tag category</value>
   </data>
@@ -825,5 +822,29 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="FilterTypeSeries" xml:space="preserve">
     <value>Series only</value>
+  </data>
+  <data name="FilterTypeMovieReleased" xml:space="preserve">
+    <value>Released (movies only)</value>
+  </data>
+  <data name="FilterTypeMovieWatched" xml:space="preserve">
+    <value>Watched (movies only)</value>
+  </data>
+  <data name="FilterTypeSeriesAnthology" xml:space="preserve">
+    <value>Anthology (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesChannel" xml:space="preserve">
+    <value>Channel (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesNumberOfEpisodes" xml:space="preserve">
+    <value>Number of episodes (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesNumberOfSeasons" xml:space="preserve">
+    <value>Number of seasons (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesReleaseStatus" xml:space="preserve">
+    <value>Release status (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesWatchStatus" xml:space="preserve">
+    <value>Watch status (series only)</value>
   </data>
 </root>

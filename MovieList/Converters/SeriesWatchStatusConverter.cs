@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using MovieList.Core;
 using MovieList.Data.Models;
 using MovieList.Properties;
 
@@ -9,7 +10,7 @@ using ReactiveUI;
 
 namespace MovieList.Converters
 {
-    public sealed class SeriesWatchStatusConverter : IBindingTypeConverter
+    public sealed class SeriesWatchStatusConverter : IBindingTypeConverter, IEnumConverter<SeriesWatchStatus>
     {
         private readonly Dictionary<SeriesWatchStatus, string> statusToString;
         private readonly Dictionary<string, SeriesWatchStatus> stringToStatus;
@@ -47,5 +48,13 @@ namespace MovieList.Converters
                     return false;
             }
         }
+
+        public string ToString(SeriesWatchStatus status)
+            => this.statusToString[status];
+
+        public SeriesWatchStatus FromString(string str)
+            => this.stringToStatus.ContainsKey(str)
+                ? this.stringToStatus[str]
+                : throw new ArgumentOutOfRangeException(nameof(str));
     }
 }

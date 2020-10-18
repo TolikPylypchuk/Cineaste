@@ -18,6 +18,7 @@ using MovieList.Core.Models;
 using MovieList.Core.Preferences;
 using MovieList.Core.State;
 using MovieList.Core.ViewModels;
+using MovieList.Core.ViewModels.Filters;
 using MovieList.Data.Models;
 using MovieList.Infrastructure;
 using MovieList.Properties;
@@ -104,16 +105,7 @@ namespace MovieList
 
             Locator.CurrentMutable.RegisterConstant(Messages.ResourceManager, typeof(ResourceManager));
 
-            this.RegisterBindingConverters(
-                new SeriesWatchStatusConverter(),
-                new SeriesReleaseStatusConverter(),
-                new SeasonWatchStatusConverter(),
-                new SeasonReleaseStatusConverter(),
-                new FilterTypeConverter(),
-                new FilterOperationConverter(),
-                new BrushToHexConverter(),
-                new ColorToBrushConverter(),
-                new BooleanToVisibilityTypeConverter());
+            this.RegisterBindingConverters();
 
             var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
                 .Catch(Observable.FromAsync(this.CreateDefaultPreferencesAsync));
@@ -130,11 +122,39 @@ namespace MovieList
                 .CreateLogger());
         }
 
+        private void RegisterBindingConverters()
+        {
+            var seriesWatchStatusConverter = new SeriesWatchStatusConverter();
+            var seriesReleaseStatusConverter = new SeriesReleaseStatusConverter();
+            var seasonWatchStatusConverter = new SeasonWatchStatusConverter();
+            var seasonReleaseStatusConverter = new SeasonReleaseStatusConverter();
+            var filterTypeConverter = new FilterTypeConverter();
+            var filterOperationConverter = new FilterOperationConverter();
+
+            this.RegisterBindingConverters(
+                seriesWatchStatusConverter,
+                seriesReleaseStatusConverter,
+                seasonWatchStatusConverter,
+                seasonReleaseStatusConverter,
+                filterTypeConverter,
+                filterOperationConverter,
+                new BrushToHexConverter(),
+                new ColorToBrushConverter(),
+                new BooleanToVisibilityTypeConverter());
+
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeriesWatchStatus>>(seriesWatchStatusConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeriesReleaseStatus>>(seriesReleaseStatusConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeasonWatchStatus>>(seasonWatchStatusConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeasonReleaseStatus>>(seasonReleaseStatusConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterType>>(filterTypeConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterOperation>>(filterOperationConverter);
+        }
+
         private void RegisterBindingConverters(params IBindingTypeConverter[] converters)
         {
             foreach (var converter in converters)
             {
-                Locator.CurrentMutable.RegisterConstant(converter, typeof(IBindingTypeConverter));
+                Locator.CurrentMutable.RegisterConstant<IBindingTypeConverter>(converter);
             }
         }
 

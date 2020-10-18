@@ -23,45 +23,6 @@ namespace MovieList.Core.ViewModels.Filters
     {
         private static readonly Func<ListItem, bool> NoFilter = item => true;
 
-        private static readonly Dictionary<FilterType, List<FilterOperation>> AvailableOperationsByType = new()
-        {
-            [FilterType.Title] = new()
-            {
-                FilterOperation.Is,
-                FilterOperation.StartsWith,
-                FilterOperation.EndsWith
-            },
-            [FilterType.Year] = new()
-            {
-                FilterOperation.Is,
-                FilterOperation.LessThan,
-                FilterOperation.GreaterThan,
-                FilterOperation.Between
-            },
-            [FilterType.Kind] = new()
-            {
-                FilterOperation.Is
-            },
-            [FilterType.Tags] = new()
-            {
-                FilterOperation.Include,
-                FilterOperation.Exclude,
-                FilterOperation.HaveCategory
-            },
-            [FilterType.Standalone] = new()
-            {
-                FilterOperation.None
-            },
-            [FilterType.Movie] = new()
-            {
-                FilterOperation.None
-            },
-            [FilterType.Series] = new()
-            {
-                FilterOperation.None
-            }
-        };
-
         private readonly SourceList<FilterOperation> availableOperationsSource = new();
         private readonly ReadOnlyObservableCollection<FilterOperation> availableOperations;
 
@@ -70,7 +31,9 @@ namespace MovieList.Core.ViewModels.Filters
 
         private ReadOnlyObservableCollection<string> kindNames = null!;
 
-        public FilterItemViewModel(ReadOnlyObservableCollection<Kind> kinds, ReadOnlyObservableCollection<Tag> tags)
+        public FilterItemViewModel(
+            ReadOnlyObservableCollection<Kind> kinds,
+            ReadOnlyObservableCollection<Tag> tags)
         {
             this.tags = tags;
 
@@ -79,7 +42,7 @@ namespace MovieList.Core.ViewModels.Filters
                 .Subscribe();
 
             this.WhenAnyValue(vm => vm.FilterType)
-                .Select(ft => AvailableOperationsByType[ft])
+                .Select(ft => FilterOperations.ByType[ft])
                 .Subscribe(ops =>
                 {
                     this.availableOperationsSource.Edit(list =>
@@ -169,12 +132,25 @@ namespace MovieList.Core.ViewModels.Filters
                 (FilterType.Year, FilterOperation.GreaterThan, NumberFilterInputViewModel input) =>
                     this.YearGreaterThan(input.Number),
 
-                (FilterType.Year, FilterOperation.Between, RangeFilterInputViewModel input) =>
-                    input.Start <= input.End ? this.YearBetween(input.Start, input.End) : NoFilter,
+                (FilterType.Year, FilterOperation.Between, RangeFilterInputViewModel input)
+                    when input.Start <= input.End =>
+                    this.YearBetween(input.Start, input.End),
 
                 (FilterType.Kind, FilterOperation.Is, SelectionFilterInputViewModel input)
                     when input.SelectedItem != null =>
                     this.KindIs(input.SelectedItem),
+
+                (FilterType.Tags, FilterOperation.Include, TagsFilterInputViewModel input)
+                    when !input.Tags.IsEmpty() =>
+                    this.TagsInclude(input.Tags.Select(vm => vm.Tag).ToList()),
+
+                (FilterType.Tags, FilterOperation.Exclude, TagsFilterInputViewModel input)
+                    when !input.Tags.IsEmpty() =>
+                    this.TagsExclude(input.Tags.Select(vm => vm.Tag).ToList()),
+
+                (FilterType.Tags, FilterOperation.HaveCategory, SelectionFilterInputViewModel input)
+                    when input.SelectedItem != null =>
+                    this.TagsHaveCategory(input.SelectedItem),
 
                 (FilterType.Standalone, _, _) =>
                    this.IsStandalone(),
@@ -257,6 +233,21 @@ namespace MovieList.Core.ViewModels.Filters
 
         private Func<ListItem, bool> KindIs(string kindName)
             => this.CreateFilter(movie => movie.Kind.Name == kindName, series => series.Kind.Name == kindName);
+
+        private Func<ListItem, bool> TagsInclude(IEnumerable<Tag> tags)
+            => this.CreateFilter(
+                movie => tags.All(tag => movie.Tags.Contains(tag)),
+                series => tags.All(tag => series.Tags.Contains(tag)));
+
+        private Func<ListItem, bool> TagsExclude(IEnumerable<Tag> tags)
+            => this.CreateFilter(
+                movie => tags.All(tag => !movie.Tags.Contains(tag)),
+                series => tags.All(tag => !series.Tags.Contains(tag)));
+
+        private Func<ListItem, bool> TagsHaveCategory(string category)
+            => this.CreateFilter(
+                movie => movie.Tags.Any(tag => tag.Category == category),
+                series => series.Tags.Any(tag => tag.Category == category));
 
         private Func<ListItem, bool> IsStandalone()
             => item => item switch

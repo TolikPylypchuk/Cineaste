@@ -12,7 +12,7 @@ using DynamicData.Binding;
 
 using MovieList.Core;
 using MovieList.Core.ViewModels.Forms;
-using MovieList.Properties;
+using MovieList.Data.Models;
 
 using ReactiveUI;
 
@@ -144,20 +144,12 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
                 ?.DisposeWith(disposables);
 
-            this.WatchStatusComboBox.Items.Add(Messages.SeasonNotWatched);
-            this.WatchStatusComboBox.Items.Add(Messages.SeasonWatching);
-            this.WatchStatusComboBox.Items.Add(Messages.SeasonHiatus);
-            this.WatchStatusComboBox.Items.Add(Messages.SeasonWatched);
-            this.WatchStatusComboBox.Items.Add(Messages.SeasonStoppedWatching);
+            this.WatchStatusComboBox.AddEnumValues<SeasonWatchStatus>();
 
             this.Bind(this.ViewModel, vm => vm.WatchStatus, v => v.WatchStatusComboBox.SelectedItem)
                 ?.DisposeWith(disposables);
 
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeasonNotStarted);
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeasonRunning);
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeasonHiatus);
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeasonFinished);
-            this.ReleaseStatusComboBox.Items.Add(Messages.SeasonUnknown);
+            this.ReleaseStatusComboBox.AddEnumValues<SeasonReleaseStatus>();
 
             this.Bind(this.ViewModel, vm => vm.ReleaseStatus, v => v.ReleaseStatusComboBox.SelectedItem)
                 ?.DisposeWith(disposables);

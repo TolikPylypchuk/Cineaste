@@ -7,8 +7,8 @@ using DynamicData;
 using DynamicData.Binding;
 
 using MovieList.Converters;
+using MovieList.Core;
 using MovieList.Core.ViewModels.Filters;
-using MovieList.Properties;
 
 using ReactiveUI;
 
@@ -30,13 +30,7 @@ namespace MovieList.Views.Filters
                     .BindTo(this, v => v.DataContext)
                     ?.DisposeWith(disposables);
 
-                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeTitle);
-                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeYear);
-                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeKind);
-                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeTags);
-                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeStandalone);
-                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeMovie);
-                this.FilterTypeComboBox.Items.Add(Messages.FilterTypeSeries);
+                this.FilterTypeComboBox.AddEnumValues<FilterType>();
 
                 this.Bind(this.ViewModel, vm => vm.FilterType, v => v.FilterTypeComboBox.SelectedItem)
                     ?.DisposeWith(disposables);

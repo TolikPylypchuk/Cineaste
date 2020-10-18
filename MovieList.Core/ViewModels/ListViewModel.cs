@@ -47,7 +47,7 @@ namespace MovieList.Core.ViewModels
 
             this.source.Connect()
                 .Filter(item => !String.IsNullOrEmpty(item.Title))
-                .Filter(listFilter.StartWith(item => true))
+                .Filter(listFilter.StartWith(item => true).ObserveOn(RxApp.TaskpoolScheduler))
                 .AutoRefresh(item => item.DisplayNumber)
                 .AutoRefresh(item => item.Title)
                 .AutoRefresh(item => item.OriginalTitle)

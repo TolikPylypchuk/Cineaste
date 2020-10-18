@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -51,6 +52,8 @@ namespace MovieList.Core.ViewModels.Filters
                 onAdd: vm => this.addableTagsSource.Remove(vm.Tag),
                 onRemove: vm => this.addableTagsSource.AddOrUpdate(vm.Tag));
 
+            this.AddTag = ReactiveCommand.Create<Tag>(this.tagsSource.AddOrUpdate);
+
             this.WhenActivated(disposables =>
             {
                 tags.ToObservableChangeSet()
@@ -71,6 +74,8 @@ namespace MovieList.Core.ViewModels.Filters
 
         public ReadOnlyObservableCollection<AddableTagViewModel> AddableTags
             => this.addableTags;
+
+        public ReactiveCommand<Tag, Unit> AddTag { get; }
 
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
 

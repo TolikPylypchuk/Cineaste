@@ -791,15 +791,6 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is standalone.
-        /// </summary>
-        public static string FilterDescriptionStandalone {
-            get {
-                return ResourceManager.GetString("FilterDescriptionStandalone", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tag category.
         /// </summary>
         public static string FilterDescriptionTagCategory {
@@ -971,11 +962,83 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Released (movies only).
+        /// </summary>
+        public static string FilterTypeMovieReleased {
+            get {
+                return ResourceManager.GetString("FilterTypeMovieReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched (movies only).
+        /// </summary>
+        public static string FilterTypeMovieWatched {
+            get {
+                return ResourceManager.GetString("FilterTypeMovieWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Series only.
         /// </summary>
         public static string FilterTypeSeries {
             get {
                 return ResourceManager.GetString("FilterTypeSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anthology (series only).
+        /// </summary>
+        public static string FilterTypeSeriesAnthology {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesAnthology", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Channel (series only).
+        /// </summary>
+        public static string FilterTypeSeriesChannel {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of episodes (series only).
+        /// </summary>
+        public static string FilterTypeSeriesNumberOfEpisodes {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesNumberOfEpisodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of seasons (series only).
+        /// </summary>
+        public static string FilterTypeSeriesNumberOfSeasons {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesNumberOfSeasons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release status (series only).
+        /// </summary>
+        public static string FilterTypeSeriesReleaseStatus {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesReleaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch status (series only).
+        /// </summary>
+        public static string FilterTypeSeriesWatchStatus {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesWatchStatus", resourceCulture);
             }
         }
         

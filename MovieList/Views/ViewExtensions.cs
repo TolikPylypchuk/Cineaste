@@ -8,10 +8,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
+using MovieList.Core;
 using MovieList.Validation;
 
 using ReactiveUI;
 using ReactiveUI.Validation.Helpers;
+
+using Splat;
 
 namespace MovieList.Views
 {
@@ -56,6 +59,16 @@ namespace MovieList.Views
 
             image.Freeze();
             return image;
+        }
+
+        public static void AddEnumValues<TEnum>(this ComboBox comboBox)
+            where TEnum : struct, Enum
+        {
+            var converter = Locator.Current.GetService<IEnumConverter<TEnum>>();
+
+            Enum.GetValues<TEnum>()
+                .Select(converter.ToString)
+                .ForEach(status => comboBox.Items.Add(status));
         }
     }
 }
