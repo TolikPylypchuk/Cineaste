@@ -119,8 +119,6 @@ namespace MovieList.Core.ViewModels.Filters
             });
         }
 
-        public ViewModelActivator Activator { get; } = new ViewModelActivator();
-
         [Reactive]
         public FilterType FilterType { get; set; } = Title;
 
@@ -129,25 +127,21 @@ namespace MovieList.Core.ViewModels.Filters
 
         public FilterInput FilterInput { [ObservableAsProperty] get; } = null!;
 
+        [Reactive]
+        public bool IsNegated { get; set; }
+
         public ReadOnlyObservableCollection<FilterOperation> AvailableOperations
             => this.availableOperations;
 
-        [Reactive]
-        public string Text { get; set; } = String.Empty;
-
-        [Reactive]
-        public int Number { get; set; }
-
-        [Reactive]
-        public int RangeStart { get; set; }
-
-        [Reactive]
-        public int RangeEnd { get; set; }
-
-        [Reactive]
-        public bool IsChecked { get; set; }
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
         public Func<ListItem, bool> CreateFilter()
+        {
+            var coreFilter = this.CreateCoreFilter();
+            return this.IsNegated ? item => !coreFilter(item) : coreFilter;
+        }
+
+        private Func<ListItem, bool> CreateCoreFilter()
             => (this.FilterType, this.FilterOperation, this.FilterInput) switch
             {
                 (Title, Is, TextFilterInputViewModel input) => this.TitleIs(input.Text),

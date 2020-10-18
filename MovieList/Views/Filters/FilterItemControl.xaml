@@ -9,21 +9,28 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4" />
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="FilterTypeComboBox" Grid.Row="0" Grid.Column="0" Margin="4"
+        <Rectangle x:Name="ColorStripRectangle" Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Fill="#E53935" />
+
+        <CheckBox x:Name="NegateCheckBox" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                  Content="{l:Translate FilterNegate}" Margin="4 4 4 0" />
+
+        <ComboBox x:Name="FilterTypeComboBox" Grid.Row="1" Grid.Column="1" Margin="4"
                   m:HintAssist.Hint="{l:Translate FilterTypeHint}"
                   Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
-        <ComboBox x:Name="FilterOperationComboBox" Grid.Row="0" Grid.Column="1" Margin="4"
+        <ComboBox x:Name="FilterOperationComboBox" Grid.Row="1" Grid.Column="2" Margin="4"
                   m:HintAssist.Hint="{l:Translate FilterOperationHint}"
                   Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
-        <rx:ViewModelViewHost x:Name="InputViewHost" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="4" />
+        <rx:ViewModelViewHost x:Name="InputViewHost" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="4" />
     </Grid>
 </local:FilterItemControlBase>

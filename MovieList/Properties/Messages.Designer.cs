@@ -872,6 +872,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Negate.
+        /// </summary>
+        public static string FilterNegate {
+            get {
+                return ResourceManager.GetString("FilterNegate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Between.
         /// </summary>
         public static string FilterOperationBetween {

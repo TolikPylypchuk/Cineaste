@@ -865,4 +865,7 @@ This will detach all entries without deleting them.</value>
   <data name="FilterTypeSeriesMiniseries" xml:space="preserve">
     <value>Miniseries (series only)</value>
   </data>
+  <data name="FilterNegate" xml:space="preserve">
+    <value>Negate</value>
+  </data>
 </root>

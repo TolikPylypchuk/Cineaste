@@ -6,11 +6,12 @@ using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
 
-using MovieList.Converters;
 using MovieList.Core;
 using MovieList.Core.ViewModels.Filters;
 
 using ReactiveUI;
+
+using Splat;
 
 namespace MovieList.Views.Filters
 {
@@ -18,8 +19,6 @@ namespace MovieList.Views.Filters
 
     public partial class FilterItemControl : FilterItemControlBase
     {
-        private readonly FilterOperationConverter opConverter = new FilterOperationConverter();
-
         public FilterItemControl()
         {
             this.InitializeComponent();
@@ -30,14 +29,26 @@ namespace MovieList.Views.Filters
                     .BindTo(this, v => v.DataContext)
                     ?.DisposeWith(disposables);
 
+                this.Bind(this.ViewModel!, vm => vm.IsNegated, v => v.NegateCheckBox.IsChecked)
+                    ?.DisposeWith(disposables);
+
+                this.OneWayBind(
+                    this.ViewModel!,
+                    vm => vm.IsNegated,
+                    v => v.ColorStripRectangle.Visibility,
+                    BooleanToVisibilityHint.UseHidden)
+                    ?.DisposeWith(disposables);
+
                 this.FilterTypeComboBox.AddEnumValues<FilterType>();
 
                 this.Bind(this.ViewModel, vm => vm.FilterType, v => v.FilterTypeComboBox.SelectedItem)
                     ?.DisposeWith(disposables);
 
+                var filterOperationConverter = Locator.Current.GetService<IEnumConverter<FilterOperation>>();
+
                 this.ViewModel!.AvailableOperations
                     .ToObservableChangeSet()
-                    .Transform(this.FilterOperationToString)
+                    .Transform(filterOperationConverter.ToString)
                     .ToCollection()
                     .Subscribe(ops =>
                     {
@@ -57,12 +68,6 @@ namespace MovieList.Views.Filters
                 this.Bind(this.ViewModel, vm => vm.FilterInput, v => v.InputViewHost.ViewModel)
                     ?.DisposeWith(disposables);
             });
-        }
-
-        private string FilterOperationToString(FilterOperation op)
-        {
-            opConverter.TryConvert(op, typeof(string), null, out object? result);
-            return result as string ?? String.Empty;
         }
     }
 }
