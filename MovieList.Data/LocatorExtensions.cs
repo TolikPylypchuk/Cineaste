@@ -16,19 +16,18 @@ namespace MovieList.Data
         {
             if (!resolver.HasRegistration(typeof(IDatabaseService), file))
             {
-                resolver.RegisterLazySingleton(() => new DatabaseService(file), typeof(IDatabaseService), file);
-                resolver.RegisterLazySingleton(() => new ListService(file), typeof(IListService), file);
+                resolver.RegisterLazySingleton<IDatabaseService>(() => new DatabaseService(file), file);
+                resolver.RegisterLazySingleton<IListService>(() => new ListService(file), file);
 
-                resolver.RegisterLazySingleton(() => new MovieService(file), typeof(IEntityService<Movie>), file);
-                resolver.RegisterLazySingleton(() => new SeriesService(file), typeof(IEntityService<Series>), file);
-                resolver.RegisterLazySingleton(
-                    () => new FranchiseService(file), typeof(IEntityService<Franchise>), file);
+                resolver.RegisterLazySingleton<IEntityService<Movie>>(() => new MovieService(file), file);
+                resolver.RegisterLazySingleton<IEntityService<Series>>(() => new SeriesService(file), file);
+                resolver.RegisterLazySingleton<IEntityService<Franchise>>(() => new FranchiseService(file), file);
 
-                resolver.RegisterLazySingleton(() => new KindService(file), typeof(ISettingsEntityService<Kind>), file);
-                resolver.RegisterLazySingleton(() => new TagService(file), typeof(ISettingsEntityService<Tag>), file);
-                resolver.RegisterLazySingleton(() => new SettingsService(file), typeof(ISettingsService), file);
+                resolver.RegisterLazySingleton<ISettingsEntityService<Kind>>(() => new KindService(file), file);
+                resolver.RegisterLazySingleton<ISettingsEntityService<Tag>>(() => new TagService(file), file);
+                resolver.RegisterLazySingleton<ISettingsService>(() => new SettingsService(file), file);
 
-                resolver.Register(() => new SqliteConnection($"Data Source={file}"), typeof(IDbConnection), file);
+                resolver.Register<IDbConnection>(() => new SqliteConnection($"Data Source={file}"), file);
             }
         }
 
@@ -36,18 +35,18 @@ namespace MovieList.Data
         {
             if (resolver.HasRegistration(typeof(IDatabaseService), file))
             {
-                resolver.UnregisterCurrent(typeof(IDatabaseService), file);
-                resolver.UnregisterCurrent(typeof(IListService), file);
+                resolver.UnregisterCurrent<IDatabaseService>(file);
+                resolver.UnregisterCurrent<IListService>(file);
 
-                resolver.UnregisterCurrent(typeof(IEntityService<Movie>), file);
-                resolver.UnregisterCurrent(typeof(IEntityService<Series>), file);
-                resolver.UnregisterCurrent(typeof(IEntityService<Franchise>), file);
+                resolver.UnregisterCurrent<IEntityService<Movie>>(file);
+                resolver.UnregisterCurrent<IEntityService<Series>>(file);
+                resolver.UnregisterCurrent<IEntityService<Franchise>>(file);
 
-                resolver.UnregisterCurrent(typeof(ISettingsEntityService<Kind>), file);
-                resolver.UnregisterCurrent(typeof(ISettingsEntityService<Tag>), file);
-                resolver.UnregisterCurrent(typeof(ISettingsService), file);
+                resolver.UnregisterCurrent<ISettingsEntityService<Kind>>(file);
+                resolver.UnregisterCurrent<ISettingsEntityService<Tag>>(file);
+                resolver.UnregisterCurrent<ISettingsService>(file);
 
-                resolver.UnregisterCurrent(typeof(IDbConnection), file);
+                resolver.UnregisterCurrent<IDbConnection>(file);
             }
         }
     }

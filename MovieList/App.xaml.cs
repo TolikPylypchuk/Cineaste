@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -97,13 +96,13 @@ namespace MovieList
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
             Locator.CurrentMutable.RegisterSuspensionDriver();
 
-            Locator.CurrentMutable.Register(() => new CustomPropertyResolver(), typeof(ICreatesObservableForProperty));
+            Locator.CurrentMutable.Register<ICreatesObservableForProperty>(() => new CustomPropertyResolver());
 
             Locator.CurrentMutable.RegisterConstant(RxApp.TaskpoolScheduler, TaskPoolKey);
             Locator.CurrentMutable.RegisterConstant(BlobCache.LocalMachine, CacheKey);
             Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, StoreKey);
 
-            Locator.CurrentMutable.RegisterConstant(Messages.ResourceManager, typeof(ResourceManager));
+            Locator.CurrentMutable.RegisterConstant(Messages.ResourceManager);
 
             this.RegisterBindingConverters();
 
@@ -154,7 +153,7 @@ namespace MovieList
         {
             foreach (var converter in converters)
             {
-                Locator.CurrentMutable.RegisterConstant<IBindingTypeConverter>(converter);
+                Locator.CurrentMutable.RegisterConstant(converter);
             }
         }
 
