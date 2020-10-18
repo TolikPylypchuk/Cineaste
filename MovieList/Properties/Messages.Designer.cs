@@ -791,6 +791,51 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Channel.
+        /// </summary>
+        public static string FilterDescriptionSeriesChannel {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of episodes.
+        /// </summary>
+        public static string FilterDescriptionSeriesNumberOfEpisodes {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesNumberOfEpisodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of seasons.
+        /// </summary>
+        public static string FilterDescriptionSeriesNumberOfSeasons {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesNumberOfSeasons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release status.
+        /// </summary>
+        public static string FilterDescriptionSeriesReleaseStatus {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesReleaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch status.
+        /// </summary>
+        public static string FilterDescriptionSeriesWatchStatus {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesWatchStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tag category.
         /// </summary>
         public static string FilterDescriptionTagCategory {
@@ -1003,6 +1048,15 @@ namespace MovieList.Properties {
         public static string FilterTypeSeriesChannel {
             get {
                 return ResourceManager.GetString("FilterTypeSeriesChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miniseries (series only).
+        /// </summary>
+        public static string FilterTypeSeriesMiniseries {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesMiniseries", resourceCulture);
             }
         }
         

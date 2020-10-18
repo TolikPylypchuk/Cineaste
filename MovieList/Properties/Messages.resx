@@ -847,4 +847,22 @@ This will detach all entries without deleting them.</value>
   <data name="FilterTypeSeriesWatchStatus" xml:space="preserve">
     <value>Watch status (series only)</value>
   </data>
+  <data name="FilterDescriptionSeriesReleaseStatus" xml:space="preserve">
+    <value>Release status</value>
+  </data>
+  <data name="FilterDescriptionSeriesWatchStatus" xml:space="preserve">
+    <value>Watch status</value>
+  </data>
+  <data name="FilterDescriptionSeriesChannel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="FilterDescriptionSeriesNumberOfEpisodes" xml:space="preserve">
+    <value>Number of episodes</value>
+  </data>
+  <data name="FilterDescriptionSeriesNumberOfSeasons" xml:space="preserve">
+    <value>Number of seasons</value>
+  </data>
+  <data name="FilterTypeSeriesMiniseries" xml:space="preserve">
+    <value>Miniseries (series only)</value>
+  </data>
 </root>

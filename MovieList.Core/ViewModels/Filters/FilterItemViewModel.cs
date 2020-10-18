@@ -10,32 +10,57 @@ using DynamicData.Binding;
 
 using MovieList.Core.Data.Models;
 using MovieList.Core.ListItems;
+using MovieList.Core.ViewModels.Forms.Preferences;
 using MovieList.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using Splat;
+
 using static MovieList.Core.Constants;
+using static MovieList.Core.ViewModels.Filters.FilterOperation;
+using static MovieList.Core.ViewModels.Filters.FilterType;
 
 namespace MovieList.Core.ViewModels.Filters
 {
     public sealed class FilterItemViewModel : ReactiveObject, IActivatableViewModel
     {
+        private const FilterType Title = FilterType.Title;
+        private const FilterType Kind = FilterType.Kind;
+        private const FilterType Movie = FilterType.Movie;
+        private const FilterType Series = FilterType.Series;
+        private const FilterType SeriesWatchStatus = FilterType.SeriesWatchStatus;
+        private const FilterType SeriesReleaseStatus = FilterType.SeriesReleaseStatus;
+
         private static readonly Func<ListItem, bool> NoFilter = item => true;
+
+        private readonly IEnumConverter<SeriesWatchStatus> seriesWatchStatusConverter;
+        private readonly IEnumConverter<SeriesReleaseStatus> seriesReleaseStatusConverter;
 
         private readonly SourceList<FilterOperation> availableOperationsSource = new();
         private readonly ReadOnlyObservableCollection<FilterOperation> availableOperations;
 
         private readonly ReadOnlyObservableCollection<Tag> tags;
-        private ReadOnlyObservableCollection<string> tagCategories = null!;
 
+        private ReadOnlyObservableCollection<string> tagCategories = null!;
         private ReadOnlyObservableCollection<string> kindNames = null!;
+        private readonly ReadOnlyObservableCollection<string> seriesWatchStatuses = null!;
+        private readonly ReadOnlyObservableCollection<string> seriesReleaseStatuses = null!;
 
         public FilterItemViewModel(
             ReadOnlyObservableCollection<Kind> kinds,
-            ReadOnlyObservableCollection<Tag> tags)
+            ReadOnlyObservableCollection<Tag> tags,
+            IEnumConverter<SeriesWatchStatus>? seriesWatchStatusConverter = null,
+            IEnumConverter<SeriesReleaseStatus>? seriesReleaseStatusConverter = null)
         {
             this.tags = tags;
+
+            this.seriesWatchStatusConverter = seriesWatchStatusConverter
+                ?? Locator.Current.GetService<IEnumConverter<SeriesWatchStatus>>();
+
+            this.seriesReleaseStatusConverter = seriesReleaseStatusConverter
+                ?? Locator.Current.GetService<IEnumConverter<SeriesReleaseStatus>>();
 
             this.availableOperationsSource.Connect()
                 .Bind(out this.availableOperations)
@@ -44,19 +69,17 @@ namespace MovieList.Core.ViewModels.Filters
             this.WhenAnyValue(vm => vm.FilterType)
                 .Select(ft => FilterOperations.ByType[ft])
                 .Subscribe(ops =>
-                {
                     this.availableOperationsSource.Edit(list =>
                     {
                         list.Clear();
                         list.AddRange(ops);
-                    });
-                });
+                    }));
 
             this.WhenAnyValue(vm => vm.FilterType)
-                .Select(_ => this.AvailableOperations[0])
+                .Select(_ => this.availableOperations[0])
                 .Subscribe(op =>
                 {
-                    this.FilterOperation = FilterOperation.None;
+                    this.FilterOperation = None;
                     this.FilterOperation = op;
                 });
 
@@ -64,6 +87,19 @@ namespace MovieList.Core.ViewModels.Filters
                 .Discard()
                 .Select(this.CreateFilterInput)
                 .ToPropertyEx(this, vm => vm.FilterInput, initialValue: new TextFilterInputViewModel());
+
+            var seriesWatchStatuses = new ObservableCollection<string>();
+
+            seriesWatchStatuses.AddRange(
+                Enum.GetValues<SeriesWatchStatus>().Select(this.seriesWatchStatusConverter.ToString));
+
+            var seriesReleaseStatuses = new ObservableCollection<string>();
+
+            seriesReleaseStatuses.AddRange(
+                Enum.GetValues<SeriesReleaseStatus>().Select(this.seriesReleaseStatusConverter.ToString));
+
+            this.seriesWatchStatuses = new ReadOnlyObservableCollection<string>(seriesWatchStatuses);
+            this.seriesReleaseStatuses = new ReadOnlyObservableCollection<string>(seriesReleaseStatuses);
 
             this.WhenActivated(disposables =>
             {
@@ -86,10 +122,10 @@ namespace MovieList.Core.ViewModels.Filters
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
         [Reactive]
-        public FilterType FilterType { get; set; } = FilterType.Title;
+        public FilterType FilterType { get; set; } = Title;
 
         [Reactive]
-        public FilterOperation FilterOperation { get; set; } = FilterOperation.Is;
+        public FilterOperation FilterOperation { get; set; } = Is;
 
         public FilterInput FilterInput { [ObservableAsProperty] get; } = null!;
 
@@ -114,52 +150,77 @@ namespace MovieList.Core.ViewModels.Filters
         public Func<ListItem, bool> CreateFilter()
             => (this.FilterType, this.FilterOperation, this.FilterInput) switch
             {
-                (FilterType.Title, FilterOperation.Is, TextFilterInputViewModel input) =>
-                    this.TitleIs(input.Text.ToLower()),
+                (Title, Is, TextFilterInputViewModel input) => this.TitleIs(input.Text),
 
-                (FilterType.Title, FilterOperation.StartsWith, TextFilterInputViewModel input) =>
-                    this.TitleStartsWith(input.Text.ToLower()),
+                (Title, StartsWith, TextFilterInputViewModel input) => this.TitleStartsWith(input.Text),
 
-                (FilterType.Title, FilterOperation.EndsWith, TextFilterInputViewModel input) =>
-                    this.TitleEndsWith(input.Text.ToLower()),
+                (Title, EndsWith, TextFilterInputViewModel input) => this.TitleEndsWith(input.Text),
 
-                (FilterType.Year, FilterOperation.Is, NumberFilterInputViewModel input) =>
-                    this.YearIs(input.Number),
+                (Year, Is, NumberFilterInputViewModel input) => this.YearIs(input.Number),
 
-                (FilterType.Year, FilterOperation.LessThan, NumberFilterInputViewModel input) =>
-                    this.YearLessThan(input.Number),
+                (Year, LessThan, NumberFilterInputViewModel input) => this.YearLessThan(input.Number),
 
-                (FilterType.Year, FilterOperation.GreaterThan, NumberFilterInputViewModel input) =>
-                    this.YearGreaterThan(input.Number),
+                (Year, GreaterThan, NumberFilterInputViewModel input) => this.YearGreaterThan(input.Number),
 
-                (FilterType.Year, FilterOperation.Between, RangeFilterInputViewModel input)
-                    when input.Start <= input.End =>
-                    this.YearBetween(input.Start, input.End),
+                (Year, Between, RangeFilterInputViewModel input) => this.YearBetween(input.Start, input.End),
 
-                (FilterType.Kind, FilterOperation.Is, SelectionFilterInputViewModel input)
-                    when input.SelectedItem != null =>
-                    this.KindIs(input.SelectedItem),
+                (Kind, Is, SelectionFilterInputViewModel input) => this.KindIs(input.SelectedItem),
 
-                (FilterType.Tags, FilterOperation.Include, TagsFilterInputViewModel input)
-                    when !input.Tags.IsEmpty() =>
-                    this.TagsInclude(input.Tags.Select(vm => vm.Tag).ToList()),
+                (Tags, Include, TagsFilterInputViewModel input) => this.TagsInclude(input.Tags),
 
-                (FilterType.Tags, FilterOperation.Exclude, TagsFilterInputViewModel input)
-                    when !input.Tags.IsEmpty() =>
-                    this.TagsExclude(input.Tags.Select(vm => vm.Tag).ToList()),
+                (Tags, Exclude, TagsFilterInputViewModel input) => this.TagsExclude(input.Tags),
 
-                (FilterType.Tags, FilterOperation.HaveCategory, SelectionFilterInputViewModel input)
-                    when input.SelectedItem != null =>
-                    this.TagsHaveCategory(input.SelectedItem),
+                (Tags, HaveCategory, SelectionFilterInputViewModel input) => this.TagsHaveCategory(input.SelectedItem),
 
-                (FilterType.Standalone, _, _) =>
-                   this.IsStandalone(),
+                (Standalone, _, _) => this.IsStandalone(),
 
-                (FilterType.Movie, _, _) =>
-                   this.IsMovie(),
+                (Movie, _, _) => this.IsMovie(),
 
-                (FilterType.Series, _, _) =>
-                   this.IsSeries(),
+                (MovieWatched, _, _) => this.IsMovieWatched(),
+
+                (MovieReleased, _, _) => this.IsMovieReleased(),
+
+                (Series, _, _) => this.IsSeries(),
+
+                (SeriesWatchStatus, Is, SelectionFilterInputViewModel input) =>
+                    this.SeriesWatchStatusIs(input.SelectedItem),
+
+                (SeriesReleaseStatus, Is, SelectionFilterInputViewModel input) =>
+                    this.SeriesReleaseStatusIs(input.SelectedItem),
+
+                (SeriesChannel, Is, TextFilterInputViewModel input) => this.SeriesChannelIs(input.Text),
+
+                (SeriesChannel, StartsWith, TextFilterInputViewModel input) => this.SeriesChannelStartsWith(input.Text),
+
+                (SeriesChannel, EndsWith, TextFilterInputViewModel input) => this.SeriesChannelEndsWith(input.Text),
+
+                (SeriesNumberOfSeasons, Is, NumberFilterInputViewModel input) =>
+                    this.SeriesNumberOfSeasonsIs(input.Number),
+
+                (SeriesNumberOfSeasons, LessThan, NumberFilterInputViewModel input) =>
+                    this.SeriesNumberOfSeasonsLessThan(input.Number),
+
+                (SeriesNumberOfSeasons, GreaterThan, NumberFilterInputViewModel input) =>
+                    this.SeriesNumberOfSeasonsGreaterThan(input.Number),
+
+                (SeriesNumberOfSeasons, Between, RangeFilterInputViewModel input) =>
+                    this.SeriesNumberOfSeasonsBetween(input.Start, input.End),
+
+                (SeriesNumberOfEpisodes, Is, NumberFilterInputViewModel input) =>
+                    this.SeriesNumberOfEpisodesIs(input.Number),
+
+                (SeriesNumberOfEpisodes, LessThan, NumberFilterInputViewModel input) =>
+                    this.SeriesNumberOfEpisodesLessThan(input.Number),
+
+                (SeriesNumberOfEpisodes, GreaterThan, NumberFilterInputViewModel input) =>
+                    this.SeriesNumberOfEpisodesGreaterThan(input.Number),
+
+                (SeriesNumberOfEpisodes, Between, RangeFilterInputViewModel input) =>
+                    this.SeriesNumberOfEpisodesBetween(input.Start, input.End),
+
+                (SeriesMiniseries, _, _) => this.SeriesIsMiniseries(),
+
+                (SeriesAnthology, _, _) => this.SeriesIsAnthology(),
 
                 _ => NoFilter
             };
@@ -167,45 +228,92 @@ namespace MovieList.Core.ViewModels.Filters
         private FilterInput CreateFilterInput()
             => (this.FilterType, this.FilterOperation) switch
             {
-                (FilterType.Title, _) =>
-                    new TextFilterInputViewModel { Description = "Title" },
+                (Title, _) =>
+                    new TextFilterInputViewModel { Description = nameof(Title) },
 
-                (FilterType.Year, FilterOperation.Is or FilterOperation.LessThan or FilterOperation.GreaterThan) =>
-                    new NumberFilterInputViewModel { Description = "Year", Number = DefaultFilterYearValue },
+                (Year, Is or LessThan or GreaterThan) =>
+                    new NumberFilterInputViewModel { Description = nameof(Year), Number = DefaultFilterYearValue },
 
-                (FilterType.Year, FilterOperation.Between) =>
+                (Year, Between) =>
                     new RangeFilterInputViewModel
                     {
-                        Description = "Year",
+                        Description = nameof(Year),
                         Start = DefaultFilterYearValue,
                         End = DefaultFilterYearValue
                     },
 
-                (FilterType.Kind, FilterOperation.Is) =>
-                    new SelectionFilterInputViewModel(this.kindNames) { Description = "Kind" },
+                (Kind, Is) =>
+                    new SelectionFilterInputViewModel(this.kindNames) { Description = nameof(Kind) },
 
-                (FilterType.Tags, FilterOperation.Include or FilterOperation.Exclude) =>
-                    new TagsFilterInputViewModel(this.tags) { Description = "Tags" },
+                (Tags, Include or Exclude) =>
+                    new TagsFilterInputViewModel(this.tags) { Description = nameof(Tags) },
 
-                (FilterType.Tags, FilterOperation.HaveCategory) =>
+                (Tags, HaveCategory) =>
                     new SelectionFilterInputViewModel(this.tagCategories) { Description = "TagCategory" },
+
+                (SeriesWatchStatus, _) =>
+                    new SelectionFilterInputViewModel(this.seriesWatchStatuses)
+                    { Description = nameof(SeriesWatchStatus) },
+
+                (SeriesReleaseStatus, _) =>
+                    new SelectionFilterInputViewModel(this.seriesReleaseStatuses)
+                    { Description = nameof(SeriesReleaseStatus) },
+
+                (SeriesChannel, _) =>
+                    new TextFilterInputViewModel { Description = nameof(SeriesChannel) },
+
+                (SeriesNumberOfSeasons, Is or LessThan or GreaterThan) =>
+                    new NumberFilterInputViewModel
+                    {
+                        Description = nameof(SeriesNumberOfSeasons),
+                        Number = DefaultFilterNumberOfSeasonsValue
+                    },
+
+                (SeriesNumberOfSeasons, Between) =>
+                    new RangeFilterInputViewModel
+                    {
+                        Description = nameof(SeriesNumberOfSeasons),
+                        Start = DefaultFilterNumberOfSeasonsValue,
+                        End = DefaultFilterNumberOfSeasonsValue
+                    },
+
+                (SeriesNumberOfEpisodes, Is or LessThan or GreaterThan) =>
+                    new NumberFilterInputViewModel
+                    {
+                        Description = nameof(SeriesNumberOfEpisodes),
+                        Number = DefaultFilterNumberOfSeasonsValue
+                    },
+
+                (SeriesNumberOfEpisodes, Between) =>
+                    new RangeFilterInputViewModel
+                    {
+                        Description = nameof(SeriesNumberOfEpisodes),
+                        Start = DefaultFilterNumberOfSeasonsValue,
+                        End = DefaultFilterNumberOfSeasonsValue
+                    },
 
                 _ => new NoFilterInputViewModel()
             };
 
-        private Func<ListItem, bool> TitleIs(string title)
-            => String.IsNullOrEmpty(title) ? NoFilter : this.TitleFilter(t => t.Contains(title));
+        private Func<ListItem, bool> TitleIs(string? title)
+            => !String.IsNullOrEmpty(title)
+                ? this.TitleFilter(t => t.Contains(title, StringComparison.InvariantCultureIgnoreCase))
+                : NoFilter;
 
-        private Func<ListItem, bool> TitleStartsWith(string title)
-            => String.IsNullOrEmpty(title) ? NoFilter : this.TitleFilter(t => t.StartsWith(title));
+        private Func<ListItem, bool> TitleStartsWith(string? title)
+            => !String.IsNullOrEmpty(title)
+                ? this.TitleFilter(t => t.StartsWith(title, StringComparison.InvariantCultureIgnoreCase))
+                : NoFilter;
 
-        private Func<ListItem, bool> TitleEndsWith(string title)
-            => String.IsNullOrEmpty(title) ? NoFilter : this.TitleFilter(t => t.EndsWith(title));
+        private Func<ListItem, bool> TitleEndsWith(string? title)
+            => !String.IsNullOrEmpty(title)
+                ? this.TitleFilter(t => t.EndsWith(title, StringComparison.InvariantCultureIgnoreCase))
+                : NoFilter;
 
         private Func<ListItem, bool> TitleFilter(Func<string, bool> predicate)
             => this.CreateFilter(
-                movie => movie.Titles.Any(t => predicate(t.Name.ToLower())),
-                series => series.Titles.Any(t => predicate(t.Name.ToLower())));
+                movie => movie.Titles.Any(t => predicate(t.Name)),
+                series => series.Titles.Any(t => predicate(t.Name)));
 
         private Func<ListItem, bool> YearIs(int year)
             => this.CreateFilter(movie => movie.Year == year, series => this.SeriesYearIs(series, year));
@@ -222,32 +330,49 @@ namespace MovieList.Core.ViewModels.Filters
             => this.CreateFilter(movie => movie.Year > year, series => series.EndYear > year);
 
         private Func<ListItem, bool> YearBetween(int startYear, int endYear)
-            => this.CreateFilter(
-                movie => startYear <= movie.Year && movie.Year <= endYear,
-                series => this.SeriesYearBetween(series, startYear, endYear));
+            => startYear <= endYear
+                ? this.CreateFilter(
+                    movie => startYear <= movie.Year && movie.Year <= endYear,
+                    series => this.SeriesYearBetween(series, startYear, endYear))
+                : NoFilter;
 
         private bool SeriesYearBetween(Series series, int startYear, int endYear)
             => series.Seasons.Any(season => season.Periods
                 .Any(period => period.StartYear <= endYear && period.EndYear >= startYear)) ||
                 series.SpecialEpisodes.Any(episode => startYear <= episode.Year && episode.Year <= endYear);
 
-        private Func<ListItem, bool> KindIs(string kindName)
-            => this.CreateFilter(movie => movie.Kind.Name == kindName, series => series.Kind.Name == kindName);
+        private Func<ListItem, bool> KindIs(string? kindName)
+            => !String.IsNullOrEmpty(kindName)
+                ? this.CreateFilter(movie => movie.Kind.Name == kindName, series => series.Kind.Name == kindName)
+                : NoFilter;
 
-        private Func<ListItem, bool> TagsInclude(IEnumerable<Tag> tags)
-            => this.CreateFilter(
+        private Func<ListItem, bool> TagsInclude(IEnumerable<TagItemViewModel> tagItems)
+            => this.CreateTagFilter(
+                tagItems,
                 movie => tags.All(tag => movie.Tags.Contains(tag)),
                 series => tags.All(tag => series.Tags.Contains(tag)));
 
-        private Func<ListItem, bool> TagsExclude(IEnumerable<Tag> tags)
-            => this.CreateFilter(
+        private Func<ListItem, bool> TagsExclude(IEnumerable<TagItemViewModel> tagItems)
+            => this.CreateTagFilter(
+                tagItems,
                 movie => tags.All(tag => !movie.Tags.Contains(tag)),
                 series => tags.All(tag => !series.Tags.Contains(tag)));
 
-        private Func<ListItem, bool> TagsHaveCategory(string category)
-            => this.CreateFilter(
-                movie => movie.Tags.Any(tag => tag.Category == category),
-                series => series.Tags.Any(tag => tag.Category == category));
+        private Func<ListItem, bool> CreateTagFilter(
+            IEnumerable<TagItemViewModel> tagItems,
+            Func<Movie, bool> moviePredicate,
+            Func<Series, bool> seriesPredicate)
+        {
+            var tags = tagItems.Select(item => item.Tag).ToList();
+            return !tags.IsEmpty() ? this.CreateFilter(moviePredicate, seriesPredicate) : NoFilter;
+        }
+
+        private Func<ListItem, bool> TagsHaveCategory(string? category)
+            => !String.IsNullOrEmpty(category)
+                ? this.CreateFilter(
+                    movie => movie.Tags.Any(tag => tag.Category == category),
+                    series => series.Tags.Any(tag => tag.Category == category))
+                : NoFilter;
 
         private Func<ListItem, bool> IsStandalone()
             => item => item switch
@@ -258,10 +383,100 @@ namespace MovieList.Core.ViewModels.Filters
             };
 
         private Func<ListItem, bool> IsMovie()
-            => this.CreateFilter(movie => true, series => false);
+            => this.CreateMovieFilter(movie => true);
+
+        private Func<ListItem, bool> IsMovieWatched()
+            => this.CreateMovieFilter(movie => movie.IsWatched);
+
+        private Func<ListItem, bool> IsMovieReleased()
+            => this.CreateMovieFilter(movie => movie.IsReleased);
+
+        private Func<ListItem, bool> CreateMovieFilter(Func<Movie, bool> predicate)
+            => this.CreateFilter(predicate, series => false);
 
         private Func<ListItem, bool> IsSeries()
-            => this.CreateFilter(movie => false, series => true);
+            => this.CreateSeriesFilter(series => true);
+
+        private Func<ListItem, bool> SeriesWatchStatusIs(string? status)
+            => !String.IsNullOrEmpty(status)
+                ? this.CreateSeriesFilter(
+                    series => this.seriesWatchStatusConverter.ToString(series.WatchStatus) == status)
+                : NoFilter;
+
+        private Func<ListItem, bool> SeriesReleaseStatusIs(string? status)
+            => !String.IsNullOrEmpty(status)
+                ? this.CreateSeriesFilter(
+                    series => this.seriesReleaseStatusConverter.ToString(series.ReleaseStatus) == status)
+                : NoFilter;
+
+        private Func<ListItem, bool> SeriesChannelIs(string? channel)
+            => !String.IsNullOrEmpty(channel)
+                ? this.CreateSeriesFilter(series =>
+                    series.Seasons.Any(season =>
+                        season.Channel.Equals(channel, StringComparison.InvariantCultureIgnoreCase)) ||
+                    series.SpecialEpisodes.Any(episode =>
+                        episode.Channel.Equals(channel, StringComparison.InvariantCultureIgnoreCase)))
+                : NoFilter;
+
+        private Func<ListItem, bool> SeriesChannelStartsWith(string? channel)
+            => !String.IsNullOrEmpty(channel)
+                ? this.CreateSeriesFilter(series =>
+                    series.Seasons.Any(season =>
+                        season.Channel.StartsWith(channel, StringComparison.InvariantCultureIgnoreCase)) ||
+                    series.SpecialEpisodes.Any(episode =>
+                        episode.Channel.StartsWith(channel, StringComparison.InvariantCultureIgnoreCase)))
+                : NoFilter;
+
+        private Func<ListItem, bool> SeriesChannelEndsWith(string? channel)
+            => !String.IsNullOrEmpty(channel)
+                ? this.CreateSeriesFilter(series =>
+                    series.Seasons.Any(season =>
+                        season.Channel.EndsWith(channel, StringComparison.InvariantCultureIgnoreCase)) ||
+                    series.SpecialEpisodes.Any(episode =>
+                        episode.Channel.EndsWith(channel, StringComparison.InvariantCultureIgnoreCase)))
+                : NoFilter;
+
+        private Func<ListItem, bool> SeriesNumberOfSeasonsIs(int numSeasons)
+            => this.CreateSeriesFilter(series => series.Seasons.Count == numSeasons);
+
+        private Func<ListItem, bool> SeriesNumberOfSeasonsLessThan(int numSeasons)
+            => this.CreateSeriesFilter(series => series.Seasons.Count < numSeasons);
+
+        private Func<ListItem, bool> SeriesNumberOfSeasonsGreaterThan(int numSeasons)
+            => this.CreateSeriesFilter(series => series.Seasons.Count > numSeasons);
+
+        private Func<ListItem, bool> SeriesNumberOfSeasonsBetween(int numSeasonsFrom, int numSeasonsTo)
+            => this.CreateSeriesFilter(series =>
+                numSeasonsFrom <= series.Seasons.Count && series.Seasons.Count <= numSeasonsTo);
+
+        private Func<ListItem, bool> SeriesNumberOfEpisodesIs(int numEpisodes)
+            => this.CreateSeriesFilter(series => this.GetNumberOfEpisodes(series) == numEpisodes);
+
+        private Func<ListItem, bool> SeriesNumberOfEpisodesLessThan(int numEpisodes)
+            => this.CreateSeriesFilter(series => this.GetNumberOfEpisodes(series) < numEpisodes);
+
+        private Func<ListItem, bool> SeriesNumberOfEpisodesGreaterThan(int numEpisodes)
+            => this.CreateSeriesFilter(series => this.GetNumberOfEpisodes(series) > numEpisodes);
+
+        private Func<ListItem, bool> SeriesNumberOfEpisodesBetween(int numEpisodesFrom, int numEpisodesTo)
+            => this.CreateSeriesFilter(series =>
+            {
+                int actualNumEpisodes = this.GetNumberOfEpisodes(series);
+                return numEpisodesFrom <= actualNumEpisodes && actualNumEpisodes <= numEpisodesTo;
+            });
+
+        private int GetNumberOfEpisodes(Series series)
+            => series.Seasons.Sum(season => season.Periods.Sum(period => period.NumberOfEpisodes)) +
+                series.SpecialEpisodes.Count;
+
+        private Func<ListItem, bool> SeriesIsMiniseries()
+            => this.CreateSeriesFilter(series => series.IsMiniseries);
+
+        private Func<ListItem, bool> SeriesIsAnthology()
+            => this.CreateSeriesFilter(series => series.IsAnthology);
+
+        private Func<ListItem, bool> CreateSeriesFilter(Func<Series, bool> predicate)
+            => this.CreateFilter(movie => false, predicate);
 
         private Func<ListItem, bool> CreateFilter(Func<Movie, bool> moviePredicate, Func<Series, bool> seriesPredicate)
         {

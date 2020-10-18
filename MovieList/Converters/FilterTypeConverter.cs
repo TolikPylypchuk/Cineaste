@@ -33,6 +33,7 @@ namespace MovieList.Converters
                 [FilterType.SeriesChannel] = Messages.FilterTypeSeriesChannel,
                 [FilterType.SeriesNumberOfSeasons] = Messages.FilterTypeSeriesNumberOfSeasons,
                 [FilterType.SeriesNumberOfEpisodes] = Messages.FilterTypeSeriesNumberOfEpisodes,
+                [FilterType.SeriesMiniseries] = Messages.FilterTypeSeriesMiniseries,
                 [FilterType.SeriesAnthology] = Messages.FilterTypeSeriesAnthology
             };
 

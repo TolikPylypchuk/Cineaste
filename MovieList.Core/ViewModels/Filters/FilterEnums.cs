@@ -13,14 +13,15 @@ namespace MovieList.Core.ViewModels.Filters
         Tags,
         Standalone,
         Movie,
-        Series,
         MovieWatched,
         MovieReleased,
+        Series,
         SeriesWatchStatus,
         SeriesReleaseStatus,
         SeriesChannel,
         SeriesNumberOfSeasons,
         SeriesNumberOfEpisodes,
+        SeriesMiniseries,
         SeriesAnthology
     }
 
@@ -65,6 +66,7 @@ namespace MovieList.Core.ViewModels.Filters
                 .Add(SeriesChannel, textOperations)
                 .Add(SeriesNumberOfSeasons, numberOperations)
                 .Add(SeriesNumberOfEpisodes, numberOperations)
+                .Add(SeriesMiniseries, noOperations)
                 .Add(SeriesAnthology, noOperations);
         }
 

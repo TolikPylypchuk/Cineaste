@@ -10,5 +10,7 @@ namespace MovieList.Core
         public const string ListFileExtension = "mlist";
 
         public const int DefaultFilterYearValue = 2000;
+        public const int DefaultFilterNumberOfSeasonsValue = 5;
+        public const int DefaultFilterNumberOfEpisodesValue = 100;
     }
 }
