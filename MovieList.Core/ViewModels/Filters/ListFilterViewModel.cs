@@ -20,7 +20,7 @@ namespace MovieList.Core.ViewModels.Filters
 
             this.ClearFilter
                 .StartWith(Unit.Default)
-                .Select(() => new FilterItemViewModel(kinds, tags))
+                .Select(() => new SimpleFilterItemViewModel(kinds, tags))
                 .ToPropertyEx(this, vm => vm.FilterItem);
 
             this.ClearFilter.InvokeCommand(this.ApplyFilter);
@@ -29,7 +29,7 @@ namespace MovieList.Core.ViewModels.Filters
         [Reactive]
         public bool IsAvailable { get; set; } = true;
 
-        public FilterItemViewModel FilterItem { [ObservableAsProperty] get; } = null!;
+        public FilterItem FilterItem { [ObservableAsProperty] get; } = null!;
 
         public ReactiveCommand<Unit, Func<ListItem, bool>> ApplyFilter { get; }
         public ReactiveCommand<Unit, Unit> ClearFilter { get; }

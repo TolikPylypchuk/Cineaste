@@ -7,22 +7,22 @@ namespace MovieList.Core.ViewModels.Filters
 {
     public enum FilterType
     {
-        Title,
-        Year,
-        Kind,
-        Tags,
-        Standalone,
-        Movie,
-        MovieWatched,
-        MovieReleased,
-        Series,
-        SeriesWatchStatus,
-        SeriesReleaseStatus,
-        SeriesChannel,
-        SeriesNumberOfSeasons,
-        SeriesNumberOfEpisodes,
-        SeriesMiniseries,
-        SeriesAnthology
+        ByTitle,
+        ByYear,
+        ByKind,
+        ByTags,
+        ByIsStandalone,
+        ByIsMovie,
+        ByMovieIsWatched,
+        ByMovieIsReleased,
+        ByIsSeries,
+        BySeriesWatchStatus,
+        BySeriesReleaseStatus,
+        BySeriesChannel,
+        BySeriesNumberOfSeasons,
+        BySeriesNumberOfEpisodes,
+        BySeriesIsMiniseries,
+        BySeriesIsAnthology
     }
 
     public enum FilterOperation
@@ -39,6 +39,8 @@ namespace MovieList.Core.ViewModels.Filters
         HaveCategory
     }
 
+    public enum FilterComposition { And, Or }
+
     public static class FilterOperations
     {
         public static readonly ImmutableDictionary<FilterType, ImmutableList<FilterOperation>> ByType;
@@ -52,22 +54,22 @@ namespace MovieList.Core.ViewModels.Filters
             var noOperations = Operations(None);
 
             ByType = ImmutableDictionary.Create<FilterType, ImmutableList<FilterOperation>>()
-                .Add(Title, textOperations)
-                .Add(Year, numberOperations)
-                .Add(Kind, onlyIs)
-                .Add(Tags, tagOperations)
-                .Add(Standalone, noOperations)
-                .Add(Movie, noOperations)
-                .Add(Series, noOperations)
-                .Add(MovieWatched, noOperations)
-                .Add(MovieReleased, noOperations)
-                .Add(SeriesWatchStatus, onlyIs)
-                .Add(SeriesReleaseStatus, onlyIs)
-                .Add(SeriesChannel, textOperations)
-                .Add(SeriesNumberOfSeasons, numberOperations)
-                .Add(SeriesNumberOfEpisodes, numberOperations)
-                .Add(SeriesMiniseries, noOperations)
-                .Add(SeriesAnthology, noOperations);
+                .Add(ByTitle, textOperations)
+                .Add(ByYear, numberOperations)
+                .Add(ByKind, onlyIs)
+                .Add(ByTags, tagOperations)
+                .Add(ByIsStandalone, noOperations)
+                .Add(ByIsMovie, noOperations)
+                .Add(ByIsSeries, noOperations)
+                .Add(ByMovieIsWatched, noOperations)
+                .Add(ByMovieIsReleased, noOperations)
+                .Add(BySeriesWatchStatus, onlyIs)
+                .Add(BySeriesReleaseStatus, onlyIs)
+                .Add(BySeriesChannel, textOperations)
+                .Add(BySeriesNumberOfSeasons, numberOperations)
+                .Add(BySeriesNumberOfEpisodes, numberOperations)
+                .Add(BySeriesIsMiniseries, noOperations)
+                .Add(BySeriesIsAnthology, noOperations);
         }
 
         private static ImmutableList<FilterOperation> Operations(params FilterOperation[] ops)

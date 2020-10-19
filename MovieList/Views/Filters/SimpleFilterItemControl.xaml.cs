@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows.Controls;
 
 using DynamicData;
 using DynamicData.Binding;
@@ -15,11 +16,11 @@ using Splat;
 
 namespace MovieList.Views.Filters
 {
-    public abstract class FilterItemControlBase : ReactiveUserControl<FilterItemViewModel> { }
+    public abstract class SimpleFilterItemControlBase : ReactiveUserControl<SimpleFilterItemViewModel> { }
 
-    public partial class FilterItemControl : FilterItemControlBase
+    public partial class SimpleFilterItemControl : SimpleFilterItemControlBase
     {
-        public FilterItemControl()
+        public SimpleFilterItemControl()
         {
             this.InitializeComponent();
 
@@ -27,16 +28,6 @@ namespace MovieList.Views.Filters
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
-
-                this.Bind(this.ViewModel!, vm => vm.IsNegated, v => v.NegateCheckBox.IsChecked)
-                    ?.DisposeWith(disposables);
-
-                this.OneWayBind(
-                    this.ViewModel!,
-                    vm => vm.IsNegated,
-                    v => v.ColorStripRectangle.Visibility,
-                    BooleanToVisibilityHint.UseHidden)
                     ?.DisposeWith(disposables);
 
                 this.FilterTypeComboBox.AddEnumValues<FilterType>();
@@ -63,6 +54,21 @@ namespace MovieList.Views.Filters
                 this.WhenAnyValue(v => v.ViewModel!.FilterOperation)
                     .Select(op => op != FilterOperation.None)
                     .BindTo(this, v => v.FilterOperationComboBox.Visibility)
+                    ?.DisposeWith(disposables);
+
+                this.Bind(this.ViewModel!, vm => vm.IsNegated, v => v.NegateCheckBox.IsChecked)
+                    ?.DisposeWith(disposables);
+
+                this.OneWayBind(
+                    this.ViewModel!,
+                    vm => vm.IsNegated,
+                    v => v.ColorStripRectangle.Visibility,
+                    BooleanToVisibilityHint.UseHidden)
+                    ?.DisposeWith(disposables);
+
+                this.WhenAnyValue(v => v.ViewModel!.FilterOperation)
+                    .Select(op => op != FilterOperation.None ? 1 : 0)
+                    .Subscribe(gridRow => Grid.SetRow(this.NegateCheckBox, gridRow))
                     ?.DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.FilterInput, v => v.InputViewHost.ViewModel)

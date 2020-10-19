@@ -4,5 +4,5 @@
                                   xmlns:local="clr-namespace:MovieList.Views.Filters"
                                   xmlns:v="clr-namespace:MovieList.Views">
     <TextBox x:Name="InputBox" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-             v:Properties.TripleClickSelectAll="True" />
+             v:Properties.TripleClickSelectAll="True" TextWrapping="Wrap" />
 </local:TextFilterInputControlBase>

@@ -19,22 +19,22 @@ namespace MovieList.Converters
         {
             this.filterTypeToString = new Dictionary<FilterType, string>
             {
-                [FilterType.Title] = Messages.FilterTypeTitle,
-                [FilterType.Year] = Messages.FilterTypeYear,
-                [FilterType.Kind] = Messages.FilterTypeKind,
-                [FilterType.Tags] = Messages.FilterTypeTags,
-                [FilterType.Standalone] = Messages.FilterTypeStandalone,
-                [FilterType.Movie] = Messages.FilterTypeMovie,
-                [FilterType.Series] = Messages.FilterTypeSeries,
-                [FilterType.MovieWatched] = Messages.FilterTypeMovieWatched,
-                [FilterType.MovieReleased] = Messages.FilterTypeMovieReleased,
-                [FilterType.SeriesWatchStatus] = Messages.FilterTypeSeriesWatchStatus,
-                [FilterType.SeriesReleaseStatus] = Messages.FilterTypeSeriesReleaseStatus,
-                [FilterType.SeriesChannel] = Messages.FilterTypeSeriesChannel,
-                [FilterType.SeriesNumberOfSeasons] = Messages.FilterTypeSeriesNumberOfSeasons,
-                [FilterType.SeriesNumberOfEpisodes] = Messages.FilterTypeSeriesNumberOfEpisodes,
-                [FilterType.SeriesMiniseries] = Messages.FilterTypeSeriesMiniseries,
-                [FilterType.SeriesAnthology] = Messages.FilterTypeSeriesAnthology
+                [FilterType.ByTitle] = Messages.FilterTypeTitle,
+                [FilterType.ByYear] = Messages.FilterTypeYear,
+                [FilterType.ByKind] = Messages.FilterTypeKind,
+                [FilterType.ByTags] = Messages.FilterTypeTags,
+                [FilterType.ByIsStandalone] = Messages.FilterTypeStandalone,
+                [FilterType.ByIsMovie] = Messages.FilterTypeMovie,
+                [FilterType.ByIsSeries] = Messages.FilterTypeSeries,
+                [FilterType.ByMovieIsWatched] = Messages.FilterTypeMovieWatched,
+                [FilterType.ByMovieIsReleased] = Messages.FilterTypeMovieReleased,
+                [FilterType.BySeriesWatchStatus] = Messages.FilterTypeSeriesWatchStatus,
+                [FilterType.BySeriesReleaseStatus] = Messages.FilterTypeSeriesReleaseStatus,
+                [FilterType.BySeriesChannel] = Messages.FilterTypeSeriesChannel,
+                [FilterType.BySeriesNumberOfSeasons] = Messages.FilterTypeSeriesNumberOfSeasons,
+                [FilterType.BySeriesNumberOfEpisodes] = Messages.FilterTypeSeriesNumberOfEpisodes,
+                [FilterType.BySeriesIsMiniseries] = Messages.FilterTypeSeriesMiniseries,
+                [FilterType.BySeriesIsAnthology] = Messages.FilterTypeSeriesAnthology
             };
 
             this.stringToFilterType = filterTypeToString.ToDictionary(e => e.Value, e => e.Key);

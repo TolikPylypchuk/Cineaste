@@ -15,7 +15,7 @@
                     HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
         </StackPanel>
 
-        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
             <rx:ViewModelViewHost x:Name="FilterItemViewHost" Margin="4" />
         </ScrollViewer>
     </DockPanel>
