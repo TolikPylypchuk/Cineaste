@@ -88,6 +88,33 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add filter.
+        /// </summary>
+        public static string AddFilter {
+            get {
+                return ResourceManager.GetString("AddFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add filter (and).
+        /// </summary>
+        public static string AddFilterAnd {
+            get {
+                return ResourceManager.GetString("AddFilterAnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add filter (or).
+        /// </summary>
+        public static string AddFilterOr {
+            get {
+                return ResourceManager.GetString("AddFilterOr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add implied tag.
         /// </summary>
         public static string AddImpliedTag {
@@ -1745,6 +1772,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove filter.
+        /// </summary>
+        public static string RemoveFilter {
+            get {
+                return ResourceManager.GetString("RemoveFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove from list.
         /// </summary>
         public static string RemoveFromList {
@@ -2002,6 +2038,24 @@ namespace MovieList.Properties {
         public static string SeriesWatching {
             get {
                 return ResourceManager.GetString("SeriesWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set filter composition to &quot;and&quot;.
+        /// </summary>
+        public static string SetFilterCompositionToAnd {
+            get {
+                return ResourceManager.GetString("SetFilterCompositionToAnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set filter composition to &quot;or&quot;.
+        /// </summary>
+        public static string SetFilterCompositionToOr {
+            get {
+                return ResourceManager.GetString("SetFilterCompositionToOr", resourceCulture);
             }
         }
         

@@ -81,6 +81,7 @@ namespace MovieList.Core.ViewModels.Filters
             this.seriesWatchStatuses = new ReadOnlyObservableCollection<string>(seriesWatchStatuses);
             this.seriesReleaseStatuses = new ReadOnlyObservableCollection<string>(seriesReleaseStatuses);
 
+            this.MakeComposite = ReactiveCommand.Create<FilterComposition, FilterComposition>(c => c);
             this.Delete = ReactiveCommand.Create(() => { });
 
             this.WhenActivated(disposables =>
@@ -112,6 +113,7 @@ namespace MovieList.Core.ViewModels.Filters
         public ReadOnlyObservableCollection<FilterOperation> AvailableOperations
             => this.availableOperations;
 
+        public ReactiveCommand<FilterComposition, FilterComposition> MakeComposite { get; }
         public override ReactiveCommand<Unit, Unit> Delete { get; }
 
         public ViewModelActivator Activator { get; } = new ViewModelActivator();

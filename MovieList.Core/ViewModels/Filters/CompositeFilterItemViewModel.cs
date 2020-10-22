@@ -24,6 +24,7 @@ namespace MovieList.Core.ViewModels.Filters
         public CompositeFilterItemViewModel(
             ReadOnlyObservableCollection<Kind> kinds,
             ReadOnlyObservableCollection<Tag> tags,
+            FilterComposition initialComposition = FilterComposition.And,
             IEnumConverter<SeriesWatchStatus>? seriesWatchStatusConverter = null,
             IEnumConverter<SeriesReleaseStatus>? seriesReleaseStatusConverter = null)
             : base(kinds, tags, seriesWatchStatusConverter, seriesReleaseStatusConverter)
@@ -33,12 +34,14 @@ namespace MovieList.Core.ViewModels.Filters
                 .DisposeMany()
                 .Subscribe();
 
-            this.SetComposition = ReactiveCommand.Create<FilterComposition, FilterComposition>(c => c);
+            this.SwitchComposition = ReactiveCommand.Create<Unit, FilterComposition>(
+                _ => this.Composition == FilterComposition.And ? FilterComposition.Or : FilterComposition.And);
+
             this.AddItem = ReactiveCommand.Create(this.OnAddItem);
             this.Delete = ReactiveCommand.Create(() => { });
 
-            this.SetComposition
-                .ToPropertyEx(this, vm => vm.Composition, initialValue: FilterComposition.And);
+            this.SwitchComposition
+                .ToPropertyEx(this, vm => vm.Composition, initialValue: initialComposition);
         }
 
         public FilterComposition Composition { [ObservableAsProperty] get; }
@@ -46,15 +49,18 @@ namespace MovieList.Core.ViewModels.Filters
         public ReadOnlyObservableCollection<FilterItem> Items
             => this.items;
 
-        public ReactiveCommand<FilterComposition, FilterComposition> SetComposition { get; }
+        public ReactiveCommand<Unit, FilterComposition> SwitchComposition { get; }
         public ReactiveCommand<Unit, Unit> AddItem { get; }
         public override ReactiveCommand<Unit, Unit> Delete { get; }
 
-        public static CompositeFilterItemViewModel FromSimpleItem(SimpleFilterItemViewModel simpleItem)
+        public static CompositeFilterItemViewModel FromSimpleItem(
+            SimpleFilterItemViewModel simpleItem,
+            FilterComposition initialComposition)
         {
             var result = new CompositeFilterItemViewModel(
                 simpleItem.Kinds,
                 simpleItem.Tags,
+                initialComposition,
                 simpleItem.SeriesWatchStatusConverter,
                 simpleItem.SeriesReleaseStatusConverter);
 
@@ -93,6 +99,19 @@ namespace MovieList.Core.ViewModels.Filters
         private void CreateSubscriptions(FilterItem item)
         {
             var subscriptions = new CompositeDisposable();
+
+            if (item is SimpleFilterItemViewModel simpleItem)
+            {
+                simpleItem.MakeComposite
+                    .Select(composition => FromSimpleItem(simpleItem, composition))
+                    .Subscribe(compositeItem =>
+                    {
+                        var index = this.itemsSource.Items.IndexOf(simpleItem);
+                        this.itemsSource.ReplaceAt(index, compositeItem);
+                        subscriptions.Dispose();
+                    })
+                    .DisposeWith(subscriptions);
+            }
 
             item.Delete
                 .Subscribe(() =>

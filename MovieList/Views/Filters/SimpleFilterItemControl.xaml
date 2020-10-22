@@ -15,6 +15,7 @@
             <ColumnDefinition Width="4" />
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Rectangle x:Name="ColorStripRectangle" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Fill="#E53935" />
@@ -31,5 +32,14 @@
 
         <CheckBox x:Name="NegateCheckBox" Grid.Row="1" Grid.Column="2" Content="{l:Translate FilterNegate}"
                   Margin="4" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+        <m:PopupBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" StaysOpen="False" HorizontalAlignment="Center"
+                    VerticalAlignment="Center" PopupMode="Click" PlacementMode="BottomAndAlignRightEdges">
+            <StackPanel Margin="0 8">
+                <Button x:Name="MakeCompositeAndButton" Content="{l:Translate AddFilterAnd}" />
+                <Button x:Name="MakeCompositeOrButton" Content="{l:Translate AddFilterOr}" />
+                <Button x:Name="RemoveFilterButton" Content="{l:Translate RemoveFilter}" />
+            </StackPanel>
+        </m:PopupBox>
     </Grid>
 </local:SimpleFilterItemControlBase>
