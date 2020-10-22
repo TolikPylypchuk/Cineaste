@@ -97,24 +97,6 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add filter (and).
-        /// </summary>
-        public static string AddFilterAnd {
-            get {
-                return ResourceManager.GetString("AddFilterAnd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add filter (or).
-        /// </summary>
-        public static string AddFilterOr {
-            get {
-                return ResourceManager.GetString("AddFilterOr", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add implied tag.
         /// </summary>
         public static string AddImpliedTag {
@@ -899,6 +881,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Make composite (and).
+        /// </summary>
+        public static string FilterMakeCompositeAnd {
+            get {
+                return ResourceManager.GetString("FilterMakeCompositeAnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make composite (or).
+        /// </summary>
+        public static string FilterMakeCompositeOr {
+            get {
+                return ResourceManager.GetString("FilterMakeCompositeOr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Negate.
         /// </summary>
         public static string FilterNegate {
@@ -1012,6 +1012,15 @@ namespace MovieList.Properties {
         public static string FilterRangeStartDescriptionFormat {
             get {
                 return ResourceManager.GetString("FilterRangeStartDescriptionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify.
+        /// </summary>
+        public static string FilterSimplify {
+            get {
+                return ResourceManager.GetString("FilterSimplify", resourceCulture);
             }
         }
         

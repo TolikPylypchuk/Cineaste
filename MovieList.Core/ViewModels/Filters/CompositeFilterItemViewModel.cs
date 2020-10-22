@@ -6,7 +6,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using DynamicData;
+using DynamicData.Aggregation;
 
+using MovieList.Core.Data.Models;
+using MovieList.Core.ListItems;
 using MovieList.Data.Models;
 
 using ReactiveUI;
@@ -30,6 +33,7 @@ namespace MovieList.Core.ViewModels.Filters
             : base(kinds, tags, seriesWatchStatusConverter, seriesReleaseStatusConverter)
         {
             this.itemsSource.Connect()
+                .Transform(this.WithSubscriptions)
                 .Bind(out items)
                 .DisposeMany()
                 .Subscribe();
@@ -38,6 +42,12 @@ namespace MovieList.Core.ViewModels.Filters
                 _ => this.Composition == FilterComposition.And ? FilterComposition.Or : FilterComposition.And);
 
             this.AddItem = ReactiveCommand.Create(this.OnAddItem);
+
+            var canSimplify = this.itemsSource.Connect()
+                .Count()
+                .Select(count => count == 1);
+
+            this.Simplify = ReactiveCommand.Create(() => this.Items[0], canSimplify);
             this.Delete = ReactiveCommand.Create(() => { });
 
             this.SwitchComposition
@@ -51,6 +61,7 @@ namespace MovieList.Core.ViewModels.Filters
 
         public ReactiveCommand<Unit, FilterComposition> SwitchComposition { get; }
         public ReactiveCommand<Unit, Unit> AddItem { get; }
+        public ReactiveCommand<Unit, FilterItem> Simplify { get; }
         public override ReactiveCommand<Unit, Unit> Delete { get; }
 
         public static CompositeFilterItemViewModel FromSimpleItem(
@@ -64,7 +75,6 @@ namespace MovieList.Core.ViewModels.Filters
                 simpleItem.SeriesWatchStatusConverter,
                 simpleItem.SeriesReleaseStatusConverter);
 
-            result.CreateSubscriptions(simpleItem);
             result.itemsSource.Add(simpleItem);
 
             return result;
@@ -84,19 +94,30 @@ namespace MovieList.Core.ViewModels.Filters
                 _ => (_, _) => NoFilter
             };
 
-            return this.Items.Select(item => item.CreateFilter()).Aggregate(composeFilters);
+            var filters = this.Items.Select(item => item.CreateFilter()).Aggregate(composeFilters);
+
+            Filter filter = null!;
+
+            filter = item => item switch
+            {
+                MovieListItem movieItem => filters(movieItem),
+                SeriesListItem seriesItem => filters(seriesItem),
+                FranchiseListItem franchiseItem =>
+                    franchiseItem.Franchise.ShowTitles &&
+                    franchiseItem.Franchise.Entries
+                        .Select(entry => entry.ToListItem())
+                        .Any(item => filter(item)),
+                _ => false
+            };
+
+            return filter;
         }
 
         private void OnAddItem()
-        {
-            var simpleItem = new SimpleFilterItemViewModel(
-                this.Kinds, this.Tags, this.SeriesWatchStatusConverter, this.SeriesReleaseStatusConverter);
+            => this.itemsSource.Add(new SimpleFilterItemViewModel(
+                this.Kinds, this.Tags, this.SeriesWatchStatusConverter, this.SeriesReleaseStatusConverter));
 
-            this.CreateSubscriptions(simpleItem);
-            this.itemsSource.Add(simpleItem);
-        }
-
-        private void CreateSubscriptions(FilterItem item)
+        private FilterItem WithSubscriptions(FilterItem item)
         {
             var subscriptions = new CompositeDisposable();
 
@@ -106,8 +127,16 @@ namespace MovieList.Core.ViewModels.Filters
                     .Select(composition => FromSimpleItem(simpleItem, composition))
                     .Subscribe(compositeItem =>
                     {
-                        var index = this.itemsSource.Items.IndexOf(simpleItem);
-                        this.itemsSource.ReplaceAt(index, compositeItem);
+                        this.itemsSource.Replace(simpleItem, compositeItem);
+                        subscriptions.Dispose();
+                    })
+                    .DisposeWith(subscriptions);
+            } else if (item is CompositeFilterItemViewModel compositeItem)
+            {
+                compositeItem.Simplify
+                    .Subscribe(newItem =>
+                    {
+                        this.itemsSource.Replace(compositeItem, newItem);
                         subscriptions.Dispose();
                     })
                     .DisposeWith(subscriptions);
@@ -120,6 +149,8 @@ namespace MovieList.Core.ViewModels.Filters
                     subscriptions.Dispose();
                 })
                 .DisposeWith(subscriptions);
+
+            return item;
         }
     }
 }

@@ -871,11 +871,11 @@ This will detach all entries without deleting them.</value>
   <data name="AddFilter" xml:space="preserve">
     <value>Add filter</value>
   </data>
-  <data name="AddFilterAnd" xml:space="preserve">
-    <value>Add filter (and)</value>
+  <data name="FilterMakeCompositeAnd" xml:space="preserve">
+    <value>Make composite (and)</value>
   </data>
-  <data name="AddFilterOr" xml:space="preserve">
-    <value>Add filter (or)</value>
+  <data name="FilterMakeCompositeOr" xml:space="preserve">
+    <value>Make composite (or)</value>
   </data>
   <data name="RemoveFilter" xml:space="preserve">
     <value>Remove filter</value>
@@ -885,5 +885,8 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="SetFilterCompositionToOr" xml:space="preserve">
     <value>Set filter composition to "or"</value>
+  </data>
+  <data name="FilterSimplify" xml:space="preserve">
+    <value>Simplify</value>
   </data>
 </root>

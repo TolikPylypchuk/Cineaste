@@ -33,6 +33,9 @@ namespace MovieList.Views.Filters
                     .BindTo(this, v => v.ColorStripRectangle.Fill)
                     ?.DisposeWith(disposables);
 
+                this.BindCommand(this.ViewModel!, vm => vm.AddItem, v => v.AddFilterButton)
+                    ?.DisposeWith(disposables);
+
                 this.BindCommand(this.ViewModel!, vm => vm.SwitchComposition, v => v.SwitchCompositionButton)
                     ?.DisposeWith(disposables);
 
@@ -43,7 +46,11 @@ namespace MovieList.Views.Filters
                     .BindTo(this, v => v.SwitchCompositionButton.ToolTip)
                     ?.DisposeWith(disposables);
 
-                this.BindCommand(this.ViewModel!, vm => vm.AddItem, v => v.AddFilterButton)
+                this.BindCommand(this.ViewModel!, vm => vm.Simplify, v => v.SimplifyButton)
+                    ?.DisposeWith(disposables);
+
+                this.ViewModel!.Simplify.CanExecute
+                    .BindTo(this, v => v.SimplifyButton.Visibility)
                     ?.DisposeWith(disposables);
             });
         }

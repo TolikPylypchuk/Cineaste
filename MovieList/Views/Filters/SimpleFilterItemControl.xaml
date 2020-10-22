@@ -36,8 +36,8 @@
         <m:PopupBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" StaysOpen="False" HorizontalAlignment="Center"
                     VerticalAlignment="Center" PopupMode="Click" PlacementMode="BottomAndAlignRightEdges">
             <StackPanel Margin="0 8">
-                <Button x:Name="MakeCompositeAndButton" Content="{l:Translate AddFilterAnd}" />
-                <Button x:Name="MakeCompositeOrButton" Content="{l:Translate AddFilterOr}" />
+                <Button x:Name="MakeCompositeAndButton" Content="{l:Translate FilterMakeCompositeAnd}" />
+                <Button x:Name="MakeCompositeOrButton" Content="{l:Translate FilterMakeCompositeOr}" />
                 <Button x:Name="RemoveFilterButton" Content="{l:Translate RemoveFilter}" />
             </StackPanel>
         </m:PopupBox>

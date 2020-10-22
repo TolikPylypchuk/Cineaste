@@ -34,6 +34,11 @@
             <Button x:Name="SwitchCompositionButton" Margin="8 4" Style="{StaticResource MaterialDesignIconButton}">
                 <m:PackIcon Kind="CogTransferOutline" />
             </Button>
+
+            <Button x:Name="SimplifyButton" Margin="8 4" ToolTip="{l:Translate FilterSimplify}"
+                    Style="{StaticResource MaterialDesignIconButton}">
+                <m:PackIcon Kind="ArrowCollapse" />
+            </Button>
         </StackPanel>
     </Grid>
 </local:CompositeFilterItemControlBase>

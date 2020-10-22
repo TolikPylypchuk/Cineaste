@@ -14,20 +14,14 @@ namespace MovieList.Core.ViewModels.Filters
 {
     public sealed class ListFilterViewModel : ReactiveObject
     {
-        private readonly ReadOnlyObservableCollection<Kind> kinds;
-        private readonly ReadOnlyObservableCollection<Tag> tags;
-
         public ListFilterViewModel(ReadOnlyObservableCollection<Kind> kinds, ReadOnlyObservableCollection<Tag> tags)
         {
-            this.kinds = kinds;
-            this.tags = tags;
-
             this.ApplyFilter = ReactiveCommand.Create(() => this.FilterItem.CreateFilter());
             this.ClearFilter = ReactiveCommand.Create(() => { });
 
             this.ClearFilter
                 .StartWith(Unit.Default)
-                .Select(this.CreateDefaultFilterItem)
+                .Select(() => this.WithSubscriptions(new SimpleFilterItemViewModel(kinds, tags)))
                 .BindTo(this, vm => vm.FilterItem);
 
             this.ClearFilter.InvokeCommand(this.ApplyFilter);
@@ -42,10 +36,16 @@ namespace MovieList.Core.ViewModels.Filters
         public ReactiveCommand<Unit, Func<ListItem, bool>> ApplyFilter { get; }
         public ReactiveCommand<Unit, Unit> ClearFilter { get; }
 
-        private FilterItem CreateDefaultFilterItem()
-        {
-            var filterItem = new SimpleFilterItemViewModel(kinds, tags);
+        private FilterItem WithSubscriptions(FilterItem filterItem)
+            => filterItem switch
+            {
+                SimpleFilterItemViewModel simpleItem => this.WithSubscriptions(simpleItem),
+                CompositeFilterItemViewModel simpleItem => this.WithSubscriptions(simpleItem),
+                _ => filterItem
+            };
 
+        private SimpleFilterItemViewModel WithSubscriptions(SimpleFilterItemViewModel filterItem)
+        {
             var subscriptions = new CompositeDisposable();
 
             filterItem.Delete
@@ -53,12 +53,34 @@ namespace MovieList.Core.ViewModels.Filters
                 .DisposeWith(subscriptions);
 
             filterItem.MakeComposite
-                .Select(composition => CompositeFilterItemViewModel.FromSimpleItem(filterItem, composition))
+                .Select(composition => this.WithSubscriptions(
+                    CompositeFilterItemViewModel.FromSimpleItem(filterItem, composition)))
                 .BindTo(this, vm => vm.FilterItem)
                 .DisposeWith(subscriptions);
 
             filterItem.Delete
                 .Merge(filterItem.MakeComposite.Discard())
+                .Subscribe(subscriptions.Dispose)
+                .DisposeWith(subscriptions);
+
+            return filterItem;
+        }
+
+        private CompositeFilterItemViewModel WithSubscriptions(CompositeFilterItemViewModel filterItem)
+        {
+            var subscriptions = new CompositeDisposable();
+
+            filterItem.Delete
+                .InvokeCommand(this.ClearFilter)
+                .DisposeWith(subscriptions);
+
+            filterItem.Simplify
+                .Select(this.WithSubscriptions)
+                .BindTo(this, vm => vm.FilterItem)
+                .DisposeWith(subscriptions);
+
+            filterItem.Delete
+                .Merge(filterItem.Simplify.Discard())
                 .Subscribe(subscriptions.Dispose)
                 .DisposeWith(subscriptions);
 
