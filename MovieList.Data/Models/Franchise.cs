@@ -23,9 +23,6 @@ namespace MovieList.Data.Models
         [Write(false)]
         public List<Title> Titles { get; set; } = new();
 
-        [Write(false)]
-        public HashSet<Tag> Tags { get; set; } = new();
-
         [Computed]
         public List<Title> ActualTitles
             => this.Titles.Count != 0

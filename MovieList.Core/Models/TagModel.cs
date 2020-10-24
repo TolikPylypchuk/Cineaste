@@ -20,7 +20,6 @@ namespace MovieList.Core.Models
             this.Color = tag.Color;
             this.IsApplicableToMovies = tag.IsApplicableToMovies;
             this.IsApplicableToSeries = tag.IsApplicableToSeries;
-            this.IsApplicableToFranchises = tag.IsApplicableToFranchises;
         }
 
         public Tag Tag { get; }
@@ -42,9 +41,6 @@ namespace MovieList.Core.Models
 
         [Reactive]
         public bool IsApplicableToSeries { get; set; }
-
-        [Reactive]
-        public bool IsApplicableToFranchises { get; set; }
 
         public ObservableCollection<TagModel> ImpliedTags { get; } = new();
 

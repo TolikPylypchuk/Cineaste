@@ -77,25 +77,6 @@
                     <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" Margin="0 8"
                              m:HintAssist.Hint="{l:Translate PosterUrl}" />
 
-                    <TextBlock Text="{l:Translate Tags}" Style="{StaticResource MaterialDesignBody2TextBlock}"
-                               Margin="0 8 0 0" />
-
-                    <ItemsControl x:Name="Tags" Margin="0 4">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-
-                    <ComboBox x:Name="AddableTagsComboBox" Margin="0 4" m:HintAssist.Hint="{l:Translate AddTag}">
-                        <ComboBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel />
-                            </ItemsPanelTemplate>
-                        </ComboBox.ItemsPanel>
-                    </ComboBox>
-
                     <Grid Margin="0 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />

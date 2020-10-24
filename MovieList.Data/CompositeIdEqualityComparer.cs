@@ -17,9 +17,6 @@ namespace MovieList.Data
 
         public static CompositeIdEqualityComparer<SeriesTag> SeriesTag { get; } =
             new(seriesTag => seriesTag.TagId, seriesTag => seriesTag.SeriesId);
-
-        public static CompositeIdEqualityComparer<FranchiseTag> FranchiseTag { get; } =
-            new(franchiseTag => franchiseTag.TagId, franchiseTag => franchiseTag.FranchiseId);
     }
 
     internal sealed class CompositeIdEqualityComparer<TTag> : EqualityComparer<TTag>

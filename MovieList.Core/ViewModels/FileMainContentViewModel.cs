@@ -238,7 +238,7 @@ namespace MovieList.Core.ViewModels
         {
             this.Log().Debug($"Creating a form for franchise: {franchise}");
 
-            var form = new FranchiseFormViewModel(franchise, this.FileName, this.FranchiseAddableItems, this.Tags);
+            var form = new FranchiseFormViewModel(franchise, this.FileName, this.FranchiseAddableItems);
             var attachedEntries = new List<FranchiseEntry>();
             var detachedEntries = new List<FranchiseEntry>();
 

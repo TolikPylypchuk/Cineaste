@@ -186,7 +186,6 @@ CREATE TABLE "Tags" (
     "Color" TEXT NOT NULL,
     "IsApplicableToMovies" INTEGER(1) NOT NULL,
     "IsApplicableToSeries" INTEGER(1) NOT NULL,
-    "IsApplicableToFranchises" INTEGER(1) NOT NULL,
 
     UNIQUE ("Name", "Category")
 );
@@ -228,20 +227,6 @@ CREATE TABLE "SeriesTags" (
     
     FOREIGN KEY ("SeriesId")
         REFERENCES "Series" ("Id")
-        ON DELETE CASCADE,
-        
-    FOREIGN KEY ("TagId")
-        REFERENCES "Tags" ("Id")
-        ON DELETE CASCADE
-);
-
-CREATE TABLE "FranchiseTags" (
-    "Id" INTEGER PRIMARY KEY,
-    "FranchiseId" INTEGER,
-    "TagId" INTEGER,
-    
-    FOREIGN KEY ("FranchiseId")
-        REFERENCES "Franchises" ("Id")
         ON DELETE CASCADE,
         
     FOREIGN KEY ("TagId")

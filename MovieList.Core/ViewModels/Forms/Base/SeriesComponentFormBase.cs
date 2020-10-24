@@ -10,11 +10,10 @@ using ReactiveUI.Fody.Helpers;
 namespace MovieList.Core.ViewModels.Forms.Base
 {
 #nullable disable
-    public abstract class SeriesComponentFormBase<TModel, TViewModel>
-        : TitledFormBase<TModel, TViewModel>, ISeriesComponentForm
+    public abstract class SeriesComponentFormBase<TModel, TForm> : TitledFormBase<TModel, TForm>, ISeriesComponentForm
 #nullable enable
         where TModel : class
-        where TViewModel : SeriesComponentFormBase<TModel, TViewModel>
+        where TForm : SeriesComponentFormBase<TModel, TForm>
     {
         protected SeriesComponentFormBase(
             SeriesFormViewModel parent,

@@ -54,7 +54,6 @@
 
             <CheckBox x:Name="IsApplicableToMoviesCheckBox" Content="{l:Translate ApplicableToMovies}" />
             <CheckBox x:Name="IsApplicableToSeriesCheckBox" Content="{l:Translate ApplicableToSeries}" />
-            <CheckBox x:Name="IsApplicableToFranchisesCheckBox" Content="{l:Translate ApplicableToFranchises}" />
 
             <TextBlock Text="{l:Translate ImpliedTags}" Margin="0 4"
                        Style="{StaticResource MaterialDesignBody2TextBlock}" />

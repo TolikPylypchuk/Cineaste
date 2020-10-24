@@ -304,24 +304,5 @@ namespace MovieList.Data
 
                         return franchise;
                     });
-
-        public static IEnumerable<Franchise> Join(
-            this IEnumerable<Franchise> franchises,
-            IEnumerable<FranchiseTag> franchiseTags,
-            IDictionary<int, Tag> tagsById)
-            => franchises.GroupJoin(
-                franchiseTags,
-                franchise => franchise.Id,
-                franchiseTag => franchiseTag.FranchiseId,
-                (franchise, franchiseTags) =>
-                {
-                    franchise.Tags = franchiseTags
-                        .Select(franchiseTag => tagsById[franchiseTag.TagId])
-                        .Do(tag => tag.Franchises.Add(franchise))
-                        .ToHashSet();
-
-                    return franchise;
-                });
-
     }
 }

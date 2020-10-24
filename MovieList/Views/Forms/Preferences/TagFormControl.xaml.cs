@@ -59,12 +59,6 @@ namespace MovieList.Views.Forms.Preferences
 
             this.Bind(this.ViewModel, vm => vm.IsApplicableToSeries, v => v.IsApplicableToSeriesCheckBox.IsChecked)
                 ?.DisposeWith(disposables);
-
-            this.Bind(
-                this.ViewModel,
-                vm => vm.IsApplicableToFranchises,
-                v => v.IsApplicableToFranchisesCheckBox.IsChecked)
-                ?.DisposeWith(disposables);
         }
 
         private void BindImpliedTags(CompositeDisposable disposables)

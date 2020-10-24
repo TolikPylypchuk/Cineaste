@@ -22,7 +22,7 @@ namespace MovieList.Data.Services.Implementations
             => "Updating all tags";
 
         protected override string DeleteExceptionMessage
-            => "Cannot delete tags that have movies, series or franchises attached to them";
+            => "Cannot delete tags that have movies or series attached to them";
 
         protected override bool CanDelete(Tag tag)
             => true;

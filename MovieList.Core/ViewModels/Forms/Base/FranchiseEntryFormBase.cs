@@ -1,18 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 
-using DynamicData;
-using DynamicData.Binding;
-
-using MovieList.Core.ViewModels.Forms.Preferences;
 using MovieList.Data.Models;
 
 using ReactiveUI;
@@ -20,54 +13,20 @@ using ReactiveUI;
 namespace MovieList.Core.ViewModels.Forms.Base
 {
 #nullable disable
-    public abstract class FranchiseEntryFormBase<TModel, TViewModel>
-        : TitledFormBase<TModel, TViewModel>, IFranchiseEntryForm
+    public abstract class FranchiseEntryFormBase<TModel, TForm> : TitledFormBase<TModel, TForm>, IFranchiseEntryForm
 #nullable enable
         where TModel : class
-        where TViewModel : FranchiseEntryFormBase<TModel, TViewModel>
+        where TForm : FranchiseEntryFormBase<TModel, TForm>
     {
-        protected readonly SourceCache<Tag, int> TagsSource = new(tag => tag.Id);
-        protected readonly SourceCache<Tag, int> AddableTagsSource = new(tag => tag.Id);
-
-        private readonly ReadOnlyObservableCollection<TagItemViewModel> tags;
-        private readonly ReadOnlyObservableCollection<AddableTagViewModel> addableTags;
-
         private readonly BehaviorSubject<bool> canCreateFranchiseSubject = new BehaviorSubject<bool>(false);
 
         protected FranchiseEntryFormBase(
             FranchiseEntry? entry,
-            ReadOnlyObservableCollection<Tag> tags,
             ResourceManager? resourceManager,
             IScheduler? scheduler = null)
             : base(resourceManager, scheduler)
         {
             this.FranchiseEntry = entry;
-
-            this.TagsSource.Connect()
-                .Transform(this.CreateTagItem)
-                .Sort(SortExpressionComparer<TagItemViewModel>
-                    .Ascending(vm => vm.Category)
-                    .ThenByAscending(vm => vm.Name))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out this.tags)
-                .DisposeMany()
-                .Subscribe();
-
-            this.AddableTagsSource.Connect()
-                .Transform(tag => new AddableTagViewModel(tag))
-                .Sort(SortExpressionComparer<AddableTagViewModel>
-                    .Ascending(vm => vm.Category)
-                    .ThenByAscending(vm => vm.Name))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out this.addableTags)
-                .DisposeMany()
-                .Subscribe();
-
-            this.AddableTagsSource.AddOrUpdate(tags.Where(this.IsTagApplicable));
-
-            this.tags.ActOnEveryObject(
-                onAdd: vm => this.AddableTagsSource.Remove(vm.Tag),
-                onRemove: vm => this.AddableTagsSource.AddOrUpdate(vm.Tag));
 
             var formNotChanged = this.FormChanged.Invert();
 
@@ -105,48 +64,14 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 canGoToPrevious);
 
             this.CreateFranchise = ReactiveCommand.Create(() => { }, this.canCreateFranchiseSubject);
-
-            this.AddTag = ReactiveCommand.Create<Tag>(this.TagsSource.AddOrUpdate);
         }
 
         public FranchiseEntry? FranchiseEntry { get; }
-
-        public ReadOnlyObservableCollection<AddableTagViewModel> AddableTags
-            => this.addableTags;
-
-        public ReadOnlyObservableCollection<TagItemViewModel> Tags
-            => this.tags;
 
         public ReactiveCommand<Unit, Franchise> GoToFranchise { get; }
         public ReactiveCommand<Unit, FranchiseEntry> GoToNext { get; }
         public ReactiveCommand<Unit, FranchiseEntry> GoToPrevious { get; }
         public ReactiveCommand<Unit, Unit> CreateFranchise { get; }
-        public ReactiveCommand<Tag, Unit> AddTag { get; }
-
-        protected abstract IEnumerable<Tag> ItemTags { get; }
-
-        protected override void EnableChangeTracking()
-        {
-            this.TrackChanges(this.Tags.ToObservableChangeSet()
-                .Transform(vm => vm.Tag.Id)
-                .ToCollection()
-                .Select(ids => !ids.ToHashSet().SetEquals(this.ItemTags.Select(tag => tag.Id).ToHashSet())));
-
-            base.EnableChangeTracking();
-        }
-
-        protected override void CopyProperties()
-        {
-            base.CopyProperties();
-
-            this.TagsSource.Edit(list =>
-            {
-                list.Clear();
-                list.AddOrUpdate(this.ItemTags);
-            });
-        }
-
-        protected abstract bool IsTagApplicable(Tag tag);
 
         protected void CanCreateFranchise()
             => Observable.CombineLatest(
@@ -160,20 +85,5 @@ namespace MovieList.Core.ViewModels.Forms.Base
             => this.FranchiseEntry == null
                 ? Observable.Return(false)
                 : observableProvider();
-
-        private TagItemViewModel CreateTagItem(Tag tag)
-        {
-            var vm = new TagItemViewModel(tag, canSelect: false);
-
-            var subscriptions = new CompositeDisposable();
-
-            vm.Delete.Subscribe(() =>
-            {
-                this.TagsSource.Remove(tag);
-                subscriptions.Dispose();
-            }).DisposeWith(subscriptions);
-
-            return vm;
-        }
     }
 }

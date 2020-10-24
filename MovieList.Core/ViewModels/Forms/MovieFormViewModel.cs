@@ -21,7 +21,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.Core.ViewModels.Forms
 {
-    public sealed class MovieFormViewModel : FranchiseEntryFormBase<Movie, MovieFormViewModel>
+    public sealed class MovieFormViewModel : TaggedFormBase<Movie, MovieFormViewModel>
     {
         private readonly IEntityService<Movie> movieService;
 

@@ -17,16 +17,12 @@ namespace MovieList.Data.Models
 
         public bool IsApplicableToMovies { get; set; } = true;
         public bool IsApplicableToSeries { get; set; } = true;
-        public bool IsApplicableToFranchises { get; set; } = true;
 
         [Write(false)]
         public HashSet<Movie> Movies { get; set; } = new();
 
         [Write(false)]
         public HashSet<Series> Series { get; set; } = new();
-
-        [Write(false)]
-        public HashSet<Franchise> Franchises { get; set; } = new();
 
         [Write(false)]
         public HashSet<Tag> ImpliedTags { get; set; } = new();

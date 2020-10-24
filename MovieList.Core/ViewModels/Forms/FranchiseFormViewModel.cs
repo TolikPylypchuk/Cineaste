@@ -42,12 +42,11 @@ namespace MovieList.Core.ViewModels.Forms
             Franchise franchise,
             string fileName,
             IEnumerable<FranchiseEntry> addableItems,
-            ReadOnlyObservableCollection<Tag> tags,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null,
             IEntityService<Franchise>? franchiseService = null,
             Settings? settings = null)
-            : base(franchise.Entry, tags, resourceManager, scheduler)
+            : base(franchise.Entry, resourceManager, scheduler)
         {
             this.Franchise = franchise;
             settings ??= Locator.Current.GetService<Settings>(fileName);
@@ -153,9 +152,6 @@ namespace MovieList.Core.ViewModels.Forms
         protected override ICollection<Title> ItemTitles
             => this.Franchise.Titles;
 
-        protected override IEnumerable<Tag> ItemTags
-            => this.Franchise.Tags;
-
         protected override string NewItemKey
             => "NewFranchise";
 
@@ -202,9 +198,6 @@ namespace MovieList.Core.ViewModels.Forms
 
         protected override void AttachTitle(Title title)
             => title.Franchise = this.Franchise;
-
-        protected override bool IsTagApplicable(Tag tag)
-            => tag.IsApplicableToFranchises;
 
         private void InitializeValueDependencies()
         {
@@ -445,13 +438,6 @@ namespace MovieList.Core.ViewModels.Forms
             this.Franchise.IsLooselyConnected = this.IsLooselyConnected;
             this.Franchise.MergeDisplayNumbers = this.MergeDisplayNumbers;
             this.Franchise.PosterUrl = this.PosterUrl.NullIfEmpty();
-
-            this.Franchise.Tags.Clear();
-
-            foreach (var tag in this.TagsSource.Items)
-            {
-                this.Franchise.Tags.Add(tag);
-            }
 
             return this.Franchise;
         }

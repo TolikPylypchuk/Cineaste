@@ -40,7 +40,6 @@ namespace MovieList.Data.Services.Implementations
 
             var movieTags = connection.GetAll<MovieTag>(transaction).ToList();
             var seriesTags = connection.GetAll<SeriesTag>(transaction).ToList();
-            var franchiseTags = connection.GetAll<FranchiseTag>(transaction).ToList();
 
             var tagsById = tags.ToDictionary(tag => tag.Id, tag => tag);
 
@@ -62,7 +61,6 @@ namespace MovieList.Data.Services.Implementations
                 franchises
                     .Join(titles)
                     .Join(entries)
-                    .Join(franchiseTags, tagsById)
                     .ToList());
         }
     }

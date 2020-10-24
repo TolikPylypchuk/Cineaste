@@ -19,9 +19,9 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.Core.ViewModels.Forms.Base
 {
-    public abstract class TitledFormBase<TModel, TViewModel> : ReactiveForm<TModel, TViewModel>
+    public abstract class TitledFormBase<TModel, TForm> : ReactiveForm<TModel, TForm>
         where TModel : class
-        where TViewModel : TitledFormBase<TModel, TViewModel>
+        where TForm : TitledFormBase<TModel, TForm>
     {
         private readonly SourceList<Title> titlesSource = new SourceList<Title>();
 

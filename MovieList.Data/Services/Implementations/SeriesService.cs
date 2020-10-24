@@ -8,7 +8,7 @@ using MovieList.Data.Models;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal sealed class SeriesService : EntityServiceBase<Series, SeriesTag>
+    internal sealed class SeriesService : TaggedEntityServiceBase<Series, SeriesTag>
     {
         public SeriesService(string fileName)
             : base(fileName, CompositeIdEqualityComparer.SeriesTag)

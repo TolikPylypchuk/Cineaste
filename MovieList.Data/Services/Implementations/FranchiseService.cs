@@ -8,10 +8,10 @@ using MovieList.Data.Models;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal class FranchiseService : EntityServiceBase<Franchise, FranchiseTag>
+    internal class FranchiseService : EntityServiceBase<Franchise>
     {
         public FranchiseService(string file)
-            : base(file, CompositeIdEqualityComparer.FranchiseTag)
+            : base(file)
         { }
 
         protected override void Insert(Franchise franchise, IDbConnection connection, IDbTransaction transaction)
@@ -90,11 +90,6 @@ namespace MovieList.Data.Services.Implementations
 
             connection.Delete(franchise, transaction);
         }
-
-        protected override List<FranchiseTag> GetTags(Franchise franchise)
-            => franchise.Tags
-                .Select(tag => new FranchiseTag { FranchiseId = franchise.Id, TagId = tag.Id })
-                .ToList();
 
         private void InsertEntries(
             IEnumerable<FranchiseEntry> entries,

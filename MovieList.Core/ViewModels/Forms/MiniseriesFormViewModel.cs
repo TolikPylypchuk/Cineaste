@@ -22,7 +22,7 @@ using static MovieList.Data.Constants;
 
 namespace MovieList.Core.ViewModels.Forms
 {
-    public sealed class MiniseriesFormViewModel : FranchiseEntryFormBase<Series, MiniseriesFormViewModel>
+    public sealed class MiniseriesFormViewModel : TaggedFormBase<Series, MiniseriesFormViewModel>
     {
         private readonly IEntityService<Series> seriesService;
         private readonly ISettingsService settingsService;

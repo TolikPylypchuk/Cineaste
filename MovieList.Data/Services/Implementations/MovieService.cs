@@ -8,7 +8,7 @@ using MovieList.Data.Models;
 
 namespace MovieList.Data.Services.Implementations
 {
-    internal sealed class MovieService : EntityServiceBase<Movie, MovieTag>
+    internal sealed class MovieService : TaggedEntityServiceBase<Movie, MovieTag>
     {
         public MovieService(string fileName)
             : base(fileName, CompositeIdEqualityComparer.MovieTag)
