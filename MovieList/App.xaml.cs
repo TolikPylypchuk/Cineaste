@@ -45,6 +45,8 @@ namespace MovieList
             this.mutex = SingleInstanceManager.TryAcquireMutex();
             this.namedPipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly()?.FullName ?? String.Empty);
 
+            PlatformRegistrationManager.SetRegistrationNamespaces(RegistrationNamespace.Wpf);
+
             var autoSuspendHelper = new AutoSuspendHelper(this);
             GC.KeepAlive(autoSuspendHelper);
 
@@ -92,7 +94,6 @@ namespace MovieList
 
         private async Task ConfigureLocatorAsync()
         {
-            Locator.CurrentMutable.InitializeReactiveUI();
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
             Locator.CurrentMutable.RegisterSuspensionDriver();
 
