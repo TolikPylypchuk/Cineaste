@@ -103,7 +103,7 @@ namespace MovieList.Core.ViewModels.Forms
             var first = periods[0];
             var last = periods[^1];
 
-            return first.StartYear == last.EndYear ? first.StartYear : $"{first.StartYear}-{last.EndYear}";
+            return first.StartYear == last.EndYear ? first.StartYear.ToString() : $"{first.StartYear}-{last.EndYear}";
         }
     }
 }

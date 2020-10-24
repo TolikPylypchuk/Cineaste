@@ -9,6 +9,10 @@
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
             <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
         </Style>
+
+        <Style TargetType="{x:Type v:NumberTextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
+        </Style>
     </local:SpecialEpisodeFormControlBase.Resources>
 
     <Grid>
@@ -95,8 +99,8 @@
                                   Margin="0 8 8 8" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   m:HintAssist.Hint="{l:Translate Month}" />
 
-                        <TextBox x:Name="YearTextBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8 8 0 8"
-                                 m:HintAssist.Hint="{l:Translate Year}" />
+                        <v:NumberTextBox x:Name="YearTextBox" Grid.Column="1" HorizontalAlignment="Stretch"
+                                         Margin="8 8 0 8" m:HintAssist.Hint="{l:Translate Year}" />
                     </Grid>
 
                     <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" Margin="0 8"

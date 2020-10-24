@@ -59,7 +59,7 @@ namespace MovieList.Core.ViewModels.Forms
         public ReadOnlyObservableCollection<Kind> Kinds { get; }
 
         [Reactive]
-        public string Year { get; set; } = String.Empty;
+        public int Year { get; set; }
 
         [Reactive]
         public Kind Kind { get; set; } = null!;
@@ -101,7 +101,7 @@ namespace MovieList.Core.ViewModels.Forms
 
         protected override void EnableChangeTracking()
         {
-            this.TrackChanges(vm => vm.Year, vm => vm.Movie.Year.ToString());
+            this.TrackChanges(vm => vm.Year, vm => vm.Movie.Year);
             this.TrackChanges(vm => vm.Kind, vm=> vm.Movie.Kind);
             this.TrackChanges(vm => vm.IsWatched, vm => vm.Movie.IsWatched);
             this.TrackChanges(vm => vm.IsReleased, vm => vm.Movie.IsReleased);
@@ -118,7 +118,7 @@ namespace MovieList.Core.ViewModels.Forms
                 {
                     this.Movie.IsWatched = this.IsWatched;
                     this.Movie.IsReleased = this.IsReleased;
-                    this.Movie.Year = Int32.Parse(this.Year);
+                    this.Movie.Year = this.Year;
                     this.Movie.Kind = this.Kind;
                     this.Movie.ImdbLink = this.ImdbLink.NullIfEmpty();
                     this.Movie.RottenTomatoesLink = this.RottenTomatoesLink.NullIfEmpty();
@@ -143,7 +143,7 @@ namespace MovieList.Core.ViewModels.Forms
         {
             base.CopyProperties();
 
-            this.Year = this.Movie.Year.ToString();
+            this.Year = this.Movie.Year;
             this.Kind = this.Movie.Kind;
             this.IsWatched = this.Movie.IsWatched;
             this.IsReleased = this.Movie.IsReleased;
@@ -170,7 +170,6 @@ namespace MovieList.Core.ViewModels.Forms
 
             this.WhenAnyValue(vm => vm.Year)
                 .Where(_ => this.YearRule.IsValid)
-                .Select(Int32.Parse)
                 .Where(year => year != this.Scheduler.Now.Year)
                 .Subscribe(year => this.IsReleased = year < this.Scheduler.Now.Year);
         }

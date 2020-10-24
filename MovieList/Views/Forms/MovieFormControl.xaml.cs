@@ -35,6 +35,8 @@ namespace MovieList.Views.Forms
                     .BindTo(this, v => v.FormTitleTextBlock.Text)
                     ?.DisposeWith(disposables);
 
+                this.YearTextBox.DisposeWith(disposables);
+
                 this.LoadPoster();
 
                 this.BindCommands(disposables);
@@ -135,15 +137,11 @@ namespace MovieList.Views.Forms
                 ?.DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.Year)
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
                 .Select(year => year <= DateTime.Now.Year)
                 .BindTo(this, v => v.IsWatchedCheckBox.IsEnabled)
                 ?.DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.Year)
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
                 .Select(year => year == DateTime.Now.Year)
                 .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled)
                 ?.DisposeWith(disposables);
@@ -176,7 +174,7 @@ namespace MovieList.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
                 ?.DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Text)
+            this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Number)
                 ?.DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Kind, v => v.KindComboBox.SelectedItem)

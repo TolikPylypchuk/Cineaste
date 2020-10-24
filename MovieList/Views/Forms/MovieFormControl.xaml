@@ -9,6 +9,10 @@
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
             <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
         </Style>
+
+        <Style TargetType="{x:Type v:NumberTextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
+        </Style>
     </local:MovieFormControlBase.Resources>
 
     <Grid>
@@ -86,8 +90,8 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <TextBox x:Name="YearTextBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0 0 8 0"
-                                 m:HintAssist.Hint="{l:Translate Year}" />
+                        <v:NumberTextBox x:Name="YearTextBox" Grid.Column="0" HorizontalAlignment="Stretch"
+                                         Margin="0 0 8 0" m:HintAssist.Hint="{l:Translate Year}" />
 
                         <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8 0 0 0"
                                   DisplayMemberPath="Name" Style="{StaticResource MaterialDesignFloatingHintComboBox}"

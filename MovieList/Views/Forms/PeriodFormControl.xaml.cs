@@ -26,6 +26,10 @@ namespace MovieList.Views.Forms
                     .BindTo(this, v => v.DataContext)
                     ?.DisposeWith(disposables);
 
+                this.StartYearTextBox.DisposeWith(disposables);
+                this.EndYearTextBox.DisposeWith(disposables);
+                this.NumberOfEpisodesTextBox.DisposeWith(disposables);
+
                 foreach (string month in Properties.MonthNames)
                 {
                     this.StartMonthComboBox.Items.Add(month);
@@ -70,7 +74,7 @@ namespace MovieList.Views.Forms
                 .Subscribe(isSingleDayRelease => HintAssist.SetHint(
                     this.StartMonthComboBox, isSingleDayRelease ? Messages.Month : Messages.StartMonth));
 
-            this.Bind(this.ViewModel, vm => vm.StartYear, v => v.StartYearTextBox.Text)
+            this.Bind(this.ViewModel, vm => vm.StartYear, v => v.StartYearTextBox.Number)
                 ?.DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.IsSingleDayRelease)
@@ -89,14 +93,14 @@ namespace MovieList.Views.Forms
                 .Invert()
                 .BindTo(this, v => v.EndMonthComboBox.Visibility);
 
-            this.Bind(this.ViewModel, vm => vm.EndYear, v => v.EndYearTextBox.Text)
+            this.Bind(this.ViewModel, vm => vm.EndYear, v => v.EndYearTextBox.Number)
                 ?.DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.IsSingleDayRelease)
                 .Invert()
                 .BindTo(this, v => v.EndYearTextBox.Visibility);
 
-            this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesTextBox.Text)
+            this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesTextBox.Number)
                 ?.DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsSingleDayRelease, v => v.IsSingleDayReleaseCheckBox.IsChecked)

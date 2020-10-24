@@ -42,6 +42,12 @@ namespace MovieList.Views
             base.OnPreviewTextInput(e);
         }
 
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            e.Handled = e.Key == Key.Space;
+            base.OnPreviewKeyDown(e);
+        }
+
         private static void OnNumberChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             if (sender is NumberTextBox numberTextBox && e.OldValue is int oldValue && e.NewValue is int newValue)
@@ -56,7 +62,7 @@ namespace MovieList.Views
             if (e.DataObject.GetDataPresent(typeof(string)))
             {
                 string input = (string)e.DataObject.GetData(typeof(string));
-                if (!this.IsTextNumeric(input))
+                if (!this.IsTextNumeric(input.Trim()))
                 {
                     e.CancelCommand();
                 }
@@ -67,7 +73,7 @@ namespace MovieList.Views
         }
 
         private bool IsTextNumeric(string text)
-            => text.All(ch => Char.IsDigit(ch));
+            => text.All(Char.IsDigit);
 
         public event NumberChangedEventHandler NumberChanged
         {

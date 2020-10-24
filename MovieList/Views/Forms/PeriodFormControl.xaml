@@ -9,6 +9,10 @@
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
             <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
         </Style>
+
+        <Style TargetType="{x:Type v:NumberTextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+            <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />
+        </Style>
     </local:PeriodFormControlBase.Resources>
 
     <Grid>
@@ -39,17 +43,18 @@
         <ComboBox x:Name="StartMonthComboBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"
                   Margin="0 8 8 8" Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
-        <TextBox x:Name="StartYearTextBox" Grid.Row="1" Grid.Column="1" Margin="8 8 0 8" />
+        <v:NumberTextBox x:Name="StartYearTextBox" Grid.Row="1" Grid.Column="1" Margin="8 8 0 8"
+                         m:HintAssist.Hint="{l:Translate StartYear}" />
 
         <ComboBox x:Name="EndMonthComboBox" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch"
                   Margin="0 8 8 8" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                   m:HintAssist.Hint="{l:Translate EndMonth}" />
 
-        <TextBox x:Name="EndYearTextBox" Grid.Row="2" Grid.Column="1" Margin="8 8 0 8"
-                 m:HintAssist.Hint="{l:Translate EndYEar}" />
+        <v:NumberTextBox x:Name="EndYearTextBox" Grid.Row="2" Grid.Column="1" Margin="8 8 0 8"
+                         m:HintAssist.Hint="{l:Translate EndYEar}" />
 
-        <TextBox x:Name="NumberOfEpisodesTextBox" Grid.Row="3" Grid.Column="0" Margin="0 8 8 8"
-                 m:HintAssist.Hint="{l:Translate NumberOfEpisodes}" />
+        <v:NumberTextBox x:Name="NumberOfEpisodesTextBox" Grid.Row="3" Grid.Column="0" Margin="0 8 8 8"
+                         m:HintAssist.Hint="{l:Translate NumberOfEpisodes}" />
 
         <CheckBox x:Name="IsSingleDayReleaseCheckBox" Grid.Row="3" Grid.Column="1"
                   Margin="8 0 0 0" VerticalAlignment="Center">

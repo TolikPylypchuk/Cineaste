@@ -18,7 +18,7 @@ namespace MovieList.Core
 
         public static ValidationHelper ValidationRule<TViewModel>(
             this TViewModel viewModel,
-            Expression<Func<TViewModel, string>> viewModelProperty,
+            Expression<Func<TViewModel, int>> viewModelProperty,
             int minValue,
             int maxValue,
             string? propertyName = null)
@@ -27,11 +27,8 @@ namespace MovieList.Core
             propertyName ??= viewModelProperty.GetMemberName();
             return viewModel.ValidationRule(
                 viewModelProperty,
-                value => !String.IsNullOrWhiteSpace(value) &&
-                         Int32.TryParse(value, out int number) &&
-                         number >= minValue &&
-                         number <= maxValue,
-                value => String.IsNullOrWhiteSpace(value) ? $"{propertyName}Empty" : $"{propertyName}Invalid");
+                value => value >= minValue && value <= maxValue,
+                value => $"{propertyName}Invalid");
         }
     }
 }

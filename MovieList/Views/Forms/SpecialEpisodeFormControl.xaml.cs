@@ -34,6 +34,8 @@ namespace MovieList.Views.Forms
                     .BindTo(this, v => v.FormTitleTextBlock.Text)
                     ?.DisposeWith(disposables);
 
+                this.YearTextBox.DisposeWith(disposables);
+
                 this.LoadPoster();
 
                 this.BindCommands(disposables);
@@ -142,7 +144,7 @@ namespace MovieList.Views.Forms
                     index => index + 1)
                 ?.DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Text)
+            this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Number)
                 ?.DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkTextBox.Text)
@@ -161,8 +163,6 @@ namespace MovieList.Views.Forms
                 ?.DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.Year)
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
                 .CombineLatest(this.WhenAnyValue(v => v.ViewModel!.Month), (year, month) => (Year: year, Month: month))
                 .Select(values =>
                     values.Year < DateTime.Now.Year ||
@@ -172,8 +172,6 @@ namespace MovieList.Views.Forms
                 ?.DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.Year)
-                .Select(year => Int32.TryParse(year, out int value) ? (int?)value : null)
-                .WhereValueNotNull()
                 .CombineLatest(this.WhenAnyValue(v => v.ViewModel!.Month), (year, month) => (Year: year, Month: month))
                 .Select(values => values.Month == DateTime.Now.Month && values.Year == DateTime.Now.Year)
                 .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled)

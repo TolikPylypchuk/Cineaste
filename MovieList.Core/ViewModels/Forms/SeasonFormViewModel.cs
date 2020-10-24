@@ -144,7 +144,7 @@ namespace MovieList.Core.ViewModels.Forms
             => "NewSeason";
 
         public override int GetNextYear()
-            => Int32.Parse(this.Periods.Last().EndYear) + 1;
+            => this.Periods.Last().EndYear + 1;
 
         protected override void EnableChangeTracking()
         {
@@ -216,14 +216,12 @@ namespace MovieList.Core.ViewModels.Forms
 
         private void OnAddPeriod()
         {
-            string lastYear = this.Periods.OrderByDescending(period => period.StartYear)
+            int year = this.Periods.OrderByDescending(period => period.StartYear)
                 .ThenByDescending(period => period.StartMonth)
                 .ThenByDescending(period => period.EndYear)
                 .ThenByDescending(period => period.EndMonth)
                 .First()
                 .EndYear;
-
-            int year = Int32.Parse(lastYear) + 1;
 
             this.periodsSource.Add(new Period
             {
@@ -285,9 +283,7 @@ namespace MovieList.Core.ViewModels.Forms
                    .All(periods => this.ArePeriodsNonOverlapping(periods[0], periods[1]));
 
         private bool ArePeriodsNonOverlapping(PeriodFormViewModel earlier, PeriodFormViewModel later)
-            => Int32.TryParse(earlier.EndYear, out int earlierEndYear) &&
-               Int32.TryParse(later.StartYear, out int laterStartYear) &&
-               (earlierEndYear < laterStartYear ||
-                earlierEndYear == laterStartYear && earlier.EndMonth <= later.StartMonth);
+            => earlier.EndYear < later.StartYear ||
+                earlier.EndYear == later.StartYear && earlier.EndMonth <= later.StartMonth;
     }
 }

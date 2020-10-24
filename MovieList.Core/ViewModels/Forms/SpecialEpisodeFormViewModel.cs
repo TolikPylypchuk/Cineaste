@@ -51,7 +51,7 @@ namespace MovieList.Core.ViewModels.Forms
         public int Month { get; set; }
 
         [Reactive]
-        public string Year { get; set; } = null!;
+        public int Year { get; set; }
 
         [Reactive]
         public bool IsWatched { get; set; }
@@ -86,12 +86,12 @@ namespace MovieList.Core.ViewModels.Forms
             => "NewSpecialEpisode";
 
         public override int GetNextYear()
-            => Int32.Parse(this.Year) + 1;
+            => this.Year + 1;
 
         protected override void EnableChangeTracking()
         {
             this.TrackChanges(vm => vm.Month, vm => vm.SpecialEpisode.Month);
-            this.TrackChanges(vm => vm.Year, vm => vm.SpecialEpisode.Year.ToString());
+            this.TrackChanges(vm => vm.Year, vm => vm.SpecialEpisode.Year);
             this.TrackChanges(vm => vm.IsWatched, vm => vm.SpecialEpisode.IsWatched);
             this.TrackChanges(vm => vm.IsReleased, vm => vm.SpecialEpisode.IsReleased);
             this.TrackChanges(vm => vm.Channel, vm => vm.SpecialEpisode.Channel);
@@ -107,7 +107,7 @@ namespace MovieList.Core.ViewModels.Forms
                 .Select(() =>
                 {
                     this.SpecialEpisode.Month = this.Month;
-                    this.SpecialEpisode.Year = Int32.Parse(this.Year);
+                    this.SpecialEpisode.Year = this.Year;
                     this.SpecialEpisode.IsWatched = this.IsWatched;
                     this.SpecialEpisode.IsReleased = this.IsReleased;
                     this.SpecialEpisode.Channel = this.Channel;
@@ -126,7 +126,7 @@ namespace MovieList.Core.ViewModels.Forms
             base.CopyProperties();
 
             this.Month = this.SpecialEpisode.Month;
-            this.Year = this.SpecialEpisode.Year.ToString();
+            this.Year = this.SpecialEpisode.Year;
             this.IsWatched = this.SpecialEpisode.IsWatched;
             this.IsReleased = this.SpecialEpisode.IsReleased;
             this.Channel = this.SpecialEpisode.Channel;
@@ -150,7 +150,6 @@ namespace MovieList.Core.ViewModels.Forms
 
             this.WhenAnyValue(vm => vm.Year)
                 .Where(_ => this.YearRule.IsValid)
-                .Select(Int32.Parse)
                 .CombineLatest(this.WhenAnyValue(vm => vm.Month), (year, month) => new DateTime(year, month, 1))
                 .Where(date => date.Year != this.Scheduler.Now.Year ||
                     date.Year == this.Scheduler.Now.Year && date.Month != this.Scheduler.Now.Month)

@@ -48,12 +48,10 @@ namespace MovieList.Core.ViewModels.Forms
                     vm => vm.StartMonth,
                     vm => vm.StartYear,
                     vm => vm.EndMonth,
-                    vm => vm.EndYear)
+                    vm => vm.EndYear,
+                    (int startMonth, int startYear, int endMonth, int endYear) =>
+                        startYear < endYear || startYear == endYear && startMonth <= endMonth)
                     .Throttle(TimeSpan.FromMilliseconds(250), this.Scheduler)
-                    .Select(((int StartMonth, string StartYear, int EndMonth, string EndYear) values) =>
-                        Int32.TryParse(values.StartYear, out int startYear) &&
-                        Int32.TryParse(values.EndYear, out int endYear) &&
-                        (startYear < endYear || startYear == endYear && values.StartMonth <= values.EndMonth))
                     .ObserveOn(RxApp.MainThreadScheduler);
 
             this.PeriodRule = this.ValidationRule(
@@ -73,16 +71,16 @@ namespace MovieList.Core.ViewModels.Forms
         public int StartMonth { get; set; }
 
         [Reactive]
-        public string StartYear { get; set; } = String.Empty;
+        public int StartYear { get; set; }
 
         [Reactive]
         public int EndMonth { get; set; }
 
         [Reactive]
-        public string EndYear { get; set; } = String.Empty;
+        public int EndYear { get; set; }
 
         [Reactive]
-        public string NumberOfEpisodes { get; set; } = String.Empty;
+        public int NumberOfEpisodes { get; set; }
 
         [Reactive]
         public bool IsSingleDayRelease { get; set; }
@@ -112,10 +110,10 @@ namespace MovieList.Core.ViewModels.Forms
         protected override void EnableChangeTracking()
         {
             this.TrackChanges(vm => vm.StartMonth, vm => vm.Period.StartMonth);
-            this.TrackChanges(vm => vm.StartYear, vm => vm.Period.StartYear.ToString());
+            this.TrackChanges(vm => vm.StartYear, vm => vm.Period.StartYear);
             this.TrackChanges(vm => vm.EndMonth, vm => vm.Period.EndMonth);
-            this.TrackChanges(vm => vm.EndYear, vm => vm.Period.EndYear.ToString());
-            this.TrackChanges(vm => vm.NumberOfEpisodes, vm => vm.Period.NumberOfEpisodes.ToString());
+            this.TrackChanges(vm => vm.EndYear, vm => vm.Period.EndYear);
+            this.TrackChanges(vm => vm.NumberOfEpisodes, vm => vm.Period.NumberOfEpisodes);
             this.TrackChanges(vm => vm.IsSingleDayRelease, vm => vm.Period.IsSingleDayRelease);
             this.TrackChanges(vm => vm.RottenTomatoesLink, vm => vm.Period.RottenTomatoesLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Period.PosterUrl.EmptyIfNull());
@@ -126,10 +124,10 @@ namespace MovieList.Core.ViewModels.Forms
         protected override IObservable<Period> OnSave()
         {
             this.Period.StartMonth = this.StartMonth;
-            this.Period.StartYear = Int32.Parse(this.StartYear);
+            this.Period.StartYear = this.StartYear;
             this.Period.EndMonth = this.EndMonth;
-            this.Period.EndYear = Int32.Parse(this.EndYear);
-            this.Period.NumberOfEpisodes = Int32.Parse(this.NumberOfEpisodes);
+            this.Period.EndYear = this.EndYear;
+            this.Period.NumberOfEpisodes = this.NumberOfEpisodes;
             this.Period.IsSingleDayRelease = this.IsSingleDayRelease;
             this.Period.RottenTomatoesLink = this.RottenTomatoesLink.NullIfEmpty();
             this.Period.PosterUrl = this.PosterUrl.NullIfEmpty();
@@ -143,10 +141,10 @@ namespace MovieList.Core.ViewModels.Forms
         protected override void CopyProperties()
         {
             this.StartMonth = this.Period.StartMonth;
-            this.StartYear = this.Period.StartYear.ToString();
+            this.StartYear = this.Period.StartYear;
             this.EndMonth = this.Period.EndMonth;
-            this.EndYear = this.Period.EndYear.ToString();
-            this.NumberOfEpisodes = this.Period.NumberOfEpisodes.ToString();
+            this.EndYear = this.Period.EndYear;
+            this.NumberOfEpisodes = this.Period.NumberOfEpisodes;
             this.IsSingleDayRelease = this.Period.IsSingleDayRelease;
             this.RottenTomatoesLink = this.Period.RottenTomatoesLink.EmptyIfNull();
             this.PosterUrl = this.Period.PosterUrl.EmptyIfNull();
