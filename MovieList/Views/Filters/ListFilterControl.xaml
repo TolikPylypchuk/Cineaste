@@ -16,7 +16,7 @@
         </StackPanel>
 
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <rx:ViewModelViewHost x:Name="FilterItemViewHost" Margin="4" VerticalAlignment="Top" />
+            <rx:ViewModelViewHost x:Name="FilterItemViewHost" Margin="4" VerticalAlignment="Stretch" />
         </ScrollViewer>
     </DockPanel>
 </local:ListFilterControlBase>

@@ -4,7 +4,8 @@
                                    xmlns:rx="http://reactiveui.net"
                                    xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                                    xmlns:local="clr-namespace:MovieList.Views.Filters"
-                                   xmlns:l="clr-namespace:MovieList.Localization">
+                                   xmlns:l="clr-namespace:MovieList.Localization"
+                                   MinHeight="1">
     <Grid VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition />

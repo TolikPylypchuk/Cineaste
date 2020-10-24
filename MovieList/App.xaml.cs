@@ -48,7 +48,7 @@ namespace MovieList
             var autoSuspendHelper = new AutoSuspendHelper(this);
             GC.KeepAlive(autoSuspendHelper);
 
-            BlobCache.ApplicationName = Assembly.GetExecutingAssembly().GetName().Name;
+            BlobCache.ApplicationName = Assembly.GetExecutingAssembly().GetName()?.Name ?? String.Empty;
         }
 
         protected override async void OnStartup(StartupEventArgs e)

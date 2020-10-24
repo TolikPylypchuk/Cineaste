@@ -182,6 +182,7 @@ namespace MovieList.Views.Forms
         {
             this.WhenAnyValue(v => v.ViewModel!.CurrentPosterUrl)
                 .Where(url => !String.IsNullOrEmpty(url))
+                .WhereNotNull()
                 .SelectMany(url => BlobCache.UserAccount.DownloadUrl(url, TimeSpan.FromMinutes(5)))
                 .Select(data => data.AsImage())
                 .WhereNotNull()
