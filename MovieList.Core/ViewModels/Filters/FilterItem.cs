@@ -1,5 +1,8 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using MovieList.Data.Models;
 
@@ -15,6 +18,8 @@ namespace MovieList.Core.ViewModels.Filters
     public abstract class FilterItem : ReactiveObject
     {
         protected static readonly Filter NoFilter = item => true;
+
+        protected readonly Subject<Unit> FilterChangedSubject = new Subject<Unit>();
 
         private protected FilterItem(
             ReadOnlyObservableCollection<Kind> kinds,
@@ -34,6 +39,9 @@ namespace MovieList.Core.ViewModels.Filters
 
         [Reactive]
         public bool IsNegated { get; set; }
+
+        public IObservable<Unit> FilterChanged
+            => this.FilterChangedSubject.AsObservable();
 
         public ReadOnlyObservableCollection<Kind> Kinds { get; }
         public ReadOnlyObservableCollection<Tag> Tags { get; }

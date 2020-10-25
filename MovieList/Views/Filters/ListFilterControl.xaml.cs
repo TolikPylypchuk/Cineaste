@@ -23,10 +23,10 @@ namespace MovieList.Views.Filters
                 this.Bind(this.ViewModel, vm => vm.FilterItem, v => v.FilterItemViewHost.ViewModel)
                     ?.DisposeWith(disposables);
 
-                this.BindCommand(this.ViewModel!, vm => vm.ApplyFilter, v => v.ApplyFilterButton)
+                this.BindCommand(this.ViewModel!, vm => vm.Apply, v => v.ApplyFilterButton)
                     ?.DisposeWith(disposables);
 
-                this.BindCommand(this.ViewModel!, vm => vm.ClearFilter, v => v.ClearFilterButton)
+                this.BindCommand(this.ViewModel!, vm => vm.Clear, v => v.ClearFilterButton)
                     ?.DisposeWith(disposables);
             });
         }

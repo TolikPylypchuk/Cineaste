@@ -52,6 +52,8 @@ namespace MovieList.Core.ViewModels.Filters
 
             this.SwitchComposition
                 .ToPropertyEx(this, vm => vm.Composition, initialValue: initialComposition);
+
+            this.Delete.Subscribe(this.FilterChangedSubject);
         }
 
         public FilterComposition Composition { [ObservableAsProperty] get; }
@@ -141,6 +143,10 @@ namespace MovieList.Core.ViewModels.Filters
                     })
                     .DisposeWith(subscriptions);
             }
+
+            item.FilterChanged
+                .Subscribe(this.FilterChangedSubject)
+                .DisposeWith(subscriptions);
 
             item.Delete
                 .Subscribe(() =>

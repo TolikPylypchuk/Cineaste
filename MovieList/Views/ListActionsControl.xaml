@@ -23,6 +23,14 @@
             <Button x:Name="AddNewSeriesButton" Content="{l:Translate AddNewSeries, ToUpper=True}" />
         </StackPanel>
 
-        <rx:ViewModelViewHost x:Name="FilterViewHost" Grid.Row="1" />
+        <TabControl Grid.Row="1" Style="{StaticResource MaterialDesignTabControl}">
+            <TabItem Header="{l:Translate Search}">
+                <rx:ViewModelViewHost x:Name="SearchViewHost" />
+            </TabItem>
+
+            <TabItem Header="{l:Translate Filter}">
+                <rx:ViewModelViewHost x:Name="FilterViewHost" />
+            </TabItem>
+        </TabControl>
     </Grid>
 </local:ListActionsControlBase>

@@ -889,4 +889,19 @@ This will detach all entries without deleting them.</value>
   <data name="FilterSimplify" xml:space="preserve">
     <value>Simplify</value>
   </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Clear search</value>
+  </data>
+  <data name="FindNext" xml:space="preserve">
+    <value>Find next</value>
+  </data>
+  <data name="FindPrevious" xml:space="preserve">
+    <value>Find previous</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="StopSearch" xml:space="preserve">
+    <value>Stop searching</value>
+  </data>
 </root>

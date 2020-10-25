@@ -1,4 +1,5 @@
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows.Media;
 
 using MovieList.Core.ViewModels;
@@ -11,6 +12,8 @@ namespace MovieList.Views
 
     public partial class ListItemControl : ListItemControlBase
     {
+        private static readonly SolidColorBrush HighlightBrush = new(new Color { A = 255, R = 237, G = 231, B = 246 });
+
         public ListItemControl()
         {
             this.InitializeComponent();
@@ -31,6 +34,12 @@ namespace MovieList.Views
                     ?.DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Item.Year, v => v.YearTextBlock.Text)
+                    ?.DisposeWith(disposables);
+
+                this.WhenAnyValue(v => v.ViewModel!.Item.IsHighlighted)
+                    .Select(isHighlighted => isHighlighted ? HighlightBrush : Brushes.Transparent)
+                    .ObserveOnDispatcher()
+                    .BindTo(this, v => v.ItemBorder.Background)
                     ?.DisposeWith(disposables);
 
                 this.OneWayBind(

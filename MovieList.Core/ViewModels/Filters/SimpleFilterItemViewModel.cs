@@ -35,6 +35,8 @@ namespace MovieList.Core.ViewModels.Filters
         private readonly ReadOnlyObservableCollection<string> seriesWatchStatuses = null!;
         private readonly ReadOnlyObservableCollection<string> seriesReleaseStatuses = null!;
 
+        private IDisposable inputChangedSubscription = Disposable.Empty;
+
         public SimpleFilterItemViewModel(
             ReadOnlyObservableCollection<Kind> kinds,
             ReadOnlyObservableCollection<Tag> tags,
@@ -83,6 +85,14 @@ namespace MovieList.Core.ViewModels.Filters
 
             this.MakeComposite = ReactiveCommand.Create<FilterComposition, FilterComposition>(c => c);
             this.Delete = ReactiveCommand.Create(() => { });
+
+            this.Delete.Subscribe(this.FilterChangedSubject);
+
+            this.WhenAnyValue(vm => vm.FilterInput)
+                .DistinctUntilChanged()
+                .Discard()
+                .Merge(this.MakeComposite.Discard())
+                .Subscribe(this.FilterChangedSubject);
 
             this.WhenActivated(disposables =>
             {
@@ -206,7 +216,8 @@ namespace MovieList.Core.ViewModels.Filters
             };
 
         private FilterInput CreateFilterInput()
-            => (this.FilterType, this.FilterOperation) switch
+        {
+            FilterInput input = (this.FilterType, this.FilterOperation) switch
             {
                 (ByTitle, _) =>
                     new TextFilterInputViewModel { Description = "Title" },
@@ -274,6 +285,12 @@ namespace MovieList.Core.ViewModels.Filters
 
                 _ => new NoFilterInputViewModel()
             };
+
+            this.inputChangedSubscription.Dispose();
+            this.inputChangedSubscription = input.InputChanged.Subscribe(this.FilterChangedSubject);
+
+            return input;
+        }
 
         private Filter TitleIs(string? title)
             => !String.IsNullOrEmpty(title)

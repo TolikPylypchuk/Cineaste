@@ -322,6 +322,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear search.
+        /// </summary>
+        public static string ClearSearch {
+            get {
+                return ResourceManager.GetString("ClearSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {
@@ -1178,6 +1187,24 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Find next.
+        /// </summary>
+        public static string FindNext {
+            get {
+                return ResourceManager.GetString("FindNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find previous.
+        /// </summary>
+        public static string FindPrevious {
+            get {
+                return ResourceManager.GetString("FindPrevious", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Franchise.
         /// </summary>
         public static string Franchise {
@@ -1871,6 +1898,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finished.
         /// </summary>
         public static string SeasonFinished {
@@ -2119,6 +2155,15 @@ namespace MovieList.Properties {
         public static string StartYear {
             get {
                 return ResourceManager.GetString("StartYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop searching.
+        /// </summary>
+        public static string StopSearch {
+            get {
+                return ResourceManager.GetString("StopSearch", resourceCulture);
             }
         }
         

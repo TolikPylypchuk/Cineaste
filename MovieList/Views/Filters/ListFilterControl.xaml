@@ -5,9 +5,6 @@
                              xmlns:rx="http://reactiveui.net"
                              xmlns:l="clr-namespace:MovieList.Localization">
     <DockPanel>
-        <TextBlock Text="{l:Translate Filter}" DockPanel.Dock="Top" Margin="8"
-                   Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
-
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
             <Button x:Name="ApplyFilterButton" Content="{l:Translate ApplyFilter, ToUpper=True}" Margin="8"
                     HorizontalAlignment="Center" />
