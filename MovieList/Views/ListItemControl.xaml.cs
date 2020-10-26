@@ -1,7 +1,11 @@
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Windows.Controls;
 using System.Windows.Media;
 
+using MovieList.Core;
 using MovieList.Core.ViewModels;
 
 using ReactiveUI;
@@ -36,10 +40,19 @@ namespace MovieList.Views
                 this.OneWayBind(this.ViewModel, vm => vm.Item.Year, v => v.YearTextBlock.Text)
                     ?.DisposeWith(disposables);
 
-                this.WhenAnyValue(v => v.ViewModel!.Item.IsHighlighted)
-                    .Select(isHighlighted => isHighlighted ? HighlightBrush : Brushes.Transparent)
+                var isMouseOver = this.Events().MouseEnter.Select(_ => true)
+                    .Merge(this.Events().MouseLeave.Select(_ => false))
+                    .DistinctUntilChanged()
+                    .StartWith(false);
+
+                this.WhenAnyValue(
+                    v => v.ViewModel!.Item.IsHighlighted,
+                    v => v.ViewModel!.Item.IsSelected,
+                    (highlighted, selected) => highlighted && !selected)
+                    .CombineLatest(isMouseOver, (highlight, mouseOver) => highlight && !mouseOver)
+                    .Select(highlight => highlight ? HighlightBrush : Brushes.Transparent)
                     .ObserveOnDispatcher()
-                    .BindTo(this, v => v.ItemBorder.Background)
+                    .BindTo(this, v => v.Background)
                     ?.DisposeWith(disposables);
 
                 this.OneWayBind(

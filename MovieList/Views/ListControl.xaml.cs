@@ -33,6 +33,7 @@ namespace MovieList.Views
 
                 this.WhenAnyValue(v => v.List.SelectedItem)
                     .WhereNotNull()
+                    .Merge(this.ViewModel!.Find)
                     .ObserveOnDispatcher()
                     .Subscribe(this.List.ScrollIntoView)
                     ?.DisposeWith(disposables);

@@ -52,9 +52,14 @@ namespace MovieList.Core.ViewModels
             this.TunnelSave = ReactiveCommand.Create(() => { });
             this.BubbleSave = ReactiveCommand.Create(() => { });
 
+            var findSubject = new Subject<ListItemViewModel>();
             var filterSubject = new Subject<Func<ListItem, bool>>();
-            this.List = new ListViewModel(fileName, filterSubject.AsObservable(), kinds, tags);
-            this.SideViewModel = this.ListActions = this.CreateListActionsViewModel(filterSubject.AsObserver());
+
+            this.List = new ListViewModel(
+                fileName, findSubject.AsObservable(), filterSubject.AsObservable(), kinds, tags);
+
+            this.SideViewModel = this.ListActions = this.CreateListActionsViewModel(
+                findSubject.AsObserver(), filterSubject.AsObserver());
 
             this.franchiseAddableItemsSource.Connect()
                 .Bind(out this.franchiseAddableItems)
@@ -144,9 +149,17 @@ namespace MovieList.Core.ViewModels
                     throw new NotSupportedException("List item type not supported")
             };
 
-        private ListActionsViewModel CreateListActionsViewModel(IObserver<Func<ListItem, bool>> filterObserver)
+        private ListActionsViewModel CreateListActionsViewModel(
+            IObserver<ListItemViewModel> findObserver,
+            IObserver<Func<ListItem, bool>> filterObserver)
         {
             var viewModel = new ListActionsViewModel(this.List.Items, this.Kinds, this.Tags);
+
+            viewModel.Search.FindNext
+                .Merge(viewModel.Search.FindPrevious)
+                .WhereNotNull()
+                .Subscribe(findObserver);
+
             viewModel.Filter.Apply.Subscribe(filterObserver);
 
             viewModel.AddNewMovie

@@ -30,6 +30,7 @@ namespace MovieList.Core.ViewModels
 
         public ListViewModel(
             string fileName,
+            IObservable<ListItemViewModel> find,
             IObservable<Func<ListItem, bool>> listFilter,
             ReadOnlyObservableCollection<Kind> kinds,
             ReadOnlyObservableCollection<Tag> tags,
@@ -69,7 +70,10 @@ namespace MovieList.Core.ViewModels
             this.RemoveSeries = ReactiveCommand.Create<Series>(this.OnRemoveSeries);
             this.RemoveFranchise = ReactiveCommand.Create<Franchise>(this.OnRemoveFranchise);
 
+            this.Find = ReactiveCommand.Create<ListItemViewModel, ListItemViewModel>(vm => vm);
+
             this.AddOrUpdate.InvokeCommand(this.SelectItem);
+            find.InvokeCommand(this.Find);
         }
 
         public ReadOnlyObservableCollection<ListItemViewModel> Items
@@ -91,11 +95,15 @@ namespace MovieList.Core.ViewModels
         public ReactiveCommand<Series, Unit> RemoveSeries { get; }
         public ReactiveCommand<Franchise, Unit> RemoveFranchise { get; }
 
+        public ReactiveCommand<ListItemViewModel, ListItemViewModel> Find { get; }
+
         private bool OnSelectItem(ListItem? item)
         {
             bool isSame = this.SelectedItem?.Item.Id == item?.Id;
 
+            this.SetSelectedForSelectedItem(false);
             this.SelectedItem = this.Items.FirstOrDefault(vm => vm.Item == item);
+            this.SetSelectedForSelectedItem(true);
 
             return !isSame || item == null;
         }
@@ -219,6 +227,14 @@ namespace MovieList.Core.ViewModels
                 .SelectMany(entry => entry.Franchise!.Entries)
                 .Select(entry => entry.ToListItem())
                 .ForEach(list.AddOrUpdate);
+        }
+
+        private void SetSelectedForSelectedItem(bool isSelected)
+        {
+            if (this.SelectedItem != null)
+            {
+                this.SelectedItem.Item.IsSelected = isSelected;
+            }
         }
     }
 }

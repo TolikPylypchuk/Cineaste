@@ -7,6 +7,7 @@ using System.Reactive.Disposables;
 using DynamicData;
 using DynamicData.Binding;
 
+using MovieList.Core.ListItems;
 using MovieList.Core.ViewModels.Filters;
 using MovieList.Data.Models;
 
@@ -123,10 +124,12 @@ namespace MovieList.Core.ViewModels
             this.RemoveHighlights();
 
             var newItems = this.listItems
-                .Where(item => filter(item.Item))
+                .Where(item => item.Item is not FranchiseListItem && filter(item.Item))
                 .ToList();
 
-            if (newItems.Count != this.listItems.Count)
+            var countWithoutFranchises = this.listItems.Count(item => item.Item is not FranchiseListItem);
+
+            if (newItems.Count != countWithoutFranchises)
             {
                 foreach (var item in newItems)
                 {
