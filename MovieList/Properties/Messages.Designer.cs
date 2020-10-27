@@ -214,6 +214,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All items satisfy the search criteria.
+        /// </summary>
+        public static string AllItemsFound {
+            get {
+                return ResourceManager.GetString("AllItemsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Animation.
         /// </summary>
         public static string Animation {
@@ -1646,6 +1655,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No items found.
+        /// </summary>
+        public static string NoItemsFound {
+            get {
+                return ResourceManager.GetString("NoItemsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no items in the list. You can start by adding a movie or series..
         /// </summary>
         public static string NoItemsInList {
@@ -1903,6 +1921,15 @@ namespace MovieList.Properties {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item {0} out ot {1}.
+        /// </summary>
+        public static string SearchResultFormat {
+            get {
+                return ResourceManager.GetString("SearchResultFormat", resourceCulture);
             }
         }
         

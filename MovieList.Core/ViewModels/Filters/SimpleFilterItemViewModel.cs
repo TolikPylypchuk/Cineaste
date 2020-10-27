@@ -92,6 +92,7 @@ namespace MovieList.Core.ViewModels.Filters
                 .DistinctUntilChanged()
                 .Discard()
                 .Merge(this.MakeComposite.Discard())
+                .Merge(this.WhenAnyValue(vm => vm.IsNegated).Discard())
                 .Subscribe(this.FilterChangedSubject);
 
             this.WhenActivated(disposables =>
@@ -119,6 +120,9 @@ namespace MovieList.Core.ViewModels.Filters
         public FilterOperation FilterOperation { get; set; } = Is;
 
         public FilterInput FilterInput { [ObservableAsProperty] get; } = null!;
+
+        [Reactive]
+        public bool IsNegated { get; set; }
 
         public ReadOnlyObservableCollection<FilterOperation> AvailableOperations
             => this.availableOperations;

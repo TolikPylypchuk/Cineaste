@@ -6,17 +6,21 @@
                              xmlns:l="clr-namespace:MovieList.Localization">
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom">
+            <TextBlock x:Name="FoundItemsCountTextBlock" Margin="8"
+                       Style="{StaticResource MaterialDesignBody1TextBlock}" />
+
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="FindNextButton" Content="{l:Translate FindNext, ToUpper=True}" Margin="8"
-                    HorizontalAlignment="Center" />
+                        HorizontalAlignment="Center" />
                 <Button x:Name="FindPreviousButton" Content="{l:Translate FindPrevious, ToUpper=True}" Margin="8"
-                    HorizontalAlignment="Center" />
+                        HorizontalAlignment="Center" />
             </StackPanel>
+
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="StopSearchButton" Content="{l:Translate StopSearch, ToUpper=True}" Margin="8"
-                    HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
+                        HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
                 <Button x:Name="ClearSearchButton" Content="{l:Translate ClearSearch, ToUpper=True}" Margin="8"
-                    HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
+                        HorizontalAlignment="Center" Style="{StaticResource MaterialDesignOutlinedButton}" />
             </StackPanel>
         </StackPanel>
 

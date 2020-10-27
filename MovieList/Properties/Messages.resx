@@ -904,4 +904,13 @@ This will detach all entries without deleting them.</value>
   <data name="StopSearch" xml:space="preserve">
     <value>Stop searching</value>
   </data>
+  <data name="AllItemsFound" xml:space="preserve">
+    <value>All items satisfy the search criteria</value>
+  </data>
+  <data name="NoItemsFound" xml:space="preserve">
+    <value>No items found</value>
+  </data>
+  <data name="SearchResultFormat" xml:space="preserve">
+    <value>Item {0} out ot {1}</value>
+  </data>
 </root>

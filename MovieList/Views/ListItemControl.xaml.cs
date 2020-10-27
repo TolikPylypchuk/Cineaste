@@ -1,11 +1,10 @@
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 using MovieList.Core;
+using MovieList.Core.ListItems;
 using MovieList.Core.ViewModels;
 
 using ReactiveUI;
@@ -16,7 +15,11 @@ namespace MovieList.Views
 
     public partial class ListItemControl : ListItemControlBase
     {
-        private static readonly SolidColorBrush HighlightBrush = new(new Color { A = 255, R = 237, G = 231, B = 246 });
+        private static readonly SolidColorBrush PartialHighlightBrush =
+            new(new Color { A = 255, R = 237, G = 231, B = 246 });
+
+        private static readonly SolidColorBrush FullHighlightBrush =
+            new(new Color { A = 255, R = 209, G = 196, B = 233 });
 
         public ListItemControl()
         {
@@ -46,11 +49,11 @@ namespace MovieList.Views
                     .StartWith(false);
 
                 this.WhenAnyValue(
-                    v => v.ViewModel!.Item.IsHighlighted,
+                    v => v.ViewModel!.Item.HighlightMode,
                     v => v.ViewModel!.Item.IsSelected,
-                    (highlighted, selected) => highlighted && !selected)
-                    .CombineLatest(isMouseOver, (highlight, mouseOver) => highlight && !mouseOver)
-                    .Select(highlight => highlight ? HighlightBrush : Brushes.Transparent)
+                    (highlightMode, selected) => (Mode: highlightMode, Selected: selected))
+                    .CombineLatest(isMouseOver, (item, mouseOver) => (item.Mode, Show: !item.Selected && !mouseOver))
+                    .Select(item => item.Show ? GetBrushForHighlightMode(item.Mode) : Brushes.Transparent)
                     .ObserveOnDispatcher()
                     .BindTo(this, v => v.Background)
                     ?.DisposeWith(disposables);
@@ -66,5 +69,13 @@ namespace MovieList.Views
                     ?.DisposeWith(disposables);
             });
         }
+
+        private Brush GetBrushForHighlightMode(HighlightMode mode)
+            => mode switch
+            {
+                HighlightMode.Partial => PartialHighlightBrush,
+                HighlightMode.Full => FullHighlightBrush,
+                _ => Brushes.Transparent
+            };
     }
 }

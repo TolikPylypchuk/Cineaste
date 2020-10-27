@@ -8,6 +8,8 @@ using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.Core.ListItems
 {
+    public enum HighlightMode { None, Partial, Full }
+
     public abstract class ListItem : ReactiveObject, IEquatable<ListItem>
     {
         private protected ListItem(
@@ -59,7 +61,7 @@ namespace MovieList.Core.ListItems
         public bool IsSelected { get; set; }
 
         [Reactive]
-        public bool IsHighlighted { get; set; }
+        public HighlightMode HighlightMode { get; set; }
 
         public override bool Equals(object? obj)
             => obj is ListItem item && this.Equals(item);

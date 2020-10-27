@@ -37,9 +37,6 @@ namespace MovieList.Core.ViewModels.Filters
                 ?? Locator.Current.GetService<IEnumConverter<SeriesReleaseStatus>>();
         }
 
-        [Reactive]
-        public bool IsNegated { get; set; }
-
         public IObservable<Unit> FilterChanged
             => this.FilterChangedSubject.AsObservable();
 

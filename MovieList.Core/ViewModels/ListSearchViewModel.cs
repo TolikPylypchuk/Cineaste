@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 
 using DynamicData;
 using DynamicData.Binding;
@@ -50,10 +51,21 @@ namespace MovieList.Core.ViewModels
 
             this.Clear.InvokeCommand(this.StopSearch);
             this.Clear.Subscribe(this.foundItemsSource.Clear);
+
+            this.FindNext.Select(_ => true)
+                .Merge(this.FindPrevious.Select(_ => true))
+                .Merge(this.StopSearch.Select(_ => false))
+                .Merge(this.Clear.Select(_ => false))
+                .ToPropertyEx(this, v => v.IsSearchInitialized, initialValue: false);
         }
 
         [Reactive]
         public int CurrentIndex { get; private set; } = NoIndex;
+
+        [Reactive]
+        public int TotalSearchedItemsCount { get; private set; } = 0;
+
+        public bool IsSearchInitialized { [ObservableAsProperty] get; }
 
         public ReadOnlyObservableCollection<ListItemViewModel> FoundItems
             => this.foundItems;
@@ -79,42 +91,41 @@ namespace MovieList.Core.ViewModels
         }
 
         private ListItemViewModel? OnFindNext()
-        {
-            if (this.shouldUpdateFilter)
-            {
-                this.UpdateFilter();
-            }
-
-            if (this.foundItems.Count == 0 || this.foundItems.Count == this.listItems.Count)
-            {
-                return null;
-            }
-
-            this.CurrentIndex = (this.CurrentIndex + 1 + this.foundItems.Count) % this.foundItems.Count;
-            return this.foundItems[this.CurrentIndex];
-        }
+            => this.Find(() => (this.CurrentIndex + 1 + this.foundItems.Count) % this.foundItems.Count);
 
         private ListItemViewModel? OnFindPrevious()
-        {
-            if (this.shouldUpdateFilter)
-            {
-                this.UpdateFilter();
-            }
-
-            if (this.foundItems.Count == 0 || this.foundItems.Count == this.listItems.Count)
-            {
-                return null;
-            }
-
-            this.CurrentIndex = (Math.Max(this.CurrentIndex, 0) - 1 + this.foundItems.Count) % this.foundItems.Count;
-            return this.foundItems[this.CurrentIndex];
-        }
+            => this.Find(() => (Math.Max(this.CurrentIndex, 0) - 1 + this.foundItems.Count) % this.foundItems.Count);
 
         private void OnStopSearch()
         {
             this.RemoveHighlights();
             this.CurrentIndex = NoIndex;
             this.ShouldUpdateFilter();
+        }
+
+        private ListItemViewModel? Find(Func<int> nextIndex)
+        {
+            if (this.shouldUpdateFilter)
+            {
+                this.UpdateFilter();
+            }
+
+            if (this.foundItems.Count == 0 || this.foundItems.Count == this.TotalSearchedItemsCount)
+            {
+                return null;
+            }
+
+            if (this.CurrentIndex != NoIndex)
+            {
+                this.foundItems[this.CurrentIndex].Item.HighlightMode = HighlightMode.Partial;
+            }
+
+            this.CurrentIndex = nextIndex();
+
+            var result = this.foundItems[this.CurrentIndex];
+            result.Item.HighlightMode = HighlightMode.Full;
+
+            return result;
         }
 
         private void UpdateFilter()
@@ -127,13 +138,13 @@ namespace MovieList.Core.ViewModels
                 .Where(item => item.Item is not FranchiseListItem && filter(item.Item))
                 .ToList();
 
-            var countWithoutFranchises = this.listItems.Count(item => item.Item is not FranchiseListItem);
+            this.TotalSearchedItemsCount = this.listItems.Count(item => item.Item is not FranchiseListItem);
 
-            if (newItems.Count != countWithoutFranchises)
+            if (newItems.Count != this.TotalSearchedItemsCount)
             {
                 foreach (var item in newItems)
                 {
-                    item.Item.IsHighlighted = true;
+                    item.Item.HighlightMode = HighlightMode.Partial;
                 }
             }
 
@@ -151,7 +162,7 @@ namespace MovieList.Core.ViewModels
         {
             foreach (var item in this.foundItems)
             {
-                item.Item.IsHighlighted = false;
+                item.Item.HighlightMode = HighlightMode.None;
             }
         }
 

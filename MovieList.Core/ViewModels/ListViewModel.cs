@@ -47,6 +47,7 @@ namespace MovieList.Core.ViewModels
             this.Log().Debug($"Loaded the list of {this.source.Count} items");
 
             this.source.Connect()
+                .ObserveOn(RxApp.TaskpoolScheduler)
                 .Filter(item => !String.IsNullOrEmpty(item.Title))
                 .Filter(listFilter.StartWith(item => true).ObserveOn(RxApp.TaskpoolScheduler))
                 .AutoRefresh(item => item.DisplayNumber)
