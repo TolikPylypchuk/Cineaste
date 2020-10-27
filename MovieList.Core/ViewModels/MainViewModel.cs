@@ -247,8 +247,7 @@ namespace MovieList.Core.ViewModels
                     .Select(file => this.AddFileToRecent(preferences, file.FileName, false))
                     .Concat()
                     .LastOrDefaultAsync())
-                .SelectMany(preferences => this.store.InsertObject(PreferencesKey, preferences).Eager())
-                .Eager();
+                .SelectMany(preferences => this.store.InsertObject(PreferencesKey, preferences).Eager());
 
         private IObservable<Unit> OnOpenPreferences()
         {
