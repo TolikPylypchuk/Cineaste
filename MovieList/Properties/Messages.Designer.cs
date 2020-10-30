@@ -1394,6 +1394,51 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By original title.
+        /// </summary>
+        public static string ListSortingByOriginalTitle {
+            get {
+                return ResourceManager.GetString("ListSortingByOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By original title (simple).
+        /// </summary>
+        public static string ListSortingByOriginalTitleSimple {
+            get {
+                return ResourceManager.GetString("ListSortingByOriginalTitleSimple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By title.
+        /// </summary>
+        public static string ListSortingByTitle {
+            get {
+                return ResourceManager.GetString("ListSortingByTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By title (simple).
+        /// </summary>
+        public static string ListSortingByTitleSimple {
+            get {
+                return ResourceManager.GetString("ListSortingByTitleSimple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By year.
+        /// </summary>
+        public static string ListSortingByYear {
+            get {
+                return ResourceManager.GetString("ListSortingByYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Live-Action.
         /// </summary>
         public static string LiveAction {
@@ -2164,6 +2209,33 @@ namespace MovieList.Properties {
         public static string SingleDayRelease {
             get {
                 return ResourceManager.GetString("SingleDayRelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sort.
+        /// </summary>
+        public static string Sort {
+            get {
+                return ResourceManager.GetString("Sort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asc.
+        /// </summary>
+        public static string SortingDirectionAscending {
+            get {
+                return ResourceManager.GetString("SortingDirectionAscending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Desc.
+        /// </summary>
+        public static string SortingDirectionDescending {
+            get {
+                return ResourceManager.GetString("SortingDirectionDescending", resourceCulture);
             }
         }
         

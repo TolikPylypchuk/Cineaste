@@ -1,23 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
-using MovieList.Core;
 using MovieList.Core.ViewModels.Filters;
 using MovieList.Properties;
 
-using ReactiveUI;
-
 namespace MovieList.Converters
 {
-    public sealed class FilterTypeConverter : IBindingTypeConverter, IEnumConverter<FilterType>
+    public sealed class FilterTypeConverter : EnumConverter<FilterType>
     {
-        private readonly Dictionary<FilterType, string> filterTypeToString;
-        private readonly Dictionary<string, FilterType> stringToFilterType;
-
-        public FilterTypeConverter()
-        {
-            this.filterTypeToString = new Dictionary<FilterType, string>
+        protected override Dictionary<FilterType, string> CreateConverterDictionary()
+            => new()
             {
                 [FilterType.ByTitle] = Messages.FilterTypeTitle,
                 [FilterType.ByYear] = Messages.FilterTypeYear,
@@ -36,37 +27,5 @@ namespace MovieList.Converters
                 [FilterType.BySeriesIsMiniseries] = Messages.FilterTypeSeriesMiniseries,
                 [FilterType.BySeriesIsAnthology] = Messages.FilterTypeSeriesAnthology
             };
-
-            this.stringToFilterType = filterTypeToString.ToDictionary(e => e.Value, e => e.Key);
-        }
-
-        public int GetAffinityForObjects(Type fromType, Type toType)
-            => fromType == typeof(FilterType) || toType == typeof(FilterType)
-                ? 10000
-                : 0;
-
-        public bool TryConvert(object? from, Type toType, object? conversionHint, out object? result)
-        {
-            switch (from)
-            {
-                case FilterType filterType:
-                    result = this.filterTypeToString[filterType];
-                    return true;
-                case string str:
-                    result = this.stringToFilterType[str];
-                    return true;
-                default:
-                    result = null;
-                    return false;
-            }
-        }
-
-        public string ToString(FilterType filterType)
-            => this.filterTypeToString[filterType];
-
-        public FilterType FromString(string str)
-            => this.stringToFilterType.ContainsKey(str)
-                ? this.stringToFilterType[str]
-                : throw new ArgumentOutOfRangeException(nameof(str));
     }
 }

@@ -913,4 +913,28 @@ This will detach all entries without deleting them.</value>
   <data name="SearchResultFormat" xml:space="preserve">
     <value>Item {0} out ot {1}</value>
   </data>
+  <data name="ListSortingByOriginalTitle" xml:space="preserve">
+    <value>By original title</value>
+  </data>
+  <data name="ListSortingByOriginalTitleSimple" xml:space="preserve">
+    <value>By original title (simple)</value>
+  </data>
+  <data name="ListSortingByTitle" xml:space="preserve">
+    <value>By title</value>
+  </data>
+  <data name="ListSortingByTitleSimple" xml:space="preserve">
+    <value>By title (simple)</value>
+  </data>
+  <data name="ListSortingByYear" xml:space="preserve">
+    <value>By year</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="SortingDirectionAscending" xml:space="preserve">
+    <value>Asc</value>
+  </data>
+  <data name="SortingDirectionDescending" xml:space="preserve">
+    <value>Desc</value>
+  </data>
 </root>

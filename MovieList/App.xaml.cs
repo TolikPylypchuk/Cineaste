@@ -130,6 +130,9 @@ namespace MovieList
             var seasonReleaseStatusConverter = new SeasonReleaseStatusConverter();
             var filterTypeConverter = new FilterTypeConverter();
             var filterOperationConverter = new FilterOperationConverter();
+            var listSortingConverter = new ListSortingConverter();
+            var sortingDirectionConverter = new SortingDirectionConverter();
+            var logLevelConverter = new LogLevelConverter();
 
             this.RegisterBindingConverters(
                 seriesWatchStatusConverter,
@@ -138,6 +141,9 @@ namespace MovieList
                 seasonReleaseStatusConverter,
                 filterTypeConverter,
                 filterOperationConverter,
+                listSortingConverter,
+                sortingDirectionConverter,
+                logLevelConverter,
                 new BrushToHexConverter(),
                 new ColorToBrushConverter(),
                 new BooleanToVisibilityTypeConverter());
@@ -148,6 +154,9 @@ namespace MovieList
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeasonReleaseStatus>>(seasonReleaseStatusConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterType>>(filterTypeConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterOperation>>(filterOperationConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSorting>>(listSortingConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SortingDirection>>(sortingDirectionConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<LogEventLevel>>(logLevelConverter);
         }
 
         private void RegisterBindingConverters(params IBindingTypeConverter[] converters)

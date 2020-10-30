@@ -1,60 +1,19 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
-using MovieList.Core;
 using MovieList.Data.Models;
 using MovieList.Properties;
 
-using ReactiveUI;
-
 namespace MovieList.Converters
 {
-    public sealed class SeriesWatchStatusConverter : IBindingTypeConverter, IEnumConverter<SeriesWatchStatus>
+    public sealed class SeriesWatchStatusConverter : EnumConverter<SeriesWatchStatus>
     {
-        private readonly Dictionary<SeriesWatchStatus, string> statusToString;
-        private readonly Dictionary<string, SeriesWatchStatus> stringToStatus;
-
-        public SeriesWatchStatusConverter()
-        {
-            this.statusToString = new Dictionary<SeriesWatchStatus, string>
+        protected override Dictionary<SeriesWatchStatus, string> CreateConverterDictionary()
+            => new()
             {
                 [SeriesWatchStatus.NotWatched] = Messages.SeriesNotWatched,
                 [SeriesWatchStatus.Watching] = Messages.SeriesWatching,
                 [SeriesWatchStatus.Watched] = Messages.SeriesWatched,
                 [SeriesWatchStatus.StoppedWatching] = Messages.SeriesStoppedWatching
             };
-
-            this.stringToStatus = statusToString.ToDictionary(e => e.Value, e => e.Key);
-        }
-
-        public int GetAffinityForObjects(Type fromType, Type toType)
-            => fromType == typeof(SeriesWatchStatus) || toType == typeof(SeriesWatchStatus)
-                ? 10000
-                : 0;
-
-        public bool TryConvert(object? from, Type toType, object? conversionHint, out object? result)
-        {
-            switch (from)
-            {
-                case SeriesWatchStatus status:
-                    result = this.statusToString[status];
-                    return true;
-                case string str:
-                    result = this.stringToStatus[str];
-                    return true;
-                default:
-                    result = null;
-                    return false;
-            }
-        }
-
-        public string ToString(SeriesWatchStatus status)
-            => this.statusToString[status];
-
-        public SeriesWatchStatus FromString(string str)
-            => this.stringToStatus.ContainsKey(str)
-                ? this.stringToStatus[str]
-                : throw new ArgumentOutOfRangeException(nameof(str));
     }
 }
