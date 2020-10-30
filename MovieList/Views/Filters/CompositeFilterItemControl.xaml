@@ -3,8 +3,7 @@
                                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                       xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                                       xmlns:local="clr-namespace:MovieList.Views.Filters"
-                                      xmlns:l="clr-namespace:MovieList.Localization"
-                                      VerticalAlignment="Top">
+                                      xmlns:l="clr-namespace:MovieList.Localization">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
