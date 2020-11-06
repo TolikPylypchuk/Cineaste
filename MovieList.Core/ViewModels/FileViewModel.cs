@@ -81,7 +81,7 @@ namespace MovieList.Core.ViewModels
                 .ObserveOn(RxApp.MainThreadScheduler);
 
             kinds.CombineLatest(tags, (k, t) => Unit.Default)
-                .Subscribe(this.SwitchCurrentContentToMain);
+                .SubscribeAsync(this.SwitchCurrentContentToMain);
 
             this.SwitchToList = ReactiveCommand.CreateFromObservable(this.OnSwitchToList);
             this.SwitchToStats = ReactiveCommand.Create(() => { });
@@ -147,21 +147,26 @@ namespace MovieList.Core.ViewModels
 
             return canSwitch
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .DoIfTrue(this.SwitchCurrentContentToMain)
+                .DoIfTrueAsync(this.SwitchCurrentContentToMain)
                 .Discard();
         }
 
-        private void SwitchCurrentContentToMain()
-        {
-            this.currentContentSubscriptions.Clear();
-            this.Settings = null;
+        private IObservable<Unit> SwitchCurrentContentToMain()
+            => this.settingsService.GetSettingsInTaskPool()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Do(settings =>
+                {
+                    this.currentContentSubscriptions.Clear();
+                    this.Settings = null;
 
-            this.Content = this.MainContent = new FileMainContentViewModel(this.FileName, this.Kinds, this.Tags);
+                    this.Content = this.MainContent = new FileMainContentViewModel(
+                        this.FileName, this.Kinds, this.Tags, settings);
 
-            this.Save
-                .InvokeCommand(this.MainContent.TunnelSave)
-                .DisposeWith(this.currentContentSubscriptions);
-        }
+                    this.Save
+                        .InvokeCommand(this.MainContent.TunnelSave)
+                        .DisposeWith(this.currentContentSubscriptions);
+                })
+                .Discard();
 
         private IObservable<Unit> OnSwitchToSettings()
         {

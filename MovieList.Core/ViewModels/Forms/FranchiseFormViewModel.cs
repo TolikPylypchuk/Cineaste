@@ -19,6 +19,8 @@ using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
 
+using Nito.Comparers;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
@@ -65,8 +67,8 @@ namespace MovieList.Core.ViewModels.Forms
             this.addableItemsSource.Connect()
                 .Filter(entry => entry.Franchise != this.Franchise)
                 .Transform(item => new FranchiseAddableItemViewModel(item))
-                .Sort(new PropertyComparer<FranchiseAddableItemViewModel, FranchiseEntry>(
-                        vm => vm.Entry, new FranchiseEntryTitleComparer(settings.CultureInfo)))
+                .Sort(ComparerBuilder.For<FranchiseAddableItemViewModel>()
+                    .OrderBy(vm => vm.Entry, new FranchiseEntryTitleComparer(settings.CultureInfo)))
                 .Bind(out this.addableItems)
                 .Subscribe();
 

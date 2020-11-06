@@ -57,6 +57,9 @@ namespace MovieList.Core.Data.Models
         public static Title? GetListTitle(this Franchise franchise)
             => franchise.ShowTitles ? franchise.Title! : franchise.GetFirstEntry()?.GetTitle();
 
+        public static Title? GetListOriginalTitle(this Franchise franchise)
+            => franchise.ShowTitles ? franchise.OriginalTitle! : franchise.GetFirstEntry()?.GetOriginalTitle();
+
         public static Title? GetTitle(this FranchiseEntry entry)
             => entry.Movie?.Title ?? entry.Series?.Title ?? entry.Franchise!.GetTitle();
 

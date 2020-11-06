@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+
+using Nito.Comparers;
 
 namespace MovieList.Core.Comparers
 {
@@ -9,12 +12,21 @@ namespace MovieList.Core.Comparers
     {
         private static readonly Regex NumberRegex = new Regex("([0-9]+)", RegexOptions.Compiled);
 
-        private readonly EnumerableComparer<object> comparer;
+        private readonly StringComparer stringComparer;
+        private readonly IComparer<IEnumerable<object>> comparer;
 
         public TitleComparer(CultureInfo culture, NullComparison nullComparison = NullComparison.NullsFirst)
             : base(nullComparison)
-            => this.comparer = new EnumerableComparer<object>(
-                new StringOrIntComparer(culture.CompareInfo.GetStringComparer(CompareOptions.None)));
+        {
+            this.stringComparer = culture.CompareInfo.GetStringComparer(CompareOptions.None);
+            this.comparer = new StringOrIntComparer(this.stringComparer, this.stringComparer).Sequence();
+        }
+
+        protected override bool EqualsSafe(string x, string y)
+            => this.stringComparer.Equals(x, y);
+
+        protected override int GetHashCodeSafe(string x)
+            => this.stringComparer.GetHashCode(x);
 
         protected override int CompareSafe(string x, string y)
             => this.comparer.Compare(

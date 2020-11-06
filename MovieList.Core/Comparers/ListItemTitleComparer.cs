@@ -11,10 +11,26 @@ namespace MovieList.Core.Comparers
     public sealed class ListItemTitleComparer : NullableComparerBase<ListItem>
     {
         private readonly TitleComparer titleComparer;
+        private readonly Func<ListItem, string> getTitle;
+        private readonly Func<Franchise, string> getFranchiseTitle;
 
-        public ListItemTitleComparer(CultureInfo culture, NullComparison nullComparison = NullComparison.NullsFirst)
+        public ListItemTitleComparer(
+            CultureInfo culture,
+            Func<ListItem, string> getTitle,
+            Func<Franchise, string> getFranchiseTitle,
+            NullComparison nullComparison = NullComparison.NullsFirst)
             : base(nullComparison)
-            => this.titleComparer = new TitleComparer(culture);
+        {
+            this.titleComparer = new TitleComparer(culture);
+            this.getTitle = getTitle;
+            this.getFranchiseTitle = getFranchiseTitle;
+        }
+
+        protected override bool EqualsSafe(ListItem x, ListItem y)
+            => x == y;
+
+        protected override int GetHashCodeSafe(ListItem item)
+            => item.GetHashCode();
 
         protected override int CompareSafe(ListItem x, ListItem y)
             => (x, y) switch
@@ -83,18 +99,8 @@ namespace MovieList.Core.Comparers
             } else if (left.Franchise.Entry == null && right.Franchise.Entry == null)
             {
                 result = this.titleComparer.Compare(
-                    left.Franchise.GetListTitle()?.Name ?? String.Empty,
-                    right.Franchise.GetListTitle()?.Name ?? String.Empty);
-
-                if (result == 0)
-                {
-                    result = left.Franchise.GetStartYear().CompareTo(right.Franchise.GetStartYear());
-
-                    if (result == 0)
-                    {
-                        result = left.Franchise.GetEndYear().CompareTo(right.Franchise.GetEndYear());
-                    }
-                }
+                    this.getFranchiseTitle(left.Franchise),
+                    this.getFranchiseTitle(right.Franchise));
             } else
             {
                 return this.Compare(
@@ -112,7 +118,7 @@ namespace MovieList.Core.Comparers
             FranchiseEntry? rightEntry)
             => (leftEntry, rightEntry) switch
             {
-                (null, null) => this.CompareTitleOrYear(left, right),
+                (null, null) => this.CompareTitle(left, right),
                 (var entry, null) => this.Compare(new FranchiseListItem(entry.ParentFranchise.GetRootSeries()), right),
                 (null, var entry) => this.Compare(left, new FranchiseListItem(entry.ParentFranchise.GetRootSeries())),
                 var (entry1, entry2) => entry1.ParentFranchise.Id == entry2.ParentFranchise.Id
@@ -124,7 +130,7 @@ namespace MovieList.Core.Comparers
         {
             if (entry == null)
             {
-                return this.CompareTitleOrYears(new FranchiseListItem(left.Franchise.GetRootSeries()), right);
+                return this.CompareTitle(new FranchiseListItem(left.Franchise.GetRootSeries()), right);
             }
 
             if (left.Franchise.Id == entry.ParentFranchise.Id)
@@ -172,25 +178,10 @@ namespace MovieList.Core.Comparers
                 new FranchiseListItem(right.ParentFranchise));
         }
 
-        private int CompareTitleOrYear(ListItem left, ListItem right)
-        {
-            int result = this.titleComparer.Compare(left.Title, right.Title);
-            return result != 0 ? result : left.Year.CompareTo(right.Year);
-        }
+        private int CompareTitle(ListItem left, ListItem right)
+            => this.titleComparer.Compare(this.getTitle(left), this.getTitle(right));
 
-        private int CompareTitleOrYears(FranchiseListItem left, ListItem right)
-        {
-            int result = this.titleComparer.Compare(
-                left.Franchise.GetListTitle()?.Name ?? String.Empty, right.Title);
-
-            if (result != 0)
-            {
-                return result;
-            }
-
-            result = left.StartYearToCompare.CompareTo(right.StartYearToCompare);
-
-            return result != 0 ? result : left.EndYearToCompare.CompareTo(right.EndYearToCompare);
-        }
+        private int CompareTitle(FranchiseListItem left, ListItem right)
+            => this.titleComparer.Compare(this.getFranchiseTitle(left.Franchise), this.getTitle(right));
     }
 }

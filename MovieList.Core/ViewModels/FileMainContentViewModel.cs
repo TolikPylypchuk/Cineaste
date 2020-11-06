@@ -15,6 +15,7 @@ using MovieList.Core.DialogModels;
 using MovieList.Core.ListItems;
 using MovieList.Core.ViewModels.Forms;
 using MovieList.Core.ViewModels.Forms.Base;
+using MovieList.Data;
 using MovieList.Data.Models;
 
 using ReactiveUI;
@@ -37,14 +38,18 @@ namespace MovieList.Core.ViewModels
 
         private readonly ReadOnlyObservableCollection<FranchiseEntry> franchiseAddableItems;
 
+        private readonly Settings settings;
+
         public FileMainContentViewModel(
             string fileName,
             ReadOnlyObservableCollection<Kind> kinds,
-            ReadOnlyObservableCollection<Tag> tags)
+            ReadOnlyObservableCollection<Tag> tags,
+            Settings settings)
         {
             this.FileName = fileName;
             this.Kinds = kinds;
             this.Tags = tags;
+            this.settings = settings;
 
             this.SelectItem = ReactiveCommand.CreateFromObservable<ListItem?, Unit>(
                 this.OnSelectItem, this.WhenAnyValue(vm => vm.CanSelectItem));
@@ -54,12 +59,18 @@ namespace MovieList.Core.ViewModels
 
             var findSubject = new Subject<ListItemViewModel>();
             var filterSubject = new Subject<Func<ListItem, bool>>();
+            var comparerSubject = new Subject<IComparer<ListItem>>();
 
             this.List = new ListViewModel(
-                fileName, findSubject.AsObservable(), filterSubject.AsObservable(), kinds, tags);
+                fileName,
+                findSubject.AsObservable(),
+                filterSubject.AsObservable(),
+                comparerSubject.AsObservable(),
+                kinds,
+                tags);
 
             this.SideViewModel = this.ListActions = this.CreateListActionsViewModel(
-                findSubject.AsObserver(), filterSubject.AsObserver());
+                findSubject.AsObserver(), filterSubject.AsObserver(), comparerSubject.AsObserver());
 
             this.franchiseAddableItemsSource.Connect()
                 .Bind(out this.franchiseAddableItems)
@@ -151,16 +162,10 @@ namespace MovieList.Core.ViewModels
 
         private ListActionsViewModel CreateListActionsViewModel(
             IObserver<ListItemViewModel> findObserver,
-            IObserver<Func<ListItem, bool>> filterObserver)
+            IObserver<Func<ListItem, bool>> filterObserver,
+            IObserver<IComparer<ListItem>> comparerObserver)
         {
-            var viewModel = new ListActionsViewModel(this.List.Items, this.Kinds, this.Tags);
-
-            viewModel.Search.FindNext
-                .Merge(viewModel.Search.FindPrevious)
-                .WhereNotNull()
-                .Subscribe(findObserver);
-
-            viewModel.Filter.Apply.Subscribe(filterObserver);
+            var viewModel = new ListActionsViewModel(this.List.Items, this.Kinds, this.Tags, this.settings);
 
             viewModel.AddNewMovie
                 .Select(_ => new Movie
@@ -188,6 +193,17 @@ namespace MovieList.Core.ViewModels
                 })
                 .Select(series => new SeriesListItem(series))
                 .InvokeCommand<ListItem>(this.SelectItem);
+
+            viewModel.Search.FindNext
+                .Merge(viewModel.Search.FindPrevious)
+                .WhereNotNull()
+                .Subscribe(findObserver);
+
+            viewModel.Filter.Apply
+                .Subscribe(filterObserver);
+
+            viewModel.WhenAnyValue(vm => vm.Sort.Comparer)
+                .Subscribe(comparerObserver);
 
             return viewModel;
         }

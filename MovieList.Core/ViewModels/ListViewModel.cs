@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -14,6 +15,8 @@ using MovieList.Core.ListItems;
 using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Data.Services;
+
+using Nito.Comparers;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -31,7 +34,8 @@ namespace MovieList.Core.ViewModels
         public ListViewModel(
             string fileName,
             IObservable<ListItemViewModel> find,
-            IObservable<Func<ListItem, bool>> listFilter,
+            IObservable<Func<ListItem, bool>> filter,
+            IObservable<IComparer<ListItem>> comparer,
             ReadOnlyObservableCollection<Kind> kinds,
             ReadOnlyObservableCollection<Tag> tags,
             Settings? settings = null,
@@ -49,15 +53,16 @@ namespace MovieList.Core.ViewModels
             this.source.Connect()
                 .ObserveOn(RxApp.TaskpoolScheduler)
                 .Filter(item => !String.IsNullOrEmpty(item.Title))
-                .Filter(listFilter.StartWith(item => true).ObserveOn(RxApp.TaskpoolScheduler))
+                .Filter(filter.StartWith(item => true).ObserveOn(RxApp.TaskpoolScheduler))
                 .AutoRefresh(item => item.DisplayNumber)
                 .AutoRefresh(item => item.Title)
                 .AutoRefresh(item => item.OriginalTitle)
                 .AutoRefresh(item => item.Year)
                 .Transform(item => new ListItemViewModel(item))
                 .Sort(
-                    new PropertyComparer<ListItemViewModel, ListItem>(
-                        vm => vm.Item, new ListItemTitleComparer(settings.CultureInfo)),
+                    comparer
+                        .Select(c => ComparerBuilder.For<ListItemViewModel>().OrderBy(vm => vm.Item, c))
+                        .ObserveOn(RxApp.TaskpoolScheduler),
                     this.resort)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out this.items)

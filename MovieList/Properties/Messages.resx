@@ -931,10 +931,10 @@ This will detach all entries without deleting them.</value>
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
   </data>
-  <data name="SortingDirectionAscending" xml:space="preserve">
+  <data name="ListSortDirectionAscending" xml:space="preserve">
     <value>Asc</value>
   </data>
-  <data name="SortingDirectionDescending" xml:space="preserve">
+  <data name="ListSortDirectionDescending" xml:space="preserve">
     <value>Desc</value>
   </data>
 </root>

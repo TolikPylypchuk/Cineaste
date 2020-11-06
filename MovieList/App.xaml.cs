@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Reactive.Linq;
@@ -131,7 +132,7 @@ namespace MovieList
             var filterTypeConverter = new FilterTypeConverter();
             var filterOperationConverter = new FilterOperationConverter();
             var listSortingConverter = new ListSortingConverter();
-            var sortingDirectionConverter = new SortingDirectionConverter();
+            var listSortDirectionConverter = new ListSortDirectionConverter();
             var logLevelConverter = new LogLevelConverter();
 
             this.RegisterBindingConverters(
@@ -142,7 +143,7 @@ namespace MovieList
                 filterTypeConverter,
                 filterOperationConverter,
                 listSortingConverter,
-                sortingDirectionConverter,
+                listSortDirectionConverter,
                 logLevelConverter,
                 new BrushToHexConverter(),
                 new ColorToBrushConverter(),
@@ -155,7 +156,7 @@ namespace MovieList
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterType>>(filterTypeConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterOperation>>(filterOperationConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSorting>>(listSortingConverter);
-            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SortingDirection>>(sortingDirectionConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSortDirection>>(listSortDirectionConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<LogEventLevel>>(logLevelConverter);
         }
 
