@@ -68,8 +68,8 @@ namespace MovieList.Data.Services.Implementations
             connection.Delete(movie, transaction);
         }
 
-        protected override List<MovieTag> GetTags(Movie movie)
-            => movie.Tags
+        protected override List<MovieTag> GetTags(Movie movie) =>
+            movie.Tags
                 .Select(tag => new MovieTag { MovieId = movie.Id, TagId = tag.Id })
                 .ToList();
     }

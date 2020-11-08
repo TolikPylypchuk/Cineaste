@@ -7,8 +7,8 @@ namespace MovieList.Converters
 {
     public sealed class ListSortingConverter : EnumConverter<ListSorting>
     {
-        protected override Dictionary<ListSorting, string> CreateConverterDictionary()
-            => new()
+        protected override Dictionary<ListSorting, string> CreateConverterDictionary() =>
+            new()
             {
                 [ListSorting.ByTitle] = Messages.ListSortingByTitle,
                 [ListSorting.ByOriginalTitle] = Messages.ListSortingByOriginalTitle,

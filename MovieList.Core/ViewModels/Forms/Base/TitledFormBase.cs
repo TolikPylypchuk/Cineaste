@@ -23,7 +23,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
         where TModel : class
         where TForm : TitledFormBase<TModel, TForm>
     {
-        private readonly SourceList<Title> titlesSource = new SourceList<Title>();
+        private readonly SourceList<Title> titlesSource = new();
 
         private readonly ReadOnlyObservableCollection<TitleFormViewModel> titles;
         private readonly ReadOnlyObservableCollection<TitleFormViewModel> originalTitles;
@@ -58,11 +58,11 @@ namespace MovieList.Core.ViewModels.Forms.Base
 
         public IObservable<string> FormTitle { get; protected set; }
 
-        public ReadOnlyObservableCollection<TitleFormViewModel> Titles
-            => this.titles;
+        public ReadOnlyObservableCollection<TitleFormViewModel> Titles =>
+            this.titles;
 
-        public ReadOnlyObservableCollection<TitleFormViewModel> OriginalTitles
-            => this.originalTitles;
+        public ReadOnlyObservableCollection<TitleFormViewModel> OriginalTitles =>
+            this.originalTitles;
 
         public ReactiveCommand<Unit, Unit> Close { get; }
 
@@ -89,8 +89,8 @@ namespace MovieList.Core.ViewModels.Forms.Base
             base.EnableChangeTracking();
         }
 
-        protected override void CopyProperties()
-            => this.titlesSource.Edit(titles =>
+        protected override void CopyProperties() =>
+            this.titlesSource.Edit(titles =>
             {
                 titles.Clear();
                 titles.AddRange(this.ItemTitles);
@@ -122,11 +122,11 @@ namespace MovieList.Core.ViewModels.Forms.Base
                     });
         }
 
-        protected void ClearTitles()
-            => this.titlesSource.Clear();
+        protected void ClearTitles() =>
+            this.titlesSource.Clear();
 
-        protected string GetFormTitle(string title)
-            => this.IsNew && String.IsNullOrWhiteSpace(title)
+        protected string GetFormTitle(string title) =>
+            this.IsNew && String.IsNullOrWhiteSpace(title)
                 ? this.ResourceManager.GetString(this.NewItemKey) ?? String.Empty
                 : title;
 

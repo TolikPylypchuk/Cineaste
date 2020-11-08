@@ -8,7 +8,7 @@ namespace MovieList.Core
 {
     public static class LocatorExtensions
     {
-        public static void RegisterSuspensionDriver(this IMutableDependencyResolver resolver)
-            => resolver.RegisterLazySingleton<ISuspensionDriver>(() => new AkavacheSuspensionDriver<AppState>());
+        public static void RegisterSuspensionDriver(this IMutableDependencyResolver resolver) =>
+            resolver.RegisterLazySingleton<ISuspensionDriver>(() => new AkavacheSuspensionDriver<AppState>());
     }
 }

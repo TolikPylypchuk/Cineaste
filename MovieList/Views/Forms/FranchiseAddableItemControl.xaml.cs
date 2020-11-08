@@ -18,19 +18,19 @@ namespace MovieList.Views.Forms
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Title, v => v.TitleTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.OriginalTitle, v => v.OriginalTitleTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Year, v => v.YearTextBlock.Text, year => $" ({year})")
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Tag, v => v.TagTextBlock.Text, tag => $" - {tag.Localized()}")
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

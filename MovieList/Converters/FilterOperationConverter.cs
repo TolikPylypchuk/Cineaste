@@ -8,8 +8,8 @@ namespace MovieList.Converters
 {
     public sealed class FilterOperationConverter : EnumConverter<FilterOperation>
     {
-        protected override Dictionary<FilterOperation, string> CreateConverterDictionary()
-            => new()
+        protected override Dictionary<FilterOperation, string> CreateConverterDictionary() =>
+            new()
             {
                 [FilterOperation.None] = String.Empty,
                 [FilterOperation.Is] = Messages.FilterOperationIs,

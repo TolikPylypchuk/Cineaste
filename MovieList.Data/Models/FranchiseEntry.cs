@@ -32,8 +32,8 @@ namespace MovieList.Data.Models
         public int? DisplayNumber { get; set; }
 
         [Computed]
-        public List<Title> Titles
-            => (this.Movie, this.Series, this.Franchise) switch
+        public List<Title> Titles =>
+            (this.Movie, this.Series, this.Franchise) switch
             {
                 (var movie, null, null) when movie != null => movie.Titles,
                 (null, var series, null) when series != null => series.Titles,
@@ -41,7 +41,7 @@ namespace MovieList.Data.Models
                 _ => throw new InvalidOperationException("Exactly one franchise entry component must be non-null.")
             };
 
-        public override string ToString()
-            => $"Franchise Entry #{this.Id}: {Title.ToString(this.Titles)}";
+        public override string ToString() =>
+            $"Franchise Entry #{this.Id}: {Title.ToString(this.Titles)}";
     }
 }

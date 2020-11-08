@@ -10,14 +10,14 @@ namespace MovieList.Converters
     [ValueConversion(typeof(Color), typeof(SolidColorBrush))]
     public class ColorToBrushConverter : IValueConverter, IBindingTypeConverter
     {
-        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
-            => value is Color color ? new SolidColorBrush(color) : Binding.DoNothing;
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo? culture) =>
+            value is Color color ? new SolidColorBrush(color) : Binding.DoNothing;
 
-        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
-            => value is SolidColorBrush brush ? brush.Color : Binding.DoNothing;
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture) =>
+            value is SolidColorBrush brush ? brush.Color : Binding.DoNothing;
 
-        public int GetAffinityForObjects(Type fromType, Type toType)
-            => (fromType, toType) switch
+        public int GetAffinityForObjects(Type fromType, Type toType) =>
+            (fromType, toType) switch
             {
                 var (from, to) when from == typeof(Color) && to == typeof(SolidColorBrush) => 10000,
                 var (from, to) when from == typeof(SolidColorBrush) && to == typeof(Color) => 10000,

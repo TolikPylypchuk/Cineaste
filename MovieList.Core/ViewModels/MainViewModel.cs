@@ -40,10 +40,10 @@ namespace MovieList.Core.ViewModels
 
         private readonly SourceCache<FileViewModel, string> fileViewModelsSource;
 
-        private readonly Dictionary<string, IDisposable> closeSubscriptions = new Dictionary<string, IDisposable>();
-        private readonly CompositeDisposable preferencesSubscriptions = new CompositeDisposable();
+        private readonly Dictionary<string, IDisposable> closeSubscriptions = new();
+        private readonly CompositeDisposable preferencesSubscriptions = new();
 
-        private readonly Subject<bool> showRecentFiles = new Subject<bool>();
+        private readonly Subject<bool> showRecentFiles = new();
 
         private readonly Version Version = Assembly.GetEntryAssembly()!.GetName()!.Version!;
 
@@ -241,8 +241,8 @@ namespace MovieList.Core.ViewModels
                 .Eager();
         }
 
-        private IObservable<Unit> OnShutdown()
-            => this.store.GetObject<UserPreferences>(PreferencesKey)
+        private IObservable<Unit> OnShutdown() =>
+            this.store.GetObject<UserPreferences>(PreferencesKey)
                 .DoAsync(preferences => this.Files
                     .Select(file => this.AddFileToRecent(preferences, file.FileName, false))
                     .Concat()
@@ -330,16 +330,16 @@ namespace MovieList.Core.ViewModels
                     : Observable.Return(Unit.Default));
         }
 
-        private IObservable<Unit> UpdateRecentFileInHomePage(RecentFile? oldRecentFile, RecentFile newRecentFile)
-            => Observable.CombineLatest(
+        private IObservable<Unit> UpdateRecentFileInHomePage(RecentFile? oldRecentFile, RecentFile newRecentFile) =>
+            Observable.CombineLatest(
                     oldRecentFile != null
                         ? this.HomePage.RemoveRecentFile.Execute(oldRecentFile)
                         : Observable.Return(Unit.Default),
                     this.HomePage.AddRecentFile.Execute(newRecentFile))
                 .Discard();
 
-        private IObservable<Unit> UpdateRecentFile(string file, string newName)
-            => this.store.GetObject<UserPreferences>(PreferencesKey)
+        private IObservable<Unit> UpdateRecentFile(string file, string newName) =>
+            this.store.GetObject<UserPreferences>(PreferencesKey)
                 .Eager()
                 .Select(preferences => new
                 {
@@ -358,8 +358,8 @@ namespace MovieList.Core.ViewModels
                 .DoAsync(data => this.HomePage.AddRecentFile.Execute(data.NewRecentFile))
                 .SelectMany(data => this.store.InsertObject(PreferencesKey, data.Preferences).Eager());
 
-        private IObservable<Settings> GetSettings(string file)
-            => Locator.Current.GetService<ISettingsService>(file).GetSettingsInTaskPool();
+        private IObservable<Settings> GetSettings(string file) =>
+            Locator.Current.GetService<ISettingsService>(file).GetSettingsInTaskPool();
 
         private void OpenPreferencesForm(PreferencesFormViewModel form)
         {
@@ -438,7 +438,7 @@ namespace MovieList.Core.ViewModels
                 .Subscribe();
         }
 
-        private void SetSelectedItemIndex(int index)
-            => RxApp.MainThreadScheduler.Schedule(() => this.SelectedItemIndex = index);
+        private void SetSelectedItemIndex(int index) =>
+            RxApp.MainThreadScheduler.Schedule(() => this.SelectedItemIndex = index);
     }
 }

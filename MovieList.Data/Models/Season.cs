@@ -46,36 +46,36 @@ namespace MovieList.Data.Models
         public List<Period> Periods { get; set; } = new();
 
         [Computed]
-        public Title Title
-            => this.Titles
+        public Title Title =>
+            this.Titles
                 .Where(title => !title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
         [Computed]
-        public Title OriginalTitle
-            => this.Titles
+        public Title OriginalTitle =>
+            this.Titles
                 .Where(title => title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
         [Computed]
-        public int StartYear
-            => this.Periods
+        public int StartYear =>
+            this.Periods
                 .OrderBy(period => period.StartYear)
                 .ThenBy(period => period.StartMonth)
                 .First()
                 .StartYear;
 
         [Computed]
-        public int EndYear
-            => this.Periods
+        public int EndYear =>
+            this.Periods
                 .OrderByDescending(period => period.EndYear)
                 .ThenByDescending(period => period.EndMonth)
                 .First()
                 .EndYear;
 
-        public override string ToString()
-            => $"Season #{this.Id}: {Title.ToString(this.Titles)} ({this.Channel})";
+        public override string ToString() =>
+            $"Season #{this.Id}: {Title.ToString(this.Titles)} ({this.Channel})";
     }
 }

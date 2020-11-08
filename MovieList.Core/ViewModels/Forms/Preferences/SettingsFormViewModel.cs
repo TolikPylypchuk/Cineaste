@@ -55,8 +55,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
         public ValidationHelper ListNameRule { get; }
 
-        protected override SettingsFormViewModel Self
-            => this;
+        protected override SettingsFormViewModel Self => this;
 
         protected override void EnableChangeTracking()
         {
@@ -74,8 +73,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
                 .DoAsync(_ => this.tagService.UpdateAllInTaskPool(this.Model.Tags));
         }
 
-        protected override IObservable<SettingsModel?> OnDelete()
-            => Observable.Return<SettingsModel?>(null);
+        protected override IObservable<SettingsModel?> OnDelete() =>
+            Observable.Return<SettingsModel?>(null);
 
         protected override void CopyProperties()
         {
@@ -83,10 +82,10 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             base.CopyProperties();
         }
 
-        protected override bool InitialKindIsNewValue(Kind kind)
-            => kind.Id == default;
+        protected override bool InitialKindIsNewValue(Kind kind) =>
+            kind.Id == default;
 
-        protected override bool IsTagNew(TagModel tagModel)
-            => tagModel.Tag.Id == default;
+        protected override bool IsTagNew(TagModel tagModel) =>
+            tagModel.Tag.Id == default;
     }
 }

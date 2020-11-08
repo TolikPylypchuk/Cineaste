@@ -24,16 +24,16 @@ namespace MovieList.Views.Filters
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.RangeStartBox.DisposeWith(disposables);
                 this.RangeEndBox.DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.Start, v => v.RangeStartBox.Number)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.End, v => v.RangeEndBox.Number)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel!.Description)
                     .Select(description => Messages.ResourceManager.GetString($"FilterDescription{description}"))
@@ -48,7 +48,7 @@ namespace MovieList.Views.Filters
                             this.RangeEndBox,
                             String.Format(Messages.FilterRangeEndDescriptionFormat, description));
                     })
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

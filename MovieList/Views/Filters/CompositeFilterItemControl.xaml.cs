@@ -23,35 +23,35 @@ namespace MovieList.Views.Filters
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Items, v => v.Filters.ItemsSource)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel!.Composition)
                     .Select(composition => composition == FilterComposition.And ? Green : Blue)
                     .BindTo(this, v => v.ColorStripRectangle.Fill)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.AddItem, v => v.AddFilterButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.SwitchComposition, v => v.SwitchCompositionButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel!.Composition)
                     .Select(composition => composition == FilterComposition.And
                         ? Messages.SetFilterCompositionToOr
                         : Messages.SetFilterCompositionToAnd)
                     .BindTo(this, v => v.SwitchCompositionButton.ToolTip)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.Simplify, v => v.SimplifyButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel!.Simplify.CanExecute
                     .BindTo(this, v => v.SimplifyButton.Visibility)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

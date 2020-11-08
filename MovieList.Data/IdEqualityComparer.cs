@@ -13,8 +13,8 @@ namespace MovieList.Data
 
         public static IdEqualityComparer<TEntity> Instance { get; } = new IdEqualityComparer<TEntity>();
 
-        public override bool Equals([AllowNull] TEntity x, [AllowNull] TEntity y)
-            => (x, y) switch
+        public override bool Equals([AllowNull] TEntity x, [AllowNull] TEntity y) =>
+            (x, y) switch
             {
                 (null, null) => true,
                 (_, null) => false,
@@ -22,7 +22,7 @@ namespace MovieList.Data
                 var (left, right) => left.Id == right.Id
             };
 
-        public override int GetHashCode([AllowNull] TEntity obj)
-            => obj?.Id.GetHashCode() ?? 0;
+        public override int GetHashCode([AllowNull] TEntity obj) =>
+            obj?.Id.GetHashCode() ?? 0;
     }
 }

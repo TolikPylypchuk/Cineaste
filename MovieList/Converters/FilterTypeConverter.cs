@@ -7,8 +7,8 @@ namespace MovieList.Converters
 {
     public sealed class FilterTypeConverter : EnumConverter<FilterType>
     {
-        protected override Dictionary<FilterType, string> CreateConverterDictionary()
-            => new()
+        protected override Dictionary<FilterType, string> CreateConverterDictionary() =>
+            new()
             {
                 [FilterType.ByTitle] = Messages.FilterTypeTitle,
                 [FilterType.ByYear] = Messages.FilterTypeYear,

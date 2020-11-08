@@ -59,7 +59,7 @@ namespace MovieList.Data.Models
                 : sortedTitles.Aggregate((acc, item) => $"{acc}/{item}");
         }
 
-        public override string ToString()
-            => $"Title #{this.Id}: {this.Name}";
+        public override string ToString() =>
+            $"Title #{this.Id}: {this.Name}";
     }
 }

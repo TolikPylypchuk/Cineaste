@@ -26,13 +26,13 @@ namespace MovieList.Views.Filters
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Tags, v => v.Tags.ItemsSource)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.AddableTags, v => v.AddableTagsComboBox.ItemsSource)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.AddableTagsComboBox.Events()
                     .SelectionChanged
@@ -40,7 +40,7 @@ namespace MovieList.Views.Filters
                     .WhereNotNull()
                     .Select(vm => vm.Tag)
                     .InvokeCommand(this.ViewModel!.AddTag)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel!.AddableTags
                     .ToObservableChangeSet()
@@ -48,7 +48,7 @@ namespace MovieList.Views.Filters
                     .StartWith(this.ViewModel.AddableTags.Count)
                     .Select(count => count > 0)
                     .BindTo(this, v => v.AddableTagsComboBox.IsEnabled)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

@@ -18,20 +18,20 @@ namespace MovieList.Views.Forms.Preferences
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Name, v => v.NameTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(
                     this.ViewModel,
                     vm => vm.Category,
                     v => v.CategoryTextBlock.Text,
                     category => $"({category})")
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Color, v => v.ColorCircle.Fill)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

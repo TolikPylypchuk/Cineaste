@@ -15,17 +15,15 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        protected override string GetAllMessage
-            => "Getting all tags";
+        protected override string GetAllMessage => "Getting all tags";
 
-        protected override string UpdateAllMessage
-            => "Updating all tags";
+        protected override string UpdateAllMessage => "Updating all tags";
 
-        protected override string DeleteExceptionMessage
-            => "Cannot delete tags that have movies or series attached to them";
+        protected override string DeleteExceptionMessage =>
+            "Cannot delete tags that have movies or series attached to them";
 
-        protected override bool CanDelete(Tag tag)
-            => true;
+        protected override bool CanDelete(Tag tag) =>
+            true;
 
         protected override IEnumerable<Tag> GetAll(IDbConnection connection, IDbTransaction transaction)
         {

@@ -84,8 +84,8 @@ namespace MovieList.Core.ViewModels.Forms
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
         public ReactiveCommand<Unit, Unit> MoveDown { get; }
 
-        public static SeriesComponentViewModel FromForm(ISeriesComponentForm form)
-            => form switch
+        public static SeriesComponentViewModel FromForm(ISeriesComponentForm form) =>
+            form switch
             {
                 SeasonFormViewModel vm => new SeriesComponentViewModel(vm),
                 SpecialEpisodeFormViewModel vm => new SeriesComponentViewModel(vm),

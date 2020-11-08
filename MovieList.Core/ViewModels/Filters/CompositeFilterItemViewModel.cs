@@ -58,8 +58,8 @@ namespace MovieList.Core.ViewModels.Filters
 
         public FilterComposition Composition { [ObservableAsProperty] get; }
 
-        public ReadOnlyObservableCollection<FilterItem> Items
-            => this.items;
+        public ReadOnlyObservableCollection<FilterItem> Items =>
+            this.items;
 
         public ReactiveCommand<Unit, FilterComposition> SwitchComposition { get; }
         public ReactiveCommand<Unit, Unit> AddItem { get; }
@@ -115,8 +115,8 @@ namespace MovieList.Core.ViewModels.Filters
             return filter;
         }
 
-        private void OnAddItem()
-            => this.itemsSource.Add(new SimpleFilterItemViewModel(
+        private void OnAddItem() =>
+            this.itemsSource.Add(new SimpleFilterItemViewModel(
                 this.Kinds, this.Tags, this.SeriesWatchStatusConverter, this.SeriesReleaseStatusConverter));
 
         private FilterItem WithSubscriptions(FilterItem item)

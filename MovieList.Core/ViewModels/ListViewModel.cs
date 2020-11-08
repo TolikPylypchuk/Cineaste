@@ -8,7 +8,6 @@ using System.Reactive.Subjects;
 
 using DynamicData;
 
-using MovieList.Core.Comparers;
 using MovieList.Core.Data;
 using MovieList.Core.Data.Models;
 using MovieList.Core.ListItems;
@@ -82,11 +81,11 @@ namespace MovieList.Core.ViewModels
             find.InvokeCommand(this.Find);
         }
 
-        public ReadOnlyObservableCollection<ListItemViewModel> Items
-            => this.items;
+        public ReadOnlyObservableCollection<ListItemViewModel> Items =>
+            this.items;
 
         [Reactive]
-        public WholeList MovieList { get; private set; }
+        public EntireList MovieList { get; private set; }
 
         [Reactive]
         public ListItemViewModel? SelectedItem { get; set; }
@@ -139,8 +138,8 @@ namespace MovieList.Core.ViewModels
             return item;
         }
 
-        private Franchise? GetFranchise(ListItem item)
-            => item switch
+        private Franchise? GetFranchise(ListItem item) =>
+            item switch
             {
                 MovieListItem movieItem when movieItem.Movie.Entry != null => movieItem.Movie.Entry.ParentFranchise,
                 SeriesListItem seriesItem when seriesItem.Series.Entry != null => seriesItem.Series.Entry.ParentFranchise,
@@ -221,8 +220,8 @@ namespace MovieList.Core.ViewModels
             }
         }
 
-        private void Resort()
-            => this.resort.OnNext(Unit.Default);
+        private void Resort() =>
+            this.resort.OnNext(Unit.Default);
 
         private void UpdateParentFranchise(Franchise franchise, ISourceUpdater<ListItem, string> list)
         {

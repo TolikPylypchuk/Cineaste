@@ -14,8 +14,8 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public void Save(TEntity entity)
-            => this.WithTransaction((connection, transaction) =>
+        public void Save(TEntity entity) =>
+            this.WithTransaction((connection, transaction) =>
             {
                 if (entity.Id == default)
                 {
@@ -28,8 +28,8 @@ namespace MovieList.Data.Services.Implementations
                 this.AfterSave(entity, connection, transaction);
             });
 
-        public void Delete(TEntity entity)
-            => this.WithTransaction((connection, transaction) =>
+        public void Delete(TEntity entity) =>
+            this.WithTransaction((connection, transaction) =>
             {
                 this.BeforeDelete(entity, connection, transaction);
                 this.Delete(entity, connection, transaction);
@@ -99,8 +99,8 @@ namespace MovieList.Data.Services.Implementations
                 .Aggregate(maxDisplayNumber + 1, this.UpdateMergedDisplayNumbers);
         }
 
-        private int UpdateMergedDisplayNumbers(int firstDisplayNumber, FranchiseEntry entry)
-            => entry.Franchise!.Entries
+        private int UpdateMergedDisplayNumbers(int firstDisplayNumber, FranchiseEntry entry) =>
+            entry.Franchise!.Entries
                 .OrderBy(e => e.SequenceNumber)
                 .Aggregate(firstDisplayNumber, (num, e) =>
                 {

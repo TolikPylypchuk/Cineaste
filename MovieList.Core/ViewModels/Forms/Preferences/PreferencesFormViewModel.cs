@@ -49,8 +49,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 
         public TabHeaderViewModel Header { get; }
 
-        protected override PreferencesFormViewModel Self
-            => this;
+        protected override PreferencesFormViewModel Self => this;
 
         protected override void EnableChangeTracking()
         {
@@ -87,10 +86,10 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             base.CopyProperties();
         }
 
-        protected override bool InitialKindIsNewValue(Kind kind)
-            => !this.Model.Defaults.DefaultKinds.Contains(kind);
+        protected override bool InitialKindIsNewValue(Kind kind) =>
+            !this.Model.Defaults.DefaultKinds.Contains(kind);
 
-        protected override bool IsTagNew(TagModel tagModel)
-            => false;
+        protected override bool IsTagNew(TagModel tagModel) =>
+            false;
     }
 }

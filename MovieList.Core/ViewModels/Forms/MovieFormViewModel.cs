@@ -84,20 +84,18 @@ namespace MovieList.Core.ViewModels.Forms
         public ValidationHelper RottenTomatoesLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
 
-        public override bool IsNew
-            => this.Movie.Id == default;
+        public override bool IsNew =>
+            this.Movie.Id == default;
 
-        protected override MovieFormViewModel Self
-            => this;
+        protected override MovieFormViewModel Self => this;
 
-        protected override ICollection<Title> ItemTitles
-            => this.Movie.Titles;
+        protected override ICollection<Title> ItemTitles =>
+            this.Movie.Titles;
 
-        protected override IEnumerable<Tag> ItemTags
-            => this.Movie.Tags;
+        protected override IEnumerable<Tag> ItemTags =>
+            this.Movie.Tags;
 
-        protected override string NewItemKey
-            => "NewMovie";
+        protected override string NewItemKey => "NewMovie";
 
         protected override void EnableChangeTracking()
         {
@@ -135,8 +133,8 @@ namespace MovieList.Core.ViewModels.Forms
                 })
                 .DoAsync(this.movieService.SaveInTaskPool);
 
-        protected override IObservable<Movie?> OnDelete()
-            => Dialog.PromptToDelete(
+        protected override IObservable<Movie?> OnDelete() =>
+            Dialog.PromptToDelete(
                 "DeleteMovie", () => this.movieService.DeleteInTaskPool(this.Movie).Select(() => this.Movie));
 
         protected override void CopyProperties()
@@ -152,11 +150,11 @@ namespace MovieList.Core.ViewModels.Forms
             this.PosterUrl = this.Movie.PosterUrl.EmptyIfNull();
         }
 
-        protected override void AttachTitle(Title title)
-            => title.Movie = this.Movie;
+        protected override void AttachTitle(Title title) =>
+            title.Movie = this.Movie;
 
-        protected override bool IsTagApplicable(Tag tag)
-            => tag.IsApplicableToMovies;
+        protected override bool IsTagApplicable(Tag tag) =>
+            tag.IsApplicableToMovies;
 
         private void InitializeValueDependencies()
         {

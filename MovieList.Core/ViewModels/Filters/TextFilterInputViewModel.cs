@@ -7,8 +7,8 @@ namespace MovieList.Core.ViewModels.Filters
 {
     public sealed class TextFilterInputViewModel : FilterInput
     {
-        public TextFilterInputViewModel()
-            => this.WhenAnyValue(vm => vm.Text)
+        public TextFilterInputViewModel() =>
+            this.WhenAnyValue(vm => vm.Text)
                 .Discard()
                 .Subscribe(this.inputChanged);
 

@@ -34,8 +34,8 @@ namespace MovieList.Data.Services.Implementations
             this.WithTransaction((connection, transaction) => this.UpdateAll(entities, connection, transaction));
         }
 
-        protected virtual IEnumerable<TEntity> GetAll(IDbConnection connection, IDbTransaction transaction)
-            => connection.GetAll<TEntity>(transaction);
+        protected virtual IEnumerable<TEntity> GetAll(IDbConnection connection, IDbTransaction transaction) =>
+            connection.GetAll<TEntity>(transaction);
 
         protected virtual void UpdateAll(
             IEnumerable<TEntity> entities,

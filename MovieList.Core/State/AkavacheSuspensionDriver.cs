@@ -11,13 +11,13 @@ namespace MovieList.Core.State
     {
         private const string AppStateKey = "appState";
 
-        public IObservable<Unit> InvalidateState()
-            => BlobCache.UserAccount.InvalidateObject<TAppState>(AppStateKey);
+        public IObservable<Unit> InvalidateState() =>
+            BlobCache.UserAccount.InvalidateObject<TAppState>(AppStateKey);
 
-        public IObservable<object> LoadState()
-            => BlobCache.UserAccount.GetObject<TAppState>(AppStateKey);
+        public IObservable<object> LoadState() =>
+            BlobCache.UserAccount.GetObject<TAppState>(AppStateKey);
 
-        public IObservable<Unit> SaveState(object state)
-            => BlobCache.UserAccount.InsertObject(AppStateKey, (TAppState)state);
+        public IObservable<Unit> SaveState(object state) =>
+            BlobCache.UserAccount.InsertObject(AppStateKey, (TAppState)state);
     }
 }

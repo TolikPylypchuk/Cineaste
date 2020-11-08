@@ -23,7 +23,7 @@ namespace MovieList.Views.Forms
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 foreach (string month in Properties.MonthNames)
                 {
@@ -32,7 +32,7 @@ namespace MovieList.Views.Forms
 
                 this.ViewModel!.FormTitle
                     .BindTo(this, v => v.FormTitleTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.YearTextBox.DisposeWith(disposables);
 
@@ -52,89 +52,89 @@ namespace MovieList.Views.Forms
             const BooleanToVisibilityHint useHidden = BooleanToVisibilityHint.UseHidden;
 
             this.BindCommand(this.ViewModel!, vm => vm.GoToSeries, v => v.GoToSeriesButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.GoToSeries, v => v.GoToSeriesIconButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.GoToSeries.CanExecute
                 .BindTo(this, v => v.GoToSeriesIconButton.Visibility, useHidden)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.Cancel, v => v.CancelButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.Cancel.CanExecute
                 .BindTo(this, v => v.CancelButton.Visibility)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.Close, v => v.CloseButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.GoToNext, v => v.GoToNextButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.GoToNext.CanExecute
                 .BindTo(this, v => v.GoToNextButton.Visibility, useHidden)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.GoToPrevious, v => v.GoToPreviousButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.GoToPrevious.CanExecute
                 .BindTo(this, v => v.GoToPreviousButton.Visibility, useHidden)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.Close, v => v.CloseButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.Delete, v => v.DeleteButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.Delete.CanExecute
                 .BindTo(this, v => v.DeleteButton.Visibility)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.AddTitle, v => v.AddTitleButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.AddTitle.CanExecute
                 .BindTo(this, v => v.AddTitleButton.Visibility)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.AddOriginalTitle, v => v.AddOriginalTitleButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.AddOriginalTitle.CanExecute
                 .BindTo(this, v => v.AddOriginalTitleButton.Visibility)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.Save
                 .Subscribe(_ => this.LoadPoster())
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void BindLink(CompositeDisposable disposables)
         {
             this.OneWayBind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLink.NavigateUri)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.RottenTomatoesLink)
                 .Select(link => !String.IsNullOrWhiteSpace(link))
                 .BindTo(this, v => v.RottenTomatoesLinkTextBlock.Visibility)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void BindFields(CompositeDisposable disposables)
         {
             this.OneWayBind(this.ViewModel, vm => vm.Titles, v => v.Titles.ItemsSource)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.ItemsSource)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Channel, v => v.ChannelTextBox.Text)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(
                     this.ViewModel,
@@ -142,25 +142,25 @@ namespace MovieList.Views.Forms
                     v => v.MonthComboBox.SelectedIndex,
                     month => month - 1,
                     index => index + 1)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Number)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkTextBox.Text)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlTextBox.Text)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void BindCheckboxes(CompositeDisposable disposables)
         {
             this.Bind(this.ViewModel, vm => vm.IsWatched, v => v.IsWatchedCheckBox.IsChecked)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsReleased, v => v.IsReleasedCheckBox.IsChecked)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.Year)
                 .CombineLatest(this.WhenAnyValue(v => v.ViewModel!.Month), (year, month) => (Year: year, Month: month))
@@ -169,28 +169,28 @@ namespace MovieList.Views.Forms
                     values.Year == DateTime.Now.Year && values.Month <= DateTime.Now.Month)
                 .ObserveOnDispatcher()
                 .BindTo(this, v => v.IsWatchedCheckBox.IsEnabled)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.Year)
                 .CombineLatest(this.WhenAnyValue(v => v.ViewModel!.Month), (year, month) => (Year: year, Month: month))
                 .Select(values => values.Month == DateTime.Now.Month && values.Year == DateTime.Now.Year)
                 .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void AddValidation(CompositeDisposable disposables)
         {
             this.ChannelTextBox.ValidateWith(this.ViewModel!.ChannelRule)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.YearTextBox.ValidateWith(this.ViewModel!.YearRule)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.RottenTomatoesLinkTextBox.ValidateWith(this.ViewModel!.RottenTomatoesLinkRule)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.PosterUrlTextBox.ValidateWith(this.ViewModel!.PosterUrlRule)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void LoadPoster()

@@ -15,8 +15,8 @@ namespace MovieList.Infrastructure
 
         private readonly Subject<string> receivedString = new Subject<string>();
 
-        public NamedPipeManager(string name)
-            => this.NamedPipeName = name;
+        public NamedPipeManager(string name) =>
+            this.NamedPipeName = name;
 
         public string NamedPipeName { get; }
 
@@ -48,7 +48,7 @@ namespace MovieList.Infrastructure
 
             if (!client.IsConnected)
             {
-                this.Log().Error("The client is not connected.");
+                this.Log().Error("The client is not connected");
                 return false;
             }
 
@@ -74,8 +74,6 @@ namespace MovieList.Infrastructure
 
                 this.receivedString.OnNext(text);
             }
-
-            // ReSharper disable once FunctionNeverReturns
         }
     }
 }

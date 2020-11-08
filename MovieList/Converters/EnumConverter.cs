@@ -20,8 +20,8 @@ namespace MovieList.Converters
             this.stringToEnum = enumToString.ToDictionary(e => e.Value, e => e.Key);
         }
 
-        public int GetAffinityForObjects(Type fromType, Type toType)
-            => fromType == typeof(TEnum) || toType == typeof(TEnum)
+        public int GetAffinityForObjects(Type fromType, Type toType) =>
+            fromType == typeof(TEnum) || toType == typeof(TEnum)
                 ? 10000
                 : fromType == typeof(TEnum) || toType == typeof(TEnum)
                     ? 1000
@@ -49,11 +49,11 @@ namespace MovieList.Converters
             }
         }
 
-        public string ToString(TEnum filterOperation)
-            => this.enumToString[filterOperation];
+        public string ToString(TEnum filterOperation) =>
+            this.enumToString[filterOperation];
 
-        public TEnum FromString(string str)
-            => this.stringToEnum.ContainsKey(str)
+        public TEnum FromString(string str) =>
+            this.stringToEnum.ContainsKey(str)
                 ? this.stringToEnum[str]
                 : throw new ArgumentOutOfRangeException(nameof(str));
 

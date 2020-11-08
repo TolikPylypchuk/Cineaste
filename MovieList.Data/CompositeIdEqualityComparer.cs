@@ -24,14 +24,14 @@ namespace MovieList.Data
     {
         private readonly Func<TTag, int>[] idSelectors;
 
-        public CompositeIdEqualityComparer(params Func<TTag, int>[] idSelectors)
-            => this.idSelectors = idSelectors.Length != 0
+        public CompositeIdEqualityComparer(params Func<TTag, int>[] idSelectors) =>
+            this.idSelectors = idSelectors.Length != 0
                 ? idSelectors
                 : throw new ArgumentOutOfRangeException(
                     nameof(idSelectors), "Cannot create an equality comparer with no ID selectors");
 
-        public override bool Equals([AllowNull] TTag left, [AllowNull] TTag right)
-            => (left, right) switch
+        public override bool Equals([AllowNull] TTag left, [AllowNull] TTag right) =>
+            (left, right) switch
             {
                 (null, null) => true,
                 (null, _) => false,
@@ -39,7 +39,7 @@ namespace MovieList.Data
                 var (a, b) => this.idSelectors.All(idSelector => idSelector(a) == idSelector(b))
             };
 
-        public override int GetHashCode([DisallowNull] TTag tag)
-            => this.idSelectors.Select(selector => selector(tag)).Aggregate(HashCode.Combine);
+        public override int GetHashCode([DisallowNull] TTag tag) =>
+            this.idSelectors.Select(selector => selector(tag)).Aggregate(HashCode.Combine);
     }
 }

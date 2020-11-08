@@ -27,8 +27,8 @@ namespace MovieList.Views
             set => this.SetValue(NumberProperty, value);
         }
 
-        public void Dispose()
-            => DataObject.RemovePastingHandler(this, this.DataObjectPasting);
+        public void Dispose() =>
+            DataObject.RemovePastingHandler(this, this.DataObjectPasting);
 
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
@@ -72,8 +72,8 @@ namespace MovieList.Views
             }
         }
 
-        private bool IsTextNumeric(string text)
-            => text.All(Char.IsDigit);
+        private bool IsTextNumeric(string text) =>
+            text.All(Char.IsDigit);
 
         public event NumberChangedEventHandler NumberChanged
         {

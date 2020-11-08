@@ -24,18 +24,18 @@ namespace MovieList.Views.Filters
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.InputBox.DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.Number, v => v.InputBox.Number)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel!.Description)
                     .Select(description => Messages.ResourceManager.GetString($"FilterDescription{description}"))
                     .WhereNotNull()
                     .Subscribe(description => HintAssist.SetHint(this.InputBox, description))
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

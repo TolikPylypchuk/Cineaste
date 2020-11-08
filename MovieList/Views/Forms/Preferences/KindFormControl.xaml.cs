@@ -26,20 +26,20 @@ namespace MovieList.Views.Forms.Preferences
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.NameTextBox.ValidateWith(this.ViewModel!.NameRule)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel.Delete.CanExecute
                     .BindTo(this, v => v.DeleteButton.Visibility, BooleanToVisibilityHint.UseHidden)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindChipIconColors(disposables);
                 this.BindChipTextColors(disposables);
@@ -53,37 +53,37 @@ namespace MovieList.Views.Forms.Preferences
                 this.ViewModel,
                 vm => vm.ColorForWatchedMovie,
                 v => v.WatchedMovieChip.IconBackground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                 this.ViewModel,
                 vm => vm.ColorForNotWatchedMovie,
                 v => v.NotWatchedMovieChip.IconBackground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotReleasedMovie,
                     v => v.NotReleasedMovieChip.IconBackground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForWatchedSeries,
                     v => v.WatchedSeriesChip.IconBackground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotWatchedSeries,
                     v => v.NotWatchedSeriesChip.IconBackground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotReleasedSeries,
                     v => v.NotReleasedSeriesChip.IconBackground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void BindChipTextColors(CompositeDisposable disposables)
@@ -92,58 +92,58 @@ namespace MovieList.Views.Forms.Preferences
                 this.ViewModel,
                 vm => vm.ColorForWatchedMovie,
                 v => v.WatchedMovieChip.Foreground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                 this.ViewModel,
                 vm => vm.ColorForNotWatchedMovie,
                 v => v.NotWatchedMovieChip.Foreground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotReleasedMovie,
                     v => v.NotReleasedMovieChip.Foreground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForWatchedSeries,
                     v => v.WatchedSeriesChip.Foreground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotWatchedSeries,
                     v => v.NotWatchedSeriesChip.Foreground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                     this.ViewModel,
                     vm => vm.ColorForNotReleasedSeries,
                     v => v.NotReleasedSeriesChip.Foreground)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void EnablePickingNewColors(CompositeDisposable disposables)
         {
             this.PickNewColorOnClick(this.WatchedMovieChip, vm => vm.ColorForWatchedMovie)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.NotWatchedMovieChip, vm => vm.ColorForNotWatchedMovie)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.NotReleasedMovieChip, vm => vm.ColorForNotReleasedMovie)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.WatchedSeriesChip, vm => vm.ColorForWatchedSeries)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.NotWatchedSeriesChip, vm => vm.ColorForNotWatchedSeries)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.PickNewColorOnClick(this.NotReleasedSeriesChip, vm => vm.ColorForNotReleasedSeries)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private IDisposable PickNewColorOnClick(

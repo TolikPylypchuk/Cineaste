@@ -6,6 +6,6 @@ namespace MovieList.Data.Services
 {
     public interface IListService
     {
-        WholeList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags);
+        EntireList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags);
     }
 }

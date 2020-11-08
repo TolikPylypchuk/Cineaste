@@ -53,11 +53,10 @@ namespace MovieList.Core.ViewModels.Forms
 
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
 
-        public override bool IsNew
-            => this.Title.Id == default;
+        public override bool IsNew =>
+            this.Title.Id == default;
 
-        protected override TitleFormViewModel Self
-            => this;
+        protected override TitleFormViewModel Self => this;
 
         protected override void EnableChangeTracking()
         {
@@ -76,8 +75,8 @@ namespace MovieList.Core.ViewModels.Forms
             return Observable.Return(this.Title);
         }
 
-        protected override IObservable<Title?> OnDelete()
-            => Observable.Return(this.Title);
+        protected override IObservable<Title?> OnDelete() =>
+            Observable.Return(this.Title);
 
         protected override void CopyProperties()
         {

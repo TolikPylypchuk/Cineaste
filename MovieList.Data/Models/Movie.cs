@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,25 +32,20 @@ namespace MovieList.Data.Models
         public HashSet<Tag> Tags { get; set; } = new();
 
         [Computed]
-        public Title Title
-            => this.Titles
+        public Title Title =>
+            this.Titles
                 .Where(title => !title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
         [Computed]
-        public Title OriginalTitle
-            => this.Titles
+        public Title OriginalTitle =>
+            this.Titles
                 .Where(title => title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
-        public override string ToString()
-            => $"Movie #{this.Id}: {Title.ToString(this.Titles)} ({this.Year})";
-
-        internal object Select(Func<object, MovieTag> p)
-        {
-            throw new NotImplementedException();
-        }
+        public override string ToString() =>
+            $"Movie #{this.Id}: {Title.ToString(this.Titles)} ({this.Year})";
     }
 }

@@ -122,8 +122,8 @@ namespace MovieList.Data.Services.Implementations
             connection.Delete(series, transaction);
         }
 
-        protected override List<SeriesTag> GetTags(Series series)
-            => series.Tags
+        protected override List<SeriesTag> GetTags(Series series) =>
+            series.Tags
                 .Select(tag => new SeriesTag { SeriesId = series.Id, TagId = tag.Id })
                 .ToList();
 
@@ -163,9 +163,7 @@ namespace MovieList.Data.Services.Implementations
         private void DeleteSpecialEpisodeDependentEntities(
             SpecialEpisode episode,
             IDbConnection connection,
-            IDbTransaction transaction)
-        {
+            IDbTransaction transaction) =>
             connection.Delete(episode.Titles, transaction);
-        }
     }
 }

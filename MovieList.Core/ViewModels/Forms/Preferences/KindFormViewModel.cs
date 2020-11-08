@@ -18,7 +18,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
 {
     public sealed class KindFormViewModel : ReactiveForm<Kind, KindFormViewModel>
     {
-        private readonly BehaviorSubject<bool> isNew = new BehaviorSubject<bool>(true);
+        private readonly BehaviorSubject<bool> isNew = new(true);
 
         public KindFormViewModel(
             Kind kind,
@@ -90,11 +90,9 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         public ValidationHelper ColorForNotWatchedSeriesRule { get; }
         public ValidationHelper ColorForNotReleasedSeriesRule { get; }
 
-        public override bool IsNew
-            => this.isNew.Value;
+        public override bool IsNew => this.isNew.Value;
 
-        protected override KindFormViewModel Self
-            => this;
+        protected override KindFormViewModel Self => this;
 
         protected override void EnableChangeTracking()
         {
@@ -122,8 +120,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             return Observable.Return(this.Kind);
         }
 
-        protected override IObservable<Kind?> OnDelete()
-            => Observable.Return(this.Kind);
+        protected override IObservable<Kind?> OnDelete() =>
+            Observable.Return(this.Kind);
 
         protected override void CopyProperties()
         {

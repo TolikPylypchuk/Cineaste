@@ -26,19 +26,19 @@ namespace MovieList.Views.Filters
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel!, vm => vm.SelectedItem, v => v.InputBox.SelectedItem)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel!, vm => vm.Items, v => v.InputBox.ItemsSource)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel!.Description)
                     .Select(description => Messages.ResourceManager.GetString($"FilterDescription{description}"))
                     .WhereNotNull()
                     .Subscribe(description => HintAssist.SetHint(this.InputBox, description))
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

@@ -67,8 +67,8 @@ namespace MovieList.Core.ViewModels
 
         public bool IsSearchInitialized { [ObservableAsProperty] get; }
 
-        public ReadOnlyObservableCollection<ListItemViewModel> FoundItems
-            => this.foundItems;
+        public ReadOnlyObservableCollection<ListItemViewModel> FoundItems =>
+            this.foundItems;
 
         public ReactiveCommand<Unit, ListItemViewModel?> FindNext { get; }
         public ReactiveCommand<Unit, ListItemViewModel?> FindPrevious { get; }
@@ -90,11 +90,11 @@ namespace MovieList.Core.ViewModels
             base.AddSubscriptions(filterItem, subscriptions);
         }
 
-        private ListItemViewModel? OnFindNext()
-            => this.Find(() => (this.CurrentIndex + 1 + this.foundItems.Count) % this.foundItems.Count);
+        private ListItemViewModel? OnFindNext() =>
+            this.Find(() => (this.CurrentIndex + 1 + this.foundItems.Count) % this.foundItems.Count);
 
-        private ListItemViewModel? OnFindPrevious()
-            => this.Find(() => (Math.Max(this.CurrentIndex, 0) - 1 + this.foundItems.Count) % this.foundItems.Count);
+        private ListItemViewModel? OnFindPrevious() =>
+            this.Find(() => (Math.Max(this.CurrentIndex, 0) - 1 + this.foundItems.Count) % this.foundItems.Count);
 
         private void OnStopSearch()
         {
@@ -166,11 +166,11 @@ namespace MovieList.Core.ViewModels
             }
         }
 
-        private void ShouldUpdateFilter()
-            => this.shouldUpdateFilter = true;
+        private void ShouldUpdateFilter() =>
+            this.shouldUpdateFilter = true;
 
-        private void SubscribeToChange(FilterItem filterItem, CompositeDisposable subscriptions)
-            => filterItem.FilterChanged
+        private void SubscribeToChange(FilterItem filterItem, CompositeDisposable subscriptions) =>
+            filterItem.FilterChanged
                 .Subscribe(this.ShouldUpdateFilter)
                 .DisposeWith(subscriptions);
     }

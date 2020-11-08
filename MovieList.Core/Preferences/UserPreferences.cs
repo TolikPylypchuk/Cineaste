@@ -38,10 +38,10 @@ namespace MovieList.Core.Preferences
             set => this.Defaults.DefaultCultureInfo = value;
         }
 
-        List<Kind> ISettings.Kinds
-            => this.Defaults.DefaultKinds;
+        List<Kind> ISettings.Kinds =>
+            this.Defaults.DefaultKinds;
 
-        List<Tag> ISettings.Tags
-            => this.Defaults.DefaultTags;
+        List<Tag> ISettings.Tags =>
+            this.Defaults.DefaultTags;
     }
 }

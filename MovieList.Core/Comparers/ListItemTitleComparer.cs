@@ -26,14 +26,14 @@ namespace MovieList.Core.Comparers
             this.getFranchiseTitle = getFranchiseTitle;
         }
 
-        protected override bool EqualsSafe(ListItem x, ListItem y)
-            => x == y;
+        protected override bool EqualsSafe(ListItem x, ListItem y) =>
+            x == y;
 
-        protected override int GetHashCodeSafe(ListItem item)
-            => item.GetHashCode();
+        protected override int GetHashCodeSafe(ListItem item) =>
+            item.GetHashCode();
 
-        protected override int CompareSafe(ListItem x, ListItem y)
-            => (x, y) switch
+        protected override int CompareSafe(ListItem x, ListItem y) =>
+            (x, y) switch
             {
                 (MovieListItem left, MovieListItem right) => this.Compare(left, right),
                 (MovieListItem left, SeriesListItem right) => this.Compare(left, right),
@@ -51,33 +51,33 @@ namespace MovieList.Core.Comparers
                     $"Types of list items to compare are not supported: {x.GetType()}, {y.GetType()}")
             };
 
-        private int Compare(MovieListItem left, MovieListItem right)
-            => left.Movie.Id == right.Movie.Id
+        private int Compare(MovieListItem left, MovieListItem right) =>
+            left.Movie.Id == right.Movie.Id
                 ? 0
                 : this.CompareEntries(left, right, left.Movie.Entry, right.Movie.Entry);
 
-        private int Compare(MovieListItem left, SeriesListItem right)
-            => this.CompareEntries(left, right, left.Movie.Entry, right.Series.Entry);
+        private int Compare(MovieListItem left, SeriesListItem right) =>
+            this.CompareEntries(left, right, left.Movie.Entry, right.Series.Entry);
 
-        private int Compare(MovieListItem left, FranchiseListItem right)
-            => this.Compare(right, left) * -1;
+        private int Compare(MovieListItem left, FranchiseListItem right) =>
+            this.Compare(right, left) * -1;
 
-        private int Compare(SeriesListItem left, MovieListItem right)
-            => this.CompareEntries(left, right, left.Series.Entry, right.Movie.Entry);
+        private int Compare(SeriesListItem left, MovieListItem right) =>
+            this.CompareEntries(left, right, left.Series.Entry, right.Movie.Entry);
 
-        private int Compare(SeriesListItem left, SeriesListItem right)
-            => left.Series.Id == right.Series.Id
+        private int Compare(SeriesListItem left, SeriesListItem right) =>
+            left.Series.Id == right.Series.Id
                 ? 0
                 : this.CompareEntries(left, right, left.Series.Entry, right.Series.Entry);
 
-        private int Compare(SeriesListItem left, FranchiseListItem right)
-            => this.Compare(right, left) * -1;
+        private int Compare(SeriesListItem left, FranchiseListItem right) =>
+            this.Compare(right, left) * -1;
 
-        private int Compare(FranchiseListItem left, MovieListItem right)
-            => this.CompareEntries(left, right, right.Movie.Entry);
+        private int Compare(FranchiseListItem left, MovieListItem right) =>
+            this.CompareEntries(left, right, right.Movie.Entry);
 
-        private int Compare(FranchiseListItem left, SeriesListItem right)
-            => this.CompareEntries(left, right, right.Series.Entry);
+        private int Compare(FranchiseListItem left, SeriesListItem right) =>
+            this.CompareEntries(left, right, right.Series.Entry);
 
         private int Compare(FranchiseListItem left, FranchiseListItem right)
         {
@@ -115,8 +115,8 @@ namespace MovieList.Core.Comparers
             ListItem left,
             ListItem right,
             FranchiseEntry? leftEntry,
-            FranchiseEntry? rightEntry)
-            => (leftEntry, rightEntry) switch
+            FranchiseEntry? rightEntry) =>
+            (leftEntry, rightEntry) switch
             {
                 (null, null) => this.CompareTitle(left, right),
                 (var entry, null) => this.Compare(new FranchiseListItem(entry.ParentFranchise.GetRootSeries()), right),
@@ -178,10 +178,10 @@ namespace MovieList.Core.Comparers
                 new FranchiseListItem(right.ParentFranchise));
         }
 
-        private int CompareTitle(ListItem left, ListItem right)
-            => this.titleComparer.Compare(this.getTitle(left), this.getTitle(right));
+        private int CompareTitle(ListItem left, ListItem right) =>
+            this.titleComparer.Compare(this.getTitle(left), this.getTitle(right));
 
-        private int CompareTitle(FranchiseListItem left, ListItem right)
-            => this.titleComparer.Compare(this.getFranchiseTitle(left.Franchise), this.getTitle(right));
+        private int CompareTitle(FranchiseListItem left, ListItem right) =>
+            this.titleComparer.Compare(this.getFranchiseTitle(left.Franchise), this.getTitle(right));
     }
 }

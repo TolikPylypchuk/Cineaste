@@ -28,7 +28,7 @@ namespace MovieList.Views.Filters
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindFilter(disposables);
                 this.BindCommands(disposables);
@@ -40,7 +40,7 @@ namespace MovieList.Views.Filters
             this.FilterTypeComboBox.AddEnumValues<FilterType>();
 
             this.Bind(this.ViewModel, vm => vm.FilterType, v => v.FilterTypeComboBox.SelectedItem)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             var filterOperationConverter = Locator.Current.GetService<IEnumConverter<FilterOperation>>();
 
@@ -53,53 +53,53 @@ namespace MovieList.Views.Filters
                     this.FilterOperationComboBox.Items.Clear();
                     ops.ForEach(op => this.FilterOperationComboBox.Items.Add(op));
                 })
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.FilterOperation, v => v.FilterOperationComboBox.SelectedItem)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.FilterOperation)
                 .Select(op => op != FilterOperation.None)
                 .BindTo(this, v => v.FilterOperationComboBox.Visibility)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel!, vm => vm.IsNegated, v => v.NegateCheckBox.IsChecked)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(
                 this.ViewModel!,
                 vm => vm.IsNegated,
                 v => v.ColorStripRectangle.Visibility,
                 BooleanToVisibilityHint.UseHidden)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.FilterOperation)
                 .Select(op => op != FilterOperation.None ? 1 : 0)
                 .Subscribe(gridRow => Grid.SetRow(this.NegateCheckBox, gridRow))
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.FilterInput, v => v.InputViewHost.ViewModel)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void BindCommands(CompositeDisposable disposables)
         {
             this.BindCommand(this.ViewModel!, vm => vm.Delete, v => v.RemoveFilterButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(
                 this.ViewModel!,
                 vm => vm.MakeComposite,
                 v => v.MakeCompositeAndButton,
                 Observable.Return(FilterComposition.And))
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(
                 this.ViewModel!,
                 vm => vm.MakeComposite,
                 v => v.MakeCompositeOrButton,
                 Observable.Return(FilterComposition.Or))
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
     }
 }

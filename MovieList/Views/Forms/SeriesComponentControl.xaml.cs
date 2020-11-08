@@ -20,32 +20,32 @@ namespace MovieList.Views.Forms
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Title, v => v.TitleTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Years, v => v.YearsTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.Events().MouseLeftButtonUp
                     .Discard()
                     .InvokeCommand(this.ViewModel!.Select)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.MoveUp, v => v.MoveUpMenuItem)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel.MoveUp.CanExecute
                     .BindTo(this, v => v.MoveUpMenuItem.Visibility)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.MoveDown, v => v.MoveDownMenuItem)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel.MoveDown.CanExecute
                     .BindTo(this, v => v.MoveDownMenuItem.Visibility)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

@@ -20,15 +20,15 @@ namespace MovieList.Views
 {
     public static class ViewExtensions
     {
-        public static IDisposable ValidateWith(this FrameworkElement element, ValidationHelper rule)
-            => ValidationSubscriber.Create(element, rule);
+        public static IDisposable ValidateWith(this FrameworkElement element, ValidationHelper rule) =>
+            ValidationSubscriber.Create(element, rule);
 
         public static IDisposable ShowValidationMessage<TControl>(
             this TControl control,
             ValidationHelper rule,
             Expression<Func<TControl, string>> property)
-            where TControl : Control
-            => rule.ValidationChanged
+            where TControl : Control =>
+            rule.ValidationChanged
                 .Where(state => !state.IsValid)
                 .Select(state => state.Text[0])
                 .ObserveOnDispatcher()

@@ -18,19 +18,19 @@ namespace MovieList.Views
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.AddNewMovie, v => v.AddNewMovieButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.AddNewSeries, v => v.AddNewSeriesButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel!, vm => vm.Search, v => v.SearchViewHost.ViewModel)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel!, vm => vm.Filter, v => v.FilterViewHost.ViewModel)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

@@ -44,13 +44,13 @@ namespace MovieList.Core.Models
 
         public ObservableCollection<TagModel> ImpliedTags { get; } = new();
 
-        public IEnumerable<TagModel> GetImpliedTagsClosure()
-            => GetClosure(new[] { this });
+        public IEnumerable<TagModel> GetImpliedTagsClosure() =>
+            GetClosure(new[] { this });
 
-        public override string ToString()
-            => $"Tag model: {this.Name} ({this.Category})";
+        public override string ToString() =>
+            $"Tag model: {this.Name} ({this.Category})";
 
-        private static IEnumerable<TagModel> GetClosure(IEnumerable<TagModel> tags)
-            => tags.Union(tags.SelectMany(tag => GetClosure(tag.ImpliedTags)));
+        private static IEnumerable<TagModel> GetClosure(IEnumerable<TagModel> tags) =>
+            tags.Union(tags.SelectMany(tag => GetClosure(tag.ImpliedTags)));
     }
 }

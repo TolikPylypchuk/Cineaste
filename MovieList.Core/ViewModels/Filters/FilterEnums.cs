@@ -72,7 +72,7 @@ namespace MovieList.Core.ViewModels.Filters
                 .Add(BySeriesIsAnthology, noOperations);
         }
 
-        private static ImmutableList<FilterOperation> Operations(params FilterOperation[] ops)
-            => ImmutableList.Create<FilterOperation>().AddRange(ops);
+        private static ImmutableList<FilterOperation> Operations(params FilterOperation[] ops) =>
+            ImmutableList.Create<FilterOperation>().AddRange(ops);
     }
 }

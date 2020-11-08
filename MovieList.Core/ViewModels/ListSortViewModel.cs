@@ -55,8 +55,8 @@ namespace MovieList.Core.ViewModels
 
         public ReactiveCommand<Unit, IComparer<ListItem>> Apply { get; }
 
-        private IComparer<ListItem> OnApply()
-            => ComparerBuilder.For<ListItem>()
+        private IComparer<ListItem> OnApply() =>
+            ComparerBuilder.For<ListItem>()
                 .OrderBy(
                     item => item,
                     this.CreateComparer(this.FirstSorting),
@@ -66,8 +66,8 @@ namespace MovieList.Core.ViewModels
                     this.CreateComparer(this.SecondSorting),
                     descending: this.SecondDirection == ListSortDirection.Descending);
 
-        private IComparer<ListItem> CreateComparer(ListSorting sorting)
-            => sorting switch
+        private IComparer<ListItem> CreateComparer(ListSorting sorting) =>
+            sorting switch
             {
                 ListSorting.ByTitle => new ListItemTitleComparer(
                     this.settings.CultureInfo,

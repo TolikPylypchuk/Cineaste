@@ -23,13 +23,13 @@ namespace MovieList.Views.Forms.Preferences
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Name, v => v.Chip.Content)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Color, v => v.Chip.IconBackground)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 Observable.CombineLatest(
                     this.WhenAnyValue(v => v.ViewModel!.Category),
@@ -38,12 +38,12 @@ namespace MovieList.Views.Forms.Preferences
                         ? $"{category} | {description}"
                         : category)
                     .BindTo(this, v => v.Chip.ToolTip)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 if (this.ViewModel!.CanSelect)
                 {
                     this.BindCommand(this.ViewModel, vm => vm.Select, v => v.Chip)
-                        ?.DisposeWith(disposables);
+                        .DisposeWith(disposables);
                 } else
                 {
                     this.Chip.Cursor = Cursors.Arrow;
@@ -54,7 +54,7 @@ namespace MovieList.Views.Forms.Preferences
                         h => this.Chip.DeleteClick -= h)
                         .Discard()
                         .InvokeCommand(this.ViewModel.Delete)
-                        ?.DisposeWith(disposables);
+                        .DisposeWith(disposables);
             });
         }
     }

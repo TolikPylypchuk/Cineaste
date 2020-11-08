@@ -18,23 +18,23 @@ namespace MovieList.Core.Comparers
             this.stringEqualityComparer = stringEqualityComparer;
         }
 
-        protected override bool EqualsSafe(object x, object y)
-            => (x, y) switch
+        protected override bool EqualsSafe(object x, object y) =>
+            (x, y) switch
             {
                 (string leftStr, string rightStr) => this.stringEqualityComparer.Equals(leftStr, rightStr),
                 (int leftInt, int rightInt) => leftInt == rightInt,
                 _ => false
             };
 
-        protected override int GetHashCodeSafe(object x)
-            => x switch
+        protected override int GetHashCodeSafe(object x) =>
+            x switch
             {
                 string str => this.stringEqualityComparer.GetHashCode(str),
                 _ => x.GetHashCode()
             };
 
-        protected override int CompareSafe(object x, object y)
-            => (x, y) switch
+        protected override int CompareSafe(object x, object y) =>
+            (x, y) switch
             {
                 (string leftStr, string rightStr) => this.stringComparer.Compare(leftStr, rightStr),
                 (int leftInt, int rightInt) => leftInt.CompareTo(rightInt),

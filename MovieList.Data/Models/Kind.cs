@@ -27,7 +27,7 @@ namespace MovieList.Data.Models
         [Write(false)]
         public List<Series> Series { get; set; } = new();
 
-        public override string ToString()
-            => $"Kind #{this.Id}: {this.Name}";
+        public override string ToString() =>
+            $"Kind #{this.Id}: {this.Name}";
     }
 }

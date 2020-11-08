@@ -127,11 +127,11 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         [Reactive]
         public bool IsApplicableToSeries { get; set; }
 
-        public ReadOnlyObservableCollection<TagItemViewModel> ImpliedTags
-            => this.impliedTags;
+        public ReadOnlyObservableCollection<TagItemViewModel> ImpliedTags =>
+            this.impliedTags;
 
-        public ReadOnlyObservableCollection<AddableTagViewModel> AddableImpliedTags
-            => this.addableImpliedTags;
+        public ReadOnlyObservableCollection<AddableTagViewModel> AddableImpliedTags =>
+            this.addableImpliedTags;
 
         public string FormTitle { [ObservableAsProperty] get; } = String.Empty;
 
@@ -143,11 +143,10 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
         public ValidationHelper ColorRule { get; }
         public ValidationHelper UniqueRule { get; }
 
-        public override bool IsNew
-            => this.TagModel.Tag.Id == default;
+        public override bool IsNew =>
+            this.TagModel.Tag.Id == default;
 
-        protected override TagFormViewModel Self
-            => this;
+        protected override TagFormViewModel Self => this;
 
         protected override void EnableChangeTracking()
         {
@@ -180,8 +179,8 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             return Observable.Return(this.TagModel);
         }
 
-        protected override IObservable<TagModel?> OnDelete()
-            => Observable.Return(this.TagModel);
+        protected override IObservable<TagModel?> OnDelete() =>
+            Observable.Return(this.TagModel);
 
         protected override void CopyProperties()
         {

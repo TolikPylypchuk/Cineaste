@@ -7,8 +7,8 @@ namespace MovieList.Converters
 {
     public sealed class SeasonWatchStatusConverter : EnumConverter<SeasonWatchStatus>
     {
-        protected override Dictionary<SeasonWatchStatus, string> CreateConverterDictionary()
-            => new()
+        protected override Dictionary<SeasonWatchStatus, string> CreateConverterDictionary() =>
+            new()
             {
                 [SeasonWatchStatus.NotWatched] = Messages.SeasonNotWatched,
                 [SeasonWatchStatus.Watching] = Messages.SeasonWatching,

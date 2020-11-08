@@ -29,8 +29,8 @@ namespace MovieList.Core.ViewModels.Filters
 
         public ReactiveCommand<Unit, Unit> Clear { get; }
 
-        protected FilterItem WithSubscriptions(FilterItem filterItem)
-            => filterItem switch
+        protected FilterItem WithSubscriptions(FilterItem filterItem) =>
+            filterItem switch
             {
                 SimpleFilterItemViewModel simpleItem => this.WithSubscriptions(simpleItem),
                 CompositeFilterItemViewModel simpleItem => this.WithSubscriptions(simpleItem),

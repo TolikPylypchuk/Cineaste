@@ -7,8 +7,8 @@ namespace MovieList.Data
 {
     internal static class EntityJoinExtensions
     {
-        public static IEnumerable<Movie> Join(this IEnumerable<Movie> movies, IEnumerable<Kind> kinds)
-            => kinds
+        public static IEnumerable<Movie> Join(this IEnumerable<Movie> movies, IEnumerable<Kind> kinds) =>
+            kinds
                 .GroupJoin(
                     movies,
                     kind => kind.Id,
@@ -27,8 +27,8 @@ namespace MovieList.Data
                     })
                 .SelectMany(m => m);
 
-        public static IEnumerable<Movie> Join(this IEnumerable<Movie> movies, IEnumerable<Title> titles)
-            => movies.GroupJoin(
+        public static IEnumerable<Movie> Join(this IEnumerable<Movie> movies, IEnumerable<Title> titles) =>
+            movies.GroupJoin(
                 titles.Where(title => title.MovieId != null),
                 movie => movie.Id,
                 title => title.MovieId,
@@ -45,8 +45,8 @@ namespace MovieList.Data
                     return movie;
                 });
 
-        public static IEnumerable<Movie> Join(this IEnumerable<Movie> movies, IEnumerable<FranchiseEntry> entries)
-            => movies.GroupJoin(
+        public static IEnumerable<Movie> Join(this IEnumerable<Movie> movies, IEnumerable<FranchiseEntry> entries) =>
+            movies.GroupJoin(
                 entries.Where(entry => entry.MovieId != null),
                 movie => movie.Id,
                 entry => entry.MovieId,
@@ -67,8 +67,8 @@ namespace MovieList.Data
         public static IEnumerable<Movie> Join(
             this IEnumerable<Movie> movies,
             IEnumerable<MovieTag> movieTags,
-            IDictionary<int, Tag> tagsById)
-            => movies.GroupJoin(
+            IDictionary<int, Tag> tagsById) =>
+            movies.GroupJoin(
                 movieTags,
                 movie => movie.Id,
                 movieTag => movieTag.MovieId,
@@ -82,8 +82,8 @@ namespace MovieList.Data
                     return movie;
                 });
 
-        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<Kind> kinds)
-            => kinds
+        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<Kind> kinds) =>
+            kinds
                 .GroupJoin(
                     seriesList,
                     kind => kind.Id,
@@ -102,8 +102,8 @@ namespace MovieList.Data
                     })
                 .SelectMany(s => s);
 
-        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<Title> titles)
-            => seriesList.GroupJoin(
+        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<Title> titles) =>
+            seriesList.GroupJoin(
                 titles.Where(title => title.SeriesId != null),
                 series => series.Id,
                 title => title.SeriesId,
@@ -120,8 +120,8 @@ namespace MovieList.Data
                     return series;
                 });
 
-        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<Season> seasons)
-            => seriesList.GroupJoin(
+        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<Season> seasons) =>
+            seriesList.GroupJoin(
                 seasons,
                 series => series.Id,
                 season => season.SeriesId,
@@ -140,8 +140,8 @@ namespace MovieList.Data
 
         public static IEnumerable<Series> Join(
             this IEnumerable<Series> seriesList,
-            IEnumerable<SpecialEpisode> episodes)
-            => seriesList.GroupJoin(
+            IEnumerable<SpecialEpisode> episodes) =>
+            seriesList.GroupJoin(
                 episodes,
                 series => series.Id,
                 episode => episode.SeriesId,
@@ -158,8 +158,10 @@ namespace MovieList.Data
                     return series;
                 });
 
-        public static IEnumerable<Series> Join(this IEnumerable<Series> seriesList, IEnumerable<FranchiseEntry> entries)
-            => seriesList.GroupJoin(
+        public static IEnumerable<Series> Join(
+            this IEnumerable<Series> seriesList,
+            IEnumerable<FranchiseEntry> entries) =>
+            seriesList.GroupJoin(
                 entries.Where(entry => entry.SeriesId != null),
                 movie => movie.Id,
                 entry => entry.SeriesId,
@@ -177,8 +179,8 @@ namespace MovieList.Data
                     return series;
                 });
 
-        public static IEnumerable<Season> Join(this IEnumerable<Season> seasons, IEnumerable<Period> periods)
-            => seasons.GroupJoin(
+        public static IEnumerable<Season> Join(this IEnumerable<Season> seasons, IEnumerable<Period> periods) =>
+            seasons.GroupJoin(
                 periods,
                 season => season.Id,
                 period => period.SeasonId,
@@ -195,8 +197,8 @@ namespace MovieList.Data
                     return season;
                 });
 
-        public static IEnumerable<Season> Join(this IEnumerable<Season> seasons, IEnumerable<Title> titles)
-            => seasons.GroupJoin(
+        public static IEnumerable<Season> Join(this IEnumerable<Season> seasons, IEnumerable<Title> titles) =>
+            seasons.GroupJoin(
                 titles.Where(title => title.SeasonId != null),
                 season => season.Id,
                 title => title.SeasonId,
@@ -215,8 +217,8 @@ namespace MovieList.Data
 
         public static IEnumerable<SpecialEpisode> Join(
             this IEnumerable<SpecialEpisode> episodes,
-            IEnumerable<Title> titles)
-            => episodes.GroupJoin(
+            IEnumerable<Title> titles) =>
+            episodes.GroupJoin(
                 titles.Where(title => title.SpecialEpisodeId != null),
                 episode => episode.Id,
                 title => title.SpecialEpisodeId,
@@ -236,8 +238,8 @@ namespace MovieList.Data
         public static IEnumerable<Series> Join(
             this IEnumerable<Series> seriesList,
             IEnumerable<SeriesTag> seriesTags,
-            IDictionary<int, Tag> tagsById)
-            => seriesList.GroupJoin(
+            IDictionary<int, Tag> tagsById) =>
+            seriesList.GroupJoin(
                 seriesTags,
                 series => series.Id,
                 seriesTag => seriesTag.SeriesId,
@@ -251,8 +253,8 @@ namespace MovieList.Data
                     return series;
                 });
 
-        public static IEnumerable<Franchise> Join(this IEnumerable<Franchise> franchises, IEnumerable<Title> titles)
-            => franchises.GroupJoin(
+        public static IEnumerable<Franchise> Join(this IEnumerable<Franchise> franchises, IEnumerable<Title> titles) =>
+            franchises.GroupJoin(
                 titles.Where(title => title.FranchiseId != null),
                 franchise => franchise.Id,
                 title => title.FranchiseId,
@@ -269,8 +271,10 @@ namespace MovieList.Data
                     return franchise;
                 });
 
-        public static IEnumerable<Franchise> Join(this IEnumerable<Franchise> franchises, IList<FranchiseEntry> entries)
-            => franchises
+        public static IEnumerable<Franchise> Join(
+            this IEnumerable<Franchise> franchises,
+            IList<FranchiseEntry> entries) =>
+            franchises
                 .GroupJoin(
                     entries.Where(entry => entry.FranchiseId != null),
                     franchise => franchise.Id,

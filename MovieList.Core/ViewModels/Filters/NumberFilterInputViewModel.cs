@@ -5,8 +5,8 @@ namespace MovieList.Core.ViewModels.Filters
 {
     public sealed class NumberFilterInputViewModel : FilterInput
     {
-        public NumberFilterInputViewModel()
-            => this.WhenAnyValue(vm => vm.Number)
+        public NumberFilterInputViewModel() =>
+            this.WhenAnyValue(vm => vm.Number)
                 .Discard()
                 .Subscribe(this.inputChanged);
 

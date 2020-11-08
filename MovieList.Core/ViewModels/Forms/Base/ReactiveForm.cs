@@ -27,13 +27,13 @@ namespace MovieList.Core.ViewModels.Forms.Base
         where TModel : class
         where TForm : ReactiveForm<TModel, TForm>
     {
-        private readonly BehaviorSubject<bool> formChangedSubject = new BehaviorSubject<bool>(false);
-        private readonly BehaviorSubject<bool> validSubject = new BehaviorSubject<bool>(true);
-        private readonly BehaviorSubject<bool> canSaveSubject = new BehaviorSubject<bool>(false);
-        private readonly BehaviorSubject<bool> canDeleteSubject = new BehaviorSubject<bool>(false);
+        private readonly BehaviorSubject<bool> formChangedSubject = new(false);
+        private readonly BehaviorSubject<bool> validSubject = new(true);
+        private readonly BehaviorSubject<bool> canSaveSubject = new(false);
+        private readonly BehaviorSubject<bool> canDeleteSubject = new(false);
 
-        private readonly List<IObservable<bool>> changesToTrack = new List<IObservable<bool>>();
-        private readonly List<IObservable<bool>> validationsToTrack = new List<IObservable<bool>>();
+        private readonly List<IObservable<bool>> changesToTrack = new();
+        private readonly List<IObservable<bool>> validationsToTrack = new();
 
         protected ReactiveForm(ResourceManager? resourceManager = null, IScheduler? scheduler = null)
         {
@@ -52,11 +52,11 @@ namespace MovieList.Core.ViewModels.Forms.Base
             this.Delete = ReactiveCommand.CreateFromObservable(this.OnDelete, this.canDeleteSubject);
         }
 
-        public IObservable<bool> FormChanged
-            => this.formChangedSubject.AsObservable();
+        public IObservable<bool> FormChanged =>
+            this.formChangedSubject.AsObservable();
 
-        public bool IsFormChanged
-            => this.formChangedSubject.Value;
+        public bool IsFormChanged =>
+            this.formChangedSubject.Value;
 
         public IObservable<bool> Valid { get; }
 
@@ -71,11 +71,11 @@ namespace MovieList.Core.ViewModels.Forms.Base
 
         protected abstract TForm Self { get; }
 
-        public override IEnumerable GetErrors(string propertyName)
-            => Enumerable.Empty<string>();
+        public override IEnumerable GetErrors(string propertyName) =>
+            Enumerable.Empty<string>();
 
-        protected void TrackChanges(IObservable<bool> changes)
-            => this.changesToTrack.Add(changes.StartWith(false));
+        protected void TrackChanges(IObservable<bool> changes) =>
+            this.changesToTrack.Add(changes.StartWith(false));
 
         protected void TrackChanges<T>(Expression<Func<TForm, T>> property, Func<TForm, T> itemValue)
         {
@@ -88,11 +88,11 @@ namespace MovieList.Core.ViewModels.Forms.Base
                         changed ? $"{propertyName} is changed" : $"{propertyName} is unchanged")));
         }
 
-        protected void TrackValidation(IObservable<bool> validation)
-            => this.validationsToTrack.Add(validation.StartWith(true));
+        protected void TrackValidation(IObservable<bool> validation) =>
+            this.validationsToTrack.Add(validation.StartWith(true));
 
-        protected void TrackValidationStrict(IObservable<bool> validation)
-            => this.validationsToTrack.Add(validation.StartWith(false));
+        protected void TrackValidationStrict(IObservable<bool> validation) =>
+            this.validationsToTrack.Add(validation.StartWith(false));
 
         protected IObservable<bool> IsCollectionChanged<TOtherForm, TOtherModel>(
             Expression<Func<TForm, ReadOnlyObservableCollection<TOtherForm>>> property,
@@ -114,24 +114,24 @@ namespace MovieList.Core.ViewModels.Forms.Base
         }
 
         protected IObservable<bool> IsCollectionValid<TOtherForm>(ReadOnlyObservableCollection<TOtherForm> viewModels)
-            where TOtherForm : IReactiveForm
-            => viewModels.ToObservableChangeSet()
+            where TOtherForm : IReactiveForm =>
+            viewModels.ToObservableChangeSet()
                 .AutoRefreshOnObservable(vm => vm.Valid)
                 .ToCollection()
                 .Select(vms => vms.Select(vm => vm.Valid).CombineLatest().AllTrue())
                 .Switch();
 
-        protected void CanDeleteWhen(IObservable<bool> canDelete)
-            => canDelete.Subscribe(this.canDeleteSubject);
+        protected void CanDeleteWhen(IObservable<bool> canDelete) =>
+            canDelete.Subscribe(this.canDeleteSubject);
 
-        protected void CanDeleteWhenNotChanged()
-            => this.CanDeleteWhen(Observable.Return(!this.IsNew).Merge(this.FormChanged.Invert()));
+        protected void CanDeleteWhenNotChanged() =>
+            this.CanDeleteWhen(Observable.Return(!this.IsNew).Merge(this.FormChanged.Invert()));
 
-        protected void CanAlwaysDelete()
-            => this.CanDeleteWhen(Observable.Return(true));
+        protected void CanAlwaysDelete() =>
+            this.CanDeleteWhen(Observable.Return(true));
 
-        protected void CanNeverDelete()
-            => this.CanDeleteWhen(Observable.Return(false));
+        protected void CanNeverDelete() =>
+            this.CanDeleteWhen(Observable.Return(false));
 
         protected virtual void EnableChangeTracking()
         {

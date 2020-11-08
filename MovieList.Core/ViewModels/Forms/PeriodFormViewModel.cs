@@ -1,7 +1,6 @@
 using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Resources;
 
 using MovieList.Core.ViewModels.Forms.Base;
@@ -101,11 +100,10 @@ namespace MovieList.Core.ViewModels.Forms
         public ValidationHelper PosterUrlRule { get; }
         public ValidationHelper PeriodRule { get; }
 
-        public override bool IsNew
-            => this.Period.Id == default;
+        public override bool IsNew =>
+            this.Period.Id == default;
 
-        protected override PeriodFormViewModel Self
-            => this;
+        protected override PeriodFormViewModel Self => this;
 
         protected override void EnableChangeTracking()
         {
@@ -135,8 +133,8 @@ namespace MovieList.Core.ViewModels.Forms
             return Observable.Return(this.Period);
         }
 
-        protected override IObservable<Period?> OnDelete()
-            => Observable.Return(this.Period);
+        protected override IObservable<Period?> OnDelete() =>
+            Observable.Return(this.Period);
 
         protected override void CopyProperties()
         {

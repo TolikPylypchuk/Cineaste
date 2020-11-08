@@ -30,7 +30,7 @@ namespace MovieList.Data.Models
         [Write(false)]
         public HashSet<Tag> InferredTags { get; set; } = new();
 
-        public override string ToString()
-            => $"Tag #{this.Id}: {this.Name} ({this.Category})";
+        public override string ToString() =>
+            $"Tag #{this.Id}: {this.Name} ({this.Category})";
     }
 }

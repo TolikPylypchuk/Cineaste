@@ -91,11 +91,10 @@ namespace MovieList.Core.ViewModels.Forms
         public ReactiveCommand<Unit, Unit> HideDisplayNumber { get; }
         public ReactiveCommand<Unit, Unit> ShowDisplayNumber { get; }
 
-        public override bool IsNew
-            => this.Entry.Id == default;
+        public override bool IsNew =>
+            this.Entry.Id == default;
 
-        protected override FranchiseEntryViewModel Self
-            => this;
+        protected override FranchiseEntryViewModel Self => this;
 
         protected override void EnableChangeTracking()
         {
@@ -113,8 +112,8 @@ namespace MovieList.Core.ViewModels.Forms
             return Observable.Return(this.Entry);
         }
 
-        protected override IObservable<FranchiseEntry?> OnDelete()
-            => Observable.Return(this.Entry);
+        protected override IObservable<FranchiseEntry?> OnDelete() =>
+            Observable.Return(this.Entry);
 
         protected override void CopyProperties()
         {

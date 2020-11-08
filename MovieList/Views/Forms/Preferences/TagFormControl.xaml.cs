@@ -28,7 +28,7 @@ namespace MovieList.Views.Forms.Preferences
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindFields(disposables);
                 this.BindImpliedTags(disposables);
@@ -40,34 +40,34 @@ namespace MovieList.Views.Forms.Preferences
         private void BindFields(CompositeDisposable disposables)
         {
             this.OneWayBind(this.ViewModel, vm => vm.FormTitle, v => v.TitleTextBlock.Text)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Description, v => v.DescriptionTextBox.Text)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Category, v => v.CategoryTextBox.Text)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.Color, v => v.ColorTextBox.Text)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsApplicableToMovies, v => v.IsApplicableToMoviesCheckBox.IsChecked)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsApplicableToSeries, v => v.IsApplicableToSeriesCheckBox.IsChecked)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void BindImpliedTags(CompositeDisposable disposables)
         {
             this.OneWayBind(this.ViewModel, vm => vm.ImpliedTags, v => v.ImpliedTags.ItemsSource)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.OneWayBind(this.ViewModel, vm => vm.AddableImpliedTags, v => v.AddableImpliedTagsComboBox.ItemsSource)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.AddableImpliedTagsComboBox.Events()
                 .SelectionChanged
@@ -75,7 +75,7 @@ namespace MovieList.Views.Forms.Preferences
                 .WhereNotNull()
                 .Select(vm => vm.TagModel!)
                 .InvokeCommand(this.ViewModel!.AddImpliedTag)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.AddableImpliedTags
                 .ToObservableChangeSet()
@@ -83,7 +83,7 @@ namespace MovieList.Views.Forms.Preferences
                 .StartWith(this.ViewModel.AddableImpliedTags.Count)
                 .Select(count => count > 0)
                 .BindTo(this, v => v.AddableImpliedTagsComboBox.IsEnabled)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void BindValidation(CompositeDisposable disposables)
@@ -98,24 +98,24 @@ namespace MovieList.Views.Forms.Preferences
                 .DisposeWith(disposables);
 
             this.ShowValidationMessage(this.ViewModel.UniqueRule, v => v.InvalidFormTextBlock.Text)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel.UniqueRule.ValidationChanged
                 .Select(state => !state.IsValid)
                 .BindTo(this, v => v.InvalidFormTextBlock.Visibility)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
 
         private void BindCommands(CompositeDisposable disposables)
         {
             this.BindCommand(this.ViewModel!, vm => vm.Save, v => v.SaveButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.Cancel, v => v.CancelButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.Close, v => v.CloseButton)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.ViewModel!.Save
                 .Discard()
@@ -126,7 +126,7 @@ namespace MovieList.Views.Forms.Preferences
 
             this.ViewModel.AddImpliedTag
                 .Subscribe(() => this.AddableImpliedTagsComboBox.SelectedItem = null)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
         }
     }
 }

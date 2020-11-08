@@ -27,18 +27,18 @@ namespace MovieList.Core.Comparers
                 .ThenBy(entry => entry.GetEndYear());
         }
 
-        protected override bool EqualsSafe(FranchiseEntry left, FranchiseEntry right)
-            => this.titleComparer.Equals(this.GetTitleName(left), this.GetTitleName(right)) &&
+        protected override bool EqualsSafe(FranchiseEntry left, FranchiseEntry right) =>
+            this.titleComparer.Equals(this.GetTitleName(left), this.GetTitleName(right)) &&
                     left.GetStartYear() == right.GetStartYear() &&
                     left.GetEndYear() == right.GetEndYear();
 
-        protected override int GetHashCodeSafe(FranchiseEntry entry)
-            => HashCode.Combine(this.GetTitleName(entry), entry.GetStartYear(), entry.GetEndYear());
+        protected override int GetHashCodeSafe(FranchiseEntry entry) =>
+            HashCode.Combine(this.GetTitleName(entry), entry.GetStartYear(), entry.GetEndYear());
 
-        protected override int CompareSafe(FranchiseEntry left, FranchiseEntry right)
-            => this.baseComparer.Compare(left, right);
+        protected override int CompareSafe(FranchiseEntry left, FranchiseEntry right) =>
+            this.baseComparer.Compare(left, right);
 
-        private string GetTitleName(FranchiseEntry entry)
-            => entry.GetTitle()?.Name ?? String.Empty;
+        private string GetTitleName(FranchiseEntry entry) =>
+            entry.GetTitle()?.Name ?? String.Empty;
     }
 }

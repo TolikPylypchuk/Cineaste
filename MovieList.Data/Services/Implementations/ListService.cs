@@ -16,16 +16,16 @@ namespace MovieList.Data.Services.Implementations
             : base(file)
         { }
 
-        public WholeList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags)
-            => this.WithTransaction((connection, transaction) => this.GetList(kinds, tags, connection, transaction));
+        public EntireList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags) =>
+            this.WithTransaction((connection, transaction) => this.GetList(kinds, tags, connection, transaction));
 
-        private WholeList GetList(
+        private EntireList GetList(
             IEnumerable<Kind> kinds,
             IEnumerable<Tag> tags,
             IDbConnection connection,
             IDbTransaction transaction)
         {
-            this.Log().Debug("Getting the full list of movies, series and franchises");
+            this.Log().Debug("Getting the entire list of movies, series and franchises");
 
             var titles = connection.GetAll<Title>(transaction).ToList();
             var entries = connection.GetAll<FranchiseEntry>(transaction).ToList();
@@ -43,7 +43,7 @@ namespace MovieList.Data.Services.Implementations
 
             var tagsById = tags.ToDictionary(tag => tag.Id, tag => tag);
 
-            return new WholeList(
+            return new EntireList(
                 movies
                     .Join(kinds)
                     .Join(titles)

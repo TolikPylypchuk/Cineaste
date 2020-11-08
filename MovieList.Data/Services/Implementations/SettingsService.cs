@@ -35,8 +35,8 @@ namespace MovieList.Data.Services.Implementations
             });
         }
 
-        public void UpdateSettings(Settings settings)
-            => this.WithTransaction((connection, transaction) =>
+        public void UpdateSettings(Settings settings) =>
+            this.WithTransaction((connection, transaction) =>
             {
                 this.Log().Debug("Saving settings");
 
@@ -55,8 +55,8 @@ namespace MovieList.Data.Services.Implementations
                 }
             });
 
-        private Dictionary<string, string> ToDictionary(Settings settings)
-            => new Dictionary<string, string>
+        private Dictionary<string, string> ToDictionary(Settings settings) =>
+            new Dictionary<string, string>
             {
                 [SettingsListNameKey] = settings.ListName,
                 [SettingsListVersionKey] = settings.ListVersion.ToString(),

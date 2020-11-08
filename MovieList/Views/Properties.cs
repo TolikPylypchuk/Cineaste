@@ -40,17 +40,17 @@ namespace MovieList.Views
             typeof(Properties),
             new UIPropertyMetadata(false, OnIsExternalChanged));
 
-        public static bool GetTripleClickSelectAll(DependencyObject element)
-            => (bool)element.GetValue(TripleClickSelectAllProperty);
+        public static bool GetTripleClickSelectAll(DependencyObject element) =>
+            (bool)element.GetValue(TripleClickSelectAllProperty);
 
-        public static void SetTripleClickSelectAll(DependencyObject element, bool value)
-            => element.SetValue(TripleClickSelectAllProperty, value);
+        public static void SetTripleClickSelectAll(DependencyObject element, bool value) =>
+            element.SetValue(TripleClickSelectAllProperty, value);
 
-        public static bool GetIsExternal(DependencyObject obj)
-            => (bool)obj.GetValue(IsExternalProperty);
+        public static bool GetIsExternal(DependencyObject obj) =>
+            (bool)obj.GetValue(IsExternalProperty);
 
-        public static void SetIsExternal(DependencyObject obj, bool value)
-            => obj.SetValue(IsExternalProperty, value);
+        public static void SetIsExternal(DependencyObject obj, bool value) =>
+            obj.SetValue(IsExternalProperty, value);
 
         private static void OnTripleClickSelectAllChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

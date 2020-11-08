@@ -20,12 +20,12 @@ namespace MovieList.Core.ListItems
                     : String.Empty,
                   series.StartYear,
                   series.EndYear,
-                  series.GetActiveColor())
-            => this.Series = series;
+                  series.GetActiveColor()) =>
+            this.Series = series;
 
         public Series Series { get; }
 
-        public override FranchiseEntry? Entry
-            => this.Series.Entry;
+        public override FranchiseEntry? Entry =>
+            this.Series.Entry;
     }
 }

@@ -29,12 +29,12 @@ namespace MovieList.Core.ViewModels
 {
     public sealed class FileMainContentViewModel : ReactiveObject, IDisposable
     {
-        private readonly CompositeDisposable sideViewModelSubscriptions = new CompositeDisposable();
-        private readonly CompositeDisposable sideViewModelSecondarySubscriptions = new CompositeDisposable();
-        private readonly BehaviorSubject<bool> areUnsavedChangesPresentSubject = new BehaviorSubject<bool>(false);
+        private readonly CompositeDisposable sideViewModelSubscriptions = new();
+        private readonly CompositeDisposable sideViewModelSecondarySubscriptions = new();
 
-        private readonly SourceList<FranchiseEntry> franchiseAddableItemsSource =
-            new SourceList<FranchiseEntry>();
+        private readonly BehaviorSubject<bool> areUnsavedChangesPresentSubject = new(false);
+
+        private readonly SourceList<FranchiseEntry> franchiseAddableItemsSource = new();
 
         private readonly ReadOnlyObservableCollection<FranchiseEntry> franchiseAddableItems;
 
@@ -101,8 +101,8 @@ namespace MovieList.Core.ViewModels
 
         public string FileName { get; }
 
-        public ReadOnlyObservableCollection<FranchiseEntry> FranchiseAddableItems
-            => this.franchiseAddableItems;
+        public ReadOnlyObservableCollection<FranchiseEntry> FranchiseAddableItems =>
+            this.franchiseAddableItems;
 
         public ReadOnlyObservableCollection<Kind> Kinds { get; }
         public ReadOnlyObservableCollection<Tag> Tags { get; }
@@ -121,8 +121,8 @@ namespace MovieList.Core.ViewModels
         public ReactiveCommand<Unit, Unit> TunnelSave { get; }
         public ReactiveCommand<Unit, Unit> BubbleSave { get; }
 
-        public void Dispose()
-            => this.CanSelectItem = false;
+        public void Dispose() =>
+            this.CanSelectItem = false;
 
         private IObservable<Unit> OnSelectItem(ListItem? item)
         {
@@ -143,8 +143,8 @@ namespace MovieList.Core.ViewModels
                         .Discard());
         }
 
-        private ReactiveObject CreateSideViewModel(ListItem? item)
-            => item switch
+        private ReactiveObject CreateSideViewModel(ListItem? item) =>
+            item switch
             {
                 null =>
                     this.ListActions,
@@ -331,8 +331,8 @@ namespace MovieList.Core.ViewModels
             return form;
         }
 
-        private IObservable<Unit> AttachEntries(List<FranchiseEntry> entries)
-            => entries.Count == 0
+        private IObservable<Unit> AttachEntries(List<FranchiseEntry> entries) =>
+            entries.Count == 0
                 ? Observable.Return(Unit.Default)
                 : entries
                     .Select(entry => this.List.AddOrUpdate
@@ -344,8 +344,8 @@ namespace MovieList.Core.ViewModels
                     .ForkJoin()
                     .Discard();
 
-        private IObservable<Unit> DetachEntries(List<FranchiseEntry> entries)
-            => entries.Count == 0
+        private IObservable<Unit> DetachEntries(List<FranchiseEntry> entries) =>
+            entries.Count == 0
                 ? Observable.Return(Unit.Default)
                 : entries
                     .Do(this.ClearEntryConnection)
@@ -632,8 +632,8 @@ namespace MovieList.Core.ViewModels
             return franchise;
         }
 
-        private FranchiseEntry CreateEntryForFranchise(Franchise parentFranchise, int displayNumber)
-            => new FranchiseEntry
+        private FranchiseEntry CreateEntryForFranchise(Franchise parentFranchise, int displayNumber) =>
+            new FranchiseEntry
             {
                 ParentFranchise = parentFranchise,
                 SequenceNumber = parentFranchise.Entries.Count == 0
@@ -667,8 +667,8 @@ namespace MovieList.Core.ViewModels
         private void RemoveSameEntry(
             IEnumerable<FranchiseEntry> entries,
             FranchiseEntry entry,
-            Action<IEnumerable<FranchiseEntry>> remove)
-            => remove(entries.Where(e =>
+            Action<IEnumerable<FranchiseEntry>> remove) =>
+            remove(entries.Where(e =>
                 (e.Movie != null && e.Movie == entry.Movie) ||
                 (e.Series != null && e.Series == entry.Series) ||
                 (e.Franchise != null && e.Franchise == entry.Franchise)));

@@ -28,10 +28,10 @@ namespace MovieList.Data
 
         public CultureInfo CultureInfo { get; set; }
 
-        public string GetSeasonTitle(int num)
-            => this.DefaultSeasonTitle.Replace(SeasonNumberPlaceholder, num.ToString());
+        public string GetSeasonTitle(int num) =>
+            this.DefaultSeasonTitle.Replace(SeasonNumberPlaceholder, num.ToString());
 
-        public string GetSeasonOriginalTitle(int num)
-            => this.DefaultSeasonOriginalTitle.Replace(SeasonNumberPlaceholder, num.ToString());
+        public string GetSeasonOriginalTitle(int num) =>
+            this.DefaultSeasonOriginalTitle.Replace(SeasonNumberPlaceholder, num.ToString());
     }
 }

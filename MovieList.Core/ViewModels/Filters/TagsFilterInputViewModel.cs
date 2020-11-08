@@ -73,11 +73,11 @@ namespace MovieList.Core.ViewModels.Filters
             });
         }
 
-        public ReadOnlyObservableCollection<TagItemViewModel> Tags
-            => this.tags;
+        public ReadOnlyObservableCollection<TagItemViewModel> Tags =>
+            this.tags;
 
-        public ReadOnlyObservableCollection<AddableTagViewModel> AddableTags
-            => this.addableTags;
+        public ReadOnlyObservableCollection<AddableTagViewModel> AddableTags =>
+            this.addableTags;
 
         public ReactiveCommand<Tag, Unit> AddTag { get; }
 

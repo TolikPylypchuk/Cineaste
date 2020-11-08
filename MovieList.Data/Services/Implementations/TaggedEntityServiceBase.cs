@@ -18,8 +18,8 @@ namespace MovieList.Data.Services.Implementations
         private readonly IEqualityComparer<TTag> tagEqualityComparer;
 
         protected TaggedEntityServiceBase(string file, IEqualityComparer<TTag> tagEqualityComparer)
-            : base(file)
-            => this.tagEqualityComparer = tagEqualityComparer;
+            : base(file) =>
+            this.tagEqualityComparer = tagEqualityComparer;
 
         protected abstract List<TTag> GetTags(TEntity entity);
 

@@ -8,8 +8,8 @@ namespace MovieList.Converters
 {
     public sealed class LogLevelConverter : EnumConverter<LogEventLevel>
     {
-        protected override Dictionary<LogEventLevel, string> CreateConverterDictionary()
-            => new()
+        protected override Dictionary<LogEventLevel, string> CreateConverterDictionary() =>
+            new()
             {
                 [LogEventLevel.Verbose] = Messages.LogLevelVerbose,
                 [LogEventLevel.Debug] = Messages.LogLevelDebug,

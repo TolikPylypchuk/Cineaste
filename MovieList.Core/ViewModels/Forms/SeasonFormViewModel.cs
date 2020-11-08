@@ -25,7 +25,7 @@ namespace MovieList.Core.ViewModels.Forms
 {
     public sealed class SeasonFormViewModel : SeriesComponentFormBase<Season, SeasonFormViewModel>
     {
-        private readonly SourceList<Period> periodsSource = new SourceList<Period>();
+        private readonly SourceList<Period> periodsSource = new();
 
         private readonly ReadOnlyObservableCollection<PeriodFormViewModel> periods;
 
@@ -113,8 +113,8 @@ namespace MovieList.Core.ViewModels.Forms
         [Reactive]
         public override string Channel { get; set; } = String.Empty;
 
-        public ReadOnlyObservableCollection<PeriodFormViewModel> Periods
-            => this.periods;
+        public ReadOnlyObservableCollection<PeriodFormViewModel> Periods =>
+            this.periods;
 
         [Reactive]
         public string? CurrentPosterUrl { get; set; }
@@ -131,20 +131,18 @@ namespace MovieList.Core.ViewModels.Forms
         public ReactiveCommand<Unit, Unit> SwitchToNextPoster { get; }
         public ReactiveCommand<Unit, Unit> SwitchToPreviousPoster { get; }
 
-        public override bool IsNew
-            => this.Season.Id == default;
+        public override bool IsNew =>
+            this.Season.Id == default;
 
-        protected override SeasonFormViewModel Self
-            => this;
+        protected override SeasonFormViewModel Self => this;
 
-        protected override ICollection<Title> ItemTitles
-            => this.Season.Titles;
+        protected override ICollection<Title> ItemTitles =>
+            this.Season.Titles;
 
-        protected override string NewItemKey
-            => "NewSeason";
+        protected override string NewItemKey => "NewSeason";
 
-        public override int GetNextYear()
-            => this.Periods.Last().EndYear + 1;
+        public override int GetNextYear() =>
+            this.Periods.Last().EndYear + 1;
 
         protected override void EnableChangeTracking()
         {
@@ -175,8 +173,8 @@ namespace MovieList.Core.ViewModels.Forms
                     return this.Season;
                 });
 
-        protected override IObservable<Season?> OnDelete()
-            => Dialog.PromptToDelete("DeleteSeason", () => Observable.Return(this.Season));
+        protected override IObservable<Season?> OnDelete() =>
+            Dialog.PromptToDelete("DeleteSeason", () => Observable.Return(this.Season));
 
         protected override void CopyProperties()
         {
@@ -196,8 +194,8 @@ namespace MovieList.Core.ViewModels.Forms
             this.SetCurrentPosterIndexToFirst();
         }
 
-        protected override void AttachTitle(Title title)
-            => title.Season = this.Season;
+        protected override void AttachTitle(Title title) =>
+            title.Season = this.Season;
 
         private PeriodFormViewModel CreatePeriodForm(Period period, IObservable<bool> canDelete)
         {
@@ -234,8 +232,8 @@ namespace MovieList.Core.ViewModels.Forms
             });
         }
 
-        private IObservable<Unit> SavePeriods()
-            => this.Periods
+        private IObservable<Unit> SavePeriods() =>
+            this.Periods
                 .Select(period => period.Save.Execute())
                 .ForkJoin()
                 .Discard()
@@ -268,22 +266,22 @@ namespace MovieList.Core.ViewModels.Forms
             }
         }
 
-        private void SetCurrentPosterIndex(Func<int, int> next)
-            => this.CurrentPosterIndex = this.GetPosterIndex(next(this.CurrentPosterIndex), next);
+        private void SetCurrentPosterIndex(Func<int, int> next) =>
+            this.CurrentPosterIndex = this.GetPosterIndex(next(this.CurrentPosterIndex), next);
 
-        private int GetPosterIndex(int index, Func<int, int> next)
-            => this.Periods[index].Period.PosterUrl != null
+        private int GetPosterIndex(int index, Func<int, int> next) =>
+            this.Periods[index].Period.PosterUrl != null
                 ? index
                 : this.GetPosterIndex(next(index), next);
 
-        private bool AreAllPeriodsNonOverlapping()
-            => this.Periods.Count == 1 ||
+        private bool AreAllPeriodsNonOverlapping() =>
+            this.Periods.Count == 1 ||
                this.Periods.Buffer(2, 1)
                    .Where(periods => periods.Count == 2)
                    .All(periods => this.ArePeriodsNonOverlapping(periods[0], periods[1]));
 
-        private bool ArePeriodsNonOverlapping(PeriodFormViewModel earlier, PeriodFormViewModel later)
-            => earlier.EndYear < later.StartYear ||
+        private bool ArePeriodsNonOverlapping(PeriodFormViewModel earlier, PeriodFormViewModel later) =>
+            earlier.EndYear < later.StartYear ||
                 earlier.EndYear == later.StartYear && earlier.EndMonth <= later.StartMonth;
     }
 }

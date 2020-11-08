@@ -7,7 +7,6 @@ using System.Reactive.Subjects;
 using MovieList.Data.Models;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
@@ -37,8 +36,8 @@ namespace MovieList.Core.ViewModels.Filters
                 ?? Locator.Current.GetService<IEnumConverter<SeriesReleaseStatus>>();
         }
 
-        public IObservable<Unit> FilterChanged
-            => this.FilterChangedSubject.AsObservable();
+        public IObservable<Unit> FilterChanged =>
+            this.FilterChangedSubject.AsObservable();
 
         public ReadOnlyObservableCollection<Kind> Kinds { get; }
         public ReadOnlyObservableCollection<Tag> Tags { get; }

@@ -18,8 +18,8 @@ namespace MovieList
 {
     public class DialogHandler
     {
-        public DialogHandler(DialogHost host)
-            => this.Host = host;
+        public DialogHandler(DialogHost host) =>
+            this.Host = host;
 
         public DialogHost Host { get; }
 

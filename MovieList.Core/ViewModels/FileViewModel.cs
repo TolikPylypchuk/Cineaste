@@ -29,7 +29,7 @@ namespace MovieList.Core.ViewModels
         private readonly SourceCache<Tag, int> tagsSource;
         private readonly ReadOnlyObservableCollection<Tag> tags;
 
-        private readonly CompositeDisposable currentContentSubscriptions = new CompositeDisposable();
+        private readonly CompositeDisposable currentContentSubscriptions = new();
         private readonly ISettingsService settingsService;
 
         public FileViewModel(
@@ -106,11 +106,11 @@ namespace MovieList.Core.ViewModels
         public FileMainContentViewModel? MainContent { get; private set; }
         public SettingsFormViewModel? Settings { get; private set; }
 
-        public ReadOnlyObservableCollection<Kind> Kinds
-            => this.kinds;
+        public ReadOnlyObservableCollection<Kind> Kinds =>
+            this.kinds;
 
-        public ReadOnlyObservableCollection<Tag> Tags
-            => this.tags;
+        public ReadOnlyObservableCollection<Tag> Tags =>
+            this.tags;
 
         public bool AreUnsavedChangesPresent { [ObservableAsProperty] get; }
 
@@ -151,8 +151,8 @@ namespace MovieList.Core.ViewModels
                 .Discard();
         }
 
-        private IObservable<Unit> SwitchCurrentContentToMain()
-            => this.settingsService.GetSettingsInTaskPool()
+        private IObservable<Unit> SwitchCurrentContentToMain() =>
+            this.settingsService.GetSettingsInTaskPool()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Do(settings =>
                 {

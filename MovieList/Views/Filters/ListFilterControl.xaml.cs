@@ -18,16 +18,16 @@ namespace MovieList.Views.Filters
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.FilterItem, v => v.FilterItemViewHost.ViewModel)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.Apply, v => v.ApplyFilterButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.Clear, v => v.ClearFilterButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

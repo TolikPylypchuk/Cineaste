@@ -99,20 +99,18 @@ namespace MovieList.Core.ViewModels.Forms
 
         public ReactiveCommand<Unit, Unit> ConvertToSeries { get; }
 
-        protected override MiniseriesFormViewModel Self
-            => this;
+        protected override MiniseriesFormViewModel Self => this;
 
-        protected override ICollection<Title> ItemTitles
-            => this.Series.Titles;
+        protected override ICollection<Title> ItemTitles =>
+            this.Series.Titles;
 
-        protected override IEnumerable<Tag> ItemTags
-            => this.Series.Tags;
+        protected override IEnumerable<Tag> ItemTags =>
+            this.Series.Tags;
 
-        protected override string NewItemKey
-            => "NewMiniseries";
+        protected override string NewItemKey => "NewMiniseries";
 
-        public override bool IsNew
-            => this.Series.Id == default;
+        public override bool IsNew =>
+            this.Series.Id == default;
 
         protected override void EnableChangeTracking()
         {
@@ -137,14 +135,14 @@ namespace MovieList.Core.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override IObservable<Series> OnSave()
-            => this.SaveTitles()
+        protected override IObservable<Series> OnSave() =>
+            this.SaveTitles()
                 .DoAsync(this.PeriodForm.Save.Execute)
                 .Select(this.CopyPropertiesIntoModel)
                 .DoAsync(this.seriesService.SaveInTaskPool);
 
-        protected override IObservable<Series?> OnDelete()
-            => Dialog.PromptToDelete(
+        protected override IObservable<Series?> OnDelete() =>
+            Dialog.PromptToDelete(
                 "DeleteSeries", () => this.seriesService.DeleteInTaskPool(this.Series).Select(() => this.Series));
 
         protected override void CopyProperties()
@@ -178,11 +176,11 @@ namespace MovieList.Core.ViewModels.Forms
             this.PosterUrl = this.Series.PosterUrl.EmptyIfNull();
         }
 
-        protected override void AttachTitle(Title title)
-            => title.Series = this.Series;
+        protected override void AttachTitle(Title title) =>
+            title.Series = this.Series;
 
-        protected override bool IsTagApplicable(Tag tag)
-            => tag.IsApplicableToSeries;
+        protected override bool IsTagApplicable(Tag tag) =>
+            tag.IsApplicableToSeries;
 
         private Series CopyPropertiesIntoModel()
         {

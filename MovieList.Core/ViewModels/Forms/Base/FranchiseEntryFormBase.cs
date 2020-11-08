@@ -18,7 +18,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
         where TModel : class
         where TForm : FranchiseEntryFormBase<TModel, TForm>
     {
-        private readonly BehaviorSubject<bool> canCreateFranchiseSubject = new BehaviorSubject<bool>(false);
+        private readonly BehaviorSubject<bool> canCreateFranchiseSubject = new(false);
 
         protected FranchiseEntryFormBase(
             FranchiseEntry? entry,
@@ -73,16 +73,16 @@ namespace MovieList.Core.ViewModels.Forms.Base
         public ReactiveCommand<Unit, FranchiseEntry> GoToPrevious { get; }
         public ReactiveCommand<Unit, Unit> CreateFranchise { get; }
 
-        protected void CanCreateFranchise()
-            => Observable.CombineLatest(
+        protected void CanCreateFranchise() =>
+            Observable.CombineLatest(
                    Observable.Return(!this.IsNew).Merge(this.Save.Select(_ => true)),
                    Observable.Return(this.FranchiseEntry == null),
                    this.FormChanged.Invert())
                 .AllTrue()
                 .Subscribe(this.canCreateFranchiseSubject);
 
-        private IObservable<bool> IfFranchisePresent(Func<IObservable<bool>> observableProvider)
-            => this.FranchiseEntry == null
+        private IObservable<bool> IfFranchisePresent(Func<IObservable<bool>> observableProvider) =>
+            this.FranchiseEntry == null
                 ? Observable.Return(false)
                 : observableProvider();
     }

@@ -35,12 +35,12 @@ namespace MovieList.Views
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.InitializeSideNavigation(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Content, v => v.ContentHost.ViewModel)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
 
@@ -60,7 +60,7 @@ namespace MovieList.Views
             this.WhenAnyValue(v => v.ViewModel!.Content)
                 .Select(content => content == this.ViewModel!.MainContent)
                 .Subscribe(shouldSelectList => this.ListItem.IsSelected = shouldSelectList)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.StatsItem = new FirstLevelNavigationItem
             {
@@ -79,7 +79,7 @@ namespace MovieList.Views
             this.WhenAnyValue(v => v.ViewModel!.Content)
                 .Select(content => content == this.ViewModel!.Settings)
                 .Subscribe(shouldSelectSettings => this.SettingsItem.IsSelected = shouldSelectSettings)
-                ?.DisposeWith(disposables);
+                .DisposeWith(disposables);
 
             this.Navigation.Items = new List<INavigationItem>
             {

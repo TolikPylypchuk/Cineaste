@@ -24,26 +24,26 @@ namespace MovieList.Views
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel, vm => vm.FilterItem, v => v.FilterItemViewHost.ViewModel)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.FindNext, v => v.FindNextButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.FindPrevious, v => v.FindPreviousButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.StopSearch, v => v.StopSearchButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.Clear, v => v.ClearSearchButton)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(
                     this.ViewModel!, vm => vm.IsSearchInitialized, v => v.FoundItemsCountTextBlock.Visibility)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 Observable.CombineLatest(
                     this.ViewModel!.FoundItems.ToObservableChangeSet().Count(),
@@ -51,12 +51,12 @@ namespace MovieList.Views
                     this.WhenAnyValue(v => v.ViewModel!.TotalSearchedItemsCount),
                     this.FoundItemsCountMessage)
                     .BindTo(this, v => v.FoundItemsCountTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
 
-        private string FoundItemsCountMessage(int numItems, int currentIndex, int numAllItems)
-            => (numItems, numAllItems) switch
+        private string FoundItemsCountMessage(int numItems, int currentIndex, int numAllItems) =>
+            (numItems, numAllItems) switch
             {
                 (0, _) => Messages.NoItemsFound,
                 (int n1, int n2) when n1 == n2 => Messages.AllItemsFound,

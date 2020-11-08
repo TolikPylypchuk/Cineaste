@@ -14,12 +14,12 @@ namespace MovieList.Core.ListItems
                 movie.Year.ToString(),
                 movie.Year,
                 movie.Year,
-                movie.GetActiveColor())
-            => this.Movie = movie;
+                movie.GetActiveColor()) =>
+            this.Movie = movie;
 
         public Movie Movie { get; }
 
-        public override FranchiseEntry? Entry
-            => this.Movie.Entry;
+        public override FranchiseEntry? Entry =>
+            this.Movie.Entry;
     }
 }

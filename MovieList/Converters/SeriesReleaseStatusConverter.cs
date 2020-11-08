@@ -7,8 +7,8 @@ namespace MovieList.Converters
 {
     public sealed class SeriesReleaseStatusConverter : EnumConverter<SeriesReleaseStatus>
     {
-        protected override Dictionary<SeriesReleaseStatus, string> CreateConverterDictionary()
-            => new()
+        protected override Dictionary<SeriesReleaseStatus, string> CreateConverterDictionary() =>
+            new()
             {
                 [SeriesReleaseStatus.NotStarted] = Messages.SeriesNotStarted,
                 [SeriesReleaseStatus.Running] = Messages.SeriesRunning,

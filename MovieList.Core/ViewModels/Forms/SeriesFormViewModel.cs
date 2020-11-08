@@ -33,14 +33,14 @@ namespace MovieList.Core.ViewModels.Forms
         private readonly IEntityService<Series> seriesService;
         private readonly ISettingsService settingsService;
 
-        private readonly SourceList<EntityBase> componentsSource = new SourceList<EntityBase>();
+        private readonly SourceList<EntityBase> componentsSource = new();
 
         private readonly ReadOnlyObservableCollection<ISeriesComponentForm> componentForms;
         private readonly ReadOnlyObservableCollection<SeasonFormViewModel> seasons;
         private readonly ReadOnlyObservableCollection<SpecialEpisodeFormViewModel> specialEpisodes;
         private readonly ReadOnlyObservableCollection<SeriesComponentViewModel> components;
 
-        private readonly BehaviorSubject<int> maxSequenceNumberSubject = new BehaviorSubject<int>(0);
+        private readonly BehaviorSubject<int> maxSequenceNumberSubject = new(0);
 
         public SeriesFormViewModel(
             Series series,
@@ -136,17 +136,17 @@ namespace MovieList.Core.ViewModels.Forms
         [Reactive]
         public SeriesReleaseStatus ReleaseStatus { get; set; }
 
-        public ReadOnlyObservableCollection<ISeriesComponentForm> ComponentForms
-            => this.componentForms;
+        public ReadOnlyObservableCollection<ISeriesComponentForm> ComponentForms =>
+            this.componentForms;
 
-        public ReadOnlyObservableCollection<SeasonFormViewModel> Seasons
-            => this.seasons;
+        public ReadOnlyObservableCollection<SeasonFormViewModel> Seasons =>
+            this.seasons;
 
-        public ReadOnlyObservableCollection<SpecialEpisodeFormViewModel> SpecialEpisodes
-            => this.specialEpisodes;
+        public ReadOnlyObservableCollection<SpecialEpisodeFormViewModel> SpecialEpisodes =>
+            this.specialEpisodes;
 
-        public ReadOnlyObservableCollection<SeriesComponentViewModel> Components
-            => this.components;
+        public ReadOnlyObservableCollection<SeriesComponentViewModel> Components =>
+            this.components;
 
         [Reactive]
         public string ImdbLink { get; set; } = String.Empty;
@@ -166,23 +166,21 @@ namespace MovieList.Core.ViewModels.Forms
         public ReactiveCommand<ISeriesComponentForm, ISeriesComponentForm> SelectComponent { get; }
         public ReactiveCommand<Unit, Unit> ConvertToMiniseries { get; }
 
-        public override bool IsNew
-            => this.Series.Id == default;
+        public override bool IsNew =>
+            this.Series.Id == default;
 
-        protected override SeriesFormViewModel Self
-            => this;
+        protected override SeriesFormViewModel Self => this;
 
-        protected override ICollection<Title> ItemTitles
-            => this.Series.Titles;
+        protected override ICollection<Title> ItemTitles =>
+            this.Series.Titles;
 
-        protected override IEnumerable<Tag> ItemTags
-            => this.Series.Tags;
+        protected override IEnumerable<Tag> ItemTags =>
+            this.Series.Tags;
 
-        protected override string NewItemKey
-            => "NewSeries";
+        protected override string NewItemKey => "NewSeries";
 
-        private IObservable<bool> CanConvertToMiniseries
-            => Observable.CombineLatest(
+        private IObservable<bool> CanConvertToMiniseries =>
+            Observable.CombineLatest(
                     this.Seasons.ToObservableChangeSet()
                         .Count()
                         .StartWith(0)
@@ -223,8 +221,8 @@ namespace MovieList.Core.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override IObservable<Series> OnSave()
-            => this.SaveTitles()
+        protected override IObservable<Series> OnSave() =>
+            this.SaveTitles()
                 .DoAsync(this.SaveSeasons)
                 .DoAsync(this.SaveSpecialEpisodes)
                 .Select(() =>
@@ -249,8 +247,8 @@ namespace MovieList.Core.ViewModels.Forms
                 })
                 .DoAsync(this.seriesService.SaveInTaskPool);
 
-        protected override IObservable<Series?> OnDelete()
-            => Dialog.PromptToDelete(
+        protected override IObservable<Series?> OnDelete() =>
+            Dialog.PromptToDelete(
                 "DeleteSeries", () => this.seriesService.DeleteInTaskPool(this.Series).Select(_ => this.Series));
 
         protected override void CopyProperties()
@@ -273,11 +271,11 @@ namespace MovieList.Core.ViewModels.Forms
             this.PosterUrl = this.Series.PosterUrl.EmptyIfNull();
         }
 
-        protected override void AttachTitle(Title title)
-            => title.Series = this.Series;
+        protected override void AttachTitle(Title title) =>
+            title.Series = this.Series;
 
-        protected override bool IsTagApplicable(Tag tag)
-            => tag.IsApplicableToSeries;
+        protected override bool IsTagApplicable(Tag tag) =>
+            tag.IsApplicableToSeries;
 
         private void OnAddSeason()
         {
@@ -334,8 +332,8 @@ namespace MovieList.Core.ViewModels.Forms
             });
         }
 
-        private ISeriesComponentForm CreateForm(EntityBase entity)
-            => entity switch
+        private ISeriesComponentForm CreateForm(EntityBase entity) =>
+            entity switch
             {
                 Season season => this.CreateSeasonForm(season),
                 SpecialEpisode episode => this.CreateSpecialEpisodeForm(episode),

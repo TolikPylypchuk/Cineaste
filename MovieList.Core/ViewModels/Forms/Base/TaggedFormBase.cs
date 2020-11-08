@@ -64,11 +64,11 @@ namespace MovieList.Core.ViewModels.Forms.Base
             this.AddTag = ReactiveCommand.Create<Tag>(this.TagsSource.AddOrUpdate);
         }
 
-        public ReadOnlyObservableCollection<AddableTagViewModel> AddableTags
-            => this.addableTags;
+        public ReadOnlyObservableCollection<AddableTagViewModel> AddableTags =>
+            this.addableTags;
 
-        public ReadOnlyObservableCollection<TagItemViewModel> Tags
-            => this.tags;
+        public ReadOnlyObservableCollection<TagItemViewModel> Tags =>
+            this.tags;
 
         protected abstract IEnumerable<Tag> ItemTags { get; }
 

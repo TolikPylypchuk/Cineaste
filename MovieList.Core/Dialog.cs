@@ -21,8 +21,8 @@ namespace MovieList.Core
         public static readonly Interaction<AboutModel, Unit> ShowAbout = new();
 
         public static IObservable<T?> PromptToDelete<T>(string messageAndTitle, Func<IObservable<T>> onDelete)
-            where T : class
-            => Confirm.Handle(new ConfirmationModel(messageAndTitle))
+            where T : class =>
+            Confirm.Handle(new ConfirmationModel(messageAndTitle))
                 .SelectMany(shouldDelete => shouldDelete ? onDelete() : Observable.Return<T?>(null));
     }
 }

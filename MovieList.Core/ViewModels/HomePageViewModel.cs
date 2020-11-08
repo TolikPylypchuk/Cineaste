@@ -27,8 +27,7 @@ namespace MovieList.Core.ViewModels
     {
         private readonly IBlobCache store;
         private readonly ReadOnlyObservableCollection<RecentFileViewModel> recentFiles;
-        private readonly SourceCache<RecentFileViewModel, string> recentFilesSource
-            = new SourceCache<RecentFileViewModel, string>(vm => vm.File.Path);
+        private readonly SourceCache<RecentFileViewModel, string> recentFilesSource = new(vm => vm.File.Path);
 
         public HomePageViewModel(IObservable<bool> showRecentFiles, IBlobCache? store = null)
         {
@@ -80,8 +79,8 @@ namespace MovieList.Core.ViewModels
                 .InvokeCommand(this.OpenFile);
         }
 
-        public ReadOnlyObservableCollection<RecentFileViewModel> RecentFiles
-            => this.recentFiles;
+        public ReadOnlyObservableCollection<RecentFileViewModel> RecentFiles =>
+            this.recentFiles;
 
         public bool ShowRecentFiles { [ObservableAsProperty] get; }
         public bool RecentFilesPresent { [ObservableAsProperty] get; }
@@ -95,8 +94,8 @@ namespace MovieList.Core.ViewModels
         public ReactiveCommand<RecentFile, Unit> AddRecentFile { get; }
         public ReactiveCommand<RecentFile, Unit> RemoveRecentFile { get; }
 
-        private IObservable<CreateFileModel?> OnCreateFile()
-            => Dialog.SaveFile.Handle(String.Empty)
+        private IObservable<CreateFileModel?> OnCreateFile() =>
+            Dialog.SaveFile.Handle(String.Empty)
                 .Do(_ => this.Log().Debug("Creating a new list"))
                 .SelectNotNull(fileName => new CreateFileModel(fileName, Path.GetFileNameWithoutExtension(fileName)));
 
@@ -106,8 +105,8 @@ namespace MovieList.Core.ViewModels
             return fileName != null ? Observable.Return(fileName) : Dialog.OpenFile.Handle(Unit.Default);
         }
 
-        private IObservable<string?> OnOpenRecentFile(string fileName)
-            => File.Exists(fileName)
+        private IObservable<string?> OnOpenRecentFile(string fileName) =>
+            File.Exists(fileName)
                 ? Observable.Return(fileName)
                 : Dialog.Confirm.Handle(new ConfirmationModel("RemoveRecentFileQuesiton", "RemoveRecentFileTitle"))
                     .SelectMany(shouldRemoveFile => shouldRemoveFile
@@ -115,16 +114,16 @@ namespace MovieList.Core.ViewModels
                         : Observable.Return(Unit.Default))
                     .Select(_ => (string?)null);
 
-        private IObservable<Unit> RemoveRecentFileEntry(string fileName)
-            => this.store.GetObject<UserPreferences>(PreferencesKey)
+        private IObservable<Unit> RemoveRecentFileEntry(string fileName) =>
+            this.store.GetObject<UserPreferences>(PreferencesKey)
                 .Eager()
                 .Do(_ => this.Log().Debug($"Removing recent file: {fileName}"))
                 .Do(_ => this.recentFilesSource.Remove(fileName))
                 .Do(preferences => preferences.File.RecentFiles.RemoveAll(file => file.Path == fileName))
                 .SelectMany(preferences => this.store.InsertObject(PreferencesKey, preferences).Eager());
 
-        private IObservable<Unit> OnRemoveSelectedRecentFiles()
-            => this.store.GetObject<UserPreferences>(PreferencesKey)
+        private IObservable<Unit> OnRemoveSelectedRecentFiles() =>
+            this.store.GetObject<UserPreferences>(PreferencesKey)
                 .Eager()
                 .Select(preferences => new
                 {

@@ -48,7 +48,9 @@ namespace MovieList.Data.Services.Implementations
                 this.UpdateMergedDisplayNumbers(franchise);
             }
 
-            new DependentEntityUpdater(connection, transaction).UpdateDependentEntities(
+            var updater = new DependentEntityUpdater(connection, transaction);
+
+            updater.UpdateDependentEntities(
                 franchise,
                 franchise.Titles,
                 title => title.FranchiseId,
@@ -57,7 +59,7 @@ namespace MovieList.Data.Services.Implementations
             this.InsertEntries(
                 franchise.Entries.Where(entry => entry.Id == default), franchise.Id, connection, transaction);
 
-            new DependentEntityUpdater(connection, transaction).UpdateDependentEntities(
+            updater.UpdateDependentEntities(
                 franchise,
                 franchise.Entries,
                 entry => entry.ParentFranchiseId,

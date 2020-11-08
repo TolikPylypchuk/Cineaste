@@ -80,18 +80,17 @@ namespace MovieList.Core.ViewModels.Forms.Base
         [Reactive]
         public CultureInfo CultureInfo { get; set; }
 
-        public ReadOnlyObservableCollection<KindFormViewModel> Kinds
-            => this.kinds;
+        public ReadOnlyObservableCollection<KindFormViewModel> Kinds =>
+            this.kinds;
 
-        public ReadOnlyObservableCollection<TagItemViewModel> TagItems
-            => this.tagItems;
+        public ReadOnlyObservableCollection<TagItemViewModel> TagItems =>
+            this.tagItems;
 
         public ReactiveCommand<Unit, Unit> AddKind { get; }
         public ReactiveCommand<Unit, Unit> AddTag { get; }
         public ReactiveCommand<TagItemViewModel, Unit> OpenTagForm { get; }
 
-        public override bool IsNew
-            => false;
+        public override bool IsNew => false;
 
         protected override void EnableChangeTracking()
         {
@@ -143,8 +142,8 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 });
         }
 
-        protected override IObservable<TSettings?> OnDelete()
-            => Observable.Return<TSettings?>(null);
+        protected override IObservable<TSettings?> OnDelete() =>
+            Observable.Return<TSettings?>(null);
 
         protected override void CopyProperties()
         {
@@ -241,8 +240,8 @@ namespace MovieList.Core.ViewModels.Forms.Base
             return vm;
         }
 
-        private IObservable<Unit> OnOpenTagForm(TagItemViewModel tagItem)
-            => Dialog.TagForm.Handle(new TagFormViewModel(tagItem.TagModel!, this.tagsSource.Items))
+        private IObservable<Unit> OnOpenTagForm(TagItemViewModel tagItem) =>
+            Dialog.TagForm.Handle(new TagFormViewModel(tagItem.TagModel!, this.tagsSource.Items))
                 .ObserveOn(RxApp.MainThreadScheduler);
 
         private IObservable<Unit> OnAddTag()
@@ -261,8 +260,8 @@ namespace MovieList.Core.ViewModels.Forms.Base
                 .ObserveOn(RxApp.MainThreadScheduler);
         }
 
-        private bool TagModelChanged(TagModel tagModel)
-            => this.IsTagNew(tagModel) ||
+        private bool TagModelChanged(TagModel tagModel) =>
+            this.IsTagNew(tagModel) ||
                 tagModel.Name != tagModel.Tag.Name ||
                 tagModel.Description != tagModel.Tag.Description ||
                 tagModel.Category != tagModel.Tag.Category ||

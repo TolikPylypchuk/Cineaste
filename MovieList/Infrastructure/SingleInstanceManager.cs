@@ -18,7 +18,7 @@ namespace MovieList.Infrastructure
             bool hasHandle = mutex.WaitOne(5000, false);
             if (!hasHandle)
             {
-                throw new TimeoutException("Timeout waiting for exclusive access on the mutex.");
+                throw new TimeoutException("Timeout waiting for exclusive access on the mutex");
             }
 
             return mutex;
@@ -32,7 +32,7 @@ namespace MovieList.Infrastructure
 
                 string message = Environment.GetCommandLineArgs().Length > 1
                      ? Environment.GetCommandLineArgs()[1]
-                    : String.Empty;
+                     : String.Empty;
 
                 namedPipeManager.Write(message);
             } finally

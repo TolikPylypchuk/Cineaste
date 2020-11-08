@@ -63,22 +63,22 @@ namespace MovieList.Core.ListItems
         [Reactive]
         public HighlightMode HighlightMode { get; set; }
 
-        public override bool Equals(object? obj)
-            => obj is ListItem item && this.Equals(item);
+        public override bool Equals(object? obj) =>
+            obj is ListItem item && this.Equals(item);
 
-        public bool Equals(ListItem? other)
-            => !(other is null) && (ReferenceEquals(this, other) || this.Id == other.Id);
+        public bool Equals(ListItem? other) =>
+            !(other is null) && (ReferenceEquals(this, other) || this.Id == other.Id);
 
-        public override int GetHashCode()
-            => this.Id.GetHashCode();
+        public override int GetHashCode() =>
+            this.Id.GetHashCode();
 
-        public override string ToString()
-            => $"{this.Title} ({this.Id})";
+        public override string ToString() =>
+            $"{this.Title} ({this.Id})";
 
-        public static bool operator ==(ListItem? left, ListItem? right)
-            => left?.Equals(right) ?? right is null;
+        public static bool operator ==(ListItem? left, ListItem? right) =>
+            left?.Equals(right) ?? right is null;
 
-        public static bool operator !=(ListItem? left, ListItem? right)
-            => !(left == right);
+        public static bool operator !=(ListItem? left, ListItem? right) =>
+            !(left == right);
     }
 }

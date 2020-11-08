@@ -20,56 +20,56 @@ namespace MovieList.Views.Forms
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.NumberToDisplay, v => v.DisplayNumberTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Title, v => v.TitleTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Years, v => v.YearsTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.Events().MouseLeftButtonUp
                     .Discard()
                     .InvokeCommand(this.ViewModel!.Select)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.MoveUp, v => v.MoveUpMenuItem)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel.MoveUp.CanExecute
                     .BindTo(this, v => v.MoveUpMenuItem.Visibility)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.MoveDown, v => v.MoveDownMenuItem)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel.MoveDown.CanExecute
                     .BindTo(this, v => v.MoveDownMenuItem.Visibility)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.HideDisplayNumber, v => v.HideDisplayNumberMenuItem)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel.HideDisplayNumber.CanExecute
                     .BindTo(this, v => v.HideDisplayNumberMenuItem.Visibility)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.ShowDisplayNumber, v => v.ShowDisplayNumberMenuItem)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel.ShowDisplayNumber.CanExecute
                     .BindTo(this, v => v.ShowDisplayNumberMenuItem.Visibility)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel!, vm => vm.Delete, v => v.DetachMenuItem)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.ViewModel.Delete.CanExecute
                     .BindTo(this, v => v.DetachMenuItem.Visibility)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
             });
         }
     }

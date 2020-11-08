@@ -31,20 +31,20 @@ namespace MovieList.Data.Models
         public List<Title> Titles { get; set; } = new();
 
         [Computed]
-        public Title Title
-            => this.Titles
+        public Title Title =>
+            this.Titles
                 .Where(title => !title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
         [Computed]
-        public Title OriginalTitle
-            => this.Titles
+        public Title OriginalTitle =>
+            this.Titles
                 .Where(title => title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
-        public override string ToString()
-            => $"Special Episode #{this.Id}: {Title.ToString(this.Titles)}";
+        public override string ToString() =>
+            $"Special Episode #{this.Id}: {Title.ToString(this.Titles)}";
     }
 }

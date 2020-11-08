@@ -21,12 +21,12 @@ namespace MovieList.Dialogs
             {
                 this.WhenAnyValue(v => v.ViewModel)
                     .BindTo(this, v => v.DataContext)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel!.Version)
                     .Select(version => String.Format(Messages.AboutTextFormat, version))
                     .BindTo(this, v => v.AboutTextBlock.Text)
-                    ?.DisposeWith(disposables);
+                    .DisposeWith(disposables);
 
                 this.DocsLink.NavigateUri = new Uri(Messages.DocsLink, UriKind.Absolute);
             });

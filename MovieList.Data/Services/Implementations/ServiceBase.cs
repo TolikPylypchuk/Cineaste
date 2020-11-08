@@ -9,8 +9,8 @@ namespace MovieList.Data.Services.Implementations
     {
         protected readonly string DatabasePath;
 
-        protected ServiceBase(string file)
-            => this.DatabasePath = file;
+        protected ServiceBase(string file) =>
+            this.DatabasePath = file;
 
         protected void WithTransaction(Action<IDbConnection, IDbTransaction> action)
         {

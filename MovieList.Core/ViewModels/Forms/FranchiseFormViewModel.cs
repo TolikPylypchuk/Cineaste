@@ -34,10 +34,10 @@ namespace MovieList.Core.ViewModels.Forms
     {
         private readonly IEntityService<Franchise> franchiseService;
 
-        private readonly SourceList<FranchiseEntry> entriesSource = new SourceList<FranchiseEntry>();
+        private readonly SourceList<FranchiseEntry> entriesSource = new();
         private readonly ReadOnlyObservableCollection<FranchiseEntryViewModel> entries;
 
-        private readonly SourceList<FranchiseEntry> addableItemsSource = new SourceList<FranchiseEntry>();
+        private readonly SourceList<FranchiseEntry> addableItemsSource = new();
         private readonly ReadOnlyObservableCollection<FranchiseAddableItemViewModel> addableItems;
 
         public FranchiseFormViewModel(
@@ -74,11 +74,10 @@ namespace MovieList.Core.ViewModels.Forms
 
             this.addableItemsSource.AddRange(addableItems);
 
-            this.FormTitle =
-                this.FormTitle
-                    .Select(this.GetFullFormTitle)
-                    .StartWith(this.GetFullFormTitle(
-                        this.GetFormTitle(this.Franchise.ActualTitles.FirstOrDefault()?.Name ?? String.Empty)));
+            this.FormTitle = this.FormTitle
+                .Select(this.GetFullFormTitle)
+                .StartWith(this.GetFullFormTitle(
+                    this.GetFormTitle(this.Franchise.ActualTitles.FirstOrDefault()?.Name ?? String.Empty)));
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
@@ -113,11 +112,11 @@ namespace MovieList.Core.ViewModels.Forms
 
         public Franchise Franchise { get; }
 
-        public ReadOnlyObservableCollection<FranchiseEntryViewModel> Entries
-            => this.entries;
+        public ReadOnlyObservableCollection<FranchiseEntryViewModel> Entries =>
+            this.entries;
 
-        public ReadOnlyObservableCollection<FranchiseAddableItemViewModel> AddableItems
-            => this.addableItems;
+        public ReadOnlyObservableCollection<FranchiseAddableItemViewModel> AddableItems =>
+            this.addableItems;
 
         [Reactive]
         public bool HasTitles { get; set; }
@@ -145,17 +144,15 @@ namespace MovieList.Core.ViewModels.Forms
         public ReactiveCommand<Unit, int> AddFranchise { get; }
         public ReactiveCommand<FranchiseEntry, FranchiseEntry> AddExistingItem { get; }
 
-        public override bool IsNew
-            => this.Franchise.Id == default;
+        public override bool IsNew =>
+            this.Franchise.Id == default;
 
-        protected override FranchiseFormViewModel Self
-            => this;
+        protected override FranchiseFormViewModel Self => this;
 
-        protected override ICollection<Title> ItemTitles
-            => this.Franchise.Titles;
+        protected override ICollection<Title> ItemTitles =>
+            this.Franchise.Titles;
 
-        protected override string NewItemKey
-            => "NewFranchise";
+        protected override string NewItemKey => "NewFranchise";
 
         protected override void EnableChangeTracking()
         {
@@ -176,8 +173,8 @@ namespace MovieList.Core.ViewModels.Forms
                 .Select(this.CopyPropertiesIntoModel)
                 .DoAsync(this.franchiseService.SaveInTaskPool);
 
-        protected override IObservable<Franchise?> OnDelete()
-            => Dialog.PromptToDelete(
+        protected override IObservable<Franchise?> OnDelete() =>
+            Dialog.PromptToDelete(
                 "DeleteFranchise",
                 () => this.franchiseService.DeleteInTaskPool(this.Franchise).Select(() => this.Franchise));
 
@@ -198,8 +195,8 @@ namespace MovieList.Core.ViewModels.Forms
             this.PosterUrl = this.Franchise.PosterUrl.EmptyIfNull();
         }
 
-        protected override void AttachTitle(Title title)
-            => title.Franchise = this.Franchise;
+        protected override void AttachTitle(Title title) =>
+            title.Franchise = this.Franchise;
 
         private void InitializeValueDependencies()
         {
@@ -230,8 +227,8 @@ namespace MovieList.Core.ViewModels.Forms
             return franchise.Entry == null ? title : $"{this.GetFormTitle(franchise.Entry.ParentFranchise)}: {title}";
         }
 
-        private string GetFullFormTitle(string title)
-            => this.FranchiseEntry != null
+        private string GetFullFormTitle(string title) =>
+            this.FranchiseEntry != null
                 ? $"{this.GetFormTitle(this.FranchiseEntry.ParentFranchise)}: {title}"
                 : title;
 
@@ -296,11 +293,11 @@ namespace MovieList.Core.ViewModels.Forms
             return viewModel;
         }
 
-        private void MoveEntryUp(FranchiseEntryViewModel vm)
-            => this.SwapEntryNumbers(this.Entries.First(e => e.SequenceNumber == vm.SequenceNumber - 1), vm);
+        private void MoveEntryUp(FranchiseEntryViewModel vm) =>
+            this.SwapEntryNumbers(this.Entries.First(e => e.SequenceNumber == vm.SequenceNumber - 1), vm);
 
-        private void MoveEntryDown(FranchiseEntryViewModel vm)
-            => this.SwapEntryNumbers(vm, this.Entries.First(e => e.SequenceNumber == vm.SequenceNumber + 1));
+        private void MoveEntryDown(FranchiseEntryViewModel vm) =>
+            this.SwapEntryNumbers(vm, this.Entries.First(e => e.SequenceNumber == vm.SequenceNumber + 1));
 
         private void SwapEntryNumbers(FranchiseEntryViewModel first, FranchiseEntryViewModel second)
         {
@@ -373,25 +370,25 @@ namespace MovieList.Core.ViewModels.Forms
             this.IncrementNumbers(vm.SequenceNumber);
         }
 
-        private void IncrementNumbers(int num)
-            => this.UpdateNumbers(num, n => n + 1);
+        private void IncrementNumbers(int num) =>
+            this.UpdateNumbers(num, n => n + 1);
 
-        private void DecrementNumbers(int num)
-            => this.UpdateNumbers(num, n => n - 1);
+        private void DecrementNumbers(int num) =>
+            this.UpdateNumbers(num, n => n - 1);
 
-        private void UpdateNumbers(int num, Func<int, int> update)
-            => this.Entries
+        private void UpdateNumbers(int num, Func<int, int> update) =>
+            this.Entries
                 .Where(entry => entry.SequenceNumber > num && entry.DisplayNumber.HasValue)
                 .ForEach(entry => entry.DisplayNumber = update(entry.DisplayNumber ?? 0));
 
-        private int GetFirstDisplayNumber()
-            => this.MergeDisplayNumbers
+        private int GetFirstDisplayNumber() =>
+            this.MergeDisplayNumbers
                 ? this.GetNextDisplayNumber(this.FranchiseEntry?.ParentFranchise.Entries
                     .LastOrDefault(entry => entry.SequenceNumber < this.FranchiseEntry.SequenceNumber))
                 : 1;
 
-        private void AdjustDisplayNumbers(int firstNumber)
-            => this.Entries
+        private void AdjustDisplayNumbers(int firstNumber) =>
+            this.Entries
                 .Where(entry => entry.DisplayNumber != null)
                 .ForEach((entry, index) => entry.DisplayNumber = index + firstNumber);
 
@@ -416,8 +413,8 @@ namespace MovieList.Core.ViewModels.Forms
                 .LastOrDefault(e => e.SequenceNumber < entry.SequenceNumber));
         }
 
-        private IObservable<Unit> SaveEntries()
-            => this.Entries.Count == 0
+        private IObservable<Unit> SaveEntries() =>
+            this.Entries.Count == 0
                 ? Observable.Return(Unit.Default)
                 : this.Entries
                     .Select(entry => entry.Save.Execute())

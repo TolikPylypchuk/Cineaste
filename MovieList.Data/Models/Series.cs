@@ -57,22 +57,22 @@ namespace MovieList.Data.Models
         public HashSet<Tag> Tags { get; set; } = new();
 
         [Computed]
-        public Title Title
-            => this.Titles
+        public Title Title =>
+            this.Titles
                 .Where(title => !title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
         [Computed]
-        public Title OriginalTitle
-            => this.Titles
+        public Title OriginalTitle =>
+            this.Titles
                 .Where(title => title.IsOriginal)
                 .OrderBy(title => title.Priority)
                 .First();
 
         [Computed]
-        public int StartYear
-            => Math.Min(
+        public int StartYear =>
+            Math.Min(
                 this.Seasons
                     .OrderBy(season => season.StartYear)
                     .FirstOrDefault()
@@ -86,8 +86,8 @@ namespace MovieList.Data.Models
                     ?? Int32.MaxValue);
 
         [Computed]
-        public int EndYear
-            => Math.Max(
+        public int EndYear =>
+            Math.Max(
                 this.Seasons
                     .OrderByDescending(season => season.EndYear)
                     .FirstOrDefault()
@@ -100,7 +100,7 @@ namespace MovieList.Data.Models
                     ?.Year
                     ?? Int32.MinValue);
 
-        public override string ToString()
-            => $"Series #{this.Id}: {Title.ToString(this.Titles)}";
+        public override string ToString() =>
+            $"Series #{this.Id}: {Title.ToString(this.Titles)}";
     }
 }

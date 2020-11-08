@@ -73,20 +73,18 @@ namespace MovieList.Core.ViewModels.Forms
         public ValidationHelper RottenTomatoesLinkRule { get; }
         public ValidationHelper PosterUrlRule { get; }
 
-        public override bool IsNew
-            => this.SpecialEpisode.Id == default;
+        public override bool IsNew =>
+            this.SpecialEpisode.Id == default;
 
-        protected override SpecialEpisodeFormViewModel Self
-            => this;
+        protected override SpecialEpisodeFormViewModel Self => this;
 
-        protected override ICollection<Title> ItemTitles
-            => this.SpecialEpisode.Titles;
+        protected override ICollection<Title> ItemTitles =>
+            this.SpecialEpisode.Titles;
 
-        protected override string NewItemKey
-            => "NewSpecialEpisode";
+        protected override string NewItemKey => "NewSpecialEpisode";
 
-        public override int GetNextYear()
-            => this.Year + 1;
+        public override int GetNextYear() =>
+            this.Year + 1;
 
         protected override void EnableChangeTracking()
         {
@@ -102,8 +100,8 @@ namespace MovieList.Core.ViewModels.Forms
             base.EnableChangeTracking();
         }
 
-        protected override IObservable<SpecialEpisode> OnSave()
-            => this.SaveTitles()
+        protected override IObservable<SpecialEpisode> OnSave() =>
+            this.SaveTitles()
                 .Select(() =>
                 {
                     this.SpecialEpisode.Month = this.Month;
@@ -118,8 +116,8 @@ namespace MovieList.Core.ViewModels.Forms
                     return this.SpecialEpisode;
                 });
 
-        protected override IObservable<SpecialEpisode?> OnDelete()
-            => Dialog.PromptToDelete("DeleteSpecialEpisode", () => Observable.Return(this.SpecialEpisode));
+        protected override IObservable<SpecialEpisode?> OnDelete() =>
+            Dialog.PromptToDelete("DeleteSpecialEpisode", () => Observable.Return(this.SpecialEpisode));
 
         protected override void CopyProperties()
         {
@@ -135,8 +133,8 @@ namespace MovieList.Core.ViewModels.Forms
             this.PosterUrl = this.SpecialEpisode.PosterUrl.EmptyIfNull();
         }
 
-        protected override void AttachTitle(Title title)
-            => title.SpecialEpisode = this.SpecialEpisode;
+        protected override void AttachTitle(Title title) =>
+            title.SpecialEpisode = this.SpecialEpisode;
 
         private void InitializeValueDependencies()
         {

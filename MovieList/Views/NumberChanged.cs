@@ -16,5 +16,4 @@ namespace MovieList.Views
     }
 
     public delegate void NumberChangedEventHandler(object sender, NumberChangedEventArgs e);
-
 }

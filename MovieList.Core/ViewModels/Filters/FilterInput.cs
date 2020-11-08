@@ -18,7 +18,7 @@ namespace MovieList.Core.ViewModels.Filters
         [Reactive]
         public string Description { get; set; } = String.Empty;
 
-        public IObservable<Unit> InputChanged
-            => this.inputChanged.AsObservable();
+        public IObservable<Unit> InputChanged =>
+            this.inputChanged.AsObservable();
     }
 }

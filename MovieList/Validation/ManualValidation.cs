@@ -25,13 +25,13 @@ namespace MovieList.Validation
                 bindingExpression ?? throw new InvalidOperationException(), validationError);
         }
 
-        public static void ClearValidation(FrameworkElement element)
-            => BindingOperations.ClearBinding(element, DummyProperty);
+        public static void ClearValidation(FrameworkElement element) =>
+            BindingOperations.ClearBinding(element, DummyProperty);
 
         private class DummyValidationRule : ValidationRule
         {
-            public override ValidationResult Validate(object value, CultureInfo cultureInfo)
-                => throw new NotSupportedException("This is a dummy validation rule.");
+            public override ValidationResult Validate(object value, CultureInfo cultureInfo) =>
+            throw new NotSupportedException("This is a dummy validation rule");
         }
     }
 }
