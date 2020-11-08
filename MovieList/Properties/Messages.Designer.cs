@@ -277,6 +277,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply sorting.
+        /// </summary>
+        public static string ApplySorting {
+            get {
+                return ResourceManager.GetString("ApplySorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to April.
         /// </summary>
         public static string April {
@@ -724,6 +733,15 @@ namespace MovieList.Properties {
         public static string Detach {
             get {
                 return ResourceManager.GetString("Detach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Direction.
+        /// </summary>
+        public static string Direction {
+            get {
+                return ResourceManager.GetString("Direction", resourceCulture);
             }
         }
         
@@ -1214,6 +1232,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First Sorting.
+        /// </summary>
+        public static string FirstSorting {
+            get {
+                return ResourceManager.GetString("FirstSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Franchise.
         /// </summary>
         public static string Franchise {
@@ -1394,7 +1421,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asc.
+        ///   Looks up a localized string similar to Ascending.
         /// </summary>
         public static string ListSortDirectionAscending {
             get {
@@ -1403,7 +1430,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Desc.
+        ///   Looks up a localized string similar to Descending.
         /// </summary>
         public static string ListSortDirectionDescending {
             get {
@@ -2078,6 +2105,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Second Sorting.
+        /// </summary>
+        public static string SecondSorting {
+            get {
+                return ResourceManager.GetString("SecondSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to September.
         /// </summary>
         public static string September {
@@ -2236,6 +2272,15 @@ namespace MovieList.Properties {
         public static string Sort {
             get {
                 return ResourceManager.GetString("Sort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorting.
+        /// </summary>
+        public static string Sorting {
+            get {
+                return ResourceManager.GetString("Sorting", resourceCulture);
             }
         }
         

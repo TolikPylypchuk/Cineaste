@@ -29,9 +29,10 @@ namespace MovieList.Core.Comparers
             this.stringComparer.GetHashCode(x);
 
         protected override int CompareSafe(string x, string y) =>
-            this.comparer.Compare(
-                NumberRegex.Split(this.Normalize(x)).Select(this.Convert),
-                NumberRegex.Split(this.Normalize(y)).Select(this.Convert));
+            this.comparer.Compare(this.NormalizeAndConvert(x), this.NormalizeAndConvert(y));
+
+        private IEnumerable<object> NormalizeAndConvert(string title) =>
+            NumberRegex.Split(this.Normalize(title)).Select(this.Convert);
 
         private string Normalize(string title) =>
             title.ToLower()

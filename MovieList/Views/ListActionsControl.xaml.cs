@@ -31,6 +31,9 @@ namespace MovieList.Views
 
                 this.OneWayBind(this.ViewModel!, vm => vm.Filter, v => v.FilterViewHost.ViewModel)
                     .DisposeWith(disposables);
+
+                this.OneWayBind(this.ViewModel!, vm => vm.Sort, v => v.SortViewHost.ViewModel)
+                    .DisposeWith(disposables);
             });
         }
     }

@@ -3,6 +3,7 @@
                               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                               xmlns:rx="http://reactiveui.net"
                               xmlns:local="clr-namespace:MovieList.Views"
+                              xmlns:c="clr-namespace:MovieList.Converters"
                               xmlns:l="clr-namespace:MovieList.Localization">
     <Grid HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
@@ -24,12 +25,47 @@
         </StackPanel>
 
         <TabControl Grid.Row="1" Style="{StaticResource MaterialDesignTabControl}">
+            <TabControl.Resources>
+                <c:TabSizeConverter x:Key="TabSizeConverter" />
+            </TabControl.Resources>
+
             <TabItem Header="{l:Translate Search}">
                 <rx:ViewModelViewHost x:Name="SearchViewHost" />
+
+                <TabItem.Width>
+                    <MultiBinding Converter="{StaticResource TabSizeConverter}">
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,
+                            AncestorType={x:Type TabControl}}" />
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,
+                            AncestorType={x:Type TabControl}}" Path="ActualWidth" />
+                    </MultiBinding>
+                </TabItem.Width>
             </TabItem>
 
             <TabItem Header="{l:Translate Filter}">
                 <rx:ViewModelViewHost x:Name="FilterViewHost" />
+
+                <TabItem.Width>
+                    <MultiBinding Converter="{StaticResource TabSizeConverter}">
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,
+                            AncestorType={x:Type TabControl}}" />
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,
+                            AncestorType={x:Type TabControl}}" Path="ActualWidth" />
+                    </MultiBinding>
+                </TabItem.Width>
+            </TabItem>
+
+            <TabItem Header="{l:Translate Sort}">
+                <rx:ViewModelViewHost x:Name="SortViewHost" />
+
+                <TabItem.Width>
+                    <MultiBinding Converter="{StaticResource TabSizeConverter}">
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,
+                            AncestorType={x:Type TabControl}}" />
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,
+                            AncestorType={x:Type TabControl}}" Path="ActualWidth" />
+                    </MultiBinding>
+                </TabItem.Width>
             </TabItem>
         </TabControl>
     </Grid>

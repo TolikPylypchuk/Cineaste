@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -6,24 +7,34 @@ using MovieList.Core.Data.Models;
 using MovieList.Core.ListItems;
 using MovieList.Data.Models;
 
+using Nito.Comparers;
+
 namespace MovieList.Core.Comparers
 {
     public sealed class ListItemTitleComparer : NullableComparerBase<ListItem>
     {
         private readonly TitleComparer titleComparer;
+        private readonly IComparer<ListItem> otherComparer;
+        private readonly IComparer<ListItem> titleAndOtherComparer;
         private readonly Func<ListItem, string> getTitle;
         private readonly Func<Franchise, string> getFranchiseTitle;
 
         public ListItemTitleComparer(
             CultureInfo culture,
+            IComparer<ListItem> otherComparer,
             Func<ListItem, string> getTitle,
             Func<Franchise, string> getFranchiseTitle,
             NullComparison nullComparison = NullComparison.NullsFirst)
             : base(nullComparison)
         {
-            this.titleComparer = new TitleComparer(culture);
             this.getTitle = getTitle;
             this.getFranchiseTitle = getFranchiseTitle;
+
+            this.titleComparer = new TitleComparer(culture);
+            this.otherComparer = otherComparer;
+            this.titleAndOtherComparer = ComparerBuilder.For<ListItem>()
+                .OrderBy(this.getTitle, this.titleComparer)
+                .ThenBy(otherComparer);
         }
 
         protected override bool EqualsSafe(ListItem x, ListItem y) =>
@@ -101,6 +112,11 @@ namespace MovieList.Core.Comparers
                 result = this.titleComparer.Compare(
                     this.getFranchiseTitle(left.Franchise),
                     this.getFranchiseTitle(right.Franchise));
+
+                if (result == 0)
+                {
+                    result = this.otherComparer.Compare(left, right);
+                }
             } else
             {
                 return this.Compare(
@@ -179,9 +195,12 @@ namespace MovieList.Core.Comparers
         }
 
         private int CompareTitle(ListItem left, ListItem right) =>
-            this.titleComparer.Compare(this.getTitle(left), this.getTitle(right));
+            this.titleAndOtherComparer.Compare(left, right);
 
-        private int CompareTitle(FranchiseListItem left, ListItem right) =>
-            this.titleComparer.Compare(this.getFranchiseTitle(left.Franchise), this.getTitle(right));
+        private int CompareTitle(FranchiseListItem left, ListItem right)
+        {
+            int result = this.titleComparer.Compare(this.getFranchiseTitle(left.Franchise), this.getTitle(right));
+            return result != 0 ? result : this.otherComparer.Compare(left, right);
+        }
     }
 }

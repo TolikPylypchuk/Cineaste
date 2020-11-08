@@ -61,12 +61,12 @@ namespace MovieList.Views
             return image;
         }
 
-        public static void AddEnumValues<TEnum>(this ComboBox comboBox)
+        public static void AddEnumValues<TEnum>(this ComboBox comboBox, params TEnum[] values)
             where TEnum : struct, Enum
         {
             var converter = Locator.Current.GetService<IEnumConverter<TEnum>>();
 
-            Enum.GetValues<TEnum>()
+            (values.Length != 0 ? values : Enum.GetValues<TEnum>())
                 .Select(converter.ToString)
                 .ForEach(status => comboBox.Items.Add(status));
         }
