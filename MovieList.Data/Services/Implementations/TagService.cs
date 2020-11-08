@@ -92,6 +92,16 @@ namespace MovieList.Data.Services.Implementations
                 otherTag.InferredTags.Remove(tag);
             }
 
+            foreach (var movie in tag.Movies)
+            {
+                movie.Tags.Remove(tag);
+            }
+
+            foreach (var series in tag.Series)
+            {
+                series.Tags.Remove(tag);
+            }
+
             connection.Execute(
                 "DELETE FROM TagImplications WHERE PremiseId = @Id OR ConsequenceId = @Id",
                 new { tag.Id },
@@ -99,7 +109,6 @@ namespace MovieList.Data.Services.Implementations
 
             connection.Execute("DELETE FROM MovieTags WHERE TagId = @Id", new { tag.Id }, transaction);
             connection.Execute("DELETE FROM SeriesTags WHERE TagId = @Id", new { tag.Id }, transaction);
-            connection.Execute("DELETE FROM FranchiseTags WHERE TagId = @Id", new { tag.Id }, transaction);
         }
     }
 }

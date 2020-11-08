@@ -44,9 +44,9 @@ namespace MovieList.Data.Services.Implementations
         {
             var entityList = entities.ToList();
 
-            var dbEntities = connection.GetAll<TEntity>(transaction).ToList();
+            var dbEntities = connection.GetAll<TEntity>(transaction).ToHashSet(IdEqualityComparer<TEntity>.Instance);
 
-            var entitiesToInsert = entityList.Except(dbEntities, IdEqualityComparer<TEntity>.Instance).ToList();
+            var entitiesToInsert = entityList.Where(e => !dbEntities.Contains(e)).ToList();
 
             foreach (var entityToInsert in entitiesToInsert)
             {
