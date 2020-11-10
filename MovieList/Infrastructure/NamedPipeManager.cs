@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Pipes;
 using System.Reactive.Linq;
@@ -59,6 +60,7 @@ namespace MovieList.Infrastructure
             return true;
         }
 
+        [DoesNotReturn]
         private void WaitForMessages()
         {
             while (true)

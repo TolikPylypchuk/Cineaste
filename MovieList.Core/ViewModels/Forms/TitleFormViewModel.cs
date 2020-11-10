@@ -44,7 +44,7 @@ namespace MovieList.Core.ViewModels.Forms
         public Title Title { get; }
 
         [Reactive]
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = String.Empty;
 
         [Reactive]
         public int Priority { get; set; }

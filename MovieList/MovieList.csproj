@@ -4,7 +4,6 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
-    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <Platforms>x64</Platforms>
@@ -32,9 +31,9 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="Splat" Version="9.6.1" />
     <PackageReference Include="Splat.Serilog" Version="9.6.1" />
-    <PackageReference Include="System.Interactive" Version="4.1.1" />
-    <PackageReference Include="System.Interactive.Async" Version="4.1.1" />
-    <PackageReference Include="System.Reactive" Version="4.4.1" />
+    <PackageReference Include="System.Interactive" Version="5.0.0" />
+    <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

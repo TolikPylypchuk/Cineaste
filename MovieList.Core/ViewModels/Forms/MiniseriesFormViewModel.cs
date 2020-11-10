@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -66,7 +67,7 @@ namespace MovieList.Core.ViewModels.Forms
         public ReadOnlyObservableCollection<Kind> Kinds { get; }
 
         [Reactive]
-        public Kind Kind { get; set; } = null!;
+        public Kind Kind { get; set; }
 
         [Reactive]
         public bool IsAnthology { get; set; }
@@ -81,7 +82,7 @@ namespace MovieList.Core.ViewModels.Forms
         public string Channel { get; set; } = String.Empty;
 
         [Reactive]
-        public PeriodFormViewModel PeriodForm { get; set; } = null!;
+        public PeriodFormViewModel PeriodForm { get; set; }
 
         [Reactive]
         public string ImdbLink { get; set; } = String.Empty;
@@ -145,6 +146,7 @@ namespace MovieList.Core.ViewModels.Forms
             Dialog.PromptToDelete(
                 "DeleteSeries", () => this.seriesService.DeleteInTaskPool(this.Series).Select(() => this.Series));
 
+        [MemberNotNull(new[] { nameof(Kind), nameof(PeriodForm) })]
         protected override void CopyProperties()
         {
             base.CopyProperties();

@@ -28,7 +28,7 @@ namespace MovieList.Core.ViewModels
     {
         private readonly ISourceCache<ListItem, string> source;
         private readonly ReadOnlyObservableCollection<ListItemViewModel> items;
-        private readonly Subject<Unit> resort = new Subject<Unit>();
+        private readonly Subject<Unit> resort = new();
 
         public ListViewModel(
             string fileName,

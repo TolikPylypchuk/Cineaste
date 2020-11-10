@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
@@ -62,7 +63,7 @@ namespace MovieList.Core.ViewModels.Forms
         public int Year { get; set; }
 
         [Reactive]
-        public Kind Kind { get; set; } = null!;
+        public Kind Kind { get; set; }
 
         [Reactive]
         public bool IsWatched { get; set; }
@@ -137,6 +138,7 @@ namespace MovieList.Core.ViewModels.Forms
             Dialog.PromptToDelete(
                 "DeleteMovie", () => this.movieService.DeleteInTaskPool(this.Movie).Select(() => this.Movie));
 
+        [MemberNotNull(nameof(Kind))]
         protected override void CopyProperties()
         {
             base.CopyProperties();

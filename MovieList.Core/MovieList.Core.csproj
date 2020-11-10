@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>MovieList.Core</RootNamespace>
     <Platforms>x64</Platforms>
@@ -28,9 +27,9 @@
     <PackageReference Include="ReactiveUI.Fody" Version="12.1.5" />
     <PackageReference Include="ReactiveUI.Validation" Version="1.8.6" />
     <PackageReference Include="Splat" Version="9.6.1" />
-    <PackageReference Include="System.Interactive" Version="4.1.1" />
-    <PackageReference Include="System.Interactive.Async" Version="4.1.1" />
-    <PackageReference Include="System.Reactive" Version="4.4.1" />
+    <PackageReference Include="System.Interactive" Version="5.0.0" />
+    <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="ToString.Fody" Version="1.11.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

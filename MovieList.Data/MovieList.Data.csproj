@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <Platforms>x64</Platforms>
     <AssemblyVersion>0.2.0.0</AssemblyVersion>
@@ -32,14 +31,14 @@
     <PackageReference Include="MethodDecorator.Fody" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.0-rc.2.20475.6" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.0" />
     <PackageReference Include="Resourcer.Fody" Version="1.8.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Splat" Version="9.6.1" />
-    <PackageReference Include="System.Interactive" Version="4.1.1" />
-    <PackageReference Include="System.Interactive.Async" Version="4.1.1" />
-    <PackageReference Include="System.Reactive" Version="4.4.1" />
+    <PackageReference Include="System.Interactive" Version="5.0.0" />
+    <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
