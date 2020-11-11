@@ -85,24 +85,14 @@
                                   Margin="0 0 8 0" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   m:HintAssist.Hint="{l:Translate WatchStatus}" />
 
-                        <CheckBox x:Name="IsAnthologyCheckBox" Grid.Column="1" Content="{l:Translate Anthology}"
-                                  Margin="8 0 0 0" VerticalAlignment="Center" />
-                    </Grid>
-
-                    <Grid Margin="0 8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-
-                        <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="0" HorizontalAlignment="Stretch"
-                                  Margin="0 0 8 0" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        <ComboBox x:Name="ReleaseStatusComboBox" Grid.Column="1" HorizontalAlignment="Stretch"
+                                  Margin="8 0 0 0" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   m:HintAssist.Hint="{l:Translate ReleaseStatus}" />
-
-                        <ComboBox x:Name="KindComboBox" Grid.Column="1" HorizontalAlignment="Stretch" Margin="8 0 0 0"
-                                  DisplayMemberPath="Name" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                                  m:HintAssist.Hint="{l:Translate Kind}" />
                     </Grid>
+
+                    <ComboBox x:Name="KindComboBox" HorizontalAlignment="Stretch" Margin="0 8"
+                              DisplayMemberPath="Name" Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              m:HintAssist.Hint="{l:Translate Kind}" />
 
                     <ItemsControl x:Name="Components" Margin="0 8" Grid.IsSharedSizeScope="True" />
 

@@ -162,9 +162,6 @@
   <data name="Animation" xml:space="preserve">
     <value>Animation</value>
   </data>
-  <data name="Anthology" xml:space="preserve">
-    <value>Anthology</value>
-  </data>
   <data name="April" xml:space="preserve">
     <value>April</value>
   </data>
@@ -828,9 +825,6 @@ This will detach all entries without deleting them.</value>
   </data>
   <data name="FilterTypeMovieWatched" xml:space="preserve">
     <value>Watched (movies only)</value>
-  </data>
-  <data name="FilterTypeSeriesAnthology" xml:space="preserve">
-    <value>Anthology (series only)</value>
   </data>
   <data name="FilterTypeSeriesChannel" xml:space="preserve">
     <value>Channel (series only)</value>

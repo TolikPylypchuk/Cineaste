@@ -21,8 +21,7 @@ namespace MovieList.Core.ViewModels.Filters
         BySeriesChannel,
         BySeriesNumberOfSeasons,
         BySeriesNumberOfEpisodes,
-        BySeriesIsMiniseries,
-        BySeriesIsAnthology
+        BySeriesIsMiniseries
     }
 
     public enum FilterOperation
@@ -68,8 +67,7 @@ namespace MovieList.Core.ViewModels.Filters
                 .Add(BySeriesChannel, textOperations)
                 .Add(BySeriesNumberOfSeasons, numberOperations)
                 .Add(BySeriesNumberOfEpisodes, numberOperations)
-                .Add(BySeriesIsMiniseries, noOperations)
-                .Add(BySeriesIsAnthology, noOperations);
+                .Add(BySeriesIsMiniseries, noOperations);
         }
 
         private static ImmutableList<FilterOperation> Operations(params FilterOperation[] ops) =>

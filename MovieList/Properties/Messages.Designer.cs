@@ -232,15 +232,6 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Anthology.
-        /// </summary>
-        public static string Anthology {
-            get {
-                return ResourceManager.GetString("Anthology", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Applicable to franchises.
         /// </summary>
         public static string ApplicableToFranchises {
@@ -1111,15 +1102,6 @@ namespace MovieList.Properties {
         public static string FilterTypeSeries {
             get {
                 return ResourceManager.GetString("FilterTypeSeries", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Anthology (series only).
-        /// </summary>
-        public static string FilterTypeSeriesAnthology {
-            get {
-                return ResourceManager.GetString("FilterTypeSeriesAnthology", resourceCulture);
             }
         }
         

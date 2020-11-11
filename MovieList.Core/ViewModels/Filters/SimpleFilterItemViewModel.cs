@@ -214,8 +214,6 @@ namespace MovieList.Core.ViewModels.Filters
 
                 (BySeriesIsMiniseries, _, _) => this.SeriesIsMiniseries(),
 
-                (BySeriesIsAnthology, _, _) => this.SeriesIsAnthology(),
-
                 _ => NoFilter
             };
 
@@ -474,9 +472,6 @@ namespace MovieList.Core.ViewModels.Filters
 
         private Filter SeriesIsMiniseries() =>
             this.CreateSeriesFilter(series => series.IsMiniseries);
-
-        private Filter SeriesIsAnthology() =>
-            this.CreateSeriesFilter(series => series.IsAnthology);
 
         private Filter CreateSeriesFilter(Func<Series, bool> predicate) =>
             this.CreateFilter(movie => false, predicate);

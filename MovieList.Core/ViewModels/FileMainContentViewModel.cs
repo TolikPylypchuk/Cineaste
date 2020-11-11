@@ -493,7 +493,6 @@ namespace MovieList.Core.ViewModels
             var miniseriesForm = this.CreateMiniseriesForm(seriesForm.Series);
 
             miniseriesForm.Kind = seriesForm.Kind;
-            miniseriesForm.IsAnthology = seriesForm.IsAnthology;
             miniseriesForm.WatchStatus = seriesForm.WatchStatus;
             miniseriesForm.ReleaseStatus = seriesForm.ReleaseStatus;
             miniseriesForm.ImdbLink = seriesForm.ImdbLink;
@@ -528,7 +527,6 @@ namespace MovieList.Core.ViewModels
             var seriesForm = this.CreateSeriesForm(miniseriesForm.Series);
 
             seriesForm.Kind = miniseriesForm.Kind;
-            seriesForm.IsAnthology = miniseriesForm.IsAnthology;
             seriesForm.WatchStatus = miniseriesForm.WatchStatus;
             seriesForm.ReleaseStatus = miniseriesForm.ReleaseStatus;
             seriesForm.ImdbLink = miniseriesForm.ImdbLink;

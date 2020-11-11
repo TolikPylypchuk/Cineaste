@@ -174,9 +174,6 @@ namespace MovieList.Views.Forms
             this.Bind(this.ViewModel, vm => vm.WatchStatus, v => v.WatchStatusComboBox.SelectedItem)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.IsAnthology, v => v.IsAnthologyCheckBox.IsChecked)
-                .DisposeWith(disposables);
-
             this.ReleaseStatusComboBox.AddEnumValues<SeriesReleaseStatus>();
 
             this.Bind(this.ViewModel, vm => vm.ReleaseStatus, v => v.ReleaseStatusComboBox.SelectedItem)

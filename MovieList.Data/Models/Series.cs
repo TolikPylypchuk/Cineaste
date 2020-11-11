@@ -27,7 +27,6 @@ namespace MovieList.Data.Models
     public sealed class Series : EntityBase
     {
         public bool IsMiniseries { get; set; }
-        public bool IsAnthology { get; set; }
 
         public SeriesWatchStatus WatchStatus { get; set; } = SeriesWatchStatus.NotWatched;
         public SeriesReleaseStatus ReleaseStatus { get; set; } = SeriesReleaseStatus.NotStarted;

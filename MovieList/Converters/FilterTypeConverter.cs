@@ -24,8 +24,7 @@ namespace MovieList.Converters
                 [FilterType.BySeriesChannel] = Messages.FilterTypeSeriesChannel,
                 [FilterType.BySeriesNumberOfSeasons] = Messages.FilterTypeSeriesNumberOfSeasons,
                 [FilterType.BySeriesNumberOfEpisodes] = Messages.FilterTypeSeriesNumberOfEpisodes,
-                [FilterType.BySeriesIsMiniseries] = Messages.FilterTypeSeriesMiniseries,
-                [FilterType.BySeriesIsAnthology] = Messages.FilterTypeSeriesAnthology
+                [FilterType.BySeriesIsMiniseries] = Messages.FilterTypeSeriesMiniseries
             };
     }
 }

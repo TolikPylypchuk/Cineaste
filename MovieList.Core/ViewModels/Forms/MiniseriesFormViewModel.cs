@@ -70,9 +70,6 @@ namespace MovieList.Core.ViewModels.Forms
         public Kind Kind { get; set; }
 
         [Reactive]
-        public bool IsAnthology { get; set; }
-
-        [Reactive]
         public SeriesWatchStatus WatchStatus { get; set; }
 
         [Reactive]
@@ -118,7 +115,6 @@ namespace MovieList.Core.ViewModels.Forms
             this.TrackChanges(vm => vm.WatchStatus, vm => vm.Series.WatchStatus);
             this.TrackChanges(vm => vm.ReleaseStatus, vm => vm.Series.ReleaseStatus);
             this.TrackChanges(vm => vm.Kind, vm => vm.Series.Kind);
-            this.TrackChanges(vm => vm.IsAnthology, vm => vm.Series.IsAnthology);
             this.TrackChanges(vm => vm.ImdbLink, vm => vm.Series.ImdbLink.EmptyIfNull());
             this.TrackChanges(vm => vm.RottenTomatoesLink, vm => vm.Series.RottenTomatoesLink.EmptyIfNull());
             this.TrackChanges(vm => vm.PosterUrl, vm => vm.Series.PosterUrl.EmptyIfNull());
@@ -169,7 +165,6 @@ namespace MovieList.Core.ViewModels.Forms
             };
 
             this.Kind = this.Series.Kind;
-            this.IsAnthology = this.Series.IsAnthology;
             this.WatchStatus = this.Series.WatchStatus;
             this.ReleaseStatus = this.Series.ReleaseStatus;
             this.Channel = this.Series.Seasons.Count == 1 ? this.Series.Seasons[0].Channel : String.Empty;
@@ -187,7 +182,6 @@ namespace MovieList.Core.ViewModels.Forms
         private Series CopyPropertiesIntoModel()
         {
             this.Series.IsMiniseries = true;
-            this.Series.IsAnthology = this.IsAnthology;
             this.Series.WatchStatus = this.WatchStatus;
             this.Series.ReleaseStatus = this.ReleaseStatus;
             this.Series.Kind = this.Kind;
