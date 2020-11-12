@@ -6,9 +6,6 @@
                              xmlns:l="clr-namespace:MovieList.Localization">
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom">
-            <TextBlock x:Name="FoundItemsCountTextBlock" Margin="8"
-                       Style="{StaticResource MaterialDesignBody1TextBlock}" />
-
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="FindNextButton" Content="{l:Translate FindNext, ToUpper=True}" Margin="8"
                         HorizontalAlignment="Center" />
@@ -25,7 +22,21 @@
         </StackPanel>
 
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <rx:ViewModelViewHost x:Name="FilterItemViewHost" Margin="4" VerticalAlignment="Top" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                
+                <rx:ViewModelViewHost x:Name="FilterItemViewHost" Grid.Row="0" Margin="4" VerticalAlignment="Top" />
+
+                <TextBlock x:Name="FoundItemsCountTextBlock" Grid.Row="1" Margin="8"
+                           Style="{StaticResource MaterialDesignBody1TextBlock}" />
+
+                <ListBox x:Name="SearchResults" Grid.Row="2" VirtualizingStackPanel.IsVirtualizing="True"
+                         Margin="4" MaxHeight="400" VerticalAlignment="Top" />
+            </Grid>
         </ScrollViewer>
     </DockPanel>
 </local:ListSearchControlBase>

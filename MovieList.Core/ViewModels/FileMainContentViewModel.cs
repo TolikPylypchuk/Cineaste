@@ -196,6 +196,7 @@ namespace MovieList.Core.ViewModels
 
             viewModel.Search.FindNext
                 .Merge(viewModel.Search.FindPrevious)
+                .Merge(viewModel.Search.FindManual)
                 .WhereNotNull()
                 .Subscribe(findObserver);
 

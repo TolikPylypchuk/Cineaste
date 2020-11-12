@@ -27,7 +27,7 @@ namespace MovieList.Views
             Messages.November,
             Messages.December
         };
-
+        
         public static readonly DependencyProperty TripleClickSelectAllProperty = DependencyProperty.RegisterAttached(
             "TripleClickSelectAll",
             typeof(bool),

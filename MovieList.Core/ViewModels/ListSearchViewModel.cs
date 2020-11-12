@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using DynamicData;
 using DynamicData.Binding;
@@ -15,6 +16,8 @@ using MovieList.Data.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using Splat;
+
 namespace MovieList.Core.ViewModels
 {
     public sealed class ListSearchViewModel : FilterItemHolder
@@ -25,6 +28,7 @@ namespace MovieList.Core.ViewModels
 
         private readonly SourceList<ListItemViewModel> foundItemsSource = new();
         private readonly ReadOnlyObservableCollection<ListItemViewModel> foundItems;
+        private readonly ReadOnlyObservableCollection<ListSearchResultViewModel> searchResults;
 
         private bool shouldUpdateFilter;
 
@@ -41,12 +45,19 @@ namespace MovieList.Core.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
+            this.foundItemsSource.Connect()
+                .Transform(item => new ListSearchResultViewModel(item))
+                .Bind(out this.searchResults)
+                .DisposeMany()
+                .Subscribe();
+
             this.listItems.ToObservableChangeSet()
                 .Discard()
                 .Subscribe(this.ShouldUpdateFilter);
 
             this.FindNext = ReactiveCommand.Create(this.OnFindNext);
             this.FindPrevious = ReactiveCommand.Create(this.OnFindPrevious);
+            this.FindManual = ReactiveCommand.Create<ListSearchResultViewModel, ListItemViewModel>(this.OnFindManual);
             this.StopSearch = ReactiveCommand.Create(this.OnStopSearch);
 
             this.Clear.InvokeCommand(this.StopSearch);
@@ -57,10 +68,25 @@ namespace MovieList.Core.ViewModels
                 .Merge(this.StopSearch.Select(_ => false))
                 .Merge(this.Clear.Select(_ => false))
                 .ToPropertyEx(this, v => v.IsSearchInitialized, initialValue: false);
+
+            var isFinding = this.FindNext.IsExecuting
+                .Merge(this.FindPrevious.IsExecuting)
+                .DistinctUntilChanged()
+                .Skip(1);
+
+            this.WhenAnyValue(v => v.CurrentResult)
+                .SkipUntil(isFinding.Where(finding => !finding))
+                .TakeUntil(isFinding.Where(finding => finding))
+                .Repeat()
+                .WhereNotNull()
+                .InvokeCommand(this.FindManual);
         }
 
         [Reactive]
         public int CurrentIndex { get; private set; } = NoIndex;
+
+        [Reactive]
+        public ListSearchResultViewModel? CurrentResult { get; private set; }
 
         [Reactive]
         public int TotalSearchedItemsCount { get; private set; } = 0;
@@ -70,8 +96,12 @@ namespace MovieList.Core.ViewModels
         public ReadOnlyObservableCollection<ListItemViewModel> FoundItems =>
             this.foundItems;
 
+        public ReadOnlyObservableCollection<ListSearchResultViewModel> SearchResults =>
+            this.searchResults;
+
         public ReactiveCommand<Unit, ListItemViewModel?> FindNext { get; }
         public ReactiveCommand<Unit, ListItemViewModel?> FindPrevious { get; }
+        public ReactiveCommand<ListSearchResultViewModel, ListItemViewModel> FindManual { get; }
         public ReactiveCommand<Unit, Unit> StopSearch { get; }
 
         protected override void AddSubscriptions(
@@ -122,10 +152,24 @@ namespace MovieList.Core.ViewModels
 
             this.CurrentIndex = nextIndex();
 
-            var result = this.foundItems[this.CurrentIndex];
-            result.Item.HighlightMode = HighlightMode.Full;
+            var item = this.foundItems[this.CurrentIndex];
+            item.Item.HighlightMode = HighlightMode.Full;
 
-            return result;
+            this.CurrentResult = this.searchResults[this.CurrentIndex];
+
+            return item;
+        }
+
+        private ListItemViewModel OnFindManual(ListSearchResultViewModel result)
+        {
+            this.foundItems[this.CurrentIndex].Item.HighlightMode = HighlightMode.Partial;
+
+            this.CurrentIndex = this.searchResults.IndexOf(result);
+
+            var item = this.foundItems[this.CurrentIndex];
+            item.Item.HighlightMode = HighlightMode.Full;
+
+            return result.Item;
         }
 
         private void UpdateFilter()

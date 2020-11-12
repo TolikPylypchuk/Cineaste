@@ -45,6 +45,8 @@ namespace MovieList.Core.ViewModels
 
             this.source = new SourceCache<ListItem, string>(item => item.Id);
 
+            this.Find = find;
+
             this.MovieList = listService.GetList(kinds, tags);
             this.source.AddOrUpdate(this.MovieList.ToListItems());
             this.Log().Debug($"Loaded the list of {this.source.Count} items");
@@ -75,10 +77,7 @@ namespace MovieList.Core.ViewModels
             this.RemoveSeries = ReactiveCommand.Create<Series>(this.OnRemoveSeries);
             this.RemoveFranchise = ReactiveCommand.Create<Franchise>(this.OnRemoveFranchise);
 
-            this.Find = ReactiveCommand.Create<ListItemViewModel, ListItemViewModel>(vm => vm);
-
             this.AddOrUpdate.InvokeCommand(this.SelectItem);
-            find.InvokeCommand(this.Find);
         }
 
         public ReadOnlyObservableCollection<ListItemViewModel> Items =>
@@ -100,7 +99,7 @@ namespace MovieList.Core.ViewModels
         public ReactiveCommand<Series, Unit> RemoveSeries { get; }
         public ReactiveCommand<Franchise, Unit> RemoveFranchise { get; }
 
-        public ReactiveCommand<ListItemViewModel, ListItemViewModel> Find { get; }
+        public IObservable<ListItemViewModel> Find { get; }
 
         private bool OnSelectItem(ListItem? item)
         {

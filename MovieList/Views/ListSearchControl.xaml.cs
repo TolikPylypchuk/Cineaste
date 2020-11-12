@@ -52,6 +52,16 @@ namespace MovieList.Views
                     this.FoundItemsCountMessage)
                     .BindTo(this, v => v.FoundItemsCountTextBlock.Text)
                     .DisposeWith(disposables);
+
+                this.OneWayBind(this.ViewModel, vm => vm.SearchResults, v => v.SearchResults.ItemsSource)
+                    .DisposeWith(disposables);
+
+                this.Bind(this.ViewModel, vm => vm.CurrentResult, v => v.SearchResults.SelectedItem)
+                    .DisposeWith(disposables);
+
+                this.WhenAnyValue(v => v.SearchResults.SelectedItem)
+                    .Subscribe(this.SearchResults.ScrollIntoView)
+                    .DisposeWith(disposables);
             });
         }
 
