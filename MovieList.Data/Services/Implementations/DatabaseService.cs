@@ -118,6 +118,26 @@ namespace MovieList.Data.Services.Implementations
                 {
                     Key = SettingsDefaultSeasonOriginalTitleKey,
                     Value = settings.DefaultSeasonOriginalTitle
+                },
+                new Setting
+                {
+                    Key = SettingsDefaultFirstSortOrderKey,
+                    Value = settings.DefaultFirstSortOrder.ToString()
+                },
+                new Setting
+                {
+                    Key = SettingsDefaultSecondSortOrderKey,
+                    Value = settings.DefaultSecondSortOrder.ToString()
+                },
+                new Setting
+                {
+                    Key = SettingsDefaultFirstSortDirectionKey,
+                    Value = settings.DefaultFirstSortDirection.ToString()
+                },
+                new Setting
+                {
+                    Key = SettingsDefaultSecondSortDirectionKey,
+                    Value = settings.DefaultSecondSortDirection.ToString()
                 }
             };
 

@@ -31,7 +31,14 @@ namespace MovieList.Data
         internal const string SettingsListNameKey = "list.name";
         internal const string SettingsListVersionKey = "list.version";
         internal const string SettingsListCultureKey = "list.culture";
-        internal const string SettingsDefaultSeasonTitleKey = "season.title.default";
-        internal const string SettingsDefaultSeasonOriginalTitleKey = "season.title.default-original";
+
+        internal const string SettingsDefaultSeasonTitleKey = "list.season.title.default";
+        internal const string SettingsDefaultSeasonOriginalTitleKey = "list.season.title.default-original";
+
+        internal const string SettingsDefaultFirstSortOrderKey = "list.sort.order.1";
+        internal const string SettingsDefaultSecondSortOrderKey = "list.sort.order.2";
+
+        internal const string SettingsDefaultFirstSortDirectionKey = "list.sort.direction.1";
+        internal const string SettingsDefaultSecondSortDirectionKey = "list.sort.direction.2";
     }
 }

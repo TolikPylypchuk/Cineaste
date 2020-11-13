@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,18 +20,8 @@ namespace MovieList.Data.Services.Implementations
         public Settings GetSettings()
         {
             this.Log().Debug("Getting all settings");
-
             return this.WithTransaction((connection, transaction) =>
-            {
-                var settings = connection.GetAll<Setting>().ToDictionary(s => s.Key, s => s.Value);
-
-                return new Settings(
-                    settings[SettingsListNameKey],
-                    Int32.Parse(settings[SettingsListVersionKey]),
-                    settings[SettingsDefaultSeasonTitleKey],
-                    settings[SettingsDefaultSeasonOriginalTitleKey],
-                    settings[SettingsListCultureKey]);
-            });
+                Settings.FromDictionary(connection.GetAll<Setting>().ToDictionary(s => s.Key, s => s.Value)));
         }
 
         public void UpdateSettings(Settings settings) =>

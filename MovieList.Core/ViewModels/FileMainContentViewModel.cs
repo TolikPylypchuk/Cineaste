@@ -201,6 +201,13 @@ namespace MovieList.Core.ViewModels
                 .Subscribe(findObserver);
 
             viewModel.Filter.Apply
+                .StartWith(item => true)
+                .CombineLatest(
+                    viewModel.WhenAnyValue(vm => vm.Sort.Comparer),
+                    (filter, _) => (Filter: filter, SortOrder: viewModel.Sort.FirstOrder))
+                .Select(data => data.SortOrder is ListSortOrder.ByTitle or ListSortOrder.ByOriginalTitle
+                    ? data.Filter
+                    : item => item is not FranchiseListItem && data.Filter(item))
                 .Subscribe(filterObserver);
 
             viewModel.WhenAnyValue(vm => vm.Sort.Comparer)

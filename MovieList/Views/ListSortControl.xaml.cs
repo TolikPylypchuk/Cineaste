@@ -2,10 +2,11 @@ using System.ComponentModel;
 using System.Reactive.Disposables;
 
 using MovieList.Core.ViewModels;
+using MovieList.Data;
 
 using ReactiveUI;
 
-using static MovieList.Core.ViewModels.ListSorting;
+using static MovieList.Data.ListSortOrder;
 
 namespace MovieList.Views
 {
@@ -23,18 +24,18 @@ namespace MovieList.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.FirstSortingComboBox.AddEnumValues<ListSorting>();
+                this.FirstOrderComboBox.AddEnumValues<ListSortOrder>();
                 this.FirstDirectionComboBox.AddEnumValues<ListSortDirection>();
-                this.SecondSortingComboBox.AddEnumValues(ByTitleSimple, ByOriginalTitleSimple, ByYear);
+                this.SecondOrderComboBox.AddEnumValues(ByTitleSimple, ByOriginalTitleSimple, ByYear);
                 this.SecondDirectionComboBox.AddEnumValues<ListSortDirection>();
 
-                this.Bind(this.ViewModel!, vm => vm.FirstSorting, v => v.FirstSortingComboBox.SelectedItem)
+                this.Bind(this.ViewModel!, vm => vm.FirstOrder, v => v.FirstOrderComboBox.SelectedItem)
                     .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel!, vm => vm.FirstDirection, v => v.FirstDirectionComboBox.SelectedItem)
                     .DisposeWith(disposables);
 
-                this.Bind(this.ViewModel!, vm => vm.SecondSorting, v => v.SecondSortingComboBox.SelectedItem)
+                this.Bind(this.ViewModel!, vm => vm.SecondOrder, v => v.SecondOrderComboBox.SelectedItem)
                     .DisposeWith(disposables);
 
                 this.Bind(this.ViewModel!, vm => vm.SecondDirection, v => v.SecondDirectionComboBox.SelectedItem)

@@ -15,15 +15,6 @@ using ReactiveUI.Fody.Helpers;
 
 namespace MovieList.Core.ViewModels
 {
-    public enum ListSorting
-    {
-        ByTitle,
-        ByOriginalTitle,
-        ByTitleSimple,
-        ByOriginalTitleSimple,
-        ByYear
-    }
-
     public sealed class ListSortViewModel : ReactiveObject
     {
         private readonly Settings settings;
@@ -34,22 +25,28 @@ namespace MovieList.Core.ViewModels
             this.settings = settings;
             this.simpleTitleComparer = new TitleComparer(this.settings.CultureInfo);
 
+            this.FirstOrder = settings.DefaultFirstSortOrder;
+            this.SecondOrder = settings.DefaultSecondSortOrder;
+
+            this.FirstDirection = settings.DefaultFirstSortDirection;
+            this.SecondDirection = settings.DefaultSecondSortDirection;
+
             this.Apply = ReactiveCommand.Create(this.OnApply);
 
             this.Apply.ToPropertyEx(this, vm => vm.Comparer, initialValue: this.OnApply());
         }
 
         [Reactive]
-        public ListSorting FirstSorting { get; set; } = ListSorting.ByTitle;
+        public ListSortOrder FirstOrder { get; set; }
 
         [Reactive]
-        public ListSortDirection FirstDirection { get; set; } = ListSortDirection.Ascending;
+        public ListSortOrder SecondOrder { get; set; }
 
         [Reactive]
-        public ListSorting SecondSorting { get; set; } = ListSorting.ByYear;
+        public ListSortDirection FirstDirection { get; set; }
 
         [Reactive]
-        public ListSortDirection SecondDirection { get; set; } = ListSortDirection.Ascending;
+        public ListSortDirection SecondDirection { get; set; }
 
         public IComparer<ListItem> Comparer { [ObservableAsProperty] get; } = null!;
 
@@ -65,56 +62,56 @@ namespace MovieList.Core.ViewModels
                     item => item,
                     firstComparer,
                     descending: this.FirstDirection == ListSortDirection.Descending)
-                .ThenBy(item => item, secondComparer, descending: false); // add false to disable ambiguity
+                .ThenBy(item => item, secondComparer, descending: false); // add false to remove ambiguity
         }
 
         private IComparer<ListItem> CreateFirstComparer(IComparer<ListItem> secondComparer) =>
-            this.FirstSorting switch
+            this.FirstOrder switch
             {
-                ListSorting.ByTitle => new ListItemTitleComparer(
+                ListSortOrder.ByTitle => new ListItemTitleComparer(
                     this.settings.CultureInfo,
                     secondComparer,
                     item => item.Title,
                     franchise => franchise.GetListTitle()?.Name ?? String.Empty),
 
-                ListSorting.ByOriginalTitle => new ListItemTitleComparer(
+                ListSortOrder.ByOriginalTitle => new ListItemTitleComparer(
                     this.settings.CultureInfo,
                     secondComparer,
                     item => item.OriginalTitle,
                     franchise => franchise.GetListOriginalTitle()?.Name ?? String.Empty),
 
-                ListSorting.ByTitleSimple =>
+                ListSortOrder.ByTitleSimple =>
                     ComparerBuilder.For<ListItem>().OrderBy(item => item.Title, this.simpleTitleComparer),
 
-                ListSorting.ByOriginalTitleSimple =>
+                ListSortOrder.ByOriginalTitleSimple =>
                     ComparerBuilder.For<ListItem>().OrderBy(item => item.OriginalTitle, this.simpleTitleComparer),
 
-                ListSorting.ByYear =>
+                ListSortOrder.ByYear =>
                     ComparerBuilder.For<ListItem>()
                         .OrderBy(item => item.StartYearToCompare)
-                        .ThenBy(item => item.EndYearToCompare, descending: false), // add false to disable ambiguity
+                        .ThenBy(item => item.EndYearToCompare, descending: false), // add false to remove ambiguity
 
-                _ => throw new InvalidOperationException($"Invlid first sorting: {this.FirstSorting}")
+                _ => throw new InvalidOperationException($"Invalid first sort order: {this.FirstOrder}")
             };
 
         private IComparer<ListItem> CreateSecondComparer() =>
-            this.SecondSorting switch
+            this.SecondOrder switch
             {
-                ListSorting.ByTitleSimple =>
+                ListSortOrder.ByTitleSimple =>
                     ComparerBuilder.For<ListItem>()
                         .OrderBy(
                             item => item.Title,
                             this.simpleTitleComparer,
                             descending: this.SecondDirection == ListSortDirection.Descending),
 
-                ListSorting.ByOriginalTitleSimple =>
+                ListSortOrder.ByOriginalTitleSimple =>
                     ComparerBuilder.For<ListItem>()
                         .OrderBy(
                             item => item.OriginalTitle,
                             this.simpleTitleComparer,
                             descending: this.SecondDirection == ListSortDirection.Descending),
 
-                ListSorting.ByYear =>
+                ListSortOrder.ByYear =>
                     ComparerBuilder.For<ListItem>()
                         .OrderBy(
                             item => item.StartYearToCompare,
@@ -123,7 +120,7 @@ namespace MovieList.Core.ViewModels
                             item => item.EndYearToCompare,
                             descending: this.SecondDirection == ListSortDirection.Descending),
 
-                _ => throw new InvalidOperationException($"Invlid second sorting: {this.SecondSorting}")
+                _ => throw new InvalidOperationException($"Invalid second sort order: {this.SecondOrder}")
             };
     }
 }

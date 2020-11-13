@@ -27,7 +27,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <ComboBox x:Name="FirstSortingComboBox" Grid.Column="0" m:HintAssist.Hint="{l:Translate Sorting}" />
+                <ComboBox x:Name="FirstOrderComboBox" Grid.Column="0" m:HintAssist.Hint="{l:Translate Sorting}" />
                 <ComboBox x:Name="FirstDirectionComboBox" Grid.Column="1" m:HintAssist.Hint="{l:Translate Direction}" />
             </Grid>
 
@@ -39,7 +39,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <ComboBox x:Name="SecondSortingComboBox" Grid.Column="0" m:HintAssist.Hint="{l:Translate Sorting}" />
+                <ComboBox x:Name="SecondOrderComboBox" Grid.Column="0" m:HintAssist.Hint="{l:Translate Sorting}" />
                 <ComboBox x:Name="SecondDirectionComboBox" Grid.Column="1" m:HintAssist.Hint="{l:Translate Direction}" />
             </Grid>
         </StackPanel>

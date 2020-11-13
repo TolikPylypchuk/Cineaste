@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
 using DynamicData;
+using DynamicData.Binding;
 
 using MovieList.Core.Data;
 using MovieList.Core.Data.Models;
@@ -54,11 +55,8 @@ namespace MovieList.Core.ViewModels
             this.source.Connect()
                 .ObserveOn(RxApp.TaskpoolScheduler)
                 .Filter(item => !String.IsNullOrEmpty(item.Title))
-                .Filter(filter.StartWith(item => true).ObserveOn(RxApp.TaskpoolScheduler))
-                .AutoRefresh(item => item.DisplayNumber)
-                .AutoRefresh(item => item.Title)
-                .AutoRefresh(item => item.OriginalTitle)
-                .AutoRefresh(item => item.Year)
+                .Filter(filter.ObserveOn(RxApp.TaskpoolScheduler))
+                .AutoRefreshOnObservable(item => item.WhenAnyPropertyChanged())
                 .Transform(item => new ListItemViewModel(item))
                 .Sort(
                     comparer

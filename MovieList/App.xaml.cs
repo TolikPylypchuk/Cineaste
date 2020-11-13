@@ -19,6 +19,7 @@ using MovieList.Core.Preferences;
 using MovieList.Core.State;
 using MovieList.Core.ViewModels;
 using MovieList.Core.ViewModels.Filters;
+using MovieList.Data;
 using MovieList.Data.Models;
 using MovieList.Infrastructure;
 using MovieList.Properties;
@@ -131,7 +132,7 @@ namespace MovieList
             var seasonReleaseStatusConverter = new SeasonReleaseStatusConverter();
             var filterTypeConverter = new FilterTypeConverter();
             var filterOperationConverter = new FilterOperationConverter();
-            var listSortingConverter = new ListSortingConverter();
+            var listSortOrderConverter = new ListSortOrderConverter();
             var listSortDirectionConverter = new ListSortDirectionConverter();
             var logLevelConverter = new LogLevelConverter();
 
@@ -142,7 +143,7 @@ namespace MovieList
                 seasonReleaseStatusConverter,
                 filterTypeConverter,
                 filterOperationConverter,
-                listSortingConverter,
+                listSortOrderConverter,
                 listSortDirectionConverter,
                 logLevelConverter,
                 new BrushToHexConverter(),
@@ -155,7 +156,7 @@ namespace MovieList
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeasonReleaseStatus>>(seasonReleaseStatusConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterType>>(filterTypeConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterOperation>>(filterOperationConverter);
-            Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSorting>>(listSortingConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSortOrder>>(listSortOrderConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSortDirection>>(listSortDirectionConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<LogEventLevel>>(logLevelConverter);
         }

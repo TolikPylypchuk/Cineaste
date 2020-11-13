@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -141,7 +142,11 @@ namespace MovieList.Core.ViewModels
                 ListFileVersion,
                 preferences.DefaultSeasonTitle,
                 preferences.DefaultSeasonOriginalTitle,
-                preferences.DefaultCultureInfo.ToString());
+                preferences.DefaultCultureInfo,
+                ListSortOrder.ByTitle,
+                ListSortOrder.ByYear,
+                ListSortDirection.Ascending,
+                ListSortDirection.Ascending);
 
             return Locator.Current.GetService<IDatabaseService>(model.File)
                 .CreateDatabaseInTaskPool(settings, preferences.DefaultKinds, preferences.DefaultTags)
