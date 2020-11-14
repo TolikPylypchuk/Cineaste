@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 
 using Dapper.Contrib.Extensions;
@@ -6,8 +5,6 @@ using Dapper.Contrib.Extensions;
 using MovieList.Data.Models;
 
 using Splat;
-
-using static MovieList.Data.Constants;
 
 namespace MovieList.Data.Services.Implementations
 {
@@ -31,7 +28,7 @@ namespace MovieList.Data.Services.Implementations
 
                 var dbSettings = connection.GetAll<Setting>(transaction);
 
-                var settingsDictionary = this.ToDictionary(settings);
+                var settingsDictionary = settings.ToDictionary();
 
                 foreach (var setting in dbSettings)
                 {
@@ -43,15 +40,5 @@ namespace MovieList.Data.Services.Implementations
                     }
                 }
             });
-
-        private Dictionary<string, string> ToDictionary(Settings settings) =>
-            new Dictionary<string, string>
-            {
-                [SettingsListNameKey] = settings.ListName,
-                [SettingsListVersionKey] = settings.ListVersion.ToString(),
-                [SettingsDefaultSeasonTitleKey] = settings.DefaultSeasonTitle,
-                [SettingsDefaultSeasonOriginalTitleKey] = settings.DefaultSeasonOriginalTitle,
-                [SettingsListCultureKey] = settings.CultureInfo.ToString()
-            };
     }
 }

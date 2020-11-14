@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive;
@@ -17,6 +18,7 @@ using DynamicData.Binding;
 using MovieList.Core.Models;
 using MovieList.Core.Preferences;
 using MovieList.Core.ViewModels.Forms.Preferences;
+using MovieList.Data;
 using MovieList.Data.Models;
 
 using ReactiveUI;
@@ -80,6 +82,18 @@ namespace MovieList.Core.ViewModels.Forms.Base
         [Reactive]
         public CultureInfo CultureInfo { get; set; }
 
+        [Reactive]
+        public ListSortOrder DefaultFirstSortOrder { get; set; }
+
+        [Reactive]
+        public ListSortOrder DefaultSecondSortOrder { get; set; }
+
+        [Reactive]
+        public ListSortDirection DefaultFirstSortDirection { get; set; }
+
+        [Reactive]
+        public ListSortDirection DefaultSecondSortDirection { get; set; }
+
         public ReadOnlyObservableCollection<KindFormViewModel> Kinds =>
             this.kinds;
 
@@ -97,16 +111,19 @@ namespace MovieList.Core.ViewModels.Forms.Base
             this.TrackChanges(vm => vm.DefaultSeasonTitle, vm => vm.Model.DefaultSeasonTitle);
             this.TrackChanges(
                 vm => vm.DefaultSeasonOriginalTitle, vm => vm.Model.DefaultSeasonOriginalTitle);
+
             this.TrackChanges(vm => vm.CultureInfo, vm => vm.Model.CultureInfo);
+
+            this.TrackChanges(vm => vm.DefaultFirstSortOrder, vm => vm.Model.DefaultFirstSortOrder);
+            this.TrackChanges(vm => vm.DefaultSecondSortOrder, vm => vm.Model.DefaultSecondSortOrder);
+
+            this.TrackChanges(vm => vm.DefaultFirstSortDirection, vm => vm.Model.DefaultFirstSortDirection);
+            this.TrackChanges(vm => vm.DefaultSecondSortDirection, vm => vm.Model.DefaultSecondSortDirection);
+
             this.TrackChanges(this.IsCollectionChanged(vm => vm.Kinds, vm => vm.Model.Kinds));
 
             this.TrackChanges(this.tagsSource.Connect()
-                .AutoRefresh(tm => tm.Name)
-                .AutoRefresh(tm => tm.Description)
-                .AutoRefresh(tm => tm.Category)
-                .AutoRefresh(tm => tm.Color)
-                .AutoRefresh(tm => tm.IsApplicableToMovies)
-                .AutoRefresh(tm => tm.IsApplicableToSeries)
+                .AutoRefreshOnObservable(tm => tm.WhenAnyPropertyChanged())
                 .AutoRefreshOnObservable(tm => tm.ImpliedTags.ToObservableChangeSet())
                 .ToCollection()
                 .Select(tags => tags.Count != this.Model.Tags.Count || tags.Any(this.TagModelChanged)));
@@ -120,7 +137,14 @@ namespace MovieList.Core.ViewModels.Forms.Base
         {
             this.Model.DefaultSeasonTitle = this.DefaultSeasonTitle;
             this.Model.DefaultSeasonOriginalTitle = this.DefaultSeasonOriginalTitle;
+
             this.Model.CultureInfo = this.CultureInfo;
+
+            this.Model.DefaultFirstSortOrder = this.DefaultFirstSortOrder;
+            this.Model.DefaultSecondSortOrder = this.DefaultSecondSortOrder;
+
+            this.Model.DefaultFirstSortDirection = this.DefaultFirstSortDirection;
+            this.Model.DefaultSecondSortDirection = this.DefaultSecondSortDirection;
 
             foreach (var tagModel in this.tagsSource.Items)
             {
@@ -149,7 +173,14 @@ namespace MovieList.Core.ViewModels.Forms.Base
         {
             this.DefaultSeasonTitle = this.Model.DefaultSeasonTitle;
             this.DefaultSeasonOriginalTitle = this.Model.DefaultSeasonOriginalTitle;
+
             this.CultureInfo = this.Model.CultureInfo;
+
+            this.DefaultFirstSortOrder = this.Model.DefaultFirstSortOrder;
+            this.DefaultSecondSortOrder = this.Model.DefaultSecondSortOrder;
+
+            this.DefaultFirstSortDirection = this.Model.DefaultFirstSortDirection;
+            this.DefaultSecondSortDirection = this.Model.DefaultSecondSortDirection;
 
             this.kindsSource.Edit(list =>
             {

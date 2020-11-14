@@ -18,7 +18,7 @@
         <Button x:Name="ApplyButton" DockPanel.Dock="Bottom" Content="{l:Translate ApplySorting, ToUpper=True}"
                 HorizontalAlignment="Left" Margin="8" />
 
-        <StackPanel>
+        <StackPanel Margin="0 16 0 0">
             <TextBlock Text="{l:Translate FirstSorting}" />
 
             <Grid Margin="4 0 4 16">

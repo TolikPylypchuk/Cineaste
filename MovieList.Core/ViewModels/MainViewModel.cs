@@ -143,10 +143,10 @@ namespace MovieList.Core.ViewModels
                 preferences.DefaultSeasonTitle,
                 preferences.DefaultSeasonOriginalTitle,
                 preferences.DefaultCultureInfo,
-                ListSortOrder.ByTitle,
-                ListSortOrder.ByYear,
-                ListSortDirection.Ascending,
-                ListSortDirection.Ascending);
+                preferences.DefaultFirstSortOrder,
+                preferences.DefaultSecondSortOrder,
+                preferences.DefaultFirstSortDirection,
+                preferences.DefaultSecondSortDirection);
 
             return Locator.Current.GetService<IDatabaseService>(model.File)
                 .CreateDatabaseInTaskPool(settings, preferences.DefaultKinds, preferences.DefaultTags)

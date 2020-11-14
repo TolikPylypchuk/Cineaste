@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 
+using MovieList.Data;
 using MovieList.Data.Models;
 
 namespace MovieList.Core.Preferences
@@ -32,16 +34,40 @@ namespace MovieList.Core.Preferences
             set => this.Defaults.DefaultSeasonOriginalTitle = value;
         }
 
+        List<Kind> ISettings.Kinds =>
+            this.Defaults.DefaultKinds;
+
+        List<Tag> ISettings.Tags =>
+            this.Defaults.DefaultTags;
+
         CultureInfo ISettings.CultureInfo
         {
             get => this.Defaults.DefaultCultureInfo;
             set => this.Defaults.DefaultCultureInfo = value;
         }
 
-        List<Kind> ISettings.Kinds =>
-            this.Defaults.DefaultKinds;
+        ListSortOrder ISettings.DefaultFirstSortOrder
+        {
+            get => this.Defaults.DefaultFirstSortOrder;
+            set => this.Defaults.DefaultFirstSortOrder = value;
+        }
 
-        List<Tag> ISettings.Tags =>
-            this.Defaults.DefaultTags;
+        ListSortOrder ISettings.DefaultSecondSortOrder
+        {
+            get => this.Defaults.DefaultSecondSortOrder;
+            set => this.Defaults.DefaultSecondSortOrder = value;
+        }
+
+        ListSortDirection ISettings.DefaultFirstSortDirection
+        {
+            get => this.Defaults.DefaultFirstSortDirection;
+            set => this.Defaults.DefaultFirstSortDirection = value;
+        }
+
+        ListSortDirection ISettings.DefaultSecondSortDirection
+        {
+            get => this.Defaults.DefaultSecondSortDirection;
+            set => this.Defaults.DefaultSecondSortDirection = value;
+        }
     }
 }

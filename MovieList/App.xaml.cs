@@ -178,7 +178,11 @@ namespace MovieList
                 Messages.DefaultDefaultSeasonOriginalTitle,
                 this.CreateDefaultKinds(),
                 new List<Tag>(),
-                CultureInfo.GetCultureInfo("uk-UA"));
+                CultureInfo.GetCultureInfo("uk-UA"),
+                ListSortOrder.ByTitle,
+                ListSortOrder.ByYear,
+                ListSortDirection.Ascending,
+                ListSortDirection.Ascending);
 
             string appName = Assembly.GetExecutingAssembly()?.GetName().Name ?? String.Empty;
 

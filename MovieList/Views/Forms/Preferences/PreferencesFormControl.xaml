@@ -62,6 +62,8 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
                         <ComboBox x:Name="CultureInfoComboBox" Grid.Row="0" Grid.Column="0"
@@ -74,6 +76,16 @@
                             </ComboBox.ItemsPanel>
                         </ComboBox>
 
+                        <ComboBox x:Name="DefaultFirstSortOrderComboBox" Grid.Row="0" Grid.Column="2" Width="Auto"
+                                  MinWidth="150" HorizontalAlignment="Left" Margin="8"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  m:HintAssist.Hint="{l:Translate DefaultFirstSorting}" />
+
+                        <ComboBox x:Name="DefaultFirstSortDirectionComboBox" Grid.Row="0" Grid.Column="3" Width="Auto"
+                                  MinWidth="100" HorizontalAlignment="Left" Margin="8"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  m:HintAssist.Hint="{l:Translate Direction}" />
+
                         <TextBox x:Name="DefaultSeasonTitleTextBox" Grid.Row="1" Grid.Column="0"
                                  m:HintAssist.Hint="{l:Translate DefaultSeasonTitle}"
                                  HorizontalAlignment="Left" />
@@ -81,6 +93,16 @@
                         <TextBox x:Name="DefaultSeasonOriginalTitleTextBox" Grid.Row="1" Grid.Column="1"
                                  m:HintAssist.Hint="{l:Translate DefaultSeasonOriginalTitle}"
                                  HorizontalAlignment="Left" />
+
+                        <ComboBox x:Name="DefaultSecondSortOrderComboBox" Grid.Row="1" Grid.Column="2" Width="Auto"
+                                  MinWidth="150" HorizontalAlignment="Left" Margin="8"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  m:HintAssist.Hint="{l:Translate DefaultSecondSorting}" />
+
+                        <ComboBox x:Name="DefaultSecondSortDirectionComboBox" Grid.Row="1" Grid.Column="3" Width="Auto"
+                                  MinWidth="100" HorizontalAlignment="Left" Margin="8"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  m:HintAssist.Hint="{l:Translate Direction}" />
                     </Grid>
 
                     <StackPanel>

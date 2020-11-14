@@ -556,6 +556,15 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default first sorting.
+        /// </summary>
+        public static string DefaultFirstSorting {
+            get {
+                return ResourceManager.GetString("DefaultFirstSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default season original title.
         /// </summary>
         public static string DefaultSeasonOriginalTitle {
@@ -579,6 +588,15 @@ namespace MovieList.Properties {
         public static string DefaultSeasonTitleHint {
             get {
                 return ResourceManager.GetString("DefaultSeasonTitleHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default second sorting.
+        /// </summary>
+        public static string DefaultSecondSorting {
+            get {
+                return ResourceManager.GetString("DefaultSecondSorting", resourceCulture);
             }
         }
         

@@ -47,6 +47,20 @@ namespace MovieList.Data
                 Enum.Parse<ListSortDirection>(settings[SettingsDefaultFirstSortDirectionKey]),
                 Enum.Parse<ListSortDirection>(settings[SettingsDefaultSecondSortDirectionKey]));
 
+        internal Dictionary<string, string> ToDictionary() =>
+            new Dictionary<string, string>
+            {
+                [SettingsListNameKey] = this.ListName,
+                [SettingsListVersionKey] = this.ListVersion.ToString(),
+                [SettingsDefaultSeasonTitleKey] = this.DefaultSeasonTitle,
+                [SettingsDefaultSeasonOriginalTitleKey] = this.DefaultSeasonOriginalTitle,
+                [SettingsListCultureKey] = this.CultureInfo.ToString(),
+                [SettingsDefaultFirstSortOrderKey] = this.DefaultFirstSortOrder.ToString(),
+                [SettingsDefaultFirstSortDirectionKey] = this.DefaultFirstSortDirection.ToString(),
+                [SettingsDefaultSecondSortOrderKey] = this.DefaultSecondSortOrder.ToString(),
+                [SettingsDefaultSecondSortDirectionKey] = this.DefaultSecondSortDirection.ToString(),
+            };
+
         public string ListName { get; set; }
         public int ListVersion { get; }
 

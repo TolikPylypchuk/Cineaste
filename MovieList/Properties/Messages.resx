@@ -946,4 +946,10 @@ This will detach all entries without deleting them.</value>
   <data name="ApplySorting" xml:space="preserve">
     <value>Apply sorting</value>
   </data>
+  <data name="DefaultFirstSorting" xml:space="preserve">
+    <value>Default first sorting</value>
+  </data>
+  <data name="DefaultSecondSorting" xml:space="preserve">
+    <value>Default second sorting</value>
+  </data>
 </root>

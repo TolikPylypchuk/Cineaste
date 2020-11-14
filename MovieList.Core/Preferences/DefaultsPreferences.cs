@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 
+using MovieList.Data;
 using MovieList.Data.Models;
 
 namespace MovieList.Core.Preferences
@@ -15,23 +17,44 @@ namespace MovieList.Core.Preferences
             string defaultSeasonOriginalTitle,
             List<Kind> defaultKinds,
             List<Tag> defaultTags,
-            CultureInfo defaultCultureInfo)
+            CultureInfo defaultCultureInfo,
+            ListSortOrder defaultFirstSortOrder,
+            ListSortOrder defaultSecondSortOrder,
+            ListSortDirection defaultFirstSortDirection,
+            ListSortDirection defaultSecondSortDirection)
         {
             this.DefaultSeasonTitle = defaultSeasonTitle;
             this.DefaultSeasonOriginalTitle = defaultSeasonOriginalTitle;
+
             this.DefaultKinds = defaultKinds;
             this.DefaultTags = defaultTags;
+
             this.DefaultCultureInfo = defaultCultureInfo;
-            this.AdjustTags();
+
+            this.DefaultFirstSortOrder = defaultFirstSortOrder;
+            this.DefaultSecondSortOrder = defaultSecondSortOrder;
+
+            this.DefaultFirstSortDirection = defaultFirstSortDirection;
+            this.DefaultSecondSortDirection = defaultSecondSortDirection;
+
+            this.CreateTagImplicationConnections();
         }
 
         public string DefaultSeasonTitle { get; set; }
         public string DefaultSeasonOriginalTitle { get; set; }
+
         public List<Kind> DefaultKinds { get; set; }
         public List<Tag> DefaultTags { get; set; }
+
         public CultureInfo DefaultCultureInfo { get; set; }
 
-        private void AdjustTags()
+        public ListSortOrder DefaultFirstSortOrder { get; set; }
+        public ListSortOrder DefaultSecondSortOrder { get; set; }
+
+        public ListSortDirection DefaultFirstSortDirection { get; set; }
+        public ListSortDirection DefaultSecondSortDirection { get; set; }
+
+        private void CreateTagImplicationConnections()
         {
             var tagsByNameCategory = this.DefaultTags
                 .ToDictionary(tag => (tag.Name, tag.Category), tag => tag);
