@@ -108,7 +108,7 @@ namespace MovieList.Core.ViewModels
         private IObservable<string?> OnOpenRecentFile(string fileName) =>
             File.Exists(fileName)
                 ? Observable.Return(fileName)
-                : Dialog.Confirm.Handle(new ConfirmationModel("RemoveRecentFileQuesiton", "RemoveRecentFileTitle"))
+                : Dialog.Confirm.Handle(new ConfirmationModel("RemoveRecentFile"))
                     .SelectMany(shouldRemoveFile => shouldRemoveFile
                         ? this.RemoveRecentFileEntry(fileName)
                         : Observable.Return(Unit.Default))
@@ -124,24 +124,26 @@ namespace MovieList.Core.ViewModels
 
         private IObservable<Unit> OnRemoveSelectedRecentFiles() =>
             this.store.GetObject<UserPreferences>(PreferencesKey)
-                .Eager()
-                .Select(preferences => new
-                {
-                    Preferences = preferences,
-                    FilesToRemove = this.recentFiles
-                        .Where(file => file.IsSelected)
-                        .ToList()
-                })
-                .Do(data =>
-                {
-                    string fileNames = data.FilesToRemove
-                        .Select(file => file.File.Name)
-                        .Aggregate((acc, file) => $"{acc}, {file}");
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Do(this.RemoveRecentFiles)
+                .ObserveOn(RxApp.TaskpoolScheduler)
+                .SelectMany(preferences => this.store.InsertObject(PreferencesKey, preferences))
+                .Eager();
 
-                    this.Log().Debug($"Removing recent files: {fileNames}");
-                })
-                .Do(data => this.recentFilesSource.Remove(data.FilesToRemove))
-                .Do(data => data.Preferences.File.RecentFiles.RemoveMany(data.FilesToRemove.Select(file => file.File)))
-                .SelectMany(data => this.store.InsertObject(PreferencesKey, data.Preferences).Eager());
+        private void RemoveRecentFiles(UserPreferences preferences)
+        {
+            var filesToRemove = this.recentFiles
+                .Where(file => file.IsSelected)
+                .ToList();
+
+            string fileNames = filesToRemove
+                .Select(file => file.File.Name)
+                .Aggregate((acc, file) => $"{acc}, {file}");
+
+            this.Log().Debug($"Removing recent files: {fileNames}");
+
+            this.recentFilesSource.Remove(filesToRemove);
+            preferences.File.RecentFiles.RemoveMany(filesToRemove.Select(file => file.File));
+        }
     }
 }
