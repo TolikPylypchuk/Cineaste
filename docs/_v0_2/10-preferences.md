@@ -1,13 +1,13 @@
 ---
 title: Preferences
-permalink: /v0.1/preferences
+permalink: /v0.2/preferences
 ---
 
-The final feature covered in these docs is the app-wide preferences. You can open them through the Edit > Preferences
-menu item, or by pressing Ctrl+Shift+P, and close them by clicking the 'close' button in the tab header, through the
-File > Close menu item, or by pressing Ctrl+W. Here's how preferences look:
+The final feature covered in these docs is the app-wide preferences. You can open them through the 'Edit > Preferences'
+menu item, or by pressing `Ctrl+Shift+P`, and close them by clicking the 'close' button in the tab header, through the
+'File > Close' menu item, or by pressing `Ctrl+W`. Here's how preferences look:
 
-![Screen with preferences]({{ '/assets/v0.1/images/screen-preferences.png' | absolute_url }})
+![Screen with preferences]({{ '/assets/v0.2/images/screen-preferences.png' | absolute_url }})
 
 Preferences consist of three sections:
 

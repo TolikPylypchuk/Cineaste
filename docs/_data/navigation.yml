@@ -3,8 +3,41 @@ main:
     url: https://github.com/TolikPylypchuk/MovieList/releases
   - title: "View on GitHub"
     url: https://github.com/TolikPylypchuk/MovieList
-  - title: "v0.1 Docs"
-    url: /v0.1/
+  - title: "v0.2 Docs"
+    url: /v0.2/
+
+v0_2:
+  - title: "Usage Guides"
+    children:
+      - title: "Home Page"
+        url: /v0.2/
+      - title: "Getting Started"
+        url: /v0.2/getting-started
+      - title: "List Files"
+        url: /v0.2/list-files
+      - title: "Forms"
+        url: /v0.2/forms
+      - title: "The Movie Form"
+        url: /v0.2/movie-form
+      - title: "The Series Form"
+        url: /v0.2/series-form
+      - title: "The Miniseries Form"
+        url: /v0.2/miniseries-form
+      - title: "The Franchise Form"
+        url: /v0.2/franchise-form
+      - title: "Searching, Filtering, Sorting"
+        url: /v0.2/search-filter-sort
+      - title: "Preferences"
+        url: /v0.2/preferences
+
+  - title: "Other"
+    children:
+      - title: "Version History"
+        url: /v0.2/version-history
+      - title: "Technical Stuff"
+        url: /v0.2/technical
+      - title: "About Movie List"
+        url: /v0.2/about
 
 v0_1:
   - title: "Usage Guides"

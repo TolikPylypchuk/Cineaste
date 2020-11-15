@@ -1,10 +1,10 @@
 ---
 title: Technical Stuff
-permalink: /v0.1/technical
+permalink: /v0.2/technical
 ---
 
 The Movie List app is written with [C#](https://github.com/dotnet/csharplang) and
-[.NET Core 3.1](https://github.com/dotnet/core). Following is the list of technologies used in this app and some other
+[.NET 5](https://github.com/dotnet/runtime). Following is the list of technologies used in this app and some other
 technical aspects.
 
 ## UI
@@ -17,11 +17,10 @@ The UI is written using [WPF](https://github.com/dotnet/wpf), and styled with
 [Material Design in XAML](http://materialdesigninxaml.net/) and
 [Material Design Extensions](https://spiegelp.github.io/MaterialDesignExtensions).
 
-I'm currently thinking about switching to [Avalonia](https://avaloniaui.net) or
-[WinUI 3](https://github.com/microsoft/microsoft-ui-xaml) in the future, because while WPF is powerful, these frameworks
-are the hot stuff and are more active. Also, they will support Fluent Design, which I think is more natural for Windows
-compared to Material Design. If I migrate to Avalonia, I may even make this app cross-platform, even though it's highly
-unlikely.
+I will switch to [Avalonia](https://avaloniaui.net) in the future, because while WPF is powerful, Avalonia is the hot
+stuff, is more active, and cross-platform. Also, it will support Fluent Design, which I think is more natural for
+Windows compared to Material Design. I will probably make the app run on Linux as well, but making it run on macOS is
+highly unlikely, unless someone would like to help me.
 
 At the beginning of the app's developement, I didn't use any libraries for styling at all, thinking I will write styles
 myself. That proved to be a horrible idea, and I started using [HandyControl](https://github.com/HandyOrg/HandyControl)
@@ -51,11 +50,15 @@ their structure and relations.
 The only table which should be elaborated on is the 'Settings' table. It contains key-value pairs for some general file
 settings which don't fit into other places. Currently each file contains five such key-value pairs:
 
-- List name (list.name)
-- List version (list.version)
-- The default season title (season.title.default)
-- The default season original title (season.title.default-original)
-- The language used for sorting titles (list.culture)
+- List name (`list.name`)
+- List version (`list.version`)
+- The default season title (`list.season.title.default`)
+- The default season original title (`list.season.title.default-original`)
+- The language used for sorting titles (`list.culture`)
+- The default first sorting order (`list.sort.order.1`)
+- The default second sorting order (`list.sort.order.2`)
+- The default first sorting direction (`list.sort.direction.1`)
+- The default second sorting direction (`list.sort.direction.2`)
 
 The app ignores any other rows in this table and will not be able to read the file if any one of the aforementioned rows
 are missing.
@@ -106,7 +109,7 @@ so I moved away from it.
 
 ## Building from Source
 
-If you want to build your own version of this app, you simply need .NET Core 3.1. That's it, there are no special
+If you want to build your own version of this app, you simply need .NET 5. That's it, there are no special
 prerequisites.
 
 Run the `Publish-App` script to create a zipped app which you can then extract to anywhere.

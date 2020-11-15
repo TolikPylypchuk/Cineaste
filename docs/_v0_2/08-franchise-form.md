@@ -1,6 +1,6 @@
 ---
 title: The Franchise Form
-permalink: /v0.1/franchise-form
+permalink: /v0.2/franchise-form
 ---
 
 Lots of movies and series have multiple parts, so it's logical to have these movies/series be grouped together in
@@ -10,7 +10,7 @@ Franchises can be created and edited via the franchise forms, but those can't be
 create a movie or a series, and after saving it, you can create a franchise where this movie/series is the first
 part, using the 'Create franchise' button at the bottom of the form. Here's how a franchise form looks:
 
-![Screen with franchise form]({{ '/assets/v0.1/images/screen-franchise-form.png' | absolute_url }})
+![Screen with franchise form]({{ '/assets/v0.2/images/screen-franchise-form.png' | absolute_url }})
 
 The franchise form is a little different from other forms in that it's focus is on actions rather than fields and data.
 It consists of the following parts:
@@ -80,7 +80,7 @@ a different franchise, you have to detach it first.
 In addition to movies and series, a franchise can also contain other franchises. This is never necessary though. You can
 always group movies and series properly with only one level of franchises. But if you want to represent the data in your
 list in a more structured manner, you can introduce multiple levels of franchises. For example, both Harry Potter and
-Fantastic Beasts belong to a franchise called J.K. Rowling's Wizarding World.
+Fantastic Beasts belong to a franchise called Wizarding World.
 
 If you have multiple levels of franchises, you can choose to merge their entries' display numbers. This functionality is
 limited to two levels only though.

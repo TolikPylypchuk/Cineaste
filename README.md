@@ -10,7 +10,7 @@ analyze the data somehow. Also, this is a fun side project.
 If you want to use this app to track movies and series, you can certainly do so, but bear in mind that this is a
 personal project - I'm writing this app for myself, at my own pace, and according to my own needs.
 
-![Screen with movie](/docs/assets/v0.1/images/screen-movie.png)
+![Screen with movie](/docs/assets/v0.2/images/screen-movie.png)
 
 ## Docs
 
@@ -19,9 +19,9 @@ how to use the app.
 
 ## Project Status
 
-I've been working on this app for a year and a half (as of July 2020) and it's not nearly done. I've released version
-0.1, because now the app is at least usable, although it lacks lots of features yet. Versions 0.x should be considered
-pre-release and as such probably shouldn't be used in general since there will be breaking changes.
+I've been working on this app for more than a year and a half (as of November 2020) and it's not nearly done. I've
+released version 0.1, because now the app is at least usable, although it lacks lots of features yet. Versions 0.x
+should be considered pre-release and as such probably shouldn't be used in general since there will be breaking changes.
 
 Currently I'm working on version 0.2 which will include the ability to search/filter/sort the list in various ways.
 Also, adding tags to movies and series will be available, to make searching/filtering more powerful.

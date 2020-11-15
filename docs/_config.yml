@@ -14,11 +14,23 @@ plugins:
 search: true
 
 collections:
+  v0_2:
+    output: true
+    permalink: /v0.2/:path/
   v0_1:
     output: true
     permalink: /v0.1/:path/
 
 defaults:
+  -
+    scope:
+      path: ""
+      type: "v0_2"
+    values:
+      layout: single
+      sidebar:
+        nav: "v0_2"
+      toc: true
   -
     scope:
       path: ""
