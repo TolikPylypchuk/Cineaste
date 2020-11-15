@@ -20,11 +20,9 @@ how to use the app.
 ## Project Status
 
 I've been working on this app for more than a year and a half (as of November 2020) and it's not nearly done. I've
-released version 0.1, because now the app is at least usable, although it lacks lots of features yet. Versions 0.x
-should be considered pre-release and as such probably shouldn't be used in general since there will be breaking changes.
-
-Currently I'm working on version 0.2 which will include the ability to search/filter/sort the list in various ways.
-Also, adding tags to movies and series will be available, to make searching/filtering more powerful.
+released versions 0.1 and 0.2, because now the app is at least usable, although it lacks lots of features yet. Versions
+0.x should be considered pre-release and as such probably shouldn't be used in general since there will be breaking
+changes.
 
 I'm actively working on the app, although sometimes I take breaks to work on other projects, so expect more versions
 soon.

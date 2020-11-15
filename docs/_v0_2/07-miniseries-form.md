@@ -56,7 +56,7 @@ period subform and it comes before the RT link of the miniseries. The RT link fo
 below the poster, and the RT link for the season is contained at the top of the period subform. Maybe I'll change it
 in a future version, but for now I will leave it as-is.
 
-The rules for tags are also the same as in the full series form.
+The rules for tags are the same as in the full series form.
 
 ## Other Actions
 

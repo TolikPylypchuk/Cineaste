@@ -11,10 +11,10 @@ shade of purple. Here's how it looks:
 
 ![Screen with search]({{ '/assets/v0.2/images/screen-search.png' | absolute_url }})
 
-When the search is activated, the list of all items will appear in the search panel, and you can click on them to jump
-to those items. To stop searching, click on the 'Stop searching' button. Afterwards, if you click on the 'Find next' or
-'Find previous' button again, the search will start from the top. If you want to stop searching and clear the criteria,
-then click on the 'Clear search' button.
+When the search is activated, the list of all found items will appear in the search panel, and you can click on them to
+jump to those items. To stop searching, click on the 'Stop searching' button. Afterwards, if you click on the 'Find
+next' or 'Find previous' button again, the search will start from the top. If you want to stop searching and clear the
+filters, then click on the 'Clear search' button.
 
 Here's the list of all possible search filters:
 
