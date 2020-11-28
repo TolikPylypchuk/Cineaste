@@ -11,4 +11,4 @@ personal project - I'm writing this app for myself, at my own pace, and accordin
 
 [Get the app](https://github.com/TolikPylypchuk/MovieList/releases){: .btn .btn-purple }
 
-![Screen with movie]({{ '/assets/v0.2/images/screen-movie.png' | absolute_url }})
+![Screen with movie](/assets/v0.2/images/screen-movie.png)

@@ -5,7 +5,7 @@ permalink: /v0.1/list-files
 
 Here's what the app looks like when you create a new file:
 
-![Screen with new file]({{ '/assets/v0.1/images/screen-new-file.png' | absolute_url }})
+![Screen with new file](/assets/v0.1/images/screen-new-file.png)
 
 The file tabs are composed of three main sections: the list itself, stats, and settings. You can switch between them
 using the left-side bar.
@@ -17,7 +17,7 @@ or by pressing Ctrl+W.
 
 Here's what the list section looks like when it contains entries:
 
-![Screen with list]({{ '/assets/v0.1/images/screen-list.png' | absolute_url }})
+![Screen with list](/assets/v0.1/images/screen-list.png)
 
 ### List Structure
 
@@ -86,7 +86,7 @@ Statistics are not implemented yet, so the respective left-side bar item is disa
 
 Here's what the settings for a file look like:
 
-![Screen with settings]({{ '/assets/v0.1/images/screen-settings.png' | absolute_url }})
+![Screen with settings](/assets/v0.1/images/screen-settings.png)
 
 You can open the file settings by clicking the left-side bar item, through the File > Settings menu item, or by
 pressing Ctrl+P.
@@ -120,7 +120,7 @@ Here you can edit existing kinds, delete them, or add new ones.
 A single kind setting consists of a name and six colors for the aforementioned item types. You can edit colors by
 clicking on them and by editing the color in the modal window.
 
-![Screen with color modal]({{ '/assets/v0.1/images/screen-settings-color.png' | absolute_url }})
+![Screen with color modal](/assets/v0.1/images/screen-settings-color.png)
 
 You can select a color in the color picker or enter its HEX color value. Mind that the HEX value field uses ARGB instead
 of RGB. You can add 'FF' in the beginning to convert an RGB value into an ARGB value.

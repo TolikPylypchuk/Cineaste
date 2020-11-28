@@ -10,7 +10,7 @@ Franchises can be created and edited via the franchise forms, but those can't be
 create a movie or a series, and after saving it, you can create a franchise where this movie/series is the first
 part, using the 'Create franchise' button at the bottom of the form. Here's how a franchise form looks:
 
-![Screen with franchise form]({{ '/assets/v0.2/images/screen-franchise-form.png' | absolute_url }})
+![Screen with franchise form](/assets/v0.2/images/screen-franchise-form.png)
 
 The franchise form is a little different from other forms in that it's focus is on actions rather than fields and data.
 It consists of the following parts:

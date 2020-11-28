@@ -5,7 +5,7 @@ permalink: /v0.2/series-form
 
 This is a big one. It takes much more effort to add a series than it is to add a movie. Here's how a series form looks:
 
-![Screen with series form]({{ '/assets/v0.2/images/screen-series-form.png' | absolute_url }})
+![Screen with series form](/assets/v0.2/images/screen-series-form.png)
 
 The series form consists of the following parts:
 
@@ -89,7 +89,7 @@ You can execute these actions only when the form doesn't contain changes.
 
 When you add a new season or click on an existing one in the series form, a season form is opened. Here's how it looks:
 
-![Screen with season form]({{ '/assets/v0.2/images/screen-season-form.png' | absolute_url }})
+![Screen with season form](/assets/v0.2/images/screen-season-form.png)
 
 Unlike the movie and series forms, the season form is not independent - it's considered to be part of the series form.
 You can't save a season directly; to save a season, go back to the series form and save the whole series. You can cancel
@@ -201,7 +201,7 @@ You can delete the season only when the form doesn't contain changes.
 When you add a new special episode or click on an existing one in the series form, a special episode form is opened.
 Here's how it looks:
 
-![Screen with episode form]({{ '/assets/v0.2/images/screen-episode-form.png' | absolute_url }})
+![Screen with episode form](/assets/v0.2/images/screen-episode-form.png)
 
 This form is similar to the movie form and is much simpler than the season form. Like the season form, the special
 episode form is not independent - it's considered to be part fo the series form. You can't save an episode directly;

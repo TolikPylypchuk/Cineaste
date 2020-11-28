@@ -9,7 +9,7 @@ You can search for certain items in the list. To do that, specify the filters, a
 previous'. The found items are colored light purple, and the currently selected found item is colored a slightly darker
 shade of purple. Here's how it looks:
 
-![Screen with search]({{ '/assets/v0.2/images/screen-search.png' | absolute_url }})
+![Screen with search](/assets/v0.2/images/screen-search.png)
 
 When the search is activated, the list of all found items will appear in the search panel, and you can click on them to
 jump to those items. To stop searching, click on the 'Stop searching' button. Afterwards, if you click on the 'Find
@@ -116,7 +116,7 @@ Filtering is very similar to searching. As you saw previously, when searching fo
 filters. Filtering the list uses the same principles, but has one big difference - it doesn't highlight the found items.
 Instead, it shows only the found items. All other items are removed from the list completely. Here's how it looks:
 
-![Screen with filter]({{ '/assets/v0.2/images/screen-filter.png' | absolute_url }})
+![Screen with filter](/assets/v0.2/images/screen-filter.png)
 
 When you have specified the filters, you can click on the 'Apply filter' button to apply them. Afterwards, you can click
 on the 'Clear filter' button to return back to the full list.
@@ -129,7 +129,7 @@ more specific conditions in the filtered list.
 You can specify how the list is sorted. There are a couple options, but they are limited. Here's how the sorting panel
 looks:
 
-![Screen with sort]({{ '/assets/v0.2/images/screen-sort.png' | absolute_url }})
+![Screen with sort](/assets/v0.2/images/screen-sort.png)
 
 Here are the possible sorting orders:
 

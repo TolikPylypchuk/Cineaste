@@ -2,7 +2,7 @@ title: Movie List
 title_separator: "|"
 email: pylypchuk.tolik@gmail.com
 description: An application for keeping a list of movies and series
-baseurl: MovieList
+baseurl: ""
 github_username:  TolikPylypchuk
 repository: TolikPylypchuk/MovieList
 

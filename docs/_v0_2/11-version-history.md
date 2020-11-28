@@ -10,7 +10,7 @@ This article provides info on what's new in every version of the MovieList app.
 This version adds searching, filtering, and sorting capabilities to the app. Also, tags can now be added to movies and
 series to make searching/filtering easier. This release is still very incomplete and far from being stable.
 
-![Version 0.2 screen]({{ '/assets/v0.2/images/screen-movie.png' | absolute_url }})
+![Version 0.2 screen](/assets/v0.2/images/screen-movie.png)
 
 The following breaking changes were added to the list files:
 
@@ -30,7 +30,7 @@ This is the first usable version of the app, albeit very incomplete. It provides
 - Editing file settings, including kinds
 - Editing app preferences
 
-![Version 0.1 screen]({{ '/assets/v0.1/images/screen-movie.png' | absolute_url }})
+![Version 0.1 screen](/assets/v0.1/images/screen-movie.png)
 
 ## Ancient History
 
@@ -39,6 +39,6 @@ was specified in the preferences. There were no tabs. And the UI was in Ukrainia
 
 Afterwards the app was completely rewritten, but this version can be found under the `old` tag on GitHub.
 
-![Old screen 1]({{ '/assets/old/images/screen-1.png' | absolute_url }})
+![Old screen 1](/assets/old/images/screen-1.png)
 
-![Old screen 2]({{ '/assets/old/images/screen-2.png' | absolute_url }})
+![Old screen 2](/assets/old/images/screen-2.png)

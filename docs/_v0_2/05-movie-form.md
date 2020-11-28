@@ -5,7 +5,7 @@ permalink: /v0.2/movie-form
 
 The movie form is the simplest and most straightforward of the forms. Here's how it looks:
 
-![Screen with movie form]({{ '/assets/v0.2/images/screen-movie-form.png' | absolute_url }})
+![Screen with movie form](/assets/v0.2/images/screen-movie-form.png)
 
 The form consists of the following sections:
 

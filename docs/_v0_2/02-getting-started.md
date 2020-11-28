@@ -20,7 +20,7 @@ a new tab.
 
 ## The Home Page
 
-![Screen with home page]({{ '/assets/v0.2/images/screen-home-page.png' | absolute_url }})
+![Screen with home page](/assets/v0.2/images/screen-home-page.png)
 
 The app's home page contains several features for working with files.
 
