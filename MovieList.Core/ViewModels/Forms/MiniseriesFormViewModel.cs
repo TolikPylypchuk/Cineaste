@@ -134,7 +134,7 @@ namespace MovieList.Core.ViewModels.Forms
 
         protected override IObservable<Series> OnSave() =>
             this.SaveTitles()
-                .DoAsync(this.PeriodForm.Save.Execute)
+                .DoAsync(() => this.PeriodForm.Save.Execute())
                 .Select(this.CopyPropertiesIntoModel)
                 .DoAsync(this.seriesService.SaveInTaskPool);
 

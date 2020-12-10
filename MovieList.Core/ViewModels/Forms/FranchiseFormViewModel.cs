@@ -241,7 +241,7 @@ namespace MovieList.Core.ViewModels.Forms
                 ?? String.Empty;
 
             return this.AddTitle.Execute()
-                .DoAsync(this.AddOriginalTitle.Execute)
+                .DoAsync(() => this.AddOriginalTitle.Execute())
                 .Do(() =>
                 {
                     this.Titles[0].Name = titleName;

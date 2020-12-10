@@ -1,43 +1,31 @@
 using System;
 using System.Linq;
-using System.Reactive.Concurrency;
+using System.Linq.Expressions;
 using System.Reactive.Linq;
-using System.Reflection;
-using System.Windows;
 
 using ReactiveUI;
-
-using Expression = System.Linq.Expressions.Expression;
 
 namespace MovieList.Infrastructure
 {
     public class CustomPropertyResolver : ICreatesObservableForProperty
     {
-        public int GetAffinityForObject(Type type, string propertyName, bool beforeChanged = false)
-        {
-            if (!typeof(FrameworkElement).IsAssignableFrom(type))
-            {
-                return 0;
-            }
+        public int GetAffinityForObject(Type type, string propertyName, bool beforeChanged = false) => 1;
 
-            var field = type.GetTypeInfo()
-                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .FirstOrDefault(f => f.Name == propertyName);
-
-            return field != null ? 2 : 0;
-        }
-
-        public IObservable<IObservedChange<object, object>> GetNotificationForProperty(
+        public IObservable<IObservedChange<object, object?>> GetNotificationForProperty(
             object sender,
             Expression expression,
             string propertyName,
             bool beforeChanged = false,
             bool suppressWarnings = false)
         {
-            var element = (FrameworkElement)sender;
+            if (sender is null)
+            {
+                throw new ArgumentNullException(nameof(sender));
+            }
+
             return Observable.Return(
-                    new ObservedChange<object, object>(sender, expression), new DispatcherScheduler(element.Dispatcher))
-                .Concat(Observable.Never<IObservedChange<object, object>>());
+                new ObservedChange<object, object?>(sender, expression, default), RxApp.MainThreadScheduler)
+                .Concat(Observable.Never<IObservedChange<object, object?>>());
         }
     }
 }

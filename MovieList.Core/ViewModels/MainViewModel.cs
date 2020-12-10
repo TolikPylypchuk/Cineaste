@@ -352,12 +352,12 @@ namespace MovieList.Core.ViewModels
                     RecentFile = preferences.File.RecentFiles.FirstOrDefault(f => f.Path == file)
                 })
                 .Where(data => data.RecentFile != null)
-                .Do(data => data.Preferences.File.RecentFiles.Remove(data.RecentFile))
-                .DoAsync(data => this.HomePage.RemoveRecentFile.Execute(data.RecentFile))
+                .Do(data => data.Preferences.File.RecentFiles.Remove(data.RecentFile!))
+                .DoAsync(data => this.HomePage.RemoveRecentFile.Execute(data.RecentFile!))
                 .Select(data => new
                 {
                     data.Preferences,
-                    NewRecentFile = new RecentFile(newName, file, data.RecentFile.Closed)
+                    NewRecentFile = new RecentFile(newName, file, data.RecentFile!.Closed)
                 })
                 .Do(data => data.Preferences.File.RecentFiles.Add(data.NewRecentFile))
                 .DoAsync(data => this.HomePage.AddRecentFile.Execute(data.NewRecentFile))

@@ -113,7 +113,6 @@ namespace MovieList.Core.ViewModels.Forms
             this.AddSeason
                 .Merge(this.AddSpecialEpisode)
                 .SelectMany(_ => this.ComponentForms.MaxBy(season => season.SequenceNumber))
-                .Cast<ISeriesComponentForm>()
                 .InvokeCommand(this.SelectComponent);
 
             this.CanDeleteWhenNotChanged();

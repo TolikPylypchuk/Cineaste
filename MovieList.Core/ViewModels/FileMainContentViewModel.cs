@@ -573,7 +573,7 @@ namespace MovieList.Core.ViewModels
             this.SideViewModel = this.CreateFranchiseForm(franchise);
 
             return this.SelectItem.Execute(new FranchiseListItem(franchise))
-                .DoAsync(this.List.ForceSelectedItem.Execute);
+                .DoAsync(() => this.List.ForceSelectedItem.Execute());
         }
 
         private IObservable<Unit> GoToFranchiseEntry(FranchiseEntry entry)
@@ -583,7 +583,7 @@ namespace MovieList.Core.ViewModels
             this.SideViewModel = this.CreateSideViewModel(listItem);
 
             return this.SelectItem.Execute(listItem)
-                .DoAsync(this.List.ForceSelectedItem.Execute);
+                .DoAsync(() => this.List.ForceSelectedItem.Execute());
         }
 
         private Movie CreateMovieForFranchise(Franchise parentFranchise, int displayNumber)
