@@ -9,7 +9,7 @@ namespace MovieList.Infrastructure
 {
     public class CustomPropertyResolver : ICreatesObservableForProperty
     {
-        public int GetAffinityForObject(Type type, string propertyName, bool beforeChanged = false) => 1;
+        public int GetAffinityForObject(Type type, string propertyName, bool beforeChanged = false) => 2;
 
         public IObservable<IObservedChange<object, object?>> GetNotificationForProperty(
             object sender,

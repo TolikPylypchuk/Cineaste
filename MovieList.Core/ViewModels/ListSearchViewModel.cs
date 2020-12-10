@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 
 using DynamicData;
 using DynamicData.Binding;
@@ -15,8 +14,6 @@ using MovieList.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-
-using Splat;
 
 namespace MovieList.Core.ViewModels
 {
@@ -72,7 +69,8 @@ namespace MovieList.Core.ViewModels
             var isFinding = this.FindNext.IsExecuting
                 .Merge(this.FindPrevious.IsExecuting)
                 .DistinctUntilChanged()
-                .Skip(1);
+                .Skip(1)
+                .Eager();
 
             this.WhenAnyValue(v => v.CurrentResult)
                 .SkipUntil(isFinding.Where(finding => !finding))
@@ -195,7 +193,11 @@ namespace MovieList.Core.ViewModels
             this.foundItemsSource.Edit(list =>
             {
                 list.Clear();
-                list.AddRange(newItems);
+
+                if (newItems.Count != 0 && newItems.Count != this.TotalSearchedItemsCount)
+                {
+                    list.AddRange(newItems);
+                }
             });
 
             this.CurrentIndex = NoIndex;
