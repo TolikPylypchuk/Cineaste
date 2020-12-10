@@ -686,7 +686,7 @@ This will detach all entries without deleting them.</value>
     <value>Rotten Tomatoes link for series</value>
   </data>
   <data name="DocsLink" xml:space="preserve">
-    <value>https://tolikpylypchuk.github.io/MovieList</value>
+    <value>https://movielist.tolik.io</value>
   </data>
   <data name="ViewDocumentation" xml:space="preserve">
     <value>View the documentation</value>

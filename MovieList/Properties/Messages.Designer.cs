@@ -755,7 +755,7 @@ namespace MovieList.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://tolikpylypchuk.github.io/MovieList.
+        ///   Looks up a localized string similar to https://movielist.tolik.io.
         /// </summary>
         public static string DocsLink {
             get {
