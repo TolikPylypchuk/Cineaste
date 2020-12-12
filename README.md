@@ -14,7 +14,7 @@ personal project - I'm writing this app for myself, at my own pace, and accordin
 
 ## Docs
 
-The docs for this app are available [here](https://tolikpylypchuk.github.io/MovieList) and contain extensive info on
+The docs for this app are available [here](https://movielist.tolik.io) and contain extensive info on
 how to use the app.
 
 ## Project Status
