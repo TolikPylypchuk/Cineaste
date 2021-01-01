@@ -1,0 +1,540 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.1 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>List Files | Movie List</title>
+<meta name="description" content="Here’s what the app looks like when you create a new file:">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Movie List">
+<meta property="og:title" content="List Files">
+<meta property="og:url" content="/v0.2/list-files">
+
+
+  <meta property="og:description" content="Here’s what the app looks like when you create a new file:">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-01-01T16:15:47+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="/v0.2/list-files">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Movie List Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <link rel="icon" type="image/ico" href="/favicon.ico">
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Movie List
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://github.com/TolikPylypchuk/MovieList/releases">Get the App</a>
+            </li><li class="masthead__menu-item">
+              <a href="https://github.com/TolikPylypchuk/MovieList">View on GitHub</a>
+            </li><li class="masthead__menu-item">
+              <a href="/v0.2/">v0.2 Docs</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Usage Guides</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/v0.2/">Home Page</a></li>
+          
+            <li><a href="/v0.2/getting-started">Getting Started</a></li>
+          
+            <li><a href="/v0.2/list-files" class="active">List Files</a></li>
+          
+            <li><a href="/v0.2/forms">Forms</a></li>
+          
+            <li><a href="/v0.2/movie-form">The Movie Form</a></li>
+          
+            <li><a href="/v0.2/series-form">The Series Form</a></li>
+          
+            <li><a href="/v0.2/miniseries-form">The Miniseries Form</a></li>
+          
+            <li><a href="/v0.2/franchise-form">The Franchise Form</a></li>
+          
+            <li><a href="/v0.2/search-filter-sort">Searching, Filtering, Sorting</a></li>
+          
+            <li><a href="/v0.2/preferences">Preferences</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Other</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/v0.2/version-history">Version History</a></li>
+          
+            <li><a href="/v0.2/technical">Technical Stuff</a></li>
+          
+            <li><a href="/v0.2/about">About Movie List</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+
+    
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="List Files">
+    <meta itemprop="description" content="Here’s what the app looks like when you create a new file:">
+    <meta itemprop="datePublished" content="2021-01-01T16:15:47+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">List Files
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#the-list-section">The List Section</a>
+    <ul>
+      <li><a href="#list-structure">List Structure</a></li>
+      <li><a href="#kinds">Kinds</a></li>
+      <li><a href="#tags">Tags</a></li>
+      <li><a href="#adding-items-to-the-list">Adding Items to the List</a></li>
+    </ul>
+  </li>
+  <li><a href="#the-stats-section">The Stats Section</a></li>
+  <li><a href="#the-settings-section">The Settings Section</a>
+    <ul>
+      <li><a href="#main-file-settings">Main File Settings</a></li>
+      <li><a href="#kind-settings">Kind Settings</a></li>
+      <li><a href="#tag-settings">Tag Settings</a></li>
+    </ul>
+  </li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p>Here’s what the app looks like when you create a new file:</p>
+
+<p><img src="/assets/v0.2/images/screen-new-file.png" alt="Screen with new file" /></p>
+
+<p>The file tabs are composed of three main sections: the list itself, stats, and settings. You can switch between them
+using the left-side bar.</p>
+
+<p>When you open a file, you can close it via the ‘close’ button in the tab’s header, through the ‘File &gt; Close’ menu item,
+or by pressing <code class="language-plaintext highlighter-rouge">Ctrl+W</code>.</p>
+
+<h2 id="the-list-section">The List Section</h2>
+
+<p>Here’s what the list section looks like when it contains entries:</p>
+
+<p><img src="/assets/v0.2/images/screen-list.png" alt="Screen with list" /></p>
+
+<h3 id="list-structure">List Structure</h3>
+
+<p>The list items can be of three types:</p>
+
+<ul>
+  <li>Movies</li>
+  <li>Series</li>
+  <li>Franchises</li>
+</ul>
+
+<p>By default, the items are sorted alphabetically by title and then by year if their title is the same, but it’s
+configurable.</p>
+
+<p>Franchises are used to group related items together and without them some items would be scattered across the list when
+it would make more sense to have them appear together.</p>
+
+<p>The list has four columns:</p>
+
+<ul>
+  <li>Sequence number to show the item’s number in a franchise</li>
+  <li>The title in your native language</li>
+  <li>The original title</li>
+  <li>Year or years</li>
+</ul>
+
+<p>The majority of popular contemporary movies are in English, so if your native language is English, then the title
+will often be the same as the original title.</p>
+
+<p>All item types can have multiple titles and original titles since different translations exist or the item is marketed
+differently in different markets. Only the first title and original title is shown in the list. Every item can have
+up to 10 titles and up to 10 original titles, although even that is too much in my opinion.</p>
+
+<h3 id="kinds">Kinds</h3>
+
+<p>Every item can be of a certain kind. Kinds are used to color-code items in the list. Every kind has six colors for
+various item types and states:</p>
+
+<ul>
+  <li>Movie which has already been watched</li>
+  <li>Movie which hasn’t been watched yet</li>
+  <li>Movie which hasn’t been released yet</li>
+  <li>Series which has already been watched or is being watched</li>
+  <li>Series which hasn’t been watched yet</li>
+  <li>Series which hasn’t been released yet</li>
+</ul>
+
+<p>There are no separate colors for franchises - they get the color of their first entry.</p>
+
+<p>By default, every file contains three kinds (although it can be configured):</p>
+
+<ul>
+  <li>Live-action: movies are black, series are blue</li>
+  <li>Animation: movies are green, series are light-blue</li>
+  <li>Documentary: both movies and series are purple</li>
+</ul>
+
+<p>The default kinds have all non-watched items as red and all non-released items as dark red.</p>
+
+<h3 id="tags">Tags</h3>
+
+<p>Every item can have one or more tags. They can be used for searching or filtering, although you can choose not to use
+them at all. Unlike kinds, tags don’t influence the item’s color in the list. In fact, they don’t impact the app’s
+behavior in any way - they are just auxiliary pieces of information. Tags are applicable to movies and series. You
+can’t add tags to franchises. You can also restrict a tag to be applicable only to movies or only to series.</p>
+
+<p>Every tag has a name, category, description, and color. The name/category combination must be unique. Names should
+generally be short enough for the tag not to take up too much space and should be all-lowercase. e.g. ‘comedy’. The
+categories are used to semantically group tags. They should start with a capital letter, e.g. ‘Genre’. Descriptions
+are used to provide more info about tags, but are not required. Colors are used to more easily discern tags.</p>
+
+<p>In addition, tags can imply other tags. For example, if you specify that the tag ‘black comedy’ implies ‘comedy’, it
+means that every movie or series which has the ‘black comedy’ tag will also implicitly have the ‘comedy’ tag as well.</p>
+
+<h3 id="adding-items-to-the-list">Adding Items to the List</h3>
+
+<p>You can add new items to the list by clicking the buttons in the right-side panel, which will open a form for editing
+the item. If you want to edit an existing item, click on it, and the form for this item will be opened. You can’t create
+franchises directly because they are not supposed to be standalone list items. Rather, you create them through
+previously created items.</p>
+
+<p>You can learn more about editing list items in the next article.</p>
+
+<h2 id="the-stats-section">The Stats Section</h2>
+
+<p>Statistics are not implemented yet, so the respective left-side bar item is disabled.</p>
+
+<h2 id="the-settings-section">The Settings Section</h2>
+
+<p>Here’s what the settings for a file look like:</p>
+
+<p><img src="/assets/v0.2/images/screen-settings.png" alt="Screen with settings" /></p>
+
+<p>You can open the file settings by clicking the left-side bar item, through the ‘File &gt; Settings’ menu item, or by
+pressing <code class="language-plaintext highlighter-rouge">Ctrl+P</code>.</p>
+
+<p>The settings consist of the three main sections: main settings, kind settings, and tag settings.</p>
+
+<h3 id="main-file-settings">Main File Settings</h3>
+
+<p>You can edit the following file attributes in the settings:</p>
+
+<ul>
+  <li>List name</li>
+  <li>Title language</li>
+  <li>Default season title</li>
+  <li>Default season original title</li>
+  <li>Default first sorting order</li>
+  <li>Default first sorting direction</li>
+  <li>Default second sorting order</li>
+  <li>Default second sorting direction</li>
+</ul>
+
+<p>You can name your list however you like and it doesn’t have to be the same as the name of the file. The list name
+appears in the tab header and in the recent files list on the home page.</p>
+
+<p>Title language is used to correctly sort titles. While original titles can be in any language, titles will usually be
+in your native language, and sorting rules may be different for different languages.</p>
+
+<p>Default season title and original title are used to generate titles for newly created seasons for series. The # symbol
+will be replaced with the actual season number. For example, if the default season title is ‘Season #’ and you create
+two seasons, their default names will be ‘Season 1’ and ‘Season 2’ respectively. Same for season original titles. You
+can learn more about the season form in the article on series.</p>
+
+<p>Default sorting is the sorting which is applied when you open the file. More info on sorting can be found in the article
+about searching, filtering, and sorting.</p>
+
+<h3 id="kind-settings">Kind Settings</h3>
+
+<p>Here you can edit existing kinds, delete them, or add new ones.</p>
+
+<p>A single kind setting consists of a name and six colors for the aforementioned item types. You can edit colors by
+clicking on them and by editing the color in the modal window.</p>
+
+<p><img src="/assets/v0.2/images/screen-settings-color.png" alt="Screen with color modal" /></p>
+
+<p>You can select a color in the color picker or enter its HEX color value. Mind that the HEX value field uses ARGB instead
+of RGB. You can add ‘FF’ in the beginning to convert an RGB value into an ARGB value.</p>
+
+<p>You can have as many kinds as you like (but more than zero). You can’t delete kinds that have items of that kind in the
+list. If you want to delete a kind, you should manually edit its every item to have a different kind.</p>
+
+<h3 id="tag-settings">Tag Settings</h3>
+
+<p>Here you can edit existing tags, delete them, or add new ones.</p>
+
+<p>When you add a new tag, or click on an existing one, a tag editing form is opened in the modal window where you can edit
+all the aforementioned attributes. The same rules apply to tag colors as to kind colors.</p>
+
+<p><img src="/assets/v0.2/images/screen-settings-tag.png" alt="Screen with tag modal" /></p>
+
+<p>You can have as many tags as you like, or none at all, if you don’t want to use them. Unlike kinds, you can delete tags
+which belong to existing items. If you do, then all items will lose this tag.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-01-01T16:15:47+00:00">January 1, 2021</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/v0.2/getting-started" class="pagination--pager" title="Getting Started
+">Previous</a>
+    
+    
+      <a href="/v0.2/forms" class="pagination--pager" title="Forms
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/TolikPylypchuk" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Movie List. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

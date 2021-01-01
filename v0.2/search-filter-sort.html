@@ -1,0 +1,542 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.1 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Searching, Filtering, Sorting | Movie List</title>
+<meta name="description" content="Searching">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Movie List">
+<meta property="og:title" content="Searching, Filtering, Sorting">
+<meta property="og:url" content="/v0.2/search-filter-sort">
+
+
+  <meta property="og:description" content="Searching">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-01-01T16:15:47+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="/v0.2/search-filter-sort">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Movie List Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <link rel="icon" type="image/ico" href="/favicon.ico">
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Movie List
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://github.com/TolikPylypchuk/MovieList/releases">Get the App</a>
+            </li><li class="masthead__menu-item">
+              <a href="https://github.com/TolikPylypchuk/MovieList">View on GitHub</a>
+            </li><li class="masthead__menu-item">
+              <a href="/v0.2/">v0.2 Docs</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      <li>
+        
+          <span class="nav__sub-title">Usage Guides</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/v0.2/">Home Page</a></li>
+          
+            <li><a href="/v0.2/getting-started">Getting Started</a></li>
+          
+            <li><a href="/v0.2/list-files">List Files</a></li>
+          
+            <li><a href="/v0.2/forms">Forms</a></li>
+          
+            <li><a href="/v0.2/movie-form">The Movie Form</a></li>
+          
+            <li><a href="/v0.2/series-form">The Series Form</a></li>
+          
+            <li><a href="/v0.2/miniseries-form">The Miniseries Form</a></li>
+          
+            <li><a href="/v0.2/franchise-form">The Franchise Form</a></li>
+          
+            <li><a href="/v0.2/search-filter-sort" class="active">Searching, Filtering, Sorting</a></li>
+          
+            <li><a href="/v0.2/preferences">Preferences</a></li>
+          
+        </ul>
+        
+      </li>
+    
+      <li>
+        
+          <span class="nav__sub-title">Other</span>
+        
+
+        
+        <ul>
+          
+            <li><a href="/v0.2/version-history">Version History</a></li>
+          
+            <li><a href="/v0.2/technical">Technical Stuff</a></li>
+          
+            <li><a href="/v0.2/about">About Movie List</a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+
+    
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Searching, Filtering, Sorting">
+    <meta itemprop="description" content="Searching">
+    <meta itemprop="datePublished" content="2021-01-01T16:15:47+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Searching, Filtering, Sorting
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#searching">Searching</a></li>
+  <li><a href="#filtering">Filtering</a></li>
+  <li><a href="#sorting">Sorting</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="searching">Searching</h2>
+
+<p>You can search for certain items in the list. To do that, specify the filters, and press ‘Find next’ or ‘Find
+previous’. The found items are colored light purple, and the currently selected found item is colored a slightly darker
+shade of purple. Here’s how it looks:</p>
+
+<p><img src="/assets/v0.2/images/screen-search.png" alt="Screen with search" /></p>
+
+<p>When the search is activated, the list of all found items will appear in the search panel, and you can click on them to
+jump to those items. To stop searching, click on the ‘Stop searching’ button. Afterwards, if you click on the ‘Find
+next’ or ‘Find previous’ button again, the search will start from the top. If you want to stop searching and clear the
+filters, then click on the ‘Clear search’ button.</p>
+
+<p>Here’s the list of all possible search filters:</p>
+
+<ul>
+  <li>
+    <p>Title - searches by title (if an item has multiple titles, they are all considered):</p>
+
+    <ul>
+      <li>Title is - searches for items whose title contains the specified input</li>
+      <li>Title starts with - searches for items whose title starts with the specified input</li>
+      <li>Title ends with - searches for items whose title ends with the specified input</li>
+    </ul>
+  </li>
+  <li>
+    <p>Year - searches by year:</p>
+
+    <ul>
+      <li>Year is - searches for items of the specified year</li>
+      <li>Year less than - searches for items before the specified year</li>
+      <li>Year greater than - searches for items after the specified year</li>
+      <li>Year between - searches for items between the specified years (inclusive)</li>
+    </ul>
+  </li>
+  <li>
+    <p>Kind is - searches for items of the specified kind</p>
+  </li>
+  <li>
+    <p>Tags - searches by tags:</p>
+
+    <ul>
+      <li>Tags include - searches for items which have all of the specified tags</li>
+      <li>Tags exclude - searches for items which have none of the specified tags</li>
+      <li>Tags have category - searches for items which have any tags of the specified category</li>
+    </ul>
+  </li>
+  <li>
+    <p>Standalone - searches for items which don’t belong to a franchise</p>
+  </li>
+  <li>
+    <p>Movies only - searches only for movies</p>
+  </li>
+  <li>
+    <p>Watched (movies only) - searches for movies which are watched</p>
+  </li>
+  <li>
+    <p>Released (movies only) - searches for movies which are released</p>
+  </li>
+  <li>
+    <p>Series only - searches only for series</p>
+  </li>
+  <li>
+    <p>Watch status is (series only) - searches for series which have the specified watch status</p>
+  </li>
+  <li>
+    <p>Release status is (series only) - searches for series which have the specified release status</p>
+  </li>
+  <li>
+    <p>Channel (series only) - searches for series which have the specified channel:</p>
+
+    <ul>
+      <li>Channel is - searches for series whose channel name equals the specified input</li>
+      <li>Channel starts with - searches for series whose channel name starts with the specified input</li>
+      <li>Channel ends with - searches for series whose channel name ends with the specified input</li>
+    </ul>
+  </li>
+  <li>
+    <p>Number of seasons (series only) - searches for series by the number of seasons:</p>
+
+    <ul>
+      <li>Number of seasons is - searches for series which have the specified number of seasons</li>
+      <li>Number of seasons less than - searches for series which have less seasons than the specified number</li>
+      <li>Number of seasons greater than - searches for series which have more seasons than the specified number</li>
+      <li>Number of seasons between - searches for series whose number of seasons is between the specified numbers (inclusive)</li>
+    </ul>
+  </li>
+  <li>
+    <p>Number of episodes (series only) - searches for series by the number of episodes:</p>
+
+    <ul>
+      <li>Number of episodes is - searches for series which have the specified number of episodes</li>
+      <li>Number of episodes less than - searches for series which have less episodes than the specified number</li>
+      <li>Number of episodes greater than - searches for series which have more episodes than the specified number</li>
+      <li>Number of episodes between - searches for series whose number of episodes is between the specified numbers
+(inclusive)</li>
+    </ul>
+  </li>
+  <li>
+    <p>Miniseries (series only) - searches for miniseries</p>
+  </li>
+</ul>
+
+<p>You can negate the filters by checking the ‘negate’ check-box. Remember that it can mean a different thing than what
+you think. For example, if you negate the ‘Watched (movies only)’ filter, it will search for series as well, because
+it will search for all items which don’t satisfy the ‘Watched (movies only)’ filter, and that includes series. When
+a filter is negated, then a red strip is added on the left side.</p>
+
+<p>The search filters can be composed in several ways. If you click on the right-side three-dot menu, the following
+options will appear:</p>
+
+<ul>
+  <li>Make composite (and)</li>
+  <li>Make composite (or)</li>
+  <li>Remove filter</li>
+</ul>
+
+<p>If you make the filter composite, then three buttons will appear:</p>
+
+<ul>
+  <li>Add filter (the ‘plus’ button)</li>
+  <li>Change the filter composition (the ‘cog’ button)</li>
+  <li>Simplify (the ‘arrows’ button)</li>
+</ul>
+
+<p>If a composite filter contains only one filter, you can make it a simple filter again by pressing the ‘simplify’ button.
+You can add filters to the composite filter by pressing the ‘add filter’ button.</p>
+
+<p>The nature of the composite filter depends on the composition type of which there are two: ‘and’ and ‘or’. If the
+composition is ‘and’ then all filters must be positive for the composite filter to be positive. If the composition is
+‘or’ then at least one filter must be positive for the composite filter to be positive. The ‘and’ composition is shown
+with a green strip on the left side, and the ‘or’ composition is shown with a blue strip on the left side. You can
+change the filter’s composition by clicking the ‘change composition’ button.</p>
+
+<p>Here’s an example: in order to search for non-watched movies, you should compose two filters: the negated ‘Watched
+(movies only)’ and ‘Movies only’, and set the composition to ‘and’ because both filters must be positive.</p>
+
+<p>If you want to remove a filter, then you can click on the ‘remove filter’ in the three-dot menu.</p>
+
+<p>You can create complex hierarchies of filters with multiple layers and different composition types.</p>
+
+<h2 id="filtering">Filtering</h2>
+
+<p>Filtering is very similar to searching. As you saw previously, when searching for items you already use various kinds of
+filters. Filtering the list uses the same principles, but has one big difference - it doesn’t highlight the found items.
+Instead, it shows only the found items. All other items are removed from the list completely. Here’s how it looks:</p>
+
+<p><img src="/assets/v0.2/images/screen-filter.png" alt="Screen with filter" /></p>
+
+<p>When you have specified the filters, you can click on the ‘Apply filter’ button to apply them. Afterwards, you can click
+on the ‘Clear filter’ button to return back to the full list.</p>
+
+<p>You can combine searching and filtering, for example by filtering by some general conditions, and then searching with
+more specific conditions in the filtered list.</p>
+
+<h2 id="sorting">Sorting</h2>
+
+<p>You can specify how the list is sorted. There are a couple options, but they are limited. Here’s how the sorting panel
+looks:</p>
+
+<p><img src="/assets/v0.2/images/screen-sort.png" alt="Screen with sort" /></p>
+
+<p>Here are the possible sorting orders:</p>
+
+<ul>
+  <li>By title</li>
+  <li>By original title</li>
+  <li>By title (simple)</li>
+  <li>By original title (simple)</li>
+  <li>By year</li>
+</ul>
+
+<p>Sorting by title takes franchises into account, while simple sorting by title doesn’t. You can specify the sorting
+direction as well - ascending or descending.</p>
+
+<p>There are two levels of sorting. The second level is used when the first level is the same (like having the same title).
+You can’t add more levels since two levels is enough.</p>
+
+<p>By default the first level of sorting is by title, and the second level is by year. The defaults can be changed in the
+file’s settings, and the default settings for new files can be changed in the preferences.</p>
+
+<p>Sorting by title is available only as the first level, because it’s complex and it doesn’t make sense to make it
+second-level. Thus only the three last options are available for the second-level sorting.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-01-01T16:15:47+00:00">January 1, 2021</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/v0.2/franchise-form" class="pagination--pager" title="The Franchise Form
+">Previous</a>
+    
+    
+      <a href="/v0.2/preferences" class="pagination--pager" title="Preferences
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/TolikPylypchuk" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Movie List. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
