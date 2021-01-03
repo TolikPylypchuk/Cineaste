@@ -2,7 +2,7 @@
 
 The final feature covered in these docs is the app-wide preferences. You can open them through the _Edit &gt; Preferences_ menu item, or by pressing `Ctrl+Shift+P`, and close them by clicking the _close_ button in the tab header, through the _File &gt; Close_ menu item, or by pressing `Ctrl+W`. Here's how preferences look:
 
-![](../.gitbook/assets/v0.1-screen-preferences.png)
+![](../.gitbook/assets/v0.2-screen-preferences.png)
 
 Preferences consist of three sections:
 
