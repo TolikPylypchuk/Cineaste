@@ -2,7 +2,7 @@
 
 The movie form is the simplest and most straightforward of the forms. Here's how it looks:
 
-![](../../.gitbook/assets/v0.1-screen-movie-form.png)
+![](../../.gitbook/assets/v0.2-screen-movie-form.png)
 
 The form consists of the following sections:
 
@@ -24,8 +24,9 @@ The movie form contains the following fields:
 * IMDb link
 * Rotten Tomatoes link
 * Poster URL
+* Tags
 
-The _released_ check-box is enabled only if the movie's year is the same as the current year. If the movie's year is before the current year, it's obvious that the movie is already released. Conversely, if the movie's year is after the current year, it's obvious that the movie was not released yet.
+The _released_ check-box is enabled only if the movie's year is the same as the current year. If the movie's year is before the current year, it's obvious that the movie is already released. Conversely, if the movie's year is after the current year, it's obvious that the movie is not released yet.
 
 If you check the _watched_ check-box, and the _released_ check-box is unchecked, it becomes checked as well. It doesn't make sense that you can watch an unreleased movie \(yes, there are exceptions, but those are rare\). If you uncheck the _released_ check-box, the _watched_ check-box becomes unchecked as well.
 
@@ -36,6 +37,8 @@ The minimum value for the year is 1850 and maximum value is 2100. The reason tha
 You can select any kind from the list of kinds which you specify in the file's settings.
 
 Links and the poster URL are not required, and indeed not every movie is guaranteed to have an entry in IMDb or RT \(although I have yet to find a movie which doesn't have an entry in IMDb\).
+
+You can add any tag from the list of tags which you specify in the file's settings. Once added, you can remove any tag by clicking its _delete_ button. Only those tags that are applicable to movies can be added.
 
 ## Actions
 

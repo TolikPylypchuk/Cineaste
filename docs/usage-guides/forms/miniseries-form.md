@@ -2,7 +2,7 @@
 
 The miniseries form describes series which are limited in nature. In the context of this app, a miniseries has only one season, which in turn has only one release period, and no special episodes. Here's how a miniseries form looks:
 
-![](../../.gitbook/assets/v0.1-screen-miniseries-form.png)
+![](../../.gitbook/assets/v0.2-screen-miniseries-form.png)
 
 As you can see, the miniseries forms are much simpler than the full series forms as they don't contain other separate forms. You can't create a miniseries form directly - you create it by creating a full series form and converting it to miniseries.
 
@@ -23,7 +23,6 @@ The miniseries form contains the following main fields:
 * Original titles \(at least one required\)
 * Watch status \(required\)
 * Release status \(required\)
-* Check-box which indicates whether the miniseries is an anthology
 * Kind \(required\)
 
 These fields are basically the same as in the full series form.
@@ -39,8 +38,11 @@ The miniseries form contains the following additional fields below the period su
 * IMDb link
 * Rotten Tomatoes link
 * Poster URL
+* Tags
 
 It may be a little confusing to see that the RT link field for the miniseries is lower than the RT link field for its single season \(RT has a separate page for miniseries' seasons\). This is because the season RT link is contained in the period subform and it comes before the RT link of the miniseries. The RT link for the miniseries is located directly below the poster, and the RT link for the season is contained at the top of the period subform. Maybe I'll change it in a future version, but for now I will leave it as-is.
+
+The rules for tags are the same as in the full series form.
 
 ## Other Actions
 

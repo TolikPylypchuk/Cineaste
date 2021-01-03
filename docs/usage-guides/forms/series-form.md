@@ -2,7 +2,7 @@
 
 This is a big one. It takes much more effort to add a series than it is to add a movie. Here's how a series form looks:
 
-![](../../.gitbook/assets/v0.1-screen-series-form.png)
+![](../../.gitbook/assets/v0.2-screen-series-form.png)
 
 The series form consists of the following parts:
 
@@ -21,11 +21,11 @@ The series form contains the following fields:
 * Original titles \(at least one required\)
 * Watch status \(required\)
 * Release status \(required\)
-* Check-box which indicates whether the series is an anthology
 * Kind \(required\)
 * IMDb link
 * Rotten Tomatoes link
 * Poster URL
+* Tags
 
 All the same rules apply to titles as with the movie form.
 
@@ -36,7 +36,7 @@ Since watching the series is more of a continuous process \(unless you binge it\
 * Watched, if you have watched the series in its entirety
 * Stopped watching, if you decided that the series is not worth your time anymore
 
-Like watch status, there's more to the release status than simply _released_ or _not released_. Here are the possible release statuses:
+Like watch status, there's more to the release status than simply 'released' or 'not released'. Here are the possible release statuses:
 
 * Not started
 * Running
@@ -44,15 +44,15 @@ Like watch status, there's more to the release status than simply _released_ or 
 * Cancelled, if the series was axed by the studio
 * Don't know/don't care, if you stopped watching the series and you don't want to track it in the app anymore
 
-You can specify that a series is an anthology series if its seasons or even individual episodes have separate storylines \(e.g. Fargo or Black Mirror\).
-
 You can select any kind from the list of kinds which you specify in the file's settings.
 
 Links and the poster URL are not required, and indeed not every series is guaranteed to have an entry in IMDb or RT \(although, like with movies, I have yet to find a series which doesn't have an entry in IMDb\). Instead of a poster, you can put a URL of a series' logo, which I do for most series.
 
+You can add any tag from the list of tags which you specify in the file's settings. Once added, you can remove any tag by clicking its _delete_ button. Only those tags that are applicable to series can be added.
+
 ## Series Components
 
-Series can \(and should\) contain one or more components. A series component is either a season or a special episode which in the context of this app means an episode which was aired or released separately from others, even if the studio doesn't designate it as 'special' \(e.g. White Christmas is a standalone episode of Black Mirror\). You can add componentes through the _'Add season_ or _Add special episode_ buttons. When you press one of them, a respective form is opened. You can't save a series unless it contains at least one component.
+Series must contain one or more components. A series component is either a season or a special episode which in the context of this app means an episode which was aired or released separately from others, even if the studio doesn't designate it as 'special' \(e.g. White Christmas is a standalone episode of Black Mirror\). You can add componentes through the _Add season_ or _Add special episode_ buttons. When you press one of them, a respective form is opened. You can't save a series unless it contains at least one component.
 
 You can move series components up and down by right-clicking on a component and selecting the _Move up_ or _Move down_ context actions.
 
@@ -73,9 +73,9 @@ You can execute these actions only when the form doesn't contain changes.
 
 When you add a new season or click on an existing one in the series form, a season form is opened. Here's how it looks:
 
-![](../../.gitbook/assets/v0.1-screen-season-form.png)
+![](../../.gitbook/assets/v0.2-screen-season-form.png)
 
-Unlike the movie and series forms, the season form is not independent - it's considered to be part of the series form. You can't save a season directly; to save a season, go back to the series form and save the whole series. You can cancel any changes in the season form directly. If you cancel changes in the series form, all changes in all seasons will be cancelled as well \(and new seasons will be deleted\).
+Unlike the movie and series forms, the season form is not independent - it's considered to be part of the series form. You can't save a season directly; to save a season, go back to the series form and save the whole series. You can cancel any changes in the season form directly. If you cancel changes in the series form, all changes in all seasons will be cancelled as well \(new seasons will be deleted, and deleted seasons will be returned\).
 
 The season form consists of the following parts:
 
@@ -163,9 +163,9 @@ You can delete the season only when the form doesn't contain changes.
 
 When you add a new special episode or click on an existing one in the series form, a special episode form is opened. Here's how it looks:
 
-![](../../.gitbook/assets/v0.1-screen-episode-form.png)
+![](../../.gitbook/assets/v0.2-screen-episode-form.png)
 
-This form is similar to the movie form and is much simpler than the season form. Like the season form, the special episode form is not independent - it's considered to be part fo the series form. You can't save an episode directly; to save an episode, go back to the series form and save the whole series. You can cancel any changes in the episode form directly. If you cancel changes in the series form, all changes in all episodes will be cancelled as well \(and new episodes will be deleted\).
+This form is similar to the movie form and is much simpler than the season form. Like the season form, the special episode form is not independent - it's considered to be part fo the series form. You can't save an episode directly; to save an episode, go back to the series form and save the whole series. You can cancel any changes in the episode form directly. If you cancel changes in the series form, all changes in all episodes will be cancelled as well \(new episodes will be deleted, and deleted episodes will be returned\).
 
 The special episode form consists of the following parts:
 
@@ -193,5 +193,5 @@ As with seasons, the year of the episode's release can be between 1950 and 2100.
 
 ### Special Episode Actions
 
-The actions are the same as seasons' actions described in the 'Other Season Actions' section.
+The actions are the same as seasons' actions described in the _Other Season Actions_ section.
 

@@ -4,7 +4,7 @@ Lots of movies and series have multiple parts, so it's logical to have these mov
 
 Franchises can be created and edited via the franchise forms, but those can't be created directly. Rather, you first create a movie or a series, and after saving it, you can create a franchise where this movie/series is the first part, using the _Create franchise_ button at the bottom of the form. Here's how a franchise form looks:
 
-![](../../.gitbook/assets/v0.1-screen-franchise-form.png)
+![](../../.gitbook/assets/v0.2-screen-franchise-form.png)
 
 The franchise form is a little different from other forms in that it's focus is on actions rather than fields and data. It consists of the following parts:
 
@@ -65,7 +65,7 @@ Merging display numbers can be better explained with an example. Suppose you cre
 
 If a movie, series, or a franchise are parts of a franchise, their forms will contain additional actions, most of which are located in the form header.
 
-Firstly, you can go to the franchise, using the _up arrow_ button in the form's header, or using the _Go to franchise_ button at the bottom of the form which substitues the _Create franchise_ button since the latter is not needed anymore.
+Firstly, you can go to the franchise, using the _up arrow_ button in the form's header, or using the _Go to franchise_ button at the bottom of the form which substitues the _Create franchise button_ since the latter is not needed anymore.
 
 Secondly, you can move to the next or previous franchise entry using the arrow buttons in the form's header, just like you can move between the series componentes if you open one of those forms.
 
