@@ -1,0 +1,21 @@
+title: Movie List
+author: Tolik Pylypcuk
+email: pylypchuk.tolik@gmail.com
+description: An app for keeping a list of movies and series
+avatar: /favicon.ico
+
+baseurl: ""
+url: ""
+
+github_username: TolikPylypchuk
+repository: TolikPylypchuk/MovieList
+
+links:
+  get-app: https://github.com/TolikPylypchuk/MovieList/releases
+  github: https://github.com/TolikPylypchuk/MovieList
+  view-docs: https://docs.movielist.tolik.io/
+
+markdown: kramdown
+theme: jekyll-theme-cayman
+plugins:
+  - jekyll-feed
