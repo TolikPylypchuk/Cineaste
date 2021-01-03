@@ -1,8 +1,0 @@
-<local:NumberFilterInputControlBase x:Class="MovieList.Views.Filters.NumberFilterInputControl"
-                                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                                    xmlns:local="clr-namespace:MovieList.Views.Filters"
-                                    xmlns:v="clr-namespace:MovieList.Views">
-    <v:NumberTextBox x:Name="InputBox" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     v:Properties.TripleClickSelectAll="True" />
-</local:NumberFilterInputControlBase>
