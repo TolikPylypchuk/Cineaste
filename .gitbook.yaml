@@ -1,0 +1,9 @@
+root: ./docs
+
+​structure:  
+    readme: ./README.md  
+    summary: ./SUMMARY.md​
+
+title: Movie List
+description: An app for tracking movies and series
+author: Tolik Pylypchuk
