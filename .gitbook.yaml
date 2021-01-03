@@ -5,5 +5,5 @@ root: ./docs
     summary: ./SUMMARY.md​
 
 title: Movie List
-description: An app for tracking movies and series
+description: An app for keeping a list of movies and series
 author: Tolik Pylypchuk
