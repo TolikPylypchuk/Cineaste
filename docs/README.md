@@ -6,5 +6,5 @@ If you want to use this app to track movies and series, you can certainly do so,
 
 [Get the app](https://github.com/TolikPylypchuk/MovieList/releases)
 
-![](.gitbook/assets/v0.1-screen-movie.png)
+![](.gitbook/assets/v0.2-screen-movie.png)
 
