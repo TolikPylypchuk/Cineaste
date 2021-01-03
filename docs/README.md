@@ -4,7 +4,5 @@ An app which keeps track of the movies and TV series you have watched or would l
 
 If you want to use this app to track movies and series, you can certainly do so, but bear in mind that this is a personal project - I'm writing this app for myself, at my own pace, and according to my own needs.
 
-[Get the app](https://github.com/TolikPylypchuk/MovieList/releases)
-
 ![](.gitbook/assets/v0.2-screen-movie.png)
 
