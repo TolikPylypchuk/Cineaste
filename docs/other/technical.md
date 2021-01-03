@@ -61,7 +61,7 @@ Currently, the file is never trimmed or rolled over, so if you choose a low log 
 
 [GitBook](https://www.gitbook.com) is used for docs since it's quite versatile and can host docs for multiple app versions.
 
-Previously these articles were built using [Jekyll](https://jekyllrb.com) and [GitHub Pages](https://pages.github.com), and use the [Minimal Mistakes theme](https://mmistakes.github.io/minimal-mistakes). The first version of the docs used the [Just the Docs theme](https://pmarsceill.github.io/just-the-docs) but it doesn't support multiple versions of the docs.
+Previously these articles were built using [Jekyll](https://jekyllrb.com) and [GitHub Pages](https://pages.github.com), and used the [Minimal Mistakes theme](https://mmistakes.github.io/minimal-mistakes). The first version of the docs used the [Just the Docs theme](https://pmarsceill.github.io/just-the-docs) but it doesn't support multiple versions of the docs.
 
 ## Building from Source
 
