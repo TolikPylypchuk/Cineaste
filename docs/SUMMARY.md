@@ -11,4 +11,10 @@
   * [The Series Form](usage-guides/forms/the-series-form.md)
   * [The Miniseries Form](usage-guides/forms/the-miniseries-form.md)
   * [The Franchise Form](usage-guides/forms/the-franchise-form.md)
+* [Preferences](usage-guides/preferences.md)
+
+## Other
+
+* [Technical Stuff](other/technical-stuff.md)
+* [About Movie List](other/about-movie-list.md)
 
