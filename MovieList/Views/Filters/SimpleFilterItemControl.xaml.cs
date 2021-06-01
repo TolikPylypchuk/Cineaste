@@ -12,7 +12,7 @@ using MovieList.Core.ViewModels.Filters;
 
 using ReactiveUI;
 
-using Splat;
+using static MovieList.Core.ServiceUtil;
 
 namespace MovieList.Views.Filters
 {
@@ -42,7 +42,7 @@ namespace MovieList.Views.Filters
             this.Bind(this.ViewModel, vm => vm.FilterType, v => v.FilterTypeComboBox.SelectedItem)
                 .DisposeWith(disposables);
 
-            var filterOperationConverter = Locator.Current.GetService<IEnumConverter<FilterOperation>>();
+            var filterOperationConverter = GetDefaultService<IEnumConverter<FilterOperation>>();
 
             this.ViewModel!.AvailableOperations
                 .ToObservableChangeSet()

@@ -8,7 +8,7 @@ using MovieList.Data.Models;
 
 using ReactiveUI;
 
-using Splat;
+using static MovieList.Core.ServiceUtil;
 
 using Filter = System.Func<MovieList.Core.ListItems.ListItem, bool>;
 
@@ -18,7 +18,7 @@ namespace MovieList.Core.ViewModels.Filters
     {
         protected static readonly Filter NoFilter = item => true;
 
-        protected readonly Subject<Unit> FilterChangedSubject = new Subject<Unit>();
+        protected readonly Subject<Unit> FilterChangedSubject = new();
 
         private protected FilterItem(
             ReadOnlyObservableCollection<Kind> kinds,
@@ -30,10 +30,10 @@ namespace MovieList.Core.ViewModels.Filters
             this.Tags = tags;
 
             this.SeriesWatchStatusConverter = seriesWatchStatusConverter
-                ?? Locator.Current.GetService<IEnumConverter<SeriesWatchStatus>>();
+                ?? GetDefaultService<IEnumConverter<SeriesWatchStatus>>();
 
             this.SeriesReleaseStatusConverter = seriesReleaseStatusConverter
-                ?? Locator.Current.GetService<IEnumConverter<SeriesReleaseStatus>>();
+                ?? GetDefaultService<IEnumConverter<SeriesReleaseStatus>>();
         }
 
         public IObservable<Unit> FilterChanged =>

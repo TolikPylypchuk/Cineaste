@@ -26,7 +26,7 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using Splat;
+using static MovieList.Core.ServiceUtil;
 
 namespace MovieList.Core.ViewModels.Forms
 {
@@ -51,10 +51,9 @@ namespace MovieList.Core.ViewModels.Forms
             : base(franchise.Entry, resourceManager, scheduler)
         {
             this.Franchise = franchise;
-            settings ??= Locator.Current.GetService<Settings>(fileName);
+            settings ??= GetDefaultService<Settings>(fileName);
 
-            this.franchiseService = franchiseService ??
-                Locator.Current.GetService<IEntityService<Franchise>>(fileName);
+            this.franchiseService = franchiseService ?? GetDefaultService<IEntityService<Franchise>>(fileName);
             
             this.entriesSource.Connect()
                 .Transform(this.CreateEntryViewModel)

@@ -17,7 +17,7 @@ using MovieList.Data.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using Splat;
+using static MovieList.Core.ServiceUtil;
 
 namespace MovieList.Core.ViewModels
 {
@@ -42,9 +42,9 @@ namespace MovieList.Core.ViewModels
             this.FileName = fileName;
             this.ListName = listName;
 
-            kindService ??= Locator.Current.GetService<ISettingsEntityService<Kind>>(fileName);
-            tagService ??= Locator.Current.GetService<ISettingsEntityService<Tag>>(fileName);
-            this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
+            kindService ??= GetDefaultService<ISettingsEntityService<Kind>>(fileName);
+            tagService ??= GetDefaultService<ISettingsEntityService<Tag>>(fileName);
+            this.settingsService = settingsService ?? GetDefaultService<ISettingsService>(fileName);
 
             this.Header = new TabHeaderViewModel(this.FileName, this.ListName);
 

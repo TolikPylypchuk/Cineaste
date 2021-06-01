@@ -17,8 +17,7 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using Splat;
-
+using static MovieList.Core.ServiceUtil;
 using static MovieList.Data.Constants;
 
 namespace MovieList.Core.ViewModels.Forms
@@ -42,8 +41,8 @@ namespace MovieList.Core.ViewModels.Forms
             this.Series = series;
             this.Kinds = kinds;
 
-            this.seriesService = seriesService ?? Locator.Current.GetService<IEntityService<Series>>(fileName);
-            this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
+            this.seriesService = seriesService ?? GetDefaultService<IEntityService<Series>>(fileName);
+            this.settingsService = settingsService ?? GetDefaultService<ISettingsService>(fileName);
 
             this.CopyProperties();
 

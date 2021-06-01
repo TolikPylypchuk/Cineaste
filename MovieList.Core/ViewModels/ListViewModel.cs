@@ -23,11 +23,13 @@ using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
+using static MovieList.Core.ServiceUtil;
+
 namespace MovieList.Core.ViewModels
 {
     public sealed class ListViewModel : ReactiveObject
     {
-        private readonly ISourceCache<ListItem, string> source;
+        private readonly SourceCache<ListItem, string> source = new(item => item.Id);
         private readonly ReadOnlyObservableCollection<ListItemViewModel> items;
         private readonly Subject<Unit> resort = new();
 
@@ -41,10 +43,8 @@ namespace MovieList.Core.ViewModels
             Settings? settings = null,
             IListService? listService = null)
         {
-            settings ??= Locator.Current.GetService<Settings>(fileName);
-            listService ??= Locator.Current.GetService<IListService>(fileName);
-
-            this.source = new SourceCache<ListItem, string>(item => item.Id);
+            settings ??= GetDefaultService<Settings>(fileName);
+            listService ??= GetDefaultService<IListService>(fileName);
 
             this.Find = find;
 

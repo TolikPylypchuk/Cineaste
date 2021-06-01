@@ -16,7 +16,7 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using Splat;
+using static MovieList.Core.ServiceUtil;
 
 namespace MovieList.Core.ViewModels.Forms.Preferences
 {
@@ -38,9 +38,9 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             IScheduler? scheduler = null)
             : base(new SettingsModel(settings, kinds.ToList(), tags.ToList()), resourceManager, scheduler)
         {
-            this.settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>(fileName);
-            this.kindService = kindService ?? Locator.Current.GetService<ISettingsEntityService<Kind>>(fileName);
-            this.tagService = tagService ?? Locator.Current.GetService<ISettingsEntityService<Tag>>(fileName);
+            this.settingsService = settingsService ?? GetDefaultService<ISettingsService>(fileName);
+            this.kindService = kindService ?? GetDefaultService<ISettingsEntityService<Kind>>(fileName);
+            this.tagService = tagService ?? GetDefaultService<ISettingsEntityService<Tag>>(fileName);
 
             this.ListNameRule = this.ValidationRule(
                 vm => vm.ListName, name => !String.IsNullOrWhiteSpace(name), "ListNameEmpty");

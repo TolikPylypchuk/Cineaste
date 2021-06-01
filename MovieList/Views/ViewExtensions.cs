@@ -14,7 +14,7 @@ using MovieList.Validation;
 using ReactiveUI;
 using ReactiveUI.Validation.Helpers;
 
-using Splat;
+using static MovieList.Core.ServiceUtil;
 
 namespace MovieList.Views
 {
@@ -64,7 +64,7 @@ namespace MovieList.Views
         public static void AddEnumValues<TEnum>(this ComboBox comboBox, params TEnum[] values)
             where TEnum : struct, Enum
         {
-            var converter = Locator.Current.GetService<IEnumConverter<TEnum>>();
+            var converter = GetDefaultService<IEnumConverter<TEnum>>();
 
             (values.Length != 0 ? values : Enum.GetValues<TEnum>())
                 .Select(converter.ToString)

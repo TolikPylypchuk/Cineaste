@@ -56,7 +56,9 @@ namespace MovieList.Data.Services.Implementations
 
         private IDbConnection OpenConnection()
         {
-            var connection = Locator.Current.GetService<IDbConnection>(this.DatabasePath);
+            var connection = Locator.Current.GetService<IDbConnection>(this.DatabasePath)
+                ?? throw new InvalidOperationException($"Cannot create a DB connection to {this.DatabasePath}");
+
             connection.Open();
 
             var walCommand = connection.CreateCommand();

@@ -11,9 +11,8 @@ using MovieList.Data.Models;
 
 using ReactiveUI.Fody.Helpers;
 
-using Splat;
-
 using static MovieList.Core.Constants;
+using static MovieList.Core.ServiceUtil;
 
 namespace MovieList.Core.ViewModels.Forms.Preferences
 {
@@ -28,7 +27,7 @@ namespace MovieList.Core.ViewModels.Forms.Preferences
             IScheduler? scheduler = null)
             : base(userPreferences, resourceManager, scheduler)
         {
-            this.store = store ?? Locator.Current.GetService<IBlobCache>(StoreKey);
+            this.store = store ?? GetDefaultService<IBlobCache>(StoreKey);
 
             this.Header = new TabHeaderViewModel(
                 String.Empty, this.ResourceManager.GetString("Preferences") ?? String.Empty);

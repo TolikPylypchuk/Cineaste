@@ -19,6 +19,8 @@ using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
+using static MovieList.Core.ServiceUtil;
+
 namespace MovieList.Core.ViewModels.Forms.Base
 {
 #nullable disable
@@ -37,7 +39,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
 
         protected ReactiveForm(ResourceManager? resourceManager = null, IScheduler? scheduler = null)
         {
-            this.ResourceManager = resourceManager ?? Locator.Current.GetService<ResourceManager>();
+            this.ResourceManager = resourceManager ?? GetDefaultService<ResourceManager>();
             this.Scheduler = scheduler ?? System.Reactive.Concurrency.Scheduler.Default;
 
             this.Valid = Observable.CombineLatest(this.validSubject, this.IsValid()).AllTrue();
@@ -71,7 +73,7 @@ namespace MovieList.Core.ViewModels.Forms.Base
 
         protected abstract TForm Self { get; }
 
-        public override IEnumerable GetErrors(string propertyName) =>
+        public override IEnumerable GetErrors(string? propertyName) =>
             Enumerable.Empty<string>();
 
         protected void TrackChanges(IObservable<bool> changes) =>

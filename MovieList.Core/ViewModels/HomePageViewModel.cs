@@ -20,6 +20,7 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 
 using static MovieList.Core.Constants;
+using static MovieList.Core.ServiceUtil;
 
 namespace MovieList.Core.ViewModels
 {
@@ -31,7 +32,7 @@ namespace MovieList.Core.ViewModels
 
         public HomePageViewModel(IObservable<bool> showRecentFiles, IBlobCache? store = null)
         {
-            this.store = store ?? Locator.Current.GetService<IBlobCache>(StoreKey);
+            this.store = store ?? GetDefaultService<IBlobCache>(StoreKey);
 
             this.recentFilesSource.Connect()
                 .Sort(SortExpressionComparer<RecentFileViewModel>.Descending(vm => vm.File.Closed))
@@ -40,7 +41,7 @@ namespace MovieList.Core.ViewModels
                 .DisposeMany()
                 .Subscribe();
 
-            var preferencesObservable = this.store.GetObject<UserPreferences>(PreferencesKey);
+            var preferencesObservable = this.store.GetObject<UserPreferences?>(PreferencesKey).WhereNotNull();
 
             preferencesObservable
                 .SelectMany(preferences => preferences.File.RecentFiles)
@@ -115,7 +116,8 @@ namespace MovieList.Core.ViewModels
                     .Select(_ => (string?)null);
 
         private IObservable<Unit> RemoveRecentFileEntry(string fileName) =>
-            this.store.GetObject<UserPreferences>(PreferencesKey)
+            this.store.GetObject<UserPreferences?>(PreferencesKey)
+                .WhereNotNull()
                 .Eager()
                 .Do(_ => this.Log().Debug($"Removing recent file: {fileName}"))
                 .Do(_ => this.recentFilesSource.Remove(fileName))
@@ -123,7 +125,8 @@ namespace MovieList.Core.ViewModels
                 .SelectMany(preferences => this.store.InsertObject(PreferencesKey, preferences).Eager());
 
         private IObservable<Unit> OnRemoveSelectedRecentFiles() =>
-            this.store.GetObject<UserPreferences>(PreferencesKey)
+            this.store.GetObject<UserPreferences?>(PreferencesKey)
+                .WhereNotNull()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Do(this.RemoveRecentFiles)
                 .ObserveOn(RxApp.TaskpoolScheduler)

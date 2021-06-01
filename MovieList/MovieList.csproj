@@ -7,8 +7,8 @@
     <Nullable>enable</Nullable>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <Platforms>x64</Platforms>
-    <AssemblyVersion>0.2.1.0</AssemblyVersion>
-    <FileVersion>0.2.1.0</FileVersion>
+    <AssemblyVersion>0.3.0.0</AssemblyVersion>
+    <FileVersion>0.3.0.0</FileVersion>
     <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
@@ -17,20 +17,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="akavache" Version="7.1.1" />
-    <PackageReference Include="DynamicData" Version="7.1.1" />
+    <PackageReference Include="akavache" Version="7.2.1" />
+    <PackageReference Include="DynamicData" Version="7.1.17" />
     <PackageReference Include="MaterialDesignColors" Version="1.2.7" />
     <PackageReference Include="MaterialDesignExtensions" Version="3.3.0-a01" />
     <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
-    <PackageReference Include="ReactiveUI" Version="13.0.1" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.0.1" />
-    <PackageReference Include="ReactiveUI.Validation" Version="1.8.6" />
-    <PackageReference Include="ReactiveUI.WPF" Version="13.0.1" />
+    <PackageReference Include="ReactiveUI" Version="13.3.2" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.3.2" />
+    <PackageReference Include="ReactiveUI.Validation" Version="2.1.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="13.3.2" />
     <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.1" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
-    <PackageReference Include="Splat" Version="9.8.1" />
-    <PackageReference Include="Splat.Serilog" Version="9.8.1" />
+    <PackageReference Include="Splat" Version="11.1.1" />
+    <PackageReference Include="Splat.Serilog" Version="11.1.1" />
     <PackageReference Include="System.Interactive" Version="5.0.0" />
     <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />

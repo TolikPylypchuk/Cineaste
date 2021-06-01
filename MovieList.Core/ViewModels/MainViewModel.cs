@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -30,6 +29,7 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 
 using static MovieList.Core.Constants;
+using static MovieList.Core.ServiceUtil;
 using static MovieList.Data.Constants;
 
 namespace MovieList.Core.ViewModels
@@ -50,7 +50,7 @@ namespace MovieList.Core.ViewModels
 
         public MainViewModel(IBlobCache? store = null, IScheduler? scheduler = null)
         {
-            this.store = store ?? Locator.Current.GetService<IBlobCache>(StoreKey);
+            this.store = store ?? GetDefaultService<IBlobCache>(StoreKey);
             this.scheduler = scheduler ?? Scheduler.Default;
 
             this.HomePage = new HomePageViewModel(showRecentFiles);
@@ -135,7 +135,7 @@ namespace MovieList.Core.ViewModels
 
             Locator.CurrentMutable.RegisterDatabaseServices(model.File);
 
-            var preferences = Locator.Current.GetService<UserPreferences>().Defaults;
+            var preferences = GetDefaultService<UserPreferences>().Defaults;
 
             var settings = new Settings(
                 model.ListName,
@@ -148,7 +148,7 @@ namespace MovieList.Core.ViewModels
                 preferences.DefaultFirstSortDirection,
                 preferences.DefaultSecondSortDirection);
 
-            return Locator.Current.GetService<IDatabaseService>(model.File)
+            return GetDefaultService<IDatabaseService>(model.File)
                 .CreateDatabaseInTaskPool(settings, preferences.DefaultKinds, preferences.DefaultTags)
                 .SelectMany(_ => this.GetSettings(model.File))
                 .Do(dbSettings => Locator.CurrentMutable.RegisterConstant(dbSettings, model.File))
@@ -175,10 +175,10 @@ namespace MovieList.Core.ViewModels
             this.Log().Debug($"Opening a file: {model.File}");
 
             Locator.CurrentMutable.RegisterDatabaseServices(model.File);
-            var settingsService = Locator.Current.GetService<ISettingsService>(model.File);
+            var settingsService = GetDefaultService<ISettingsService>(model.File);
             Locator.CurrentMutable.RegisterConstant(settingsService.GetSettings(), model.File);
 
-            return Locator.Current.GetService<IDatabaseService>(model.File)
+            return GetDefaultService<IDatabaseService>(model.File)
                 .ValidateDatabaseInTaskPool()
                 .SelectMany(isFileValid =>
                 {
@@ -237,7 +237,8 @@ namespace MovieList.Core.ViewModels
 
             this.SetSelectedItemIndex(currentIndex == fileIndex ? fileIndex - 1 : currentIndex);
 
-            return this.store.GetObject<UserPreferences>(PreferencesKey)
+            return this.store.GetObject<UserPreferences?>(PreferencesKey)
+                .WhereNotNull()
                 .DoAsync(preferences => this.AddFileToRecent(preferences, file, true))
                 .DoAsync(preferences => this.store.InsertObject(PreferencesKey, preferences).Eager())
                 .Select(_ => file)
@@ -247,7 +248,8 @@ namespace MovieList.Core.ViewModels
         }
 
         private IObservable<Unit> OnShutdown() =>
-            this.store.GetObject<UserPreferences>(PreferencesKey)
+            this.store.GetObject<UserPreferences?>(PreferencesKey)
+                .WhereNotNull()
                 .DoAsync(preferences => this.Files
                     .Select(file => this.AddFileToRecent(preferences, file.FileName, false))
                     .Concat()
@@ -261,7 +263,8 @@ namespace MovieList.Core.ViewModels
                 this.SetSelectedItemIndex(this.Files.Count + 1);
             }
 
-            return this.store.GetObject<UserPreferences>(PreferencesKey)
+            return this.store.GetObject<UserPreferences?>(PreferencesKey)
+                .WhereNotNull()
                 .Select(preferences => new PreferencesFormViewModel(preferences, this.store))
                 .Do(this.OpenPreferencesForm)
                 .Discard()
@@ -344,7 +347,8 @@ namespace MovieList.Core.ViewModels
                 .Discard();
 
         private IObservable<Unit> UpdateRecentFile(string file, string newName) =>
-            this.store.GetObject<UserPreferences>(PreferencesKey)
+            this.store.GetObject<UserPreferences?>(PreferencesKey)
+                .WhereNotNull()
                 .Eager()
                 .Select(preferences => new
                 {
@@ -364,7 +368,7 @@ namespace MovieList.Core.ViewModels
                 .SelectMany(data => this.store.InsertObject(PreferencesKey, data.Preferences).Eager());
 
         private IObservable<Settings> GetSettings(string file) =>
-            Locator.Current.GetService<ISettingsService>(file).GetSettingsInTaskPool();
+            GetDefaultService<ISettingsService>(file).GetSettingsInTaskPool();
 
         private void OpenPreferencesForm(PreferencesFormViewModel form)
         {

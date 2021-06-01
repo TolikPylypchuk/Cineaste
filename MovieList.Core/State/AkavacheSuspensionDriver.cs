@@ -15,7 +15,7 @@ namespace MovieList.Core.State
             BlobCache.UserAccount.InvalidateObject<TAppState>(AppStateKey);
 
         public IObservable<object> LoadState() =>
-            BlobCache.UserAccount.GetObject<TAppState>(AppStateKey);
+            BlobCache.UserAccount.GetObject<TAppState?>(AppStateKey).WhereNotNull();
 
         public IObservable<Unit> SaveState(object state) =>
             BlobCache.UserAccount.InsertObject(AppStateKey, (TAppState)state);
