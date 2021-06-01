@@ -1,4 +1,4 @@
-title: Movie List
+title: Cineaste
 author: Tolik Pylypcuk
 email: pylypchuk.tolik@gmail.com
 description: An app for keeping a list of movies and series
@@ -8,12 +8,12 @@ baseurl: ""
 url: ""
 
 github_username: TolikPylypchuk
-repository: TolikPylypchuk/MovieList
+repository: TolikPylypchuk/Cineaste
 
 links:
-  get-app: https://github.com/TolikPylypchuk/MovieList/releases
-  github: https://github.com/TolikPylypchuk/MovieList
-  view-docs: https://docs.movielist.tolik.io/
+  get-app: https://github.com/TolikPylypchuk/Cineaste/releases
+  github: https://github.com/TolikPylypchuk/Cineaste
+  view-docs: https://docs.cineaste.tolik.io/
 
 markdown: kramdown
 theme: jekyll-theme-cayman

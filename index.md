@@ -1,9 +1,9 @@
 ---
 layout: custom
-title: Movie List
+title: Cineaste
 ---
 
-Movie List is an app which keeps track of the movies and TV series you have watched or would like to watch.
+Cineaste is an app which keeps track of the movies and TV series you have watched or would like to watch.
 
 A long time ago I started keeping a list of movies and TV series I've watched and would like to watch. Keeping track
 of all these movies and series in a Word document because cumbersome since now there are more than a thousand entries
@@ -17,7 +17,7 @@ personal project - I'm writing this app for myself, at my own pace, and accordin
 
 # Docs
 
-The docs for this app are available [here](https://docs.movielist.tolik.io) and contain extensive info on how to use
+The docs for this app are available [here](https://docs.cineaste.tolik.io) and contain extensive info on how to use
 the app.
 
 # Project Status
