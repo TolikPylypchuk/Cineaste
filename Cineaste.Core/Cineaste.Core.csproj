@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MovieList.Data\MovieList.Data.csproj" />
+    <ProjectReference Include="..\Cineaste.Data\Cineaste.Data.csproj" />
   </ItemGroup>
 
 </Project>

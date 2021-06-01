@@ -37,8 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MovieList.Core\MovieList.Core.csproj" />
-    <ProjectReference Include="..\MovieList.Data\MovieList.Data.csproj" />
+    <ProjectReference Include="..\Cineaste.Core\Cineaste.Core.csproj" />
+    <ProjectReference Include="..\Cineaste.Data\Cineaste.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
