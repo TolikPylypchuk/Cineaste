@@ -10,7 +10,10 @@ namespace MovieList.Core.Comparers
 {
     public sealed class TitleComparer : NullableComparerBase<string>
     {
+        private const string Space = " ";
+
         private static readonly Regex NumberRegex = new("([0-9]+)", RegexOptions.Compiled);
+        private static readonly Regex SpacesRegex = new("\\s+", RegexOptions.Compiled);
 
         private readonly StringComparer stringComparer;
         private readonly IComparer<IEnumerable<object>> comparer;
@@ -35,20 +38,21 @@ namespace MovieList.Core.Comparers
             NumberRegex.Split(this.Normalize(title)).Select(this.Convert);
 
         private string Normalize(string title) =>
-            title.ToLower()
-                .Replace(":", "")
-                .Replace(";", "")
-                .Replace("!", "")
-                .Replace("?", "")
-                .Replace(".", "")
-                .Replace(",", "")
-                .Replace(" - ", " ")
-                .Replace(" – ", " ")
-                .Replace("-", " ")
-                .Replace("'", "")
-                .Replace("’", "")
-                .Replace("\"", "")
-                .Replace("  ", " ");
+            SpacesRegex.Replace(
+                title.ToLower()
+                    .Replace(":", Space)
+                    .Replace(";", Space)
+                    .Replace("!", Space)
+                    .Replace("?", Space)
+                    .Replace(".", Space)
+                    .Replace(",", Space)
+                    .Replace(" - ", Space)
+                    .Replace(" – ", Space)
+                    .Replace("-", Space)
+                    .Replace("'", Space)
+                    .Replace("’", Space)
+                    .Replace("\"", Space),
+                Space);
 
         private object Convert(string title) =>
             Int32.TryParse(title, out int result) ? (object)result : title;

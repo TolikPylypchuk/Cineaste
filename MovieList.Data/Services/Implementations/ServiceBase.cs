@@ -1,6 +1,8 @@
 using System;
 using System.Data;
 
+using Dapper;
+
 using Splat;
 
 namespace MovieList.Data.Services.Implementations
@@ -26,9 +28,6 @@ namespace MovieList.Data.Services.Implementations
                 transaction.Rollback();
                 this.Log().Error(e);
                 throw;
-            } finally
-            {
-                connection.Close();
             }
         }
 
@@ -48,9 +47,6 @@ namespace MovieList.Data.Services.Implementations
                 transaction.Rollback();
                 this.Log().Error(e);
                 throw;
-            } finally
-            {
-                connection.Close();
             }
         }
 
@@ -60,10 +56,7 @@ namespace MovieList.Data.Services.Implementations
                 ?? throw new InvalidOperationException($"Cannot create a DB connection to {this.DatabasePath}");
 
             connection.Open();
-
-            var walCommand = connection.CreateCommand();
-            walCommand.CommandText = @"PRAGMA journal_mode = 'wal'";
-            walCommand.ExecuteNonQuery();
+            connection.Execute(@"PRAGMA journal_mode = 'wal'");
 
             return connection;
         }
