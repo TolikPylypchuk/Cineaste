@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using MovieList.Core.ListItems;
-using MovieList.Data;
-using MovieList.Data.Models;
+using Cineaste.Core.ListItems;
+using Cineaste.Data;
+using Cineaste.Data.Models;
 
-namespace MovieList.Core.Data
+namespace Cineaste.Core.Data
 {
-    public static class MovieListExtensions
+    public static class ListExtensions
     {
         public static List<ListItem> ToListItems(this EntireList list) =>
             list.Movies.Select(movie => new MovieListItem(movie))

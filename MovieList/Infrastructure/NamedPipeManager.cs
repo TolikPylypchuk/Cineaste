@@ -8,7 +8,7 @@ using System.Threading;
 
 using Splat;
 
-namespace MovieList.Infrastructure
+namespace Cineaste.Infrastructure
 {
     public sealed class NamedPipeManager : IEnableLogger
     {

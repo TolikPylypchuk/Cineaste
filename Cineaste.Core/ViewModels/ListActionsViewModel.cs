@@ -1,13 +1,13 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 
-using MovieList.Core.ViewModels.Filters;
-using MovieList.Data;
-using MovieList.Data.Models;
+using Cineaste.Core.ViewModels.Filters;
+using Cineaste.Data;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public sealed class ListActionsViewModel : ReactiveObject
     {

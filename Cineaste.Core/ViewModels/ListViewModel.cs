@@ -6,15 +6,15 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
+using Cineaste.Core.Data;
+using Cineaste.Core.Data.Models;
+using Cineaste.Core.ListItems;
+using Cineaste.Data;
+using Cineaste.Data.Models;
+using Cineaste.Data.Services;
+
 using DynamicData;
 using DynamicData.Binding;
-
-using MovieList.Core.Data;
-using MovieList.Core.Data.Models;
-using MovieList.Core.ListItems;
-using MovieList.Data;
-using MovieList.Data.Models;
-using MovieList.Data.Services;
 
 using Nito.Comparers;
 
@@ -23,9 +23,9 @@ using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-using static MovieList.Core.ServiceUtil;
+using static Cineaste.Core.ServiceUtil;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public sealed class ListViewModel : ReactiveObject
     {

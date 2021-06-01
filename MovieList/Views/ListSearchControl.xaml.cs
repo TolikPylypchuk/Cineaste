@@ -2,15 +2,15 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using Cineaste.Core.ViewModels;
+using Cineaste.Properties;
+
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
-using MovieList.Core.ViewModels;
-using MovieList.Properties;
-
 using ReactiveUI;
 
-namespace MovieList.Views
+namespace Cineaste.Views
 {
     public abstract class ListSearchControlBase : ReactiveUserControl<ListSearchViewModel> { }
 

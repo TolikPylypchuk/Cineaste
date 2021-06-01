@@ -3,18 +3,18 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+
 using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
 using MaterialDesignThemes.Wpf;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels.Forms.Preferences;
-
 using ReactiveUI;
 
-namespace MovieList.Views.Forms.Preferences
+namespace Cineaste.Views.Forms.Preferences
 {
     public abstract class TagFormControlBase : ReactiveUserControl<TagFormViewModel> { }
 

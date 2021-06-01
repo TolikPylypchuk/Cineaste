@@ -1,11 +1,11 @@
-<local:MiniseriesFormControlBase x:Class="MovieList.Views.Forms.MiniseriesFormControl"
+<local:MiniseriesFormControlBase x:Class="Cineaste.Views.Forms.MiniseriesFormControl"
                                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                  xmlns:rx="http://reactiveui.net"
                                  xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
-                                 xmlns:local="clr-namespace:MovieList.Views.Forms"
-                                 xmlns:v="clr-namespace:MovieList.Views"
-                                 xmlns:l="clr-namespace:MovieList.Localization">
+                                 xmlns:local="clr-namespace:Cineaste.Views.Forms"
+                                 xmlns:v="clr-namespace:Cineaste.Views"
+                                 xmlns:l="clr-namespace:Cineaste.Localization">
     <local:MiniseriesFormControlBase.Resources>
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
             <Setter Property="v:Properties.TripleClickSelectAll" Value="True" />

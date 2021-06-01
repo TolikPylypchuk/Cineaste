@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 using Nito.Comparers;
 
-namespace MovieList.Core.Comparers
+namespace Cineaste.Core.Comparers
 {
     public sealed class TitleComparer : NullableComparerBase<string>
     {

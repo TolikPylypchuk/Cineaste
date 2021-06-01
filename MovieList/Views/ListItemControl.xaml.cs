@@ -3,13 +3,13 @@ using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-using MovieList.Core;
-using MovieList.Core.ListItems;
-using MovieList.Core.ViewModels;
+using Cineaste.Core;
+using Cineaste.Core.ListItems;
+using Cineaste.Core.ViewModels;
 
 using ReactiveUI;
 
-namespace MovieList.Views
+namespace Cineaste.Views
 {
     public abstract class ListItemControlBase : ReactiveUserControl<ListItemViewModel> { }
 

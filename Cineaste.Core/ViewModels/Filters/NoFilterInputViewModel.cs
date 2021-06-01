@@ -1,4 +1,4 @@
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public sealed class NoFilterInputViewModel : FilterInput
     { }

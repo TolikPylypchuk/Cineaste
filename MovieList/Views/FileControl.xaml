@@ -1,9 +1,9 @@
-<local:FileControlBase x:Class="MovieList.Views.FileControl"
+<local:FileControlBase x:Class="Cineaste.Views.FileControl"
                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:rx="http://reactiveui.net"
                        xmlns:me="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
-                       xmlns:local="clr-namespace:MovieList.Views">
+                       xmlns:local="clr-namespace:Cineaste.Views">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />

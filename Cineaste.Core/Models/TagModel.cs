@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-using MovieList.Data.Models;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.Models
+namespace Cineaste.Core.Models
 {
     public sealed class TagModel : ReactiveObject
     {

@@ -1,9 +1,9 @@
-<local:ListSearchControlBase x:Class="MovieList.Views.ListSearchControl"
+<local:ListSearchControlBase x:Class="Cineaste.Views.ListSearchControl"
                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                             xmlns:local="clr-namespace:MovieList.Views"
+                             xmlns:local="clr-namespace:Cineaste.Views"
                              xmlns:rx="http://reactiveui.net"
-                             xmlns:l="clr-namespace:MovieList.Localization">
+                             xmlns:l="clr-namespace:Cineaste.Localization">
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom">
             <StackPanel Orientation="Horizontal">

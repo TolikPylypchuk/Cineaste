@@ -4,17 +4,17 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using MovieList.Converters;
-using MovieList.Core;
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Data;
-using MovieList.Properties;
+using Cineaste.Converters;
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Data;
+using Cineaste.Properties;
 
 using ReactiveUI;
 
-using static MovieList.Data.ListSortOrder;
+using static Cineaste.Data.ListSortOrder;
 
-namespace MovieList.Views.Forms.Preferences
+namespace Cineaste.Views.Forms.Preferences
 {
     public abstract class PreferencesFormControlBase : ReactiveUserControl<PreferencesFormViewModel> { }
 

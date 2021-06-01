@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive;
 
-using MovieList.Core.Comparers;
-using MovieList.Core.Data.Models;
-using MovieList.Core.ListItems;
-using MovieList.Data;
+using Cineaste.Core.Comparers;
+using Cineaste.Core.Data.Models;
+using Cineaste.Core.ListItems;
+using Cineaste.Data;
 
 using Nito.Comparers;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public sealed class ListSortViewModel : ReactiveObject
     {

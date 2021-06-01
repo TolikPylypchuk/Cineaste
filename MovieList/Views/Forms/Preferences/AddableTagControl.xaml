@@ -1,7 +1,7 @@
-<local:AddableTagControlBase x:Class="MovieList.Views.Forms.Preferences.AddableTagControl"
+<local:AddableTagControlBase x:Class="Cineaste.Views.Forms.Preferences.AddableTagControl"
                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                             xmlns:local="clr-namespace:MovieList.Views.Forms.Preferences">
+                             xmlns:local="clr-namespace:Cineaste.Views.Forms.Preferences">
     <WrapPanel>
         <Ellipse x:Name="ColorCircle" Width="15" Height="15" Margin="0 0 8 0" VerticalAlignment="Center" />
 

@@ -1,11 +1,11 @@
 using System;
 using System.Windows;
 
-using MovieList.Properties;
+using Cineaste.Properties;
 
 using ReactiveUI.Validation.Helpers;
 
-namespace MovieList.Validation
+namespace Cineaste.Validation
 {
     public sealed class ValidationSubscriber : IDisposable
     {

@@ -2,12 +2,12 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 
-using MovieList.Core.ListItems;
-using MovieList.Data.Models;
+using Cineaste.Core.ListItems;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public sealed class ListFilterViewModel : FilterItemHolder
     {

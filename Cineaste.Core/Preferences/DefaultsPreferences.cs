@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 
-using MovieList.Data;
-using MovieList.Data.Models;
+using Cineaste.Data;
+using Cineaste.Data.Models;
 
-namespace MovieList.Core.Preferences
+namespace Cineaste.Core.Preferences
 {
     [ToString]
     [Equals(DoNotAddEqualityOperators = true)]

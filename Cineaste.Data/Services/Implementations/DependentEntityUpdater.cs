@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
+using Cineaste.Data.Models;
+
 using Dapper.Contrib.Extensions;
 
-using MovieList.Data.Models;
-
-namespace MovieList.Data.Services.Implementations
+namespace Cineaste.Data.Services.Implementations
 {
     internal sealed class DependentEntityUpdater
     {

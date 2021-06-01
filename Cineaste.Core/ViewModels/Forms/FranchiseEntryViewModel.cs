@@ -4,19 +4,19 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 
+using Cineaste.Core.Data.Models;
+using Cineaste.Core.ViewModels.Forms.Base;
+using Cineaste.Data.Models;
+
 using DynamicData.Aggregation;
 using DynamicData.Binding;
-
-using MovieList.Core.Data.Models;
-using MovieList.Core.ViewModels.Forms.Base;
-using MovieList.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-namespace MovieList.Core.ViewModels.Forms
+namespace Cineaste.Core.ViewModels.Forms
 {
     public sealed class FranchiseEntryViewModel : ReactiveForm<FranchiseEntry, FranchiseEntryViewModel>
     {

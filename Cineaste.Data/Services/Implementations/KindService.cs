@@ -1,6 +1,6 @@
-using MovieList.Data.Models;
+using Cineaste.Data.Models;
 
-namespace MovieList.Data.Services.Implementations
+namespace Cineaste.Data.Services.Implementations
 {
     internal sealed class KindService : SettingsEntityServiceBase<Kind>
     {

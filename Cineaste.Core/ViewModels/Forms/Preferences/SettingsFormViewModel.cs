@@ -5,20 +5,20 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 
-using MovieList.Core.Data.Services;
-using MovieList.Core.Models;
-using MovieList.Core.ViewModels.Forms.Base;
-using MovieList.Data;
-using MovieList.Data.Models;
-using MovieList.Data.Services;
+using Cineaste.Core.Data.Services;
+using Cineaste.Core.Models;
+using Cineaste.Core.ViewModels.Forms.Base;
+using Cineaste.Data;
+using Cineaste.Data.Models;
+using Cineaste.Data.Services;
 
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using static MovieList.Core.ServiceUtil;
+using static Cineaste.Core.ServiceUtil;
 
-namespace MovieList.Core.ViewModels.Forms.Preferences
+namespace Cineaste.Core.ViewModels.Forms.Preferences
 {
     public sealed class SettingsFormViewModel : SettingsFormBase<SettingsModel, SettingsFormViewModel>
     {

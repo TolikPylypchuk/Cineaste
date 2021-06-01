@@ -6,7 +6,7 @@ using System.Reactive.Subjects;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public abstract class FilterInput : ReactiveObject
     {

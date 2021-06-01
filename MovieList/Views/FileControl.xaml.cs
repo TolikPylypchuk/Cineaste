@@ -5,16 +5,16 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
+using Cineaste.Core.ViewModels;
+using Cineaste.Properties;
+
 using MaterialDesignExtensions.Model;
 
 using MaterialDesignThemes.Wpf;
 
-using MovieList.Core.ViewModels;
-using MovieList.Properties;
-
 using ReactiveUI;
 
-namespace MovieList.Views
+namespace Cineaste.Views
 {
     public abstract class FileControlBase : ReactiveUserControl<FileViewModel> { }
 

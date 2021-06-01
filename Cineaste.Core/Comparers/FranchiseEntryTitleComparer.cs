@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-using MovieList.Core.Data.Models;
-using MovieList.Data.Models;
+using Cineaste.Core.Data.Models;
+using Cineaste.Data.Models;
 
 using Nito.Comparers;
 
-namespace MovieList.Core.Comparers
+namespace Cineaste.Core.Comparers
 {
     public class FranchiseEntryTitleComparer : NullableComparerBase<FranchiseEntry>
     {

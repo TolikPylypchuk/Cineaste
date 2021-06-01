@@ -1,9 +1,9 @@
-<local:TabHeaderControlBase x:Class="MovieList.Views.TabHeaderControl"
+<local:TabHeaderControlBase x:Class="Cineaste.Views.TabHeaderControl"
                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                             xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
                             xmlns:me="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
-                            xmlns:local="clr-namespace:MovieList.Views">
+                            xmlns:local="clr-namespace:Cineaste.Views">
     <DockPanel HorizontalAlignment="Stretch">
         <Button x:Name="CloseButton" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignIconButton}"
                 VerticalAlignment="Center" Padding="0" Width="15" Height="15" Margin="10 0 0 0">

@@ -2,12 +2,12 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 
-using MovieList.Core.DialogModels;
-using MovieList.Core.ViewModels.Forms.Preferences;
+using Cineaste.Core.DialogModels;
+using Cineaste.Core.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 
-namespace MovieList.Core
+namespace Cineaste.Core
 {
     public static class Dialog
     {

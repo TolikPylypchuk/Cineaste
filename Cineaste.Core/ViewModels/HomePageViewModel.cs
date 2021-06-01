@@ -7,22 +7,22 @@ using System.Reactive.Linq;
 
 using Akavache;
 
+using Cineaste.Core.DialogModels;
+using Cineaste.Core.Models;
+using Cineaste.Core.Preferences;
+
 using DynamicData;
 using DynamicData.Binding;
-
-using MovieList.Core.DialogModels;
-using MovieList.Core.Models;
-using MovieList.Core.Preferences;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-using static MovieList.Core.Constants;
-using static MovieList.Core.ServiceUtil;
+using static Cineaste.Core.Constants;
+using static Cineaste.Core.ServiceUtil;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public sealed class HomePageViewModel : ReactiveObject
     {

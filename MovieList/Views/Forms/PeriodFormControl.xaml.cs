@@ -2,15 +2,15 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using MaterialDesignThemes.Wpf;
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Forms;
+using Cineaste.Properties;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels.Forms;
-using MovieList.Properties;
+using MaterialDesignThemes.Wpf;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Forms
+namespace Cineaste.Views.Forms
 {
     public abstract class PeriodFormControlBase : ReactiveUserControl<PeriodFormViewModel> { }
 

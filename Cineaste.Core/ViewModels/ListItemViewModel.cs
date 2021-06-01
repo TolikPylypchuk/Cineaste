@@ -1,8 +1,8 @@
-using MovieList.Core.ListItems;
+using Cineaste.Core.ListItems;
 
 using ReactiveUI;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public sealed class ListItemViewModel : ReactiveObject
     {

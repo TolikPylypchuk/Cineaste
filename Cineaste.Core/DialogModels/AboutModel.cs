@@ -3,7 +3,7 @@ using System;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.DialogModels
+namespace Cineaste.Core.DialogModels
 {
     public sealed class AboutModel : ReactiveObject
     {

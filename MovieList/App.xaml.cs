@@ -12,17 +12,17 @@ using System.Windows.Threading;
 
 using Akavache;
 
-using MovieList.Converters;
-using MovieList.Core;
-using MovieList.Core.Models;
-using MovieList.Core.Preferences;
-using MovieList.Core.State;
-using MovieList.Core.ViewModels;
-using MovieList.Core.ViewModels.Filters;
-using MovieList.Data;
-using MovieList.Data.Models;
-using MovieList.Infrastructure;
-using MovieList.Properties;
+using Cineaste.Converters;
+using Cineaste.Core;
+using Cineaste.Core.Models;
+using Cineaste.Core.Preferences;
+using Cineaste.Core.State;
+using Cineaste.Core.ViewModels;
+using Cineaste.Core.ViewModels.Filters;
+using Cineaste.Data;
+using Cineaste.Data.Models;
+using Cineaste.Infrastructure;
+using Cineaste.Properties;
 
 using ReactiveUI;
 
@@ -33,9 +33,9 @@ using Serilog.Events;
 using Splat;
 using Splat.Serilog;
 
-using static MovieList.Core.Constants;
+using static Cineaste.Core.Constants;
 
-namespace MovieList
+namespace Cineaste
 {
     public partial class App : Application, IEnableLogger
     {

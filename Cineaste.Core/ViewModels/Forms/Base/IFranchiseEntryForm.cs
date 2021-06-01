@@ -1,8 +1,8 @@
-using MovieList.Data.Models;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 
-namespace MovieList.Core.ViewModels.Forms.Base
+namespace Cineaste.Core.ViewModels.Forms.Base
 {
     public interface IFranchiseEntryForm : IReactiveObject
     {

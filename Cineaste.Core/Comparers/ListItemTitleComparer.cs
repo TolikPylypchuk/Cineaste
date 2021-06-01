@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-using MovieList.Core.Data.Models;
-using MovieList.Core.ListItems;
-using MovieList.Data.Models;
+using Cineaste.Core.Data.Models;
+using Cineaste.Core.ListItems;
+using Cineaste.Data.Models;
 
 using Nito.Comparers;
 
-namespace MovieList.Core.Comparers
+namespace Cineaste.Core.Comparers
 {
     public sealed class ListItemTitleComparer : NullableComparerBase<ListItem>
     {

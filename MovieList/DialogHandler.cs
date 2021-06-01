@@ -2,19 +2,19 @@ using System;
 using System.Reactive;
 using System.Threading.Tasks;
 
+using Cineaste.Core.DialogModels;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Properties;
+
 using MaterialDesignExtensions.Controls;
 
 using MaterialDesignThemes.Wpf;
 
-using MovieList.Core.DialogModels;
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Properties;
-
 using ReactiveUI;
 
-using static MovieList.Core.Constants;
+using static Cineaste.Core.Constants;
 
-namespace MovieList
+namespace Cineaste
 {
     public class DialogHandler
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace MovieList.Core
+namespace Cineaste.Core
 {
     public interface IEnumConverter<TEnum>
         where TEnum : Enum

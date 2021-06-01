@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
-using MovieList.Core.Preferences;
-using MovieList.Data;
-using MovieList.Data.Models;
+using Cineaste.Core.Preferences;
+using Cineaste.Data;
+using Cineaste.Data.Models;
 
-namespace MovieList.Core.Models
+namespace Cineaste.Core.Models
 {
     public sealed record SettingsModel(Settings Settings, List<Kind> Kinds, List<Tag> Tags) : ISettings
     {

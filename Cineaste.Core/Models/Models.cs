@@ -1,4 +1,4 @@
-namespace MovieList.Core.Models
+namespace Cineaste.Core.Models
 {
     public sealed record CreateFileModel(string File, string ListName);
 

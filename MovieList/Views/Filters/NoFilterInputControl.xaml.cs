@@ -1,10 +1,10 @@
 using System.Reactive.Disposables;
 
-using MovieList.Core.ViewModels.Filters;
+using Cineaste.Core.ViewModels.Filters;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Filters
+namespace Cineaste.Views.Filters
 {
     public abstract class NoFilterInputControlBase : ReactiveUserControl<NoFilterInputViewModel> { }
 

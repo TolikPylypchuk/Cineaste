@@ -1,10 +1,10 @@
 using System.Reactive.Disposables;
 
-using MovieList.Core.ViewModels.Forms.Preferences;
+using Cineaste.Core.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Forms.Preferences
+namespace Cineaste.Views.Forms.Preferences
 {
     public abstract class AddableTagControlBase : ReactiveUserControl<AddableTagViewModel> { }
 

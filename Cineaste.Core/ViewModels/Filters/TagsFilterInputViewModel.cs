@@ -5,16 +5,16 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using Cineaste.Core.Models;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Data.Models;
+
 using DynamicData;
 using DynamicData.Binding;
 
-using MovieList.Core.Models;
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Data.Models;
-
 using ReactiveUI;
 
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public sealed class TagsFilterInputViewModel : FilterInput, IActivatableViewModel
     {

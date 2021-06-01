@@ -4,17 +4,17 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 
-using MovieList.Core.ViewModels.Forms.Base;
-using MovieList.Data.Models;
+using Cineaste.Core.ViewModels.Forms.Base;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using static MovieList.Data.Constants;
+using static Cineaste.Data.Constants;
 
-namespace MovieList.Core.ViewModels.Forms
+namespace Cineaste.Core.ViewModels.Forms
 {
     public sealed class SpecialEpisodeFormViewModel
         : SeriesComponentFormBase<SpecialEpisode, SpecialEpisodeFormViewModel>

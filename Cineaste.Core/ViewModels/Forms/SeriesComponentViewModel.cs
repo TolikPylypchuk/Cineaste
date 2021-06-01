@@ -4,17 +4,17 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 
+using Cineaste.Core.ViewModels.Forms.Base;
+
 using DynamicData;
 using DynamicData.Binding;
-
-using MovieList.Core.ViewModels.Forms.Base;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-namespace MovieList.Core.ViewModels.Forms
+namespace Cineaste.Core.ViewModels.Forms
 {
     public sealed class SeriesComponentViewModel : ReactiveObject
     {

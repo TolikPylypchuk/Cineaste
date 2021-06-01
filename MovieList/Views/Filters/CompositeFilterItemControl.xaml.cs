@@ -1,12 +1,12 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using MovieList.Core.ViewModels.Filters;
-using MovieList.Properties;
+using Cineaste.Core.ViewModels.Filters;
+using Cineaste.Properties;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Filters
+namespace Cineaste.Views.Filters
 {
     public abstract class CompositeFilterItemControlBase : ReactiveUserControl<CompositeFilterItemViewModel> { }
 

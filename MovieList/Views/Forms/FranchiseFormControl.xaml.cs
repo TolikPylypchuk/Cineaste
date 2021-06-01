@@ -6,15 +6,15 @@ using System.Windows.Controls;
 
 using Akavache;
 
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Forms;
+
 using DynamicData;
 using DynamicData.Binding;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels.Forms;
-
 using ReactiveUI;
 
-namespace MovieList.Views.Forms
+namespace Cineaste.Views.Forms
 {
     public abstract class FranchiseFormControlBase : ReactiveUserControl<FranchiseFormViewModel> { }
 

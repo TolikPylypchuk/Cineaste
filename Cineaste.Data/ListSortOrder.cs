@@ -1,4 +1,4 @@
-namespace MovieList.Data
+namespace Cineaste.Data
 {
     public enum ListSortOrder
     {

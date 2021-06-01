@@ -6,15 +6,13 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 
-using MovieList.Data.Models;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 
-namespace MovieList.Core.ViewModels.Forms.Base
+namespace Cineaste.Core.ViewModels.Forms.Base
 {
-#nullable disable
     public abstract class FranchiseEntryFormBase<TModel, TForm> : TitledFormBase<TModel, TForm>, IFranchiseEntryForm
-#nullable enable
         where TModel : class
         where TForm : FranchiseEntryFormBase<TModel, TForm>
     {

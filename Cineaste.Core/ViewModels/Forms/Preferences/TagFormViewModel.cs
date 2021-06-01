@@ -9,18 +9,18 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Resources;
 
+using Cineaste.Core.Models;
+using Cineaste.Core.ViewModels.Forms.Base;
+
 using DynamicData;
 using DynamicData.Binding;
-
-using MovieList.Core.Models;
-using MovieList.Core.ViewModels.Forms.Base;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-namespace MovieList.Core.ViewModels.Forms.Preferences
+namespace Cineaste.Core.ViewModels.Forms.Preferences
 {
     public sealed class TagFormViewModel : ReactiveForm<TagModel, TagFormViewModel>
     {

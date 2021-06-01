@@ -12,27 +12,27 @@ using System.Reflection;
 
 using Akavache;
 
+using Cineaste.Core.Data.Services;
+using Cineaste.Core.DialogModels;
+using Cineaste.Core.Models;
+using Cineaste.Core.Preferences;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Data;
+using Cineaste.Data.Services;
+
 using DynamicData;
 using DynamicData.Binding;
-
-using MovieList.Core.Data.Services;
-using MovieList.Core.DialogModels;
-using MovieList.Core.Models;
-using MovieList.Core.Preferences;
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Data;
-using MovieList.Data.Services;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-using static MovieList.Core.Constants;
-using static MovieList.Core.ServiceUtil;
-using static MovieList.Data.Constants;
+using static Cineaste.Core.Constants;
+using static Cineaste.Core.ServiceUtil;
+using static Cineaste.Data.Constants;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public sealed class MainViewModel : ReactiveObject, IEnableLogger
     {

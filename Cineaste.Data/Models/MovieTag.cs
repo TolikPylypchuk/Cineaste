@@ -1,6 +1,6 @@
 using Dapper.Contrib.Extensions;
 
-namespace MovieList.Data.Models
+namespace Cineaste.Data.Models
 {
     [Table("MovieTags")]
     internal sealed class MovieTag : EntityBase

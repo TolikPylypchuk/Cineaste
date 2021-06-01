@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using MovieList.Properties;
+using Cineaste.Properties;
 
-namespace MovieList.Converters
+namespace Cineaste.Converters
 {
     public sealed class ListSortDirectionConverter : EnumConverter<ListSortDirection>
     {

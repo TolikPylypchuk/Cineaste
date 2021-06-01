@@ -5,17 +5,17 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using Cineaste.Core.ListItems;
+using Cineaste.Core.ViewModels.Filters;
+using Cineaste.Data.Models;
+
 using DynamicData;
 using DynamicData.Binding;
-
-using MovieList.Core.ListItems;
-using MovieList.Core.ViewModels.Filters;
-using MovieList.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public sealed class ListSearchViewModel : FilterItemHolder
     {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 
-using MovieList.Data.Models;
-using MovieList.Properties;
+using Cineaste.Data.Models;
+using Cineaste.Properties;
 
-namespace MovieList.Converters
+namespace Cineaste.Converters
 {
     public sealed class SeasonWatchStatusConverter : EnumConverter<SeasonWatchStatus>
     {

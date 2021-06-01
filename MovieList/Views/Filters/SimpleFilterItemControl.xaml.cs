@@ -4,17 +4,17 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Filters;
+
 using DynamicData;
 using DynamicData.Binding;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels.Filters;
-
 using ReactiveUI;
 
-using static MovieList.Core.ServiceUtil;
+using static Cineaste.Core.ServiceUtil;
 
-namespace MovieList.Views.Filters
+namespace Cineaste.Views.Filters
 {
     public abstract class SimpleFilterItemControlBase : ReactiveUserControl<SimpleFilterItemViewModel> { }
 

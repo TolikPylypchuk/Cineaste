@@ -4,17 +4,17 @@ using System.Resources;
 
 using Akavache;
 
-using MovieList.Core.Models;
-using MovieList.Core.Preferences;
-using MovieList.Core.ViewModels.Forms.Base;
-using MovieList.Data.Models;
+using Cineaste.Core.Models;
+using Cineaste.Core.Preferences;
+using Cineaste.Core.ViewModels.Forms.Base;
+using Cineaste.Data.Models;
 
 using ReactiveUI.Fody.Helpers;
 
-using static MovieList.Core.Constants;
-using static MovieList.Core.ServiceUtil;
+using static Cineaste.Core.Constants;
+using static Cineaste.Core.ServiceUtil;
 
-namespace MovieList.Core.ViewModels.Forms.Preferences
+namespace Cineaste.Core.ViewModels.Forms.Preferences
 {
     public sealed class PreferencesFormViewModel : SettingsFormBase<UserPreferences, PreferencesFormViewModel>
     {

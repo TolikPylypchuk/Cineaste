@@ -1,4 +1,4 @@
-namespace MovieList.Core
+namespace Cineaste.Core
 {
     public static class Constants
     {

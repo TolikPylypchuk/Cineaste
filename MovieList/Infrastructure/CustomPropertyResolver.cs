@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 
 using ReactiveUI;
 
-namespace MovieList.Infrastructure
+namespace Cineaste.Infrastructure
 {
     public class CustomPropertyResolver : ICreatesObservableForProperty
     {

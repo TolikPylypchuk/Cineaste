@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 using Dapper.Contrib.Extensions;
 
-using static MovieList.Data.Constants;
+using static Cineaste.Data.Constants;
 
-namespace MovieList.Data.Models
+namespace Cineaste.Data.Models
 {
     [Table("Tags")]
     public sealed class Tag : EntityBase

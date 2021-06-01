@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace MovieList.Views
+namespace Cineaste.Views
 {
     public class NumberChangedEventArgs : RoutedEventArgs
     {

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using MovieList.Core;
+using Cineaste.Core;
 
 using ReactiveUI;
 
-namespace MovieList.Converters
+namespace Cineaste.Converters
 {
     public abstract class EnumConverter<TEnum> : IBindingTypeConverter, IEnumConverter<TEnum>
         where TEnum : Enum

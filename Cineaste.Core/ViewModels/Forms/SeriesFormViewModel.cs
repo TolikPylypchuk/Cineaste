@@ -9,24 +9,24 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 
+using Cineaste.Core.Data.Services;
+using Cineaste.Core.ViewModels.Forms.Base;
+using Cineaste.Data.Models;
+using Cineaste.Data.Services;
+
 using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
-
-using MovieList.Core.Data.Services;
-using MovieList.Core.ViewModels.Forms.Base;
-using MovieList.Data.Models;
-using MovieList.Data.Services;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using static MovieList.Core.ServiceUtil;
-using static MovieList.Data.Constants;
+using static Cineaste.Core.ServiceUtil;
+using static Cineaste.Data.Constants;
 
-namespace MovieList.Core.ViewModels.Forms
+namespace Cineaste.Core.ViewModels.Forms
 {
     public sealed class SeriesFormViewModel : TaggedFormBase<Series, SeriesFormViewModel>
     {

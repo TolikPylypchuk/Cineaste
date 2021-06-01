@@ -1,9 +1,9 @@
-<local:ListFilterControlBase x:Class="MovieList.Views.Filters.ListFilterControl"
+<local:ListFilterControlBase x:Class="Cineaste.Views.Filters.ListFilterControl"
                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                             xmlns:local="clr-namespace:MovieList.Views.Filters"
+                             xmlns:local="clr-namespace:Cineaste.Views.Filters"
                              xmlns:rx="http://reactiveui.net"
-                             xmlns:l="clr-namespace:MovieList.Localization">
+                             xmlns:l="clr-namespace:Cineaste.Localization">
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
             <Button x:Name="ApplyFilterButton" Content="{l:Translate ApplyFilter, ToUpper=True}" Margin="8"

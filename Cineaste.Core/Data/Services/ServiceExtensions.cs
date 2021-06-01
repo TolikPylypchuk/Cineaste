@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 
-using MovieList.Data;
-using MovieList.Data.Models;
-using MovieList.Data.Services;
+using Cineaste.Data;
+using Cineaste.Data.Models;
+using Cineaste.Data.Services;
 
 using ReactiveUI;
 
-namespace MovieList.Core.Data.Services
+namespace Cineaste.Core.Data.Services
 {
     public static class ServiceExtensions
     {

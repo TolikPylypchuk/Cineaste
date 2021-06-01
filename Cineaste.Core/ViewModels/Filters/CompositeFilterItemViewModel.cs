@@ -5,19 +5,19 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using Cineaste.Core.Data.Models;
+using Cineaste.Core.ListItems;
+using Cineaste.Data.Models;
+
 using DynamicData;
 using DynamicData.Aggregation;
-
-using MovieList.Core.Data.Models;
-using MovieList.Core.ListItems;
-using MovieList.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using Filter = System.Func<MovieList.Core.ListItems.ListItem, bool>;
+using Filter = System.Func<Cineaste.Core.ListItems.ListItem, bool>;
 
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public sealed class CompositeFilterItemViewModel : FilterItem
     {

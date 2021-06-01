@@ -4,22 +4,22 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using DynamicData;
+using Cineaste.Core.Data.Services;
+using Cineaste.Core.DialogModels;
+using Cineaste.Core.Models;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Data;
+using Cineaste.Data.Models;
+using Cineaste.Data.Services;
 
-using MovieList.Core.Data.Services;
-using MovieList.Core.DialogModels;
-using MovieList.Core.Models;
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Data;
-using MovieList.Data.Models;
-using MovieList.Data.Services;
+using DynamicData;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using static MovieList.Core.ServiceUtil;
+using static Cineaste.Core.ServiceUtil;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public sealed class FileViewModel : ReactiveObject
     {

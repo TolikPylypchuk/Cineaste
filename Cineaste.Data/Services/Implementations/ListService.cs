@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-using Dapper.Contrib.Extensions;
+using Cineaste.Data.Models;
 
-using MovieList.Data.Models;
+using Dapper.Contrib.Extensions;
 
 using Splat;
 
-namespace MovieList.Data.Services.Implementations
+namespace Cineaste.Data.Services.Implementations
 {
     internal class ListService : ServiceBase, IListService
     {

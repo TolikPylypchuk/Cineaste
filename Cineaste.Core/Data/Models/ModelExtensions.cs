@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using MovieList.Core.ListItems;
-using MovieList.Data.Models;
+using Cineaste.Core.ListItems;
+using Cineaste.Data.Models;
 
-using static MovieList.Data.Constants;
+using static Cineaste.Data.Constants;
 
-namespace MovieList.Core.Data.Models
+namespace Cineaste.Core.Data.Models
 {
     public static class ModelExtensions
     {

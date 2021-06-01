@@ -6,7 +6,7 @@ using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-namespace MovieList.Core
+namespace Cineaste.Core
 {
     public static class ValidationExtensions
     {

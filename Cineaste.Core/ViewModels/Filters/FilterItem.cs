@@ -4,15 +4,15 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
-using MovieList.Data.Models;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 
-using static MovieList.Core.ServiceUtil;
+using static Cineaste.Core.ServiceUtil;
 
-using Filter = System.Func<MovieList.Core.ListItems.ListItem, bool>;
+using Filter = System.Func<Cineaste.Core.ListItems.ListItem, bool>;
 
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public abstract class FilterItem : ReactiveObject
     {

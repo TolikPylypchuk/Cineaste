@@ -1,12 +1,12 @@
 using System.Reactive.Disposables;
 using System.Windows.Controls;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels.Forms;
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Forms;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Forms
+namespace Cineaste.Views.Forms
 {
     public abstract class SeriesComponentControlBase : ReactiveUserControl<SeriesComponentViewModel> { }
 

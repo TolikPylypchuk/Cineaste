@@ -7,17 +7,17 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Resources;
 
+using Cineaste.Data.Models;
+
 using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
-using MovieList.Data.Models;
-
 using ReactiveUI;
 
-using static MovieList.Data.Constants;
+using static Cineaste.Data.Constants;
 
-namespace MovieList.Core.ViewModels.Forms.Base
+namespace Cineaste.Core.ViewModels.Forms.Base
 {
     public abstract class TitledFormBase<TModel, TForm> : ReactiveForm<TModel, TForm>
         where TModel : class

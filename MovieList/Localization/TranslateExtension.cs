@@ -1,9 +1,9 @@
 using System;
 using System.Windows.Markup;
 
-using MovieList.Properties;
+using Cineaste.Properties;
 
-namespace MovieList.Localization
+namespace Cineaste.Localization
 {
     [MarkupExtensionReturnType(typeof(string))]
     public sealed class TranslateExtension : MarkupExtension

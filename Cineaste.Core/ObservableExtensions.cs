@@ -5,13 +5,13 @@ using System.Linq.Expressions;
 using System.Reactive;
 using System.Reactive.Linq;
 
-using MovieList.Core.Validation;
-using MovieList.Core.ViewModels.Forms.Base;
+using Cineaste.Core.Validation;
+using Cineaste.Core.ViewModels.Forms.Base;
 
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-namespace MovieList.Core
+namespace Cineaste.Core
 {
     public static class ObservableExtensions
     {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-using MovieList.Data.Models;
+using Cineaste.Data.Models;
 
-namespace MovieList.Data.Services
+namespace Cineaste.Data.Services
 {
     public interface ISettingsEntityService<TEntity>
         where TEntity : EntityBase

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Dapper.Contrib.Extensions;
 
-namespace MovieList.Data.Models
+namespace Cineaste.Data.Models
 {
     [Table("FranchiseEntries")]
     public sealed class FranchiseEntry : EntityBase

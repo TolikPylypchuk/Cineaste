@@ -1,10 +1,10 @@
 using System.Reactive.Disposables;
 
-using MovieList.Core.ViewModels.Forms;
+using Cineaste.Core.ViewModels.Forms;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Forms
+namespace Cineaste.Views.Forms
 {
     public abstract class FranchiseAddableItemControlBase : ReactiveUserControl<FranchiseAddableItemViewModel> { }
 

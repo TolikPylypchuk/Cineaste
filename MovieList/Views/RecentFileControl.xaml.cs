@@ -4,11 +4,11 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-using MovieList.Core.ViewModels;
+using Cineaste.Core.ViewModels;
 
 using ReactiveUI;
 
-namespace MovieList.Views
+namespace Cineaste.Views
 {
     public abstract class RecentFileControlBase : ReactiveUserControl<RecentFileViewModel> { }
 

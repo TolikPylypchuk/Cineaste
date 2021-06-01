@@ -3,16 +3,16 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Filters;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels.Filters;
-using MovieList.Core.ViewModels.Forms.Preferences;
-
 using ReactiveUI;
 
-namespace MovieList.Views.Filters
+namespace Cineaste.Views.Filters
 {
     public abstract class TagsFilterInputControlBase : ReactiveUserControl<TagsFilterInputViewModel> { }
 

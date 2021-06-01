@@ -1,7 +1,7 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.DialogModels
+namespace Cineaste.Core.DialogModels
 {
     public abstract class DialogModelBase : ReactiveObject
     {

@@ -6,17 +6,17 @@ using System.Windows.Media;
 
 using Akavache;
 
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Forms;
+using Cineaste.Data.Models;
+
 using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels.Forms;
-using MovieList.Data.Models;
-
 using ReactiveUI;
 
-namespace MovieList.Views.Forms
+namespace Cineaste.Views.Forms
 {
     public abstract class SeasonFormControlBase : ReactiveUserControl<SeasonFormViewModel> { }
 

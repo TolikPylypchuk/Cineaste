@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-using MovieList.Properties;
+using Cineaste.Properties;
 
 using Serilog.Events;
 
-namespace MovieList.Converters
+namespace Cineaste.Converters
 {
     public sealed class LogLevelConverter : EnumConverter<LogEventLevel>
     {

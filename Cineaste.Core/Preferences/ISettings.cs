@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
-using MovieList.Data;
-using MovieList.Data.Models;
+using Cineaste.Data;
+using Cineaste.Data.Models;
 
-namespace MovieList.Core.Preferences
+namespace Cineaste.Core.Preferences
 {
     public interface ISettings
     {

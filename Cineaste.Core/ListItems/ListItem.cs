@@ -1,12 +1,12 @@
 using System;
 
-using MovieList.Core.Data.Models;
-using MovieList.Data.Models;
+using Cineaste.Core.Data.Models;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ListItems
+namespace Cineaste.Core.ListItems
 {
     public enum HighlightMode { None, Partial, Full }
 

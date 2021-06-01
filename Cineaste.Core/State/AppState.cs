@@ -1,9 +1,9 @@
 using System.Runtime.Serialization;
 
-namespace MovieList.Core.State
+namespace Cineaste.Core.State
 {
     [DataContract]
-    public class AppState
+    public sealed class AppState
     {
         [DataMember]
         public double WindowWidth { get; set; }

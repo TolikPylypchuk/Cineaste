@@ -2,7 +2,7 @@ using System;
 
 using Dapper.Contrib.Extensions;
 
-namespace MovieList.Data.Models
+namespace Cineaste.Data.Models
 {
     [Table("Settings")]
     internal sealed class Setting : EntityBase

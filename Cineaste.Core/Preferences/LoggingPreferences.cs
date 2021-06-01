@@ -1,4 +1,4 @@
-namespace MovieList.Core.Preferences
+namespace Cineaste.Core.Preferences
 {
     [ToString]
     [Equals(DoNotAddEqualityOperators = true)]

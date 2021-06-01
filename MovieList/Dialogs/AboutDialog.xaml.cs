@@ -2,12 +2,12 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using MovieList.Core.DialogModels;
-using MovieList.Properties;
+using Cineaste.Core.DialogModels;
+using Cineaste.Properties;
 
 using ReactiveUI;
 
-namespace MovieList.Dialogs
+namespace Cineaste.Dialogs
 {
     public abstract class AboutDialogBase : ReactiveUserControl<AboutModel> { }
 

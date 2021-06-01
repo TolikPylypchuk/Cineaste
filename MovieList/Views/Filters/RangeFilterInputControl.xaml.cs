@@ -2,15 +2,15 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using MaterialDesignThemes.Wpf;
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Filters;
+using Cineaste.Properties;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels.Filters;
-using MovieList.Properties;
+using MaterialDesignThemes.Wpf;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Filters
+namespace Cineaste.Views.Filters
 {
     public abstract class RangeFilterInputControlBase : ReactiveUserControl<RangeFilterInputViewModel> { }
 

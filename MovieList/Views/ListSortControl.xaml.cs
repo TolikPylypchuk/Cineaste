@@ -1,14 +1,14 @@
 using System.ComponentModel;
 using System.Reactive.Disposables;
 
-using MovieList.Core.ViewModels;
-using MovieList.Data;
+using Cineaste.Core.ViewModels;
+using Cineaste.Data;
 
 using ReactiveUI;
 
-using static MovieList.Data.ListSortOrder;
+using static Cineaste.Data.ListSortOrder;
 
-namespace MovieList.Views
+namespace Cineaste.Views
 {
     public abstract class ListSortControlBase : ReactiveUserControl<ListSortViewModel> { }
 

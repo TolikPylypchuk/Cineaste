@@ -5,14 +5,14 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 
-using MovieList.Core;
-using MovieList.Core.DialogModels;
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Properties;
+using Cineaste.Core;
+using Cineaste.Core.DialogModels;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Properties;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Forms.Preferences
+namespace Cineaste.Views.Forms.Preferences
 {
     public abstract class KindFormControlBase : ReactiveUserControl<KindFormViewModel> { }
 

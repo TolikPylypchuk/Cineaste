@@ -1,14 +1,14 @@
 using System.Data;
 
-using Microsoft.Data.Sqlite;
+using Cineaste.Data.Models;
+using Cineaste.Data.Services;
+using Cineaste.Data.Services.Implementations;
 
-using MovieList.Data.Models;
-using MovieList.Data.Services;
-using MovieList.Data.Services.Implementations;
+using Microsoft.Data.Sqlite;
 
 using Splat;
 
-namespace MovieList.Data
+namespace Cineaste.Data
 {
     public static class LocatorExtensions
     {

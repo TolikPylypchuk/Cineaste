@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 
-using MovieList.Core.ViewModels.Filters;
-using MovieList.Properties;
+using Cineaste.Core.ViewModels.Filters;
+using Cineaste.Properties;
 
-namespace MovieList.Converters
+namespace Cineaste.Converters
 {
     public sealed class FilterTypeConverter : EnumConverter<FilterType>
     {

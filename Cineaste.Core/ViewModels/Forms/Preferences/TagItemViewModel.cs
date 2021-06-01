@@ -1,13 +1,13 @@
 using System.Reactive;
 using System.Reactive.Linq;
 
-using MovieList.Core.Models;
-using MovieList.Data.Models;
+using Cineaste.Core.Models;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels.Forms.Preferences
+namespace Cineaste.Core.ViewModels.Forms.Preferences
 {
     public class TagItemViewModel : ReactiveObject
     {

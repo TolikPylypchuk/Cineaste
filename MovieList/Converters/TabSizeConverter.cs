@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace MovieList.Converters
+namespace Cineaste.Converters
 {
     public sealed class TabSizeConverter : IMultiValueConverter
     {

@@ -2,7 +2,7 @@ using System;
 
 using Splat;
 
-namespace MovieList.Core
+namespace Cineaste.Core
 {
     public static class ServiceUtil
     {

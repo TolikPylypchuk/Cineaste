@@ -1,10 +1,10 @@
 using System.Globalization;
 using System.Windows.Controls;
 
-using MovieList.Core.Validation;
-using MovieList.Properties;
+using Cineaste.Core.Validation;
+using Cineaste.Properties;
 
-namespace MovieList.Validation
+namespace Cineaste.Validation
 {
     public class HexColorValidationRule : ValidationRule
     {

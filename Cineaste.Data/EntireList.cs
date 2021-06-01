@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-using MovieList.Data.Models;
+using Cineaste.Data.Models;
 
-namespace MovieList.Data
+namespace Cineaste.Data
 {
     public sealed record EntireList(
         IEnumerable<Movie> Movies,

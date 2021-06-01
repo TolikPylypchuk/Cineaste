@@ -2,12 +2,12 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels;
+using Cineaste.Core;
+using Cineaste.Core.ViewModels;
 
 using ReactiveUI;
 
-namespace MovieList.Views
+namespace Cineaste.Views
 {
     public abstract class ListControlBase : ReactiveUserControl<ListViewModel> { }
 

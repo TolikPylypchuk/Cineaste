@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
-using static MovieList.Data.Constants;
+using static Cineaste.Data.Constants;
 
-namespace MovieList.Data
+namespace Cineaste.Data
 {
     public sealed class Settings
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MovieList.Core.Comparers
+namespace Cineaste.Core.Comparers
 {
     public class StringOrIntComparer : NullableComparerBase<object>
     {

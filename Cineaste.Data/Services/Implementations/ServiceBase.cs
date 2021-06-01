@@ -5,7 +5,7 @@ using Dapper;
 
 using Splat;
 
-namespace MovieList.Data.Services.Implementations
+namespace Cineaste.Data.Services.Implementations
 {
     internal abstract class ServiceBase : IEnableLogger
     {

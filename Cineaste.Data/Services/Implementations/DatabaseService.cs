@@ -4,18 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using Cineaste.Data.Models;
+
 using Dapper;
 using Dapper.Contrib.Extensions;
-
-using MovieList.Data.Models;
 
 using Resourcer;
 
 using Splat;
 
-using static MovieList.Data.Constants;
+using static Cineaste.Data.Constants;
 
-namespace MovieList.Data.Services.Implementations
+namespace Cineaste.Data.Services.Implementations
 {
     internal class DatabaseService : ServiceBase, IDatabaseService
     {

@@ -1,11 +1,11 @@
-<local:ConfirmationDialogBase x:Class="MovieList.Dialogs.ConfirmationDialog"
+<local:ConfirmationDialogBase x:Class="Cineaste.Dialogs.ConfirmationDialog"
                               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                               xmlns:system="clr-namespace:System;assembly=System.Runtime"
                               xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
-                              xmlns:local="clr-namespace:MovieList.Dialogs"
+                              xmlns:local="clr-namespace:Cineaste.Dialogs"
                               mc:Ignorable="d" >
     <Grid Margin="16">
         <Grid.RowDefinitions>

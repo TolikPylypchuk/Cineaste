@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace MovieList.Validation
+namespace Cineaste.Validation
 {
     public static class ManualValidation
     {

@@ -19,13 +19,11 @@ using ReactiveUI.Validation.Helpers;
 
 using Splat;
 
-using static MovieList.Core.ServiceUtil;
+using static Cineaste.Core.ServiceUtil;
 
-namespace MovieList.Core.ViewModels.Forms.Base
+namespace Cineaste.Core.ViewModels.Forms.Base
 {
-#nullable disable
     public abstract class ReactiveForm<TModel, TForm> : ReactiveValidationObject, IReactiveForm
-#nullable enable
         where TModel : class
         where TForm : ReactiveForm<TModel, TForm>
     {

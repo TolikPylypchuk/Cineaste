@@ -1,7 +1,7 @@
-using MovieList.Core.Data.Models;
-using MovieList.Data.Models;
+using Cineaste.Core.Data.Models;
+using Cineaste.Data.Models;
 
-namespace MovieList.Core.ListItems
+namespace Cineaste.Core.ListItems
 {
     public class MovieListItem : ListItem
     {

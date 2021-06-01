@@ -1,9 +1,9 @@
 using System.Collections.Immutable;
 
-using static MovieList.Core.ViewModels.Filters.FilterOperation;
-using static MovieList.Core.ViewModels.Filters.FilterType;
+using static Cineaste.Core.ViewModels.Filters.FilterOperation;
+using static Cineaste.Core.ViewModels.Filters.FilterType;
 
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public enum FilterType
     {

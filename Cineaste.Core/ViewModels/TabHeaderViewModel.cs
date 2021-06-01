@@ -3,7 +3,7 @@ using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public class TabHeaderViewModel : ReactiveObject
     {

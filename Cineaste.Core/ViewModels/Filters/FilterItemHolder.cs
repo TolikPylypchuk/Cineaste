@@ -3,12 +3,12 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using MovieList.Data.Models;
+using Cineaste.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public abstract class FilterItemHolder : ReactiveObject
     {

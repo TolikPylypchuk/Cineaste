@@ -6,9 +6,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
-using MovieList.Properties;
+using Cineaste.Properties;
 
-namespace MovieList.Views
+namespace Cineaste.Views
 {
     public static class Properties
     {

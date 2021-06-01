@@ -1,8 +1,8 @@
-<local:InputDialogBase x:Class="MovieList.Dialogs.InputDialog"
+<local:InputDialogBase x:Class="Cineaste.Dialogs.InputDialog"
                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
-                       xmlns:local="clr-namespace:MovieList.Dialogs">
+                       xmlns:local="clr-namespace:Cineaste.Dialogs">
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition />

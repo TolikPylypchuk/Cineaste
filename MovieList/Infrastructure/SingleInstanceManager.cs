@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Threading;
 
-namespace MovieList.Infrastructure
+namespace Cineaste.Infrastructure
 {
     public static class SingleInstanceManager
     {

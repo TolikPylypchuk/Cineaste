@@ -7,25 +7,25 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
-using DynamicData;
+using Cineaste.Core.Data;
+using Cineaste.Core.Data.Models;
+using Cineaste.Core.DialogModels;
+using Cineaste.Core.ListItems;
+using Cineaste.Core.ViewModels.Forms;
+using Cineaste.Core.ViewModels.Forms.Base;
+using Cineaste.Data;
+using Cineaste.Data.Models;
 
-using MovieList.Core.Data;
-using MovieList.Core.Data.Models;
-using MovieList.Core.DialogModels;
-using MovieList.Core.ListItems;
-using MovieList.Core.ViewModels.Forms;
-using MovieList.Core.ViewModels.Forms.Base;
-using MovieList.Data;
-using MovieList.Data.Models;
+using DynamicData;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using Splat;
 
-using static MovieList.Data.Constants;
+using static Cineaste.Data.Constants;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public sealed class FileMainContentViewModel : ReactiveObject, IDisposable
     {

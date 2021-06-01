@@ -7,11 +7,9 @@ using System.Resources;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels.Forms.Base
+namespace Cineaste.Core.ViewModels.Forms.Base
 {
-#nullable disable
     public abstract class SeriesComponentFormBase<TModel, TForm> : TitledFormBase<TModel, TForm>, ISeriesComponentForm
-#nullable enable
         where TModel : class
         where TForm : SeriesComponentFormBase<TModel, TForm>
     {

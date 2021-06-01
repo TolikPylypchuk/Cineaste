@@ -1,4 +1,4 @@
-namespace MovieList.Data.Services
+namespace Cineaste.Data.Services
 {
     public interface IEntityService<in TEntity>
     {

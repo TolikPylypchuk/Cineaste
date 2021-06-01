@@ -1,6 +1,6 @@
-using MovieList.Properties;
+using Cineaste.Properties;
 
-namespace MovieList
+namespace Cineaste
 {
     public static class Extensions
     {

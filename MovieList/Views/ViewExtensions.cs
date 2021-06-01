@@ -8,15 +8,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-using MovieList.Core;
-using MovieList.Validation;
+using Cineaste.Core;
+using Cineaste.Validation;
 
 using ReactiveUI;
 using ReactiveUI.Validation.Helpers;
 
-using static MovieList.Core.ServiceUtil;
+using static Cineaste.Core.ServiceUtil;
 
-namespace MovieList.Views
+namespace Cineaste.Views
 {
     public static class ViewExtensions
     {

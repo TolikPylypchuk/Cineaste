@@ -1,11 +1,11 @@
 using System.Reactive.Disposables;
 
-using MovieList.Core.DialogModels;
+using Cineaste.Core.DialogModels;
 
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
 
-namespace MovieList.Dialogs
+namespace Cineaste.Dialogs
 {
     public abstract class ColorDialogBase : ReactiveUserControl<ColorModel> { }
 

@@ -7,17 +7,17 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-using DynamicData.Binding;
+using Cineaste.Core;
+using Cineaste.Core.Models;
+using Cineaste.Core.ViewModels;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Properties;
 
-using MovieList.Core;
-using MovieList.Core.Models;
-using MovieList.Core.ViewModels;
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Properties;
+using DynamicData.Binding;
 
 using ReactiveUI;
 
-namespace MovieList
+namespace Cineaste
 {
     public abstract class MainWindowBase : ReactiveWindow<MainViewModel> { }
 

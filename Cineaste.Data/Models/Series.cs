@@ -4,7 +4,7 @@ using System.Linq;
 
 using Dapper.Contrib.Extensions;
 
-namespace MovieList.Data.Models
+namespace Cineaste.Data.Models
 {
     public enum SeriesWatchStatus
     {

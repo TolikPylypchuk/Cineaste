@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 using ReactiveUI;
 
-namespace MovieList.Converters
+namespace Cineaste.Converters
 {
     [ValueConversion(typeof(Color), typeof(SolidColorBrush))]
     public class ColorToBrushConverter : IValueConverter, IBindingTypeConverter

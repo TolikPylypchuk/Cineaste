@@ -1,9 +1,9 @@
-using MovieList.Core.Preferences;
+using Cineaste.Core.Preferences;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels
+namespace Cineaste.Core.ViewModels
 {
     public class RecentFileViewModel : ReactiveObject
     {

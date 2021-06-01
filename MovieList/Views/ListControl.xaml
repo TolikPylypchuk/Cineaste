@@ -1,8 +1,8 @@
-<local:ListControlBase x:Class="MovieList.Views.ListControl"
+<local:ListControlBase x:Class="Cineaste.Views.ListControl"
                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:local="clr-namespace:MovieList.Views"
-                       xmlns:l="clr-namespace:MovieList.Localization">
+                       xmlns:local="clr-namespace:Cineaste.Views"
+                       xmlns:l="clr-namespace:Cineaste.Localization">
     <Grid Margin="0,8,0,0" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

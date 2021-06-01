@@ -11,20 +11,20 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 
+using Cineaste.Core.Models;
+using Cineaste.Core.Preferences;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Data;
+using Cineaste.Data.Models;
+
 using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
-using MovieList.Core.Models;
-using MovieList.Core.Preferences;
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Data;
-using MovieList.Data.Models;
-
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels.Forms.Base
+namespace Cineaste.Core.ViewModels.Forms.Base
 {
     public abstract class SettingsFormBase<TSettings, TForm> : ReactiveForm<TSettings, TForm>
         where TSettings : class, ISettings

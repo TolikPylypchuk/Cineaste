@@ -8,15 +8,15 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Resources;
 
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Data.Models;
+
 using DynamicData;
 using DynamicData.Binding;
 
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Data.Models;
-
 using ReactiveUI;
 
-namespace MovieList.Core.ViewModels.Forms.Base
+namespace Cineaste.Core.ViewModels.Forms.Base
 {
     public abstract class TaggedFormBase<TModel, TForm> : FranchiseEntryFormBase<TModel, TForm>
         where TModel : class

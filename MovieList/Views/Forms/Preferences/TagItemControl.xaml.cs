@@ -4,12 +4,12 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
 
-using MovieList.Core;
-using MovieList.Core.ViewModels.Forms.Preferences;
+using Cineaste.Core;
+using Cineaste.Core.ViewModels.Forms.Preferences;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Forms.Preferences
+namespace Cineaste.Views.Forms.Preferences
 {
     public abstract class TagItemControlBase : ReactiveUserControl<TagItemViewModel> { }
 

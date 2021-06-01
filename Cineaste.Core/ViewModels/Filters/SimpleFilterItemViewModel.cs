@@ -6,24 +6,24 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using Cineaste.Core.Data.Models;
+using Cineaste.Core.ListItems;
+using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Data.Models;
+
 using DynamicData;
 using DynamicData.Binding;
-
-using MovieList.Core.Data.Models;
-using MovieList.Core.ListItems;
-using MovieList.Core.ViewModels.Forms.Preferences;
-using MovieList.Data.Models;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using static MovieList.Core.Constants;
-using static MovieList.Core.ViewModels.Filters.FilterOperation;
-using static MovieList.Core.ViewModels.Filters.FilterType;
+using static Cineaste.Core.Constants;
+using static Cineaste.Core.ViewModels.Filters.FilterOperation;
+using static Cineaste.Core.ViewModels.Filters.FilterType;
 
-using Filter = System.Func<MovieList.Core.ListItems.ListItem, bool>;
+using Filter = System.Func<Cineaste.Core.ListItems.ListItem, bool>;
 
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public sealed class SimpleFilterItemViewModel : FilterItem, IActivatableViewModel
     {

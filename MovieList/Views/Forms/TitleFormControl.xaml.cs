@@ -1,13 +1,13 @@
 using System.Reactive.Disposables;
 
-using MaterialDesignThemes.Wpf;
+using Cineaste.Core.ViewModels.Forms;
+using Cineaste.Properties;
 
-using MovieList.Core.ViewModels.Forms;
-using MovieList.Properties;
+using MaterialDesignThemes.Wpf;
 
 using ReactiveUI;
 
-namespace MovieList.Views.Forms
+namespace Cineaste.Views.Forms
 {
     public abstract class TitleFormControlBase : ReactiveUserControl<TitleFormViewModel> { }
 

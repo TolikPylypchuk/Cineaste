@@ -3,7 +3,7 @@ using System;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace MovieList.Core.ViewModels.Filters
+namespace Cineaste.Core.ViewModels.Filters
 {
     public sealed class TextFilterInputViewModel : FilterInput
     {

@@ -1,10 +1,10 @@
-<local:PreferencesFormControlBase x:Class="MovieList.Views.Forms.Preferences.PreferencesFormControl"
+<local:PreferencesFormControlBase x:Class="Cineaste.Views.Forms.Preferences.PreferencesFormControl"
                                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                   xmlns:m="http://materialdesigninxaml.net/winfx/xaml/themes"
-                                  xmlns:local="clr-namespace:MovieList.Views.Forms.Preferences"
-                                  xmlns:views="clr-namespace:MovieList.Views"
-                                  xmlns:l="clr-namespace:MovieList.Localization">
+                                  xmlns:local="clr-namespace:Cineaste.Views.Forms.Preferences"
+                                  xmlns:views="clr-namespace:Cineaste.Views"
+                                  xmlns:l="clr-namespace:Cineaste.Localization">
     <local:PreferencesFormControlBase.Resources>
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
             <Setter Property="views:Properties.TripleClickSelectAll" Value="True" />
