@@ -755,7 +755,7 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://movielist.tolik.io.
+        ///   Looks up a localized string similar to https://cineaste.tolik.io.
         /// </summary>
         public static string DocsLink {
             get {
