@@ -1,4 +1,4 @@
-# Movie List
+# Cineaste
 
 An app which keeps track of the movies and TV series you have watched or would like to watch.
 
