@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <Platforms>x64</Platforms>
+    <AssemblyVersion>0.3.0.0</AssemblyVersion>
+    <FileVersion>0.3.0.0</FileVersion>
+    <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="akavache" Version="7.2.1" />
+    <PackageReference Include="Avalonia" Version="0.10.5" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.5" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.5" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.5" />
+    <PackageReference Include="DynamicData" Version="7.1.17" />
+    <PackageReference Include="ReactiveUI" Version="13.3.2" />
+    <PackageReference Include="ReactiveUI.Validation" Version="2.1.1" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="Splat" Version="11.1.1" />
+    <PackageReference Include="Splat.Serilog" Version="11.1.1" />
+    <PackageReference Include="System.Interactive" Version="5.0.0" />
+    <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cineaste.Core\Cineaste.Core.csproj" />
+    <ProjectReference Include="..\Cineaste.Data\Cineaste.Data.csproj" />
+  </ItemGroup>
+</Project>
