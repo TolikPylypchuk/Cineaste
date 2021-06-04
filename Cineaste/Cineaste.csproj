@@ -15,10 +15,10 @@
 
   <ItemGroup>
     <PackageReference Include="akavache" Version="7.2.1" />
-    <PackageReference Include="Avalonia" Version="0.10.5" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.5" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.5" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.5" />
+    <PackageReference Include="Avalonia" Version="0.10.6" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.6" />
     <PackageReference Include="DynamicData" Version="7.1.17" />
     <PackageReference Include="ReactiveUI" Version="13.3.2" />
     <PackageReference Include="ReactiveUI.Validation" Version="2.1.1" />
@@ -36,5 +36,20 @@
   <ItemGroup>
     <ProjectReference Include="..\Cineaste.Core\Cineaste.Core.csproj" />
     <ProjectReference Include="..\Cineaste.Data\Cineaste.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Messages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
