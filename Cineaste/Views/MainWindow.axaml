@@ -2,9 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="using:Projektanker.Icons.Avalonia"
         xmlns:l="using:Cineaste.Localization"
         xmlns:vm="using:Cineaste.Core.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="800"
         x:Class="Cineaste.Views.MainWindow" Title="Cineaste" Width="1600" Height="800"
         Icon="/Assets/avalonia-logo.ico" WindowStartupLocation="CenterScreen">
     <Design.DataContext>
@@ -14,28 +15,75 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{l:Translate File}">
-                <MenuItem x:Name="NewMenuItem" Header="{l:Translate New}" />
-                <MenuItem x:Name="OpenMenuItem" Header="{l:Translate Open}" />
-                <MenuItem x:Name="OpenRecentMenuItem" Header="{l:Translate OpenRecent}" />
+                <MenuItem x:Name="NewMenuItem" Header="{l:Translate New}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-file" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem x:Name="OpenMenuItem" Header="{l:Translate Open}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-file-alt" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem x:Name="OpenRecentMenuItem" Header="{l:Translate OpenRecent}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-file-alt" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
 
                 <Separator />
 
-                <MenuItem x:Name="SaveMenuItem" Header="{l:Translate Save}" />
-                <MenuItem x:Name="SaveAsMenuItem" Header="{l:Translate SaveAs}" />
-                <MenuItem x:Name="SettingsMenuItem" Header="{l:Translate Settings}" />
-                <MenuItem x:Name="CloseMenuItem" Header="{l:Translate Close}" />
+                <MenuItem x:Name="SaveMenuItem" Header="{l:Translate Save}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-save" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem x:Name="SaveAsMenuItem" Header="{l:Translate SaveAs}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-save" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem x:Name="SettingsMenuItem" Header="{l:Translate Settings}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-cog" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem x:Name="CloseMenuItem" Header="{l:Translate Close}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-times-circle" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <Separator />
 
-                <MenuItem x:Name="ExitMenuItem" Header="{l:Translate Exit}" />
+                <MenuItem x:Name="ExitMenuItem" Header="{l:Translate Exit}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-sign-out-alt" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
             </MenuItem>
 
             <MenuItem Header="{l:Translate Edit}">
-                <MenuItem x:Name="PreferencesMenuItem" Header="{l:Translate Preferences}" />
+                <MenuItem x:Name="PreferencesMenuItem" Header="{l:Translate Preferences}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-cogs" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
             <MenuItem Header="{l:Translate Help}">
-                <MenuItem x:Name="AboutMenuItem" Header="{l:Translate About}" />
+                <MenuItem x:Name="AboutMenuItem" Header="{l:Translate About}">
+                    <MenuItem.Icon>
+                        <i:Icon Value="fas fa-info-circle" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
 

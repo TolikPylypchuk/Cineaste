@@ -79,11 +79,29 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cineaste.
+        /// </summary>
+        internal static string Cineaste {
+            get {
+                return ResourceManager.GetString("Cineaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
             get {
                 return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a list.
+        /// </summary>
+        internal static string CreateList {
+            get {
+                return ResourceManager.GetString("CreateList", resourceCulture);
             }
         }
         
@@ -151,11 +169,29 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No recently opened files.
+        /// </summary>
+        internal static string NoRecentlyOpenedFiles {
+            get {
+                return ResourceManager.GetString("NoRecentlyOpenedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         internal static string Open {
             get {
                 return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open a list.
+        /// </summary>
+        internal static string OpenList {
+            get {
+                return ResourceManager.GetString("OpenList", resourceCulture);
             }
         }
         
@@ -174,6 +210,24 @@ namespace Cineaste.Properties {
         internal static string Preferences {
             get {
                 return ResourceManager.GetString("Preferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recently Opened Files.
+        /// </summary>
+        internal static string RecentlyOpenedFiles {
+            get {
+                return ResourceManager.GetString("RecentlyOpenedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove from list.
+        /// </summary>
+        internal static string RemoveFromList {
+            get {
+                return ResourceManager.GetString("RemoveFromList", resourceCulture);
             }
         }
         

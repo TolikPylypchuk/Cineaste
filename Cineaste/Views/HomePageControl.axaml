@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:l="using:Cineaste.Localization"
+             xmlns:vm="using:Cineaste.Core.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="750"
+             x:Class="Cineaste.Views.HomePageControl">
+    <Design.DataContext>
+        <vm:HomePageViewModel />
+    </Design.DataContext>
+
+    <Grid Grid.RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Stretch">
+        <TextBlock Grid.Row="0" Text="{l:Translate Cineaste}" HorizontalAlignment="Center" FontSize="60"
+                   TextAlignment="Center" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="36">
+            <Button x:Name="CreateListButton" Classes="accent" MinWidth="150" Height="50" HorizontalAlignment="Center"
+                    Margin="0 0 12 0" Content="{l:Translate CreateList}" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" FontSize="18" />
+
+            <Button x:Name="OpenListButton" Classes="accent" MinWidth="150" Height="50" HorizontalAlignment="Center"
+                    Margin="12 0 0 0" Content="{l:Translate OpenList}" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" FontSize="18" />
+        </StackPanel>
+
+        <TextBlock x:Name="RecentlyOpenedFilesTextBlock" Grid.Row="2" Text="{l:Translate RecentlyOpenedFiles}"
+                   FontSize="32" HorizontalAlignment="Center" />
+
+        <DockPanel x:Name="RecentlyOpenedFilesPanel" Grid.Row="3" VerticalAlignment="Top">
+            <Button x:Name="RemoveButton" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="8 8 8 16"
+                    Content="{l:Translate RemoveFromList}" />
+
+            <ScrollViewer HorizontalAlignment="Stretch" Margin="24" VerticalScrollBarVisibility="Auto" MaxWidth="800">
+                <ItemsControl x:Name="RecentFilesList" HorizontalAlignment="Stretch" />
+            </ScrollViewer>
+        </DockPanel>
+
+        <TextBlock x:Name="NoRecentlyOpenedFilesTextBlock" Grid.Row="3" HorizontalAlignment="Center"
+                   Text="{l:Translate NoRecentlyOpenedFiles}" FontSize="18" Margin="0 16 0 0" />
+    </Grid>
+</UserControl>

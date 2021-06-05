@@ -123,8 +123,14 @@
   <data name="Animation" xml:space="preserve">
     <value>Animation</value>
   </data>
+  <data name="Cineaste" xml:space="preserve">
+    <value>Cineaste</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="CreateList" xml:space="preserve">
+    <value>Create a list</value>
   </data>
   <data name="DefaultDefaultSeasonOriginalTitle" xml:space="preserve">
     <value>Season #</value>
@@ -147,14 +153,26 @@
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="NoRecentlyOpenedFiles" xml:space="preserve">
+    <value>No recently opened files</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
+  </data>
+  <data name="OpenList" xml:space="preserve">
+    <value>Open a list</value>
   </data>
   <data name="OpenRecent" xml:space="preserve">
     <value>Open Recent</value>
   </data>
   <data name="Preferences" xml:space="preserve">
     <value>Preferences</value>
+  </data>
+  <data name="RecentlyOpenedFiles" xml:space="preserve">
+    <value>Recently Opened Files</value>
+  </data>
+  <data name="RemoveFromList" xml:space="preserve">
+    <value>Remove from list</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>

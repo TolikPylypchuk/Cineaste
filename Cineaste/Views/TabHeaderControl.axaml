@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:vm="using:Cineaste.Core.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="40"
+             x:Class="Cineaste.Views.TabHeaderControl">
+    <Design.DataContext>
+        <vm:TabHeaderViewModel />
+    </Design.DataContext>
+
+    <DockPanel HorizontalAlignment="Stretch">
+        <Button x:Name="CloseButton" DockPanel.Dock="Right" i:Attached.Icon="far fa-times-circle"
+                VerticalAlignment="Center" Padding="0" Width="15" Height="15" Margin="10 0 0 0" />
+
+        <TextBlock x:Name="NameTextBlock" VerticalAlignment="Center" />
+    </DockPanel>
+</UserControl>

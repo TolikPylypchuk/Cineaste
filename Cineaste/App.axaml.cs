@@ -28,6 +28,9 @@ using Cineaste.Infrastructure;
 using Cineaste.Properties;
 using Cineaste.Views;
 
+using Projektanker.Icons.Avalonia;
+using Projektanker.Icons.Avalonia.FontAwesome;
+
 using ReactiveUI;
 
 using Serilog;
@@ -79,6 +82,8 @@ namespace Cineaste
         {
             await this.ConfigureLocator();
             this.ConfigureSuspensionDriver(desktop);
+
+            IconProvider.Register<FontAwesomeIconProvider>();
 
             var mainViewModel = new MainViewModel();
 
