@@ -161,7 +161,7 @@ namespace Cineaste
                     .Where(state => state != WindowState.Minimized)
                     .Discard())
                 .Merge(Observable.FromEventPattern<PixelPointEventArgs>(
-                    e => window.PositionChanged += e, e => window.PositionChanged -= e)
+                    h => window.PositionChanged += h, h => window.PositionChanged -= h)
                     .Discard())
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .ObserveOn(RxApp.MainThreadScheduler)
