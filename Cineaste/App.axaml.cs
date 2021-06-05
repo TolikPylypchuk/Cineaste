@@ -39,6 +39,7 @@ using Splat.Serilog;
 
 using static Cineaste.Constants;
 using static Cineaste.Core.Constants;
+using static Cineaste.Core.Util;
 
 namespace Cineaste
 {
@@ -58,9 +59,7 @@ namespace Cineaste
 
         public override void RegisterServices()
         {
-            PlatformRegistrationManager.SetRegistrationNamespaces(RegistrationNamespace.Avalonia);
             BlobCache.ApplicationName = Assembly.GetExecutingAssembly().GetName()?.Name ?? String.Empty;
-
             base.RegisterServices();
         }
 
@@ -69,21 +68,17 @@ namespace Cineaste
             if (this.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.Exit += this.OnExit;
-                await this.InitializeAppAsync(desktop);
+                await this.InitializeApp(desktop);
                 this.Log().Info("Cineaste app started");
             }
 
             base.OnFrameworkInitializationCompleted();
         }
 
-        private async Task InitializeAppAsync(IClassicDesktopStyleApplicationLifetime desktop)
+        private async Task InitializeApp(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            await this.ConfigureLocatorAsync();
-
-            var suspension = new AutoSuspendHelper(desktop);
-            RxApp.SuspensionHost.CreateNewAppState = () => new AppState();
-            RxApp.SuspensionHost.SetupDefaultSuspendResume();
-            suspension.OnFrameworkInitializationCompleted();
+            await this.ConfigureLocator();
+            this.ConfigureSuspensionDriver(desktop);
 
             var mainViewModel = new MainViewModel();
 
@@ -98,10 +93,9 @@ namespace Cineaste
                 .InvokeCommand(mainViewModel.OpenFile);
         }
 
-        private async Task ConfigureLocatorAsync()
+        private async Task ConfigureLocator()
         {
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
-            Locator.CurrentMutable.RegisterSuspensionDriver();
 
             Locator.CurrentMutable.RegisterConstant(RxApp.TaskpoolScheduler, TaskPoolKey);
             Locator.CurrentMutable.RegisterConstant(BlobCache.LocalMachine, CacheKey);
@@ -114,26 +108,36 @@ namespace Cineaste
             var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
                 .Catch(Observable.FromAsync(this.CreateDefaultPreferencesAsync));
 
-            var loggingLevelSwitch = new LoggingLevelSwitch((LogEventLevel)preferences.Logging.MinLogLevel);
-
             Locator.CurrentMutable.RegisterConstant(preferences);
-            Locator.CurrentMutable.RegisterConstant(loggingLevelSwitch);
 
-            Locator.CurrentMutable.UseSerilogFullLogger(new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .MinimumLevel.ControlledBy(loggingLevelSwitch)
-                .WriteTo.Debug(outputTemplate: LogTemplate)
-                .WriteTo.Async(c => c.File(
-                    path: preferences.Logging.LogPath,
-                    outputTemplate: LogTemplate,
-                    fileSizeLimitBytes: 10000000,
-                    rollOnFileSizeLimit: true,
-                    retainedFileCountLimit: 2))
-                .Filter.ByIncludingOnly($"StartsWith(SourceContext, '{nameof(Cineaste)}')")
-                .CreateLogger());
+            this.ConfigureLogging(preferences);
         }
 
-        private MainWindow CreateMainWindow(MainViewModel viewModel, IClassicDesktopStyleApplicationLifetime desktop)
+        private void ConfigureSuspensionDriver(IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var autoSuspendHelper = new AutoSuspendHelper(desktop);
+
+            static string GetUnixHomeFolder() =>
+                Environment.GetEnvironmentVariable("HOME") ?? String.Empty;
+
+            string root = PlatformDependent(
+                    windows: () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    macos: GetUnixHomeFolder,
+                    linux: GetUnixHomeFolder);
+
+            string folder = Assembly.GetExecutingAssembly().GetName().Name ?? String.Empty;
+
+            string file = Path.Combine(root, folder, AppStateFileName);
+
+            RxApp.SuspensionHost.CreateNewAppState = () => new AppState();
+            RxApp.SuspensionHost.SetupDefaultSuspendResume(new JsonSuspensionDriver<AppState>(file));
+
+            autoSuspendHelper.OnFrameworkInitializationCompleted();
+        }
+
+        private MainWindow CreateMainWindow(
+            MainViewModel viewModel,
+            IClassicDesktopStyleApplicationLifetime desktop)
         {
             var state = RxApp.SuspensionHost.GetAppState<AppState>();
 
@@ -142,7 +146,7 @@ namespace Cineaste
                 ViewModel = viewModel
             };
 
-            if (state.IsInitialized)
+            if (state != null && state.IsInitialized)
             {
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
                 window.Width = state.WindowWidth;
@@ -168,6 +172,26 @@ namespace Cineaste
 
         private void RegisterBindingConverters()
         { }
+
+        private void ConfigureLogging(UserPreferences preferences)
+        {
+            var loggingLevelSwitch = new LoggingLevelSwitch((LogEventLevel)preferences.Logging.MinLogLevel);
+
+            Locator.CurrentMutable.RegisterConstant(loggingLevelSwitch);
+
+            Locator.CurrentMutable.UseSerilogFullLogger(new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.ControlledBy(loggingLevelSwitch)
+                .WriteTo.Debug(outputTemplate: LogTemplate)
+                .WriteTo.Async(c => c.File(
+                    path: preferences.Logging.LogPath,
+                    outputTemplate: LogTemplate,
+                    fileSizeLimitBytes: 10000000,
+                    rollOnFileSizeLimit: true,
+                    retainedFileCountLimit: 2))
+                .Filter.ByIncludingOnly($"StartsWith(SourceContext, '{nameof(Cineaste)}')")
+                .CreateLogger());
+        }
 
         private async Task<UserPreferences> CreateDefaultPreferencesAsync()
         {
@@ -267,11 +291,16 @@ namespace Cineaste
 
             var state = RxApp.SuspensionHost.GetAppState<AppState>();
 
-            state.WindowWidth = desktop.MainWindow.Width;
-            state.WindowHeight = desktop.MainWindow.Height;
-            state.WindowX = desktop.MainWindow.Position.X;
-            state.WindowY = desktop.MainWindow.Position.Y;
             state.IsWindowMaximized = desktop.MainWindow.WindowState == WindowState.Maximized;
+
+            if (!state.IsWindowMaximized)
+            {
+                state.WindowWidth = desktop.MainWindow.Width;
+                state.WindowHeight = desktop.MainWindow.Height;
+                state.WindowX = desktop.MainWindow.Position.X;
+                state.WindowY = desktop.MainWindow.Position.Y;
+            }
+
             state.IsInitialized = true;
         }
 

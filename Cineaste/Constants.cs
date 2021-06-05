@@ -4,5 +4,7 @@ namespace Cineaste
     {
         public const string LogTemplate =
             "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] [{SourceContext}] {Message}{NewLine}{Exception}";
+
+        public const string AppStateFileName = "appstate.json";
     }
 }

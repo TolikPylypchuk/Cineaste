@@ -32,6 +32,7 @@
     <PackageReference Include="System.Interactive" Version="5.0.0" />
     <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.2.1" />
   </ItemGroup>
 
