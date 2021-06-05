@@ -59,5 +59,50 @@ namespace Cineaste.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Animation.
+        /// </summary>
+        internal static string Animation {
+            get {
+                return ResourceManager.GetString("Animation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Season #.
+        /// </summary>
+        internal static string DefaultDefaultSeasonOriginalTitle {
+            get {
+                return ResourceManager.GetString("DefaultDefaultSeasonOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Season #.
+        /// </summary>
+        internal static string DefaultDefaultSeasonTitle {
+            get {
+                return ResourceManager.GetString("DefaultDefaultSeasonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentary.
+        /// </summary>
+        internal static string Documentary {
+            get {
+                return ResourceManager.GetString("Documentary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Live Action.
+        /// </summary>
+        internal static string LiveAction {
+            get {
+                return ResourceManager.GetString("LiveAction", resourceCulture);
+            }
+        }
     }
 }
