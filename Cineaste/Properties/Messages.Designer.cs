@@ -70,6 +70,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Files.
+        /// </summary>
+        internal static string AllExtensionsDescription {
+            get {
+                return ResourceManager.GetString("AllExtensionsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Animation.
         /// </summary>
         internal static string Animation {
@@ -142,6 +151,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cineaste List.
+        /// </summary>
+        internal static string FileExtensionDescription {
+            get {
+                return ResourceManager.GetString("FileExtensionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home Page.
         /// </summary>
         internal static string HomePage {
@@ -183,6 +201,15 @@ namespace Cineaste.Properties {
         internal static string Open {
             get {
                 return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open File.
+        /// </summary>
+        internal static string OpenFile {
+            get {
+                return ResourceManager.GetString("OpenFile", resourceCulture);
             }
         }
         
@@ -246,6 +273,15 @@ namespace Cineaste.Properties {
         internal static string SaveAs {
             get {
                 return ResourceManager.GetString("SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save File.
+        /// </summary>
+        internal static string SaveFile {
+            get {
+                return ResourceManager.GetString("SaveFile", resourceCulture);
             }
         }
         

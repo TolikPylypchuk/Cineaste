@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="AllExtensionsDescription" xml:space="preserve">
+    <value>All Files</value>
+  </data>
   <data name="Animation" xml:space="preserve">
     <value>Animation</value>
   </data>
@@ -144,6 +147,9 @@
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="FileExtensionDescription" xml:space="preserve">
+    <value>Cineaste List</value>
+  </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home Page</value>
   </data>
@@ -158,6 +164,9 @@
   </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
+  </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>Open File</value>
   </data>
   <data name="OpenList" xml:space="preserve">
     <value>Open a list</value>
@@ -179,6 +188,9 @@
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Save As</value>
+  </data>
+  <data name="SaveFile" xml:space="preserve">
+    <value>Save File</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>

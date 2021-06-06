@@ -41,6 +41,7 @@ using Splat;
 using Splat.Serilog;
 
 using static Cineaste.Constants;
+using static Cineaste.Util;
 using static Cineaste.Core.Constants;
 using static Cineaste.Core.Util;
 
@@ -122,13 +123,10 @@ namespace Cineaste
         {
             var autoSuspendHelper = new AutoSuspendHelper(desktop);
 
-            static string GetUnixHomeFolder() =>
-                Environment.GetEnvironmentVariable("HOME") ?? String.Empty;
-
             string root = PlatformDependent(
-                    windows: () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    macos: GetUnixHomeFolder,
-                    linux: GetUnixHomeFolder);
+                windows: () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                macos: GetUnixHomeFolder,
+                linux: GetUnixHomeFolder);
 
             string folder = Assembly.GetExecutingAssembly().GetName().Name ?? String.Empty;
 
