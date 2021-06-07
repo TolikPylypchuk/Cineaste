@@ -19,15 +19,14 @@ bld/
 [Oo]bj/
 [Ll]og/
 
+# WWW Root Folder
+**/wwwroot/lib/
+**/wwwroot/**/*.css
+
 # Visual Studio and Visual Studio Code cache/options directory
 .vs/
 .vscode/
 .ionide/
-
-# Jekyll files
-_site
-.sass-cache
-.jekyll-metadata
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
