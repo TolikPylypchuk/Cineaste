@@ -50,12 +50,14 @@ namespace Cineaste
     public sealed class App : Application, IEnableLogger
     {
         private readonly Mutex mutex;
+        private readonly string appName;
         private readonly NamedPipeManager namedPipeManager;
 
         public App()
         {
             this.mutex = SingleInstanceManager.TryAcquireMutex();
-            this.namedPipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly()?.FullName ?? String.Empty);
+            this.appName = Assembly.GetExecutingAssembly()?.FullName ?? String.Empty;
+            this.namedPipeManager = new NamedPipeManager(this.appName);
         }
 
         public override void Initialize() =>
@@ -63,7 +65,7 @@ namespace Cineaste
 
         public override void RegisterServices()
         {
-            BlobCache.ApplicationName = Assembly.GetExecutingAssembly().GetName()?.Name ?? String.Empty;
+            BlobCache.ApplicationName = this.appName;
             base.RegisterServices();
         }
 
@@ -85,6 +87,8 @@ namespace Cineaste
             this.ConfigureSuspensionDriver(desktop);
 
             IconProvider.Register<FontAwesomeIconProvider>();
+
+            TransitioningContentControl.PageTransitionProperty.OverrideDefaultValue(typeof(ViewModelViewHost), null);
 
             var mainViewModel = new MainViewModel();
 
@@ -123,14 +127,7 @@ namespace Cineaste
         {
             var autoSuspendHelper = new AutoSuspendHelper(desktop);
 
-            string root = PlatformDependent(
-                windows: () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                macos: GetUnixHomeFolder,
-                linux: GetUnixHomeFolder);
-
-            string folder = Assembly.GetExecutingAssembly().GetName().Name ?? String.Empty;
-
-            string file = Path.Combine(root, folder, AppStateFileName);
+            string file = Path.Combine(this.GetConfigDirectory(), AppStateFileName);
 
             RxApp.SuspensionHost.CreateNewAppState = () => new AppState();
             RxApp.SuspensionHost.SetupDefaultSuspendResume(new JsonSuspensionDriver<AppState>(file));
@@ -211,13 +208,8 @@ namespace Cineaste
                 ListSortDirection.Ascending,
                 ListSortDirection.Ascending);
 
-            string appName = Assembly.GetExecutingAssembly()?.GetName().Name ?? String.Empty;
-
             var loggingPreferences = new LoggingPreferences(
-                Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    appName,
-                    $"{appName}.log"),
+                Path.Combine(this.GetConfigDirectory(), $"{this.appName}.log"),
                 (int)LogEventLevel.Warning);
 
             var preferences = new UserPreferences(filePreferences, defaultsPreferences, loggingPreferences);
@@ -225,6 +217,19 @@ namespace Cineaste
             await BlobCache.UserAccount.InsertObject(PreferencesKey, preferences);
 
             return preferences;
+        }
+
+        private string GetConfigDirectory()
+        {
+            string root = PlatformDependent(
+                windows: () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                macos: GetUnixHomeFolder,
+                linux: GetUnixHomeFolder);
+
+            string directory = PlatformDependent(
+                windows: () => this.appName, macos: () => $".{this.appName}", linux: () => $".{this.appName}");
+
+            return Path.Combine(root, directory);
         }
 
         private List<Kind> CreateDefaultKinds()
