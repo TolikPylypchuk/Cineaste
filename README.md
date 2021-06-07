@@ -32,3 +32,7 @@ If you want to build your own version of this app, you simply need [.NET 5](http
 That's it, there are no special prerequisites.
 
 Run the `Publish-App` script to create a zipped app which you can then extract to anywhere.
+
+## Icons
+
+Icons made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com).
