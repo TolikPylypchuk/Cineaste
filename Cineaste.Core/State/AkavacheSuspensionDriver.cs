@@ -7,6 +7,7 @@ using ReactiveUI;
 
 namespace Cineaste.Core.State
 {
+    [Obsolete("Use JsonSuspensionDriver instead")]
     public sealed class AkavacheSuspensionDriver<TAppState> : ISuspensionDriver where TAppState : class
     {
         private const string AppStateKey = "appState";

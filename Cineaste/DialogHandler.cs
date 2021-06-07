@@ -69,11 +69,14 @@ namespace Cineaste
                 }
             };
 
-            var fileNames = await dialog.ShowAsync(this.window);
+            string[]? fileNames = await dialog.ShowAsync(this.window);
 
             if (fileNames.Length > 0)
             {
                 ctx.SetOutput(fileNames[0]);
+            } else
+            {
+                ctx.SetOutput(null);
             }
         }
 
