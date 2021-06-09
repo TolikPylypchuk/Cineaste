@@ -12,7 +12,7 @@
 
     <Grid Grid.RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Stretch">
         <TextBlock Grid.Row="0" Text="{l:Translate Cineaste}" HorizontalAlignment="Center" FontSize="60"
-                   TextAlignment="Center" />
+                   TextAlignment="Center" FontWeight="Light" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="36">
             <Button x:Name="CreateListButton" Classes="accent" MinWidth="150" Height="50" HorizontalAlignment="Center"
@@ -25,7 +25,7 @@
         </StackPanel>
 
         <TextBlock x:Name="RecentlyOpenedFilesTextBlock" Grid.Row="2" Text="{l:Translate RecentlyOpenedFiles}"
-                   FontSize="32" HorizontalAlignment="Center" />
+                   FontSize="32" HorizontalAlignment="Center" FontWeight="Light" />
 
         <DockPanel x:Name="RecentlyOpenedFilesPanel" Grid.Row="3" VerticalAlignment="Top">
             <Button x:Name="RemoveButton" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="8 8 8 16"

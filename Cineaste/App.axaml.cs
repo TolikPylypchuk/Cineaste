@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
@@ -41,9 +42,9 @@ using Splat;
 using Splat.Serilog;
 
 using static Cineaste.Constants;
-using static Cineaste.Util;
 using static Cineaste.Core.Constants;
 using static Cineaste.Core.Util;
+using static Cineaste.Util;
 
 namespace Cineaste
 {
@@ -56,7 +57,7 @@ namespace Cineaste
         public App()
         {
             this.mutex = SingleInstanceManager.TryAcquireMutex();
-            this.appName = Assembly.GetExecutingAssembly()?.FullName ?? String.Empty;
+            this.appName = Assembly.GetExecutingAssembly()?.GetName().Name ?? String.Empty;
             this.namedPipeManager = new NamedPipeManager(this.appName);
         }
 
@@ -69,21 +70,22 @@ namespace Cineaste
             base.RegisterServices();
         }
 
-        public override async void OnFrameworkInitializationCompleted()
+        public override void OnFrameworkInitializationCompleted()
         {
             if (this.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.Exit += this.OnExit;
-                await this.InitializeApp(desktop);
+                RxApp.DefaultExceptionHandler = Observer.ToObserver<Exception>(this.OnException);
+                this.InitializeApp(desktop);
                 this.Log().Info("Cineaste app started");
             }
 
             base.OnFrameworkInitializationCompleted();
         }
 
-        private async Task InitializeApp(IClassicDesktopStyleApplicationLifetime desktop)
+        private void InitializeApp(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            await this.ConfigureLocator();
+            this.ConfigureLocator();
             this.ConfigureSuspensionDriver(desktop);
 
             IconProvider.Register<FontAwesomeIconProvider>();
@@ -103,7 +105,7 @@ namespace Cineaste
                 .InvokeCommand(mainViewModel.OpenFile);
         }
 
-        private async Task ConfigureLocator()
+        private void ConfigureLocator()
         {
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
 
@@ -115,8 +117,17 @@ namespace Cineaste
 
             this.RegisterBindingConverters();
 
-            var preferences = await BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
-                .Catch(Observable.FromAsync(this.CreateDefaultPreferencesAsync));
+            var preferences = BlobCache.UserAccount.GetObject<UserPreferences>(PreferencesKey)
+                .Catch(Observable.FromAsync(this.CreateDefaultPreferencesAsync))
+                .Wait();
+
+            if (preferences == null)
+            {
+                string message = "Cannot get the preferences or create new ones";
+                var exp = new InvalidOperationException(message);
+                this.Log().Fatal(exp, message);
+                throw exp;
+            }
 
             Locator.CurrentMutable.RegisterConstant(preferences);
 
@@ -312,7 +323,16 @@ namespace Cineaste
             state.IsInitialized = true;
         }
 
-        private void OnExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+        private void OnException(Notification<Exception> notification)
+        {
+            this.Log().Fatal(notification.Value);
+            this.CleanUp();
+        }
+
+        private void OnExit(object? sender, ControlledApplicationLifetimeExitEventArgs e) =>
+            this.CleanUp();
+
+        private void CleanUp()
         {
             BlobCache.Shutdown().Wait();
             this.mutex.ReleaseMutex();

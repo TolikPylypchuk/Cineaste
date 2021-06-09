@@ -156,6 +156,15 @@
   <data name="LiveAction" xml:space="preserve">
     <value>Live Action</value>
   </data>
+  <data name="NavigationList" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="NavigationSettings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="NavigationStats" xml:space="preserve">
+    <value>Stats</value>
+  </data>
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
@@ -187,7 +196,7 @@
     <value>Save</value>
   </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>Save As</value>
+    <value>Save As...</value>
   </data>
   <data name="SaveFile" xml:space="preserve">
     <value>Save File</value>

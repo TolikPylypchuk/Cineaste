@@ -178,6 +178,33 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List.
+        /// </summary>
+        internal static string NavigationList {
+            get {
+                return ResourceManager.GetString("NavigationList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string NavigationSettings {
+            get {
+                return ResourceManager.GetString("NavigationSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stats.
+        /// </summary>
+        internal static string NavigationStats {
+            get {
+                return ResourceManager.GetString("NavigationStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New.
         /// </summary>
         internal static string New {
@@ -268,7 +295,7 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save As.
+        ///   Looks up a localized string similar to Save As....
         /// </summary>
         internal static string SaveAs {
             get {
