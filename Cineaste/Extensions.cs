@@ -1,3 +1,5 @@
+using Avalonia.Media;
+
 using Cineaste.Properties;
 
 namespace Cineaste
@@ -6,5 +8,11 @@ namespace Cineaste
     {
         public static string Localized(this string text) =>
             Messages.ResourceManager.GetString(text) ?? text;
+
+        public static Brush ToBrush(this Color color) =>
+            new SolidColorBrush
+            {
+                Color = color
+            };
     }
 }
