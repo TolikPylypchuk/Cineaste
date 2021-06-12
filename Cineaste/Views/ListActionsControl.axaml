@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rx="http://reactiveui.net"
+             xmlns:c="using:Cineaste.Converters"
+             xmlns:l="using:Cineaste.Localization"
+             xmlns:vm="using:Cineaste.Core.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="750"
+             x:Class="Cineaste.Views.ListActionsControl">
+    <Design.DataContext>
+        <vm:ListActionsViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*" HorizontalAlignment="Stretch">
+        <StackPanel Grid.Row="0">
+            <StackPanel.Styles>
+                <Style Selector="Button.add">
+                    <Setter Property="Height" Value="50" />
+                    <Setter Property="Margin" Value="32 16" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="FontSize" Value="18" />
+                </Style>
+            </StackPanel.Styles>
+
+            <Button x:Name="AddNewMovieButton" Classes="accent add" Content="{l:Translate AddNewMovie}" />
+            <Button x:Name="AddNewSeriesButton" Classes="accent add" Content="{l:Translate AddNewSeries}" />
+        </StackPanel>
+
+        <TabControl x:Name="ActionTabControl" Grid.Row="1" HorizontalAlignment="Center">
+            <TabItem Header="{l:Translate Search}">
+                <rx:ViewModelViewHost x:Name="SearchViewHost" />
+            </TabItem>
+
+            <TabItem Header="{l:Translate Filter}">
+                <rx:ViewModelViewHost x:Name="FilterViewHost" />
+            </TabItem>
+
+            <TabItem Header="{l:Translate Sort}">
+                <rx:ViewModelViewHost x:Name="SortViewHost" />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

@@ -31,23 +31,23 @@ namespace Cineaste.Views
                     .WhereNotNull()
                     .Subscribe(content =>
                     {
-                        foreach (TabItem item in this.Sidebar.Items)
-                        {
-                            item.Content = null;
-                        }
-
                         var selectedItem = content switch
                         {
                             FileMainContentViewModel => this.ListItem,
                             _ => this.SettingsItem
                         };
 
-                        selectedItem.Content = content;
+                        if (selectedItem.Content is ViewModelViewHost host)
+                        {
+                            host.ViewModel = content;
+                        }
+
                         this.Sidebar.SelectedItem = selectedItem;
                     })
                     .DisposeWith(disposables);
 
                 this.Sidebar.GetObservable(SelectingItemsControl.SelectedItemProperty)
+                    .SkipUntil(this.ViewModel!.IsInitialized.Where(isInitialized => isInitialized))
                     .WhereNotNull()
                     .OfType<TabItem>()
                     .Select(item => item == this.ListItem

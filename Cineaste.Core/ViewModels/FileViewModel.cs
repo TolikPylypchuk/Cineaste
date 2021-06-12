@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Cineaste.Core.Data.Services;
 using Cineaste.Core.DialogModels;
@@ -28,6 +29,8 @@ namespace Cineaste.Core.ViewModels
 
         private readonly SourceCache<Tag, int> tagsSource;
         private readonly ReadOnlyObservableCollection<Tag> tags;
+
+        private readonly BehaviorSubject<bool> isInitialized = new(false);
 
         private readonly CompositeDisposable currentContentSubscriptions = new();
         private readonly ISettingsService settingsService;
@@ -83,6 +86,9 @@ namespace Cineaste.Core.ViewModels
             kinds.CombineLatest(tags, (k, t) => Unit.Default)
                 .SubscribeAsync(this.SwitchCurrentContentToMain);
 
+            kinds.CombineLatest(tags, (k, t) => true)
+                .Subscribe(this.isInitialized);
+
             this.SwitchToList = ReactiveCommand.CreateFromObservable(this.OnSwitchToList);
             this.SwitchToStats = ReactiveCommand.Create(() => { });
             this.SwitchToSettings = ReactiveCommand.CreateFromObservable(this.OnSwitchToSettings);
@@ -92,6 +98,9 @@ namespace Cineaste.Core.ViewModels
             this.WhenAnyValue(vm => vm.ListName)
                 .BindTo(this.Header, h => h.TabName);
         }
+
+        public IObservable<bool> IsInitialized =>
+            this.isInitialized.AsObservable();
 
         public string FileName { get; }
 

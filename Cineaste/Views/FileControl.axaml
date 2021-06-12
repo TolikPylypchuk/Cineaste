@@ -16,7 +16,7 @@
     <TabControl x:Name="Sidebar" Classes="sidebar">
         <TabControl.Styles>
             <Style Selector="TabItem > StackPanel > i|Icon">
-                <Setter Property="Margin" Value="0 0 20 0" />
+                <Setter Property="Margin" Value="0 0 15 0" />
             </Style>
         </TabControl.Styles>
 
@@ -27,6 +27,8 @@
                     <TextBlock Text="{l:Translate NavigationList}" />
                 </StackPanel>
             </TabItem.Header>
+
+            <rx:ViewModelViewHost />
         </TabItem>
 
         <TabItem IsEnabled="False">
@@ -36,6 +38,8 @@
                     <TextBlock Text="{l:Translate NavigationStats}" />
                 </StackPanel>
             </TabItem.Header>
+
+            <rx:ViewModelViewHost />
         </TabItem>
 
         <TabItem x:Name="SettingsItem">
@@ -45,6 +49,8 @@
                     <TextBlock Text="{l:Translate NavigationSettings}" />
                 </StackPanel>
             </TabItem.Header>
+
+            <rx:ViewModelViewHost />
         </TabItem>
     </TabControl>
 </UserControl>

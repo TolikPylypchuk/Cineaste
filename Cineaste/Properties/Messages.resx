@@ -120,6 +120,12 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="AddNewMovie" xml:space="preserve">
+    <value>Add new movie</value>
+  </data>
+  <data name="AddNewSeries" xml:space="preserve">
+    <value>Add new series</value>
+  </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All Files</value>
   </data>
@@ -149,6 +155,9 @@
   </data>
   <data name="FileExtensionDescription" xml:space="preserve">
     <value>Cineaste List</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
   </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home Page</value>
@@ -201,7 +210,13 @@
   <data name="SaveFile" xml:space="preserve">
     <value>Save File</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Sort</value>
   </data>
 </root>
