@@ -8,6 +8,7 @@
             </TabControl>
         </Border>
     </Design.PreviewWith>
+
     <Style Selector="TabControl.sidebar">
         <Setter Property="TabStripPlacement" Value="Left" />
         <Setter Property="Padding" Value="0" />

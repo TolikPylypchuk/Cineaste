@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:l="using:Cineaste.Localization"
+             xmlns:vm="using:Cineaste.Core.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
+             x:Class="Cineaste.Views.ListSortControl">
+    <Design.DataContext>
+        <vm:ListSortViewModel />
+    </Design.DataContext>
+
+    <DockPanel>
+        <Button x:Name="ApplyButton" DockPanel.Dock="Bottom" Content="{l:Translate ApplySorting}"
+                HorizontalAlignment="Center" Margin="8" Classes="accent" />
+
+        <StackPanel>
+            <StackPanel.Styles>
+                <Style Selector="ComboBox">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                </Style>
+
+                <Style Selector="ComboBox.order">
+                    <Setter Property="Margin" Value="0 0 8 0" />
+                </Style>
+            </StackPanel.Styles>
+
+            <TextBlock Text="{l:Translate FirstSorting}" FontSize="{DynamicResource FontSizeBig}" Margin="0 8 0 0" />
+
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="2*,*" Margin="0 8 0 0">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{l:Translate Sorting}" Classes="caption" />
+                <ComboBox x:Name="FirstOrderComboBox" Grid.Row="1" Grid.Column="0" Classes="order" />
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{l:Translate Direction}" Classes="caption" />
+                <ComboBox x:Name="FirstDirectionComboBox" Grid.Row="1" Grid.Column="1" />
+            </Grid>
+
+            <TextBlock Text="{l:Translate SecondSorting}" FontSize="{DynamicResource FontSizeBig}" Margin="0 16 0 0" />
+
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="2*,*" Margin="0 8 0 0">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{l:Translate Sorting}" Classes="caption" />
+                <ComboBox x:Name="SecondOrderComboBox" Grid.Row="1" Grid.Column="0" Classes="order" />
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{l:Translate Direction}" Classes="caption" />
+                <ComboBox x:Name="SecondDirectionComboBox" Grid.Row="1" Grid.Column="1" />
+            </Grid>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

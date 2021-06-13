@@ -17,11 +17,11 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="36">
             <Button x:Name="CreateListButton" Classes="accent" MinWidth="150" Height="50" HorizontalAlignment="Center"
                     Margin="0 0 12 0" Content="{l:Translate CreateList}" HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center" FontSize="18" />
+                    VerticalContentAlignment="Center" FontSize="{DynamicResource FontSizeLarge}" />
 
             <Button x:Name="OpenListButton" Classes="accent" MinWidth="150" Height="50" HorizontalAlignment="Center"
                     Margin="12 0 0 0" Content="{l:Translate OpenList}" HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center" FontSize="18" />
+                    VerticalContentAlignment="Center" FontSize="{DynamicResource FontSizeLarge}" />
         </StackPanel>
 
         <TextBlock x:Name="RecentlyOpenedFilesTextBlock" Grid.Row="2" Text="{l:Translate RecentlyOpenedFiles}"
@@ -36,7 +36,7 @@
             </ScrollViewer>
         </DockPanel>
 
-        <TextBlock x:Name="NoRecentlyOpenedFilesTextBlock" Grid.Row="3" HorizontalAlignment="Center"
-                   Text="{l:Translate NoRecentlyOpenedFiles}" FontSize="18" Margin="0 16 0 0" />
+        <TextBlock x:Name="NoRecentlyOpenedFilesTextBlock" Grid.Row="3" HorizontalAlignment="Center" Margin="0 16 0 0"
+                   Text="{l:Translate NoRecentlyOpenedFiles}" FontSize="{DynamicResource FontSizeLarge}" />
     </Grid>
 </UserControl>

@@ -18,6 +18,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 
+using Cineaste.Converters;
 using Cineaste.Core;
 using Cineaste.Core.Models;
 using Cineaste.Core.Preferences;
@@ -182,7 +183,25 @@ namespace Cineaste
         }
 
         private void RegisterBindingConverters()
-        { }
+        {
+            var listSortOrderConverter = new ListSortOrderConverter();
+            var listSortDirectionConverter = new ListSortDirectionConverter();
+
+            this.RegisterBindingConverters(
+                listSortOrderConverter,
+                listSortDirectionConverter);
+
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSortOrder>>(listSortOrderConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSortDirection>>(listSortDirectionConverter);
+        }
+
+        private void RegisterBindingConverters(params IBindingTypeConverter[] converters)
+        {
+            foreach (var converter in converters)
+            {
+                Locator.CurrentMutable.RegisterConstant(converter);
+            }
+        }
 
         private void ConfigureLogging(UserPreferences preferences)
         {

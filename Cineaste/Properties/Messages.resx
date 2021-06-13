@@ -132,6 +132,9 @@
   <data name="Animation" xml:space="preserve">
     <value>Animation</value>
   </data>
+  <data name="ApplySorting" xml:space="preserve">
+    <value>Apply sorting</value>
+  </data>
   <data name="Cineaste" xml:space="preserve">
     <value>Cineaste</value>
   </data>
@@ -147,6 +150,9 @@
   <data name="DefaultDefaultSeasonTitle" xml:space="preserve">
     <value>Season #</value>
   </data>
+  <data name="Direction" xml:space="preserve">
+    <value>Direction</value>
+  </data>
   <data name="Documentary" xml:space="preserve">
     <value>Documentary</value>
   </data>
@@ -159,8 +165,32 @@
   <data name="Filter" xml:space="preserve">
     <value>Filter</value>
   </data>
+  <data name="FirstSorting" xml:space="preserve">
+    <value>First Sorting</value>
+  </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home Page</value>
+  </data>
+  <data name="ListSortDirectionAscending" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="ListSortDirectionDescending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="ListSortingByOriginalTitle" xml:space="preserve">
+    <value>By original title</value>
+  </data>
+  <data name="ListSortingByOriginalTitleSimple" xml:space="preserve">
+    <value>By original title (simple)</value>
+  </data>
+  <data name="ListSortingByTitle" xml:space="preserve">
+    <value>By title</value>
+  </data>
+  <data name="ListSortingByTitleSimple" xml:space="preserve">
+    <value>By title (simple)</value>
+  </data>
+  <data name="ListSortingByYear" xml:space="preserve">
+    <value>By year</value>
   </data>
   <data name="LiveAction" xml:space="preserve">
     <value>Live Action</value>
@@ -219,11 +249,17 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SecondSorting" xml:space="preserve">
+    <value>Second Sorting</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
+  </data>
+  <data name="Sorting" xml:space="preserve">
+    <value>Sorting</value>
   </data>
   <data name="TitleHeader" xml:space="preserve">
     <value>Title</value>

@@ -21,7 +21,7 @@
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="FontSize" Value="{DynamicResource FontSizeLarge}" />
                 </Style>
             </StackPanel.Styles>
 
@@ -29,7 +29,13 @@
             <Button x:Name="AddNewSeriesButton" Classes="accent add" Content="{l:Translate AddNewSeries}" />
         </StackPanel>
 
-        <TabControl x:Name="ActionTabControl" Grid.Row="1" HorizontalAlignment="Center">
+        <TabControl x:Name="ActionTabControl" Grid.Row="1" HorizontalAlignment="Stretch">
+            <TabControl.Styles>
+                <Style Selector="TabControl /template/ ItemsPresenter#PART_ItemsPresenter">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                </Style>
+            </TabControl.Styles>
+
             <TabItem Header="{l:Translate Search}">
                 <rx:ViewModelViewHost x:Name="SearchViewHost" />
             </TabItem>

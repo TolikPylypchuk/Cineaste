@@ -1,0 +1,9 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="using:System">
+    <sys:Double x:Key="FontSizeTiny">10</sys:Double>
+    <sys:Double x:Key="FontSizeSmall">12</sys:Double>
+    <sys:Double x:Key="FontSizeNormal">14</sys:Double>
+    <sys:Double x:Key="FontSizeBig">16</sys:Double>
+    <sys:Double x:Key="FontSizeLarge">18</sys:Double>
+</ResourceDictionary>

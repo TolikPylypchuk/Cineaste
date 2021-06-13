@@ -106,6 +106,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply sorting.
+        /// </summary>
+        internal static string ApplySorting {
+            get {
+                return ResourceManager.GetString("ApplySorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cineaste.
         /// </summary>
         internal static string Cineaste {
@@ -151,6 +160,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Direction.
+        /// </summary>
+        internal static string Direction {
+            get {
+                return ResourceManager.GetString("Direction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentary.
         /// </summary>
         internal static string Documentary {
@@ -187,11 +205,83 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First Sorting.
+        /// </summary>
+        internal static string FirstSorting {
+            get {
+                return ResourceManager.GetString("FirstSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home Page.
         /// </summary>
         internal static string HomePage {
             get {
                 return ResourceManager.GetString("HomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ascending.
+        /// </summary>
+        internal static string ListSortDirectionAscending {
+            get {
+                return ResourceManager.GetString("ListSortDirectionAscending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descending.
+        /// </summary>
+        internal static string ListSortDirectionDescending {
+            get {
+                return ResourceManager.GetString("ListSortDirectionDescending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By original title.
+        /// </summary>
+        internal static string ListSortingByOriginalTitle {
+            get {
+                return ResourceManager.GetString("ListSortingByOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By original title (simple).
+        /// </summary>
+        internal static string ListSortingByOriginalTitleSimple {
+            get {
+                return ResourceManager.GetString("ListSortingByOriginalTitleSimple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By title.
+        /// </summary>
+        internal static string ListSortingByTitle {
+            get {
+                return ResourceManager.GetString("ListSortingByTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By title (simple).
+        /// </summary>
+        internal static string ListSortingByTitleSimple {
+            get {
+                return ResourceManager.GetString("ListSortingByTitleSimple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By year.
+        /// </summary>
+        internal static string ListSortingByYear {
+            get {
+                return ResourceManager.GetString("ListSortingByYear", resourceCulture);
             }
         }
         
@@ -367,6 +457,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Second Sorting.
+        /// </summary>
+        internal static string SecondSorting {
+            get {
+                return ResourceManager.GetString("SecondSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string Settings {
@@ -381,6 +480,15 @@ namespace Cineaste.Properties {
         internal static string Sort {
             get {
                 return ResourceManager.GetString("Sort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorting.
+        /// </summary>
+        internal static string Sorting {
+            get {
+                return ResourceManager.GetString("Sorting", resourceCulture);
             }
         }
         
