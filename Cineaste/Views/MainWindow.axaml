@@ -7,7 +7,7 @@
         xmlns:vm="using:Cineaste.Core.ViewModels"
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="800"
         x:Class="Cineaste.Views.MainWindow" Title="{l:Translate Cineaste}" Width="1600" Height="800"
-        Icon="/Assets/icon.ico" WindowStartupLocation="CenterScreen">
+        Icon="/Assets/icon.ico" WindowStartupLocation="CenterScreen" DragDrop.AllowDrop="True">
     <Design.DataContext>
         <vm:MainViewModel />
     </Design.DataContext>

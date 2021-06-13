@@ -250,6 +250,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #.
+        /// </summary>
+        internal static string NumberHeader {
+            get {
+                return ResourceManager.GetString("NumberHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         internal static string Open {
@@ -282,6 +291,15 @@ namespace Cineaste.Properties {
         internal static string OpenRecent {
             get {
                 return ResourceManager.GetString("OpenRecent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original Title.
+        /// </summary>
+        internal static string OriginalTitleHeader {
+            get {
+                return ResourceManager.GetString("OriginalTitleHeader", resourceCulture);
             }
         }
         
@@ -363,6 +381,24 @@ namespace Cineaste.Properties {
         internal static string Sort {
             get {
                 return ResourceManager.GetString("Sort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string TitleHeader {
+            get {
+                return ResourceManager.GetString("TitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        internal static string YearHeader {
+            get {
+                return ResourceManager.GetString("YearHeader", resourceCulture);
             }
         }
     }

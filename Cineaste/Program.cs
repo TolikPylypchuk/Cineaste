@@ -1,3 +1,5 @@
+using System;
+
 using Avalonia;
 using Avalonia.ReactiveUI;
 
@@ -5,6 +7,7 @@ namespace Cineaste
 {
     public static class Program
     {
+        [STAThread]
         public static void Main(string[] args) =>
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
 
