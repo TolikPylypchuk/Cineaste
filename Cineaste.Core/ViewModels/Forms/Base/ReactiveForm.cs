@@ -82,7 +82,7 @@ namespace Cineaste.Core.ViewModels.Forms.Base
             string propertyName = property.GetMemberName();
 
             this.TrackChanges(
-                this.Self.WhenAnyValue(property)
+                this.Self.WhenAnyValue(property!)
                     .Select(value => !Equals(value, itemValue(this.Self)))
                     .Do(changed => this.Log().Debug(
                         changed ? $"{propertyName} is changed" : $"{propertyName} is unchanged")));

@@ -29,7 +29,7 @@ namespace Cineaste.Views
                 this.OneWayBind(this.ViewModel, vm => vm.Year, v => v.YearTextBlock.Text, year => $" ({year})")
                     .DisposeWith(disposables);
 
-                this.OneWayBind(this.ViewModel, vm => vm.Tag, v => v.TagTextBlock.Text, tag => $" - {tag.Localized()}")
+                this.OneWayBind(this.ViewModel, vm => vm.Tag, v => v.TagTextBlock.Text, tag => $" - {tag!.Localized()}")
                     .DisposeWith(disposables);
             });
         }

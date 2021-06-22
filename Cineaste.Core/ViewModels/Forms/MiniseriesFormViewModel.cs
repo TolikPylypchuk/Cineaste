@@ -121,7 +121,7 @@ namespace Cineaste.Core.ViewModels.Forms
                 vm => vm.Channel,
                 vm => vm.Series.Seasons.Count == 1 ? vm.Series.Seasons[0].Channel : String.Empty);
 
-            this.TrackChanges(this.WhenAnyValue(vm => vm.PeriodForm).Select(vm => vm.FormChanged).Switch());
+            this.TrackChanges(this.WhenAnyValue(vm => vm.PeriodForm).Select(vm => vm!.FormChanged).Switch());
 
             if (!this.Series.IsMiniseries && !this.IsNew)
             {

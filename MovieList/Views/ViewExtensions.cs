@@ -26,7 +26,7 @@ namespace Cineaste.Views
         public static IDisposable ShowValidationMessage<TControl>(
             this TControl control,
             ValidationHelper rule,
-            Expression<Func<TControl, string>> property)
+            Expression<Func<TControl, string?>> property)
             where TControl : Control =>
             rule.ValidationChanged
                 .Where(state => !state.IsValid)

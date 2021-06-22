@@ -42,6 +42,7 @@ namespace Cineaste.Core.ViewModels.Forms
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
+#nullable disable
             var periodValid =
                 this.WhenAnyValue(
                     vm => vm.StartMonth,
@@ -52,6 +53,7 @@ namespace Cineaste.Core.ViewModels.Forms
                         startYear < endYear || startYear == endYear && startMonth <= endMonth)
                     .Throttle(TimeSpan.FromMilliseconds(250), this.Scheduler)
                     .ObserveOn(RxApp.MainThreadScheduler);
+#nullable enable
 
             this.PeriodRule = this.ValidationRule(
                 periodValid,

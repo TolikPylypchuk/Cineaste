@@ -156,7 +156,7 @@ namespace Cineaste.Views.Forms.Preferences
                 .SelectMany(_ => this.PickNewColor(getColor(this.ViewModel!)))
                 .WhereNotNull()
                 .ObserveOnDispatcher()
-                .BindTo(this.ViewModel!, colorProperty);
+                .BindTo(this.ViewModel!, colorProperty!);
         }
 
         private IObservable<string?> PickNewColor(string color)

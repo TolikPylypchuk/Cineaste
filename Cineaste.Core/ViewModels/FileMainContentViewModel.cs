@@ -92,7 +92,7 @@ namespace Cineaste.Core.ViewModels
             this.BubbleSave.InvokeCommand(this.List.ForceSelectedItem);
 
             this.WhenAnyValue(vm => vm.SideViewModel)
-                .OfType<ListActionsViewModel>()
+                !.OfType<ListActionsViewModel>()
                 .Select(_ => false)
                 .Subscribe(this.areUnsavedChangesPresentSubject);
         }
@@ -211,7 +211,7 @@ namespace Cineaste.Core.ViewModels
                 .Subscribe(filterObserver);
 
             viewModel.WhenAnyValue(vm => vm.Sort.Comparer)
-                .Subscribe(comparerObserver);
+                .Subscribe(comparerObserver!);
 
             return viewModel;
         }
