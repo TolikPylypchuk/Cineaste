@@ -1,3 +1,5 @@
+using System.Reactive;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -9,6 +11,8 @@ namespace Cineaste.Core.DialogModels
         {
             this.Message = message;
             this.Title = title;
+
+            this.Close = ReactiveCommand.Create(() => { });
         }
 
         [Reactive]
@@ -16,5 +20,7 @@ namespace Cineaste.Core.DialogModels
 
         [Reactive]
         public string Title { get; set; }
+
+        public ReactiveCommand<Unit, Unit> Close { get; }
     }
 }

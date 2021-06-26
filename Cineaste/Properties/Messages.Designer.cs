@@ -70,6 +70,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cineaste. Version {0}. Created by Tolik Pylypchuk.
+        /// </summary>
+        internal static string AboutTextFormat {
+            get {
+                return ResourceManager.GetString("AboutTextFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new movie.
         /// </summary>
         internal static string AddNewMovie {
@@ -115,6 +124,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cineaste.
         /// </summary>
         internal static string Cineaste {
@@ -129,6 +147,15 @@ namespace Cineaste.Properties {
         internal static string Close {
             get {
                 return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        internal static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
             }
         }
         
@@ -165,6 +192,15 @@ namespace Cineaste.Properties {
         internal static string Direction {
             get {
                 return ResourceManager.GetString("Direction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://cineaste.tolik.io.
+        /// </summary>
+        internal static string DocsLink {
+            get {
+                return ResourceManager.GetString("DocsLink", resourceCulture);
             }
         }
         
@@ -349,6 +385,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string OK {
+            get {
+                return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         internal static string Open {
@@ -498,6 +543,15 @@ namespace Cineaste.Properties {
         internal static string TitleHeader {
             get {
                 return ResourceManager.GetString("TitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View the documentation.
+        /// </summary>
+        internal static string ViewDocumentation {
+            get {
+                return ResourceManager.GetString("ViewDocumentation", resourceCulture);
             }
         }
         

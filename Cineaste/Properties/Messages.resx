@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="AboutTextFormat" xml:space="preserve">
+    <value>Cineaste. Version {0}. Created by Tolik Pylypchuk</value>
+  </data>
   <data name="AddNewMovie" xml:space="preserve">
     <value>Add new movie</value>
   </data>
@@ -135,11 +138,17 @@
   <data name="ApplySorting" xml:space="preserve">
     <value>Apply sorting</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="Cineaste" xml:space="preserve">
     <value>Cineaste</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
   </data>
   <data name="CreateList" xml:space="preserve">
     <value>Create a list</value>
@@ -152,6 +161,9 @@
   </data>
   <data name="Direction" xml:space="preserve">
     <value>Direction</value>
+  </data>
+  <data name="DocsLink" xml:space="preserve">
+    <value>https://cineaste.tolik.io</value>
   </data>
   <data name="Documentary" xml:space="preserve">
     <value>Documentary</value>
@@ -213,6 +225,9 @@
   <data name="NumberHeader" xml:space="preserve">
     <value>#</value>
   </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
@@ -263,6 +278,9 @@
   </data>
   <data name="TitleHeader" xml:space="preserve">
     <value>Title</value>
+  </data>
+  <data name="ViewDocumentation" xml:space="preserve">
+    <value>View the documentation</value>
   </data>
   <data name="YearHeader" xml:space="preserve">
     <value>Year</value>

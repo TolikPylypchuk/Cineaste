@@ -6,6 +6,5 @@ namespace Cineaste
     {
         public static string GetUnixHomeFolder() =>
             Environment.GetEnvironmentVariable("HOME") ?? String.Empty;
-
     }
 }

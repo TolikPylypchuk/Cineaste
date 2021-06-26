@@ -342,11 +342,8 @@ namespace Cineaste
             state.IsInitialized = true;
         }
 
-        private void OnException(Notification<Exception> notification)
-        {
-            this.Log().Fatal(notification.Value);
-            this.CleanUp();
-        }
+        private void OnException(Notification<Exception> notification) =>
+            this.Log().Error(notification.Value);
 
         private void OnExit(object? sender, ControlledApplicationLifetimeExitEventArgs e) =>
             this.CleanUp();
