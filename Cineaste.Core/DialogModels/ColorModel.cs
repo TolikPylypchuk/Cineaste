@@ -10,7 +10,7 @@ using ReactiveUI.Validation.Helpers;
 
 namespace Cineaste.Core.DialogModels
 {
-    public sealed class ColorModel : DialogModelBase, IValidatableViewModel
+    public sealed class ColorModel : DialogModelBase<string?>, IValidatableViewModel
     {
         public ColorModel(
             string message,

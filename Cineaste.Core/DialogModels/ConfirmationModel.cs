@@ -2,7 +2,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Cineaste.Core.DialogModels
 {
-    public sealed class ConfirmationModel : DialogModelBase
+    public sealed class ConfirmationModel : DialogModelBase<bool?>
     {
         public const string MessageSuffix = "Question";
         public const string TitleSuffix = "Title";

@@ -1,18 +1,18 @@
-using System.Reactive;
-
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Cineaste.Core.DialogModels
 {
-    public abstract class DialogModelBase : ReactiveObject
+    public abstract class DialogModelBase<T> : ReactiveObject
     {
         protected DialogModelBase(string message, string title)
         {
             this.Message = message;
             this.Title = title;
 
-            this.Close = ReactiveCommand.Create(() => { });
+            this.Close = ReactiveCommand.Create<T, T>(result => result);
+
+            this.Close.ToPropertyEx(this, vm => vm.Result, default(T));
         }
 
         [Reactive]
@@ -21,6 +21,8 @@ namespace Cineaste.Core.DialogModels
         [Reactive]
         public string Title { get; set; }
 
-        public ReactiveCommand<Unit, Unit> Close { get; }
+        public T Result { [ObservableAsProperty] get; } = default!;
+
+        public ReactiveCommand<T, T> Close { get; }
     }
 }

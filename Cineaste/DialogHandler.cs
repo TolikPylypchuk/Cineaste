@@ -12,10 +12,9 @@ using Cineaste.Properties;
 using ReactiveUI;
 
 using static Cineaste.Constants;
-using static Cineaste.Util;
-using static Cineaste.Core.Util;
-
 using static Cineaste.Core.ServiceUtil;
+using static Cineaste.Core.Util;
+using static Cineaste.Util;
 
 namespace Cineaste
 {
@@ -26,39 +25,48 @@ namespace Cineaste
         public DialogHandler(Window window) =>
             this.window = window;
 
-        public Task ShowMessageDialogAsync(InteractionContext<MessageModel, Unit> ctx) =>
-            this.ShowDialogWindowForViewModel(
+        public async Task ShowMessageDialogAsync(InteractionContext<MessageModel, Unit> ctx)
+        {
+            var result = await this.ShowDialogWindowForViewModel<MessageModel, Unit>(
                 ctx.Input,
                 vm => new MessageModel(
                     vm.Message.Localized(),
                     vm.Title.Localized(),
                     vm.CloseText?.Localized() ?? Messages.OK));
 
-        public Task ShowConfirmDialogAsync(InteractionContext<ConfirmationModel, bool> ctx) =>
-            this.ShowDialogWindowForViewModel(
+            ctx.SetOutput(result);
+        }
+
+        public async Task ShowConfirmDialogAsync(InteractionContext<ConfirmationModel, bool> ctx)
+        {
+            bool? result = await this.ShowDialogWindowForViewModel<ConfirmationModel, bool?>(
                 ctx.Input,
                 vm => new ConfirmationModel(
-                    vm.Message.Localized(),
-                    vm.Title.Localized(),
-                    vm.ConfirmText?.Localized() ?? Messages.Confirm,
-                    vm.CancelText?.Localized() ?? Messages.Cancel));
+                vm.Message.Localized(),
+                vm.Title.Localized(),
+                vm.ConfirmText?.Localized() ?? Messages.Confirm,
+                vm.CancelText?.Localized() ?? Messages.Cancel));
+
+            ctx.SetOutput(result == true);
+        }
 
         public async Task ShowInputDialogAsync(InteractionContext<InputModel, string?> ctx)
         {
-            await this.ShowDialogWindowForViewModel(ctx.Input);
-            ctx.SetOutput(null);
+            string? result = await this.ShowDialogWindowForViewModel<InputModel, string?>(ctx.Input);
+            ctx.SetOutput(result);
         }
 
         public async Task ShowColorDialogAsync(InteractionContext<ColorModel, string?> ctx)
         {
-            await this.ShowDialogWindowForViewModel(ctx.Input);
-            ctx.SetOutput(null);
+            string? result = await this.ShowDialogWindowForViewModel<ColorModel, string?>(ctx.Input);
+            ctx.SetOutput(result);
         }
 
         public async Task ShowTagFormDialogAsync(InteractionContext<TagFormViewModel, Unit> ctx)
         {
-            await this.ShowDialogWindowForViewModel(ctx.Input, ctx.Input.FormTitle, ctx.Input.Close);
-            ctx.SetOutput(Unit.Default);
+            var result = await this.ShowDialogWindowForViewModel(
+                ctx.Input, ctx.Input.FormTitle, ctx.Input.Close, () => Unit.Default);
+            ctx.SetOutput(result);
         }
 
         public async Task ShowSaveFileDialogAsync(InteractionContext<string, string?> ctx)
@@ -105,26 +113,22 @@ namespace Cineaste
 
         public async Task ShowAboutDialogAsync(InteractionContext<AboutModel, Unit> ctx)
         {
-            await this.ShowDialogWindowForViewModel(ctx.Input, Messages.About, ctx.Input.Close);
-            ctx.SetOutput(Unit.Default);
+            var result = await this.ShowDialogWindowForViewModel(
+                ctx.Input, Messages.About, ctx.Input.Close, () => Unit.Default);
+            ctx.SetOutput(result);
         }
-
-        private string GetFileDialogInitialDirectory() =>
-            PlatformDependent(
-                windows: () => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                macos: GetUnixHomeFolder,
-                linux: GetUnixHomeFolder);
-
-        private Task ShowDialogWindowForViewModel<TViewModel>(
+        private Task<TResult> ShowDialogWindowForViewModel<TViewModel, TResult>(
             TViewModel viewModel,
             Func<TViewModel, TViewModel>? transform = null)
-            where TViewModel : DialogModelBase =>
-            this.ShowDialogWindowForViewModel(viewModel, viewModel.Title, viewModel.Close, transform);
+            where TViewModel : DialogModelBase<TResult> =>
+            this.ShowDialogWindowForViewModel(
+                viewModel, viewModel.Title, viewModel.Close, () => viewModel.Result, transform);
 
-        private async Task ShowDialogWindowForViewModel<TViewModel>(
+        private async Task<TResult> ShowDialogWindowForViewModel<TViewModel, TResult>(
             TViewModel viewModel,
             string title,
-            IObservable<Unit> close,
+            IObservable<TResult> close,
+            Func<TResult> result,
             Func<TViewModel, TViewModel>? transform = null)
             where TViewModel : ReactiveObject
         {
@@ -137,14 +141,23 @@ namespace Cineaste
                 Title = title,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 SizeToContent = SizeToContent.WidthAndHeight,
-                CanResize = false
+                CanResize = false,
+                Icon = this.window.Icon
             };
 
-            var subscription = close.Subscribe(() => window.Close());
+            var subscription = close.Subscribe(result => window.Close());
 
             await window.ShowDialog(this.window);
 
             subscription.Dispose();
+
+            return result();
         }
+
+        private string GetFileDialogInitialDirectory() =>
+            PlatformDependent(
+                windows: () => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                macos: GetUnixHomeFolder,
+                linux: GetUnixHomeFolder);
     }
 }

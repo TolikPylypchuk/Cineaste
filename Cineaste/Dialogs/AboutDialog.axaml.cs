@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -31,7 +32,7 @@ namespace Cineaste.Dialogs
                     .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel!.Version)
-                    .Select(version => String.Format(Messages.AboutTextFormat, version))
+                    .Select(version => String.Format(CultureInfo.InvariantCulture, Messages.AboutTextFormat, version))
                     .BindTo(this, v => v.AboutTextBlock.Text)
                     .DisposeWith(disposables);
 

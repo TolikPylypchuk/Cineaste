@@ -4,7 +4,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Cineaste.Core.DialogModels
 {
-    public class InputModel : DialogModelBase
+    public class InputModel : DialogModelBase<string?>
     {
         public InputModel(
             string message,
