@@ -48,8 +48,7 @@ namespace Cineaste.Views
                     v => v.ViewModel!.Item.IsSelected,
                     (highlightMode, selected) => (Mode: highlightMode, Selected: selected))
                     .CombineLatest(isMouseOver, (item, mouseOver) => (item.Mode, Show: !item.Selected && !mouseOver))
-                    .Select(item => item.Show ? this.GetColorForHighlightMode(item.Mode) : Colors.Transparent)
-                    .Select(color => color.ToBrush())
+                    .Select(item => item.Show ? this.GetColorForHighlightMode(item.Mode) : Brushes.Transparent)
                     .ObserveOn(RxApp.MainThreadScheduler)
                     .BindTo(this, v => v.Background)
                     .DisposeWith(disposables);
@@ -63,18 +62,20 @@ namespace Cineaste.Views
             });
         }
 
-        private Color GetColorForHighlightMode(HighlightMode mode) =>
+        private IBrush GetColorForHighlightMode(HighlightMode mode) =>
             mode switch
             {
                 HighlightMode.Partial =>
-                    this.TryFindResource("SystemAccentColorLight3", out object? resource) && resource is Color color
-                    ? color
-                    : Colors.Transparent,
+                    this.TryFindResource("SystemControlHighlightListLowBrush", out object? resource) &&
+                    resource is Brush brush
+                    ? brush
+                    : Brushes.Transparent,
                 HighlightMode.Full =>
-                    this.TryFindResource("SystemAccentColorLight2", out object? resource) && resource is Color color
-                    ? color
-                    : Colors.Transparent,
-                _ => Colors.Transparent
+                    this.TryFindResource("SystemControlHighlightListAccentLowBrush", out object? resource) &&
+                    resource is Brush brush
+                    ? brush
+                    : Brushes.Transparent,
+                _ => Brushes.Transparent
             };
     }
 }

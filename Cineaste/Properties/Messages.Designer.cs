@@ -124,6 +124,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All items satisfy the search criteria.
+        /// </summary>
+        internal static string AllItemsFound {
+            get {
+                return ResourceManager.GetString("AllItemsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Animation.
         /// </summary>
         internal static string Animation {
@@ -174,6 +183,15 @@ namespace Cineaste.Properties {
         internal static string ClearFilter {
             get {
                 return ResourceManager.GetString("ClearFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear search.
+        /// </summary>
+        internal static string ClearSearch {
+            get {
+                return ResourceManager.GetString("ClearSearch", resourceCulture);
             }
         }
         
@@ -673,6 +691,24 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Find next.
+        /// </summary>
+        internal static string FindNext {
+            get {
+                return ResourceManager.GetString("FindNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find previous.
+        /// </summary>
+        internal static string FindPrevious {
+            get {
+                return ResourceManager.GetString("FindPrevious", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First Sorting.
         /// </summary>
         internal static string FirstSorting {
@@ -862,6 +898,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No items found.
+        /// </summary>
+        internal static string NoItemsFound {
+            get {
+                return ResourceManager.GetString("NoItemsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No recently opened files.
         /// </summary>
         internal static string NoRecentlyOpenedFiles {
@@ -1002,6 +1047,15 @@ namespace Cineaste.Properties {
         internal static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item {0} out ot {1}.
+        /// </summary>
+        internal static string SearchResultFormat {
+            get {
+                return ResourceManager.GetString("SearchResultFormat", resourceCulture);
             }
         }
         
@@ -1218,6 +1272,15 @@ namespace Cineaste.Properties {
         internal static string Sorting {
             get {
                 return ResourceManager.GetString("Sorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop search.
+        /// </summary>
+        internal static string StopSearch {
+            get {
+                return ResourceManager.GetString("StopSearch", resourceCulture);
             }
         }
         

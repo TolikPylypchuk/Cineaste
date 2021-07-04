@@ -138,6 +138,9 @@
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All Files</value>
   </data>
+  <data name="AllItemsFound" xml:space="preserve">
+    <value>All items satisfy the search criteria</value>
+  </data>
   <data name="Animation" xml:space="preserve">
     <value>Animation</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="ClearFilter" xml:space="preserve">
     <value>Clear filter</value>
+  </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Clear search</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
@@ -321,6 +327,12 @@
   <data name="FilterTypeYear" xml:space="preserve">
     <value>Year</value>
   </data>
+  <data name="FindNext" xml:space="preserve">
+    <value>Find next</value>
+  </data>
+  <data name="FindPrevious" xml:space="preserve">
+    <value>Find previous</value>
+  </data>
   <data name="FirstSorting" xml:space="preserve">
     <value>First Sorting</value>
   </data>
@@ -384,6 +396,9 @@
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="NoItemsFound" xml:space="preserve">
+    <value>No items found</value>
+  </data>
   <data name="NoRecentlyOpenedFiles" xml:space="preserve">
     <value>No recently opened files</value>
   </data>
@@ -431,6 +446,9 @@
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="SearchResultFormat" xml:space="preserve">
+    <value>Item {0} out ot {1}</value>
   </data>
   <data name="SeasonFinished" xml:space="preserve">
     <value>Finished</value>
@@ -503,6 +521,9 @@
   </data>
   <data name="Sorting" xml:space="preserve">
     <value>Sorting</value>
+  </data>
+  <data name="StopSearch" xml:space="preserve">
+    <value>Stop search</value>
   </data>
   <data name="TitleHeader" xml:space="preserve">
     <value>Title</value>
