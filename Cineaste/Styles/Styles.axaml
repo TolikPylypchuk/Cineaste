@@ -11,4 +11,8 @@
         <Setter Property="Padding" Value="2" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
+
+    <Style Selector="Button.icon /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="CornerRadius" Value="100" />
+    </Style>
 </Styles>

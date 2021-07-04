@@ -1150,6 +1150,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a tag.
+        /// </summary>
+        internal static string SelectTag {
+            get {
+                return ResourceManager.GetString("SelectTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancelled.
         /// </summary>
         internal static string SeriesCancelled {

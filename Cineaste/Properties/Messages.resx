@@ -480,6 +480,9 @@
   <data name="SecondSorting" xml:space="preserve">
     <value>Second Sorting</value>
   </data>
+  <data name="SelectTag" xml:space="preserve">
+    <value>Select a tag</value>
+  </data>
   <data name="SeriesCancelled" xml:space="preserve">
     <value>Cancelled</value>
   </data>

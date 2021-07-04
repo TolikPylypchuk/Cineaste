@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Cineaste.Core.ViewModels.Forms.Preferences"
+             mc:Ignorable="d" d:DesignWidth="40" d:DesignHeight="100"
+             x:Class="Cineaste.Views.Forms.Preferences.AddableTagControl">
+    <Design.DataContext>
+        <vm:AddableTagViewModel />
+    </Design.DataContext>
+
+    <WrapPanel>
+        <Ellipse x:Name="ColorCircle" Width="16" Height="16" Margin="0 0 8 0" VerticalAlignment="Center" />
+
+        <TextBlock x:Name="NameTextBlock" TextWrapping="Wrap" VerticalAlignment="Center" />
+
+        <TextBlock x:Name="CategoryTextBlock" TextWrapping="Wrap" Margin="8 0 0 0" VerticalAlignment="Center" />
+    </WrapPanel>
+</UserControl>

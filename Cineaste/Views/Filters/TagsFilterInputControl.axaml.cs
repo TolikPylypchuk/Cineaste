@@ -9,6 +9,7 @@ using Avalonia.ReactiveUI;
 using Cineaste.Core.ViewModels.Filters;
 using Cineaste.Core.ViewModels.Forms.Preferences;
 
+using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 
@@ -38,6 +39,7 @@ namespace Cineaste.Views.Filters
                     .Select(e => e.AddedItems.OfType<AddableTagViewModel>().FirstOrDefault())
                     .WhereNotNull()
                     .Select(vm => vm.Tag)
+                    .Do(_ => this.AddableTagsComboBox.SelectedItem = null)
                     .InvokeCommand(this.ViewModel!.AddTag)
                     .DisposeWith(disposables);
 

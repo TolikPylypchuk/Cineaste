@@ -10,17 +10,25 @@
         <vm:TagsFilterInputViewModel />
     </Design.DataContext>
 
-    <StackPanel>
-        <ItemsControl x:Name="Tags" Margin="0 4">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" SharedSizeGroup="Caption" />
+            <RowDefinition Height="Auto" SharedSizeGroup="Input" />
+        </Grid.RowDefinitions>
 
-        <TextBlock Text="{l:Translate AddTag}" Classes="caption" />
+        <StackPanel Grid.Row="0">
+            <ItemsControl x:Name="Tags" Margin="0 4">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
 
-        <ComboBox x:Name="AddableTagsComboBox" Margin="0 4" />
-    </StackPanel>
+            <TextBlock Text="{l:Translate AddTag}" Classes="caption" />
+        </StackPanel>
+
+        <ComboBox x:Name="AddableTagsComboBox" Grid.Row="1" Margin="0 4" HorizontalAlignment="Stretch"
+                  PlaceholderText="{l:Translate SelectTag}" />
+    </Grid>
 </UserControl>

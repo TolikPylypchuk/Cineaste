@@ -29,7 +29,7 @@
         </StackPanel>
 
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <Grid RowDefinitions="Auto,Auto">
+            <Grid RowDefinitions="Auto,Auto,Auto">
                 <rx:ViewModelViewHost x:Name="FilterItemViewHost" Grid.Row="0" Margin="4" VerticalAlignment="Top" />
 
                 <TextBlock x:Name="FoundItemsCountTextBlock" Grid.Row="1" Margin="8" />
