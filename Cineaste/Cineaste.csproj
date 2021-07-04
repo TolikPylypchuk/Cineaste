@@ -49,6 +49,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\Filters\NoFilterInputControl.axaml.cs">
+      <DependentUpon>NoFilterInputControl.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rx="http://reactiveui.net"
+             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:l="using:Cineaste.Localization"
+             xmlns:vm="using:Cineaste.Core.ViewModels.Filters"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
+             x:Class="Cineaste.Views.Filters.SimpleFilterItemControl">
+    <Design.DataContext>
+        <vm:SimpleFilterItemViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="4,2*,*,Auto" VerticalAlignment="Top"
+          Grid.IsSharedSizeScope="True">
+        <Rectangle x:Name="ColorStripRectangle" Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Fill="#E53935" />
+
+        <TextBlock Text="{l:Translate FilterTypeCaption}" Grid.Row="0" Grid.Column="1" Margin="4" Classes="caption" />
+
+        <ComboBox x:Name="FilterTypeComboBox" Grid.Row="1" Grid.Column="1" Margin="4"
+                  HorizontalAlignment="Stretch" />
+
+        <TextBlock x:Name="FilterOperationCaption" Grid.Row="0" Grid.Column="2" Margin="4" Classes="caption"
+                   Text="{l:Translate FilterOperationCaption}" />
+
+        <ComboBox x:Name="FilterOperationComboBox" Grid.Row="1" Grid.Column="2" Margin="4"
+                  HorizontalAlignment="Stretch" />
+
+        <rx:ViewModelViewHost x:Name="InputViewHost" Grid.Row="2" Grid.Column="1" Margin="4" />
+
+        <Grid x:Name="NegateGrid" Grid.Column="2" Margin="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" SharedSizeGroup="Caption" />
+                <RowDefinition Height="Auto" SharedSizeGroup="Input" />
+            </Grid.RowDefinitions>
+
+            <CheckBox x:Name="NegateCheckBox" Grid.Row="1" Content="{l:Translate FilterNegate}"
+                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+
+        <Button x:Name="OtherActionsButton" Grid.Row="0" Grid.RowSpan="3" Grid.Column="3" HorizontalAlignment="Center"
+                VerticalAlignment="Center" Classes="icon" i:Attached.Icon="fas fa-ellipsis-v">
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="MakeCompositeAndItem" Header="{l:Translate FilterMakeCompositeAnd}" />
+                    <MenuItem x:Name="MakeCompositeOrItem" Header="{l:Translate FilterMakeCompositeOr}" />
+                    <MenuItem x:Name="RemoveFilterItem" Header="{l:Translate RemoveFilter}" />
+                </ContextMenu>
+            </Button.ContextMenu>
+        </Button>
+    </Grid>
+</UserControl>

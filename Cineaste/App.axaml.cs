@@ -24,6 +24,7 @@ using Cineaste.Core.Models;
 using Cineaste.Core.Preferences;
 using Cineaste.Core.State;
 using Cineaste.Core.ViewModels;
+using Cineaste.Core.ViewModels.Filters;
 using Cineaste.Data;
 using Cineaste.Data.Models;
 using Cineaste.Infrastructure;
@@ -77,7 +78,10 @@ namespace Cineaste
             {
                 desktop.Exit += this.OnExit;
                 RxApp.DefaultExceptionHandler = Observer.ToObserver<Exception>(this.OnException);
+                CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = new CultureInfo("en-US");
+
                 this.InitializeApp(desktop);
+
                 this.Log().Info("Cineaste app started");
             }
 
@@ -184,15 +188,36 @@ namespace Cineaste
 
         private void RegisterBindingConverters()
         {
+            var seriesWatchStatusConverter = new SeriesWatchStatusConverter();
+            var seriesReleaseStatusConverter = new SeriesReleaseStatusConverter();
+            var seasonWatchStatusConverter = new SeasonWatchStatusConverter();
+            var seasonReleaseStatusConverter = new SeasonReleaseStatusConverter();
+            var filterTypeConverter = new FilterTypeConverter();
+            var filterOperationConverter = new FilterOperationConverter();
             var listSortOrderConverter = new ListSortOrderConverter();
             var listSortDirectionConverter = new ListSortDirectionConverter();
+            var logLevelConverter = new LogLevelConverter();
 
             this.RegisterBindingConverters(
+                seriesWatchStatusConverter,
+                seriesReleaseStatusConverter,
+                seasonWatchStatusConverter,
+                seasonReleaseStatusConverter,
+                filterTypeConverter,
+                filterOperationConverter,
                 listSortOrderConverter,
-                listSortDirectionConverter);
+                listSortDirectionConverter,
+                logLevelConverter);
 
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeriesWatchStatus>>(seriesWatchStatusConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeriesReleaseStatus>>(seriesReleaseStatusConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeasonWatchStatus>>(seasonWatchStatusConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeasonReleaseStatus>>(seasonReleaseStatusConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterType>>(filterTypeConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<FilterOperation>>(filterOperationConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSortOrder>>(listSortOrderConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<ListSortDirection>>(listSortDirectionConverter);
+            Locator.CurrentMutable.RegisterConstant<IEnumConverter<LogEventLevel>>(logLevelConverter);
         }
 
         private void RegisterBindingConverters(params IBindingTypeConverter[] converters)

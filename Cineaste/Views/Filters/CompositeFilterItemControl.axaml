@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rx="http://reactiveui.net"
+             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:l="using:Cineaste.Localization"
+             xmlns:vm="using:Cineaste.Core.ViewModels.Filters"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
+             x:Class="Cineaste.Views.Filters.CompositeFilterItemControl">
+    <Design.DataContext>
+        <vm:CompositeFilterItemViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="4,*">
+        <Rectangle x:Name="ColorStripRectangle" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" />
+
+        <ItemsControl x:Name="Filters" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" />
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="AddFilterButton" Margin="8 4" ToolTip.Tip="{l:Translate AddFilter}"
+                    Classes="icon" i:Attached.Icon="fas fa-plus" />
+
+            <Button x:Name="SwitchCompositionButton" Margin="8 4" Classes="icon"
+                    i:Attached.Icon="fas fa-exchange-alt" />
+
+            <Button x:Name="SimplifyButton" Margin="8 4" ToolTip.Tip="{l:Translate FilterSimplify}"
+                    Classes="icon" i:Attached.Icon="fas fa-compress-alt" />
+        </StackPanel>
+    </Grid>
+</UserControl>

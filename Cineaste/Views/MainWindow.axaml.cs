@@ -133,7 +133,7 @@ namespace Cineaste.Views
 
         private void InitializeMainMenu(CompositeDisposable disposables)
         {
-            this.BindCommand(this.ViewModel!, vm => vm.HomePage.CreateFile, v => v.NewMenuItem)
+            this.BindCommand(this.ViewModel, vm => vm.HomePage.CreateFile, v => v.NewMenuItem)
                 .DisposeWith(disposables);
 
             this.BindKeyToCommand(Key.N, KeyModifiers.Control, this.ViewModel!.HomePage.CreateFile)

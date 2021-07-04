@@ -17,7 +17,7 @@ namespace Cineaste.Converters
         public EnumConverter()
         {
             this.enumToString = this.CreateConverterDictionary();
-            this.stringToEnum = enumToString.ToDictionary(e => e.Value, e => e.Key);
+            this.stringToEnum = this.enumToString.ToDictionary(e => e.Value, e => e.Key);
         }
 
         public int GetAffinityForObjects(Type fromType, Type toType) =>
@@ -49,8 +49,8 @@ namespace Cineaste.Converters
             }
         }
 
-        public string ToString(TEnum filterOperation) =>
-            this.enumToString[filterOperation];
+        public string ToString(TEnum value) =>
+            this.enumToString[value];
 
         public TEnum FromString(string str) =>
             this.stringToEnum.ContainsKey(str)

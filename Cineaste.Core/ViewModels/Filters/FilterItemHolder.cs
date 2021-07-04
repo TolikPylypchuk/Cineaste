@@ -33,7 +33,7 @@ namespace Cineaste.Core.ViewModels.Filters
             filterItem switch
             {
                 SimpleFilterItemViewModel simpleItem => this.WithSubscriptions(simpleItem),
-                CompositeFilterItemViewModel simpleItem => this.WithSubscriptions(simpleItem),
+                CompositeFilterItemViewModel compositeItem => this.WithSubscriptions(compositeItem),
                 _ => filterItem
             };
 

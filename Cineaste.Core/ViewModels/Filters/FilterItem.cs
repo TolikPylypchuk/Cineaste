@@ -16,9 +16,9 @@ namespace Cineaste.Core.ViewModels.Filters
 {
     public abstract class FilterItem : ReactiveObject
     {
-        protected static readonly Filter NoFilter = item => true;
+        private protected static readonly Filter NoFilter = item => true;
 
-        protected readonly Subject<Unit> FilterChangedSubject = new();
+        private protected readonly Subject<Unit> FilterChangedSubject = new();
 
         private protected FilterItem(
             ReadOnlyObservableCollection<Kind> kinds,

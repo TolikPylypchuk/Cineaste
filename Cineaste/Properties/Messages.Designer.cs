@@ -79,6 +79,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add filter.
+        /// </summary>
+        internal static string AddFilter {
+            get {
+                return ResourceManager.GetString("AddFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new movie.
         /// </summary>
         internal static string AddNewMovie {
@@ -97,6 +106,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add tag.
+        /// </summary>
+        internal static string AddTag {
+            get {
+                return ResourceManager.GetString("AddTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Files.
         /// </summary>
         internal static string AllExtensionsDescription {
@@ -111,6 +129,15 @@ namespace Cineaste.Properties {
         internal static string Animation {
             get {
                 return ResourceManager.GetString("Animation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply filter.
+        /// </summary>
+        internal static string ApplyFilter {
+            get {
+                return ResourceManager.GetString("ApplyFilter", resourceCulture);
             }
         }
         
@@ -138,6 +165,15 @@ namespace Cineaste.Properties {
         internal static string Cineaste {
             get {
                 return ResourceManager.GetString("Cineaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear filter.
+        /// </summary>
+        internal static string ClearFilter {
+            get {
+                return ResourceManager.GetString("ClearFilter", resourceCulture);
             }
         }
         
@@ -241,6 +277,402 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        internal static string FilterDescriptionKind {
+            get {
+                return ResourceManager.GetString("FilterDescriptionKind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Channel.
+        /// </summary>
+        internal static string FilterDescriptionSeriesChannel {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of episodes.
+        /// </summary>
+        internal static string FilterDescriptionSeriesNumberOfEpisodes {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesNumberOfEpisodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of seasons.
+        /// </summary>
+        internal static string FilterDescriptionSeriesNumberOfSeasons {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesNumberOfSeasons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release status.
+        /// </summary>
+        internal static string FilterDescriptionSeriesReleaseStatus {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesReleaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch status.
+        /// </summary>
+        internal static string FilterDescriptionSeriesWatchStatus {
+            get {
+                return ResourceManager.GetString("FilterDescriptionSeriesWatchStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tag category.
+        /// </summary>
+        internal static string FilterDescriptionTagCategory {
+            get {
+                return ResourceManager.GetString("FilterDescriptionTagCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        internal static string FilterDescriptionTags {
+            get {
+                return ResourceManager.GetString("FilterDescriptionTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string FilterDescriptionTitle {
+            get {
+                return ResourceManager.GetString("FilterDescriptionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        internal static string FilterDescriptionYear {
+            get {
+                return ResourceManager.GetString("FilterDescriptionYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make composite (and).
+        /// </summary>
+        internal static string FilterMakeCompositeAnd {
+            get {
+                return ResourceManager.GetString("FilterMakeCompositeAnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make composite (or).
+        /// </summary>
+        internal static string FilterMakeCompositeOr {
+            get {
+                return ResourceManager.GetString("FilterMakeCompositeOr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Negate.
+        /// </summary>
+        internal static string FilterNegate {
+            get {
+                return ResourceManager.GetString("FilterNegate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Between.
+        /// </summary>
+        internal static string FilterOperationBetween {
+            get {
+                return ResourceManager.GetString("FilterOperationBetween", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By.
+        /// </summary>
+        internal static string FilterOperationCaption {
+            get {
+                return ResourceManager.GetString("FilterOperationCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ends with.
+        /// </summary>
+        internal static string FilterOperationEndsWith {
+            get {
+                return ResourceManager.GetString("FilterOperationEndsWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclude.
+        /// </summary>
+        internal static string FilterOperationExclude {
+            get {
+                return ResourceManager.GetString("FilterOperationExclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Greater than.
+        /// </summary>
+        internal static string FilterOperationGreaterThan {
+            get {
+                return ResourceManager.GetString("FilterOperationGreaterThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Have category.
+        /// </summary>
+        internal static string FilterOperationHaveCategory {
+            get {
+                return ResourceManager.GetString("FilterOperationHaveCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include.
+        /// </summary>
+        internal static string FilterOperationInclude {
+            get {
+                return ResourceManager.GetString("FilterOperationInclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is.
+        /// </summary>
+        internal static string FilterOperationIs {
+            get {
+                return ResourceManager.GetString("FilterOperationIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Less than.
+        /// </summary>
+        internal static string FilterOperationLessThan {
+            get {
+                return ResourceManager.GetString("FilterOperationLessThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starts with.
+        /// </summary>
+        internal static string FilterOperationStartsWith {
+            get {
+                return ResourceManager.GetString("FilterOperationStartsWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} to.
+        /// </summary>
+        internal static string FilterRangeEndDescriptionFormat {
+            get {
+                return ResourceManager.GetString("FilterRangeEndDescriptionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} to.
+        /// </summary>
+        internal static string FilterRangeEndDescriptionFormat1 {
+            get {
+                return ResourceManager.GetString("FilterRangeEndDescriptionFormat1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} from.
+        /// </summary>
+        internal static string FilterRangeStartDescriptionFormat {
+            get {
+                return ResourceManager.GetString("FilterRangeStartDescriptionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} from.
+        /// </summary>
+        internal static string FilterRangeStartDescriptionFormat1 {
+            get {
+                return ResourceManager.GetString("FilterRangeStartDescriptionFormat1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify filter.
+        /// </summary>
+        internal static string FilterSimplify {
+            get {
+                return ResourceManager.GetString("FilterSimplify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        internal static string FilterTypeCaption {
+            get {
+                return ResourceManager.GetString("FilterTypeCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        internal static string FilterTypeKind {
+            get {
+                return ResourceManager.GetString("FilterTypeKind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movies only.
+        /// </summary>
+        internal static string FilterTypeMovie {
+            get {
+                return ResourceManager.GetString("FilterTypeMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Released (movies only).
+        /// </summary>
+        internal static string FilterTypeMovieReleased {
+            get {
+                return ResourceManager.GetString("FilterTypeMovieReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched (movies only).
+        /// </summary>
+        internal static string FilterTypeMovieWatched {
+            get {
+                return ResourceManager.GetString("FilterTypeMovieWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Series only.
+        /// </summary>
+        internal static string FilterTypeSeries {
+            get {
+                return ResourceManager.GetString("FilterTypeSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Channel (series only).
+        /// </summary>
+        internal static string FilterTypeSeriesChannel {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miniseries (series only).
+        /// </summary>
+        internal static string FilterTypeSeriesMiniseries {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesMiniseries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of episodes (series only).
+        /// </summary>
+        internal static string FilterTypeSeriesNumberOfEpisodes {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesNumberOfEpisodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of seasons (series only).
+        /// </summary>
+        internal static string FilterTypeSeriesNumberOfSeasons {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesNumberOfSeasons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release status (series only).
+        /// </summary>
+        internal static string FilterTypeSeriesReleaseStatus {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesReleaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch status (series only).
+        /// </summary>
+        internal static string FilterTypeSeriesWatchStatus {
+            get {
+                return ResourceManager.GetString("FilterTypeSeriesWatchStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standalone.
+        /// </summary>
+        internal static string FilterTypeStandalone {
+            get {
+                return ResourceManager.GetString("FilterTypeStandalone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        internal static string FilterTypeTags {
+            get {
+                return ResourceManager.GetString("FilterTypeTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string FilterTypeTitle {
+            get {
+                return ResourceManager.GetString("FilterTypeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        internal static string FilterTypeYear {
+            get {
+                return ResourceManager.GetString("FilterTypeYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First Sorting.
         /// </summary>
         internal static string FirstSorting {
@@ -327,6 +759,69 @@ namespace Cineaste.Properties {
         internal static string LiveAction {
             get {
                 return ResourceManager.GetString("LiveAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debug.
+        /// </summary>
+        internal static string LogLevelDebug {
+            get {
+                return ResourceManager.GetString("LogLevelDebug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string LogLevelError {
+            get {
+                return ResourceManager.GetString("LogLevelError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fatal.
+        /// </summary>
+        internal static string LogLevelFatal {
+            get {
+                return ResourceManager.GetString("LogLevelFatal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        internal static string LogLevelInformation {
+            get {
+                return ResourceManager.GetString("LogLevelInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verbose.
+        /// </summary>
+        internal static string LogLevelVerbose {
+            get {
+                return ResourceManager.GetString("LogLevelVerbose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        internal static string LogLevelWarning {
+            get {
+                return ResourceManager.GetString("LogLevelWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log path.
+        /// </summary>
+        internal static string LogPath {
+            get {
+                return ResourceManager.GetString("LogPath", resourceCulture);
             }
         }
         
@@ -457,6 +952,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove filter.
+        /// </summary>
+        internal static string RemoveFilter {
+            get {
+                return ResourceManager.GetString("RemoveFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove from list.
         /// </summary>
         internal static string RemoveFromList {
@@ -502,11 +1006,191 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        internal static string SeasonFinished {
+            get {
+                return ResourceManager.GetString("SeasonFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiatus.
+        /// </summary>
+        internal static string SeasonHiatus {
+            get {
+                return ResourceManager.GetString("SeasonHiatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not started.
+        /// </summary>
+        internal static string SeasonNotStarted {
+            get {
+                return ResourceManager.GetString("SeasonNotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not watched.
+        /// </summary>
+        internal static string SeasonNotWatched {
+            get {
+                return ResourceManager.GetString("SeasonNotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running.
+        /// </summary>
+        internal static string SeasonRunning {
+            get {
+                return ResourceManager.GetString("SeasonRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopped watching.
+        /// </summary>
+        internal static string SeasonStoppedWatching {
+            get {
+                return ResourceManager.GetString("SeasonStoppedWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t know/don&apos;t care.
+        /// </summary>
+        internal static string SeasonUnknown {
+            get {
+                return ResourceManager.GetString("SeasonUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched.
+        /// </summary>
+        internal static string SeasonWatched {
+            get {
+                return ResourceManager.GetString("SeasonWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watching.
+        /// </summary>
+        internal static string SeasonWatching {
+            get {
+                return ResourceManager.GetString("SeasonWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Second Sorting.
         /// </summary>
         internal static string SecondSorting {
             get {
                 return ResourceManager.GetString("SecondSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancelled.
+        /// </summary>
+        internal static string SeriesCancelled {
+            get {
+                return ResourceManager.GetString("SeriesCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        internal static string SeriesFinished {
+            get {
+                return ResourceManager.GetString("SeriesFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not started.
+        /// </summary>
+        internal static string SeriesNotStarted {
+            get {
+                return ResourceManager.GetString("SeriesNotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not watched.
+        /// </summary>
+        internal static string SeriesNotWatched {
+            get {
+                return ResourceManager.GetString("SeriesNotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running.
+        /// </summary>
+        internal static string SeriesRunning {
+            get {
+                return ResourceManager.GetString("SeriesRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopped watching.
+        /// </summary>
+        internal static string SeriesStoppedWatching {
+            get {
+                return ResourceManager.GetString("SeriesStoppedWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t know/don&apos;t care.
+        /// </summary>
+        internal static string SeriesUnknown {
+            get {
+                return ResourceManager.GetString("SeriesUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched.
+        /// </summary>
+        internal static string SeriesWatched {
+            get {
+                return ResourceManager.GetString("SeriesWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watching.
+        /// </summary>
+        internal static string SeriesWatching {
+            get {
+                return ResourceManager.GetString("SeriesWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set filter composition to &quot;and&quot;.
+        /// </summary>
+        internal static string SetFilterCompositionToAnd {
+            get {
+                return ResourceManager.GetString("SetFilterCompositionToAnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set filter composition to &quot;or&quot;.
+        /// </summary>
+        internal static string SetFilterCompositionToOr {
+            get {
+                return ResourceManager.GetString("SetFilterCompositionToOr", resourceCulture);
             }
         }
         

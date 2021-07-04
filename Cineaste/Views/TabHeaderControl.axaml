@@ -12,8 +12,7 @@
 
     <DockPanel HorizontalAlignment="Stretch">
         <Button x:Name="CloseButton" DockPanel.Dock="Right" i:Attached.Icon="far fa-times-circle"
-                VerticalAlignment="Center" Padding="0" Width="16" Height="16" Margin="10 0 0 0"
-                Background="Transparent" BorderBrush="Transparent" Cursor="Hand" />
+                Classes="icon" VerticalAlignment="Center" Width="20" Height="20" Margin="10 0 0 0" />
 
         <TextBlock x:Name="NameTextBlock" VerticalAlignment="Center" />
     </DockPanel>

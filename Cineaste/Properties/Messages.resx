@@ -123,17 +123,26 @@
   <data name="AboutTextFormat" xml:space="preserve">
     <value>Cineaste. Version {0}. Created by Tolik Pylypchuk</value>
   </data>
+  <data name="AddFilter" xml:space="preserve">
+    <value>Add filter</value>
+  </data>
   <data name="AddNewMovie" xml:space="preserve">
     <value>Add new movie</value>
   </data>
   <data name="AddNewSeries" xml:space="preserve">
     <value>Add new series</value>
   </data>
+  <data name="AddTag" xml:space="preserve">
+    <value>Add tag</value>
+  </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All Files</value>
   </data>
   <data name="Animation" xml:space="preserve">
     <value>Animation</value>
+  </data>
+  <data name="ApplyFilter" xml:space="preserve">
+    <value>Apply filter</value>
   </data>
   <data name="ApplySorting" xml:space="preserve">
     <value>Apply sorting</value>
@@ -143,6 +152,9 @@
   </data>
   <data name="Cineaste" xml:space="preserve">
     <value>Cineaste</value>
+  </data>
+  <data name="ClearFilter" xml:space="preserve">
+    <value>Clear filter</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
@@ -177,6 +189,138 @@
   <data name="Filter" xml:space="preserve">
     <value>Filter</value>
   </data>
+  <data name="FilterDescriptionKind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="FilterDescriptionSeriesChannel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="FilterDescriptionSeriesNumberOfEpisodes" xml:space="preserve">
+    <value>Number of episodes</value>
+  </data>
+  <data name="FilterDescriptionSeriesNumberOfSeasons" xml:space="preserve">
+    <value>Number of seasons</value>
+  </data>
+  <data name="FilterDescriptionSeriesReleaseStatus" xml:space="preserve">
+    <value>Release status</value>
+  </data>
+  <data name="FilterDescriptionSeriesWatchStatus" xml:space="preserve">
+    <value>Watch status</value>
+  </data>
+  <data name="FilterDescriptionTagCategory" xml:space="preserve">
+    <value>Tag category</value>
+  </data>
+  <data name="FilterDescriptionTags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="FilterDescriptionTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="FilterDescriptionYear" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="FilterMakeCompositeAnd" xml:space="preserve">
+    <value>Make composite (and)</value>
+  </data>
+  <data name="FilterMakeCompositeOr" xml:space="preserve">
+    <value>Make composite (or)</value>
+  </data>
+  <data name="FilterNegate" xml:space="preserve">
+    <value>Negate</value>
+  </data>
+  <data name="FilterOperationBetween" xml:space="preserve">
+    <value>Between</value>
+  </data>
+  <data name="FilterOperationCaption" xml:space="preserve">
+    <value>By</value>
+  </data>
+  <data name="FilterOperationEndsWith" xml:space="preserve">
+    <value>Ends with</value>
+  </data>
+  <data name="FilterOperationExclude" xml:space="preserve">
+    <value>Exclude</value>
+  </data>
+  <data name="FilterOperationGreaterThan" xml:space="preserve">
+    <value>Greater than</value>
+  </data>
+  <data name="FilterOperationHaveCategory" xml:space="preserve">
+    <value>Have category</value>
+  </data>
+  <data name="FilterOperationInclude" xml:space="preserve">
+    <value>Include</value>
+  </data>
+  <data name="FilterOperationIs" xml:space="preserve">
+    <value>Is</value>
+  </data>
+  <data name="FilterOperationLessThan" xml:space="preserve">
+    <value>Less than</value>
+  </data>
+  <data name="FilterOperationStartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="FilterRangeEndDescriptionFormat" xml:space="preserve">
+    <value>{0} to</value>
+  </data>
+  <data name="FilterRangeEndDescriptionFormat1" xml:space="preserve">
+    <value>{0} to</value>
+  </data>
+  <data name="FilterRangeStartDescriptionFormat" xml:space="preserve">
+    <value>{0} from</value>
+  </data>
+  <data name="FilterRangeStartDescriptionFormat1" xml:space="preserve">
+    <value>{0} from</value>
+  </data>
+  <data name="FilterSimplify" xml:space="preserve">
+    <value>Simplify filter</value>
+  </data>
+  <data name="FilterTypeCaption" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="FilterTypeKind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="FilterTypeMovie" xml:space="preserve">
+    <value>Movies only</value>
+  </data>
+  <data name="FilterTypeMovieReleased" xml:space="preserve">
+    <value>Released (movies only)</value>
+  </data>
+  <data name="FilterTypeMovieWatched" xml:space="preserve">
+    <value>Watched (movies only)</value>
+  </data>
+  <data name="FilterTypeSeries" xml:space="preserve">
+    <value>Series only</value>
+  </data>
+  <data name="FilterTypeSeriesChannel" xml:space="preserve">
+    <value>Channel (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesMiniseries" xml:space="preserve">
+    <value>Miniseries (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesNumberOfEpisodes" xml:space="preserve">
+    <value>Number of episodes (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesNumberOfSeasons" xml:space="preserve">
+    <value>Number of seasons (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesReleaseStatus" xml:space="preserve">
+    <value>Release status (series only)</value>
+  </data>
+  <data name="FilterTypeSeriesWatchStatus" xml:space="preserve">
+    <value>Watch status (series only)</value>
+  </data>
+  <data name="FilterTypeStandalone" xml:space="preserve">
+    <value>Standalone</value>
+  </data>
+  <data name="FilterTypeTags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="FilterTypeTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="FilterTypeYear" xml:space="preserve">
+    <value>Year</value>
+  </data>
   <data name="FirstSorting" xml:space="preserve">
     <value>First Sorting</value>
   </data>
@@ -206,6 +350,27 @@
   </data>
   <data name="LiveAction" xml:space="preserve">
     <value>Live Action</value>
+  </data>
+  <data name="LogLevelDebug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="LogLevelError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="LogLevelFatal" xml:space="preserve">
+    <value>Fatal</value>
+  </data>
+  <data name="LogLevelInformation" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="LogLevelVerbose" xml:space="preserve">
+    <value>Verbose</value>
+  </data>
+  <data name="LogLevelWarning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="LogPath" xml:space="preserve">
+    <value>Log path</value>
   </data>
   <data name="NavigationList" xml:space="preserve">
     <value>List</value>
@@ -249,6 +414,9 @@
   <data name="RecentlyOpenedFiles" xml:space="preserve">
     <value>Recently Opened Files</value>
   </data>
+  <data name="RemoveFilter" xml:space="preserve">
+    <value>Remove filter</value>
+  </data>
   <data name="RemoveFromList" xml:space="preserve">
     <value>Remove from list</value>
   </data>
@@ -264,8 +432,68 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SeasonFinished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="SeasonHiatus" xml:space="preserve">
+    <value>Hiatus</value>
+  </data>
+  <data name="SeasonNotStarted" xml:space="preserve">
+    <value>Not started</value>
+  </data>
+  <data name="SeasonNotWatched" xml:space="preserve">
+    <value>Not watched</value>
+  </data>
+  <data name="SeasonRunning" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="SeasonStoppedWatching" xml:space="preserve">
+    <value>Stopped watching</value>
+  </data>
+  <data name="SeasonUnknown" xml:space="preserve">
+    <value>Don't know/don't care</value>
+  </data>
+  <data name="SeasonWatched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
+  <data name="SeasonWatching" xml:space="preserve">
+    <value>Watching</value>
+  </data>
   <data name="SecondSorting" xml:space="preserve">
     <value>Second Sorting</value>
+  </data>
+  <data name="SeriesCancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="SeriesFinished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="SeriesNotStarted" xml:space="preserve">
+    <value>Not started</value>
+  </data>
+  <data name="SeriesNotWatched" xml:space="preserve">
+    <value>Not watched</value>
+  </data>
+  <data name="SeriesRunning" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="SeriesStoppedWatching" xml:space="preserve">
+    <value>Stopped watching</value>
+  </data>
+  <data name="SeriesUnknown" xml:space="preserve">
+    <value>Don't know/don't care</value>
+  </data>
+  <data name="SeriesWatched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
+  <data name="SeriesWatching" xml:space="preserve">
+    <value>Watching</value>
+  </data>
+  <data name="SetFilterCompositionToAnd" xml:space="preserve">
+    <value>Set filter composition to "and"</value>
+  </data>
+  <data name="SetFilterCompositionToOr" xml:space="preserve">
+    <value>Set filter composition to "or"</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>

@@ -32,7 +32,7 @@ namespace Cineaste.Dialogs
                     .DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ViewModel!.Version)
-                    .Select(version => String.Format(CultureInfo.InvariantCulture, Messages.AboutTextFormat, version))
+                    .Select(version => String.Format(CultureInfo.CurrentCulture, Messages.AboutTextFormat, version))
                     .BindTo(this, v => v.AboutTextBlock.Text)
                     .DisposeWith(disposables);
 

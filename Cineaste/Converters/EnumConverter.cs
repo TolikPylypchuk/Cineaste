@@ -21,11 +21,7 @@ namespace Cineaste.Converters
         }
 
         public int GetAffinityForObjects(Type fromType, Type toType) =>
-            fromType == typeof(TEnum) || toType == typeof(TEnum)
-                ? 10000
-                : fromType == typeof(TEnum) || toType == typeof(TEnum)
-                    ? 1000
-                    : 0;
+            fromType == typeof(TEnum) || toType == typeof(TEnum) ? 10000 : 0;
 
         public bool TryConvert(object? from, Type toType, object? conversionHint, out object? result)
         {
