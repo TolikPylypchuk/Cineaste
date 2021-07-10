@@ -11,7 +11,7 @@
         <vm:TagItemViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0 4">
+    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0 4 4 4">
         <Border CornerRadius="16" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
                 Grid.ColumnSpan="3" />
 

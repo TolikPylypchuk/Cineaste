@@ -6,4 +6,9 @@
     <sys:Double x:Key="FontSizeNormal">14</sys:Double>
     <sys:Double x:Key="FontSizeBig">16</sys:Double>
     <sys:Double x:Key="FontSizeLarge">18</sys:Double>
+    <sys:Double x:Key="FontSizeFormTitle">24</sys:Double>
+
+    <Color x:Key="LinkPointerOverColor">#D70078</Color>
+    <SolidColorBrush x:Key="LinkBrush" Color="{DynamicResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="LinkPointerOverBrush" Color="{DynamicResource LinkPointerOverColor}" />
 </ResourceDictionary>

@@ -29,12 +29,14 @@ using Cineaste.Data;
 using Cineaste.Data.Models;
 using Cineaste.Infrastructure;
 using Cineaste.Properties;
+using Cineaste.Validation;
 using Cineaste.Views;
 
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
 
 using ReactiveUI;
+using ReactiveUI.Validation.Formatters.Abstractions;
 
 using Serilog;
 using Serilog.Core;
@@ -119,6 +121,9 @@ namespace Cineaste
             Locator.CurrentMutable.RegisterConstant(BlobCache.UserAccount, StoreKey);
 
             Locator.CurrentMutable.RegisterConstant(Messages.ResourceManager);
+            Locator.CurrentMutable.RegisterConstant(
+                new LocalizedValidationTextFormatter(Messages.ResourceManager),
+                typeof(IValidationTextFormatter<string>));
 
             this.RegisterBindingConverters();
 

@@ -132,8 +132,14 @@
   <data name="AddNewSeries" xml:space="preserve">
     <value>Add new series</value>
   </data>
+  <data name="AddOriginalTitle" xml:space="preserve">
+    <value>Add original title</value>
+  </data>
   <data name="AddTag" xml:space="preserve">
     <value>Add tag</value>
+  </data>
+  <data name="AddTitle" xml:space="preserve">
+    <value>Add title</value>
   </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All Files</value>
@@ -168,6 +174,9 @@
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
+  <data name="CreateFranchise" xml:space="preserve">
+    <value>Create franchise</value>
+  </data>
   <data name="CreateList" xml:space="preserve">
     <value>Create a list</value>
   </data>
@@ -176,6 +185,9 @@
   </data>
   <data name="DefaultDefaultSeasonTitle" xml:space="preserve">
     <value>Season #</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="Direction" xml:space="preserve">
     <value>Direction</value>
@@ -336,8 +348,20 @@
   <data name="FirstSorting" xml:space="preserve">
     <value>First Sorting</value>
   </data>
+  <data name="GoToFranchise" xml:space="preserve">
+    <value>Go to franchise</value>
+  </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home Page</value>
+  </data>
+  <data name="Imdb" xml:space="preserve">
+    <value>IMDb</value>
+  </data>
+  <data name="ImdbLink" xml:space="preserve">
+    <value>IMDb Link</value>
+  </data>
+  <data name="Kind" xml:space="preserve">
+    <value>Kind</value>
   </data>
   <data name="ListSortDirectionAscending" xml:space="preserve">
     <value>Ascending</value>
@@ -420,8 +444,14 @@
   <data name="OpenRecent" xml:space="preserve">
     <value>Open Recent</value>
   </data>
+  <data name="OriginalTitle" xml:space="preserve">
+    <value>Original title</value>
+  </data>
   <data name="OriginalTitleHeader" xml:space="preserve">
     <value>Original Title</value>
+  </data>
+  <data name="PosterUrl" xml:space="preserve">
+    <value>Poster URL</value>
   </data>
   <data name="Preferences" xml:space="preserve">
     <value>Preferences</value>
@@ -429,11 +459,20 @@
   <data name="RecentlyOpenedFiles" xml:space="preserve">
     <value>Recently Opened Files</value>
   </data>
+  <data name="Released" xml:space="preserve">
+    <value>Released</value>
+  </data>
   <data name="RemoveFilter" xml:space="preserve">
     <value>Remove filter</value>
   </data>
   <data name="RemoveFromList" xml:space="preserve">
     <value>Remove from list</value>
+  </data>
+  <data name="RottenTomatoes" xml:space="preserve">
+    <value>Rotten Tomatoes</value>
+  </data>
+  <data name="RottenTomatoesLink" xml:space="preserve">
+    <value>Rotten Tomatoes Link</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
@@ -528,11 +567,74 @@
   <data name="StopSearch" xml:space="preserve">
     <value>Stop search</value>
   </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
   <data name="TitleHeader" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="ValidationCategoryEmpty" xml:space="preserve">
+    <value>The category must not be empty</value>
+  </data>
+  <data name="ValidationChannelEmpty" xml:space="preserve">
+    <value>The channel must not be empty</value>
+  </data>
+  <data name="ValidationDescriptionEmpty" xml:space="preserve">
+    <value>The description must not be empty</value>
+  </data>
+  <data name="ValidationHexColorInvalid" xml:space="preserve">
+    <value>Invalid color HEX value</value>
+  </data>
+  <data name="ValidationImdbLinkInvalid" xml:space="preserve">
+    <value>The IMDb link is invalid</value>
+  </data>
+  <data name="ValidationListNameEmpty" xml:space="preserve">
+    <value>The list name must not be empty</value>
+  </data>
+  <data name="ValidationNameEmpty" xml:space="preserve">
+    <value>Name must not be empty</value>
+  </data>
+  <data name="ValidationNameNotUnique" xml:space="preserve">
+    <value>The name is not unique</value>
+  </data>
+  <data name="ValidationNumberOfEpisodesEmpty" xml:space="preserve">
+    <value># of episodes is empty</value>
+  </data>
+  <data name="ValidationNumberOfEpisodesInvalid" xml:space="preserve">
+    <value># of episodes is invalid</value>
+  </data>
+  <data name="ValidationPeriodInvalid" xml:space="preserve">
+    <value>The period is invalid</value>
+  </data>
+  <data name="ValidationPeriodsOverlap" xml:space="preserve">
+    <value>The periods are overlapping</value>
+  </data>
+  <data name="ValidationPosterUrlInvalid" xml:space="preserve">
+    <value>The poster URL is invalid</value>
+  </data>
+  <data name="ValidationRottenTomatoesLinkInvalid" xml:space="preserve">
+    <value>The Rotten Tomatoes Link is invalid</value>
+  </data>
+  <data name="ValidationTagNotUniqueFormat" xml:space="preserve">
+    <value>There's already a tag named '{0}' in the '{1}' category</value>
+  </data>
+  <data name="ValidationTitleNameEmpty" xml:space="preserve">
+    <value>The title must not be empty</value>
+  </data>
+  <data name="ValidationYearEmpty" xml:space="preserve">
+    <value>The year must not be empty</value>
+  </data>
+  <data name="ValidationYearInvalid" xml:space="preserve">
+    <value>The year is invalid</value>
+  </data>
   <data name="ViewDocumentation" xml:space="preserve">
     <value>View the documentation</value>
+  </data>
+  <data name="Watched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
   </data>
   <data name="YearHeader" xml:space="preserve">
     <value>Year</value>

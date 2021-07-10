@@ -1,18 +1,45 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="Button">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
     <Style Selector="TextBlock.caption">
         <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}" />
         <Setter Property="Margin" Value="0 4" />
+    </Style>
+
+    <Style Selector="TextBlock.error">
+        <Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}" />
     </Style>
 
     <Style Selector="Button.icon">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Padding" Value="2" />
-        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="Button.icon /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="CornerRadius" Value="100" />
+    </Style>
+
+    <Style Selector="Button.link">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <TextBlock TextDecorations="Underline" FontFamily="{TemplateBinding FontFamily}"
+                               FontSize="{TemplateBinding FontSize}" FontStyle="{TemplateBinding FontStyle}"
+                               Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}"
+                               TextAlignment="{TemplateBinding HorizontalContentAlignment}"
+                               Text="{TemplateBinding Content}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource LinkBrush}" />
+    </Style>
+
+    <Style Selector="Button.link:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource LinkPointerOverBrush}" />
     </Style>
 </Styles>

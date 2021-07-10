@@ -106,11 +106,29 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add original title.
+        /// </summary>
+        internal static string AddOriginalTitle {
+            get {
+                return ResourceManager.GetString("AddOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add tag.
         /// </summary>
         internal static string AddTag {
             get {
                 return ResourceManager.GetString("AddTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add title.
+        /// </summary>
+        internal static string AddTitle {
+            get {
+                return ResourceManager.GetString("AddTitle", resourceCulture);
             }
         }
         
@@ -214,6 +232,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create franchise.
+        /// </summary>
+        internal static string CreateFranchise {
+            get {
+                return ResourceManager.GetString("CreateFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a list.
         /// </summary>
         internal static string CreateList {
@@ -237,6 +264,15 @@ namespace Cineaste.Properties {
         internal static string DefaultDefaultSeasonTitle {
             get {
                 return ResourceManager.GetString("DefaultDefaultSeasonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        internal static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
             }
         }
         
@@ -718,11 +754,47 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to franchise.
+        /// </summary>
+        internal static string GoToFranchise {
+            get {
+                return ResourceManager.GetString("GoToFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home Page.
         /// </summary>
         internal static string HomePage {
             get {
                 return ResourceManager.GetString("HomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IMDb.
+        /// </summary>
+        internal static string Imdb {
+            get {
+                return ResourceManager.GetString("Imdb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IMDb Link.
+        /// </summary>
+        internal static string ImdbLink {
+            get {
+                return ResourceManager.GetString("ImdbLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        internal static string Kind {
+            get {
+                return ResourceManager.GetString("Kind", resourceCulture);
             }
         }
         
@@ -970,11 +1042,29 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original title.
+        /// </summary>
+        internal static string OriginalTitle {
+            get {
+                return ResourceManager.GetString("OriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original Title.
         /// </summary>
         internal static string OriginalTitleHeader {
             get {
                 return ResourceManager.GetString("OriginalTitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poster URL.
+        /// </summary>
+        internal static string PosterUrl {
+            get {
+                return ResourceManager.GetString("PosterUrl", resourceCulture);
             }
         }
         
@@ -997,6 +1087,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Released.
+        /// </summary>
+        internal static string Released {
+            get {
+                return ResourceManager.GetString("Released", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove filter.
         /// </summary>
         internal static string RemoveFilter {
@@ -1011,6 +1110,24 @@ namespace Cineaste.Properties {
         internal static string RemoveFromList {
             get {
                 return ResourceManager.GetString("RemoveFromList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes.
+        /// </summary>
+        internal static string RottenTomatoes {
+            get {
+                return ResourceManager.GetString("RottenTomatoes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes Link.
+        /// </summary>
+        internal static string RottenTomatoesLink {
+            get {
+                return ResourceManager.GetString("RottenTomatoesLink", resourceCulture);
             }
         }
         
@@ -1296,9 +1413,180 @@ namespace Cineaste.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
+        internal static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
         internal static string TitleHeader {
             get {
                 return ResourceManager.GetString("TitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The category must not be empty.
+        /// </summary>
+        internal static string ValidationCategoryEmpty {
+            get {
+                return ResourceManager.GetString("ValidationCategoryEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The channel must not be empty.
+        /// </summary>
+        internal static string ValidationChannelEmpty {
+            get {
+                return ResourceManager.GetString("ValidationChannelEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The description must not be empty.
+        /// </summary>
+        internal static string ValidationDescriptionEmpty {
+            get {
+                return ResourceManager.GetString("ValidationDescriptionEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid color HEX value.
+        /// </summary>
+        internal static string ValidationHexColorInvalid {
+            get {
+                return ResourceManager.GetString("ValidationHexColorInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The IMDb link is invalid.
+        /// </summary>
+        internal static string ValidationImdbLinkInvalid {
+            get {
+                return ResourceManager.GetString("ValidationImdbLinkInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The list name must not be empty.
+        /// </summary>
+        internal static string ValidationListNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationListNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name must not be empty.
+        /// </summary>
+        internal static string ValidationNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name is not unique.
+        /// </summary>
+        internal static string ValidationNameNotUnique {
+            get {
+                return ResourceManager.GetString("ValidationNameNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # of episodes is empty.
+        /// </summary>
+        internal static string ValidationNumberOfEpisodesEmpty {
+            get {
+                return ResourceManager.GetString("ValidationNumberOfEpisodesEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # of episodes is invalid.
+        /// </summary>
+        internal static string ValidationNumberOfEpisodesInvalid {
+            get {
+                return ResourceManager.GetString("ValidationNumberOfEpisodesInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period is invalid.
+        /// </summary>
+        internal static string ValidationPeriodInvalid {
+            get {
+                return ResourceManager.GetString("ValidationPeriodInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The periods are overlapping.
+        /// </summary>
+        internal static string ValidationPeriodsOverlap {
+            get {
+                return ResourceManager.GetString("ValidationPeriodsOverlap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The poster URL is invalid.
+        /// </summary>
+        internal static string ValidationPosterUrlInvalid {
+            get {
+                return ResourceManager.GetString("ValidationPosterUrlInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Rotten Tomatoes Link is invalid.
+        /// </summary>
+        internal static string ValidationRottenTomatoesLinkInvalid {
+            get {
+                return ResourceManager.GetString("ValidationRottenTomatoesLinkInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There&apos;s already a tag named &apos;{0}&apos; in the &apos;{1}&apos; category.
+        /// </summary>
+        internal static string ValidationTagNotUniqueFormat {
+            get {
+                return ResourceManager.GetString("ValidationTagNotUniqueFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title must not be empty.
+        /// </summary>
+        internal static string ValidationTitleNameEmpty {
+            get {
+                return ResourceManager.GetString("ValidationTitleNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The year must not be empty.
+        /// </summary>
+        internal static string ValidationYearEmpty {
+            get {
+                return ResourceManager.GetString("ValidationYearEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The year is invalid.
+        /// </summary>
+        internal static string ValidationYearInvalid {
+            get {
+                return ResourceManager.GetString("ValidationYearInvalid", resourceCulture);
             }
         }
         
@@ -1308,6 +1596,24 @@ namespace Cineaste.Properties {
         internal static string ViewDocumentation {
             get {
                 return ResourceManager.GetString("ViewDocumentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched.
+        /// </summary>
+        internal static string Watched {
+            get {
+                return ResourceManager.GetString("Watched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        internal static string Year {
+            get {
+                return ResourceManager.GetString("Year", resourceCulture);
             }
         }
         

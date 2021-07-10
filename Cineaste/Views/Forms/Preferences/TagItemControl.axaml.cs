@@ -47,8 +47,7 @@ namespace Cineaste.Views.Forms.Preferences
                         .Discard()
                         .InvokeCommand(this.ViewModel.Select)
                         .DisposeWith(disposables);
-                } else
-                {
+
                     this.Cursor = Cursor.Parse(nameof(StandardCursorType.Hand));
                 }
 
