@@ -1,0 +1,121 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:l="using:Cineaste.Localization"
+             xmlns:vm="using:Cineaste.Core.ViewModels.Forms"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="750"
+             x:Class="Cineaste.Views.Forms.FranchiseFormControl">
+    <Design.DataContext>
+        <vm:FranchiseFormViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <Grid Grid.Row="0" ColumnDefinitions="*,25,25,*" HorizontalAlignment="Stretch">
+            <Button x:Name="GoToFranchiseArrowButton" Grid.Column="0" HorizontalAlignment="Left"
+                    Classes="icon" i:Attached.Icon="fas fa-chevron-up" Width="25" Height="25" />
+
+            <Button x:Name="GoToPreviousButton" Grid.Column="1" Classes="icon" i:Attached.Icon="fas fa-chevron-left"
+                    Width="25" Height="25" />
+
+            <Button x:Name="GoToNextButton" Grid.Column="2" Classes="icon" i:Attached.Icon="fas fa-chevron-right"
+                    Width="25" Height="25" />
+
+            <Button x:Name="CloseButton" Grid.Column="3" HorizontalAlignment="Right"
+                    Classes="icon" i:Attached.Icon="fas fa-times" Width="25" Height="25" />
+        </Grid>
+
+        <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" FontSize="{DynamicResource FontSizeFormTitle}"
+                   Margin="16 8" TextWrapping="Wrap" />
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <DockPanel>
+                <Button x:Name="DeleteButton" Content="{l:Translate Delete}" HorizontalAlignment="Center"
+                        Margin="8" DockPanel.Dock="Bottom" />
+
+                <StackPanel Margin="16 8 16 0">
+                    <Image x:Name="Poster" />
+
+                    <WrapPanel HorizontalAlignment="Center" Margin="0 8 0 0">
+                        <CheckBox x:Name="HasTitlesCheckBox" Margin="4 0"
+                                  Content="{l:Translate FranchiseHasTitles}" />
+                        <CheckBox x:Name="ShowInListCheckBox" Margin="4 0"
+                                  Content="{l:Translate FranchiseShowInList}" />
+                    </WrapPanel>
+
+                    <WrapPanel HorizontalAlignment="Center" Margin="0 8 0 0">
+                        <CheckBox x:Name="IsLooselyConnectedCheckBox" Margin="4 0"
+                                  Content="{l:Translate FranchiseLooselyConnected}" />
+                        <CheckBox x:Name="MergeDisplayNumbersCheckBox" Margin="4 0"
+                                  Content="{l:Translate FranchiseMergeDisplayNumbers}" />
+                    </WrapPanel>
+
+                    <ItemsControl x:Name="Titles" />
+
+                    <ItemsControl x:Name="OriginalTitles" />
+
+                    <ItemsControl x:Name="Entries" Margin="0 8" Grid.IsSharedSizeScope="True" />
+
+                    <TextBlock Classes="caption" Text="{l:Translate PosterUrl}" />
+                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" />
+                    <TextBlock x:Name="PosterUrlErrorTextBlock" Classes="error caption" />
+
+                    <StackPanel>
+                        <StackPanel.Styles>
+                            <Style Selector="Button">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="Margin" Value="4 0" />
+                            </Style>
+                            <Style Selector="Button > TextBlock">
+                                <Setter Property="TextAlignment" Value="Center" />
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                            </Style>
+                        </StackPanel.Styles>
+
+                        <Grid ColumnDefinitions="*,*" Margin="0 8">
+                            <Button x:Name="AddMovieButton" Grid.Column="0">
+                                <TextBlock Text="{l:Translate FranchiseAddNewMovie}" />
+                            </Button>
+
+                            <Button x:Name="AddSeriesButton" Grid.Column="1">
+                                <TextBlock Text="{l:Translate FranchiseAddNewSeries}" />
+                            </Button>
+                        </Grid>
+
+                        <Button x:Name="AddFranchiseButton" HorizontalAlignment="Center" Margin="8">
+                            <TextBlock Text="{l:Translate FranchiseAddNewFranchise}" />
+                        </Button>
+
+                        <Grid ColumnDefinitions="*,*" Margin="0 8">
+                            <Button x:Name="AddTitleButton" Grid.Column="0">
+                                <TextBlock Text="{l:Translate AddTitle}" />
+                            </Button>
+
+                            <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
+                                <TextBlock Text="{l:Translate AddOriginalTitle}" />
+                            </Button>
+                        </Grid>
+
+                        <Button x:Name="CreateFranchiseButton" HorizontalAlignment="Center" Margin="8">
+                            <TextBlock Text="{l:Translate CreateFranchise}" />
+                        </Button>
+
+                        <Button x:Name="GoToFranchiseButton" HorizontalAlignment="Center" Margin="8">
+                            <TextBlock Text="{l:Translate GoToFranchise}" />
+                        </Button>
+                    </StackPanel>
+
+                    <TextBlock Classes="caption" Text="{l:Translate FranchiseAddExistingItem}" />
+                    <ComboBox x:Name="AddableItemsComboBox" HorizontalAlignment="Stretch" VirtualizationMode="Simple" />
+                </StackPanel>
+            </DockPanel>
+        </ScrollViewer>
+
+        <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
+            <Button x:Name="SaveButton" Content="{l:Translate Save}" Margin="8" Classes="accent"
+                    HorizontalAlignment="Center" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel}" Margin="8" HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</UserControl>

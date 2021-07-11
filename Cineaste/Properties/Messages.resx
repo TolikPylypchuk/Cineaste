@@ -189,6 +189,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Detach" xml:space="preserve">
+    <value>Detach</value>
+  </data>
   <data name="Direction" xml:space="preserve">
     <value>Direction</value>
   </data>
@@ -348,8 +351,35 @@
   <data name="FirstSorting" xml:space="preserve">
     <value>First Sorting</value>
   </data>
+  <data name="FranchiseAddExistingItem" xml:space="preserve">
+    <value>Add existing item</value>
+  </data>
+  <data name="FranchiseAddNewFranchise" xml:space="preserve">
+    <value>Add new franchise</value>
+  </data>
+  <data name="FranchiseAddNewMovie" xml:space="preserve">
+    <value>Add new movie</value>
+  </data>
+  <data name="FranchiseAddNewSeries" xml:space="preserve">
+    <value>Add new series</value>
+  </data>
+  <data name="FranchiseHasTitles" xml:space="preserve">
+    <value>Has titles</value>
+  </data>
+  <data name="FranchiseLooselyConnected" xml:space="preserve">
+    <value>Loosely connected</value>
+  </data>
+  <data name="FranchiseMergeDisplayNumbers" xml:space="preserve">
+    <value>Merge display numbers</value>
+  </data>
+  <data name="FranchiseShowInList" xml:space="preserve">
+    <value>Show in list</value>
+  </data>
   <data name="GoToFranchise" xml:space="preserve">
     <value>Go to franchise</value>
+  </data>
+  <data name="HideDisplayNumber" xml:space="preserve">
+    <value>Hide display number</value>
   </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home Page</value>
@@ -407,6 +437,12 @@
   </data>
   <data name="LogPath" xml:space="preserve">
     <value>Log path</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Move up</value>
   </data>
   <data name="NavigationList" xml:space="preserve">
     <value>List</value>
@@ -557,6 +593,9 @@
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="ShowDisplayNumber" xml:space="preserve">
+    <value>Show display number</value>
   </data>
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>

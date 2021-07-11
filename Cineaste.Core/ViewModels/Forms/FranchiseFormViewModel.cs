@@ -318,11 +318,14 @@ namespace Cineaste.Core.ViewModels.Forms
         {
             this.DecrementNumbers(entry.SequenceNumber);
 
-            this.Entries
-                .Where(e => e.SequenceNumber >= entry.SequenceNumber)
-                .ForEach(e => e.SequenceNumber--);
+            this.entriesSource.Edit(list =>
+            {
+                list.Where(e => e.SequenceNumber >= entry.SequenceNumber)
+                    .ForEach(e => e.SequenceNumber--);
 
-            this.entriesSource.Remove(entry);
+                list.Remove(entry);
+            });
+
             this.addableItemsSource.Add(entry);
 
             return entry;

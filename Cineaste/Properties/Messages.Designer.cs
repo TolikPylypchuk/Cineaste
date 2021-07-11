@@ -277,6 +277,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detach.
+        /// </summary>
+        internal static string Detach {
+            get {
+                return ResourceManager.GetString("Detach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Direction.
         /// </summary>
         internal static string Direction {
@@ -754,11 +763,92 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add existing item.
+        /// </summary>
+        internal static string FranchiseAddExistingItem {
+            get {
+                return ResourceManager.GetString("FranchiseAddExistingItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new franchise.
+        /// </summary>
+        internal static string FranchiseAddNewFranchise {
+            get {
+                return ResourceManager.GetString("FranchiseAddNewFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new movie.
+        /// </summary>
+        internal static string FranchiseAddNewMovie {
+            get {
+                return ResourceManager.GetString("FranchiseAddNewMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new series.
+        /// </summary>
+        internal static string FranchiseAddNewSeries {
+            get {
+                return ResourceManager.GetString("FranchiseAddNewSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has titles.
+        /// </summary>
+        internal static string FranchiseHasTitles {
+            get {
+                return ResourceManager.GetString("FranchiseHasTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loosely connected.
+        /// </summary>
+        internal static string FranchiseLooselyConnected {
+            get {
+                return ResourceManager.GetString("FranchiseLooselyConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merge display numbers.
+        /// </summary>
+        internal static string FranchiseMergeDisplayNumbers {
+            get {
+                return ResourceManager.GetString("FranchiseMergeDisplayNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in list.
+        /// </summary>
+        internal static string FranchiseShowInList {
+            get {
+                return ResourceManager.GetString("FranchiseShowInList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go to franchise.
         /// </summary>
         internal static string GoToFranchise {
             get {
                 return ResourceManager.GetString("GoToFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide display number.
+        /// </summary>
+        internal static string HideDisplayNumber {
+            get {
+                return ResourceManager.GetString("HideDisplayNumber", resourceCulture);
             }
         }
         
@@ -930,6 +1020,24 @@ namespace Cineaste.Properties {
         internal static string LogPath {
             get {
                 return ResourceManager.GetString("LogPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move down.
+        /// </summary>
+        internal static string MoveDown {
+            get {
+                return ResourceManager.GetString("MoveDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move up.
+        /// </summary>
+        internal static string MoveUp {
+            get {
+                return ResourceManager.GetString("MoveUp", resourceCulture);
             }
         }
         
@@ -1380,6 +1488,15 @@ namespace Cineaste.Properties {
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show display number.
+        /// </summary>
+        internal static string ShowDisplayNumber {
+            get {
+                return ResourceManager.GetString("ShowDisplayNumber", resourceCulture);
             }
         }
         
