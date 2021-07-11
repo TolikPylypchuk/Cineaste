@@ -15,12 +15,14 @@ namespace Cineaste.Core.Comparers
         private static readonly Regex NumberRegex = new("([0-9]+)", RegexOptions.Compiled);
         private static readonly Regex SpacesRegex = new("\\s+", RegexOptions.Compiled);
 
+        private readonly CultureInfo culture;
         private readonly StringComparer stringComparer;
         private readonly IComparer<IEnumerable<object>> comparer;
 
         public TitleComparer(CultureInfo culture, NullComparison nullComparison = NullComparison.NullsFirst)
             : base(nullComparison)
         {
+            this.culture = culture;
             this.stringComparer = culture.CompareInfo.GetStringComparer(CompareOptions.None);
             this.comparer = new StringOrIntComparer(this.stringComparer, this.stringComparer).Sequence();
         }
@@ -39,7 +41,7 @@ namespace Cineaste.Core.Comparers
 
         private string Normalize(string title) =>
             SpacesRegex.Replace(
-                title.ToLower()
+                title.ToLower(this.culture)
                     .Replace(":", Space)
                     .Replace(";", Space)
                     .Replace("!", Space)
@@ -55,6 +57,6 @@ namespace Cineaste.Core.Comparers
                 Space);
 
         private object Convert(string title) =>
-            Int32.TryParse(title, out int result) ? (object)result : title;
+            Int32.TryParse(title, out int result) ? result : title;
     }
 }

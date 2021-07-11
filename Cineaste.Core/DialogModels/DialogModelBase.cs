@@ -11,8 +11,6 @@ namespace Cineaste.Core.DialogModels
             this.Title = title;
 
             this.Close = ReactiveCommand.Create<T, T>(result => result);
-
-            this.Close.ToPropertyEx(this, vm => vm.Result, default(T));
         }
 
         [Reactive]
@@ -20,8 +18,6 @@ namespace Cineaste.Core.DialogModels
 
         [Reactive]
         public string Title { get; set; }
-
-        public T Result { [ObservableAsProperty] get; } = default!;
 
         public ReactiveCommand<T, T> Close { get; }
     }

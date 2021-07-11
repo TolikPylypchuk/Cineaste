@@ -95,40 +95,47 @@
                     <ComboBox x:Name="AddableTagsComboBox" PlaceholderText="{l:Translate SelectTag}" Margin="0 0 0 16"
                               HorizontalAlignment="Stretch" />
 
-                    <Grid ColumnDefinitions="*,*">
-                        <Grid.Styles>
+                    <StackPanel>
+                        <StackPanel.Styles>
                             <Style Selector="Button">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="8" />
+                            </Style>
+                            <Style Selector="Grid > Button">
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                                 <Setter Property="Margin" Value="4 0" />
-                                <Setter Property="MinHeight" Value="32" />
                             </Style>
-                        </Grid.Styles>
+                            <Style Selector="Button > TextBlock">
+                                <Setter Property="TextAlignment" Value="Center" />
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                            </Style>
+                        </StackPanel.Styles>
 
-                        <Button x:Name="AddTitleButton" Grid.Column="0">
-                            <TextBlock Text="{l:Translate AddTitle}" TextAlignment="Center" TextWrapping="Wrap" />
+                        <Grid ColumnDefinitions="*,*">
+                            <Button x:Name="AddTitleButton" Grid.Column="0">
+                                <TextBlock Text="{l:Translate AddTitle}" />
+                            </Button>
+
+                            <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
+                                <TextBlock Text="{l:Translate AddOriginalTitle}" />
+                            </Button>
+                        </Grid>
+
+                        <Button x:Name="CreateFranchiseButton">
+                            <TextBlock Text="{l:Translate CreateFranchise}" />
                         </Button>
 
-                        <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
-                            <TextBlock Text="{l:Translate AddOriginalTitle}" TextAlignment="Center"
-                                       TextWrapping="Wrap" />
+                        <Button x:Name="GoToFranchiseButton">
+                            <TextBlock Text="{l:Translate GoToFranchise}" />
                         </Button>
-                    </Grid>
-
-                    <Button x:Name="CreateFranchiseButton" MinHeight="32" Margin="8" HorizontalAlignment="Center">
-                        <TextBlock Text="{l:Translate CreateFranchise}" TextAlignment="Center" TextWrapping="Wrap" />
-                    </Button>
-
-                    <Button x:Name="GoToFranchiseButton" MinHeight="32" Margin="8" HorizontalAlignment="Center">
-                        <TextBlock Text="{l:Translate GoToFranchise}" TextAlignment="Center" TextWrapping="Wrap" />
-                    </Button>
+                    </StackPanel>
                 </StackPanel>
             </DockPanel>
         </ScrollViewer>
 
         <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
-            <Button x:Name="SaveButton" Content="{l:Translate Save}" Margin="8" Classes="accent"
-                    HorizontalAlignment="Center" />
-            <Button x:Name="CancelButton" Content="{l:Translate Cancel}" Margin="8" HorizontalAlignment="Center" />
+            <Button x:Name="SaveButton" Content="{l:Translate Save}" Margin="8" Classes="accent" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel}" Margin="8" />
         </StackPanel>
     </Grid>
 </UserControl>

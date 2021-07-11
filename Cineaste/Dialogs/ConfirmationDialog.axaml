@@ -5,19 +5,17 @@
              xmlns:l="using:Cineaste.Localization"
              xmlns:dm="using:Cineaste.Core.DialogModels"
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
-             x:Class="Cineaste.Dialogs.AboutDialog">
+             x:Class="Cineaste.Dialogs.ConfirmationDialog">
     <Design.DataContext>
-        <dm:AboutModel />
+        <dm:ConfirmationModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,Auto" Margin="8">
-        <TextBlock x:Name="AboutTextBlock" Grid.Row="0" Margin="0 8 0 0" />
+    <Grid RowDefinitions="Auto,Auto" Margin="8">
+        <TextBlock x:Name="MessageTextBlock" Grid.Row="0" Margin="0 8 0 16" />
 
-        <Button x:Name="DocsButton" Grid.Row="1" Classes="accent"
-                Content="{l:Translate ViewDocumentation}" Margin="0 16" />
-
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0 16 0 0" HorizontalAlignment="Right">
-            <Button x:Name="OKButton" IsDefault="True" Classes="accent" Content="{l:Translate OK}" />
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 16 0 0" HorizontalAlignment="Right">
+            <Button x:Name="CancelButton" IsCancel="True" Margin="8 0 0 0" />
+            <Button x:Name="ConfirmButton" IsDefault="True" Margin="8 0 0 0" Classes="accent" />
         </StackPanel>
     </Grid>
 </UserControl>

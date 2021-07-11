@@ -1,5 +1,7 @@
 using System;
+using System.Globalization;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 using Avalonia.Controls;
@@ -64,8 +66,7 @@ namespace Cineaste
 
         public async Task ShowTagFormDialogAsync(InteractionContext<TagFormViewModel, Unit> ctx)
         {
-            var result = await this.ShowDialogWindowForViewModel(
-                ctx.Input, ctx.Input.FormTitle, ctx.Input.Close, () => Unit.Default);
+            var result = await this.ShowDialogWindowForViewModel(ctx.Input, ctx.Input.FormTitle, vm => vm.Close);
             ctx.SetOutput(result);
         }
 
@@ -113,22 +114,20 @@ namespace Cineaste
 
         public async Task ShowAboutDialogAsync(InteractionContext<AboutModel, Unit> ctx)
         {
-            var result = await this.ShowDialogWindowForViewModel(
-                ctx.Input, Messages.About, ctx.Input.Close, () => Unit.Default);
+            var result = await this.ShowDialogWindowForViewModel(ctx.Input, nameof(Messages.About), vm => vm.Close);
             ctx.SetOutput(result);
         }
-        private Task<TResult> ShowDialogWindowForViewModel<TViewModel, TResult>(
+
+        private Task<TResult?> ShowDialogWindowForViewModel<TViewModel, TResult>(
             TViewModel viewModel,
             Func<TViewModel, TViewModel>? transform = null)
             where TViewModel : DialogModelBase<TResult> =>
-            this.ShowDialogWindowForViewModel(
-                viewModel, viewModel.Title, viewModel.Close, () => viewModel.Result, transform);
+            this.ShowDialogWindowForViewModel(viewModel, viewModel.Title, vm => vm.Close, transform);
 
-        private async Task<TResult> ShowDialogWindowForViewModel<TViewModel, TResult>(
+        private async Task<TResult?> ShowDialogWindowForViewModel<TViewModel, TResult>(
             TViewModel viewModel,
             string title,
-            IObservable<TResult> close,
-            Func<TResult> result,
+            Func<TViewModel, IObservable<TResult>> close,
             Func<TViewModel, TViewModel>? transform = null)
             where TViewModel : ReactiveObject
         {
@@ -138,20 +137,28 @@ namespace Cineaste
             var window = new Window
             {
                 Content = view,
-                Title = title,
+                Title = Messages.ResourceManager.GetString(title, CultureInfo.CurrentUICulture) ?? title,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 CanResize = false,
                 Icon = this.window.Icon
             };
 
-            var subscription = close.Subscribe(result => window.Close());
+            var result = default(TResult);
+
+            var subscription = close(view.ViewModel)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(closeResult =>
+                {
+                    result = closeResult;
+                    window.Close();
+                });
 
             await window.ShowDialog(this.window);
 
             subscription.Dispose();
 
-            return result();
+            return result;
         }
 
         private string GetFileDialogInitialDirectory() =>

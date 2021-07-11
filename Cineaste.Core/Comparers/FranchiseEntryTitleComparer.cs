@@ -22,21 +22,21 @@ namespace Cineaste.Core.Comparers
             this.titleComparer = new TitleComparer(culture);
 
             this.baseComparer = ComparerBuilder.For<FranchiseEntry>()
-                .OrderBy(this.GetTitleName)
+                .OrderBy(this.GetTitleName, this.titleComparer)
                 .ThenBy(entry => entry.GetStartYear())
                 .ThenBy(entry => entry.GetEndYear());
         }
 
-        protected override bool EqualsSafe(FranchiseEntry left, FranchiseEntry right) =>
-            this.titleComparer.Equals(this.GetTitleName(left), this.GetTitleName(right)) &&
-                    left.GetStartYear() == right.GetStartYear() &&
-                    left.GetEndYear() == right.GetEndYear();
+        protected override bool EqualsSafe(FranchiseEntry x, FranchiseEntry y) =>
+            this.titleComparer.Equals(this.GetTitleName(x), this.GetTitleName(y)) &&
+                    x.GetStartYear() == y.GetStartYear() &&
+                    x.GetEndYear() == y.GetEndYear();
 
-        protected override int GetHashCodeSafe(FranchiseEntry entry) =>
-            HashCode.Combine(this.GetTitleName(entry), entry.GetStartYear(), entry.GetEndYear());
+        protected override int GetHashCodeSafe(FranchiseEntry x) =>
+            HashCode.Combine(this.GetTitleName(x), x.GetStartYear(), x.GetEndYear());
 
-        protected override int CompareSafe(FranchiseEntry left, FranchiseEntry right) =>
-            this.baseComparer.Compare(left, right);
+        protected override int CompareSafe(FranchiseEntry x, FranchiseEntry y) =>
+            this.baseComparer.Compare(x, y);
 
         private string GetTitleName(FranchiseEntry entry) =>
             entry.GetTitle()?.Name ?? String.Empty;

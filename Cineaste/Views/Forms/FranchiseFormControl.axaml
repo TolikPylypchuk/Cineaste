@@ -64,6 +64,10 @@
                     <StackPanel>
                         <StackPanel.Styles>
                             <Style Selector="Button">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="8" />
+                            </Style>
+                            <Style Selector="Grid > Button">
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                                 <Setter Property="Margin" Value="4 0" />
                             </Style>
@@ -83,7 +87,7 @@
                             </Button>
                         </Grid>
 
-                        <Button x:Name="AddFranchiseButton" HorizontalAlignment="Center" Margin="8">
+                        <Button x:Name="AddFranchiseButton">
                             <TextBlock Text="{l:Translate FranchiseAddNewFranchise}" />
                         </Button>
 
@@ -97,11 +101,11 @@
                             </Button>
                         </Grid>
 
-                        <Button x:Name="CreateFranchiseButton" HorizontalAlignment="Center" Margin="8">
+                        <Button x:Name="CreateFranchiseButton">
                             <TextBlock Text="{l:Translate CreateFranchise}" />
                         </Button>
 
-                        <Button x:Name="GoToFranchiseButton" HorizontalAlignment="Center" Margin="8">
+                        <Button x:Name="GoToFranchiseButton">
                             <TextBlock Text="{l:Translate GoToFranchise}" />
                         </Button>
                     </StackPanel>
@@ -113,9 +117,8 @@
         </ScrollViewer>
 
         <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
-            <Button x:Name="SaveButton" Content="{l:Translate Save}" Margin="8" Classes="accent"
-                    HorizontalAlignment="Center" />
-            <Button x:Name="CancelButton" Content="{l:Translate Cancel}" Margin="8" HorizontalAlignment="Center" />
+            <Button x:Name="SaveButton" Content="{l:Translate Save}" Margin="8" Classes="accent" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel}" Margin="8" />
         </StackPanel>
     </Grid>
 </UserControl>

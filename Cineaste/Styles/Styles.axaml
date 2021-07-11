@@ -30,7 +30,6 @@
                     <TextBlock TextDecorations="Underline" FontFamily="{TemplateBinding FontFamily}"
                                FontSize="{TemplateBinding FontSize}" FontStyle="{TemplateBinding FontStyle}"
                                Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}"
-                               TextAlignment="{TemplateBinding HorizontalContentAlignment}"
                                Text="{TemplateBinding Content}" />
                 </ControlTemplate>
             </Setter.Value>

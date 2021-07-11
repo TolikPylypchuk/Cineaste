@@ -277,6 +277,114 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the franchise?.
+        /// </summary>
+        internal static string DeleteFranchiseQuestion {
+            get {
+                return ResourceManager.GetString("DeleteFranchiseQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Franchise.
+        /// </summary>
+        internal static string DeleteFranchiseTitle {
+            get {
+                return ResourceManager.GetString("DeleteFranchiseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the movie?.
+        /// </summary>
+        internal static string DeleteMovieQuestion {
+            get {
+                return ResourceManager.GetString("DeleteMovieQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Movie.
+        /// </summary>
+        internal static string DeleteMovieTitle {
+            get {
+                return ResourceManager.GetString("DeleteMovieTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the season?.
+        /// </summary>
+        internal static string DeleteSeasonQuestion {
+            get {
+                return ResourceManager.GetString("DeleteSeasonQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Season.
+        /// </summary>
+        internal static string DeleteSeasonTitle {
+            get {
+                return ResourceManager.GetString("DeleteSeasonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the series?.
+        /// </summary>
+        internal static string DeleteSeriesQuestion {
+            get {
+                return ResourceManager.GetString("DeleteSeriesQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Series.
+        /// </summary>
+        internal static string DeleteSeriesTitle {
+            get {
+                return ResourceManager.GetString("DeleteSeriesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the episode?.
+        /// </summary>
+        internal static string DeleteSpecialEpisodeQuestion {
+            get {
+                return ResourceManager.GetString("DeleteSpecialEpisodeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Special Episode.
+        /// </summary>
+        internal static string DeleteSpecialEpisodeTitle {
+            get {
+                return ResourceManager.GetString("DeleteSpecialEpisodeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the tag?.
+        /// </summary>
+        internal static string DeleteTagQuestion {
+            get {
+                return ResourceManager.GetString("DeleteTagQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Tag.
+        /// </summary>
+        internal static string DeleteTagTitle {
+            get {
+                return ResourceManager.GetString("DeleteTagTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Detach.
         /// </summary>
         internal static string Detach {
@@ -1524,6 +1632,15 @@ namespace Cineaste.Properties {
         internal static string StopSearch {
             get {
                 return ResourceManager.GetString("StopSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will detach all entries without deleting them..
+        /// </summary>
+        internal static string String {
+            get {
+                return ResourceManager.GetString("String", resourceCulture);
             }
         }
         
