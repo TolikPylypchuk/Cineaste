@@ -74,9 +74,11 @@ namespace Cineaste.Core.ViewModels.Forms
             this.addableItemsSource.AddRange(addableItems);
 
             this.FormTitle = this.FormTitle
-                .Select(this.GetFullFormTitle)
-                .StartWith(this.GetFullFormTitle(
-                    this.GetFormTitle(this.Franchise.ActualTitles.FirstOrDefault()?.Name ?? String.Empty)));
+                .StartWith(String.Empty)
+                .Select(title => !String.IsNullOrWhiteSpace(title)
+                    ? title
+                    : this.GetFormTitle(this.Franchise.ActualTitles.FirstOrDefault()?.Name ?? String.Empty))
+                .Select(this.GetFullFormTitle);
 
             this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 

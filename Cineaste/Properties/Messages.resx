@@ -406,7 +406,7 @@
     <value>Loosely connected</value>
   </data>
   <data name="FranchiseMergeDisplayNumbers" xml:space="preserve">
-    <value>Merge display numbers</value>
+    <value>Merge numbers</value>
   </data>
   <data name="FranchiseShowInList" xml:space="preserve">
     <value>Show in list</value>

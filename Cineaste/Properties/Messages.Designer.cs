@@ -925,7 +925,7 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Merge display numbers.
+        ///   Looks up a localized string similar to Merge numbers.
         /// </summary>
         internal static string FranchiseMergeDisplayNumbers {
             get {
