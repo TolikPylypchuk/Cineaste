@@ -1,0 +1,101 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:l="using:Cineaste.Localization"
+             xmlns:vm="using:Cineaste.Core.ViewModels.Forms"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="750"
+             x:Class="Cineaste.Views.Forms.SpecialEpisodeFormControl">
+    <Design.DataContext>
+        <vm:SpecialEpisodeFormViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <Grid Grid.Row="0" ColumnDefinitions="*,25,25,*" HorizontalAlignment="Stretch">
+            <Button x:Name="GoToSeriesIconButton" Grid.Column="0" HorizontalAlignment="Left"
+                    Classes="icon" i:Attached.Icon="fas fa-chevron-up" Width="25" Height="25" />
+
+            <Button x:Name="GoToPreviousButton" Grid.Column="1" Classes="icon" i:Attached.Icon="fas fa-chevron-left"
+                    Width="25" Height="25" />
+
+            <Button x:Name="GoToNextButton" Grid.Column="2" Classes="icon" i:Attached.Icon="fas fa-chevron-right"
+                    Width="25" Height="25" />
+
+            <Button x:Name="CloseButton" Grid.Column="3" HorizontalAlignment="Right"
+                    Classes="icon" i:Attached.Icon="fas fa-times" Width="25" Height="25" />
+        </Grid>
+
+        <TextBlock x:Name="FormTitleTextBlock" Grid.Row="1" FontSize="{DynamicResource FontSizeFormTitle}"
+                   Margin="16 8" TextWrapping="Wrap" />
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <DockPanel>
+                <Button x:Name="DeleteButton" Content="{l:Translate Delete}" HorizontalAlignment="Center"
+                        Margin="8" DockPanel.Dock="Bottom" />
+
+                <StackPanel Margin="16 8 16 0">
+                    <Image x:Name="Poster" />
+
+                    <Button x:Name="RottenTomatoesLinkButton" Margin="0 8 0 0" HorizontalAlignment="Center"
+                            Classes="link" Content="{l:Translate RottenTomatoes}" />
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 8 0 0">
+                        <CheckBox x:Name="IsWatchedCheckBox" Content="{l:Translate Watched}" Margin="0 0 4 0" />
+                        <CheckBox x:Name="IsReleasedCheckBox" Content="{l:Translate Released}" Margin="4 0 0 0" />
+                    </StackPanel>
+
+                    <ItemsControl x:Name="Titles" />
+
+                    <ItemsControl x:Name="OriginalTitles" />
+
+                    <TextBlock Classes="caption" Text="{l:Translate Channel}" />
+                    <TextBox x:Name="ChannelTextBox" HorizontalAlignment="Stretch" />
+                    <TextBlock x:Name="ChannelErrorTextBlock" Classes="error caption" />
+
+                    <TextBlock Classes="caption" Text="{l:Translate Release}" />
+                    <DatePicker x:Name="ReleaseDatePicker" HorizontalAlignment="Stretch" DayVisible="False" />
+                    <TextBlock x:Name="ReleaseDateErrorTextBlock" Classes="error caption" />
+
+                    <TextBlock Classes="caption" Text="{l:Translate RottenTomatoesLink}" />
+                    <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" />
+                    <TextBlock x:Name="RottenTomatoesLinkErrorTextBlock" Classes="error caption" />
+
+                    <TextBlock Classes="caption" Text="{l:Translate PosterUrl}" />
+                    <TextBox x:Name="PosterUrlTextBox" HorizontalAlignment="Stretch" />
+                    <TextBlock x:Name="PosterUrlErrorTextBlock" Classes="error caption" />
+
+                    <Grid ColumnDefinitions="*,*">
+                        <Grid.Styles>
+                            <Style Selector="Button">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="8" />
+                            </Style>
+                            <Style Selector="Grid > Button">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="Margin" Value="4 0" />
+                            </Style>
+                            <Style Selector="Button > TextBlock">
+                                <Setter Property="TextAlignment" Value="Center" />
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                            </Style>
+                        </Grid.Styles>
+
+                        <Button x:Name="AddTitleButton" Grid.Column="0">
+                            <TextBlock Text="{l:Translate AddTitle}" />
+                        </Button>
+
+                        <Button x:Name="AddOriginalTitleButton" Grid.Column="1">
+                            <TextBlock Text="{l:Translate AddOriginalTitle}" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </DockPanel>
+        </ScrollViewer>
+
+        <StackPanel x:Name="ActionPanel" Grid.Row="3" Orientation="Horizontal">
+            <Button x:Name="GoToSeriesButton" Content="{l:Translate GoToSeries}" Margin="8" Classes="accent" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel}" Margin="8" />
+        </StackPanel>
+    </Grid>
+</UserControl>

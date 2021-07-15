@@ -165,6 +165,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
   <data name="Cineaste" xml:space="preserve">
     <value>Cineaste</value>
   </data>
@@ -435,6 +438,9 @@
   <data name="GoToFranchise" xml:space="preserve">
     <value>Go to franchise</value>
   </data>
+  <data name="GoToSeries" xml:space="preserve">
+    <value>Go to series</value>
+  </data>
   <data name="HideDisplayNumber" xml:space="preserve">
     <value>Hide display number</value>
   </data>
@@ -551,6 +557,9 @@
   </data>
   <data name="RecentlyOpenedFiles" xml:space="preserve">
     <value>Recently Opened Files</value>
+  </data>
+  <data name="Release" xml:space="preserve">
+    <value>Release</value>
   </data>
   <data name="Released" xml:space="preserve">
     <value>Released</value>

@@ -205,6 +205,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Channel.
+        /// </summary>
+        internal static string Channel {
+            get {
+                return ResourceManager.GetString("Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cineaste.
         /// </summary>
         internal static string Cineaste {
@@ -1015,6 +1024,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to series.
+        /// </summary>
+        internal static string GoToSeries {
+            get {
+                return ResourceManager.GetString("GoToSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide display number.
         /// </summary>
         internal static string HideDisplayNumber {
@@ -1362,6 +1380,15 @@ namespace Cineaste.Properties {
         internal static string RecentlyOpenedFiles {
             get {
                 return ResourceManager.GetString("RecentlyOpenedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release.
+        /// </summary>
+        internal static string Release {
+            get {
+                return ResourceManager.GetString("Release", resourceCulture);
             }
         }
         

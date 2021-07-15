@@ -18,6 +18,10 @@ namespace Cineaste.Core
         public static IObservable<Unit> Discard<T>(this IObservable<T> obserevable) =>
             obserevable.Select(_ => Unit.Default);
 
+        public static IObservable<T> WhereValueNotNull<T>(this IObservable<T?> observable)
+            where T : struct =>
+            observable.Where(value => value.HasValue).Select(value => value!.Value);
+
         public static IObservable<bool> AllTrue(this IObservable<IEnumerable<bool>> observable) =>
             observable.Select(values => values.All(value => value));
 
