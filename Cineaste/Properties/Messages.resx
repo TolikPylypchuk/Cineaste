@@ -135,6 +135,12 @@
   <data name="AddOriginalTitle" xml:space="preserve">
     <value>Add original title</value>
   </data>
+  <data name="AddSeason" xml:space="preserve">
+    <value>Add season</value>
+  </data>
+  <data name="AddSpecialEpisode" xml:space="preserve">
+    <value>Add special episode</value>
+  </data>
   <data name="AddTag" xml:space="preserve">
     <value>Add tag</value>
   </data>
@@ -185,6 +191,9 @@
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
+  </data>
+  <data name="ConvertToMiniseries" xml:space="preserve">
+    <value>Convert to miniseries</value>
   </data>
   <data name="CreateFranchise" xml:space="preserve">
     <value>Create franchise</value>
@@ -546,6 +555,9 @@
   <data name="Released" xml:space="preserve">
     <value>Released</value>
   </data>
+  <data name="ReleaseStatus" xml:space="preserve">
+    <value>Release status</value>
+  </data>
   <data name="RemoveFilter" xml:space="preserve">
     <value>Remove filter</value>
   </data>
@@ -722,6 +734,9 @@
   </data>
   <data name="Watched" xml:space="preserve">
     <value>Watched</value>
+  </data>
+  <data name="WatchStatus" xml:space="preserve">
+    <value>Watch status</value>
   </data>
   <data name="Year" xml:space="preserve">
     <value>Year</value>

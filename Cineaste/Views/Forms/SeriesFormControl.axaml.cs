@@ -13,6 +13,7 @@ using Avalonia.ReactiveUI;
 using Cineaste.Core;
 using Cineaste.Core.ViewModels.Forms;
 using Cineaste.Core.ViewModels.Forms.Preferences;
+using Cineaste.Data.Models;
 
 using DynamicData.Binding;
 
@@ -20,9 +21,9 @@ using ReactiveUI;
 
 namespace Cineaste.Views.Forms
 {
-    public partial class MovieFormControl : ReactiveUserControl<MovieFormViewModel>
+    public partial class SeriesFormControl : ReactiveUserControl<SeriesFormViewModel>
     {
-        public MovieFormControl()
+        public SeriesFormControl()
         {
             this.InitializeComponent();
 
@@ -39,10 +40,12 @@ namespace Cineaste.Views.Forms
                 this.LoadPoster();
 
                 this.BindCommands(disposables);
-                this.BindCheckboxes(disposables);
                 this.BindLinks(disposables);
                 this.BindFields(disposables);
                 this.BindTags(disposables);
+
+                this.OneWayBind(this.ViewModel, vm => vm.Components, v => v.Components.Items)
+                    .DisposeWith(disposables);
 
                 this.AddValidation(disposables);
             });
@@ -57,6 +60,9 @@ namespace Cineaste.Views.Forms
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.Close, v => v.CloseButton)
+                .DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel!, vm => vm.Delete, v => v.DeleteButton)
                 .DisposeWith(disposables);
 
             this.BindCommand(this.ViewModel!, vm => vm.GoToFranchise, v => v.GoToFranchiseButton)
@@ -94,9 +100,6 @@ namespace Cineaste.Views.Forms
                 .BindTo(this, v => v.CreateFranchiseButton.IsVisible)
                 .DisposeWith(disposables);
 
-            this.BindCommand(this.ViewModel!, vm => vm.Delete, v => v.DeleteButton)
-                .DisposeWith(disposables);
-
             this.ViewModel!.Delete.CanExecute
                 .BindTo(this, v => v.DeleteButton.IsVisible)
                 .DisposeWith(disposables);
@@ -115,6 +118,19 @@ namespace Cineaste.Views.Forms
                 .BindTo(this, v => v.AddOriginalTitleButton.IsVisible)
                 .DisposeWith(disposables);
 
+            this.BindCommand(this.ViewModel!, vm => vm.AddSeason, v => v.AddSeasonButton)
+                .DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel!, vm => vm.AddSpecialEpisode, v => v.AddSpecialEpisodeButton)
+                .DisposeWith(disposables);
+
+            this.BindCommand(this.ViewModel!, vm => vm.ConvertToMiniseries, v => v.ConvertToMiniseriesButton)
+                .DisposeWith(disposables);
+
+            this.ViewModel!.ConvertToMiniseries.CanExecute
+                .BindTo(this, v => v.ConvertToMiniseriesButton.IsVisible)
+                .DisposeWith(disposables);
+
             Observable.CombineLatest(this.ViewModel!.Save.CanExecute, this.ViewModel!.Cancel.CanExecute)
                 .AnyTrue()
                 .BindTo(this, v => v.ActionPanel.IsVisible)
@@ -122,25 +138,6 @@ namespace Cineaste.Views.Forms
 
             this.ViewModel!.Save
                 .Subscribe(_ => this.LoadPoster())
-                .DisposeWith(disposables);
-        }
-
-        private void BindCheckboxes(CompositeDisposable disposables)
-        {
-            this.Bind(this.ViewModel, vm => vm.IsWatched, v => v.IsWatchedCheckBox.IsChecked)
-                .DisposeWith(disposables);
-
-            this.Bind(this.ViewModel, vm => vm.IsReleased, v => v.IsReleasedCheckBox.IsChecked)
-                .DisposeWith(disposables);
-
-            this.WhenAnyValue(v => v.ViewModel!.Year)
-                .Select(year => year <= DateTime.Now.Year)
-                .BindTo(this, v => v.IsWatchedCheckBox.IsEnabled)
-                .DisposeWith(disposables);
-
-            this.WhenAnyValue(v => v.ViewModel!.Year)
-                .Select(year => year == DateTime.Now.Year)
-                .BindTo(this, v => v.IsReleasedCheckBox.IsEnabled)
                 .DisposeWith(disposables);
         }
 
@@ -173,7 +170,14 @@ namespace Cineaste.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.Items)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Value)
+            this.WatchStatusComboBox.SetEnumValues<SeriesWatchStatus>();
+
+            this.Bind(this.ViewModel, vm => vm.WatchStatus, v => v.WatchStatusComboBox.SelectedItem)
+                .DisposeWith(disposables);
+
+            this.ReleaseStatusComboBox.SetEnumValues<SeriesReleaseStatus>();
+
+            this.Bind(this.ViewModel, vm => vm.ReleaseStatus, v => v.ReleaseStatusComboBox.SelectedItem)
                 .DisposeWith(disposables);
 
             this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.KindComboBox.Items)
@@ -223,9 +227,6 @@ namespace Cineaste.Views.Forms
 
         private void AddValidation(CompositeDisposable disposables)
         {
-            this.BindDefaultValidation(this.ViewModel, vm => vm.Year, v => v.YearErrorTextBlock.Text)
-                .DisposeWith(disposables);
-
             this.BindDefaultValidation(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLinkErrorTextBlock.Text)
                 .DisposeWith(disposables);
 

@@ -115,6 +115,24 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add season.
+        /// </summary>
+        internal static string AddSeason {
+            get {
+                return ResourceManager.GetString("AddSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add special episode.
+        /// </summary>
+        internal static string AddSpecialEpisode {
+            get {
+                return ResourceManager.GetString("AddSpecialEpisode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add tag.
         /// </summary>
         internal static string AddTag {
@@ -264,6 +282,15 @@ namespace Cineaste.Properties {
         internal static string Confirm {
             get {
                 return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert to miniseries.
+        /// </summary>
+        internal static string ConvertToMiniseries {
+            get {
+                return ResourceManager.GetString("ConvertToMiniseries", resourceCulture);
             }
         }
         
@@ -1348,6 +1375,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Release status.
+        /// </summary>
+        internal static string ReleaseStatus {
+            get {
+                return ResourceManager.GetString("ReleaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove filter.
         /// </summary>
         internal static string RemoveFilter {
@@ -1875,6 +1911,15 @@ namespace Cineaste.Properties {
         internal static string Watched {
             get {
                 return ResourceManager.GetString("Watched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch status.
+        /// </summary>
+        internal static string WatchStatus {
+            get {
+                return ResourceManager.GetString("WatchStatus", resourceCulture);
             }
         }
         

@@ -16,7 +16,6 @@ using DynamicData;
 using DynamicData.Binding;
 
 using ReactiveUI;
-using ReactiveUI.Validation.Extensions;
 
 namespace Cineaste.Views.Forms
 {
