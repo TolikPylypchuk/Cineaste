@@ -6,7 +6,6 @@ using Cineaste.Core.ViewModels.Forms;
 using Cineaste.Properties;
 
 using ReactiveUI;
-using ReactiveUI.Validation.Extensions;
 
 namespace Cineaste.Views.Forms
 {
@@ -25,7 +24,7 @@ namespace Cineaste.Views.Forms
                 this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
                     .DisposeWith(disposables);
 
-                this.BindValidation(this.ViewModel, vm => vm.Name, v => v.ErrorTextBlock.Text)
+                this.BindDefaultValidation(this.ViewModel, vm => vm.Name, v => v.ErrorTextBlock)
                     .DisposeWith(disposables);
 
                 this.CaptionTextBlock.Text =

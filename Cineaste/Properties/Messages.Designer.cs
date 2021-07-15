@@ -223,6 +223,42 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are unsaved changes. Are you sure you want to close the file?.
+        /// </summary>
+        internal static string CloseFileQuestion {
+            get {
+                return ResourceManager.GetString("CloseFileQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close File.
+        /// </summary>
+        internal static string CloseFileTitle {
+            get {
+                return ResourceManager.GetString("CloseFileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are unsaved changes. Are you sure you want to close the form?.
+        /// </summary>
+        internal static string CloseFormQuestion {
+            get {
+                return ResourceManager.GetString("CloseFormQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Form.
+        /// </summary>
+        internal static string CloseFormTitle {
+            get {
+                return ResourceManager.GetString("CloseFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         internal static string Confirm {
