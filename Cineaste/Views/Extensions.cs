@@ -22,26 +22,23 @@ namespace Cineaste.Views
 {
     public static class Extensions
     {
-        private static readonly MemberInfo TextProperty =
-            typeof(TextBlock).GetProperty(nameof(TextBlock.Text))!;
-
         public static IDisposable BindDefaultValidation<TView, TViewModel, T>(
             this TView view,
             TViewModel? viewModel,
             Expression<Func<TViewModel, T?>> prop,
-            Expression<Func<TView, TextBlock>> errorTextBlock)
+            Expression<Func<TView, string?>> errorText)
             where TView : class, IViewFor<TViewModel>
             where TViewModel : class, IReactiveObject, IValidatableViewModel
         {
             var subscriptions = new CompositeDisposable();
 
-            view.BindValidation(viewModel, prop, errorTextBlock.WithProperty<TView, TextBlock, string>(TextProperty))
+            view.BindValidation(viewModel, prop, errorText)
                 .DisposeWith(subscriptions);
 
             view.WhenAnyValue(prop.PrependProperty<TViewModel, TView, T>(nameof(IViewFor.ViewModel)))
                 .Take(1)
                 .Select(_ => String.Empty)
-                .BindTo(view, errorTextBlock.WithProperty<TView, TextBlock, string?>(TextProperty))
+                .BindTo(view, errorText)
                 .DisposeWith(subscriptions);
 
             return subscriptions;
@@ -59,14 +56,6 @@ namespace Cineaste.Views
 
         public static IBitmap? AsImage([AllowNull] this byte[] imageData) =>
             imageData == null || imageData.Length == 0 ? null : new Bitmap(new MemoryStream(imageData));
-
-        private static Expression<Func<TParam, TResult>> WithProperty<TParam, TType, TResult>(
-            this Expression<Func<TParam, TType>> expr,
-            MemberInfo prop)
-        {
-            var body = Expression.MakeMemberAccess(expr.Body, prop);
-            return Expression.Lambda<Func<TParam, TResult>>(body, expr.Parameters);
-        }
 
         private static Expression<Func<TNewParam, T?>> PrependProperty<TParam, TNewParam, T>(
             this Expression<Func<TParam, T?>> originalExpression,

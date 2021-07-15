@@ -225,17 +225,17 @@ namespace Cineaste.Views.Forms
 
         private void AddValidation(CompositeDisposable disposables)
         {
-            this.BindDefaultValidation(this.ViewModel, vm => vm.Year, v => v.YearErrorTextBlock)
+            this.BindDefaultValidation(this.ViewModel, vm => vm.Year, v => v.YearErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLinkErrorTextBlock)
+            this.BindDefaultValidation(this.ViewModel, vm => vm.ImdbLink, v => v.ImdbLinkErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
             this.BindDefaultValidation(
-                this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkErrorTextBlock)
+                this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlErrorTextBlock)
+            this.BindDefaultValidation(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlErrorTextBlock.Text)
                 .DisposeWith(disposables);
         }
 

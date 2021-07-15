@@ -220,7 +220,7 @@ namespace Cineaste.Views.Forms
         }
 
         private void AddValidation(CompositeDisposable disposables) =>
-            this.BindDefaultValidation(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlErrorTextBlock)
+            this.BindDefaultValidation(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
         private void LoadPoster()

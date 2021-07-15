@@ -24,7 +24,7 @@ namespace Cineaste.Views.Forms
                 this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
                     .DisposeWith(disposables);
 
-                this.BindDefaultValidation(this.ViewModel, vm => vm.Name, v => v.ErrorTextBlock)
+                this.BindDefaultValidation(this.ViewModel, vm => vm.Name, v => v.ErrorTextBlock.Text)
                     .DisposeWith(disposables);
 
                 this.CaptionTextBlock.Text =
