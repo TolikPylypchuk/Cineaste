@@ -115,6 +115,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add period.
+        /// </summary>
+        internal static string AddPeriod {
+            get {
+                return ResourceManager.GetString("AddPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add season.
         /// </summary>
         internal static string AddSeason {
@@ -489,6 +498,15 @@ namespace Cineaste.Properties {
         internal static string Documentary {
             get {
                 return ResourceManager.GetString("Documentary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End.
+        /// </summary>
+        internal static string End {
+            get {
+                return ResourceManager.GetString("End", resourceCulture);
             }
         }
         
@@ -1294,6 +1312,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of episodes.
+        /// </summary>
+        internal static string NumberOfEpisodes {
+            get {
+                return ResourceManager.GetString("NumberOfEpisodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string OK {
@@ -1708,6 +1735,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Single-day release.
+        /// </summary>
+        internal static string SingleDayRelease {
+            get {
+                return ResourceManager.GetString("SingleDayRelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sort.
         /// </summary>
         internal static string Sort {
@@ -1722,6 +1758,15 @@ namespace Cineaste.Properties {
         internal static string Sorting {
             get {
                 return ResourceManager.GetString("Sorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        internal static string Start {
+            get {
+                return ResourceManager.GetString("Start", resourceCulture);
             }
         }
         

@@ -33,8 +33,32 @@ namespace Cineaste.Views
 
             view.BindValidation(viewModel, prop, errorText)
                 .DisposeWith(subscriptions);
-
+            
             view.WhenAnyValue(prop.PrependProperty<TViewModel, TView, T>(nameof(IViewFor.ViewModel)))
+                .Take(1)
+                .Select(_ => String.Empty)
+                .BindTo(view, errorText)
+                .DisposeWith(subscriptions);
+
+            return subscriptions;
+        }
+
+        public static IDisposable BindDefaultValidation<TView, TViewModel>(
+            this TView view,
+            TViewModel? viewModel,
+            Expression<Func<TView, string?>> errorText)
+            where TView : class, IViewFor<TViewModel>
+            where TViewModel : class, IReactiveObject, IValidatableViewModel
+        {
+            var subscriptions = new CompositeDisposable();
+
+            view.BindValidation(viewModel, errorText)
+                .DisposeWith(subscriptions);
+
+            var param = Expression.Parameter(typeof(TView));
+            var vm = Expression.MakeMemberAccess(param, typeof(TView).GetProperty(nameof(IViewFor.ViewModel))!);
+
+            view.WhenAnyValue(Expression.Lambda<Func<TView, TViewModel>>(vm, param)!)
                 .Take(1)
                 .Select(_ => String.Empty)
                 .BindTo(view, errorText)

@@ -219,7 +219,7 @@ namespace Cineaste.Core.ViewModels.Forms
                 .ThenByDescending(period => period.EndYear)
                 .ThenByDescending(period => period.EndMonth)
                 .First()
-                .EndYear;
+                .EndYear + 1;
 
             this.periodsSource.Add(new Period
             {

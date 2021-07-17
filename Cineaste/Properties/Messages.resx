@@ -135,6 +135,9 @@
   <data name="AddOriginalTitle" xml:space="preserve">
     <value>Add original title</value>
   </data>
+  <data name="AddPeriod" xml:space="preserve">
+    <value>Add period</value>
+  </data>
   <data name="AddSeason" xml:space="preserve">
     <value>Add season</value>
   </data>
@@ -260,6 +263,9 @@
   </data>
   <data name="Documentary" xml:space="preserve">
     <value>Documentary</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>End</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
@@ -528,6 +534,9 @@
   <data name="NumberHeader" xml:space="preserve">
     <value>#</value>
   </data>
+  <data name="NumberOfEpisodes" xml:space="preserve">
+    <value>Number of episodes</value>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
@@ -666,11 +675,17 @@
   <data name="ShowDisplayNumber" xml:space="preserve">
     <value>Show display number</value>
   </data>
+  <data name="SingleDayRelease" xml:space="preserve">
+    <value>Single-day release</value>
+  </data>
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
   </data>
   <data name="Sorting" xml:space="preserve">
     <value>Sorting</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
   </data>
   <data name="StopSearch" xml:space="preserve">
     <value>Stop search</value>

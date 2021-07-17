@@ -144,7 +144,9 @@ namespace Cineaste.Views.Forms
         private void BindLinks(CompositeDisposable disposables)
         {
             this.ImdbLinkButton.GetObservable(Button.ClickEvent)
-                .Subscribe(_ => new Uri(this.ViewModel!.ImdbLink).OpenInBrowser())
+                .Select(_ => this.ViewModel!.ImdbLink)
+                .WhereNotNull()
+                .Subscribe(link => new Uri(link).OpenInBrowser())
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.ImdbLink)
@@ -153,7 +155,9 @@ namespace Cineaste.Views.Forms
                 .DisposeWith(disposables);
 
             this.RottenTomatoesLinkButton.GetObservable(Button.ClickEvent)
-                .Subscribe(_ => new Uri(this.ViewModel!.RottenTomatoesLink).OpenInBrowser())
+                .Select(_ => this.ViewModel!.RottenTomatoesLink)
+                .WhereNotNull()
+                .Subscribe(link => new Uri(link).OpenInBrowser())
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.RottenTomatoesLink)
