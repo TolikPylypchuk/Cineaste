@@ -313,6 +313,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert to series.
+        /// </summary>
+        internal static string ConvertToSeries {
+            get {
+                return ResourceManager.GetString("ConvertToSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create franchise.
         /// </summary>
         internal static string CreateFranchise {

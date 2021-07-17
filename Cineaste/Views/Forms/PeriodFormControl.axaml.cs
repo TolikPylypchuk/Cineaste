@@ -126,7 +126,7 @@ namespace Cineaste.Views.Forms
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.ShowPosterUrl)
-                .BindTo(this, v => v.PosterUrlTextBox.IsVisible)
+                .BindTo(this, v => v.PosterUrlGrid.IsVisible)
                 .DisposeWith(disposables);
         }
 

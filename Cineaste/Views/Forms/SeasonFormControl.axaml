@@ -38,11 +38,13 @@
                     <Image x:Name="Poster" />
 
                     <DockPanel x:Name="SwitchPosterPanel" HorizontalAlignment="Stretch">
-                        <Button x:Name="SwitchToPreviousPosterButton" Classes="icon" DockPanel.Dock="Left" Width="25"
-                                Height="25" HorizontalAlignment="Left" i:Attached.Icon="fas fa-chevron-left" />
+                        <Button x:Name="SwitchToPreviousPosterButton" Classes="icon" DockPanel.Dock="Left"
+                                Width="25" Height="25" HorizontalAlignment="Left" Margin="0 4"
+                                i:Attached.Icon="fas fa-chevron-left" />
 
-                        <Button x:Name="SwitchToNextPosterButton" Classes="icon" DockPanel.Dock="Right" Width="25"
-                                Height="25" HorizontalAlignment="Right" i:Attached.Icon="fas fa-chevron-right" />
+                        <Button x:Name="SwitchToNextPosterButton" Classes="icon" DockPanel.Dock="Right"
+                                Width="25" Height="25" HorizontalAlignment="Right" Margin="0 4"
+                                i:Attached.Icon="fas fa-chevron-right" />
                     </DockPanel>
 
                     <ItemsControl x:Name="Titles" />

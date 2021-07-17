@@ -41,7 +41,7 @@
         <TextBox x:Name="RottenTomatoesLinkTextBox" HorizontalAlignment="Stretch" />
         <TextBlock x:Name="RottenTomatoesLinkErrorTextBlock" Classes="error caption" />
 
-        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+        <Grid x:Name="PosterUrlGrid" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
             <TextBlock Grid.Row="0" Grid.Column="0" Classes="caption" Text="{l:Translate PosterUrl}" />
             <TextBox x:Name="PosterUrlTextBox" Grid.Row="1" Grid.Column="0" />
             <TextBlock x:Name="PosterUrlErrorTextBlock" Grid.Row="2" Grid.Column="0" Classes="error caption" />

@@ -201,6 +201,9 @@
   <data name="ConvertToMiniseries" xml:space="preserve">
     <value>Convert to miniseries</value>
   </data>
+  <data name="ConvertToSeries" xml:space="preserve">
+    <value>Convert to series</value>
+  </data>
   <data name="CreateFranchise" xml:space="preserve">
     <value>Create franchise</value>
   </data>
