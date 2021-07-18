@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:c="using:Cineaste.Controls"
+             xmlns:l="using:Cineaste.Localization"
+             xmlns:vm="using:Cineaste.Core.ViewModels.Forms.Preferences"
+             mc:Ignorable="d" d:DesignWidth="120" d:DesignHeight="90"
+             x:Class="Cineaste.Views.Forms.Preferences.KindFormControl">
+    <StackPanel Margin="0 0 16 4">
+        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch" Margin="0 0 0 4">
+            <TextBlock Grid.Row="0" Grid.Column="0" Classes="caption" Text="{l:Translate KindName}" />
+            <TextBox Grid.Row="1" Grid.Column="0" x:Name="NameTextBox" />
+            <TextBlock x:Name="NameErrorTextBlock" Grid.Row="2" Grid.Column="0" Classes="error caption" />
+
+            <Button x:Name="DeleteButton" Grid.Row="1" Grid.Column="1" Classes="icon" VerticalAlignment="Center"
+                    Width="20" Height="20" i:Attached.Icon="fas fa-times" />
+        </Grid>
+
+        <StackPanel Orientation="Horizontal">
+            <StackPanel>
+                <c:Chip x:Name="WatchedMovieChip" Text="{l:Translate ColorForWatchedMovies}" />
+                <c:Chip x:Name="NotWatchedMovieChip" Text="{l:Translate ColorForNotWatchedMovies}" />
+                <c:Chip x:Name="NotReleasedMovieChip" Text="{l:Translate ColorForNotReleasedMovies}" />
+            </StackPanel>
+
+            <StackPanel>
+                <c:Chip x:Name="WatchedSeriesChip" Text="{l:Translate ColorForWatchedSeries}" />
+                <c:Chip x:Name="NotWatchedSeriesChip" Text="{l:Translate ColorForNotWatchedSeries}" />
+                <c:Chip x:Name="NotReleasedSeriesChip" Text="{l:Translate ColorForNotReleasedSeries}" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

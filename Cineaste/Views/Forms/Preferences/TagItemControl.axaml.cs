@@ -7,6 +7,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
 
+using Cineaste.Controls;
 using Cineaste.Core;
 using Cineaste.Core.ViewModels.Forms.Preferences;
 
@@ -26,10 +27,10 @@ namespace Cineaste.Views.Forms.Preferences
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.OneWayBind(this.ViewModel, vm => vm.Name, v => v.TextBlock.Text)
+                this.OneWayBind(this.ViewModel, vm => vm.Name, v => v.TagChip.Text)
                     .DisposeWith(disposables);
 
-                this.OneWayBind(this.ViewModel, vm => vm.Color, v => v.ColorTagBorder.Background)
+                this.OneWayBind(this.ViewModel, vm => vm.Color, v => v.TagChip.TagBrush)
                     .DisposeWith(disposables);
 
                 Observable.CombineLatest(
@@ -51,10 +52,10 @@ namespace Cineaste.Views.Forms.Preferences
                     this.Cursor = Cursor.Parse(nameof(StandardCursorType.Hand));
                 }
 
-                this.DeleteButton.GetObservable(Button.ClickEvent)
-                        .Discard()
-                        .InvokeCommand(this.ViewModel.Delete)
-                        .DisposeWith(disposables);
+                this.TagChip.GetObservable(Chip.DeletedEvent)
+                    .Discard()
+                    .InvokeCommand(this.ViewModel.Delete)
+                    .DisposeWith(disposables);
             });
         }
     }

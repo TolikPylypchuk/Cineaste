@@ -11,20 +11,5 @@
         <vm:TagItemViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0 4 4 4">
-        <Border CornerRadius="16" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
-                Grid.ColumnSpan="3" />
-
-        <Border x:Name="ColorTagBorder" VerticalAlignment="Center" Height="32" Width="32">
-            <Border.Clip>
-                <EllipseGeometry RadiusX="16" RadiusY="16" Center="16,16" />
-            </Border.Clip>
-        </Border>
-
-        <TextBlock x:Name="TextBlock" Grid.Column="1" VerticalAlignment="Center" Margin="8 0 12 0" />
-
-        <Button x:Name="DeleteButton" Grid.Column="2" Margin="0 0 4 0"
-                Classes="icon" VerticalAlignment="Center" Width="20" Height="20"
-                i:Attached.Icon="far fa-times-circle" />
-    </Grid>
+    <c:Chip x:Name="TagChip" IsDeletable="True" Margin="0 4 4 4" />
 </UserControl>

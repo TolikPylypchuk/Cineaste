@@ -295,6 +295,87 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color for not released movies.
+        /// </summary>
+        internal static string ColorForNotReleasedMovies {
+            get {
+                return ResourceManager.GetString("ColorForNotReleasedMovies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for not released series.
+        /// </summary>
+        internal static string ColorForNotReleasedSeries {
+            get {
+                return ResourceManager.GetString("ColorForNotReleasedSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for not watched movies.
+        /// </summary>
+        internal static string ColorForNotWatchedMovies {
+            get {
+                return ResourceManager.GetString("ColorForNotWatchedMovies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for not watched series.
+        /// </summary>
+        internal static string ColorForNotWatchedSeries {
+            get {
+                return ResourceManager.GetString("ColorForNotWatchedSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for watched movies.
+        /// </summary>
+        internal static string ColorForWatchedMovies {
+            get {
+                return ResourceManager.GetString("ColorForWatchedMovies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color for watched series.
+        /// </summary>
+        internal static string ColorForWatchedSeries {
+            get {
+                return ResourceManager.GetString("ColorForWatchedSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color ARGB value.
+        /// </summary>
+        internal static string ColorHexValue {
+            get {
+                return ResourceManager.GetString("ColorHexValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a color or enter its ARGB value.
+        /// </summary>
+        internal static string ColorPickerMessage {
+            get {
+                return ResourceManager.GetString("ColorPickerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick the color.
+        /// </summary>
+        internal static string ColorPickerTitle {
+            get {
+                return ResourceManager.GetString("ColorPickerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         internal static string Confirm {
@@ -1101,6 +1182,15 @@ namespace Cineaste.Properties {
         internal static string Kind {
             get {
                 return ResourceManager.GetString("Kind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string KindName {
+            get {
+                return ResourceManager.GetString("KindName", resourceCulture);
             }
         }
         

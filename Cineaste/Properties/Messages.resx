@@ -195,6 +195,33 @@
   <data name="CloseFormTitle" xml:space="preserve">
     <value>Close Form</value>
   </data>
+  <data name="ColorForNotReleasedMovies" xml:space="preserve">
+    <value>Color for not released movies</value>
+  </data>
+  <data name="ColorForNotReleasedSeries" xml:space="preserve">
+    <value>Color for not released series</value>
+  </data>
+  <data name="ColorForNotWatchedMovies" xml:space="preserve">
+    <value>Color for not watched movies</value>
+  </data>
+  <data name="ColorForNotWatchedSeries" xml:space="preserve">
+    <value>Color for not watched series</value>
+  </data>
+  <data name="ColorForWatchedMovies" xml:space="preserve">
+    <value>Color for watched movies</value>
+  </data>
+  <data name="ColorForWatchedSeries" xml:space="preserve">
+    <value>Color for watched series</value>
+  </data>
+  <data name="ColorHexValue" xml:space="preserve">
+    <value>Color ARGB value</value>
+  </data>
+  <data name="ColorPickerMessage" xml:space="preserve">
+    <value>Select a color or enter its ARGB value</value>
+  </data>
+  <data name="ColorPickerTitle" xml:space="preserve">
+    <value>Pick the color</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
@@ -464,6 +491,9 @@
   </data>
   <data name="Kind" xml:space="preserve">
     <value>Kind</value>
+  </data>
+  <data name="KindName" xml:space="preserve">
+    <value>Name</value>
   </data>
   <data name="ListSortDirectionAscending" xml:space="preserve">
     <value>Ascending</value>
