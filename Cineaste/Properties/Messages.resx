@@ -243,6 +243,21 @@
   <data name="DefaultDefaultSeasonTitle" xml:space="preserve">
     <value>Season #</value>
   </data>
+  <data name="DefaultFirstSorting" xml:space="preserve">
+    <value>Default first sorting</value>
+  </data>
+  <data name="DefaultSeasonOriginalTitle" xml:space="preserve">
+    <value>Default season original title</value>
+  </data>
+  <data name="DefaultSeasonTitle" xml:space="preserve">
+    <value>Default season title</value>
+  </data>
+  <data name="DefaultSeasonTitleHint" xml:space="preserve">
+    <value>Use the # character in default season titles as a substitute for the actual season number</value>
+  </data>
+  <data name="DefaultSecondSorting" xml:space="preserve">
+    <value>Default second sorting</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -495,6 +510,15 @@
   <data name="KindName" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="Kinds" xml:space="preserve">
+    <value>Kinds</value>
+  </data>
+  <data name="ListName" xml:space="preserve">
+    <value>List name</value>
+  </data>
+  <data name="ListNameHint" xml:space="preserve">
+    <value>The list name can be different from the actual file name</value>
+  </data>
   <data name="ListSortDirectionAscending" xml:space="preserve">
     <value>Ascending</value>
   </data>
@@ -726,11 +750,20 @@
   <data name="String" xml:space="preserve">
     <value>This will detach all entries without deleting them.</value>
   </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>
   </data>
   <data name="TitleHeader" xml:space="preserve">
     <value>Title</value>
+  </data>
+  <data name="TitleLanguage" xml:space="preserve">
+    <value>Title language</value>
+  </data>
+  <data name="TitleLanguageHint" xml:space="preserve">
+    <value>The title language is used for sorting titles</value>
   </data>
   <data name="ValidationCategoryEmpty" xml:space="preserve">
     <value>The category must not be empty</value>

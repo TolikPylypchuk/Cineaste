@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
 
@@ -44,12 +43,12 @@ namespace Cineaste.Views.Forms.Preferences
 
                 if (this.ViewModel!.CanSelect)
                 {
-                    this.GetObservable(PointerReleasedEvent)
-                        .Discard()
-                        .InvokeCommand(this.ViewModel.Select)
-                        .DisposeWith(disposables);
+                    this.TagChip.IsClickable = true;
 
-                    this.Cursor = Cursor.Parse(nameof(StandardCursorType.Hand));
+                    this.TagChip.GetObservable(Chip.ClickEvent)
+                        .Discard()
+                        .InvokeCommand(this.ViewModel!.Select)
+                        .DisposeWith(disposables);
                 }
 
                 this.TagChip.GetObservable(Chip.DeletedEvent)

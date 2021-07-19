@@ -439,6 +439,51 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default first sorting.
+        /// </summary>
+        internal static string DefaultFirstSorting {
+            get {
+                return ResourceManager.GetString("DefaultFirstSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default season original title.
+        /// </summary>
+        internal static string DefaultSeasonOriginalTitle {
+            get {
+                return ResourceManager.GetString("DefaultSeasonOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default season title.
+        /// </summary>
+        internal static string DefaultSeasonTitle {
+            get {
+                return ResourceManager.GetString("DefaultSeasonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the # character in default season titles as a substitute for the actual season number.
+        /// </summary>
+        internal static string DefaultSeasonTitleHint {
+            get {
+                return ResourceManager.GetString("DefaultSeasonTitleHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default second sorting.
+        /// </summary>
+        internal static string DefaultSecondSorting {
+            get {
+                return ResourceManager.GetString("DefaultSecondSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         internal static string Delete {
@@ -1195,6 +1240,33 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kinds.
+        /// </summary>
+        internal static string Kinds {
+            get {
+                return ResourceManager.GetString("Kinds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List name.
+        /// </summary>
+        internal static string ListName {
+            get {
+                return ResourceManager.GetString("ListName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The list name can be different from the actual file name.
+        /// </summary>
+        internal static string ListNameHint {
+            get {
+                return ResourceManager.GetString("ListNameHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ascending.
         /// </summary>
         internal static string ListSortDirectionAscending {
@@ -1888,6 +1960,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        internal static string Tags {
+            get {
+                return ResourceManager.GetString("Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         internal static string Title {
@@ -1902,6 +1983,24 @@ namespace Cineaste.Properties {
         internal static string TitleHeader {
             get {
                 return ResourceManager.GetString("TitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title language.
+        /// </summary>
+        internal static string TitleLanguage {
+            get {
+                return ResourceManager.GetString("TitleLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title language is used for sorting titles.
+        /// </summary>
+        internal static string TitleLanguageHint {
+            get {
+                return ResourceManager.GetString("TitleLanguageHint", resourceCulture);
             }
         }
         

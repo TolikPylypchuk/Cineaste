@@ -29,6 +29,7 @@ namespace Cineaste.Views
 
                 this.WhenAnyValue(v => v.ViewModel!.Content)
                     .WhereNotNull()
+                    .DistinctUntilChanged()
                     .Subscribe(content =>
                     {
                         var selectedItem = content switch
@@ -47,7 +48,6 @@ namespace Cineaste.Views
                     .DisposeWith(disposables);
 
                 this.Sidebar.GetObservable(SelectingItemsControl.SelectedItemProperty)
-                    .SkipUntil(this.ViewModel!.IsInitialized.Where(isInitialized => isInitialized))
                     .WhereNotNull()
                     .OfType<TabItem>()
                     .Select(item => item == this.ListItem

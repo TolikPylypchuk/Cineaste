@@ -8,17 +8,28 @@
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms.Preferences"
              mc:Ignorable="d" d:DesignWidth="120" d:DesignHeight="90"
              x:Class="Cineaste.Views.Forms.Preferences.KindFormControl">
+    <Design.DataContext>
+        <vm:KindFormViewModel />
+    </Design.DataContext>
+
     <StackPanel Margin="0 0 16 4">
-        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch" Margin="0 0 0 4">
+        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch" Margin="8 0 0 4">
             <TextBlock Grid.Row="0" Grid.Column="0" Classes="caption" Text="{l:Translate KindName}" />
             <TextBox Grid.Row="1" Grid.Column="0" x:Name="NameTextBox" />
             <TextBlock x:Name="NameErrorTextBlock" Grid.Row="2" Grid.Column="0" Classes="error caption" />
 
             <Button x:Name="DeleteButton" Grid.Row="1" Grid.Column="1" Classes="icon" VerticalAlignment="Center"
-                    Width="20" Height="20" i:Attached.Icon="fas fa-times" />
+                    Width="20" Height="20" Margin="8 0 0 0" i:Attached.Icon="fas fa-times" />
         </Grid>
 
         <StackPanel Orientation="Horizontal">
+            <StackPanel.Styles>
+                <Style Selector="c|Chip">
+                    <Setter Property="Margin" Value="8 4 0 4" />
+                    <Setter Property="IsClickable" Value="True" />
+                </Style>
+            </StackPanel.Styles>
+
             <StackPanel>
                 <c:Chip x:Name="WatchedMovieChip" Text="{l:Translate ColorForWatchedMovies}" />
                 <c:Chip x:Name="NotWatchedMovieChip" Text="{l:Translate ColorForNotWatchedMovies}" />

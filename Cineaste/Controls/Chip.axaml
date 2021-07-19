@@ -16,7 +16,7 @@
             </Border.Clip>
         </Border>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Text}"
+        <TextBlock x:Name="TextBlock" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Text}"
                    Margin="8 0 12 0" Foreground="{Binding Path=Foreground}" />
 
         <Button x:Name="DeleteButton" Grid.Row="0" Grid.Column="2" Margin="0 0 4 0" Classes="icon"
