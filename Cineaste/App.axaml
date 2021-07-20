@@ -9,6 +9,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Resources/FluentIcons.axaml" />
                 <ResourceInclude Source="/Resources/Resources.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

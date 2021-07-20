@@ -32,9 +32,6 @@ using Cineaste.Properties;
 using Cineaste.Validation;
 using Cineaste.Views;
 
-using Projektanker.Icons.Avalonia;
-using Projektanker.Icons.Avalonia.FontAwesome;
-
 using ReactiveUI;
 using ReactiveUI.Validation.Formatters.Abstractions;
 
@@ -94,8 +91,6 @@ namespace Cineaste
         {
             this.ConfigureLocator();
             this.ConfigureSuspensionDriver(desktop);
-
-            IconProvider.Register<FontAwesomeIconProvider>();
 
             TransitioningContentControl.PageTransitionProperty.OverrideDefaultValue(typeof(ViewModelViewHost), null);
 

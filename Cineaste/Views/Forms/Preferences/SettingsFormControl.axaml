@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms.Preferences"
              mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="750"
@@ -75,8 +75,8 @@
                                 <Setter Property="HorizontalAlignment" Value="Left" />
                                 <Setter Property="Foreground" Value="Gray" />
                             </Style>
-                            <Style Selector="i|Icon">
-                                <Setter Property="Value" Value="fas fa-info-circle" />
+                            <Style Selector="c|FluentIcon">
+                                <Setter Property="Icon" Value="{DynamicResource Icon.Info}" />
                                 <Setter Property="Width" Value="10" />
                                 <Setter Property="Height" Value="10" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -89,17 +89,17 @@
                         </StackPanel.Styles>
 
                         <StackPanel>
-                            <i:Icon />
+                            <c:FluentIcon />
                             <TextBlock Text="{l:Translate ListNameHint}" />
                         </StackPanel>
 
                         <StackPanel>
-                            <i:Icon />
+                            <c:FluentIcon />
                             <TextBlock Text="{l:Translate TitleLanguageHint}" />
                         </StackPanel>
 
                         <StackPanel>
-                            <i:Icon />
+                            <c:FluentIcon />
                             <TextBlock Text="{l:Translate DefaultSeasonTitleHint}" />
                         </StackPanel>
                     </StackPanel>
@@ -121,8 +121,8 @@
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
 
-                        <Style Selector="i|Icon.plus">
-                            <Setter Property="Value" Value="fas fa-plus-circle" />
+                        <Style Selector="c|FluentIcon.add">
+                            <Setter Property="Icon" Value="{DynamicResource Icon.AddCircle}" />
                             <Setter Property="Margin" Value="0" />
                             <Setter Property="Width" Value="30" />
                             <Setter Property="Height" Value="30" />
@@ -132,7 +132,7 @@
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="{l:Translate Kinds}" Classes="title" />
 
                     <Button x:Name="AddKindButton" Grid.Row="0" Grid.Column="1" Classes="icon plus">
-                        <i:Icon Classes="plus" />
+                        <c:FluentIcon Classes="add" />
                     </Button>
 
                     <ItemsControl x:Name="Kinds" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 8">
@@ -146,7 +146,7 @@
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="{l:Translate Tags}" Classes="title" />
 
                     <Button x:Name="AddTagButton" Grid.Row="2" Grid.Column="1" Classes="icon plus">
-                        <i:Icon Classes="plus" />
+                        <c:FluentIcon Classes="add" />
                     </Button>
 
                     <ItemsControl x:Name="Tags" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">

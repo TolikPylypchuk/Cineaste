@@ -33,8 +33,8 @@ namespace Cineaste.Controls
 
         public Chip()
         {
-            this.InitializeComponent();
             this.DataContext = this;
+            this.InitializeComponent();
 
             this.MainBorder.GetObservable(PointerReleasedEvent)
                 .Where(_ => this.IsClickable)

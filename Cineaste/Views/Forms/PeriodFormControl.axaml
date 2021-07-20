@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
@@ -47,7 +47,9 @@
             <TextBlock x:Name="PosterUrlErrorTextBlock" Grid.Row="2" Grid.Column="0" Classes="error caption" />
 
             <Button x:Name="DeleteButton" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="20" Height="20"
-                    Margin="8 0 0 0" Classes="icon" i:Attached.Icon="fas fa-times" />
+                    Margin="8 0 0 0" Classes="icon">
+                <c:FluentIcon Icon="{DynamicResource Icon.Dismiss}" />
+            </Button>
         </Grid>
 
         <TextBlock x:Name="InvalidFormTextBlock" Classes="error" Margin="0 4" />

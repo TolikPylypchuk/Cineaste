@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="50"
@@ -32,31 +32,31 @@
             <ContextMenu>
                 <MenuItem x:Name="MoveUpMenuItem" Header="{l:Translate MoveUp}">
                     <MenuItem.Icon>
-                        <i:Icon Value="fas fa-arrow-up" />
+                        <c:FluentIcon Icon="{DynamicResource Icon.ArrowUp}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="MoveDownMenuItem" Header="{l:Translate MoveDown}">
                     <MenuItem.Icon>
-                        <i:Icon Value="fas fa-arrow-down" />
+                        <c:FluentIcon Icon="{DynamicResource Icon.ArrowDown}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="HideDisplayNumberMenuItem" Header="{l:Translate HideDisplayNumber}">
                     <MenuItem.Icon>
-                        <i:Icon Value="fas fa-eye-slash" />
+                        <c:FluentIcon Icon="{DynamicResource Icon.EyeHide}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="ShowDisplayNumberMenuItem" Header="{l:Translate ShowDisplayNumber}">
                     <MenuItem.Icon>
-                        <i:Icon Value="fas fa-eye" />
+                        <c:FluentIcon Icon="{DynamicResource Icon.EyeShow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="DetachMenuItem" Header="{l:Translate Detach}">
                     <MenuItem.Icon>
-                        <i:Icon Value="fas fa-object-ungroup" />
+                        <c:FluentIcon Icon="{DynamicResource Icon.Cut}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>

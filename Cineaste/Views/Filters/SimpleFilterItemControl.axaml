@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:rx="http://reactiveui.net"
-             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Filters"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
@@ -40,12 +40,28 @@
         </Grid>
 
         <Button x:Name="OtherActionsButton" Grid.Row="0" Grid.RowSpan="3" Grid.Column="3" HorizontalAlignment="Center"
-                VerticalAlignment="Center" Classes="icon" i:Attached.Icon="fas fa-ellipsis-v">
+                VerticalAlignment="Center" Classes="icon" Width="25" Height="25">
+            <c:FluentIcon Icon="{DynamicResource Icon.MoreVertical}" />
+
             <Button.ContextMenu>
                 <ContextMenu>
-                    <MenuItem x:Name="MakeCompositeAndItem" Header="{l:Translate FilterMakeCompositeAnd}" />
-                    <MenuItem x:Name="MakeCompositeOrItem" Header="{l:Translate FilterMakeCompositeOr}" />
-                    <MenuItem x:Name="RemoveFilterItem" Header="{l:Translate RemoveFilter}" />
+                    <MenuItem x:Name="MakeCompositeAndItem" Header="{l:Translate FilterMakeCompositeAnd}">
+                        <MenuItem.Icon>
+                            <c:FluentIcon Icon="{DynamicResource Icon.Add}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem x:Name="MakeCompositeOrItem" Header="{l:Translate FilterMakeCompositeOr}">
+                        <MenuItem.Icon>
+                            <c:FluentIcon Icon="{DynamicResource Icon.Add}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem x:Name="RemoveFilterItem" Header="{l:Translate RemoveFilter}">
+                        <MenuItem.Icon>
+                            <c:FluentIcon Icon="{DynamicResource Icon.Remove}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </Button.ContextMenu>
         </Button>

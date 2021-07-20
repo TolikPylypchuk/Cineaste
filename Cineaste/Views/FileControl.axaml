@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:rx="http://reactiveui.net"
-             xmlns:i="using:Projektanker.Icons.Avalonia"
+             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels"
              xmlns:vmp="using:Cineaste.Core.ViewModels.Forms.Preferences"
@@ -15,15 +15,21 @@
 
     <TabControl x:Name="Sidebar" Classes="sidebar">
         <TabControl.Styles>
-            <Style Selector="TabItem > StackPanel > i|Icon">
-                <Setter Property="Margin" Value="0 0 15 0" />
+            <Style Selector="TabItem > StackPanel > c|FluentIcon">
+                <Setter Property="Width" Value="20" />
+                <Setter Property="Height" Value="20" />
+            </Style>
+
+            <Style Selector="TabItem > StackPanel > TextBlock">
+                <Setter Property="Margin" Value="16 0 0 0" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
         </TabControl.Styles>
 
         <TabItem x:Name="ListItem">
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal">
-                    <i:Icon Value="fas fa-list" />
+                    <c:FluentIcon Icon="{DynamicResource Icon.List}" />
                     <TextBlock Text="{l:Translate NavigationList}" />
                 </StackPanel>
             </TabItem.Header>
@@ -34,7 +40,7 @@
         <TabItem IsEnabled="False">
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal">
-                    <i:Icon Value="fas fa-chart-bar" />
+                    <c:FluentIcon Icon="{DynamicResource Icon.DataHistogram}" />
                     <TextBlock Text="{l:Translate NavigationStats}" />
                 </StackPanel>
             </TabItem.Header>
@@ -45,7 +51,7 @@
         <TabItem x:Name="SettingsItem">
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal">
-                    <i:Icon Value="fas fa-cog" />
+                    <c:FluentIcon Icon="{DynamicResource Icon.Settings}" />
                     <TextBlock Text="{l:Translate NavigationSettings}" />
                 </StackPanel>
             </TabItem.Header>
