@@ -76,7 +76,7 @@ namespace Cineaste.Core.ViewModels
                 .Bind(out this.franchiseAddableItems)
                 .Subscribe();
 
-            this.WhenAnyValue(vm => vm.List.MovieList)
+            this.WhenAnyValue(vm => vm.List.DataList)
                 .WhereNotNull()
                 .Select(list => list.ToEntries())
                 .Select(entries => entries.Where(entry =>

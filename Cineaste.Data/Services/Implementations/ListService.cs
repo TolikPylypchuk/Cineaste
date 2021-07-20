@@ -16,10 +16,10 @@ namespace Cineaste.Data.Services.Implementations
             : base(file)
         { }
 
-        public EntireList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags) =>
+        public DataList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags) =>
             this.WithTransaction((connection, transaction) => this.GetList(kinds, tags, connection, transaction));
 
-        private EntireList GetList(
+        private DataList GetList(
             IEnumerable<Kind> kinds,
             IEnumerable<Tag> tags,
             IDbConnection connection,
@@ -43,7 +43,7 @@ namespace Cineaste.Data.Services.Implementations
 
             var tagsById = tags.ToDictionary(tag => tag.Id, tag => tag);
 
-            return new EntireList(
+            return new DataList(
                 movies
                     .Join(kinds)
                     .Join(titles)

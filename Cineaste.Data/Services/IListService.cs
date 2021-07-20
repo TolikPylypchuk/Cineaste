@@ -6,6 +6,6 @@ namespace Cineaste.Data.Services
 {
     public interface IListService
     {
-        EntireList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags);
+        DataList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags);
     }
 }

@@ -47,13 +47,22 @@ namespace Cineaste.Views
                     })
                     .DisposeWith(disposables);
 
+                var isInitialized = this.ViewModel!.IsInitialized
+                    .Where(isInitialized => isInitialized);
+
                 this.Sidebar.GetObservable(SelectingItemsControl.SelectedItemProperty)
+                    .SkipUntil(isInitialized)
                     .WhereNotNull()
                     .OfType<TabItem>()
                     .Select(item => item == this.ListItem
                         ? this.ViewModel!.SwitchToList
                         : this.ViewModel!.SwitchToSettings)
                     .SubscribeAsync(command => command.Execute())
+                    .DisposeWith(disposables);
+
+                isInitialized.Select(_ => this.ListItem)
+                    .Take(1)
+                    .BindTo(this, v => v.Sidebar.SelectedItem)
                     .DisposeWith(disposables);
             });
         }

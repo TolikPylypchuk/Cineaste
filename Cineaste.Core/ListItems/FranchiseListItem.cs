@@ -9,7 +9,7 @@ namespace Cineaste.Core.ListItems
     {
         public FranchiseListItem(Franchise franchise)
             : base(
-                $"MS-{franchise.Id}",
+                $"F-{franchise.Id}",
                 null,
                 franchise.ShowTitles && franchise.Title != null
                     ? $"{franchise.Title.Name}:"

@@ -42,7 +42,7 @@ namespace Cineaste.Core.Data.Services
             where TEntity : EntityBase =>
             Observable.Start(() => service.UpdateAll(entities), RxApp.TaskpoolScheduler);
 
-        public static IObservable<EntireList> GetListInTaskPool(
+        public static IObservable<DataList> GetListInTaskPool(
             this IListService service,
             IEnumerable<Kind> kinds,
             IEnumerable<Tag> tags) =>

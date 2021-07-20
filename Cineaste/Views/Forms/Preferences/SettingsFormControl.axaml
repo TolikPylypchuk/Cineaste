@@ -19,7 +19,7 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <TextBlock Text="{l:Translate Settings}" FontSize="48" Margin="8 16" />
+                <TextBlock Text="{l:Translate Settings}" FontSize="48" FontWeight="Light" Margin="8 16" />
 
                 <WrapPanel>
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,8,*,8,*,8,*"
@@ -67,13 +67,14 @@
                                   MinWidth="100" HorizontalAlignment="Stretch" />
                     </Grid>
 
-                    <StackPanel>
+                    <StackPanel Orientation="Vertical">
                         <StackPanel.Styles>
                             <Style Selector="TextBlock">
                                 <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}" />
                                 <Setter Property="Margin" Value="2" />
                                 <Setter Property="HorizontalAlignment" Value="Left" />
                                 <Setter Property="Foreground" Value="Gray" />
+                                <Setter Property="TextWrapping" Value="Wrap" />
                             </Style>
                             <Style Selector="c|FluentIcon">
                                 <Setter Property="Icon" Value="{DynamicResource Icon.Info}" />
@@ -109,6 +110,7 @@
                     <Grid.Styles>
                         <Style Selector="TextBlock.title">
                             <Setter Property="FontSize" Value="36" />
+                            <Setter Property="FontWeight" Value="Light" />
                             <Setter Property="Margin" Value="8 16" />
                         </Style>
 

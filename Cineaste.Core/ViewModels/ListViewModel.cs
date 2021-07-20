@@ -48,8 +48,8 @@ namespace Cineaste.Core.ViewModels
 
             this.Find = find;
 
-            this.MovieList = listService.GetList(kinds, tags);
-            this.source.AddOrUpdate(this.MovieList.ToListItems());
+            this.DataList = listService.GetList(kinds, tags);
+            this.source.AddOrUpdate(this.DataList.ToListItems());
             this.Log().Debug($"Loaded the list of {this.source.Count} items");
 
             this.source.Connect()
@@ -82,7 +82,7 @@ namespace Cineaste.Core.ViewModels
             this.items;
 
         [Reactive]
-        public EntireList MovieList { get; private set; }
+        public DataList DataList { get; private set; }
 
         [Reactive]
         public ListItemViewModel? SelectedItem { get; set; }
