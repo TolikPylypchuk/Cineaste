@@ -160,6 +160,24 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Advanced Preferences.
+        /// </summary>
+        internal static string AdvancedPreferences {
+            get {
+                return ResourceManager.GetString("AdvancedPreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changing these preferences takes effect after restarting the app.
+        /// </summary>
+        internal static string AdvancedPreferencesHint {
+            get {
+                return ResourceManager.GetString("AdvancedPreferencesHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Files.
         /// </summary>
         internal static string AllExtensionsDescription {
@@ -480,6 +498,15 @@ namespace Cineaste.Properties {
         internal static string DefaultSecondSorting {
             get {
                 return ResourceManager.GetString("DefaultSecondSorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Settings.
+        /// </summary>
+        internal static string DefaultSettings {
+            get {
+                return ResourceManager.GetString("DefaultSettings", resourceCulture);
             }
         }
         
@@ -1402,6 +1429,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Min log level.
+        /// </summary>
+        internal static string MinLogLevel {
+            get {
+                return ResourceManager.GetString("MinLogLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move down.
         /// </summary>
         internal static string MoveDown {
@@ -1551,6 +1587,15 @@ namespace Cineaste.Properties {
         internal static string OriginalTitleHeader {
             get {
                 return ResourceManager.GetString("OriginalTitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other Preferences.
+        /// </summary>
+        internal static string OtherPreferences {
+            get {
+                return ResourceManager.GetString("OtherPreferences", resourceCulture);
             }
         }
         
@@ -1902,6 +1947,15 @@ namespace Cineaste.Properties {
         internal static string ShowDisplayNumber {
             get {
                 return ResourceManager.GetString("ShowDisplayNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show recent files.
+        /// </summary>
+        internal static string ShowRecentFiles {
+            get {
+                return ResourceManager.GetString("ShowRecentFiles", resourceCulture);
             }
         }
         

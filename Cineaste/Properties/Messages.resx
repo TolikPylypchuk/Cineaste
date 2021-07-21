@@ -150,6 +150,12 @@
   <data name="AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>
+  <data name="AdvancedPreferences" xml:space="preserve">
+    <value>Advanced Preferences</value>
+  </data>
+  <data name="AdvancedPreferencesHint" xml:space="preserve">
+    <value>Changing these preferences takes effect after restarting the app</value>
+  </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All Files</value>
   </data>
@@ -257,6 +263,9 @@
   </data>
   <data name="DefaultSecondSorting" xml:space="preserve">
     <value>Default second sorting</value>
+  </data>
+  <data name="DefaultSettings" xml:space="preserve">
+    <value>Default Settings</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -564,6 +573,9 @@
   <data name="LogPath" xml:space="preserve">
     <value>Log path</value>
   </data>
+  <data name="MinLogLevel" xml:space="preserve">
+    <value>Min log level</value>
+  </data>
   <data name="MoveDown" xml:space="preserve">
     <value>Move down</value>
   </data>
@@ -614,6 +626,9 @@
   </data>
   <data name="OriginalTitleHeader" xml:space="preserve">
     <value>Original Title</value>
+  </data>
+  <data name="OtherPreferences" xml:space="preserve">
+    <value>Other Preferences</value>
   </data>
   <data name="PosterUrl" xml:space="preserve">
     <value>Poster URL</value>
@@ -731,6 +746,9 @@
   </data>
   <data name="ShowDisplayNumber" xml:space="preserve">
     <value>Show display number</value>
+  </data>
+  <data name="ShowRecentFiles" xml:space="preserve">
+    <value>Show recent files</value>
   </data>
   <data name="SingleDayRelease" xml:space="preserve">
     <value>Single-day release</value>

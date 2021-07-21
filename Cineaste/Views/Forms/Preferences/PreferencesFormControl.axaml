@@ -6,12 +6,12 @@
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms.Preferences"
              mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="750"
-             x:Class="Cineaste.Views.Forms.Preferences.SettingsFormControl">
+             x:Class="Cineaste.Views.Forms.Preferences.PreferencesFormControl">
     <Design.DataContext>
-        <vm:SettingsFormViewModel />
+        <vm:PreferencesFormViewModel />
     </Design.DataContext>
 
-    <DockPanel>
+    <DockPanel Margin="200 0 0 0">
         <StackPanel x:Name="ActionPanel" DockPanel.Dock="Bottom" Orientation="Horizontal">
             <Button x:Name="SaveButton" Content="{l:Translate Save}" Margin="8" Classes="accent" />
             <Button x:Name="CancelButton" Content="{l:Translate Cancel}" Margin="8" />
@@ -19,16 +19,27 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <TextBlock Text="{l:Translate Settings}" FontSize="48" FontWeight="Light" Margin="8 16" />
+                <StackPanel.Styles>
+                    <Style Selector="TextBlock.title">
+                        <Setter Property="FontSize" Value="30" />
+                        <Setter Property="FontWeight" Value="Light" />
+                        <Setter Property="Margin" Value="8 16" />
+                    </Style>
+                    <Style Selector="c|FluentIcon.info">
+                        <Setter Property="Icon" Value="{DynamicResource Icon.Info}" />
+                        <Setter Property="Width" Value="10" />
+                        <Setter Property="Height" Value="10" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Foreground" Value="Gray" />
+                    </Style>
+                </StackPanel.Styles>
+
+                <TextBlock Text="{l:Translate Preferences}" FontSize="48" FontWeight="Light" Margin="8 16" />
+                <TextBlock Text="{l:Translate DefaultSettings}" FontSize="36" FontWeight="Light" Margin="8 16" />
 
                 <WrapPanel>
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,8,*,8,*,8,*"
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,8,*,8,*,8,*"
                           Margin="8 0 24 0">
-                        <TextBlock Grid.Row="0" Grid.Column="0" Classes="caption" Text="{l:Translate ListName}" />
-                        <TextBox x:Name="ListNameTextBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" />
-                        <TextBlock x:Name="ListNameErrorTextBlock" Grid.Row="2" Grid.Column="0"
-                                   Classes="error caption" />
-
                         <TextBlock Grid.Row="0" Grid.Column="2" Classes="caption" Text="{l:Translate TitleLanguage}" />
                         <ComboBox x:Name="CultureInfoComboBox" Grid.Row="1" Grid.Column="2" MinWidth="150"
                                   HorizontalAlignment="Stretch" VirtualizationMode="Simple">
@@ -48,23 +59,23 @@
                         <ComboBox x:Name="DefaultFirstSortDirectionComboBox" Grid.Row="1" Grid.Column="6" MinWidth="100"
                                   HorizontalAlignment="Stretch" />
 
-                        <TextBlock Grid.Row="3" Grid.Column="0" Classes="caption"
+                        <TextBlock Grid.Row="2" Grid.Column="0" Classes="caption"
                                    Text="{l:Translate DefaultSeasonTitle}" />
-                        <TextBox x:Name="DefaultSeasonTitleTextBox" Grid.Row="4" Grid.Column="0"
+                        <TextBox x:Name="DefaultSeasonTitleTextBox" Grid.Row="3" Grid.Column="0"
                                  HorizontalAlignment="Stretch" />
 
-                        <TextBlock Grid.Row="3" Grid.Column="2" Classes="caption"
+                        <TextBlock Grid.Row="2" Grid.Column="2" Classes="caption"
                                    Text="{l:Translate DefaultSeasonOriginalTitle}" />
-                        <TextBox x:Name="DefaultSeasonOriginalTitleTextBox" Grid.Row="4" Grid.Column="2"
+                        <TextBox x:Name="DefaultSeasonOriginalTitleTextBox" Grid.Row="3" Grid.Column="2"
                                  HorizontalAlignment="Stretch" />
 
-                        <TextBlock Grid.Row="3" Grid.Column="4" Classes="caption"
+                        <TextBlock Grid.Row="2" Grid.Column="4" Classes="caption"
                                    Text="{l:Translate DefaultSecondSorting}" />
-                        <ComboBox x:Name="DefaultSecondSortOrderComboBox" Grid.Row="4" Grid.Column="4" MinWidth="150"
+                        <ComboBox x:Name="DefaultSecondSortOrderComboBox" Grid.Row="3" Grid.Column="4" MinWidth="150"
                                   HorizontalAlignment="Stretch" />
 
-                        <TextBlock Grid.Row="3" Grid.Column="6" Classes="caption" Text="{l:Translate Direction}" />
-                        <ComboBox x:Name="DefaultSecondSortDirectionComboBox" Grid.Row="4" Grid.Column="6"
+                        <TextBlock Grid.Row="2" Grid.Column="6" Classes="caption" Text="{l:Translate Direction}" />
+                        <ComboBox x:Name="DefaultSecondSortDirectionComboBox" Grid.Row="3" Grid.Column="6"
                                   MinWidth="100" HorizontalAlignment="Stretch" />
                     </Grid>
 
@@ -77,13 +88,6 @@
                                 <Setter Property="Foreground" Value="Gray" />
                                 <Setter Property="TextWrapping" Value="Wrap" />
                             </Style>
-                            <Style Selector="c|FluentIcon">
-                                <Setter Property="Icon" Value="{DynamicResource Icon.Info}" />
-                                <Setter Property="Width" Value="10" />
-                                <Setter Property="Height" Value="10" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="Foreground" Value="Gray" />
-                            </Style>
                             <Style Selector="StackPanel">
                                 <Setter Property="Orientation" Value="Horizontal" />
                                 <Setter Property="Margin" Value="8 2 2 2" />
@@ -91,17 +95,17 @@
                         </StackPanel.Styles>
 
                         <StackPanel>
-                            <c:FluentIcon />
+                            <c:FluentIcon Classes="info" />
                             <TextBlock Text="{l:Translate ListNameHint}" />
                         </StackPanel>
 
                         <StackPanel>
-                            <c:FluentIcon />
+                            <c:FluentIcon Classes="info" />
                             <TextBlock Text="{l:Translate TitleLanguageHint}" />
                         </StackPanel>
 
                         <StackPanel>
-                            <c:FluentIcon />
+                            <c:FluentIcon Classes="info" />
                             <TextBlock Text="{l:Translate DefaultSeasonTitleHint}" />
                         </StackPanel>
                     </StackPanel>
@@ -109,12 +113,6 @@
 
                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                     <Grid.Styles>
-                        <Style Selector="TextBlock.title">
-                            <Setter Property="FontSize" Value="36" />
-                            <Setter Property="FontWeight" Value="Light" />
-                            <Setter Property="Margin" Value="8 16" />
-                        </Style>
-
                         <Style Selector="Button.plus">
                             <Setter Property="Margin" Value="32 0 0 0" />
                             <Setter Property="Margin" Value="32 0 0 0" />
@@ -160,6 +158,31 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </Grid>
+
+                <TextBlock Text="{l:Translate OtherPreferences}" Margin="8 16" Classes="title" />
+
+                <CheckBox x:Name="ShowRecentFilesCheckBox" Margin="8" Content="{l:Translate ShowRecentFiles}"
+                          HorizontalAlignment="Left" />
+
+                <TextBlock Text="{l:Translate AdvancedPreferences}" Margin="8 16" Classes="title" />
+
+                <StackPanel Orientation="Horizontal" Margin="8 0">
+                    <StackPanel Margin="0 0 4 0">
+                        <TextBlock Classes="caption" Text="{l:Translate LogPath}" />
+                        <TextBox x:Name="LogPathTextBox" />
+                    </StackPanel>
+
+                    <StackPanel Margin="4 0">
+                        <TextBlock Classes="caption" Text="{l:Translate MinLogLevel}" />
+                        <ComboBox x:Name="MinLogLevelComboBox" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                    <c:FluentIcon Classes="info" Margin="0 0 2 0" />
+                    <TextBlock Text="{l:Translate AdvancedPreferencesHint}" VerticalAlignment="Center"
+                               FontSize="{DynamicResource FontSizeTiny}" Foreground="Gray" />
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </DockPanel>
