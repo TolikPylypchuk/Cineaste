@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dm="using:Cineaste.Core.DialogModels"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
+             x:Class="Cineaste.Dialogs.InputDialog">
+    <Design.DataContext>
+        <dm:InputModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto,Auto" Margin="8">
+        <TextBlock x:Name="CaptionTextBlock" Grid.Row="0" Margin="0 8 0 0" Classes="caption" />
+
+        <TextBox x:Name="ValueTextBox" Grid.Row="1" Margin="0 8 0 0" />
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0 16 0 0" HorizontalAlignment="Right">
+            <Button x:Name="CancelButton" IsCancel="True" Margin="8 0 0 0" />
+            <Button x:Name="ConfirmButton" IsDefault="True" Margin="8 0 0 0" Classes="accent" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -16,8 +16,7 @@
         <Button x:Name="DocsButton" Grid.Row="1" Classes="accent"
                 Content="{l:Translate ViewDocumentation}" Margin="0 16" />
 
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0 16 0 0" HorizontalAlignment="Right">
-            <Button x:Name="OKButton" IsDefault="True" Classes="accent" Content="{l:Translate OK}" />
-        </StackPanel>
+        <Button x:Name="OKButton" Grid.Row="2" Margin="0 16 0 0" HorizontalAlignment="Right" IsDefault="True"
+                Classes="accent" Content="{l:Translate OK}" />
     </Grid>
 </UserControl>

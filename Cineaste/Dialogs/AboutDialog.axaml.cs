@@ -27,10 +27,6 @@ namespace Cineaste.Dialogs
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.WhenAnyValue(v => v.ViewModel)
-                    .BindTo(this, v => v.DataContext)
-                    .DisposeWith(disposables);
-
                 this.WhenAnyValue(v => v.ViewModel!.Version)
                     .Select(version => String.Format(CultureInfo.CurrentCulture, Messages.AboutTextFormat, version))
                     .BindTo(this, v => v.AboutTextBlock.Text)
