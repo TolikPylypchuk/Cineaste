@@ -1,15 +1,13 @@
-using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.ReactiveUI;
 
 using Cineaste.Core;
 using Cineaste.Core.ViewModels;
+
+using FluentAvalonia.UI.Controls;
 
 using ReactiveUI;
 
@@ -27,42 +25,33 @@ namespace Cineaste.Views
                     .BindTo(this, v => v.DataContext)
                     .DisposeWith(disposables);
 
-                this.WhenAnyValue(v => v.ViewModel!.Content)
-                    .WhereNotNull()
-                    .DistinctUntilChanged()
-                    .Subscribe(content =>
-                    {
-                        var selectedItem = content switch
-                        {
-                            FileMainContentViewModel => this.ListItem,
-                            _ => this.SettingsItem
-                        };
-
-                        if (selectedItem.Content is ViewModelViewHost host)
-                        {
-                            host.ViewModel = content;
-                        }
-
-                        this.Sidebar.SelectedItem = selectedItem;
-                    })
+                this.OneWayBind(this.ViewModel, vm => vm.Content, v => v.Host.ViewModel)
                     .DisposeWith(disposables);
 
-                var isInitialized = this.ViewModel!.IsInitialized
-                    .Where(isInitialized => isInitialized);
-
-                this.Sidebar.GetObservable(SelectingItemsControl.SelectedItemProperty)
-                    .SkipUntil(isInitialized)
-                    .WhereNotNull()
-                    .OfType<TabItem>()
-                    .Select(item => item == this.ListItem
-                        ? this.ViewModel!.SwitchToList
-                        : this.ViewModel!.SwitchToSettings)
+                Observable.FromEventPattern<NavigationViewItemInvokedEventArgs>(
+                    h => this.Navigation.ItemInvoked += h, h => this.Navigation.ItemInvoked -= h)
+                    .Select(e => e.EventArgs.IsSettingsInvoked
+                        ? this.ViewModel!.SwitchToSettings
+                        : this.ViewModel!.SwitchToList)
                     .SubscribeAsync(command => command.Execute())
                     .DisposeWith(disposables);
 
-                isInitialized.Select(_ => this.ListItem)
+                this.WhenAnyValue(v => v.ViewModel!.Content)
+                    .WhereNotNull()
+                    .DistinctUntilChanged()
+                    .Select(content => content switch
+                    {
+                        FileMainContentViewModel => this.ListItem,
+                        _ => this.Navigation.SettingsItem
+                    })
+                    .BindTo(this, v => v.Navigation.SelectedItem)
+                    .DisposeWith(disposables);
+
+                this.ViewModel!.IsInitialized
+                    .Where(isInitialized => isInitialized)
+                    .Select(_ => this.ListItem)
                     .Take(1)
-                    .BindTo(this, v => v.Sidebar.SelectedItem)
+                    .BindTo(this, v => v.Navigation.SelectedItem)
                     .DisposeWith(disposables);
             });
         }

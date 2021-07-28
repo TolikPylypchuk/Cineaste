@@ -32,6 +32,8 @@ using Cineaste.Properties;
 using Cineaste.Validation;
 using Cineaste.Views;
 
+using FluentAvalonia.Styling;
+
 using ReactiveUI;
 using ReactiveUI.Validation.Formatters.Abstractions;
 
@@ -93,6 +95,9 @@ namespace Cineaste
             this.ConfigureSuspensionDriver(desktop);
 
             TransitioningContentControl.PageTransitionProperty.OverrideDefaultValue(typeof(ViewModelViewHost), null);
+
+            var theme = AvaloniaLocator.Current.GetService<FluentAvaloniaTheme>();
+            theme.RequestedTheme = "Light";
 
             var mainViewModel = new MainViewModel();
 
