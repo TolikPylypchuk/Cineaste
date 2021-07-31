@@ -27,15 +27,15 @@
             </StackPanel.Styles>
 
             <Button x:Name="AddFilterButton" Classes="icon" ToolTip.Tip="{l:Translate AddFilter}">
-                <c:FluentIcon Icon="{DynamicResource Icon.Add}" />
+                <c:SymbolIcon Symbol="Add" />
             </Button>
 
             <Button x:Name="SwitchCompositionButton" Classes="icon">
-                <c:FluentIcon Icon="{DynamicResource Icon.ArrowSwap}" />
+                <c:SymbolIcon Symbol="ArrowSwap" />
             </Button>
 
             <Button x:Name="SimplifyButton" Classes="icon" ToolTip.Tip="{l:Translate FilterSimplify}">
-                <c:FluentIcon Icon="{DynamicResource Icon.ArrowMinimize}" />
+                <c:SymbolIcon Symbol="ArrowMinimize" />
             </Button>
         </StackPanel>
     </Grid>

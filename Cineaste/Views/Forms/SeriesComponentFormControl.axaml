@@ -30,13 +30,13 @@
             <ContextMenu>
                 <MenuItem x:Name="MoveUpMenuItem" Header="{l:Translate MoveUp}">
                     <MenuItem.Icon>
-                        <c:FluentIcon Icon="{DynamicResource Icon.ArrowUp}" />
+                        <c:SymbolIcon Symbol="ArrowUp" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="MoveDownMenuItem" Header="{l:Translate MoveDown}">
                     <MenuItem.Icon>
-                        <c:FluentIcon Icon="{DynamicResource Icon.ArrowDown}" />
+                        <c:SymbolIcon Symbol="ArrowDown" />
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>

@@ -41,25 +41,25 @@
 
         <Button x:Name="OtherActionsButton" Grid.Row="0" Grid.RowSpan="3" Grid.Column="3" HorizontalAlignment="Center"
                 VerticalAlignment="Center" Classes="icon" Width="25" Height="25">
-            <c:FluentIcon Icon="{DynamicResource Icon.MoreVertical}" />
+            <c:SymbolIcon Symbol="MoreVertical" FontSize="20" />
 
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="MakeCompositeAndItem" Header="{l:Translate FilterMakeCompositeAnd}">
                         <MenuItem.Icon>
-                            <c:FluentIcon Icon="{DynamicResource Icon.Add}" />
+                            <c:SymbolIcon Symbol="Add" />
                         </MenuItem.Icon>
                     </MenuItem>
 
                     <MenuItem x:Name="MakeCompositeOrItem" Header="{l:Translate FilterMakeCompositeOr}">
                         <MenuItem.Icon>
-                            <c:FluentIcon Icon="{DynamicResource Icon.Add}" />
+                            <c:SymbolIcon Symbol="Add" />
                         </MenuItem.Icon>
                     </MenuItem>
 
                     <MenuItem x:Name="RemoveFilterItem" Header="{l:Translate RemoveFilter}">
                         <MenuItem.Icon>
-                            <c:FluentIcon Icon="{DynamicResource Icon.Remove}" />
+                            <c:SymbolIcon Symbol="Dismiss" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

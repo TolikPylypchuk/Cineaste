@@ -18,6 +18,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 
+using Cineaste.Controls;
 using Cineaste.Converters;
 using Cineaste.Core;
 using Cineaste.Core.Models;
@@ -33,6 +34,7 @@ using Cineaste.Validation;
 using Cineaste.Views;
 
 using FluentAvalonia.Styling;
+using FluentAvalonia.UI.Controls;
 
 using ReactiveUI;
 using ReactiveUI.Validation.Formatters.Abstractions;
@@ -93,11 +95,7 @@ namespace Cineaste
         {
             this.ConfigureLocator();
             this.ConfigureSuspensionDriver(desktop);
-
-            TransitioningContentControl.PageTransitionProperty.OverrideDefaultValue(typeof(ViewModelViewHost), null);
-
-            var theme = AvaloniaLocator.Current.GetService<FluentAvaloniaTheme>();
-            theme.RequestedTheme = "Light";
+            this.TweakUI();
 
             var mainViewModel = new MainViewModel();
 
@@ -154,6 +152,14 @@ namespace Cineaste
             RxApp.SuspensionHost.SetupDefaultSuspendResume(new JsonSuspensionDriver<AppState>(file));
 
             autoSuspendHelper.OnFrameworkInitializationCompleted();
+        }
+
+        private void TweakUI()
+        {
+            TransitioningContentControl.PageTransitionProperty.OverrideDefaultValue(typeof(ViewModelViewHost), null);
+
+            var theme = AvaloniaLocator.Current.GetService<FluentAvaloniaTheme>();
+            theme.RequestedTheme = "Light";
         }
 
         private MainWindow CreateMainWindow(

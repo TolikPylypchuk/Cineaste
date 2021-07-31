@@ -15,20 +15,20 @@
         <Grid Grid.Row="0" ColumnDefinitions="*,25,25,*" HorizontalAlignment="Stretch">
             <Button x:Name="GoToFranchiseArrowButton" Grid.Column="0" HorizontalAlignment="Left" Classes="icon"
                     Width="25" Height="25">
-                <c:FluentIcon Icon="{DynamicResource Icon.ChevronUp}" />
+                <c:SymbolIcon Symbol="ChevronUp" FontSize="20" />
             </Button>
 
             <Button x:Name="GoToPreviousButton" Grid.Column="1" Classes="icon" Width="25" Height="25">
-                <c:FluentIcon Icon="{DynamicResource Icon.ChevronLeft}" />
+                <c:SymbolIcon Symbol="ChevronLeft" FontSize="20" />
             </Button>
 
             <Button x:Name="GoToNextButton" Grid.Column="2" Classes="icon" Width="25" Height="25">
-                <c:FluentIcon Icon="{DynamicResource Icon.ChevronRight}" />
+                <c:SymbolIcon Symbol="ChevronRight" FontSize="20" />
             </Button>
 
             <Button x:Name="CloseButton" Grid.Column="3" HorizontalAlignment="Right" Classes="icon"
                     Width="25" Height="25">
-                <c:FluentIcon Icon="{DynamicResource Icon.Dismiss}" />
+                <c:SymbolIcon Symbol="Dismiss" FontSize="20" />
             </Button>
         </Grid>
 

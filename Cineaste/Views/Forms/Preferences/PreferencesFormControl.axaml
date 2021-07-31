@@ -25,10 +25,9 @@
                         <Setter Property="FontWeight" Value="Light" />
                         <Setter Property="Margin" Value="8 16" />
                     </Style>
-                    <Style Selector="c|FluentIcon.info">
-                        <Setter Property="Icon" Value="{DynamicResource Icon.Info}" />
-                        <Setter Property="Width" Value="10" />
-                        <Setter Property="Height" Value="10" />
+                    <Style Selector="c|SymbolIcon.info">
+                        <Setter Property="Symbol" Value="Info" />
+                        <Setter Property="FontSize" Value="10" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                         <Setter Property="Foreground" Value="Gray" />
                     </Style>
@@ -95,17 +94,17 @@
                         </StackPanel.Styles>
 
                         <StackPanel>
-                            <c:FluentIcon Classes="info" />
+                            <c:SymbolIcon Classes="info" />
                             <TextBlock Text="{l:Translate ListNameHint}" />
                         </StackPanel>
 
                         <StackPanel>
-                            <c:FluentIcon Classes="info" />
+                            <c:SymbolIcon Classes="info" />
                             <TextBlock Text="{l:Translate TitleLanguageHint}" />
                         </StackPanel>
 
                         <StackPanel>
-                            <c:FluentIcon Classes="info" />
+                            <c:SymbolIcon Classes="info" />
                             <TextBlock Text="{l:Translate DefaultSeasonTitleHint}" />
                         </StackPanel>
                     </StackPanel>
@@ -122,18 +121,17 @@
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
 
-                        <Style Selector="c|FluentIcon.add">
-                            <Setter Property="Icon" Value="{DynamicResource Icon.AddCircle}" />
+                        <Style Selector="c|SymbolIcon.add">
+                            <Setter Property="Symbol" Value="AddCircle" />
                             <Setter Property="Margin" Value="0" />
-                            <Setter Property="Width" Value="30" />
-                            <Setter Property="Height" Value="30" />
+                            <Setter Property="FontSize" Value="24" />
                         </Style>
                     </Grid.Styles>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="{l:Translate Kinds}" Classes="title" />
 
                     <Button x:Name="AddKindButton" Grid.Row="0" Grid.Column="1" Classes="icon plus">
-                        <c:FluentIcon Classes="add" />
+                        <c:SymbolIcon Classes="add" />
                     </Button>
 
                     <ItemsControl x:Name="Kinds" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 8">
@@ -147,7 +145,7 @@
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="{l:Translate Tags}" Classes="title" />
 
                     <Button x:Name="AddTagButton" Grid.Row="2" Grid.Column="1" Classes="icon plus">
-                        <c:FluentIcon Classes="add" />
+                        <c:SymbolIcon Classes="add" />
                     </Button>
 
                     <ItemsControl x:Name="Tags" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
@@ -179,7 +177,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
-                    <c:FluentIcon Classes="info" Margin="0 0 2 0" />
+                    <c:SymbolIcon Classes="info" Margin="0 0 2 0" />
                     <TextBlock Text="{l:Translate AdvancedPreferencesHint}" VerticalAlignment="Center"
                                FontSize="{DynamicResource FontSizeTiny}" Foreground="Gray" />
                 </StackPanel>

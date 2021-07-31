@@ -13,7 +13,7 @@
     <DockPanel HorizontalAlignment="Stretch">
         <Button x:Name="CloseButton" DockPanel.Dock="Right" Classes="icon" VerticalAlignment="Center"
                 Width="20" Height="20" Margin="10 0 0 0">
-            <c:FluentIcon Icon="{DynamicResource Icon.Dismiss}" />
+            <c:SymbolIcon Symbol="Dismiss" />
         </Button>
 
         <TextBlock x:Name="NameTextBlock" VerticalAlignment="Center" />

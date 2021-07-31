@@ -18,7 +18,7 @@
 
         <Button x:Name="DeleteButton" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="20" Height="20"
                 Margin="8 0 0 0" Classes="icon">
-            <c:FluentIcon Icon="{DynamicResource Icon.Dismiss}" />
+            <c:SymbolIcon Symbol="Dismiss" />
         </Button>
     </Grid>
 </UserControl>
