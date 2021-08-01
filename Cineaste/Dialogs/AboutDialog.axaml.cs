@@ -32,14 +32,11 @@ namespace Cineaste.Dialogs
                     .BindTo(this, v => v.AboutTextBlock.Text)
                     .DisposeWith(disposables);
 
+                this.DocsButton.NavigateUri = new Uri(Messages.DocsLink, UriKind.Absolute);
+
                 this.OKButton.GetObservable(Button.ClickEvent)
                     .Discard()
                     .InvokeCommand(this.ViewModel!.Close)
-                    .DisposeWith(disposables);
-
-                this.DocsButton.GetObservable(Button.ClickEvent)
-                    .Discard()
-                    .Subscribe(() => new Uri(Messages.DocsLink, UriKind.Absolute).OpenInBrowser())
                     .DisposeWith(disposables);
             });
         }

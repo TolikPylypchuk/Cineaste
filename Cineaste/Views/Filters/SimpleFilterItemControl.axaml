@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:rx="http://reactiveui.net"
              xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
@@ -39,31 +40,21 @@
                       HorizontalAlignment="Center" VerticalAlignment="Center" />
         </Grid>
 
-        <Button x:Name="OtherActionsButton" Grid.Row="0" Grid.RowSpan="3" Grid.Column="3" HorizontalAlignment="Center"
-                VerticalAlignment="Center" Classes="icon" Width="25" Height="25">
+        <ui:Button x:Name="OtherActionsButton" Grid.Row="0" Grid.RowSpan="3" Grid.Column="3" Width="25" Height="25"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" Classes="icon">
             <c:SymbolIcon Symbol="MoreVertical" FontSize="20" />
 
-            <Button.ContextMenu>
-                <ContextMenu>
-                    <MenuItem x:Name="MakeCompositeAndItem" Header="{l:Translate FilterMakeCompositeAnd}">
-                        <MenuItem.Icon>
-                            <c:SymbolIcon Symbol="Add" />
-                        </MenuItem.Icon>
-                    </MenuItem>
+            <ui:Button.Flyout>
+                <ui:MenuFlyout Placement="Bottom">
+                    <ui:MenuFlyoutItem x:Name="MakeCompositeAndItem" Icon="Add"
+                                       Text="{l:Translate FilterMakeCompositeAnd}" />
 
-                    <MenuItem x:Name="MakeCompositeOrItem" Header="{l:Translate FilterMakeCompositeOr}">
-                        <MenuItem.Icon>
-                            <c:SymbolIcon Symbol="Add" />
-                        </MenuItem.Icon>
-                    </MenuItem>
+                    <ui:MenuFlyoutItem x:Name="MakeCompositeOrItem" Icon="Add"
+                                       Text="{l:Translate FilterMakeCompositeOr}" />
 
-                    <MenuItem x:Name="RemoveFilterItem" Header="{l:Translate RemoveFilter}">
-                        <MenuItem.Icon>
-                            <c:SymbolIcon Symbol="Dismiss" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </Button.ContextMenu>
-        </Button>
+                    <ui:MenuFlyoutItem x:Name="RemoveFilterItem" Icon="Dismiss" Text="{l:Translate RemoveFilter}" />
+                </ui:MenuFlyout>
+            </ui:Button.Flyout>
+        </ui:Button>
     </Grid>
 </UserControl>

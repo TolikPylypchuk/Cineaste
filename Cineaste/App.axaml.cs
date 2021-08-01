@@ -218,7 +218,8 @@ namespace Cineaste
                 filterOperationConverter,
                 listSortOrderConverter,
                 listSortDirectionConverter,
-                logLevelConverter);
+                logLevelConverter,
+                new UriConverter());
 
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeriesWatchStatus>>(seriesWatchStatusConverter);
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeriesReleaseStatus>>(seriesReleaseStatusConverter);

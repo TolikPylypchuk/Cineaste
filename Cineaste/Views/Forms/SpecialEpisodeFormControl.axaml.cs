@@ -110,10 +110,7 @@ namespace Cineaste.Views.Forms
 
         private void BindLink(CompositeDisposable disposables)
         {
-            this.RottenTomatoesLinkButton.GetObservable(Button.ClickEvent)
-                .Select(_ => this.ViewModel!.RottenTomatoesLink)
-                .WhereNotNull()
-                .Subscribe(link => new Uri(link).OpenInBrowser())
+            this.OneWayBind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkButton.NavigateUri)
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.RottenTomatoesLink)

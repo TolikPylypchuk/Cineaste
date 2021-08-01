@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:dm="using:Cineaste.Core.DialogModels"
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
@@ -13,10 +14,9 @@
     <Grid RowDefinitions="Auto,Auto,Auto" Margin="8">
         <TextBlock x:Name="AboutTextBlock" Grid.Row="0" Margin="0 8 0 0" />
 
-        <Button x:Name="DocsButton" Grid.Row="1" Classes="accent"
-                Content="{l:Translate ViewDocumentation}" Margin="0 16" />
+        <ui:HyperlinkButton x:Name="DocsButton" Grid.Row="1" Content="{l:Translate ViewDocumentation}" Margin="0 16" />
 
-        <Button x:Name="OKButton" Grid.Row="2" Margin="0 16 0 0" HorizontalAlignment="Right" IsDefault="True"
-                Classes="accent" Content="{l:Translate OK}" />
+        <ui:Button x:Name="OKButton" Grid.Row="2" Margin="0 16 0 0" HorizontalAlignment="Right" IsDefault="True"
+                   Classes="accent" Content="{l:Translate OK}" />
     </Grid>
 </UserControl>

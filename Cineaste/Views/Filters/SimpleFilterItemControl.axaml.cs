@@ -4,7 +4,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
 
 using Cineaste.Core;
@@ -33,12 +32,6 @@ namespace Cineaste.Views.Filters
 
                 this.BindFilter(disposables);
                 this.BindCommands(disposables);
-
-                this.OtherActionsButton.GetObservable(Button.ClickEvent)
-                    .Select(_ => this.OtherActionsButton.ContextMenu)
-                    .WhereNotNull()
-                    .Subscribe(menu => menu.Open())
-                    .DisposeWith(disposables);
             });
         }
 

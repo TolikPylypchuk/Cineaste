@@ -20,22 +20,22 @@
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <StackPanel.Styles>
                 <Style Selector="Button">
-                    <Setter Property="Width" Value="25" />
-                    <Setter Property="Height" Value="25" />
+                    <Setter Property="Width" Value="30" />
+                    <Setter Property="Height" Value="30" />
                     <Setter Property="Margin" Value="8 4" />
                 </Style>
             </StackPanel.Styles>
 
             <Button x:Name="AddFilterButton" Classes="icon" ToolTip.Tip="{l:Translate AddFilter}">
-                <c:SymbolIcon Symbol="Add" />
+                <c:SymbolIcon Symbol="Add" FontSize="24" />
             </Button>
 
             <Button x:Name="SwitchCompositionButton" Classes="icon">
-                <c:SymbolIcon Symbol="ArrowSwap" />
+                <c:SymbolIcon Symbol="ArrowSwap" FontSize="24" />
             </Button>
 
             <Button x:Name="SimplifyButton" Classes="icon" ToolTip.Tip="{l:Translate FilterSimplify}">
-                <c:SymbolIcon Symbol="ArrowMinimize" />
+                <c:SymbolIcon Symbol="ArrowMinimize" FontSize="24" />
             </Button>
         </StackPanel>
     </Grid>

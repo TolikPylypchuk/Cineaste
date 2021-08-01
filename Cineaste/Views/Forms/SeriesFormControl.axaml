@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms"
@@ -44,10 +45,10 @@
                     <Image x:Name="Poster" />
 
                     <WrapPanel Margin="0 8 0 0" HorizontalAlignment="Center">
-                        <Button x:Name="ImdbLinkButton" Margin="4 0" HorizontalAlignment="Center" Classes="link"
-                                Content="{l:Translate Imdb}" />
-                        <Button x:Name="RottenTomatoesLinkButton" Margin="4 0" HorizontalAlignment="Center"
-                                Classes="link" Content="{l:Translate RottenTomatoes}" />
+                        <ui:HyperlinkButton x:Name="ImdbLinkButton" HorizontalAlignment="Center"
+                                            Content="{l:Translate Imdb}" />
+                        <ui:HyperlinkButton x:Name="RottenTomatoesLinkButton" HorizontalAlignment="Center"
+                                            Content="{l:Translate RottenTomatoes}" />
                     </WrapPanel>
 
                     <ItemsControl x:Name="Titles" />
