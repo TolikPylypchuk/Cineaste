@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms.Preferences"
@@ -12,7 +13,7 @@
     </Design.DataContext>
 
     <StackPanel Margin="0 0 16 4">
-        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch" Margin="8 0 0 4">
+        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch" Margin="0 0 0 4">
             <TextBlock Grid.Row="0" Grid.Column="0" Classes="caption" Text="{l:Translate KindName}" />
             <TextBox Grid.Row="1" Grid.Column="0" x:Name="NameTextBox" />
             <TextBlock x:Name="NameErrorTextBlock" Grid.Row="2" Grid.Column="0" Classes="error caption" />
@@ -25,23 +26,44 @@
 
         <StackPanel Orientation="Horizontal">
             <StackPanel.Styles>
-                <Style Selector="c|Chip">
-                    <Setter Property="Margin" Value="8 4 0 4" />
-                    <Setter Property="IsClickable" Value="True" />
+                <Style Selector="ui|ColorPickerButton">
+                    <Setter Property="UseColorTriangle" Value="False" />
+                    <Setter Property="ShowAcceptDismissButtons" Value="False" />
+                    <Setter Property="IsMoreButtonVisible" Value="False" />
+                </Style>
+                <Style Selector="TextBlock">
+                    <Setter Property="Margin" Value="4 0 0 0" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
             </StackPanel.Styles>
 
-            <StackPanel>
-                <c:Chip x:Name="WatchedMovieChip" Text="{l:Translate ColorForWatchedMovies}" />
-                <c:Chip x:Name="NotWatchedMovieChip" Text="{l:Translate ColorForNotWatchedMovies}" />
-                <c:Chip x:Name="NotReleasedMovieChip" Text="{l:Translate ColorForNotReleasedMovies}" />
-            </StackPanel>
+            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <ui:ColorPickerButton x:Name="WatchedMovieButton" Grid.Row="0" Grid.Column="0" />
+                <TextBlock x:Name="WatchedMovieTextBlock" Grid.Row="0" Grid.Column="1"
+                           Text="{l:Translate ColorForWatchedMovies}" />
 
-            <StackPanel>
-                <c:Chip x:Name="WatchedSeriesChip" Text="{l:Translate ColorForWatchedSeries}" />
-                <c:Chip x:Name="NotWatchedSeriesChip" Text="{l:Translate ColorForNotWatchedSeries}" />
-                <c:Chip x:Name="NotReleasedSeriesChip" Text="{l:Translate ColorForNotReleasedSeries}" />
-            </StackPanel>
+                <ui:ColorPickerButton x:Name="NotWatchedMovieButton" Grid.Row="1" Grid.Column="0" />
+                <TextBlock x:Name="NotWatchedMovieTextBlock" Grid.Row="1" Grid.Column="1"
+                           Text="{l:Translate ColorForNotWatchedMovies}" />
+
+                <ui:ColorPickerButton x:Name="NotReleasedMovieButton" Grid.Row="2" Grid.Column="0" />
+                <TextBlock x:Name="NotReleasedMovieTextBlock" Grid.Row="2" Grid.Column="1"
+                           Text="{l:Translate ColorForNotReleasedMovies}" />
+            </Grid>
+
+            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*" Margin="8 0 0 0">
+                <ui:ColorPickerButton x:Name="WatchedSeriesButton" Grid.Row="0" Grid.Column="0" />
+                <TextBlock x:Name="WatchedSeriesTextBlock" Grid.Row="0" Grid.Column="1"
+                           Text="{l:Translate ColorForWatchedSeries}" />
+
+                <ui:ColorPickerButton x:Name="NotWatchedSeriesButton" Grid.Row="1" Grid.Column="0" />
+                <TextBlock x:Name="NotWatchedSeriesTextBlock" Grid.Row="1" Grid.Column="1"
+                           Text="{l:Translate ColorForNotWatchedSeries}" />
+
+                <ui:ColorPickerButton x:Name="NotReleasedSeriesButton" Grid.Row="2" Grid.Column="0" />
+                <TextBlock x:Name="NotReleasedSeriesTextBlock" Grid.Row="2" Grid.Column="1"
+                           Text="{l:Translate ColorForNotReleasedSeries}" />
+            </Grid>
         </StackPanel>
     </StackPanel>
 </UserControl>

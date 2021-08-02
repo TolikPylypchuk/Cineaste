@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
@@ -18,7 +19,6 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 
-using Cineaste.Controls;
 using Cineaste.Converters;
 using Cineaste.Core;
 using Cineaste.Core.Models;
@@ -34,7 +34,6 @@ using Cineaste.Validation;
 using Cineaste.Views;
 
 using FluentAvalonia.Styling;
-using FluentAvalonia.UI.Controls;
 
 using ReactiveUI;
 using ReactiveUI.Validation.Formatters.Abstractions;
@@ -219,6 +218,7 @@ namespace Cineaste
                 listSortOrderConverter,
                 listSortDirectionConverter,
                 logLevelConverter,
+                new ColorConverter(),
                 new UriConverter());
 
             Locator.CurrentMutable.RegisterConstant<IEnumConverter<SeriesWatchStatus>>(seriesWatchStatusConverter);
@@ -350,7 +350,6 @@ namespace Cineaste
             Dialog.ShowMessage.RegisterHandler(handler.ShowMessageDialogAsync);
             Dialog.Confirm.RegisterHandler(handler.ShowConfirmDialogAsync);
             Dialog.Input.RegisterHandler(handler.ShowInputDialogAsync);
-            Dialog.ColorPicker.RegisterHandler(handler.ShowColorDialogAsync);
             Dialog.TagForm.RegisterHandler(handler.ShowTagFormDialogAsync);
             Dialog.SaveFile.RegisterHandler(handler.ShowSaveFileDialogAsync);
             Dialog.OpenFile.RegisterHandler(handler.ShowOpenFileDialogAsync);

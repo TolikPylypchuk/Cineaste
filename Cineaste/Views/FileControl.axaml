@@ -14,7 +14,7 @@
         <vm:FileViewModel />
     </Design.DataContext>
 
-    <ui:NavigationView x:Name="Navigation" IsBackEnabled="False" IsBackButtonVisible="False" AlwaysShowHeader="True">
+    <ui:NavigationView x:Name="Navigation" IsBackEnabled="False" IsBackButtonVisible="False" AlwaysShowHeader="False">
         <ui:NavigationView.MenuItems>
             <ui:NavigationViewItem x:Name="ListItem" Content="{l:Translate NavigationList}" Icon="List" />
         </ui:NavigationView.MenuItems>

@@ -58,12 +58,6 @@ namespace Cineaste
             ctx.SetOutput(result);
         }
 
-        public async Task ShowColorDialogAsync(InteractionContext<ColorModel, string?> ctx)
-        {
-            string? result = await this.ShowDialogWindowForViewModel<ColorModel, string?>(ctx.Input);
-            ctx.SetOutput(result);
-        }
-
         public async Task ShowTagFormDialogAsync(InteractionContext<TagFormViewModel, Unit> ctx)
         {
             var result = await this.ShowDialogWindowForViewModel(ctx.Input, ctx.Input.FormTitle, vm => vm.Close);

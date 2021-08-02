@@ -7,6 +7,10 @@ namespace Cineaste.Core
 {
     public static class Extensions
     {
+        public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable)
+            where T : class =>
+            enumerable.Where(item => item != null)!;
+
         public static string? NullIfEmpty(this string? str) =>
             String.IsNullOrEmpty(str) ? null : str;
 
