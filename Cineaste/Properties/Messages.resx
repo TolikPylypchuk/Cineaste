@@ -126,6 +126,9 @@
   <data name="AddFilter" xml:space="preserve">
     <value>Add filter</value>
   </data>
+  <data name="AddImpliedTag" xml:space="preserve">
+    <value>Add implied tag</value>
+  </data>
   <data name="AddNewMovie" xml:space="preserve">
     <value>Add new movie</value>
   </data>
@@ -165,6 +168,12 @@
   <data name="Animation" xml:space="preserve">
     <value>Animation</value>
   </data>
+  <data name="ApplicableToMovies" xml:space="preserve">
+    <value>Applicable to movies</value>
+  </data>
+  <data name="ApplicableToSeries" xml:space="preserve">
+    <value>Applicable to series</value>
+  </data>
   <data name="ApplyFilter" xml:space="preserve">
     <value>Apply filter</value>
   </data>
@@ -173,6 +182,9 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
   </data>
   <data name="Channel" xml:space="preserve">
     <value>Channel</value>
@@ -200,6 +212,9 @@
   </data>
   <data name="CloseFormTitle" xml:space="preserve">
     <value>Close Form</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
   </data>
   <data name="ColorForNotReleasedMovies" xml:space="preserve">
     <value>Color for not released movies</value>
@@ -305,6 +320,9 @@
   </data>
   <data name="DeleteTagTitle" xml:space="preserve">
     <value>Delete Tag</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
   <data name="Detach" xml:space="preserve">
     <value>Detach</value>
@@ -513,6 +531,9 @@
   <data name="ImdbLink" xml:space="preserve">
     <value>IMDb Link</value>
   </data>
+  <data name="ImpliedTags" xml:space="preserve">
+    <value>Implied Tags</value>
+  </data>
   <data name="Kind" xml:space="preserve">
     <value>Kind</value>
   </data>
@@ -581,6 +602,9 @@
   </data>
   <data name="MoveUp" xml:space="preserve">
     <value>Move up</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
   <data name="NavigationList" xml:space="preserve">
     <value>List</value>
@@ -767,6 +791,12 @@
   </data>
   <data name="String" xml:space="preserve">
     <value>This will detach all entries without deleting them.</value>
+  </data>
+  <data name="TagFormHeader" xml:space="preserve">
+    <value>Edit Tag</value>
+  </data>
+  <data name="TagFormHeaderFormat" xml:space="preserve">
+    <value>Edit Tag - {0}</value>
   </data>
   <data name="Tags" xml:space="preserve">
     <value>Tags</value>

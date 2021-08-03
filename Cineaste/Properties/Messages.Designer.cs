@@ -88,6 +88,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add implied tag.
+        /// </summary>
+        internal static string AddImpliedTag {
+            get {
+                return ResourceManager.GetString("AddImpliedTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new movie.
         /// </summary>
         internal static string AddNewMovie {
@@ -205,6 +214,24 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applicable to movies.
+        /// </summary>
+        internal static string ApplicableToMovies {
+            get {
+                return ResourceManager.GetString("ApplicableToMovies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applicable to series.
+        /// </summary>
+        internal static string ApplicableToSeries {
+            get {
+                return ResourceManager.GetString("ApplicableToSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply filter.
         /// </summary>
         internal static string ApplyFilter {
@@ -228,6 +255,15 @@ namespace Cineaste.Properties {
         internal static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        internal static string Category {
+            get {
+                return ResourceManager.GetString("Category", resourceCulture);
             }
         }
         
@@ -309,6 +345,15 @@ namespace Cineaste.Properties {
         internal static string CloseFormTitle {
             get {
                 return ResourceManager.GetString("CloseFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color.
+        /// </summary>
+        internal static string Color {
+            get {
+                return ResourceManager.GetString("Color", resourceCulture);
             }
         }
         
@@ -624,6 +669,15 @@ namespace Cineaste.Properties {
         internal static string DeleteTagTitle {
             get {
                 return ResourceManager.GetString("DeleteTagTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
             }
         }
         
@@ -1249,6 +1303,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Implied Tags.
+        /// </summary>
+        internal static string ImpliedTags {
+            get {
+                return ResourceManager.GetString("ImpliedTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kind.
         /// </summary>
         internal static string Kind {
@@ -1452,6 +1515,15 @@ namespace Cineaste.Properties {
         internal static string MoveUp {
             get {
                 return ResourceManager.GetString("MoveUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
             }
         }
         
@@ -2010,6 +2082,24 @@ namespace Cineaste.Properties {
         internal static string String {
             get {
                 return ResourceManager.GetString("String", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Tag.
+        /// </summary>
+        internal static string TagFormHeader {
+            get {
+                return ResourceManager.GetString("TagFormHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Tag - {0}.
+        /// </summary>
+        internal static string TagFormHeaderFormat {
+            get {
+                return ResourceManager.GetString("TagFormHeaderFormat", resourceCulture);
             }
         }
         

@@ -40,6 +40,10 @@ namespace Cineaste.Controls
                 .Where(_ => this.IsClickable)
                 .Subscribe(_ => this.RaiseEvent(new RoutedEventArgs { RoutedEvent = ClickEvent, Source = this }));
 
+            this.TextBlock.GetObservable(PointerReleasedEvent)
+                .Where(_ => this.IsClickable)
+                .Subscribe(_ => this.RaiseEvent(new RoutedEventArgs { RoutedEvent = ClickEvent, Source = this }));
+
             this.GetObservable(IsClickableProperty)
                 .Select(clickable => clickable ? StandardCursorType.Hand : StandardCursorType.Arrow)
                 .Select(type => new Cursor(type))

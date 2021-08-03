@@ -11,12 +11,12 @@
         <dm:ConfirmationModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto" Margin="8">
-        <TextBlock x:Name="MessageTextBlock" Grid.Row="0" Margin="0 8 0 16" />
+    <StackPanel Margin="8">
+        <TextBlock x:Name="MessageTextBlock" Margin="0 8 0 16" />
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 16 0 0" HorizontalAlignment="Right">
+        <StackPanel Orientation="Horizontal" Margin="0 16 0 0" HorizontalAlignment="Right">
             <ui:Button x:Name="CancelButton" IsCancel="True" Margin="8 0 0 0" />
             <ui:Button x:Name="ConfirmButton" IsDefault="True" Margin="8 0 0 0" Classes="accent" />
         </StackPanel>
-    </Grid>
+    </StackPanel>
 </UserControl>

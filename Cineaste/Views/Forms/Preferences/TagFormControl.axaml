@@ -1,0 +1,71 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:l="using:Cineaste.Localization"
+             xmlns:vm="using:Cineaste.Core.ViewModels.Forms.Preferences"
+             mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="360"
+             x:Class="Cineaste.Views.Forms.Preferences.TagFormControl">
+    <Design.DataContext>
+        <vm:TagFormViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto" Margin="16">
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+            <StackPanel.Styles>
+                <Style Selector="TextBox">
+                    <Setter Property="MinWidth" Value="320" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="0 0 8 0" />
+                </Style>
+
+                <Style Selector="CheckBox">
+                    <Setter Property="Margin" Value="0 2" />
+                    <Setter Property="HorizontalAlignment" Value="Left" />
+                </Style>
+            </StackPanel.Styles>
+
+            <TextBlock Classes="caption" Text="{l:Translate Name}" />
+            <TextBox x:Name="NameTextBox" />
+            <TextBlock x:Name="NameErrorTextBlock" Classes="error caption" />
+
+            <TextBlock Classes="caption" Text="{l:Translate Description}" />
+            <TextBox x:Name="DescriptionTextBox" TextWrapping="Wrap" />
+
+            <TextBlock Classes="caption" Text="{l:Translate Category}" />
+            <TextBox x:Name="CategoryTextBox" />
+            <TextBlock x:Name="CategoryErrorTextBlock" Classes="error caption" />
+
+            <TextBlock x:Name="InvalidFormTextBlock" TextWrapping="Wrap" Classes="error" />
+
+            <CheckBox x:Name="IsApplicableToMoviesCheckBox" Content="{l:Translate ApplicableToMovies}" />
+            <CheckBox x:Name="IsApplicableToSeriesCheckBox" Content="{l:Translate ApplicableToSeries}" />
+
+            <TextBlock Text="{l:Translate ImpliedTags}" Margin="0 4" />
+
+            <TextBlock Classes="caption" Text="{l:Translate AddImpliedTag}" />
+            <ComboBox x:Name="AddableImpliedTagsComboBox" PlaceholderText="{l:Translate SelectTag}" Margin="0 4 16 4" />
+
+            <ItemsControl x:Name="ImpliedTags" Margin="0 8">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <TextBlock Text="{l:Translate Color}" Margin="0 0 0 8" FontSize="{DynamicResource FontSizeLarge}" />
+            <ui:ColorPicker x:Name="ColorPicker" UseColorWheel="True" UseColorTriangle="False" IsCompact="True" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 4 0 0"
+                    HorizontalAlignment="Right">
+            <Button x:Name="SaveButton" Content="{l:Translate Save}" Margin="8" Classes="accent"
+                    HorizontalAlignment="Center" />
+            <Button x:Name="CancelButton" Content="{l:Translate Cancel}" Margin="8" HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</UserControl>

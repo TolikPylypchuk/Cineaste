@@ -11,12 +11,14 @@
         <dm:AboutModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,Auto" Margin="8">
-        <TextBlock x:Name="AboutTextBlock" Grid.Row="0" Margin="0 8 0 0" />
+    <StackPanel>
+        <TextBlock x:Name="AboutTextBlock" Margin="16" />
 
-        <ui:HyperlinkButton x:Name="DocsButton" Grid.Row="1" Content="{l:Translate ViewDocumentation}" Margin="0 16" />
+        <DockPanel Margin="16 0 16 16">
+            <ui:HyperlinkButton x:Name="DocsButton" DockPanel.Dock="Left" Content="{l:Translate ViewDocumentation}" />
 
-        <ui:Button x:Name="OKButton" Grid.Row="2" Margin="0 16 0 0" HorizontalAlignment="Right" IsDefault="True"
-                   Classes="accent" Content="{l:Translate OK}" />
-    </Grid>
+            <ui:Button x:Name="OKButton" DockPanel.Dock="Right" HorizontalAlignment="Right" IsDefault="True"
+                       Classes="accent" Content="{l:Translate OK}" />
+        </DockPanel>
+    </StackPanel>
 </UserControl>

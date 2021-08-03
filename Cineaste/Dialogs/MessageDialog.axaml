@@ -10,9 +10,9 @@
         <dm:MessageModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto" Margin="8">
-        <TextBlock x:Name="MessageTextBlock" Grid.Row="0" Margin="0 8 0 0" />
-        <ui:Button x:Name="CloseButton" Grid.Row="1" Margin="0 16 0 0" HorizontalAlignment="Right"
-                IsDefault="True" Classes="accent" />
-    </Grid>
+    <StackPanel Margin="8">
+        <TextBlock x:Name="MessageTextBlock" Margin="0 8 0 0" />
+        <ui:Button x:Name="CloseButton" Margin="0 16 0 0" IsDefault="True" Classes="accent"
+                   HorizontalAlignment="Right" />
+    </StackPanel>
 </UserControl>

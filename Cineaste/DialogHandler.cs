@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
+using System.Linq.Expressions;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -60,7 +62,8 @@ namespace Cineaste
 
         public async Task ShowTagFormDialogAsync(InteractionContext<TagFormViewModel, Unit> ctx)
         {
-            var result = await this.ShowDialogWindowForViewModel(ctx.Input, ctx.Input.FormTitle, vm => vm.Close);
+            var result = await this.ShowDialogWindowForViewModel(
+                ctx.Input, title: null, vm => vm.Close, vmTitle: vm => vm.FormTitle);
             ctx.SetOutput(result);
         }
 
@@ -116,41 +119,58 @@ namespace Cineaste
             TViewModel viewModel,
             Func<TViewModel, TViewModel>? transform = null)
             where TViewModel : DialogModelBase<TResult> =>
-            this.ShowDialogWindowForViewModel(viewModel, viewModel.Title, vm => vm.Close, transform);
+            this.ShowDialogWindowForViewModel(viewModel, viewModel.Title, vm => vm.Close, transform: transform);
 
         private async Task<TResult?> ShowDialogWindowForViewModel<TViewModel, TResult>(
             TViewModel viewModel,
-            string title,
+            string? title,
             Func<TViewModel, IObservable<TResult>> close,
+            Expression<Func<TViewModel, string?>>? vmTitle = null,
             Func<TViewModel, TViewModel>? transform = null)
             where TViewModel : ReactiveObject
         {
             var view = GetDefaultService<IViewFor<TViewModel>>();
-            view.ViewModel = transform != null ? transform(viewModel) : viewModel;
+            var newViewModel = transform != null ? transform(viewModel) : viewModel;
+            view.ViewModel = newViewModel;
 
             var window = new Window
             {
                 Content = view,
-                Title = Messages.ResourceManager.GetString(title, CultureInfo.CurrentUICulture) ?? title,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 CanResize = false,
                 Icon = this.window.Icon
             };
 
+            var subscriptions = new CompositeDisposable();
+
+            if (title != null)
+            {
+                window.Title = Messages.ResourceManager.GetString(title, CultureInfo.CurrentUICulture) ?? title;
+            } else if (vmTitle != null)
+            {
+                newViewModel.WhenAnyValue(vmTitle)
+                    .Select(title => !String.IsNullOrWhiteSpace(title)
+                        ? String.Format(CultureInfo.InvariantCulture, Messages.TagFormHeaderFormat, title)
+                        : Messages.TagFormHeader)
+                    .BindTo(window, w => w.Title)
+                    .DisposeWith(subscriptions);
+            }
+
             var result = default(TResult);
 
-            var subscription = close(view.ViewModel)
+            close(view.ViewModel)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(closeResult =>
                 {
                     result = closeResult;
                     window.Close();
-                });
+                })
+                .DisposeWith(subscriptions);
 
             await window.ShowDialog(this.window);
 
-            subscription.Dispose();
+            subscriptions.Dispose();
 
             return result;
         }
