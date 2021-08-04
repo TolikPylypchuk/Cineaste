@@ -1,8 +1,0 @@
-<local:TextFilterInputControlBase x:Class="Cineaste.Views.Filters.TextFilterInputControl"
-                                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                                  xmlns:local="clr-namespace:Cineaste.Views.Filters"
-                                  xmlns:v="clr-namespace:Cineaste.Views">
-    <TextBox x:Name="InputBox" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-             v:Properties.TripleClickSelectAll="True" TextWrapping="Wrap" />
-</local:TextFilterInputControlBase>
