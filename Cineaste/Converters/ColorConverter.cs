@@ -20,8 +20,11 @@ namespace Cineaste.Converters
         {
             switch (from)
             {
-                case string value when Color.TryParse(value, out var color):
-                    result = toType == typeof(Color) ? color : new Color2(color);
+                case string value when toType == typeof(Color) && Color.TryParse(value, out var color):
+                    result = color;
+                    return true;
+                case string value when toType == typeof(Color2) && Color2.TryParse(value, out var color):
+                    result = color;
                     return true;
                 case Color value:
                     result = $"#{value.ToUint32():X8}";
