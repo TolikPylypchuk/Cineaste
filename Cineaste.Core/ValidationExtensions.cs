@@ -1,6 +1,9 @@
 using System;
 using System.Linq.Expressions;
 
+using Cineaste.Core.Validation;
+using Cineaste.Core.ViewModels.Forms.Base;
+
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Extensions;
@@ -30,5 +33,10 @@ namespace Cineaste.Core
                 value => value >= minValue && value <= maxValue,
                 value => $"{propertyName}Invalid");
         }
+
+        public static ValidationHelper ValidationRuleForColor<TForm>(
+            this TForm form, Expression<Func<TForm, string>> vmProperty)
+            where TForm : ReactiveValidationObject, IReactiveForm =>
+            form.ValidationRule(vmProperty, HexColorValidator.IsArgbString, "HexColorInvalid");
     }
 }

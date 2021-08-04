@@ -1,35 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace Cineaste.Core
 {
     public static class Extensions
     {
-        public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable)
-            where T : class =>
-            enumerable.Where(item => item != null)!;
-
         public static string? NullIfEmpty(this string? str) =>
             String.IsNullOrEmpty(str) ? null : str;
 
         public static string EmptyIfNull(this string? str) =>
             String.IsNullOrEmpty(str) ? String.Empty : str;
-
-        public static void DisposeAndRemove<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
-            where TValue : IDisposable
-        {
-            dictionary[key].Dispose();
-            dictionary.Remove(key);
-        }
-
-        public static void DisposeAndClear<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
-            where TValue : IDisposable
-        {
-            dictionary.Values.ForEach(value => value.Dispose());
-            dictionary.Clear();
-        }
 
         public static string GetMemberName(this Expression expression) =>
             expression is LambdaExpression lambda && lambda.Body is MemberExpression member

@@ -23,13 +23,13 @@ using Cineaste.Converters;
 using Cineaste.Core;
 using Cineaste.Core.Models;
 using Cineaste.Core.Preferences;
-using Cineaste.Core.State;
 using Cineaste.Core.ViewModels;
 using Cineaste.Core.ViewModels.Filters;
 using Cineaste.Data;
 using Cineaste.Data.Models;
 using Cineaste.Infrastructure;
 using Cineaste.Properties;
+using Cineaste.State;
 using Cineaste.Validation;
 using Cineaste.Views;
 
@@ -47,7 +47,6 @@ using Splat.Serilog;
 
 using static Cineaste.Constants;
 using static Cineaste.Core.Constants;
-using static Cineaste.Core.Util;
 using static Cineaste.Util;
 
 namespace Cineaste

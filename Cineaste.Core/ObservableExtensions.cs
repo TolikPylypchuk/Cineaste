@@ -1,15 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reactive;
 using System.Reactive.Linq;
-
-using Cineaste.Core.Validation;
-using Cineaste.Core.ViewModels.Forms.Base;
-
-using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 namespace Cineaste.Core
 {
@@ -92,10 +85,5 @@ namespace Cineaste.Core
 
         public static IDisposable SubscribeAsync(this IObservable<Unit> observable, Func<IObservable<Unit>> observer) =>
             observable.SelectMany(_ => observer()).Subscribe();
-
-        public static ValidationHelper ValidationRuleForColor<TForm>(
-            this TForm form, Expression<Func<TForm, string>> vmProperty)
-            where TForm : ReactiveValidationObject, IReactiveForm =>
-            form.ValidationRule(vmProperty, HexColorValidator.IsArgbString, "HexColorInvalid");
     }
 }

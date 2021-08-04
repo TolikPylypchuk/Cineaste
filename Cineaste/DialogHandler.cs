@@ -17,7 +17,6 @@ using ReactiveUI;
 
 using static Cineaste.Constants;
 using static Cineaste.Core.ServiceUtil;
-using static Cineaste.Core.Util;
 using static Cineaste.Util;
 
 namespace Cineaste
