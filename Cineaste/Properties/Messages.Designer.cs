@@ -169,24 +169,6 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Advanced Preferences.
-        /// </summary>
-        internal static string AdvancedPreferences {
-            get {
-                return ResourceManager.GetString("AdvancedPreferences", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Changing these preferences takes effect after restarting the app.
-        /// </summary>
-        internal static string AdvancedPreferencesHint {
-            get {
-                return ResourceManager.GetString("AdvancedPreferencesHint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to All Files.
         /// </summary>
         internal static string AllExtensionsDescription {
@@ -1429,6 +1411,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changing the logging preferences takes effect after restarting the app.
+        /// </summary>
+        internal static string LoggingPreferencesHint {
+            get {
+                return ResourceManager.GetString("LoggingPreferencesHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Debug.
         /// </summary>
         internal static string LogLevelDebug {
@@ -1528,11 +1519,29 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default Settings.
+        /// </summary>
+        internal static string NavigationDefaultSettings {
+            get {
+                return ResourceManager.GetString("NavigationDefaultSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List.
         /// </summary>
         internal static string NavigationList {
             get {
                 return ResourceManager.GetString("NavigationList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other Preferences.
+        /// </summary>
+        internal static string NavigationOtherPreferences {
+            get {
+                return ResourceManager.GetString("NavigationOtherPreferences", resourceCulture);
             }
         }
         

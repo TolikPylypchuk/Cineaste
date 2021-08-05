@@ -17,6 +17,11 @@
     <ui:NavigationView x:Name="Navigation" IsBackEnabled="False" IsBackButtonVisible="False" AlwaysShowHeader="False">
         <ui:NavigationView.MenuItems>
             <ui:NavigationViewItem x:Name="ListItem" Content="{l:Translate NavigationList}" Icon="List" />
+            <ui:NavigationViewItem Content="{l:Translate NavigationStats}" IsEnabled="False">
+                <ui:NavigationViewItem.Icon>
+                    <c:SymbolIcon Symbol="DataHistogram" />
+                </ui:NavigationViewItem.Icon>
+            </ui:NavigationViewItem>
         </ui:NavigationView.MenuItems>
 
         <rx:ViewModelViewHost x:Name="Host" />

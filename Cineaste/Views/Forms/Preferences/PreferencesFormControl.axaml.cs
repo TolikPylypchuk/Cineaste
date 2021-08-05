@@ -13,6 +13,8 @@ using Cineaste.Core.ViewModels.Forms.Preferences;
 using Cineaste.Data;
 using Cineaste.Properties;
 
+using FluentAvalonia.UI.Controls;
+
 using ReactiveUI;
 
 using static Cineaste.Data.ListSortOrder;
@@ -38,9 +40,28 @@ namespace Cineaste.Views.Forms.Preferences
                 this.DefaultSecondSortOrderComboBox.SetEnumValues(ByTitleSimple, ByOriginalTitleSimple, ByYear);
                 this.DefaultSecondSortDirectionComboBox.SetEnumValues<ListSortDirection>();
 
+                this.BindPanels(disposables);
                 this.BindFields(disposables);
                 this.BindCommands(disposables);
             });
+        }
+
+        private void BindPanels(CompositeDisposable disposables)
+        {
+            var invokedItem = Observable.FromEventPattern<NavigationViewItemInvokedEventArgs>(
+                    h => this.Navigation.ItemInvoked += h, h => this.Navigation.ItemInvoked -= h)
+                    .Select(e => e.EventArgs.InvokedItemContainer)
+                    .DistinctUntilChanged();
+
+            invokedItem
+                    .Select(item => item == this.DefaultSettingsItem)
+                    .BindTo(this, v => v.DefaultSettingsPanel.IsVisible)
+                    .DisposeWith(disposables);
+
+            invokedItem
+                    .Select(item => item == this.OtherPreferencesItem)
+                    .BindTo(this, v => v.OtherPreferencesPanel.IsVisible)
+                    .DisposeWith(disposables);
         }
 
         private void BindFields(CompositeDisposable disposables)

@@ -116,7 +116,6 @@
 
                         <Style Selector="Button.plus">
                             <Setter Property="Margin" Value="32 0 0 0" />
-                            <Setter Property="Margin" Value="32 0 0 0" />
                             <Setter Property="Width" Value="30" />
                             <Setter Property="Height" Value="30" />
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -136,7 +135,7 @@
                         <c:SymbolIcon Classes="add" />
                     </Button>
 
-                    <ItemsControl x:Name="Kinds" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="8 8 0 8">
+                    <ItemsControl x:Name="Kinds" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="8 0">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -150,7 +149,7 @@
                         <c:SymbolIcon Classes="add" />
                     </Button>
 
-                    <ItemsControl x:Name="Tags" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
+                    <ItemsControl x:Name="Tags" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="8 0">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />

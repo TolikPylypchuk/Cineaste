@@ -30,7 +30,9 @@ namespace Cineaste.Views
 
                 Observable.FromEventPattern<NavigationViewItemInvokedEventArgs>(
                     h => this.Navigation.ItemInvoked += h, h => this.Navigation.ItemInvoked -= h)
-                    .Select(e => e.EventArgs.IsSettingsInvoked
+                    .Select(e => e.EventArgs.InvokedItemContainer)
+                    .DistinctUntilChanged()
+                    .Select(item => item == this.ListItem
                         ? this.ViewModel!.SwitchToSettings
                         : this.ViewModel!.SwitchToList)
                     .SubscribeAsync(command => command.Execute())

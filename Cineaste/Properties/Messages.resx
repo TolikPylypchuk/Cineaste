@@ -153,12 +153,6 @@
   <data name="AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>
-  <data name="AdvancedPreferences" xml:space="preserve">
-    <value>Advanced Preferences</value>
-  </data>
-  <data name="AdvancedPreferencesHint" xml:space="preserve">
-    <value>Changing these preferences takes effect after restarting the app</value>
-  </data>
   <data name="AllExtensionsDescription" xml:space="preserve">
     <value>All Files</value>
   </data>
@@ -573,6 +567,9 @@
   <data name="LiveAction" xml:space="preserve">
     <value>Live Action</value>
   </data>
+  <data name="LoggingPreferencesHint" xml:space="preserve">
+    <value>Changing the logging preferences takes effect after restarting the app</value>
+  </data>
   <data name="LogLevelDebug" xml:space="preserve">
     <value>Debug</value>
   </data>
@@ -606,8 +603,14 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="NavigationDefaultSettings" xml:space="preserve">
+    <value>Default Settings</value>
+  </data>
   <data name="NavigationList" xml:space="preserve">
     <value>List</value>
+  </data>
+  <data name="NavigationOtherPreferences" xml:space="preserve">
+    <value>Other Preferences</value>
   </data>
   <data name="NavigationSettings" xml:space="preserve">
     <value>Settings</value>
