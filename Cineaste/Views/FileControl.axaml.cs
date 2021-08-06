@@ -33,8 +33,8 @@ namespace Cineaste.Views
                     .Select(e => e.EventArgs.InvokedItemContainer)
                     .DistinctUntilChanged()
                     .Select(item => item == this.ListItem
-                        ? this.ViewModel!.SwitchToSettings
-                        : this.ViewModel!.SwitchToList)
+                        ? this.ViewModel!.SwitchToList
+                        : this.ViewModel!.SwitchToSettings)
                     .SubscribeAsync(command => command.Execute())
                     .DisposeWith(disposables);
 
