@@ -11,13 +11,19 @@ namespace Cineaste.Core.Preferences
     [Equals(DoNotAddEqualityOperators = true)]
     public sealed class UserPreferences : ISettings
     {
-        public UserPreferences(FilePreferences file, DefaultsPreferences defaults, LoggingPreferences logging)
+        public UserPreferences(
+            UIPreferences ui,
+            FilePreferences file,
+            DefaultsPreferences defaults,
+            LoggingPreferences logging)
         {
+            this.UI = ui;
             this.File = file;
             this.Defaults = defaults;
             this.Logging = logging;
         }
 
+        public UIPreferences UI { get; }
         public FilePreferences File { get; }
         public DefaultsPreferences Defaults { get; }
         public LoggingPreferences Logging { get; }

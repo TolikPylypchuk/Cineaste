@@ -7,7 +7,7 @@
              x:Class="Cineaste.Controls.Chip">
     <Grid ColumnDefinitions="Auto,*,Auto">
         <Border x:Name="MainBorder" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" CornerRadius="16"
-                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" />
+                Background="{DynamicResource SolidBackgroundFillColorSecondaryBrush}" />
 
         <Border x:Name="ColorTagBorder" Background="{Binding Path=TagBrush}" VerticalAlignment="Center"
                 Height="32" Width="32" Grid.Row="0" Grid.Column="0">

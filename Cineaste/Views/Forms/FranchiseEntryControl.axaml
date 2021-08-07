@@ -11,8 +11,8 @@
         <vm:FranchiseEntryViewModel />
     </Design.DataContext>
 
-    <Border HorizontalAlignment="Stretch" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
-                BorderThickness="0 0 0 1" Padding="8" Background="Transparent" Cursor="Hand">
+    <Border HorizontalAlignment="Stretch" BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}" Padding="8"
+            BorderThickness="0 0 0 1" Background="Transparent" Cursor="Hand">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition SharedSizeGroup="DisplayNumber" Width="Auto" />

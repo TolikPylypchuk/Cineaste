@@ -11,7 +11,7 @@
         <vm:SeriesComponentViewModel />
     </Design.DataContext>
 
-    <Border HorizontalAlignment="Stretch" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+    <Border HorizontalAlignment="Stretch" BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}"
             BorderThickness="0 0 0 1" Padding="8" Background="Transparent" Cursor="Hand">
         <Grid>
             <Grid.ColumnDefinitions>

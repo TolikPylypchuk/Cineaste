@@ -16,7 +16,6 @@
     </Application.Resources>
 
     <Application.Styles>
-        <FluentTheme Mode="Light" />
         <ui:FluentAvaloniaTheme />
 
         <StyleInclude Source="/Styles/Styles.axaml" />

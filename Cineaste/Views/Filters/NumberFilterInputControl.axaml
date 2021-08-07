@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:vm="using:Cineaste.Core.ViewModels.Filters"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
              x:Class="Cineaste.Views.Filters.NumberFilterInputControl">
@@ -16,6 +17,6 @@
         </Grid.RowDefinitions>
 
         <TextBlock x:Name="CaptionTextBlock" Grid.Row="0" Classes="caption" />
-        <NumericUpDown x:Name="Input" Grid.Row="1" />
+        <ui:NumberBox x:Name="Input" Grid.Row="1" HorizontalAlignment="Stretch" />
     </Grid>
 </UserControl>

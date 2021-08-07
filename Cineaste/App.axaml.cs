@@ -17,12 +17,15 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Markup.Xaml.Styling;
 using Avalonia.ReactiveUI;
+using Avalonia.Themes.Fluent;
 
 using Cineaste.Converters;
 using Cineaste.Core;
 using Cineaste.Core.Models;
 using Cineaste.Core.Preferences;
+using Cineaste.Core.Theming;
 using Cineaste.Core.ViewModels;
 using Cineaste.Core.ViewModels.Filters;
 using Cineaste.Data;
@@ -93,7 +96,7 @@ namespace Cineaste
         {
             this.ConfigureLocator();
             this.ConfigureSuspensionDriver(desktop);
-            this.TweakUI();
+            this.ConfigureUI();
 
             var mainViewModel = new MainViewModel();
 
@@ -136,6 +139,7 @@ namespace Cineaste
             }
 
             Locator.CurrentMutable.RegisterConstant(preferences);
+            Locator.CurrentMutable.RegisterConstant(new ThemeManager(preferences.UI.Theme));
 
             this.ConfigureLogging(preferences);
         }
@@ -152,12 +156,16 @@ namespace Cineaste
             autoSuspendHelper.OnFrameworkInitializationCompleted();
         }
 
-        private void TweakUI()
+        private void ConfigureUI()
         {
             TransitioningContentControl.PageTransitionProperty.OverrideDefaultValue(typeof(ViewModelViewHost), null);
 
-            var theme = AvaloniaLocator.Current.GetService<FluentAvaloniaTheme>();
-            theme.RequestedTheme = "Light";
+            var themeManager = Locator.Current.GetService<ThemeManager>();
+            var fluentAvaloniaTheme = AvaloniaLocator.Current.GetService<FluentAvaloniaTheme>();
+
+            themeManager.WhenAnyValue(tm => tm.Theme)
+                .Select(Enum.GetName)
+                .Subscribe(theme => fluentAvaloniaTheme.RequestedTheme = theme);
         }
 
         private MainWindow CreateMainWindow(
@@ -261,9 +269,11 @@ namespace Cineaste
 
         private async Task<UserPreferences> CreateDefaultPreferencesAsync()
         {
-            var filePreferences = new FilePreferences(showRecentFiles: true, new List<RecentFile>());
+            var ui = new UIPreferences(Theme.Light);
 
-            var defaultsPreferences = new DefaultsPreferences(
+            var file = new FilePreferences(showRecentFiles: true, new List<RecentFile>());
+
+            var defaults = new DefaultsPreferences(
                 Messages.DefaultDefaultSeasonTitle,
                 Messages.DefaultDefaultSeasonOriginalTitle,
                 this.CreateDefaultKinds(),
@@ -274,11 +284,11 @@ namespace Cineaste
                 ListSortDirection.Ascending,
                 ListSortDirection.Ascending);
 
-            var loggingPreferences = new LoggingPreferences(
+            var logging = new LoggingPreferences(
                 Path.Combine(this.GetConfigDirectory(), $"{this.appName}.log"),
                 (int)LogEventLevel.Warning);
 
-            var preferences = new UserPreferences(filePreferences, defaultsPreferences, loggingPreferences);
+            var preferences = new UserPreferences(ui, file, defaults, logging);
 
             await BlobCache.UserAccount.InsertObject(PreferencesKey, preferences);
 

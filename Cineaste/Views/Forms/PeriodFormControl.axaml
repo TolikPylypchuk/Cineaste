@@ -30,7 +30,7 @@
 
         <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,8,*">
             <TextBlock Grid.Row="0" Grid.Column="0" Classes="caption" Text="{l:Translate NumberOfEpisodes}" />
-            <NumericUpDown x:Name="NumberOfEpisodesTextBox" Grid.Row="1" Grid.Column="0" />
+            <ui:NumberBox x:Name="NumberOfEpisodesBox" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" />
             <TextBlock x:Name="NumberOfEpisodesErrorTextBlock" Grid.Row="2" Grid.Column="0" Classes="error caption" />
 
             <CheckBox x:Name="IsSingleDayReleaseCheckBox" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center">

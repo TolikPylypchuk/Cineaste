@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Cineaste.Views.RecentFileControl">
-    <Border x:Name="Border" Padding="8" BorderThickness="0 0 0 1"
-            BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" Cursor="Hand">
+    <Border x:Name="Border" Padding="8" BorderThickness="0 0 0 1" Cursor="Hand"
+            BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}">
         <Grid ColumnDefinitions="Auto,*">
             <CheckBox x:Name="IsSelectedCheckBox" VerticalAlignment="Center" />
 

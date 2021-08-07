@@ -62,8 +62,8 @@
 
                     <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,8,*">
                         <TextBlock Grid.Row="0" Grid.Column="0" Classes="caption" Text="{l:Translate Year}" />
-                        <NumericUpDown x:Name="YearTextBox" Grid.Row="1" Grid.Column="0"
-                                       HorizontalAlignment="Stretch" />
+                        <ui:NumberBox x:Name="YearBox" Grid.Row="1" Grid.Column="0"
+                                      Foreground="{DynamicResource TextControlForeground}" HorizontalAlignment="Stretch" />
                         <TextBlock x:Name="YearErrorTextBlock" Grid.Row="2" Grid.Column="0" Classes="error caption" />
 
                         <TextBlock Grid.Row="0" Grid.Column="2" Classes="caption" Text="{l:Translate Kind}" />

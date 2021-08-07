@@ -11,7 +11,7 @@
     </Style>
 
     <Style Selector="TextBlock.error">
-        <Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
     </Style>
 
     <Style Selector="Button.icon">
@@ -24,5 +24,75 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Padding" Value="2" />
+    </Style>
+
+    <Style Selector="ui|NumberBox">
+        <Setter Property="Margin" Value="0 -8 0 0" />
+        <Setter Property="SpinButtonPlacementMode" Value="Inline" />
+    </Style>
+
+    <Style Selector="TextBox.NumberBoxTextBoxStyle">
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DataValidationErrors>
+                    <Panel>
+                        <Border Name="PART_BorderElement" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                MinWidth="{TemplateBinding MinWidth}" MinHeight="{TemplateBinding MinHeight}"
+                                RenderTransform="scaleY(-1)" />
+
+                        <Border Margin="{TemplateBinding BorderThickness}">
+                            <Grid ColumnDefinitions="Auto,*,Auto" >
+                                <ContentPresenter Grid.Column="0" Grid.ColumnSpan="1"
+                                                  Content="{TemplateBinding InnerLeftContent}" />
+                                <DockPanel x:Name="PART_InnerDockPanel" Grid.Column="1" Grid.ColumnSpan="1"
+                                           Margin="{TemplateBinding Padding}">
+                                    <TextBlock Name="PART_FloatingWatermark"
+                                               Foreground="{DynamicResource SystemAccentColor}"
+                                               FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding Watermark}"
+                                               DockPanel.Dock="Top" />
+
+                                    <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding
+                                                      (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                                  VerticalScrollBarVisibility="{TemplateBinding
+                                                      (ScrollViewer.VerticalScrollBarVisibility)}">
+                                        <Panel>
+                                            <TextBlock Name="PART_Watermark" Text="{TemplateBinding Watermark}"
+                                                       TextAlignment="{TemplateBinding TextAlignment}"
+                                                       TextWrapping="{TemplateBinding TextWrapping}"
+                                                       IsVisible="{TemplateBinding Text,
+                                                           Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                       HorizontalAlignment="{TemplateBinding
+                                                           HorizontalContentAlignment}"
+                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                       IsHitTestVisible="False"/>
+                                            <TextPresenter Name="PART_TextPresenter"
+                                                           Text="{TemplateBinding Text, Mode=TwoWay}"
+                                                           CaretIndex="{TemplateBinding CaretIndex}"
+                                                           SelectionStart="{TemplateBinding SelectionStart}"
+                                                           SelectionEnd="{TemplateBinding SelectionEnd}"
+                                                           TextAlignment="{TemplateBinding TextAlignment}"
+                                                           TextWrapping="{TemplateBinding TextWrapping}"
+                                                           PasswordChar="{TemplateBinding PasswordChar}"
+                                                           RevealPassword="{TemplateBinding RevealPassword}"
+                                                           SelectionBrush="{TemplateBinding SelectionBrush}"
+                                                           SelectionForegroundBrush="{TemplateBinding
+                                                               SelectionForegroundBrush}"
+                                                           CaretBrush="{TemplateBinding CaretBrush}"
+                                                           HorizontalAlignment="{TemplateBinding
+                                                               HorizontalContentAlignment}"
+                                                           VerticalAlignment="{TemplateBinding
+                                                               VerticalContentAlignment}"/>
+                                        </Panel>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </Border>
+                    </Panel>
+                </DataValidationErrors>
+            </ControlTemplate>
+        </Setter>
     </Style>
 </Styles>

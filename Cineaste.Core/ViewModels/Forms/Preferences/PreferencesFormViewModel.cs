@@ -6,6 +6,7 @@ using Akavache;
 
 using Cineaste.Core.Models;
 using Cineaste.Core.Preferences;
+using Cineaste.Core.Theming;
 using Cineaste.Core.ViewModels.Forms.Base;
 using Cineaste.Data.Models;
 
@@ -19,15 +20,18 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
     public sealed class PreferencesFormViewModel : SettingsFormBase<UserPreferences, PreferencesFormViewModel>
     {
         private readonly IBlobCache store;
+        private readonly ThemeManager themeManager;
 
         public PreferencesFormViewModel(
             UserPreferences userPreferences,
             IBlobCache? store = null,
+            ThemeManager? themeManager = null,
             ResourceManager? resourceManager = null,
             IScheduler? scheduler = null)
             : base(userPreferences, resourceManager, scheduler)
         {
             this.store = store ?? GetDefaultService<IBlobCache>(StoreKey);
+            this.themeManager = themeManager ?? GetDefaultService<ThemeManager>();
 
             this.Header = new TabHeaderViewModel(
                 String.Empty, this.ResourceManager.GetString("Preferences") ?? String.Empty);
@@ -36,6 +40,9 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
             this.CanNeverDelete();
             this.EnableChangeTracking();
         }
+
+        [Reactive]
+        public Theme Theme { get; set; }
 
         [Reactive]
         public bool ShowRecentFiles { get; set; }
@@ -52,6 +59,7 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
 
         protected override void EnableChangeTracking()
         {
+            this.TrackChanges(vm => vm.Theme, vm => vm.Model.UI.Theme);
             this.TrackChanges(vm => vm.ShowRecentFiles, vm => vm.Model.File.ShowRecentFiles);
             this.TrackChanges(vm => vm.LogPath, vm => vm.Model.Logging.LogPath);
             this.TrackChanges(vm => vm.MinLogLevel, vm => vm.Model.Logging.MinLogLevel);
@@ -61,7 +69,10 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
 
         protected override IObservable<UserPreferences> OnSave()
         {
+            this.Model.UI.Theme = this.Theme;
             this.Model.File.ShowRecentFiles = this.ShowRecentFiles;
+
+            this.themeManager.Theme = this.Theme;
 
             if (!this.Model.File.ShowRecentFiles)
             {
@@ -78,6 +89,7 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
 
         protected override void CopyProperties()
         {
+            this.Theme = this.Model.UI.Theme;
             this.ShowRecentFiles = this.Model.File.ShowRecentFiles;
             this.LogPath = this.Model.Logging.LogPath;
             this.MinLogLevel = this.Model.Logging.MinLogLevel;

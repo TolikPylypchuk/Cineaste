@@ -12,7 +12,7 @@
 
     <Grid x:Name="Grid" RowDefinitions="Auto,*" HorizontalAlignment="Stretch">
         <Border Grid.Row="0" HorizontalAlignment="Stretch" BorderThickness="0,0,0,1" Padding="16"
-                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}">
+                BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}">
             <Grid ColumnDefinitions="50,*,*,142" HorizontalAlignment="Stretch">
                 <TextBlock Grid.Column="0" Text="{l:Translate NumberHeader}" TextAlignment="Left" />
 

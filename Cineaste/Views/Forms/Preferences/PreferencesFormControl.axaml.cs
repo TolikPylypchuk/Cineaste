@@ -5,10 +5,13 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using Avalonia;
+using Avalonia.Controls.Primitives;
 using Avalonia.ReactiveUI;
 
 using Cineaste.Converters;
 using Cineaste.Core;
+using Cineaste.Core.Preferences;
 using Cineaste.Core.ViewModels.Forms.Preferences;
 using Cineaste.Data;
 using Cineaste.Properties;
@@ -41,7 +44,8 @@ namespace Cineaste.Views.Forms.Preferences
                 this.DefaultSecondSortDirectionComboBox.SetEnumValues<ListSortDirection>();
 
                 this.BindPanels(disposables);
-                this.BindFields(disposables);
+                this.BindDefaultSettings(disposables);
+                this.BindOtherPreferences(disposables);
                 this.BindCommands(disposables);
             });
         }
@@ -64,7 +68,7 @@ namespace Cineaste.Views.Forms.Preferences
                     .DisposeWith(disposables);
         }
 
-        private void BindFields(CompositeDisposable disposables)
+        private void BindDefaultSettings(CompositeDisposable disposables)
         {
             this.CultureInfoComboBox.Items = CultureInfo.GetCultures(CultureTypes.AllCultures)
                 .OrderBy(culture => culture.EnglishName)
@@ -105,6 +109,31 @@ namespace Cineaste.Views.Forms.Preferences
                 .DisposeWith(disposables);
 
             this.OneWayBind(this.ViewModel, vm => vm.TagItems, v => v.Tags.Items)
+                .DisposeWith(disposables);
+        }
+
+        public void BindOtherPreferences(CompositeDisposable disposables)
+        {
+            this.WhenAnyValue(v => v.ViewModel!.Theme)
+                .Select(theme => theme == Theme.Light)
+                .BindTo(this, v => v.LightThemeButton.IsChecked)
+                .DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel!.Theme)
+                .Select(theme => theme == Theme.Dark)
+                .BindTo(this, v => v.DarkThemeButton.IsChecked)
+                .DisposeWith(disposables);
+
+            this.LightThemeButton.GetObservable(ToggleButton.IsCheckedProperty)
+                .Where(isChecked => isChecked ?? false)
+                .Discard()
+                .Subscribe(() => this.ViewModel!.Theme = Theme.Light)
+                .DisposeWith(disposables);
+
+            this.DarkThemeButton.GetObservable(ToggleButton.IsCheckedProperty)
+                .Where(isChecked => isChecked ?? false)
+                .Discard()
+                .Subscribe(() => this.ViewModel!.Theme = Theme.Dark)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.ShowRecentFiles, v => v.ShowRecentFilesCheckBox.IsChecked)

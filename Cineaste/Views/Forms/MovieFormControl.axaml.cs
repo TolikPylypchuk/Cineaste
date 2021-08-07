@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 
 using Akavache;
 
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
@@ -17,6 +16,8 @@ using Cineaste.Core.ViewModels.Forms.Preferences;
 using DynamicData.Binding;
 
 using ReactiveUI;
+
+using static Cineaste.Data.Constants;
 
 namespace Cineaste.Views.Forms
 {
@@ -171,7 +172,10 @@ namespace Cineaste.Views.Forms
             this.OneWayBind(this.ViewModel, vm => vm.OriginalTitles, v => v.OriginalTitles.Items)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.Year, v => v.YearTextBox.Value)
+            this.YearBox.Minimum = MovieMinYear;
+            this.YearBox.Maximum = MovieMaxYear;
+
+            this.Bind(this.ViewModel, vm => vm.Year, v => v.YearBox.Value)
                 .DisposeWith(disposables);
 
             this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.KindComboBox.Items)

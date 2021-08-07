@@ -187,6 +187,11 @@
                     <StackPanel x:Name="OtherPreferencesPanel" IsVisible="False">
                         <TextBlock Text="{l:Translate OtherPreferences}" Margin="8 16" Classes="panel-title" />
 
+                        <StackPanel Orientation="Horizontal" Margin="8 0 0 8">
+                            <RadioButton x:Name="LightThemeButton" Content="{l:Translate ThemeLight}" />
+                            <RadioButton x:Name="DarkThemeButton" Content="{l:Translate ThemeDark}" Margin="32 0 0 0" />
+                        </StackPanel>
+
                         <CheckBox x:Name="ShowRecentFilesCheckBox" Margin="8" Content="{l:Translate ShowRecentFiles}"
                                   HorizontalAlignment="Left" />
 

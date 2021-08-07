@@ -10,7 +10,7 @@
     </Design.DataContext>
 
     <Border x:Name="ItemBorder" HorizontalAlignment="Stretch" Padding="16" Cursor="Hand" BorderThickness="0 0 0 1"
-            BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" Background="Transparent">
+            BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}" Background="Transparent">
         <Grid ColumnDefinitions="50,*,*,125" HorizontalAlignment="Stretch">
             <Grid.Styles>
                 <Style Selector="TextBlock">

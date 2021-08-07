@@ -13,6 +13,8 @@ using Cineaste.Properties;
 
 using ReactiveUI;
 
+using static Cineaste.Data.Constants;
+
 namespace Cineaste.Views.Forms
 {
     public partial class PeriodFormControl : ReactiveUserControl<PeriodFormViewModel>
@@ -101,7 +103,10 @@ namespace Cineaste.Views.Forms
                 .BindTo(this, v => v.StartDateCaption.Text)
                 .DisposeWith(disposables);
 
-            this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesTextBox.Value)
+            this.NumberOfEpisodesBox.Minimum = PeriodMinNumberOfEpisodes;
+            this.NumberOfEpisodesBox.Maximum = PeriodMaxNumberOfEpisodes;
+
+            this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesBox.Value)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsSingleDayRelease, v => v.IsSingleDayReleaseCheckBox.IsChecked)
