@@ -200,11 +200,11 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
 
         private TagItemViewModel CreateTagItemViewModel(TagModel tagModel)
         {
-            var viewModel = new TagItemViewModel(tagModel, canSelect: false);
+            var vm = new TagItemViewModel(tagModel, canSelect: false);
 
             var subscriptions = new CompositeDisposable();
 
-            viewModel.Delete
+            vm.Delete
                 .Subscribe(_ =>
                 {
                     this.impliedTagsSource.Remove(tagModel);
@@ -212,7 +212,7 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
                 })
                 .DisposeWith(subscriptions);
 
-            return viewModel;
+            return vm;
         }
     }
 }

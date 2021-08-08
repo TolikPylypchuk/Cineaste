@@ -30,7 +30,7 @@ namespace Cineaste.Converters
                     result = $"#{value.ToUint32():X8}";
                     return true;
                 case Color2 value:
-                    result = value.ToHexString();
+                    result = value.ToHexString().ToUpper();
                     return true;
                 case null:
                     result = null;

@@ -58,6 +58,7 @@ namespace Cineaste.Core.ViewModels
                 .Filter(filter.ObserveOn(RxApp.TaskpoolScheduler))
                 .AutoRefreshOnObservable(item => item.WhenAnyPropertyChanged())
                 .Transform(item => new ListItemViewModel(item))
+                .DisposeMany()
                 .Sort(
                     comparer
                         .Select(c => ComparerBuilder.For<ListItemViewModel>().OrderBy(vm => vm.Item, c))

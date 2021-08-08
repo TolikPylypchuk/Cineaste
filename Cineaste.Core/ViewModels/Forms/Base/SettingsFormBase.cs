@@ -217,6 +217,8 @@ namespace Cineaste.Core.ViewModels.Forms.Base
             var form = new KindFormViewModel(
                 kind, isKindNew.AsObservable(), canDeleteKind, allKindNames, this.ResourceManager, this.Scheduler);
 
+            form.DisposeWith(formSubscriptions);
+
             form.Save
                 .Select(_ => false)
                 .Subscribe(isKindNew)

@@ -11,7 +11,7 @@ using Avalonia.ReactiveUI;
 
 using Cineaste.Converters;
 using Cineaste.Core;
-using Cineaste.Core.Preferences;
+using Cineaste.Core.Theming;
 using Cineaste.Core.ViewModels.Forms.Preferences;
 using Cineaste.Data;
 using Cineaste.Properties;

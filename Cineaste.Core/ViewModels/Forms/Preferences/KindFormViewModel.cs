@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Resources;
 
+using Cineaste.Core.Theming;
 using Cineaste.Core.ViewModels.Forms.Base;
 using Cineaste.Data.Models;
 
@@ -14,21 +16,28 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
+using static Cineaste.Core.ServiceUtil;
+
 namespace Cineaste.Core.ViewModels.Forms.Preferences
 {
-    public sealed class KindFormViewModel : ReactiveForm<Kind, KindFormViewModel>
+    public sealed class KindFormViewModel : ReactiveForm<Kind, KindFormViewModel>, IDisposable
     {
+        private readonly IThemeAwareColorGenerator themeAwareColorGenerator;
         private readonly BehaviorSubject<bool> isNew = new(true);
+        private readonly CompositeDisposable colorSubscriptions = new();
 
         public KindFormViewModel(
             Kind kind,
             IObservable<bool> isNew,
             IObservable<bool> canDelete,
             IObservable<IReadOnlyCollection<KindFormViewModel>> allKinds,
-            ResourceManager? resourceManager,
-            IScheduler? scheduler)
+            ResourceManager? resourceManager = null,
+            IScheduler? scheduler = null,
+            IThemeAwareColorGenerator? themeAwareColorGenerator = null)
             : base(resourceManager, scheduler)
         {
+            this.themeAwareColorGenerator = themeAwareColorGenerator ?? GetDefaultService<IThemeAwareColorGenerator>();
+
             this.Kind = kind;
             this.CopyProperties();
 
@@ -94,15 +103,36 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
 
         protected override KindFormViewModel Self => this;
 
+        public void Dispose() =>
+            this.colorSubscriptions.Dispose();
+
         protected override void EnableChangeTracking()
         {
             this.TrackChanges(vm => vm.Name, vm => vm.Kind.Name);
-            this.TrackChanges(vm => vm.ColorForWatchedMovie, vm => vm.Kind.ColorForWatchedMovie);
-            this.TrackChanges(vm => vm.ColorForWatchedSeries, vm => vm.Kind.ColorForWatchedSeries);
-            this.TrackChanges(vm => vm.ColorForNotWatchedMovie, vm => vm.Kind.ColorForNotWatchedMovie);
-            this.TrackChanges(vm => vm.ColorForNotWatchedSeries, vm => vm.Kind.ColorForNotWatchedSeries);
-            this.TrackChanges(vm => vm.ColorForNotReleasedMovie, vm => vm.Kind.ColorForNotReleasedMovie);
-            this.TrackChanges(vm => vm.ColorForNotReleasedSeries, vm => vm.Kind.ColorForNotReleasedSeries);
+
+            this.TrackChanges(
+                vm => vm.ColorForWatchedMovie,
+                vm => this.themeAwareColorGenerator.TransformColorForCurrentTheme(vm.Kind.ColorForWatchedMovie));
+
+            this.TrackChanges(
+                vm => vm.ColorForWatchedSeries,
+                vm => this.themeAwareColorGenerator.TransformColorForCurrentTheme(vm.Kind.ColorForWatchedSeries));
+
+            this.TrackChanges(
+                vm => vm.ColorForNotWatchedMovie,
+                vm => this.themeAwareColorGenerator.TransformColorForCurrentTheme(vm.Kind.ColorForNotWatchedMovie));
+
+            this.TrackChanges(
+                vm => vm.ColorForNotWatchedSeries,
+                vm => this.themeAwareColorGenerator.TransformColorForCurrentTheme(vm.Kind.ColorForNotWatchedSeries));
+
+            this.TrackChanges(
+                vm => vm.ColorForNotReleasedMovie,
+                vm => this.themeAwareColorGenerator.TransformColorForCurrentTheme(vm.Kind.ColorForNotReleasedMovie));
+
+            this.TrackChanges(
+                vm => vm.ColorForNotReleasedSeries,
+                vm => this.themeAwareColorGenerator.TransformColorForCurrentTheme(vm.Kind.ColorForNotReleasedSeries));
 
             base.EnableChangeTracking();
         }
@@ -110,12 +140,24 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
         protected override IObservable<Kind> OnSave()
         {
             this.Kind.Name = this.Name;
-            this.Kind.ColorForWatchedMovie = this.ColorForWatchedMovie;
-            this.Kind.ColorForWatchedSeries = this.ColorForWatchedSeries;
-            this.Kind.ColorForNotWatchedMovie = this.ColorForNotWatchedMovie;
-            this.Kind.ColorForNotWatchedSeries = this.ColorForNotWatchedSeries;
-            this.Kind.ColorForNotReleasedMovie = this.ColorForNotReleasedMovie;
-            this.Kind.ColorForNotReleasedSeries = this.ColorForNotReleasedSeries;
+
+            this.Kind.ColorForWatchedMovie = this.themeAwareColorGenerator.TransformColorForCurrentTheme(
+                this.ColorForWatchedMovie);
+
+            this.Kind.ColorForWatchedSeries = this.themeAwareColorGenerator.TransformColorForCurrentTheme(
+                this.ColorForWatchedSeries);
+
+            this.Kind.ColorForNotWatchedMovie = this.themeAwareColorGenerator.TransformColorForCurrentTheme(
+                this.ColorForNotWatchedMovie);
+
+            this.Kind.ColorForNotWatchedSeries = this.themeAwareColorGenerator.TransformColorForCurrentTheme(
+                this.ColorForNotWatchedSeries);
+
+            this.Kind.ColorForNotReleasedMovie = this.themeAwareColorGenerator.TransformColorForCurrentTheme(
+                this.ColorForNotReleasedMovie);
+
+            this.Kind.ColorForNotReleasedSeries = this.themeAwareColorGenerator.TransformColorForCurrentTheme(
+                this.ColorForNotReleasedSeries);
 
             return Observable.Return(this.Kind);
         }
@@ -126,12 +168,44 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
         protected override void CopyProperties()
         {
             this.Name = this.Kind.Name;
+
             this.ColorForWatchedMovie = this.Kind.ColorForWatchedMovie;
             this.ColorForWatchedSeries = this.Kind.ColorForWatchedSeries;
             this.ColorForNotWatchedMovie = this.Kind.ColorForNotWatchedMovie;
             this.ColorForNotWatchedSeries = this.Kind.ColorForNotWatchedSeries;
             this.ColorForNotReleasedMovie = this.Kind.ColorForNotReleasedMovie;
             this.ColorForNotReleasedSeries = this.Kind.ColorForNotReleasedSeries;
+
+            this.colorSubscriptions.Clear();
+
+            this.MakeColorsThemeAware();
+        }
+
+        private void MakeColorsThemeAware()
+        {
+            this.themeAwareColorGenerator.CreateThemeAwareColor(this.ColorForWatchedMovie)
+                .BindTo(this, vm => vm.ColorForWatchedMovie)
+                .DisposeWith(this.colorSubscriptions);
+
+            this.themeAwareColorGenerator.CreateThemeAwareColor(this.ColorForWatchedSeries)
+                .BindTo(this, vm => vm.ColorForWatchedSeries)
+                .DisposeWith(this.colorSubscriptions);
+
+            this.themeAwareColorGenerator.CreateThemeAwareColor(this.ColorForNotWatchedMovie)
+                .BindTo(this, vm => vm.ColorForNotWatchedMovie)
+                .DisposeWith(this.colorSubscriptions);
+
+            this.themeAwareColorGenerator.CreateThemeAwareColor(this.ColorForNotWatchedSeries)
+                .BindTo(this, vm => vm.ColorForNotWatchedSeries)
+                .DisposeWith(this.colorSubscriptions);
+
+            this.themeAwareColorGenerator.CreateThemeAwareColor(this.ColorForNotReleasedMovie)
+                .BindTo(this, vm => vm.ColorForNotReleasedMovie)
+                .DisposeWith(this.colorSubscriptions);
+
+            this.themeAwareColorGenerator.CreateThemeAwareColor(this.ColorForNotReleasedSeries)
+                .BindTo(this, vm => vm.ColorForNotReleasedSeries)
+                .DisposeWith(this.colorSubscriptions);
         }
     }
 }

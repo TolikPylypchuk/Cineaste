@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Resources;
 
 using Akavache;
@@ -10,6 +11,7 @@ using Cineaste.Core.Theming;
 using Cineaste.Core.ViewModels.Forms.Base;
 using Cineaste.Data.Models;
 
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using static Cineaste.Core.Constants;
@@ -20,7 +22,6 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
     public sealed class PreferencesFormViewModel : SettingsFormBase<UserPreferences, PreferencesFormViewModel>
     {
         private readonly IBlobCache store;
-        private readonly ThemeManager themeManager;
 
         public PreferencesFormViewModel(
             UserPreferences userPreferences,
@@ -31,12 +32,17 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
             : base(userPreferences, resourceManager, scheduler)
         {
             this.store = store ?? GetDefaultService<IBlobCache>(StoreKey);
-            this.themeManager = themeManager ?? GetDefaultService<ThemeManager>();
+            themeManager ??= GetDefaultService<ThemeManager>();
 
             this.Header = new TabHeaderViewModel(
                 String.Empty, this.ResourceManager.GetString("Preferences") ?? String.Empty);
 
             this.CopyProperties();
+
+            this.WhenAnyValue(vm => vm.Theme)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .BindTo(themeManager, tm => tm.Theme);
+
             this.CanNeverDelete();
             this.EnableChangeTracking();
         }
@@ -71,8 +77,6 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
         {
             this.Model.UI.Theme = this.Theme;
             this.Model.File.ShowRecentFiles = this.ShowRecentFiles;
-
-            this.themeManager.Theme = this.Theme;
 
             if (!this.Model.File.ShowRecentFiles)
             {

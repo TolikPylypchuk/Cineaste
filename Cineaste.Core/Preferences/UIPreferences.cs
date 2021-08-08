@@ -1,7 +1,7 @@
+using Cineaste.Core.Theming;
+
 namespace Cineaste.Core.Preferences
 {
-    public enum Theme { Light, Dark }
-
     [ToString]
     [Equals(DoNotAddEqualityOperators = true)]
     public sealed class UIPreferences

@@ -55,7 +55,7 @@ namespace Cineaste.Views
 
                 this.OneWayBind(
                     this.ViewModel,
-                    vm => vm.Item.Color,
+                    vm => vm.Color,
                     v => v.Foreground,
                     color => Color.TryParse(color, out var result) ? result.ToBrush() : Brushes.Black)
                     .DisposeWith(disposables);

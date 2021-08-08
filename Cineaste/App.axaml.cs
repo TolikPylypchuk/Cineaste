@@ -17,9 +17,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.Markup.Xaml.Styling;
 using Avalonia.ReactiveUI;
-using Avalonia.Themes.Fluent;
 
 using Cineaste.Converters;
 using Cineaste.Core;
@@ -33,6 +31,7 @@ using Cineaste.Data.Models;
 using Cineaste.Infrastructure;
 using Cineaste.Properties;
 using Cineaste.State;
+using Cineaste.Theming;
 using Cineaste.Validation;
 using Cineaste.Views;
 
@@ -139,7 +138,12 @@ namespace Cineaste
             }
 
             Locator.CurrentMutable.RegisterConstant(preferences);
-            Locator.CurrentMutable.RegisterConstant(new ThemeManager(preferences.UI.Theme));
+
+            var themeManager = new ThemeManager(preferences.UI.Theme);
+
+            Locator.CurrentMutable.RegisterConstant(themeManager);
+            Locator.CurrentMutable.RegisterConstant<IThemeAwareColorGenerator>(
+                new ThemeAwareColorGenerator(themeManager));
 
             this.ConfigureLogging(preferences);
         }

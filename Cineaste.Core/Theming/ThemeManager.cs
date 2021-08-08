@@ -1,4 +1,4 @@
-using Cineaste.Core.Preferences;
+using System;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -12,5 +12,8 @@ namespace Cineaste.Core.Theming
 
         [Reactive]
         public Theme Theme { get; set; }
+
+        public override string ToString() =>
+            $"Current theme: {Enum.GetName(this.Theme)}";
     }
 }
