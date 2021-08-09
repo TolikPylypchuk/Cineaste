@@ -10,7 +10,6 @@ using Cineaste.Data.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 using static Cineaste.Data.Constants;
 
@@ -28,8 +27,7 @@ namespace Cineaste.Core.ViewModels.Forms
             this.Title = title;
             this.CopyProperties();
 
-            this.NameRule = this.ValidationRule(
-                vm => vm.Name, name => !String.IsNullOrWhiteSpace(name), "TitleNameEmpty");
+            this.ValidationRule(vm => vm.Name, name => !String.IsNullOrWhiteSpace(name), "TitleNameEmpty");
 
             this.CanDeleteWhen(canDelete);
 
@@ -48,8 +46,6 @@ namespace Cineaste.Core.ViewModels.Forms
 
         [Reactive]
         public int Priority { get; set; }
-
-        public ValidationHelper NameRule { get; }
 
         public ReactiveCommand<Unit, Unit> MoveUp { get; }
 

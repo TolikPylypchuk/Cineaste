@@ -14,7 +14,6 @@ using Cineaste.Data.Services;
 
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 using static Cineaste.Core.ServiceUtil;
 
@@ -42,8 +41,7 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
             this.kindService = kindService ?? GetDefaultService<ISettingsEntityService<Kind>>(fileName);
             this.tagService = tagService ?? GetDefaultService<ISettingsEntityService<Tag>>(fileName);
 
-            this.ListNameRule = this.ValidationRule(
-                vm => vm.ListName, name => !String.IsNullOrWhiteSpace(name), "ListNameEmpty");
+            this.ValidationRule(vm => vm.ListName, name => !String.IsNullOrWhiteSpace(name), "ListNameEmpty");
 
             this.CopyProperties();
             this.CanNeverDelete();
@@ -52,8 +50,6 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
 
         [Reactive]
         public string ListName { get; set; } = String.Empty;
-
-        public ValidationHelper ListNameRule { get; }
 
         protected override SettingsFormViewModel Self => this;
 

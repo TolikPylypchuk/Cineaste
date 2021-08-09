@@ -9,7 +9,6 @@ using Cineaste.Data.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 using static Cineaste.Data.Constants;
 
@@ -29,18 +28,11 @@ namespace Cineaste.Core.ViewModels.Forms
             this.Period = period;
             this.CopyProperties();
 
-            this.StartYearRule = this.ValidationRule(vm => vm.StartYear, SeriesMinYear, SeriesMaxYear, YearProperty);
-            this.EndYearRule = this.ValidationRule(vm => vm.EndYear, SeriesMinYear, SeriesMaxYear, YearProperty);
-
-            this.NumberOfEpisodesRule = this.ValidationRule(
-                vm => vm.NumberOfEpisodes,
-                PeriodMinNumberOfEpisodes,
-                PeriodMaxNumberOfEpisodes);
-
-            this.RottenTomatoesLinkRule = this.ValidationRule(
-                vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
-
-            this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
+            this.ValidationRule(vm => vm.StartYear, SeriesMinYear, SeriesMaxYear, YearProperty);
+            this.ValidationRule(vm => vm.EndYear, SeriesMinYear, SeriesMaxYear, YearProperty);
+            this.ValidationRule(vm => vm.NumberOfEpisodes, PeriodMinNumberOfEpisodes, PeriodMaxNumberOfEpisodes);
+            this.ValidationRule(vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
+            this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
 #nullable disable
             var periodValid =
@@ -55,9 +47,7 @@ namespace Cineaste.Core.ViewModels.Forms
                     .ObserveOn(RxApp.MainThreadScheduler);
 #nullable enable
 
-            this.PeriodRule = this.ValidationRule(
-                periodValid,
-                this.ResourceManager.GetString("ValidationPeriodInvalid") ?? String.Empty);
+            this.ValidationRule(periodValid, this.ResourceManager.GetString("ValidationPeriodInvalid") ?? String.Empty);
 
             this.CanDeleteWhen(canDelete);
 
@@ -94,13 +84,6 @@ namespace Cineaste.Core.ViewModels.Forms
 
         [Reactive]
         public bool ShowPosterUrl { get; set; } = true;
-
-        public ValidationHelper StartYearRule { get; }
-        public ValidationHelper EndYearRule { get; }
-        public ValidationHelper NumberOfEpisodesRule { get; }
-        public ValidationHelper RottenTomatoesLinkRule { get; }
-        public ValidationHelper PosterUrlRule { get; }
-        public ValidationHelper PeriodRule { get; }
 
         public override bool IsNew =>
             this.Period.Id == default;

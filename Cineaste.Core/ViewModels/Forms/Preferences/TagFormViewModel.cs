@@ -18,7 +18,6 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 namespace Cineaste.Core.ViewModels.Forms.Preferences
 {
@@ -77,16 +76,16 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
             this.AddImpliedTag = ReactiveCommand.Create<TagModel>(this.impliedTagsSource.Add);
             this.Close = ReactiveCommand.Create(() => { });
 
-            this.NameRule = this.ValidationRule(vm => vm.Name, notEmpty, "NameEmpty");
-            this.CategoryRule = this.ValidationRule(vm => vm.Category, notEmpty, "CategoryEmpty");
-            this.ColorRule = this.ValidationRuleForColor(vm => vm.Color);
+            this.ValidationRule(vm => vm.Name, notEmpty, "NameEmpty");
+            this.ValidationRule(vm => vm.Category, notEmpty, "CategoryEmpty");
+            this.ValidationRuleForColor(vm => vm.Color);
 
             var nameAndCategoryObservable = this.WhenAnyValue(
                 vm => vm.Name,
                 vm => vm.Category,
                 (name, category) => (Name: name, Category: category));
 
-            this.UniqueRule = this.ValidationRule(
+            this.ValidationRule(
                 nameAndCategoryObservable,
                 nameAndCategory => !allTagsList.Any(tag =>
                     tag != this.TagModel &&
@@ -137,11 +136,6 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
 
         public ReactiveCommand<TagModel, Unit> AddImpliedTag { get; }
         public ReactiveCommand<Unit, Unit> Close { get; }
-
-        public ValidationHelper NameRule { get; }
-        public ValidationHelper CategoryRule { get; }
-        public ValidationHelper ColorRule { get; }
-        public ValidationHelper UniqueRule { get; }
 
         public override bool IsNew =>
             this.TagModel.Tag.Id == default;

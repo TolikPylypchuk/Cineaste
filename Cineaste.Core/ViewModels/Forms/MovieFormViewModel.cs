@@ -14,7 +14,6 @@ using Cineaste.Data.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 using static Cineaste.Core.ServiceUtil;
 using static Cineaste.Data.Constants;
@@ -42,11 +41,10 @@ namespace Cineaste.Core.ViewModels.Forms
 
             this.CopyProperties();
 
-            this.YearRule = this.ValidationRule(vm => vm.Year, MovieMinYear, MovieMaxYear);
-            this.ImdbLinkRule = this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
-            this.RottenTomatoesLinkRule = this.ValidationRule(
-                vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
-            this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
+            this.ValidationRule(vm => vm.Year, MovieMinYear, MovieMaxYear);
+            this.ValidationRule(vm => vm.ImdbLink, link => link.IsUrl(), "ImdbLinkInvalid");
+            this.ValidationRule(vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
+            this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.InitializeValueDependencies();
             this.CanDeleteWhenNotChanged();
@@ -78,11 +76,6 @@ namespace Cineaste.Core.ViewModels.Forms
 
         [Reactive]
         public string PosterUrl { get; set; } = String.Empty;
-
-        public ValidationHelper YearRule { get; }
-        public ValidationHelper ImdbLinkRule { get; }
-        public ValidationHelper RottenTomatoesLinkRule { get; }
-        public ValidationHelper PosterUrlRule { get; }
 
         public override bool IsNew =>
             this.Movie.Id == default;
@@ -168,7 +161,7 @@ namespace Cineaste.Core.ViewModels.Forms
                 .Subscribe(_ => this.IsReleased = true);
 
             this.WhenAnyValue(vm => vm.Year)
-                .Where(_ => this.YearRule.IsValid)
+                .Where(year => MovieMinYear <= year && year <= MovieMaxYear)
                 .Where(year => year != this.Scheduler.Now.Year)
                 .Subscribe(year => this.IsReleased = year < this.Scheduler.Now.Year);
         }

@@ -95,7 +95,7 @@ namespace Cineaste.Views.Forms.Preferences
             this.BindDefaultValidation(this.ViewModel, vm => vm.Category, v => v.CategoryErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindValidation(this.ViewModel, vm => vm!.UniqueRule, v => v.InvalidFormTextBlock.Text)
+            this.BindValidation(this.ViewModel, v => v.InvalidFormTextBlock.Text)
                 .DisposeWith(disposables);
         }
 

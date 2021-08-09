@@ -14,7 +14,6 @@ using Cineaste.Data.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 using static Cineaste.Core.ServiceUtil;
 
@@ -46,19 +45,19 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
                 this.WhenAnyValue(vm => vm.Name),
                 (kinds, name) => (Kinds: kinds, Name: name));
 
-            this.NameRule = this.ValidationRule(
+            this.ValidationRule(
                 nameAndKindsObservable,
                 nameAndKinds =>
                     !String.IsNullOrWhiteSpace(nameAndKinds.Name) &&
                     nameAndKinds.Kinds.Count(k => k.Name == nameAndKinds.Name) == 1,
                 nameAndKinds => String.IsNullOrWhiteSpace(nameAndKinds.Name) ? "NameEmpty" : "NameNotUnique");
 
-            this.ColorForWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForWatchedMovie);
-            this.ColorForNotWatchedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForNotWatchedMovie);
-            this.ColorForNotReleasedMovieRule = this.ValidationRuleForColor(vm => vm.ColorForNotReleasedMovie);
-            this.ColorForWatchedSeriesRule = this.ValidationRuleForColor(vm => vm.ColorForWatchedSeries);
-            this.ColorForNotWatchedSeriesRule = this.ValidationRuleForColor(vm => vm.ColorForNotWatchedSeries);
-            this.ColorForNotReleasedSeriesRule = this.ValidationRuleForColor(vm => vm.ColorForNotReleasedSeries);
+            this.ValidationRuleForColor(vm => vm.ColorForWatchedMovie);
+            this.ValidationRuleForColor(vm => vm.ColorForNotWatchedMovie);
+            this.ValidationRuleForColor(vm => vm.ColorForNotReleasedMovie);
+            this.ValidationRuleForColor(vm => vm.ColorForWatchedSeries);
+            this.ValidationRuleForColor(vm => vm.ColorForNotWatchedSeries);
+            this.ValidationRuleForColor(vm => vm.ColorForNotReleasedSeries);
 
             isNew.Subscribe(this.isNew);
 
@@ -90,14 +89,6 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
 
         [Reactive]
         public string ColorForNotReleasedSeries { get; set; } = String.Empty;
-
-        public ValidationHelper NameRule { get; }
-        public ValidationHelper ColorForWatchedMovieRule { get; }
-        public ValidationHelper ColorForNotWatchedMovieRule { get; }
-        public ValidationHelper ColorForNotReleasedMovieRule { get; }
-        public ValidationHelper ColorForWatchedSeriesRule { get; }
-        public ValidationHelper ColorForNotWatchedSeriesRule { get; }
-        public ValidationHelper ColorForNotReleasedSeriesRule { get; }
 
         public override bool IsNew => this.isNew.Value;
 

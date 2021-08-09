@@ -17,7 +17,6 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 using static Cineaste.Data.Constants;
 
@@ -55,8 +54,7 @@ namespace Cineaste.Core.ViewModels.Forms
 
             this.CopyProperties();
 
-            this.ChannelRule = this.ValidationRule(
-                vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
+            this.ValidationRule(vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
 
             this.PeriodsNonOverlapping =
                 this.periods.ToObservableChangeSet()
@@ -121,8 +119,6 @@ namespace Cineaste.Core.ViewModels.Forms
 
         [Reactive]
         public int CurrentPosterIndex { get; private set; }
-
-        public ValidationHelper ChannelRule { get; }
 
         public IObservable<bool> PeriodsNonOverlapping { get; }
 

@@ -10,7 +10,6 @@ using Cineaste.Data.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 using static Cineaste.Data.Constants;
 
@@ -30,15 +29,10 @@ namespace Cineaste.Core.ViewModels.Forms
             this.SpecialEpisode = episode;
             this.CopyProperties();
 
-            this.ChannelRule = this.ValidationRule(
-                vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
-
-            this.YearRule = this.ValidationRule(vm => vm.Year, SeriesMinYear, SeriesMaxYear);
-
-            this.RottenTomatoesLinkRule = this.ValidationRule(
-                vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
-
-            this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
+            this.ValidationRule(vm => vm.Channel, channel => !String.IsNullOrWhiteSpace(channel), "ChannelEmpty");
+            this.ValidationRule(vm => vm.Year, SeriesMinYear, SeriesMaxYear);
+            this.ValidationRule(vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
+            this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.InitializeValueDependencies();
             this.CanAlwaysDelete();
@@ -67,11 +61,6 @@ namespace Cineaste.Core.ViewModels.Forms
 
         [Reactive]
         public string? PosterUrl { get; set; }
-
-        public ValidationHelper ChannelRule { get; }
-        public ValidationHelper YearRule { get; }
-        public ValidationHelper RottenTomatoesLinkRule { get; }
-        public ValidationHelper PosterUrlRule { get; }
 
         public override bool IsNew =>
             this.SpecialEpisode.Id == default;
@@ -147,7 +136,7 @@ namespace Cineaste.Core.ViewModels.Forms
                 .Subscribe(_ => this.IsReleased = true);
 
             this.WhenAnyValue(vm => vm.Year)
-                .Where(_ => this.YearRule.IsValid)
+                .Where(year => SeriesMinYear <= year && year <= SeriesMaxYear)
                 .CombineLatest(this.WhenAnyValue(vm => vm.Month), (year, month) => new DateTime(year, month, 1))
                 .Where(date => date.Year != this.Scheduler.Now.Year ||
                     date.Year == this.Scheduler.Now.Year && date.Month != this.Scheduler.Now.Month)

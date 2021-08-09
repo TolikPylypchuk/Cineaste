@@ -24,7 +24,6 @@ using Nito.Comparers;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 using static Cineaste.Core.ServiceUtil;
 
@@ -80,7 +79,7 @@ namespace Cineaste.Core.ViewModels.Forms
                     : this.GetFormTitle(this.Franchise.ActualTitles.FirstOrDefault()?.Name ?? String.Empty))
                 .Select(this.GetFullFormTitle);
 
-            this.PosterUrlRule = this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
+            this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
             this.entriesSource.Connect()
                 .Count()
@@ -133,8 +132,6 @@ namespace Cineaste.Core.ViewModels.Forms
 
         [Reactive]
         public string PosterUrl { get; set; } = String.Empty;
-
-        public ValidationHelper PosterUrlRule { get; }
 
         public bool CanShowTitles { [ObservableAsProperty] get; }
 
