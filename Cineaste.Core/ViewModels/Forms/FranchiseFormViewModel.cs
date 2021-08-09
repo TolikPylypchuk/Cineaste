@@ -202,9 +202,6 @@ namespace Cineaste.Core.ViewModels.Forms
         private void InitializeValueDependencies()
         {
             this.WhenAnyValue(vm => vm.HasTitles)
-                .BindTo(this, vm => vm.ShowTitles);
-
-            this.WhenAnyValue(vm => vm.HasTitles)
                 .Where(hasTitles => hasTitles && this.Titles.Count == 0)
                 .Discard()
                 .SubscribeAsync(this.AddTitles);
@@ -214,9 +211,12 @@ namespace Cineaste.Core.ViewModels.Forms
                 .Discard()
                 .Subscribe(this.ClearTitles);
 
-            this.WhenAnyValue(vm => vm.ShowTitles)
-                .Where(showTitles => showTitles && !this.CanShowTitles)
-                .Subscribe(_ => this.ShowTitles = false);
+            this.WhenAnyValue(
+                vm => vm.HasTitles,
+                vm => vm.ShowTitles,
+                vm => vm.CanShowTitles,
+                (has, show, canShow) => has || show && canShow)
+                .BindTo(this, vm => vm.ShowTitles);
 
             this.WhenAnyValue(vm => vm.MergeDisplayNumbers)
                 .Subscribe(_ => this.AdjustDisplayNumbers(this.GetFirstDisplayNumber()));
