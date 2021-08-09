@@ -25,7 +25,7 @@
     <PackageReference Include="ReactiveUI" Version="14.2.1" />
     <PackageReference Include="ReactiveUI.Fody" Version="14.2.1" />
     <PackageReference Include="ReactiveUI.Validation" Version="2.1.1" />
-    <PackageReference Include="Splat" Version="12.1.1" />
+    <PackageReference Include="Splat" Version="12.1.4" />
     <PackageReference Include="System.Interactive" Version="5.0.0" />
     <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
