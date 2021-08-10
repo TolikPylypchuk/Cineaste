@@ -87,8 +87,7 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
             this.Model.Logging.MinLogLevel = this.MinLogLevel;
 
             return base.OnSave()
-                .DoAsync(_ => this.store.InsertObject(PreferencesKey, this.Model).Eager())
-                .Eager();
+                .DoAsync(_ => this.store.InsertObject(PreferencesKey, this.Model).Eager());
         }
 
         protected override void CopyProperties()
