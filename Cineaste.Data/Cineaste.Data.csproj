@@ -31,11 +31,11 @@
     <PackageReference Include="MethodDecorator.Fody" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.8" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.9" />
     <PackageReference Include="Resourcer.Fody" Version="1.8.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Splat" Version="12.1.4" />
+    <PackageReference Include="Splat" Version="12.1.6" />
     <PackageReference Include="System.Interactive" Version="5.0.0" />
     <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />

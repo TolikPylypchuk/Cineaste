@@ -27,11 +27,11 @@
     </Style>
 
     <Style Selector="ui|NumberBox">
-        <Setter Property="Margin" Value="0 -8 0 0" />
         <Setter Property="SpinButtonPlacementMode" Value="Inline" />
     </Style>
 
     <Style Selector="TextBox.NumberBoxTextBoxStyle">
+        <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="Template">
             <ControlTemplate>
