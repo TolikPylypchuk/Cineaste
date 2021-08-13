@@ -229,6 +229,7 @@ namespace Cineaste
                 listSortOrderConverter,
                 listSortDirectionConverter,
                 logLevelConverter,
+                new NumberConverter(),
                 new ColorConverter(),
                 new UriConverter());
 

@@ -179,6 +179,10 @@ namespace Cineaste.Views.Forms
             this.Bind(this.ViewModel, vm => vm.Year, v => v.YearBox.Value)
                 .DisposeWith(disposables);
 
+            this.YearBox.GetObservable(RequestBringIntoViewEvent)
+                .Subscribe(e => e.Handled = true)
+                .DisposeWith(disposables);
+
             this.OneWayBind(this.ViewModel, vm => vm.Kinds, v => v.KindComboBox.Items)
                 .DisposeWith(disposables);
 

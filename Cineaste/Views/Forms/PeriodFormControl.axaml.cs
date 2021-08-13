@@ -1,4 +1,5 @@
 using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -108,6 +109,10 @@ namespace Cineaste.Views.Forms
             this.NumberOfEpisodesBox.Maximum = PeriodMaxNumberOfEpisodes;
 
             this.Bind(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesBox.Value)
+                .DisposeWith(disposables);
+
+            this.NumberOfEpisodesBox.GetObservable(RequestBringIntoViewEvent)
+                .Subscribe(e => e.Handled = true)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.IsSingleDayRelease, v => v.IsSingleDayReleaseCheckBox.IsChecked)

@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ui="using:FluentAvalonia.UI.Controls">
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:l="using:Cineaste.Localization">
     <Style Selector="CheckBox">
         <Setter Property="MinWidth" Value="20" />
     </Style>
@@ -28,11 +29,12 @@
 
     <Style Selector="ui|NumberBox">
         <Setter Property="SpinButtonPlacementMode" Value="Inline" />
+        <Setter Property="ToolTip.Tip" Value="{l:Translate NumberBoxHint}" />
+        <Setter Property="ValidationMode" Value="InvalidInputOverwritten" />
     </Style>
 
     <Style Selector="TextBox.NumberBoxTextBoxStyle">
         <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
-        <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="Template">
             <ControlTemplate>
                 <DataValidationErrors>

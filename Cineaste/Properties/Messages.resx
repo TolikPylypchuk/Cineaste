@@ -642,6 +642,9 @@
   <data name="NoRecentlyOpenedFiles" xml:space="preserve">
     <value>No recently opened files</value>
   </data>
+  <data name="NumberBoxHint" xml:space="preserve">
+    <value>If you input the number then press 'Enter' to apply changes</value>
+  </data>
   <data name="NumberHeader" xml:space="preserve">
     <value>#</value>
   </data>
