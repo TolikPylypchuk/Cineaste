@@ -1573,6 +1573,51 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Miniseries.
+        /// </summary>
+        internal static string NewMiniseries {
+            get {
+                return ResourceManager.GetString("NewMiniseries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Movie.
+        /// </summary>
+        internal static string NewMovie {
+            get {
+                return ResourceManager.GetString("NewMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Season.
+        /// </summary>
+        internal static string NewSeason {
+            get {
+                return ResourceManager.GetString("NewSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Series.
+        /// </summary>
+        internal static string NewSeries {
+            get {
+                return ResourceManager.GetString("NewSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Special Episode.
+        /// </summary>
+        internal static string NewSpecialEpisode {
+            get {
+                return ResourceManager.GetString("NewSpecialEpisode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No items found.
         /// </summary>
         internal static string NoItemsFound {
@@ -2230,7 +2275,7 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name must not be empty.
+        ///   Looks up a localized string similar to The name must not be empty.
         /// </summary>
         internal static string ValidationNameEmpty {
             get {

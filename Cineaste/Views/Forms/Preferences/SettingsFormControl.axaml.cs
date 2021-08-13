@@ -11,6 +11,7 @@ using Cineaste.Core.ViewModels.Forms.Preferences;
 using Cineaste.Data;
 
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
 
 using static Cineaste.Data.ListSortOrder;
 
@@ -47,7 +48,7 @@ namespace Cineaste.Views.Forms.Preferences
             this.Bind(this.ViewModel, vm => vm.ListName, v => v.ListNameTextBox.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(this.ViewModel, vm => vm.ListName, v => v.ListNameErrorTextBlock.Text)
+            this.BindValidation(this.ViewModel, vm => vm.ListName, v => v.ListNameErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.CultureInfo, v => v.CultureInfoComboBox.SelectedItem)
@@ -66,9 +67,7 @@ namespace Cineaste.Views.Forms.Preferences
                 .DisposeWith(disposables);
 
             this.Bind(
-                    this.ViewModel,
-                    vm => vm.DefaultSeasonOriginalTitle,
-                    v => v.DefaultSeasonOriginalTitleTextBox.Text)
+                this.ViewModel, vm => vm.DefaultSeasonOriginalTitle, v => v.DefaultSeasonOriginalTitleTextBox.Text)
                 .DisposeWith(disposables);
 
             this.Bind(

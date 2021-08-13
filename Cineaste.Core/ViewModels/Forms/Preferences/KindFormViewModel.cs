@@ -46,6 +46,7 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
                 (kinds, name) => (Kinds: kinds, Name: name));
 
             this.ValidationRule(
+                vm => vm.Name,
                 nameAndKindsObservable,
                 nameAndKinds =>
                     !String.IsNullOrWhiteSpace(nameAndKinds.Name) &&

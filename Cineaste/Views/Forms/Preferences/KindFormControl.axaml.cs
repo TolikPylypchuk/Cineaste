@@ -23,7 +23,7 @@ namespace Cineaste.Views.Forms.Preferences
                 this.Bind(this.ViewModel, vm => vm.Name, v => v.NameTextBox.Text)
                     .DisposeWith(disposables);
 
-                this.BindDefaultValidation(this.ViewModel, vm => vm.Name, v => v.NameErrorTextBlock.Text)
+                this.BindStrictValidation(this.ViewModel, vm => vm.Name, v => v.NameErrorTextBlock.Text)
                     .DisposeWith(disposables);
 
                 this.BindCommand(this.ViewModel, vm => vm.Delete, v => v.DeleteButton)

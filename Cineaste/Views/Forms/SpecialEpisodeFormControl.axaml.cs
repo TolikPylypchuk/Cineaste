@@ -13,6 +13,7 @@ using Cineaste.Core;
 using Cineaste.Core.ViewModels.Forms;
 
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
 
 namespace Cineaste.Views.Forms
 {
@@ -182,17 +183,18 @@ namespace Cineaste.Views.Forms
 
         private void AddValidation(CompositeDisposable disposables)
         {
-            this.BindDefaultValidation(this.ViewModel, vm => vm.Channel, v => v.ChannelErrorTextBlock.Text)
+            this.BindStrictValidation(
+                this.ViewModel, vm => vm.Channel, v => v.ChannelErrorTextBlock.Text, magicallyWorks: false)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(this.ViewModel, vm => vm.Year, v => v.ReleaseDateErrorTextBlock.Text)
+            this.BindValidation(this.ViewModel, vm => vm.Year, v => v.ReleaseDateErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(
+            this.BindValidation(
                 this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlErrorTextBlock.Text)
+            this.BindValidation(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlErrorTextBlock.Text)
                 .DisposeWith(disposables);
         }
 

@@ -160,7 +160,8 @@ namespace Cineaste.Views.Forms
 
         private void AddValidation(CompositeDisposable disposables)
         {
-            this.BindDefaultValidation(this.ViewModel, vm => vm.Channel, v => v.ChannelErrorTextBlock.Text)
+            this.BindStrictValidation(
+                this.ViewModel, vm => vm.Channel, v => v.ChannelErrorTextBlock.Text, magicallyWorks: false)
                 .DisposeWith(disposables);
 
             var allPeriodsValid = this.ViewModel!.Periods

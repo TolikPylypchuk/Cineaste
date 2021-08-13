@@ -18,6 +18,7 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
 
 namespace Cineaste.Core.ViewModels.Forms.Preferences
 {
@@ -85,7 +86,7 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
                 vm => vm.Category,
                 (name, category) => (Name: name, Category: category));
 
-            this.ValidationRule(
+            this.UniqueRule = this.ValidationRule(
                 nameAndCategoryObservable,
                 nameAndCategory => !allTagsList.Any(tag =>
                     tag != this.TagModel &&
@@ -133,6 +134,8 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
             this.addableImpliedTags;
 
         public string FormTitle { [ObservableAsProperty] get; } = String.Empty;
+
+        public ValidationHelper UniqueRule { get; }
 
         public ReactiveCommand<TagModel, Unit> AddImpliedTag { get; }
         public ReactiveCommand<Unit, Unit> Close { get; }

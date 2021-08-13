@@ -621,6 +621,21 @@
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="NewMiniseries" xml:space="preserve">
+    <value>New Miniseries</value>
+  </data>
+  <data name="NewMovie" xml:space="preserve">
+    <value>New Movie</value>
+  </data>
+  <data name="NewSeason" xml:space="preserve">
+    <value>New Season</value>
+  </data>
+  <data name="NewSeries" xml:space="preserve">
+    <value>New Series</value>
+  </data>
+  <data name="NewSpecialEpisode" xml:space="preserve">
+    <value>New Special Episode</value>
+  </data>
   <data name="NoItemsFound" xml:space="preserve">
     <value>No items found</value>
   </data>
@@ -841,7 +856,7 @@
     <value>The list name must not be empty</value>
   </data>
   <data name="ValidationNameEmpty" xml:space="preserve">
-    <value>Name must not be empty</value>
+    <value>The name must not be empty</value>
   </data>
   <data name="ValidationNameNotUnique" xml:space="preserve">
     <value>The name is not unique</value>

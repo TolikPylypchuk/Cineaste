@@ -12,6 +12,7 @@ using Cineaste.Core.ViewModels.Forms;
 using Cineaste.Properties;
 
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
 
 using static Cineaste.Data.Constants;
 
@@ -134,24 +135,23 @@ namespace Cineaste.Views.Forms
 
         public void AddValidation(CompositeDisposable disposables)
         {
-            this.BindDefaultValidation(this.ViewModel, vm => vm.StartYear, v => v.StartDateErrorTextBlock.Text)
+            this.BindValidation(this.ViewModel, vm => vm.StartYear, v => v.StartDateErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(this.ViewModel, vm => vm.EndYear, v => v.EndDateErrorTextBlock.Text)
+            this.BindValidation(this.ViewModel, vm => vm.EndYear, v => v.EndDateErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(
-                this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesErrorTextBlock.Text)
+            this.BindValidation(this.ViewModel, vm => vm.NumberOfEpisodes, v => v.NumberOfEpisodesErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(
+            this.BindValidation(
                 this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlErrorTextBlock.Text)
+            this.BindValidation(this.ViewModel, vm => vm.PosterUrl, v => v.PosterUrlErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(this.ViewModel, v => v.InvalidFormTextBlock.Text)
+            this.BindValidation(this.ViewModel, vm => vm!.ValidPeriodRule, v => v.InvalidFormTextBlock.Text)
                 .DisposeWith(disposables);
         }
     }

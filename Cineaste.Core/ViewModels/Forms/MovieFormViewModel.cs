@@ -93,7 +93,7 @@ namespace Cineaste.Core.ViewModels.Forms
         protected override void EnableChangeTracking()
         {
             this.TrackChanges(vm => vm.Year, vm => vm.Movie.Year);
-            this.TrackChanges(vm => vm.Kind, vm=> vm.Movie.Kind);
+            this.TrackChanges(vm => vm.Kind, vm => vm.Movie.Kind);
             this.TrackChanges(vm => vm.IsWatched, vm => vm.Movie.IsWatched);
             this.TrackChanges(vm => vm.IsReleased, vm => vm.Movie.IsReleased);
             this.TrackChanges(vm => vm.ImdbLink, vm => vm.Movie.ImdbLink.EmptyIfNull());

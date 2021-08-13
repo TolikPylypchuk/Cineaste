@@ -89,13 +89,13 @@ namespace Cineaste.Views.Forms.Preferences
 
         private void BindValidation(CompositeDisposable disposables)
         {
-            this.BindDefaultValidation(this.ViewModel, vm => vm.Name, v => v.NameErrorTextBlock.Text)
+            this.BindStrictValidation(this.ViewModel, vm => vm.Name, v => v.NameErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindDefaultValidation(this.ViewModel, vm => vm.Category, v => v.CategoryErrorTextBlock.Text)
+            this.BindStrictValidation(this.ViewModel, vm => vm.Category, v => v.CategoryErrorTextBlock.Text)
                 .DisposeWith(disposables);
 
-            this.BindValidation(this.ViewModel, v => v.InvalidFormTextBlock.Text)
+            this.BindValidation(this.ViewModel, vm => vm!.UniqueRule, v => v.InvalidFormTextBlock.Text)
                 .DisposeWith(disposables);
         }
 

@@ -9,6 +9,7 @@ using Cineaste.Data.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
 
 using static Cineaste.Data.Constants;
 
@@ -34,7 +35,6 @@ namespace Cineaste.Core.ViewModels.Forms
             this.ValidationRule(vm => vm.RottenTomatoesLink, link => link.IsUrl(), "RottenTomatoesLinkInvalid");
             this.ValidationRule(vm => vm.PosterUrl, url => url.IsUrl(), "PosterUrlInvalid");
 
-#nullable disable
             var periodValid =
                 this.WhenAnyValue(
                     vm => vm.StartMonth,
@@ -45,9 +45,9 @@ namespace Cineaste.Core.ViewModels.Forms
                         startYear < endYear || startYear == endYear && startMonth <= endMonth)
                     .Throttle(TimeSpan.FromMilliseconds(250), this.Scheduler)
                     .ObserveOn(RxApp.MainThreadScheduler);
-#nullable enable
 
-            this.ValidationRule(periodValid, this.ResourceManager.GetString("ValidationPeriodInvalid") ?? String.Empty);
+            this.ValidPeriodRule = this.ValidationRule(
+                periodValid, this.ResourceManager.GetString("ValidationPeriodInvalid") ?? String.Empty);
 
             this.CanDeleteWhen(canDelete);
 
@@ -84,6 +84,8 @@ namespace Cineaste.Core.ViewModels.Forms
 
         [Reactive]
         public bool ShowPosterUrl { get; set; } = true;
+
+        public ValidationHelper ValidPeriodRule { get; }
 
         public override bool IsNew =>
             this.Period.Id == default;
