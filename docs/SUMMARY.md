@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Movie List](README.md)
+* [Cineaste](README.md)
 
 ## Usage Guides
 

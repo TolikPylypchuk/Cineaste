@@ -2,17 +2,17 @@
 
 ## How to Get the App
 
-The Movie List app works only on Windows 10 May 2020 Update or later. Currently the only way to get this app is to download it from the _releases_ section on GitHub and extract it manually. The latest version is 0.2.
+Cineaste should work on Windows, macOS, and Linux, but was tested only on Windows 10. Currently the only way to get this app on Windows is to download it from the _releases_ section on GitHub and extract it manually. For other platforms you'll have to build it yourself. The latest version is 0.3.
 
 ## Files and Tabs
 
-The app works with files of the _.mlist_ extension. An _.mlist_ file represents a list of movies, series, and franchises, and some auxiliary settings. If you want Windows to bind the file extension to this app, you'll have to do it manually for now. All files are opened in separate tabs.
+The app works with files of the _.cnl_ extension. A _.cnl_ file represents a list of movies, series, and franchises, and some auxiliary settings. If you want Windows to bind the file extension to this app, you'll have to do it manually for now. All files are opened in separate tabs.
 
 This is a single-instance app. You can't open multiple windows in this app. If you open it when it's already opened, it will simply show you the existing window. If you open a file when the app is already running, it will open the file in a new tab.
 
 ## The Home Page
 
-![](../.gitbook/assets/v0.2-screen-home-page.png)
+![](../.gitbook/assets/v0.3-screen-home-page.png)
 
 The app's home page contains several features for working with files.
 
