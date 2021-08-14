@@ -2,7 +2,7 @@
 
 This is a big one. It takes much more effort to add a series than it is to add a movie. Here's how a series form looks:
 
-![](../../.gitbook/assets/v0.2-screen-series-form.png)
+![](../../.gitbook/assets/v0.3-screen-series-form.png)
 
 The series form consists of the following parts:
 
@@ -31,18 +31,18 @@ All the same rules apply to titles as with the movie form.
 
 Since watching the series is more of a continuous process \(unless you binge it\), its watch status is more than just _watched_ or _not watched_. Here are the possible watch statuses:
 
-* Not watched, if you haven't started watching the series yet
-* Watching, if you are currenly watching the series or waiting for new episodes
-* Watched, if you have watched the series in its entirety
-* Stopped watching, if you decided that the series is not worth your time anymore
+* Not watched, if you haven't started watching the series yet;
+* Watching, if you are currenly watching the series or waiting for new episodes;
+* Watched, if you have watched the series in its entirety;
+* Stopped watching, if you decided that the series is not worth your time anymore.
 
 Like watch status, there's more to the release status than simply 'released' or 'not released'. Here are the possible release statuses:
 
-* Not started
-* Running
-* Finished, if the series finished naturally
-* Cancelled, if the series was axed by the studio
-* Don't know/don't care, if you stopped watching the series and you don't want to track it in the app anymore
+* Not started;
+* Running;
+* Finished, if the series finished naturally;
+* Cancelled, if the series was axed by the studio;
+* Don't know/don't care, if you stopped watching the series and you don't want to track it in the app anymore.
 
 You can select any kind from the list of kinds which you specify in the file's settings.
 
@@ -60,10 +60,10 @@ You can move series components up and down by right-clicking on a component and 
 
 The series form has several other action buttons:
 
-* Delete the series
-* Convert to miniseries
-* Create a franchise
-* Other franchise actions which are discussed in the article on franchises
+* Delete the series;
+* Convert to miniseries;
+* Create a franchise;
+* Other franchise actions which are discussed in the article on franchises.
 
 You can convert a series to a miniseries. A miniseries is a one-season series without special episodes which is designed to be limited in nature. Miniseries have separate, simplified forms. You can convert a series to a miniseries only if it contains one season or none at all, and no special episodes.
 
@@ -73,45 +73,45 @@ You can execute these actions only when the form doesn't contain changes.
 
 When you add a new season or click on an existing one in the series form, a season form is opened. Here's how it looks:
 
-![](../../.gitbook/assets/v0.2-screen-season-form.png)
+![](../../.gitbook/assets/v0.3-screen-season-form.png)
 
-Unlike the movie and series forms, the season form is not independent - it's considered to be part of the series form. You can't save a season directly; to save a season, go back to the series form and save the whole series. You can cancel any changes in the season form directly. If you cancel changes in the series form, all changes in all seasons will be cancelled as well \(new seasons will be deleted, and deleted seasons will be returned\).
+Unlike the movie and series forms, the season form is not independent - it's considered to be part of the series form. You can't save a season directly; to save a season, go back to the series form and save the whole series. You can cancel any changes in the season form directly. If you cancel changes in the series form, all changes in all seasons will be cancelled as well \(new seasons will be removed, and deleted seasons will be returned\).
 
 The season form consists of the following parts:
 
-* Header which contains the first title, the _close_ button, and navigation buttons
-* Poster, if present
-* Main form fields
-* The list of release periods
-* Buttons for various actions
+* Header which contains the first title, the _close_ button, and navigation buttons;
+* Poster, if present;
+* Main form fields;
+* The list of release periods;
+* Buttons for various actions.
 
 ### Season Form Fields
 
 The season form contains the following fields \(all fields are required\):
 
-* Titles
-* Original titles
-* Watch status
-* Release status
-* Original channel
+* Titles;
+* Original titles;
+* Watch status;
+* Release status;
+* Original channel.
 
 When you create a new season, its titles are generated using the default season titles from the file's settings.
 
 As with series, there are several watch statuses:
 
-* Not watched, if you haven't started watching the season
-* Watching, if you are currently watching it, or waiting for new episodes
-* Watched, if you have finished watching the full season
-* Hiatus, if the season is on a hiatus, or you decided to take a break from watching it
-* Stopped watching, if you lost interest in the series, haven't finished the season, and don't plan to finish it
+* Not watched, if you haven't started watching the season;
+* Watching, if you are currently watching it, or waiting for new episodes;
+* Watched, if you have finished watching the full season;
+* Hiatus, if the season is on a hiatus, or you decided to take a break from watching it;
+* Stopped watching, if you haven't finished the season, and don't plan to finish it.
 
 Likewise, there are several release statuses:
 
-* Not started, if the season hasn't started airing or hasn't been released yet
-* Running, if new episodes are currently airing or are being released
-* Finished, if all episodes of the season have been released
-* Hiatus, if the season is on a hiatus and new episodes won't come for some time
-* Don't know/don't care, if you stopped watching the series and you don't want to track it in the app anymore
+* Not started, if the season hasn't started airing or hasn't been released yet;
+* Running, if new episodes are currently airing or are being released;
+* Finished, if all episodes of the season have been released;
+* Hiatus, if the season is on a hiatus and new episodes won't come for some time.
+* Don't know/don't care, if you stopped watching the series and you don't want to track it in the app anymore.
 
 The original channel is just for descriptive purposes. When you create a new season, by default it has the same channel as the previous series component. There may be situations when a series has multiple original channels \(e.g. Killing Eve is a co-production between BBC America and AMC\). If that's the case, choose one of those. The form is complicated as-is, and adding the possibility of multiple channels will only make it more complicated.
 
@@ -123,20 +123,22 @@ Unlike movies, where releases are tracked up to a year, series components are tr
 
 The period subform consists of the following fields \(all fields except links are required\):
 
-* Start month
-* Start year
-* End month
-* End year
-* Number of episodes
-* Check-box which indicates whether it was a single-day release \(like for Netflix series\)
-* Rotten Tomatoes link
-* Poster URL
+* Period start;
+* Period end;
+* Number of episodes;
+* Check-box which indicates whether it was a single-day release \(like for Netflix series\);
+* Rotten Tomatoes link;
+* Poster URL.
 
-The year of the release can be between 1950 and 2100. The periods must be valid - the end date cannot be before the start date and the periods cannot be interleaved.
+The year of the release can be between 1950 and 2100. The periods must be valid - the end date cannot be before the start date and periods cannot be interleaved.
 
 The number of episodes for a single period can be between 1 and 50.
 
 If it's a single-day release, you don't select the end month/year, becuase they are obviously equal to the start month/year.
+
+{% hint style="warning" %}
+There is a bug in Avalonia which makes the date picker for the season start/end a little more difficult to use. When you change both a month and a year, only the year is changed. You have to change the year, apply the changes, and then change the month.
+{% endhint %}
 
 Rotten Tomatoes tracks scores for individual seasons, but it may have multiple pages per season \(the only series I've seen have multiple pages per season is The Sopranos\). Thus the main part of the season form doesn't contain the RT link. Instead, the period subform has it, and that's why the link to RT is at the top of the period subform, and not directly below the poster, like in other forms.
 
@@ -148,44 +150,43 @@ You can add a period by clicking the _Add period_ button at the bottom of the se
 
 The season form has a couple other action buttons at the bottom of the form:
 
-* Delete the season
-* Go to series
+* Delete the season;
+* Go to series.
 
 It also has action buttons in the form header:
 
-* Go to series
-* Go to the next series component \(if the season is not the last component\)
-* Go to the previous series component \(if the season is not the first component\)
+* Go to series;
+* Go to the next series component \(if the season is not the last component\);
+* Go to the previous series component \(if the season is not the first component\).
 
-You can delete the season only when the form doesn't contain changes.
+You can delete the season only when the form doesn't contain changes and go to series only when it's valid.
 
 ## The Special Episode Form
 
 When you add a new special episode or click on an existing one in the series form, a special episode form is opened. Here's how it looks:
 
-![](../../.gitbook/assets/v0.2-screen-episode-form.png)
+![](../../.gitbook/assets/v0.3-screen-episode-form.png)
 
-This form is similar to the movie form and is much simpler than the season form. Like the season form, the special episode form is not independent - it's considered to be part fo the series form. You can't save an episode directly; to save an episode, go back to the series form and save the whole series. You can cancel any changes in the episode form directly. If you cancel changes in the series form, all changes in all episodes will be cancelled as well \(new episodes will be deleted, and deleted episodes will be returned\).
+This form is similar to the movie form and is much simpler than the season form. Like the season form, the special episode form is not independent - it's considered to be part fo the series form. You can't save an episode directly; to save an episode, go back to the series form and save the whole series. You can cancel any changes in the episode form directly. If you cancel changes in the series form, all changes in all episodes will be cancelled as well \(new episodes will be removed, and deleted episodes will be returned\).
 
 The special episode form consists of the following parts:
 
-* Header which contains the first title, the _close_ button, and navigation buttons
-* Poster and RT link, if present
-* Form fields
-* Buttons for various actions
+* Header which contains the first title, the _close_ button, and navigation buttons;
+* Poster and RT link, if present;
+* Form fields;
+* Buttons for various actions.
 
 ### Special Episode Form Fields
 
 The special episode form contains the following fields:
 
-* Check-box which indicates whether you watched the episode
-* Check-box which indicates whether the episode is released
-* Titles \(at least one required\)
-* Original titles \(at least one required\)
-* Release month \(required\)
-* Release year \(required\)
-* Rotten Tomatoes link
-* Poster URL
+* Check-box which indicates whether you watched the episode;
+* Check-box which indicates whether the episode is released;
+* Titles \(at least one required\);
+* Original titles \(at least one required\);
+* Release month and year \(required\);
+* Rotten Tomatoes link;
+* Poster URL.
 
 As with movies, watch and release statuses are simple check-boxes. The _released_ check-box is enabled only if the release month/year is the same as the current month/year, because otherwise the release status is obvious. If you check the _watched_ check-box, the _released_ check-box becomes checked as well. If you uncheck the _released_ check-box, the _watched_ check-box becomes unchecked as well.
 
