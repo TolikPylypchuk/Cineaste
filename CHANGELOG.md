@@ -5,11 +5,20 @@
 All 0.x versions are pre-release versions and as such are not 100% stable,
 and may contain breaking changes across versions.
 
-### [v0.2.1](https://github.com/TolikPylypchuk/MovieList/releases/tag/v0.2.1)
+### [v0.3](https://github.com/TolikPylypchuk/Cineaste/releases/tag/v0.3)
+
+The third usable version of the app. Contains no new features, but the UI was fully rewritten:
+
+- The app was renamed to Cineaste
+- The app now uses Avalonia instead of WPF which makes it cross-platform
+- Fluent UI is the app's theme now instead of Material UI
+- Dark theme was added
+
+### [v0.2.1](https://github.com/TolikPylypchuk/Cineaste/releases/tag/v0.2.1)
 
 A minor release which fixes a bug in search.
 
-### [v0.2](https://github.com/TolikPylypchuk/MovieList/releases/tag/v0.2)
+### [v0.2](https://github.com/TolikPylypchuk/Cineaste/releases/tag/v0.2)
 
 The second usable version of the app. Contains a few new features:
 
@@ -17,7 +26,7 @@ The second usable version of the app. Contains a few new features:
 - Searching and filtering the list
 - Sorting the list in various ways
 
-### [v0.1](https://github.com/TolikPylypchuk/MovieList/releases/tag/v0.1)
+### [v0.1](https://github.com/TolikPylypchuk/Cineaste/releases/tag/v0.1)
 
 The first usable version of the MovieList app. Contains the basic functionality:
 
