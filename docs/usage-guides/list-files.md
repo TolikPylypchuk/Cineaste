@@ -2,7 +2,7 @@
 
 Here's what the app looks like when you create a new file:
 
-![](../.gitbook/assets/v0.2-screen-new-file.png)
+![](../.gitbook/assets/v0.3-screen-new-file.png)
 
 The file tabs are composed of three main sections: the list itself, stats, and settings. You can switch between them using the left-side bar.
 
@@ -12,7 +12,7 @@ When you open a file, you can close it via the _close_ button in the tab's heade
 
 Here's what the list section looks like when it contains entries:
 
-![](../.gitbook/assets/v0.2-screen-list.png)
+![](../.gitbook/assets/v0.3-screen-list.png)
 
 ### List Structure
 
@@ -35,26 +35,26 @@ The list has four columns:
 
 The majority of popular contemporary movies are in English, so if your native language is English, then the title will often be the same as the original title.
 
-All item types can have multiple titles and original titles since different translations exist or the item is marketed differently in different markets. Only the first title and original title is shown in the list. Every item can have up to 10 titles and up to 10 original titles, although even that is too much in my opinion.
+All item types can have multiple titles and original titles since different translations exist or the item is marketed differently in different markets. Only the first title and original title is shown in the list. Every item can have up to 10 titles and up to 10 original titles.
 
 ### Kinds
 
 Every item can be of a certain kind. Kinds are used to color-code items in the list. Every kind has six colors for various item types and states:
 
-* Movie which has already been watched
-* Movie which hasn't been watched yet
-* Movie which hasn't been released yet
-* Series which has already been watched or is being watched
-* Series which hasn't been watched yet
-* Series which hasn't been released yet
+* Movie which has already been watched;
+* Movie which hasn't been watched yet;
+* Movie which hasn't been released yet;
+* Series which has already been watched or is being watched;
+* Series which hasn't been watched yet;
+* Series which hasn't been released yet.
 
 There are no separate colors for franchises - they get the color of their first entry.
 
 By default, every file contains three kinds \(although it can be configured\):
 
-* Live-action: movies are black, series are blue
-* Animation: movies are green, series are light-blue
-* Documentary: both movies and series are purple
+* Live Action: movies are black, series are blue;
+* Animation: movies are green, series are light-blue;
+* Documentary: both movies and series are purple.
 
 The default kinds have all non-watched items as red and all non-released items as dark red.
 
@@ -74,13 +74,13 @@ You can learn more about editing list items in the next article.
 
 ## The Stats Section
 
-Statistics are not implemented yet, so the respective left-side bar item is disabled.
+Statistics are not implemented yet, so the respective navigation bar item is disabled.
 
 ## The Settings Section
 
 Here's what the settings for a file look like:
 
-![](../.gitbook/assets/v0.2-screen-settings.png)
+![](../.gitbook/assets/v0.3-screen-settings.png)
 
 You can open the file settings by clicking the left-side bar item, through the _File &gt; Settings_ menu item, or by pressing `Ctrl+P`.
 
@@ -90,14 +90,14 @@ The settings consist of the three main sections: main settings, kind settings, a
 
 You can edit the following file attributes in the settings:
 
-* List name
-* Title language
-* Default season title
-* Default season original title
-* Default first sorting order
-* Default first sorting direction
-* Default second sorting order
-* Default second sorting direction
+* List name;
+* Title language;
+* Default season title;
+* Default season original title;
+* Default first sorting order;
+* Default first sorting direction;
+* Default second sorting order;
+* Default second sorting direction.
 
 You can name your list however you like and it doesn't have to be the same as the name of the file. The list name appears in the tab header and in the recent files list on the home page.
 
@@ -111,11 +111,11 @@ Default sorting is the sorting which is applied when you open the file. More inf
 
 Here you can edit existing kinds, delete them, or add new ones.
 
-A single kind setting consists of a name and six colors for the aforementioned item types. You can edit colors by clicking on them and by editing the color in the modal window.
+A single kind setting consists of a name and six colors for the aforementioned item types. You can edit colors by clicking on them and by editing the color in the popup.
 
-![](../.gitbook/assets/v0.2-screen-settings-color.png)
+![](../.gitbook/assets/v0.3-screen-settings-color.png)
 
-You can select a color in the color picker or enter its HEX color value. Mind that the HEX value field uses ARGB instead of RGB. You can add `FF` in the beginning to convert an RGB value into an ARGB value.
+You can select a color in the color picker which supports three modes - palette, wheel, and manual settings.
 
 You can have as many kinds as you like \(but more than zero\). You can't delete kinds that have items of that kind in the list. If you want to delete a kind, you should manually edit its every item to have a different kind.
 
@@ -123,9 +123,9 @@ You can have as many kinds as you like \(but more than zero\). You can't delete 
 
 Here you can edit existing tags, delete them, or add new ones.
 
-When you add a new tag, or click on an existing one, a tag editing form is opened in the modal window where you can edit all the aforementioned attributes. The same rules apply to tag colors as to kind colors.
+![](../.gitbook/assets/v0.3-screen-settings-tag.png)
 
-![](../.gitbook/assets/v0.2-screen-settings-tag.png)
+When you add a new tag, or click on an existing one, a tag editing form is opened in the modal window where you can edit all the aforementioned attributes. The same rules apply to tag colors as to kind colors.
 
 You can have as many tags as you like, or none at all, if you don't want to use them. Unlike kinds, you can delete tags which belong to existing items. If you do, then all items will lose this tag.
 
