@@ -4,27 +4,27 @@ Lots of movies and series have multiple parts, so it's logical to have these mov
 
 Franchises can be created and edited via the franchise forms, but those can't be created directly. Rather, you first create a movie or a series, and after saving it, you can create a franchise where this movie/series is the first part, using the _Create franchise_ button at the bottom of the form. Here's how a franchise form looks:
 
-![](../../.gitbook/assets/v0.2-screen-franchise-form.png)
+![](../../.gitbook/assets/v0.3-screen-franchise-form.png)
 
 The franchise form is a little different from other forms in that it's focus is on actions rather than fields and data. It consists of the following parts:
 
-* Header which contains the first title, the _close_ button, and a few other buttons if the franchise is a part of another franchise
-* Poster \(or logo\), if present
-* Form fields
-* The franchise entry list
-* Buttons for various actions
+* Header which contains the first title, the _close_ button, and a few other buttons if the franchise is a part of another franchise;
+* Poster \(or logo\), if present;
+* Form fields;
+* The franchise entry list;
+* Buttons for various actions.
 
 ## Form Fields
 
 The franchise form contains the following main fields:
 
-* Check-box which indicates whether the franchise has its own titles
-* Check-box which indicates whether the franchise should be shown as an item in the list
-* Check-box which indicates whether the franchise entries are loosely connected
-* Check-box which indicates whether the display numbers should be merged with those of the previous franchise
-* Titles \(if the franchise has titles\)
-* Original titles \(if the franchise has titles\)
-* Poster URL
+* Check-box which indicates whether the franchise has its own titles;
+* Check-box which indicates whether the franchise should be shown as an item in the list;
+* Check-box which indicates whether the franchise entries are loosely connected;
+* Check-box which indicates whether the display numbers should be merged with those of the previous franchise;
+* Titles \(if the franchise has titles\);
+* Original titles \(if the franchise has titles\);
+* Poster URL.
 
 The franchise form is the only form where titles are not required. If the franchise doesn't have its own titles, then the titles of its first entry are considered as the titles of the franchise. If the franchise has its own titles, you can specify whether to show it as an item in the list. This is not always necessary since the franchise can have a title which is very similar to the first entry's title.
 
@@ -40,10 +40,10 @@ When you add a new entry, its respective form is opened. There's nothing differe
 
 If you right-click on a franchise entry, a context menu will apper which has the following actions:
 
-* Move up \(if the entry is not the first one\)
-* Move down \(if the entry is not the last one\)
-* Hide/show display number
-* Detach
+* Move up \(if the entry is not the first one\);
+* Move down \(if the entry is not the last one\);
+* Hide/show display number;
+* Detach.
 
 You can move the entries around, and they don't have to be in chronological order \(although it's usually logical that they be in chronological order\).
 
@@ -59,7 +59,7 @@ In addition to movies and series, a franchise can also contain other franchises.
 
 If you have multiple levels of franchises, you can choose to merge their entries' display numbers. This functionality is limited to two levels only though.
 
-Merging display numbers can be better explained with an example. Suppose you created a franchise called Star Wars which contains three other franchises: The Original Trilogy, The Prequel Trilogy and The Sequel Trilogy, each of which contains three movies, for a total of nine movies \(anthology films and series notwithstanding\). If you open any of the child franchises, you'll see that every movie is numbered 1, 2, and 3. This may not be desirable, because all of these movies are part of one big Star Wars franchise, and so it would be better to say that e.g. The Revenge of the Sith is the sixth movie overall, and not just the third movie of the Prequel Trilogy. You can do that by merging the display numbers. If you check the _merge display numbers_ check-box in the child franchises \(the trilogies\), then the Prequel Trilogy will continue numbering its movies after the Original Trilogy \(so, 4, 5, and 6\) and the Sequel Trilogy will continue numbering its movies after the Prequel Trilogy \(so, 7, 8, and 9\).
+Merging display numbers can be better explained with an example. Suppose you created a franchise called Star Wars which contains three other franchises: The Original Trilogy, The Prequel Trilogy and The Sequel Trilogy, each of which contains three movies, for a total of nine movies \(anthology films and series notwithstanding\). If you open any of the child franchises, you'll see that every movie is numbered 1, 2, and 3. This may not be desirable, because all of these movies are part of one big Star Wars franchise, and so it would be better to say that e.g. Revenge of the Sith is the sixth movie overall, and not just the third movie of the Prequel Trilogy. You can do that by merging the display numbers. If you check the _merge display numbers_ check-box in the child franchises \(the trilogies\), then the Prequel Trilogy will continue numbering its movies after the Original Trilogy \(so, 4, 5, and 6\) and the Sequel Trilogy will continue numbering its movies after the Prequel Trilogy \(so, 7, 8, and 9\).
 
 ## Franchise Navigation Actions
 
@@ -75,8 +75,8 @@ These actions are available only when the form doesn't contain changes.
 
 The franchise form has a couple other action buttons:
 
-* Delete the franchise
-* Create a franchise
+* Delete the franchise;
+* Create a franchise.
 
 You can delete the franchise only when the form doesn't contain changes. When you delete the franchise, none of its entries are deleted. Instead, they are all detached. You have to delete all entries manually.
 
