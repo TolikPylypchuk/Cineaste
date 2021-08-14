@@ -52,7 +52,7 @@ There are no separate colors for franchises - they get the color of their first 
 
 By default, every file contains three kinds \(although it can be configured\):
 
-* Live Action: movies are black, series are blue;
+* Live-Action: movies are black, series are blue;
 * Animation: movies are green, series are light-blue;
 * Documentary: both movies and series are purple.
 
