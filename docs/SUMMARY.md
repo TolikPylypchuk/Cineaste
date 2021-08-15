@@ -18,5 +18,5 @@
 
 * [Version History](other/version-history.md)
 * [Technical Stuff](other/technical.md)
-* [About Movie List](other/about.md)
+* [About Cineaste](other/about.md)
 
