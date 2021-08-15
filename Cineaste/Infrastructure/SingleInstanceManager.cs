@@ -28,7 +28,8 @@ namespace Cineaste.Infrastructure
         {
             try
             {
-                var namedPipeManager = new NamedPipeManager(Assembly.GetExecutingAssembly()?.FullName ?? String.Empty);
+                var namedPipeManager = new NamedPipeManager(
+                    Assembly.GetExecutingAssembly()?.GetName()?.Name ?? String.Empty);
 
                 string message = Environment.GetCommandLineArgs().Length > 1
                      ? Environment.GetCommandLineArgs()[1]
