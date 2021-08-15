@@ -10,7 +10,9 @@ if (Test-Path .\bin\Cineaste\)
 dotnet publish .\Cineaste\Cineaste.csproj --configuration Release --runtime win10-x64 --self-contained true `
 --output .\bin\Cineaste --nologo -p:Platform=x64 -p:PublishSingleFile=true -p:PublishTrimmed=true
 
-Remove-Item -Path .\bin\Cineaste\ -Include *.pdb, *.xml
+Remove-Item -Path .\bin\Cineaste\Cineaste.pdb
+Remove-Item -Path .\bin\Cineaste\Cineaste.Core.pdb
+Remove-Item -Path .\bin\Cineaste\Cineaste.Data.pdb
 
 if (Test-Path .\bin\Cineaste.zip) 
 {
