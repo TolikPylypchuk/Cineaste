@@ -108,18 +108,8 @@ namespace Cineaste.Core.ViewModels.Forms.Base
                     .Select(title => title.Save.Execute())
                     .ForkJoin()
                     .Discard()
-                    .Do(() =>
-                    {
-                        foreach (var title in this.titlesSource.Items.Except(this.ItemTitles).ToList())
-                        {
-                            this.ItemTitles.Add(title);
-                        }
-
-                        foreach (var title in this.ItemTitles.Except(this.titlesSource.Items).ToList())
-                        {
-                            this.ItemTitles.Remove(title);
-                        }
-                    });
+                    .Do(() => this.titlesSource.Items.Except(this.ItemTitles).ForEach(this.ItemTitles.Add))
+                    .Do(() => this.ItemTitles.Except(this.titlesSource.Items).ForEach(i => this.ItemTitles.Remove(i)));
         }
 
         protected void ClearTitles() =>

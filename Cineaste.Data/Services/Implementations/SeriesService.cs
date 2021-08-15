@@ -97,6 +97,15 @@ namespace Cineaste.Data.Services.Implementations
                 episode => this.InsertSpecialEpisodeDependentEntities(episode, connection, transaction),
                 episode => this.DeleteSpecialEpisodeDependentEntities(episode, connection, transaction));
 
+            foreach (var episode in series.SpecialEpisodes)
+            {
+                updater.UpdateDependentEntities(
+                    episode,
+                    episode.Titles,
+                    title => title.SpecialEpisodeId,
+                    (title, episodeId) => title.SpecialEpisodeId = episodeId);
+            }
+
             if (series.Entry != null)
             {
                 connection.Update(series.Entry, transaction);
