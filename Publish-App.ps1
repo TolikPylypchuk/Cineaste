@@ -1,26 +1,26 @@
-if (Test-Path .\bin\MovieList\) 
+if (Test-Path .\bin\Cineaste\) 
 {
-    Get-Childitem .\bin\MovieList\ -Recurse | ForEach-Object { 
+    Get-Childitem .\bin\Cineaste\ -Recurse | ForEach-Object { 
         Remove-Item $_.FullName -Force -Recurse
     }
 
-    Remove-Item -Recurse -Force -Path .\bin\MovieList\
+    Remove-Item -Recurse -Force -Path .\bin\Cineaste\
 }
 
-dotnet publish .\MovieList\MovieList.csproj --configuration Release --runtime win10-x64 --self-contained `
---output .\bin\MovieList --nologo -p:Platform=x64 -p:PublishSingleFile=true
+dotnet publish .\Cineaste\Cineaste.csproj --configuration Release --runtime win10-x64 --self-contained true `
+--output .\bin\Cineaste --nologo -p:Platform=x64 -p:PublishSingleFile=true -p:PublishTrimmed=true
 
-Remove-Item -Path .\bin\MovieList\ -Include *.pdb, *.xml
+Remove-Item -Path .\bin\Cineaste\ -Include *.pdb, *.xml
 
-if (Test-Path .\bin\MovieList.zip) 
+if (Test-Path .\bin\Cineaste.zip) 
 {
-    Remove-Item -Path .\bin\MovieList.zip
+    Remove-Item -Path .\bin\Cineaste.zip
 }
 
-Compress-Archive -Path .\bin\MovieList\ -DestinationPath .\bin\MovieList.zip
+Compress-Archive -Path .\bin\Cineaste\ -DestinationPath .\bin\Cineaste.zip
 
-Get-Childitem .\bin\MovieList\ -Recurse | ForEach-Object { 
+Get-Childitem .\bin\Cineaste\ -Recurse | ForEach-Object { 
     Remove-Item $_.FullName -Force -Recurse
 }
 
-Remove-Item -Recurse -Force -Path .\bin\MovieList\
+Remove-Item -Recurse -Force -Path .\bin\Cineaste\
