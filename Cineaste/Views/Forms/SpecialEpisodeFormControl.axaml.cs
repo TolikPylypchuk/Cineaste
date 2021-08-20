@@ -1,6 +1,8 @@
 using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Akavache;
 
@@ -131,23 +133,27 @@ namespace Cineaste.Views.Forms
             this.Bind(this.ViewModel, vm => vm.Channel, v => v.ChannelTextBox.Text)
                 .DisposeWith(disposables);
 
+            var isUpdatingReleaseDateChanged = new Subject<Unit>();
+
             this.WhenAnyValue(
                 v => v.ViewModel!.Year,
                 v => v.ViewModel!.Month,
                 (year, month) => new DateTimeOffset(new DateTime(year, month, 1)))
+                .SkipUntil(isUpdatingReleaseDateChanged.StartWith(Unit.Default))
+                .TakeUntil(isUpdatingReleaseDateChanged)
+                .Repeat()
                 .BindTo(this, v => v.ReleaseDatePicker.SelectedDate)
                 .DisposeWith(disposables);
 
             this.ReleaseDatePicker.GetObservable(DatePicker.SelectedDateProperty)
                 .WhereValueNotNull()
-                .Select(date => date.Year)
-                .BindTo(this, v => v.ViewModel!.Year)
-                .DisposeWith(disposables);
-
-            this.ReleaseDatePicker.GetObservable(DatePicker.SelectedDateProperty)
-                .WhereValueNotNull()
-                .Select(date => date.Month)
-                .BindTo(this, v => v.ViewModel!.Month)
+                .Subscribe(date =>
+                {
+                    isUpdatingReleaseDateChanged.OnNext(Unit.Default);
+                    this.ViewModel!.Month = date.Month;
+                    this.ViewModel!.Year = date.Year;
+                    isUpdatingReleaseDateChanged.OnNext(Unit.Default);
+                })
                 .DisposeWith(disposables);
 
             this.Bind(this.ViewModel, vm => vm.RottenTomatoesLink, v => v.RottenTomatoesLinkTextBox.Text)

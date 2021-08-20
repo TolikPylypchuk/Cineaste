@@ -2,6 +2,7 @@ using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -57,42 +58,50 @@ namespace Cineaste.Views.Forms
 
         public void BindFields(CompositeDisposable disposables)
         {
+            var isUpdatingStartDateChanged = new Subject<Unit>();
+
             this.WhenAnyValue(
                 v => v.ViewModel!.StartYear,
                 v => v.ViewModel!.StartMonth,
                 (year, month) => new DateTimeOffset(new DateTime(year, month, 1)))
+                .SkipUntil(isUpdatingStartDateChanged.StartWith(Unit.Default))
+                .TakeUntil(isUpdatingStartDateChanged)
+                .Repeat()
                 .BindTo(this, v => v.StartDatePicker.SelectedDate)
                 .DisposeWith(disposables);
 
             this.StartDatePicker.GetObservable(DatePicker.SelectedDateProperty)
                 .WhereValueNotNull()
-                .Select(date => date.Year)
-                .BindTo(this, v => v.ViewModel!.StartYear)
+                .Subscribe(date =>
+                {
+                    isUpdatingStartDateChanged.OnNext(Unit.Default);
+                    this.ViewModel!.StartMonth = date.Month;
+                    this.ViewModel!.StartYear = date.Year;
+                    isUpdatingStartDateChanged.OnNext(Unit.Default);
+                })
                 .DisposeWith(disposables);
 
-            this.StartDatePicker.GetObservable(DatePicker.SelectedDateProperty)
-                .WhereValueNotNull()
-                .Select(date => date.Month)
-                .BindTo(this, v => v.ViewModel!.StartMonth)
-                .DisposeWith(disposables);
+            var isUpdatingEndDateChanged = new Subject<Unit>();
 
             this.WhenAnyValue(
                 v => v.ViewModel!.EndYear,
                 v => v.ViewModel!.EndMonth,
                 (year, month) => new DateTimeOffset(new DateTime(year, month, 1)))
+                .SkipUntil(isUpdatingEndDateChanged.StartWith(Unit.Default))
+                .TakeUntil(isUpdatingEndDateChanged)
+                .Repeat()
                 .BindTo(this, v => v.EndDatePicker.SelectedDate)
                 .DisposeWith(disposables);
 
             this.EndDatePicker.GetObservable(DatePicker.SelectedDateProperty)
                 .WhereValueNotNull()
-                .Select(date => date.Year)
-                .BindTo(this, v => v.ViewModel!.EndYear)
-                .DisposeWith(disposables);
-
-            this.EndDatePicker.GetObservable(DatePicker.SelectedDateProperty)
-                .WhereValueNotNull()
-                .Select(date => date.Month)
-                .BindTo(this, v => v.ViewModel!.EndMonth)
+                .Subscribe(date =>
+                {
+                    isUpdatingEndDateChanged.OnNext(Unit.Default);
+                    this.ViewModel!.EndMonth = date.Month;
+                    this.ViewModel!.EndYear = date.Year;
+                    isUpdatingEndDateChanged.OnNext(Unit.Default);
+                })
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel!.IsSingleDayRelease)
