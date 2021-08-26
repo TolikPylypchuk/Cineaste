@@ -246,11 +246,17 @@
   <data name="ConvertToSeries" xml:space="preserve">
     <value>Convert to series</value>
   </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
   <data name="CreateFranchise" xml:space="preserve">
     <value>Create franchise</value>
   </data>
   <data name="CreateList" xml:space="preserve">
     <value>Create a list</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>Cut</value>
   </data>
   <data name="DefaultDefaultSeasonOriginalTitle" xml:space="preserve">
     <value>Season #</value>
@@ -674,6 +680,9 @@
   </data>
   <data name="OtherPreferences" xml:space="preserve">
     <value>Other Preferences</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Paste</value>
   </data>
   <data name="PosterUrl" xml:space="preserve">
     <value>Poster URL</value>

@@ -448,6 +448,15 @@ namespace Cineaste.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        internal static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create franchise.
         /// </summary>
         internal static string CreateFranchise {
@@ -462,6 +471,15 @@ namespace Cineaste.Properties {
         internal static string CreateList {
             get {
                 return ResourceManager.GetString("CreateList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cut.
+        /// </summary>
+        internal static string Cut {
+            get {
+                return ResourceManager.GetString("Cut", resourceCulture);
             }
         }
         
@@ -1731,6 +1749,15 @@ namespace Cineaste.Properties {
         internal static string OtherPreferences {
             get {
                 return ResourceManager.GetString("OtherPreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste.
+        /// </summary>
+        internal static string Paste {
+            get {
+                return ResourceManager.GetString("Paste", resourceCulture);
             }
         }
         

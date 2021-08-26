@@ -28,8 +28,8 @@
                        VerticalAlignment="Center" />
         </Grid>
 
-        <Border.ContextMenu>
-            <ContextMenu>
+        <Border.ContextFlyout>
+            <MenuFlyout>
                 <MenuItem x:Name="MoveUpMenuItem" Header="{l:Translate MoveUp}">
                     <MenuItem.Icon>
                         <c:SymbolIcon Symbol="ArrowUp" />
@@ -59,7 +59,7 @@
                         <c:SymbolIcon Symbol="Cut" />
                     </MenuItem.Icon>
                 </MenuItem>
-            </ContextMenu>
-        </Border.ContextMenu>
+            </MenuFlyout>
+        </Border.ContextFlyout>
     </Border>
 </UserControl>
