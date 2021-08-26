@@ -67,6 +67,13 @@ namespace Cineaste.Views.Forms
                 .BindTo(this, v => v.GoToFranchiseButton.IsVisible)
                 .DisposeWith(disposables);
 
+            this.BindCommand(this.ViewModel!, vm => vm.GoToFranchise, v => v.GoToFranchiseArrowButton)
+                .DisposeWith(disposables);
+
+            this.ViewModel!.GoToFranchise.CanExecute
+                .BindTo(this, v => v.GoToFranchiseArrowButton.IsVisible)
+                .DisposeWith(disposables);
+
             this.BindCommand(this.ViewModel!, vm => vm.GoToNext, v => v.GoToNextButton)
                 .DisposeWith(disposables);
 
