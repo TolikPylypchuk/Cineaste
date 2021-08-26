@@ -5,6 +5,10 @@
 All 0.x versions are pre-release versions and as such are not 100% stable,
 and may contain breaking changes across versions.
 
+### [v0.3.1](https://github.com/TolikPylypchuk/Cineaste/releases/tag/v0.3.1)
+
+A minor release which fixes a couple bugs in the UI.
+
 ### [v0.3](https://github.com/TolikPylypchuk/Cineaste/releases/tag/v0.3)
 
 The third usable version of the app. Contains no new features, but the UI was fully rewritten:
