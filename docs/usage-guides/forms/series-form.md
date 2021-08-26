@@ -136,10 +136,6 @@ The number of episodes for a single period can be between 1 and 50.
 
 If it's a single-day release, you don't select the end month/year, becuase they are obviously equal to the start month/year.
 
-{% hint style="warning" %}
-There is a bug in Avalonia which makes the date picker for the season start/end a little more difficult to use. When you change both a month and a year, only the year is changed. You have to change the year, apply the changes, and then change the month.
-{% endhint %}
-
 Rotten Tomatoes tracks scores for individual seasons, but it may have multiple pages per season \(the only series I've seen have multiple pages per season is The Sopranos\). Thus the main part of the season form doesn't contain the RT link. Instead, the period subform has it, and that's why the link to RT is at the top of the period subform, and not directly below the poster, like in other forms.
 
 If a season is released over multiple periods, it may be marketed differently during those periods and hence have different posters for different parts. If the season has multiple posters, you can switch between them with the little arrow buttons below the poster.
