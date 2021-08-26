@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 
 using Akavache;
 
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;

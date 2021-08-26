@@ -35,6 +35,14 @@
         </Setter>
     </Style>
 
+    <Style Selector="ComboBox">
+        <Setter Property="ItemsPanel">
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel />
+            </ItemsPanelTemplate>
+        </Setter>
+    </Style>
+
     <Style Selector="TextBlock.caption">
         <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}" />
         <Setter Property="Margin" Value="0 4" />
