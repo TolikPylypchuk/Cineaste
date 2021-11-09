@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:rx="http://reactiveui.net"
-             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="750"
@@ -17,20 +16,20 @@
         <Grid Grid.Row="0" ColumnDefinitions="*,25,25,*" HorizontalAlignment="Stretch">
             <Button x:Name="GoToFranchiseArrowButton" Grid.Column="0" HorizontalAlignment="Left" Classes="icon"
                     Width="25" Height="25">
-                <c:SymbolIcon Symbol="ChevronUp" FontSize="20" />
+                <ui:SymbolIcon Symbol="ChevronUp" FontSize="20" />
             </Button>
 
             <Button x:Name="GoToPreviousButton" Grid.Column="1" Classes="icon" Width="25" Height="25">
-                <c:SymbolIcon Symbol="ChevronLeft" FontSize="20" />
+                <ui:SymbolIcon Symbol="ChevronLeft" FontSize="20" />
             </Button>
 
             <Button x:Name="GoToNextButton" Grid.Column="2" Classes="icon" Width="25" Height="25">
-                <c:SymbolIcon Symbol="ChevronRight" FontSize="20" />
+                <ui:SymbolIcon Symbol="ChevronRight" FontSize="20" />
             </Button>
 
             <Button x:Name="CloseButton" Grid.Column="3" HorizontalAlignment="Right" Classes="icon"
                     Width="25" Height="25">
-                <c:SymbolIcon Symbol="Dismiss" FontSize="20" />
+                <ui:SymbolIcon Symbol="Dismiss" FontSize="20" />
             </Button>
         </Grid>
 

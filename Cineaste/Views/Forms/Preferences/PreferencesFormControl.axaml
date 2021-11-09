@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms.Preferences"
              mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="750"
@@ -18,13 +17,13 @@
             <ui:NavigationViewItem x:Name="DefaultSettingsItem" Content="{l:Translate NavigationDefaultSettings}"
                                    IsSelected="True">
                 <ui:NavigationViewItem.Icon>
-                    <c:SymbolIcon Symbol="Settings" />
+                    <ui:SymbolIcon Symbol="Setting" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
 
             <ui:NavigationViewItem x:Name="OtherPreferencesItem" Content="{l:Translate NavigationOtherPreferences}">
                 <ui:NavigationViewItem.Icon>
-                    <c:SymbolIcon Symbol="ContentSettings" />
+                    <ui:SymbolIcon Symbol="Settings" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
         </ui:NavigationView.MenuItems>
@@ -48,8 +47,8 @@
                             <Setter Property="FontWeight" Value="Light" />
                             <Setter Property="Margin" Value="8 16" />
                         </Style>
-                        <Style Selector="c|SymbolIcon.info">
-                            <Setter Property="Symbol" Value="Info" />
+                        <Style Selector="ui|SymbolIcon.info">
+                            <Setter Property="Symbol" Value="Pin" />
                             <Setter Property="FontSize" Value="10" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                             <Setter Property="Foreground" Value="Gray" />
@@ -121,17 +120,17 @@
                                 </StackPanel.Styles>
 
                                 <StackPanel>
-                                    <c:SymbolIcon Classes="info" />
+                                    <ui:SymbolIcon Classes="info" />
                                     <TextBlock Text="{l:Translate ListNameHint}" />
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <c:SymbolIcon Classes="info" />
+                                    <ui:SymbolIcon Classes="info" />
                                     <TextBlock Text="{l:Translate TitleLanguageHint}" />
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <c:SymbolIcon Classes="info" />
+                                    <ui:SymbolIcon Classes="info" />
                                     <TextBlock Text="{l:Translate DefaultSeasonTitleHint}" />
                                 </StackPanel>
                             </StackPanel>
@@ -147,8 +146,8 @@
                                     <Setter Property="VerticalAlignment" Value="Center" />
                                 </Style>
 
-                                <Style Selector="c|SymbolIcon.add">
-                                    <Setter Property="Symbol" Value="AddCircle" />
+                                <Style Selector="ui|SymbolIcon.add">
+                                    <Setter Property="Symbol" Value="Add" />
                                     <Setter Property="Margin" Value="0" />
                                     <Setter Property="FontSize" Value="24" />
                                 </Style>
@@ -157,7 +156,7 @@
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="{l:Translate Kinds}" Classes="title" />
 
                             <Button x:Name="AddKindButton" Grid.Row="0" Grid.Column="1" Classes="icon plus">
-                                <c:SymbolIcon Classes="add" />
+                                <ui:SymbolIcon Classes="add" />
                             </Button>
 
                             <ItemsControl x:Name="Kinds" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="8 0">
@@ -171,7 +170,7 @@
                             <TextBlock Grid.Row="2" Grid.Column="0" Text="{l:Translate Tags}" Classes="title" />
 
                             <Button x:Name="AddTagButton" Grid.Row="2" Grid.Column="1" Classes="icon plus">
-                                <c:SymbolIcon Classes="add" />
+                                <ui:SymbolIcon Classes="add" />
                             </Button>
 
                             <ItemsControl x:Name="Tags" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="8 0">
@@ -208,7 +207,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
-                            <c:SymbolIcon Classes="info" Margin="0 0 2 0" />
+                            <ui:SymbolIcon Classes="info" Margin="0 0 2 0" />
                             <TextBlock Text="{l:Translate LoggingPreferencesHint}" VerticalAlignment="Center"
                                        FontSize="{DynamicResource FontSizeTiny}" Foreground="Gray" />
                         </StackPanel>

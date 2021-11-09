@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms.Preferences"
              mc:Ignorable="d" d:DesignWidth="120" d:DesignHeight="90"
@@ -20,7 +19,7 @@
 
             <Button x:Name="DeleteButton" Grid.Row="1" Grid.Column="1" Classes="icon" VerticalAlignment="Center"
                     Width="20" Height="20" Margin="8 0 0 0">
-                <c:SymbolIcon Symbol="Dismiss" />
+                <ui:SymbolIcon Symbol="Dismiss" />
             </Button>
         </Grid>
 

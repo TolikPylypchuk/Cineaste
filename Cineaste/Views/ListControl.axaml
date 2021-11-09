@@ -28,6 +28,7 @@
                  ScrollViewer.VerticalScrollBarVisibility="Visible" Background="Transparent">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
+                    <Setter Property="Margin" Value="0" />
                     <Setter Property="Padding" Value="0" />
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

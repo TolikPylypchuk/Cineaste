@@ -35,7 +35,7 @@ namespace Cineaste.Core
         }
 
         public static ValidationHelper ValidationRuleForColor<TForm>(
-            this TForm form, Expression<Func<TForm, string>> vmProperty)
+            this TForm form, Expression<Func<TForm, string?>> vmProperty)
             where TForm : ReactiveValidationObject, IReactiveForm =>
             form.ValidationRule(vmProperty, HexColorValidator.IsArgbString, "HexColorInvalid");
     }

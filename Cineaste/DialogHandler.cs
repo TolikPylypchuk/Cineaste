@@ -80,7 +80,7 @@ namespace Cineaste
                 }
             };
 
-            string fileName = await dialog.ShowAsync(this.window);
+            string? fileName = await dialog.ShowAsync(this.window);
             ctx.SetOutput(fileName);
         }
 
@@ -99,7 +99,7 @@ namespace Cineaste
 
             string[]? fileNames = await dialog.ShowAsync(this.window);
 
-            if (fileNames.Length > 0)
+            if (fileNames != null && fileNames.Length > 0)
             {
                 ctx.SetOutput(fileNames[0]);
             } else

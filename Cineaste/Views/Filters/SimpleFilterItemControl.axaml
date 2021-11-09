@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:rx="http://reactiveui.net"
-             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Filters"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
@@ -42,7 +41,7 @@
 
         <ui:Button x:Name="OtherActionsButton" Grid.Row="0" Grid.RowSpan="3" Grid.Column="3" Width="25" Height="25"
                    HorizontalAlignment="Center" VerticalAlignment="Center" Classes="icon">
-            <c:SymbolIcon Symbol="MoreVertical" FontSize="20" />
+            <ui:SymbolIcon Symbol="MoreVertical" FontSize="20" />
 
             <ui:Button.Flyout>
                 <ui:MenuFlyout Placement="Bottom">

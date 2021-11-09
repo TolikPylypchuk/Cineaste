@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:rx="http://reactiveui.net"
-             xmlns:c="using:Cineaste.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels"
              xmlns:vmp="using:Cineaste.Core.ViewModels.Forms.Preferences"
@@ -19,7 +18,7 @@
             <ui:NavigationViewItem x:Name="ListItem" Content="{l:Translate NavigationList}" Icon="List" />
             <ui:NavigationViewItem Content="{l:Translate NavigationStats}" IsEnabled="False">
                 <ui:NavigationViewItem.Icon>
-                    <c:SymbolIcon Symbol="DataHistogram" />
+                    <ui:SymbolIcon Symbol="TwoBars" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
         </ui:NavigationView.MenuItems>

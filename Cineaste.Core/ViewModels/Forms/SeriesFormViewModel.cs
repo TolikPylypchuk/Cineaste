@@ -25,6 +25,8 @@ using ReactiveUI.Validation.Extensions;
 using static Cineaste.Core.ServiceUtil;
 using static Cineaste.Data.Constants;
 
+using EnumerableEx = System.Linq.EnumerableEx;
+
 namespace Cineaste.Core.ViewModels.Forms
 {
     public sealed class SeriesFormViewModel : TaggedFormBase<Series, SeriesFormViewModel>
@@ -109,7 +111,7 @@ namespace Cineaste.Core.ViewModels.Forms
 
             this.AddSeason
                 .Merge(this.AddSpecialEpisode)
-                .SelectMany(_ => this.ComponentForms.MaxBy(season => season.SequenceNumber))
+                .SelectMany(_ => EnumerableEx.MaxBy(this.ComponentForms, season => season.SequenceNumber))
                 .InvokeCommand(this.SelectComponent);
 
             this.CanDeleteWhenNotChanged();

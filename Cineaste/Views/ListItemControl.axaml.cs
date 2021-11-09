@@ -66,12 +66,12 @@ namespace Cineaste.Views
             mode switch
             {
                 HighlightMode.Partial =>
-                    this.TryFindResource("AccentAcrylicBackgroundFillColorDefaultBrush", out object? resource) &&
+                    this.TryFindResource("SolidBackgroundFillColorSecondaryBrush", out object? resource) &&
                     resource is IBrush brush
                     ? brush
                     : Brushes.Transparent,
                 HighlightMode.Full =>
-                    this.TryFindResource("AccentAcrylicBackgroundFillColorBaseBrush", out object? resource) &&
+                    this.TryFindResource("SolidBackgroundFillColorSecondaryBrush", out object? resource) &&
                     resource is IBrush brush
                     ? brush
                     : Brushes.Transparent,

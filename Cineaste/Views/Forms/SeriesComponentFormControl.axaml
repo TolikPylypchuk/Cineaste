@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:c="using:Cineaste.Controls"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:l="using:Cineaste.Localization"
              xmlns:vm="using:Cineaste.Core.ViewModels.Forms"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="50"
@@ -30,13 +30,13 @@
             <MenuFlyout>
                 <MenuItem x:Name="MoveUpMenuItem" Header="{l:Translate MoveUp}">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="ArrowUp" />
+                        <ui:SymbolIcon Symbol="ChevronUp" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="MoveDownMenuItem" Header="{l:Translate MoveDown}">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="ArrowDown" />
+                        <ui:SymbolIcon Symbol="ChevronDown" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuFlyout>

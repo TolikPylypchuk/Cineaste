@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:c="using:Cineaste.Controls"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
         xmlns:l="using:Cineaste.Localization"
         xmlns:vm="using:Cineaste.Core.ViewModels"
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="800"
@@ -17,19 +17,19 @@
             <MenuItem Header="{l:Translate File}">
                 <MenuItem x:Name="NewMenuItem" Header="{l:Translate New}" InputGesture="Ctrl+N">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="Document" />
+                        <ui:SymbolIcon Symbol="Document" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="OpenMenuItem" Header="{l:Translate Open}" InputGesture="Ctrl+O">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="DocumentEdit" />
+                        <ui:SymbolIcon Symbol="Folder" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="OpenRecentMenuItem" Header="{l:Translate OpenRecent}">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="Bookmark" />
+                        <ui:SymbolIcon Symbol="Bookmark" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -37,42 +37,37 @@
 
                 <MenuItem x:Name="SaveMenuItem" Header="{l:Translate Save}" InputGesture="Ctrl+S">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="Save" />
+                        <ui:SymbolIcon Symbol="Save" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="SaveAsMenuItem" Header="{l:Translate SaveAs}" InputGesture="Ctrl+Shift+S">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="SaveEdit" />
+                        <ui:SymbolIcon Symbol="SaveAs" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="SettingsMenuItem" Header="{l:Translate Settings}" InputGesture="Ctrl+P">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="Settings" />
+                        <ui:SymbolIcon Symbol="Setting" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem x:Name="CloseMenuItem" Header="{l:Translate Close}" InputGesture="Ctrl+W">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="DocumentDismiss" />
+                        <ui:SymbolIcon Symbol="Dismiss" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <Separator />
 
-                <MenuItem x:Name="ExitMenuItem" Header="{l:Translate Exit}" InputGesture="Alt+F4">
-                    <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="SignOut" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
+                <MenuItem x:Name="ExitMenuItem" Header="{l:Translate Exit}" InputGesture="Alt+F4" />
             </MenuItem>
 
             <MenuItem Header="{l:Translate Edit}">
                 <MenuItem x:Name="PreferencesMenuItem" Header="{l:Translate Preferences}" InputGesture="Ctrl+Shift+P">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="ContentSettings" />
+                        <ui:SymbolIcon Symbol="Settings" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -80,7 +75,7 @@
             <MenuItem Header="{l:Translate Help}">
                 <MenuItem x:Name="AboutMenuItem" Header="{l:Translate About}" InputGesture="F1">
                     <MenuItem.Icon>
-                        <c:SymbolIcon Symbol="Info" />
+                        <ui:SymbolIcon Symbol="Help" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

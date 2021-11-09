@@ -72,7 +72,7 @@ namespace Cineaste.Core.ViewModels.Forms.Preferences
                     onAdd: t => this.addableImpliedTagsSource.Remove(t),
                     onRemove: this.addableImpliedTagsSource.Add);
 
-            static bool notEmpty(string str) => !String.IsNullOrWhiteSpace(str);
+            static bool notEmpty(string? str) => !String.IsNullOrWhiteSpace(str);
 
             this.AddImpliedTag = ReactiveCommand.Create<TagModel>(this.impliedTagsSource.Add);
             this.Close = ReactiveCommand.Create(() => { });
