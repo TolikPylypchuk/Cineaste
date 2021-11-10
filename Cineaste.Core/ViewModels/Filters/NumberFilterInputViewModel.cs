@@ -1,16 +1,12 @@
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+namespace Cineaste.Core.ViewModels.Filters;
 
-namespace Cineaste.Core.ViewModels.Filters
+public sealed class NumberFilterInputViewModel : FilterInput
 {
-    public sealed class NumberFilterInputViewModel : FilterInput
-    {
-        public NumberFilterInputViewModel() =>
-            this.WhenAnyValue(vm => vm.Number)
-                .Discard()
-                .Subscribe(this.inputChanged);
+    public NumberFilterInputViewModel() =>
+        this.WhenAnyValue(vm => vm.Number)
+            .Discard()
+            .Subscribe(this.inputChanged);
 
-        [Reactive]
-        public int Number { get; set; }
-    }
+    [Reactive]
+    public int Number { get; set; }
 }

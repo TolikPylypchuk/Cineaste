@@ -1,76 +1,67 @@
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+namespace Cineaste.Data.Services.Implementations;
 
-using Cineaste.Data.Models;
-
-using Dapper.Contrib.Extensions;
-
-namespace Cineaste.Data.Services.Implementations
+internal sealed class MovieService : TaggedEntityServiceBase<Movie, MovieTag>
 {
-    internal sealed class MovieService : TaggedEntityServiceBase<Movie, MovieTag>
+    public MovieService(string fileName)
+        : base(fileName, CompositeIdEqualityComparer.MovieTag)
+    { }
+
+    protected override void Insert(Movie movie, IDbConnection connection, IDbTransaction transaction)
     {
-        public MovieService(string fileName)
-            : base(fileName, CompositeIdEqualityComparer.MovieTag)
-        { }
+        movie.KindId = movie.Kind.Id;
 
-        protected override void Insert(Movie movie, IDbConnection connection, IDbTransaction transaction)
+        movie.Id = (int)connection.Insert(movie, transaction);
+
+        foreach (var title in movie.Titles)
         {
-            movie.KindId = movie.Kind.Id;
-
-            movie.Id = (int)connection.Insert(movie, transaction);
-
-            foreach (var title in movie.Titles)
-            {
-                title.MovieId = movie.Id;
-                title.Id = (int)connection.Insert(title, transaction);
-            }
-
-            if (movie.Entry != null)
-            {
-                var entry = movie.Entry;
-                entry.MovieId = movie.Id;
-                entry.ParentFranchiseId = entry.ParentFranchise.Id;
-                entry.Id = (int)connection.Insert(entry, transaction);
-                entry.ParentFranchise.Entries.Add(entry);
-
-                this.UpdateMergedDisplayNumbers(entry.ParentFranchise);
-            }
+            title.MovieId = movie.Id;
+            title.Id = (int)connection.Insert(title, transaction);
         }
 
-        protected override void Update(Movie movie, IDbConnection connection, IDbTransaction transaction)
+        if (movie.Entry != null)
         {
-            movie.KindId = movie.Kind.Id;
+            var entry = movie.Entry;
+            entry.MovieId = movie.Id;
+            entry.ParentFranchiseId = entry.ParentFranchise.Id;
+            entry.Id = (int)connection.Insert(entry, transaction);
+            entry.ParentFranchise.Entries.Add(entry);
 
-            connection.Update(movie, transaction);
-
-            new DependentEntityUpdater(connection, transaction).UpdateDependentEntities(
-                movie,
-                movie.Titles,
-                title => title.MovieId,
-                (title, movieId) => title.MovieId = movieId);
-
-            if (movie.Entry != null)
-            {
-                connection.Update(movie.Entry, transaction);
-            }
+            this.UpdateMergedDisplayNumbers(entry.ParentFranchise);
         }
-
-        protected override void Delete(Movie movie, IDbConnection connection, IDbTransaction transaction)
-        {
-            connection.Delete(movie.Titles, transaction);
-
-            if (movie.Entry != null)
-            {
-                this.DeleteFranchiseEntry(movie.Entry, connection, transaction);
-            }
-
-            connection.Delete(movie, transaction);
-        }
-
-        protected override List<MovieTag> GetTags(Movie movie) =>
-            movie.Tags
-                .Select(tag => new MovieTag { MovieId = movie.Id, TagId = tag.Id })
-                .ToList();
     }
+
+    protected override void Update(Movie movie, IDbConnection connection, IDbTransaction transaction)
+    {
+        movie.KindId = movie.Kind.Id;
+
+        connection.Update(movie, transaction);
+
+        new DependentEntityUpdater(connection, transaction).UpdateDependentEntities(
+            movie,
+            movie.Titles,
+            title => title.MovieId,
+            (title, movieId) => title.MovieId = movieId);
+
+        if (movie.Entry != null)
+        {
+            connection.Update(movie.Entry, transaction);
+        }
+    }
+
+    protected override void Delete(Movie movie, IDbConnection connection, IDbTransaction transaction)
+    {
+        connection.Delete(movie.Titles, transaction);
+
+        if (movie.Entry != null)
+        {
+            this.DeleteFranchiseEntry(movie.Entry, connection, transaction);
+        }
+
+        connection.Delete(movie, transaction);
+    }
+
+    protected override List<MovieTag> GetTags(Movie movie) =>
+        movie.Tags
+            .Select(tag => new MovieTag { MovieId = movie.Id, TagId = tag.Id })
+            .ToList();
 }

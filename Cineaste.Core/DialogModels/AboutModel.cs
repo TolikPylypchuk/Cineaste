@@ -1,19 +1,12 @@
-using System;
-using System.Reactive;
+namespace Cineaste.Core.DialogModels;
 
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-
-namespace Cineaste.Core.DialogModels
+public sealed class AboutModel : ReactiveObject
 {
-    public sealed class AboutModel : ReactiveObject
-    {
-        public AboutModel() =>
-            this.Close = ReactiveCommand.Create(() => { });
+    public AboutModel() =>
+        this.Close = ReactiveCommand.Create(() => { });
 
-        [Reactive]
-        public string Version { get; set; } = String.Empty;
+    [Reactive]
+    public string Version { get; set; } = String.Empty;
 
-        public ReactiveCommand<Unit, Unit> Close { get; }
-    }
+    public ReactiveCommand<Unit, Unit> Close { get; }
 }

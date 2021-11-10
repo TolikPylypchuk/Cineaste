@@ -1,20 +1,13 @@
-using System;
+namespace Cineaste.Localization;
 
-using Avalonia.Markup.Xaml;
-
-using Cineaste.Properties;
-
-namespace Cineaste.Localization
+public sealed class TranslateExtension : MarkupExtension
 {
-    public sealed class TranslateExtension : MarkupExtension
-    {
-        public TranslateExtension(string key) =>
-            this.Key = key;
+    public TranslateExtension(string key) =>
+        this.Key = key;
 
-        [ConstructorArgument("key")]
-        public string Key { get; set; }
+    [ConstructorArgument("key")]
+    public string Key { get; set; }
 
-        public override object ProvideValue(IServiceProvider serviceProvider) =>
-            Messages.ResourceManager.GetString(this.Key) ?? this.Key;
-    }
+    public override object ProvideValue(IServiceProvider serviceProvider) =>
+        Messages.ResourceManager.GetString(this.Key) ?? this.Key;
 }

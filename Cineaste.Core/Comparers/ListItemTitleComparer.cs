@@ -1,206 +1,194 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+namespace Cineaste.Core.Comparers;
 
-using Cineaste.Core.Data.Models;
-using Cineaste.Core.ListItems;
-using Cineaste.Data.Models;
-
-using Nito.Comparers;
-
-namespace Cineaste.Core.Comparers
+public sealed class ListItemTitleComparer : NullableComparerBase<ListItem>
 {
-    public sealed class ListItemTitleComparer : NullableComparerBase<ListItem>
+    private readonly TitleComparer titleComparer;
+    private readonly IComparer<ListItem> otherComparer;
+    private readonly IComparer<ListItem> titleAndOtherComparer;
+    private readonly Func<ListItem, string> getTitle;
+    private readonly Func<Franchise, string> getFranchiseTitle;
+
+    public ListItemTitleComparer(
+        CultureInfo culture,
+        IComparer<ListItem> otherComparer,
+        Func<ListItem, string> getTitle,
+        Func<Franchise, string> getFranchiseTitle,
+        NullComparison nullComparison = NullComparison.NullsFirst)
+        : base(nullComparison)
     {
-        private readonly TitleComparer titleComparer;
-        private readonly IComparer<ListItem> otherComparer;
-        private readonly IComparer<ListItem> titleAndOtherComparer;
-        private readonly Func<ListItem, string> getTitle;
-        private readonly Func<Franchise, string> getFranchiseTitle;
+        this.getTitle = getTitle;
+        this.getFranchiseTitle = getFranchiseTitle;
 
-        public ListItemTitleComparer(
-            CultureInfo culture,
-            IComparer<ListItem> otherComparer,
-            Func<ListItem, string> getTitle,
-            Func<Franchise, string> getFranchiseTitle,
-            NullComparison nullComparison = NullComparison.NullsFirst)
-            : base(nullComparison)
+        this.titleComparer = new TitleComparer(culture);
+        this.otherComparer = otherComparer;
+        this.titleAndOtherComparer = ComparerBuilder.For<ListItem>()
+            .OrderBy(this.getTitle, this.titleComparer)
+            .ThenBy(otherComparer);
+    }
+
+    protected override bool EqualsSafe(ListItem x, ListItem y) =>
+        x == y;
+
+    protected override int GetHashCodeSafe(ListItem item) =>
+        item.GetHashCode();
+
+    protected override int CompareSafe(ListItem x, ListItem y) =>
+        (x, y) switch
         {
-            this.getTitle = getTitle;
-            this.getFranchiseTitle = getFranchiseTitle;
+            (MovieListItem left, MovieListItem right) => this.Compare(left, right),
+            (MovieListItem left, SeriesListItem right) => this.Compare(left, right),
+            (MovieListItem left, FranchiseListItem right) => this.Compare(left, right),
 
-            this.titleComparer = new TitleComparer(culture);
-            this.otherComparer = otherComparer;
-            this.titleAndOtherComparer = ComparerBuilder.For<ListItem>()
-                .OrderBy(this.getTitle, this.titleComparer)
-                .ThenBy(otherComparer);
-        }
+            (SeriesListItem left, MovieListItem right) => this.Compare(left, right),
+            (SeriesListItem left, SeriesListItem right) => this.Compare(left, right),
+            (SeriesListItem left, FranchiseListItem right) => this.Compare(left, right),
 
-        protected override bool EqualsSafe(ListItem x, ListItem y) =>
-            x == y;
+            (FranchiseListItem left, MovieListItem right) => this.Compare(left, right),
+            (FranchiseListItem left, SeriesListItem right) => this.Compare(left, right),
+            (FranchiseListItem left, FranchiseListItem right) => this.Compare(left, right),
 
-        protected override int GetHashCodeSafe(ListItem item) =>
-            item.GetHashCode();
+            _ => throw new NotSupportedException(
+                $"Types of list items to compare are not supported: {x.GetType()}, {y.GetType()}")
+        };
 
-        protected override int CompareSafe(ListItem x, ListItem y) =>
-            (x, y) switch
-            {
-                (MovieListItem left, MovieListItem right) => this.Compare(left, right),
-                (MovieListItem left, SeriesListItem right) => this.Compare(left, right),
-                (MovieListItem left, FranchiseListItem right) => this.Compare(left, right),
+    private int Compare(MovieListItem left, MovieListItem right) =>
+        left.Movie.Id == right.Movie.Id
+            ? 0
+            : this.CompareEntries(left, right, left.Movie.Entry, right.Movie.Entry);
 
-                (SeriesListItem left, MovieListItem right) => this.Compare(left, right),
-                (SeriesListItem left, SeriesListItem right) => this.Compare(left, right),
-                (SeriesListItem left, FranchiseListItem right) => this.Compare(left, right),
+    private int Compare(MovieListItem left, SeriesListItem right) =>
+        this.CompareEntries(left, right, left.Movie.Entry, right.Series.Entry);
 
-                (FranchiseListItem left, MovieListItem right) => this.Compare(left, right),
-                (FranchiseListItem left, SeriesListItem right) => this.Compare(left, right),
-                (FranchiseListItem left, FranchiseListItem right) => this.Compare(left, right),
+    private int Compare(MovieListItem left, FranchiseListItem right) =>
+        this.Compare(right, left) * -1;
 
-                _ => throw new NotSupportedException(
-                    $"Types of list items to compare are not supported: {x.GetType()}, {y.GetType()}")
-            };
+    private int Compare(SeriesListItem left, MovieListItem right) =>
+        this.CompareEntries(left, right, left.Series.Entry, right.Movie.Entry);
 
-        private int Compare(MovieListItem left, MovieListItem right) =>
-            left.Movie.Id == right.Movie.Id
-                ? 0
-                : this.CompareEntries(left, right, left.Movie.Entry, right.Movie.Entry);
+    private int Compare(SeriesListItem left, SeriesListItem right) =>
+        left.Series.Id == right.Series.Id
+            ? 0
+            : this.CompareEntries(left, right, left.Series.Entry, right.Series.Entry);
 
-        private int Compare(MovieListItem left, SeriesListItem right) =>
-            this.CompareEntries(left, right, left.Movie.Entry, right.Series.Entry);
+    private int Compare(SeriesListItem left, FranchiseListItem right) =>
+        this.Compare(right, left) * -1;
 
-        private int Compare(MovieListItem left, FranchiseListItem right) =>
-            this.Compare(right, left) * -1;
+    private int Compare(FranchiseListItem left, MovieListItem right) =>
+        this.CompareEntries(left, right, right.Movie.Entry);
 
-        private int Compare(SeriesListItem left, MovieListItem right) =>
-            this.CompareEntries(left, right, left.Series.Entry, right.Movie.Entry);
+    private int Compare(FranchiseListItem left, SeriesListItem right) =>
+        this.CompareEntries(left, right, right.Series.Entry);
 
-        private int Compare(SeriesListItem left, SeriesListItem right) =>
-            left.Series.Id == right.Series.Id
-                ? 0
-                : this.CompareEntries(left, right, left.Series.Entry, right.Series.Entry);
+    private int Compare(FranchiseListItem left, FranchiseListItem right)
+    {
+        int result;
 
-        private int Compare(SeriesListItem left, FranchiseListItem right) =>
-            this.Compare(right, left) * -1;
-
-        private int Compare(FranchiseListItem left, MovieListItem right) =>
-            this.CompareEntries(left, right, right.Movie.Entry);
-
-        private int Compare(FranchiseListItem left, SeriesListItem right) =>
-            this.CompareEntries(left, right, right.Series.Entry);
-
-        private int Compare(FranchiseListItem left, FranchiseListItem right)
+        if (left.Franchise.Id == right.Franchise.Id)
         {
-            int result;
-
-            if (left.Franchise.Id == right.Franchise.Id)
-            {
-                result = 0;
-            } else if (left.Franchise.IsDescendantOf(right.Franchise))
-            {
-                result = 1;
-            } else if (right.Franchise.IsDescendantOf(left.Franchise))
-            {
-                result = -1;
-            } else if (left.Franchise.GetRootSeries().Id == right.Franchise.GetRootSeries().Id)
-            {
-                var (ancestor1, ancestor2) = left.Franchise.GetDistinctAncestors(right.Franchise);
-                result = ancestor1.Entry?.SequenceNumber.CompareTo(ancestor2.Entry?.SequenceNumber) ?? 0;
-            } else if (left.Franchise.Entry == null && right.Franchise.Entry == null)
-            {
-                result = this.titleComparer.Compare(
-                    this.getFranchiseTitle(left.Franchise),
-                    this.getFranchiseTitle(right.Franchise));
-
-                if (result == 0)
-                {
-                    result = this.otherComparer.Compare(left, right);
-                }
-            } else
-            {
-                return this.Compare(
-                    new FranchiseListItem(left.Franchise.GetRootSeries()),
-                    new FranchiseListItem(right.Franchise.GetRootSeries()));
-            }
-
-            return result;
-        }
-
-        private int CompareEntries(
-            ListItem left,
-            ListItem right,
-            FranchiseEntry? leftEntry,
-            FranchiseEntry? rightEntry) =>
-            (leftEntry, rightEntry) switch
-            {
-                (null, null) => this.CompareTitle(left, right),
-                (var entry, null) => this.Compare(new FranchiseListItem(entry.ParentFranchise.GetRootSeries()), right),
-                (null, var entry) => this.Compare(left, new FranchiseListItem(entry.ParentFranchise.GetRootSeries())),
-                var (entry1, entry2) => entry1.ParentFranchise.Id == entry2.ParentFranchise.Id
-                    ? entry1.SequenceNumber.CompareTo(entry2.SequenceNumber)
-                    : this.CompareEntries(entry1, entry2)
-            };
-
-        private int CompareEntries(FranchiseListItem left, ListItem right, FranchiseEntry? entry)
+            result = 0;
+        } else if (left.Franchise.IsDescendantOf(right.Franchise))
         {
-            if (entry == null)
-            {
-                return this.CompareTitle(new FranchiseListItem(left.Franchise.GetRootSeries()), right);
-            }
-
-            if (left.Franchise.Id == entry.ParentFranchise.Id)
-            {
-                return -1;
-            }
-
-            if (left.Franchise.IsStrictDescendantOf(entry.ParentFranchise))
-            {
-                return left.Franchise.GetAllAncestors()
-                        .Where(f => f.Entry != null)
-                        .First(f => f.Entry!.ParentFranchise.Id == entry.ParentFranchise.Id)
-                        .Entry!
-                    .SequenceNumber
-                    .CompareTo(entry.SequenceNumber);
-            }
-
-            return this.Compare(left, new FranchiseListItem(entry.ParentFranchise));
-        }
-
-        private int CompareEntries(FranchiseEntry left, FranchiseEntry right)
+            result = 1;
+        } else if (right.Franchise.IsDescendantOf(left.Franchise))
         {
-            if (left.ParentFranchise.IsStrictDescendantOf(right.ParentFranchise))
-            {
-                return left.ParentFranchise.GetAllAncestors()
-                        .Where(a => a.Entry != null)
-                        .First(a => a.Entry!.ParentFranchise.Id == right.ParentFranchise.Id)
-                        .Entry!
-                    .SequenceNumber
-                    .CompareTo(right.SequenceNumber);
-            }
+            result = -1;
+        } else if (left.Franchise.GetRootSeries().Id == right.Franchise.GetRootSeries().Id)
+        {
+            var (ancestor1, ancestor2) = left.Franchise.GetDistinctAncestors(right.Franchise);
+            result = ancestor1.Entry?.SequenceNumber.CompareTo(ancestor2.Entry?.SequenceNumber) ?? 0;
+        } else if (left.Franchise.Entry == null && right.Franchise.Entry == null)
+        {
+            result = this.titleComparer.Compare(
+                this.getFranchiseTitle(left.Franchise),
+                this.getFranchiseTitle(right.Franchise));
 
-            if (right.ParentFranchise.IsStrictDescendantOf(left.ParentFranchise))
+            if (result == 0)
             {
-                return left.SequenceNumber.CompareTo(
-                    right.ParentFranchise.GetAllAncestors()
-                        .Where(a => a.Entry != null)
-                        .First(a => a.Entry!.ParentFranchise.Id == left.ParentFranchise.Id)
-                        .Entry!
-                        .SequenceNumber);
+                result = this.otherComparer.Compare(left, right);
             }
-
+        } else
+        {
             return this.Compare(
-                new FranchiseListItem(left.ParentFranchise),
-                new FranchiseListItem(right.ParentFranchise));
+                new FranchiseListItem(left.Franchise.GetRootSeries()),
+                new FranchiseListItem(right.Franchise.GetRootSeries()));
         }
 
-        private int CompareTitle(ListItem left, ListItem right) =>
-            this.titleAndOtherComparer.Compare(left, right);
+        return result;
+    }
 
-        private int CompareTitle(FranchiseListItem left, ListItem right)
+    private int CompareEntries(
+        ListItem left,
+        ListItem right,
+        FranchiseEntry? leftEntry,
+        FranchiseEntry? rightEntry) =>
+        (leftEntry, rightEntry) switch
         {
-            int result = this.titleComparer.Compare(this.getFranchiseTitle(left.Franchise), this.getTitle(right));
-            return result != 0 ? result : this.otherComparer.Compare(left, right);
+            (null, null) => this.CompareTitle(left, right),
+            (var entry, null) => this.Compare(new FranchiseListItem(entry.ParentFranchise.GetRootSeries()), right),
+            (null, var entry) => this.Compare(left, new FranchiseListItem(entry.ParentFranchise.GetRootSeries())),
+            var (entry1, entry2) => entry1.ParentFranchise.Id == entry2.ParentFranchise.Id
+                ? entry1.SequenceNumber.CompareTo(entry2.SequenceNumber)
+                : this.CompareEntries(entry1, entry2)
+        };
+
+    private int CompareEntries(FranchiseListItem left, ListItem right, FranchiseEntry? entry)
+    {
+        if (entry == null)
+        {
+            return this.CompareTitle(new FranchiseListItem(left.Franchise.GetRootSeries()), right);
         }
+
+        if (left.Franchise.Id == entry.ParentFranchise.Id)
+        {
+            return -1;
+        }
+
+        if (left.Franchise.IsStrictDescendantOf(entry.ParentFranchise))
+        {
+            return left.Franchise.GetAllAncestors()
+                    .Where(f => f.Entry != null)
+                    .First(f => f.Entry!.ParentFranchise.Id == entry.ParentFranchise.Id)
+                    .Entry!
+                .SequenceNumber
+                .CompareTo(entry.SequenceNumber);
+        }
+
+        return this.Compare(left, new FranchiseListItem(entry.ParentFranchise));
+    }
+
+    private int CompareEntries(FranchiseEntry left, FranchiseEntry right)
+    {
+        if (left.ParentFranchise.IsStrictDescendantOf(right.ParentFranchise))
+        {
+            return left.ParentFranchise.GetAllAncestors()
+                    .Where(a => a.Entry != null)
+                    .First(a => a.Entry!.ParentFranchise.Id == right.ParentFranchise.Id)
+                    .Entry!
+                .SequenceNumber
+                .CompareTo(right.SequenceNumber);
+        }
+
+        if (right.ParentFranchise.IsStrictDescendantOf(left.ParentFranchise))
+        {
+            return left.SequenceNumber.CompareTo(
+                right.ParentFranchise.GetAllAncestors()
+                    .Where(a => a.Entry != null)
+                    .First(a => a.Entry!.ParentFranchise.Id == left.ParentFranchise.Id)
+                    .Entry!
+                    .SequenceNumber);
+        }
+
+        return this.Compare(
+            new FranchiseListItem(left.ParentFranchise),
+            new FranchiseListItem(right.ParentFranchise));
+    }
+
+    private int CompareTitle(ListItem left, ListItem right) =>
+        this.titleAndOtherComparer.Compare(left, right);
+
+    private int CompareTitle(FranchiseListItem left, ListItem right)
+    {
+        int result = this.titleComparer.Compare(this.getFranchiseTitle(left.Franchise), this.getTitle(right));
+        return result != 0 ? result : this.otherComparer.Compare(left, right);
     }
 }

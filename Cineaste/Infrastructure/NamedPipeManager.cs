@@ -1,81 +1,72 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
+namespace Cineaste.Infrastructure;
+
 using System.IO.Pipes;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Threading;
 
-using Splat;
-
-namespace Cineaste.Infrastructure
+public sealed class NamedPipeManager : IEnableLogger
 {
-    public sealed class NamedPipeManager : IEnableLogger
+    private Thread? thread;
+
+    private readonly Subject<string> receivedString = new();
+
+    public NamedPipeManager(string name) =>
+        this.NamedPipeName = name;
+
+    public string NamedPipeName { get; }
+
+    public IObservable<string> ReceivedString =>
+        this.receivedString.AsObservable();
+
+    public void StartServer()
     {
-        private Thread? thread;
-
-        private readonly Subject<string> receivedString = new();
-
-        public NamedPipeManager(string name) =>
-            this.NamedPipeName = name;
-
-        public string NamedPipeName { get; }
-
-        public IObservable<string> ReceivedString =>
-            this.receivedString.AsObservable();
-
-        public void StartServer()
+        this.thread = new Thread(this.WaitForMessages)
         {
-            this.thread = new Thread(this.WaitForMessages)
-            {
-                IsBackground = true
-            };
+            IsBackground = true
+        };
 
-            this.thread.Start();
+        this.thread.Start();
+    }
+
+    public bool Write(string text, int connectionTimeout = 300)
+    {
+        using var client = new NamedPipeClientStream(this.NamedPipeName);
+
+        try
+        {
+            client.Connect(connectionTimeout);
+        } catch (Exception e)
+        {
+            this.Log().Error(e);
+            return false;
         }
 
-        public bool Write(string text, int connectionTimeout = 300)
+        if (!client.IsConnected)
         {
-            using var client = new NamedPipeClientStream(this.NamedPipeName);
-
-            try
-            {
-                client.Connect(connectionTimeout);
-            } catch (Exception e)
-            {
-                this.Log().Error(e);
-                return false;
-            }
-
-            if (!client.IsConnected)
-            {
-                this.Log().Error("The client is not connected");
-                return false;
-            }
-
-            using var writer = new StreamWriter(client);
-            writer.Write(text);
-            writer.Flush();
-
-            return true;
+            this.Log().Error("The client is not connected");
+            return false;
         }
 
-        [DoesNotReturn]
-        private void WaitForMessages()
+        using var writer = new StreamWriter(client);
+        writer.Write(text);
+        writer.Flush();
+
+        return true;
+    }
+
+    [DoesNotReturn]
+    private void WaitForMessages()
+    {
+        while (true)
         {
-            while (true)
+            string text;
+            using (var server = new NamedPipeServerStream(this.NamedPipeName, PipeDirection.InOut, 10))
             {
-                string text;
-                using (var server = new NamedPipeServerStream(this.NamedPipeName, PipeDirection.InOut, 10))
-                {
-                    server.WaitForConnection();
+                server.WaitForConnection();
 
-                    using var reader = new StreamReader(server);
-                    text = reader.ReadToEnd();
-                }
-
-                this.receivedString.OnNext(text);
+                using var reader = new StreamReader(server);
+                text = reader.ReadToEnd();
             }
+
+            this.receivedString.OnNext(text);
         }
     }
 }

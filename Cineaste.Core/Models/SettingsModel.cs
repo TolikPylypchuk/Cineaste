@@ -1,55 +1,46 @@
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
+namespace Cineaste.Core.Models;
 
-using Cineaste.Core.Preferences;
-using Cineaste.Data;
-using Cineaste.Data.Models;
-
-namespace Cineaste.Core.Models
+public sealed record SettingsModel(Settings Settings, List<Kind> Kinds, List<Tag> Tags) : ISettings
 {
-    public sealed record SettingsModel(Settings Settings, List<Kind> Kinds, List<Tag> Tags) : ISettings
+    string ISettings.DefaultSeasonTitle
     {
-        string ISettings.DefaultSeasonTitle
-        {
-            get => this.Settings.DefaultSeasonTitle;
-            set => this.Settings.DefaultSeasonTitle = value;
-        }
+        get => this.Settings.DefaultSeasonTitle;
+        set => this.Settings.DefaultSeasonTitle = value;
+    }
 
-        string ISettings.DefaultSeasonOriginalTitle
-        {
-            get => this.Settings.DefaultSeasonOriginalTitle;
-            set => this.Settings.DefaultSeasonOriginalTitle = value;
-        }
+    string ISettings.DefaultSeasonOriginalTitle
+    {
+        get => this.Settings.DefaultSeasonOriginalTitle;
+        set => this.Settings.DefaultSeasonOriginalTitle = value;
+    }
 
-        CultureInfo ISettings.CultureInfo
-        {
-            get => this.Settings.CultureInfo;
-            set => this.Settings.CultureInfo = value;
-        }
+    CultureInfo ISettings.CultureInfo
+    {
+        get => this.Settings.CultureInfo;
+        set => this.Settings.CultureInfo = value;
+    }
 
-        ListSortOrder ISettings.DefaultFirstSortOrder
-        {
-            get => this.Settings.DefaultFirstSortOrder;
-            set => this.Settings.DefaultFirstSortOrder = value;
-        }
+    ListSortOrder ISettings.DefaultFirstSortOrder
+    {
+        get => this.Settings.DefaultFirstSortOrder;
+        set => this.Settings.DefaultFirstSortOrder = value;
+    }
 
-        ListSortOrder ISettings.DefaultSecondSortOrder
-        {
-            get => this.Settings.DefaultSecondSortOrder;
-            set => this.Settings.DefaultSecondSortOrder = value;
-        }
+    ListSortOrder ISettings.DefaultSecondSortOrder
+    {
+        get => this.Settings.DefaultSecondSortOrder;
+        set => this.Settings.DefaultSecondSortOrder = value;
+    }
 
-        ListSortDirection ISettings.DefaultFirstSortDirection
-        {
-            get => this.Settings.DefaultFirstSortDirection;
-            set => this.Settings.DefaultFirstSortDirection = value;
-        }
+    ListSortDirection ISettings.DefaultFirstSortDirection
+    {
+        get => this.Settings.DefaultFirstSortDirection;
+        set => this.Settings.DefaultFirstSortDirection = value;
+    }
 
-        ListSortDirection ISettings.DefaultSecondSortDirection
-        {
-            get => this.Settings.DefaultSecondSortDirection;
-            set => this.Settings.DefaultSecondSortDirection = value;
-        }
+    ListSortDirection ISettings.DefaultSecondSortDirection
+    {
+        get => this.Settings.DefaultSecondSortDirection;
+        set => this.Settings.DefaultSecondSortDirection = value;
     }
 }

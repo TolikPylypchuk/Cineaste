@@ -1,33 +1,25 @@
-using System;
-using System.Collections.Generic;
+namespace Cineaste.Data.Models;
 
-using Dapper.Contrib.Extensions;
-
-using static Cineaste.Data.Constants;
-
-namespace Cineaste.Data.Models
+[Table("Kinds")]
+public sealed class Kind : EntityBase
 {
-    [Table("Kinds")]
-    public sealed class Kind : EntityBase
-    {
-        public string Name { get; set; } = String.Empty;
+    public string Name { get; set; } = String.Empty;
 
-        public string ColorForWatchedMovie { get; set; } = DefaultNewKindColor;
-        public string ColorForWatchedSeries { get; set; } = DefaultNewKindColor;
+    public string ColorForWatchedMovie { get; set; } = DefaultNewKindColor;
+    public string ColorForWatchedSeries { get; set; } = DefaultNewKindColor;
 
-        public string ColorForNotWatchedMovie { get; set; } = DefaultNewKindColor;
-        public string ColorForNotWatchedSeries { get; set; } = DefaultNewKindColor;
+    public string ColorForNotWatchedMovie { get; set; } = DefaultNewKindColor;
+    public string ColorForNotWatchedSeries { get; set; } = DefaultNewKindColor;
 
-        public string ColorForNotReleasedMovie { get; set; } = DefaultNewKindColor;
-        public string ColorForNotReleasedSeries { get; set; } = DefaultNewKindColor;
+    public string ColorForNotReleasedMovie { get; set; } = DefaultNewKindColor;
+    public string ColorForNotReleasedSeries { get; set; } = DefaultNewKindColor;
 
-        [Write(false)]
-        public List<Movie> Movies { get; set; } = new();
+    [Write(false)]
+    public List<Movie> Movies { get; set; } = new();
 
-        [Write(false)]
-        public List<Series> Series { get; set; } = new();
+    [Write(false)]
+    public List<Series> Series { get; set; } = new();
 
-        public override string ToString() =>
-            $"Kind #{this.Id}: {this.Name}";
-    }
+    public override string ToString() =>
+        $"Kind #{this.Id}: {this.Name}";
 }

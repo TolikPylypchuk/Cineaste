@@ -1,60 +1,50 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+namespace Cineaste.Data.Services.Implementations;
+
 using System.Reflection;
 
-using Cineaste.Data.Models;
-
-using Dapper;
-using Dapper.Contrib.Extensions;
-
-namespace Cineaste.Data.Services.Implementations
+internal abstract class TaggedEntityServiceBase<TEntity, TTag> : EntityServiceBase<TEntity>
+    where TEntity : EntityBase
+    where TTag : EntityBase
 {
-    internal abstract class TaggedEntityServiceBase<TEntity, TTag> : EntityServiceBase<TEntity>
-        where TEntity : EntityBase
-        where TTag : EntityBase
+    private readonly IEqualityComparer<TTag> tagEqualityComparer;
+
+    protected TaggedEntityServiceBase(string file, IEqualityComparer<TTag> tagEqualityComparer)
+        : base(file) =>
+        this.tagEqualityComparer = tagEqualityComparer;
+
+    protected abstract List<TTag> GetTags(TEntity entity);
+
+    protected override void AfterSave(TEntity entity, IDbConnection connection, IDbTransaction transaction)
     {
-        private readonly IEqualityComparer<TTag> tagEqualityComparer;
+        var tags = this.GetTags(entity);
 
-        protected TaggedEntityServiceBase(string file, IEqualityComparer<TTag> tagEqualityComparer)
-            : base(file) =>
-            this.tagEqualityComparer = tagEqualityComparer;
+        var (table, idColumn) = this.GetTagTableAndIdColumn();
 
-        protected abstract List<TTag> GetTags(TEntity entity);
+        var dbTags = connection.Query<TTag>(
+            $"SELECT * FROM {table} WHERE {idColumn} = @Id", new { entity.Id }, transaction);
 
-        protected override void AfterSave(TEntity entity, IDbConnection connection, IDbTransaction transaction)
+        foreach (var tagToInsert in tags.Except(dbTags, this.tagEqualityComparer))
         {
-            var tags = this.GetTags(entity);
-
-            var (table, idColumn) = this.GetTagTableAndIdColumn();
-
-            var dbTags = connection.Query<TTag>(
-                $"SELECT * FROM {table} WHERE {idColumn} = @Id", new { entity.Id }, transaction);
-
-            foreach (var tagToInsert in tags.Except(dbTags, this.tagEqualityComparer))
-            {
-                tagToInsert.Id = (int)connection.Insert(tagToInsert, transaction);
-            }
-
-            var tagsToDelete = dbTags.Except(tags, this.tagEqualityComparer).ToList();
-            connection.Delete(tagsToDelete, transaction);
+            tagToInsert.Id = (int)connection.Insert(tagToInsert, transaction);
         }
 
-        protected override void BeforeDelete(TEntity entity, IDbConnection connection, IDbTransaction transaction)
-        {
-            var (table, idColumn) = this.GetTagTableAndIdColumn();
-            connection.Execute($"DELETE FROM {table} WHERE {idColumn} = @Id", new { entity.Id }, transaction);
-        }
+        var tagsToDelete = dbTags.Except(tags, this.tagEqualityComparer).ToList();
+        connection.Delete(tagsToDelete, transaction);
+    }
 
-        private (string, string) GetTagTableAndIdColumn()
-        {
-            string table = typeof(TTag).GetCustomAttribute<TableAttribute>()?.Name
-                ?? throw new InvalidOperationException($"The type {typeof(TTag)} doesn't have the Table attribute");
+    protected override void BeforeDelete(TEntity entity, IDbConnection connection, IDbTransaction transaction)
+    {
+        var (table, idColumn) = this.GetTagTableAndIdColumn();
+        connection.Execute($"DELETE FROM {table} WHERE {idColumn} = @Id", new { entity.Id }, transaction);
+    }
 
-            string idColumn = $"{typeof(TEntity).Name}Id";
+    private (string, string) GetTagTableAndIdColumn()
+    {
+        string table = typeof(TTag).GetCustomAttribute<TableAttribute>()?.Name
+            ?? throw new InvalidOperationException($"The type {typeof(TTag)} doesn't have the Table attribute");
 
-            return (table, idColumn);
-        }
+        string idColumn = $"{typeof(TEntity).Name}Id";
+
+        return (table, idColumn);
     }
 }

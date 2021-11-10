@@ -1,10 +1,7 @@
-using Dapper.Contrib.Extensions;
+namespace Cineaste.Data.Models;
 
-namespace Cineaste.Data.Models
+public abstract class EntityBase
 {
-    public abstract class EntityBase
-    {
-        [Key]
-        public int Id { get; set; }
-    }
+    [Key]
+    public int Id { get; set; }
 }

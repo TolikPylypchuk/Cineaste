@@ -1,12 +1,7 @@
-using System.Collections.Generic;
+namespace Cineaste.Data.Services;
 
-using Cineaste.Data.Models;
-
-namespace Cineaste.Data.Services
+public interface IDatabaseService
 {
-    public interface IDatabaseService
-    {
-        void CreateDatabase(Settings settings, IEnumerable<Kind> initialKinds, IEnumerable<Tag> initialTags);
-        bool ValidateDatabase();
-    }
+    void CreateDatabase(Settings settings, IEnumerable<Kind> initialKinds, IEnumerable<Tag> initialTags);
+    bool ValidateDatabase();
 }

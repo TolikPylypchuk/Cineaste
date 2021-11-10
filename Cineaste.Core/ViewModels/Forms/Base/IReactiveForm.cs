@@ -1,16 +1,11 @@
-using System;
+namespace Cineaste.Core.ViewModels.Forms.Base;
 
-using ReactiveUI;
-
-namespace Cineaste.Core.ViewModels.Forms.Base
+public interface IReactiveForm : IReactiveObject
 {
-    public interface IReactiveForm : IReactiveObject
-    {
-        IObservable<bool> FormChanged { get; }
-        bool IsFormChanged { get; }
+    IObservable<bool> FormChanged { get; }
+    bool IsFormChanged { get; }
 
-        IObservable<bool> Valid { get; }
+    IObservable<bool> Valid { get; }
 
-        bool IsNew { get; }
-    }
+    bool IsNew { get; }
 }

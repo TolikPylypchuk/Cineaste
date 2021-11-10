@@ -1,162 +1,142 @@
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
+namespace Cineaste.Core.ViewModels.Filters;
 
-using Cineaste.Core.Data.Models;
-using Cineaste.Core.ListItems;
-using Cineaste.Data.Models;
-
-using DynamicData;
-using DynamicData.Aggregation;
-
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-
-using Filter = System.Func<Cineaste.Core.ListItems.ListItem, bool>;
-
-namespace Cineaste.Core.ViewModels.Filters
+public sealed class CompositeFilterItemViewModel : FilterItem
 {
-    public sealed class CompositeFilterItemViewModel : FilterItem
+    private readonly SourceList<FilterItem> itemsSource = new();
+    private readonly ReadOnlyObservableCollection<FilterItem> items;
+
+    public CompositeFilterItemViewModel(
+        ReadOnlyObservableCollection<Kind> kinds,
+        ReadOnlyObservableCollection<Tag> tags,
+        FilterComposition initialComposition = FilterComposition.And,
+        IEnumConverter<SeriesWatchStatus>? seriesWatchStatusConverter = null,
+        IEnumConverter<SeriesReleaseStatus>? seriesReleaseStatusConverter = null)
+        : base(kinds, tags, seriesWatchStatusConverter, seriesReleaseStatusConverter)
     {
-        private readonly SourceList<FilterItem> itemsSource = new();
-        private readonly ReadOnlyObservableCollection<FilterItem> items;
+        this.itemsSource.Connect()
+            .Transform(this.WithSubscriptions)
+            .Bind(out items)
+            .DisposeMany()
+            .Subscribe();
 
-        public CompositeFilterItemViewModel(
-            ReadOnlyObservableCollection<Kind> kinds,
-            ReadOnlyObservableCollection<Tag> tags,
-            FilterComposition initialComposition = FilterComposition.And,
-            IEnumConverter<SeriesWatchStatus>? seriesWatchStatusConverter = null,
-            IEnumConverter<SeriesReleaseStatus>? seriesReleaseStatusConverter = null)
-            : base(kinds, tags, seriesWatchStatusConverter, seriesReleaseStatusConverter)
+        this.SwitchComposition = ReactiveCommand.Create<Unit, FilterComposition>(
+            _ => this.Composition == FilterComposition.And ? FilterComposition.Or : FilterComposition.And);
+
+        this.AddItem = ReactiveCommand.Create(this.OnAddItem);
+
+        var canSimplify = this.itemsSource.Connect()
+            .Count()
+            .Select(count => count == 1);
+
+        this.Simplify = ReactiveCommand.Create(() => this.Items[0], canSimplify);
+        this.Delete = ReactiveCommand.Create(() => { });
+
+        this.SwitchComposition
+            .ToPropertyEx(this, vm => vm.Composition, initialValue: initialComposition);
+
+        this.Delete.Subscribe(this.FilterChangedSubject);
+    }
+
+    public FilterComposition Composition { [ObservableAsProperty] get; }
+
+    public ReadOnlyObservableCollection<FilterItem> Items =>
+        this.items;
+
+    public ReactiveCommand<Unit, FilterComposition> SwitchComposition { get; }
+    public ReactiveCommand<Unit, Unit> AddItem { get; }
+    public ReactiveCommand<Unit, FilterItem> Simplify { get; }
+    public override ReactiveCommand<Unit, Unit> Delete { get; }
+
+    public static CompositeFilterItemViewModel FromSimpleItem(
+        SimpleFilterItemViewModel simpleItem,
+        FilterComposition initialComposition)
+    {
+        var result = new CompositeFilterItemViewModel(
+            simpleItem.Kinds,
+            simpleItem.Tags,
+            initialComposition,
+            simpleItem.SeriesWatchStatusConverter,
+            simpleItem.SeriesReleaseStatusConverter);
+
+        result.itemsSource.Add(simpleItem);
+
+        return result;
+    }
+
+    public override Filter CreateFilter()
+    {
+        if (this.Items.Count == 0)
         {
-            this.itemsSource.Connect()
-                .Transform(this.WithSubscriptions)
-                .Bind(out items)
-                .DisposeMany()
-                .Subscribe();
-
-            this.SwitchComposition = ReactiveCommand.Create<Unit, FilterComposition>(
-                _ => this.Composition == FilterComposition.And ? FilterComposition.Or : FilterComposition.And);
-
-            this.AddItem = ReactiveCommand.Create(this.OnAddItem);
-
-            var canSimplify = this.itemsSource.Connect()
-                .Count()
-                .Select(count => count == 1);
-
-            this.Simplify = ReactiveCommand.Create(() => this.Items[0], canSimplify);
-            this.Delete = ReactiveCommand.Create(() => { });
-
-            this.SwitchComposition
-                .ToPropertyEx(this, vm => vm.Composition, initialValue: initialComposition);
-
-            this.Delete.Subscribe(this.FilterChangedSubject);
+            return NoFilter;
         }
 
-        public FilterComposition Composition { [ObservableAsProperty] get; }
-
-        public ReadOnlyObservableCollection<FilterItem> Items =>
-            this.items;
-
-        public ReactiveCommand<Unit, FilterComposition> SwitchComposition { get; }
-        public ReactiveCommand<Unit, Unit> AddItem { get; }
-        public ReactiveCommand<Unit, FilterItem> Simplify { get; }
-        public override ReactiveCommand<Unit, Unit> Delete { get; }
-
-        public static CompositeFilterItemViewModel FromSimpleItem(
-            SimpleFilterItemViewModel simpleItem,
-            FilterComposition initialComposition)
+        Func<Filter, Filter, Filter> composeFilters = this.Composition switch
         {
-            var result = new CompositeFilterItemViewModel(
-                simpleItem.Kinds,
-                simpleItem.Tags,
-                initialComposition,
-                simpleItem.SeriesWatchStatusConverter,
-                simpleItem.SeriesReleaseStatusConverter);
+            FilterComposition.And => (a, b) => item => a(item) && b(item),
+            FilterComposition.Or => (a, b) => item => a(item) || b(item),
+            _ => (_, _) => NoFilter
+        };
 
-            result.itemsSource.Add(simpleItem);
+        var filters = this.Items.Select(item => item.CreateFilter()).Aggregate(composeFilters);
 
-            return result;
-        }
+        Filter filter = null!;
 
-        public override Filter CreateFilter()
+        filter = item => item switch
         {
-            if (this.Items.Count == 0)
-            {
-                return NoFilter;
-            }
+            MovieListItem movieItem => filters(movieItem),
+            SeriesListItem seriesItem => filters(seriesItem),
+            FranchiseListItem franchiseItem =>
+                franchiseItem.Franchise.ShowTitles &&
+                franchiseItem.Franchise.Entries
+                    .Select(entry => entry.ToListItem())
+                    .Any(item => filter(item)),
+            _ => false
+        };
 
-            Func<Filter, Filter, Filter> composeFilters = this.Composition switch
-            {
-                FilterComposition.And => (a, b) => item => a(item) && b(item),
-                FilterComposition.Or => (a, b) => item => a(item) || b(item),
-                _ => (_, _) => NoFilter
-            };
+        return filter;
+    }
 
-            var filters = this.Items.Select(item => item.CreateFilter()).Aggregate(composeFilters);
+    private void OnAddItem() =>
+        this.itemsSource.Add(new SimpleFilterItemViewModel(
+            this.Kinds, this.Tags, this.SeriesWatchStatusConverter, this.SeriesReleaseStatusConverter));
 
-            Filter filter = null!;
+    private FilterItem WithSubscriptions(FilterItem item)
+    {
+        var subscriptions = new CompositeDisposable();
 
-            filter = item => item switch
-            {
-                MovieListItem movieItem => filters(movieItem),
-                SeriesListItem seriesItem => filters(seriesItem),
-                FranchiseListItem franchiseItem =>
-                    franchiseItem.Franchise.ShowTitles &&
-                    franchiseItem.Franchise.Entries
-                        .Select(entry => entry.ToListItem())
-                        .Any(item => filter(item)),
-                _ => false
-            };
-
-            return filter;
-        }
-
-        private void OnAddItem() =>
-            this.itemsSource.Add(new SimpleFilterItemViewModel(
-                this.Kinds, this.Tags, this.SeriesWatchStatusConverter, this.SeriesReleaseStatusConverter));
-
-        private FilterItem WithSubscriptions(FilterItem item)
+        if (item is SimpleFilterItemViewModel simpleItem)
         {
-            var subscriptions = new CompositeDisposable();
-
-            if (item is SimpleFilterItemViewModel simpleItem)
-            {
-                simpleItem.MakeComposite
-                    .Select(composition => FromSimpleItem(simpleItem, composition))
-                    .Subscribe(compositeItem =>
-                    {
-                        this.itemsSource.Replace(simpleItem, compositeItem);
-                        subscriptions.Dispose();
-                    })
-                    .DisposeWith(subscriptions);
-            } else if (item is CompositeFilterItemViewModel compositeItem)
-            {
-                compositeItem.Simplify
-                    .Subscribe(newItem =>
-                    {
-                        this.itemsSource.Replace(compositeItem, newItem);
-                        subscriptions.Dispose();
-                    })
-                    .DisposeWith(subscriptions);
-            }
-
-            item.FilterChanged
-                .Subscribe(this.FilterChangedSubject)
-                .DisposeWith(subscriptions);
-
-            item.Delete
-                .Subscribe(() =>
+            simpleItem.MakeComposite
+                .Select(composition => FromSimpleItem(simpleItem, composition))
+                .Subscribe(compositeItem =>
                 {
-                    this.itemsSource.Remove(item);
+                    this.itemsSource.Replace(simpleItem, compositeItem);
                     subscriptions.Dispose();
                 })
                 .DisposeWith(subscriptions);
-
-            return item;
+        } else if (item is CompositeFilterItemViewModel compositeItem)
+        {
+            compositeItem.Simplify
+                .Subscribe(newItem =>
+                {
+                    this.itemsSource.Replace(compositeItem, newItem);
+                    subscriptions.Dispose();
+                })
+                .DisposeWith(subscriptions);
         }
+
+        item.FilterChanged
+            .Subscribe(this.FilterChangedSubject)
+            .DisposeWith(subscriptions);
+
+        item.Delete
+            .Subscribe(() =>
+            {
+                this.itemsSource.Remove(item);
+                subscriptions.Dispose();
+            })
+            .DisposeWith(subscriptions);
+
+        return item;
     }
 }

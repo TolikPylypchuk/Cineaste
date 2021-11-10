@@ -1,11 +1,8 @@
-using System;
+namespace Cineaste.Core;
 
-namespace Cineaste.Core
+public interface IEnumConverter<TEnum>
+    where TEnum : Enum
 {
-    public interface IEnumConverter<TEnum>
-        where TEnum : Enum
-    {
-        string ToString(TEnum value);
-        TEnum FromString(string str);
-    }
+    string ToString(TEnum value);
+    TEnum FromString(string str);
 }

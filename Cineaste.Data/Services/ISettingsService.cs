@@ -1,8 +1,7 @@
-namespace Cineaste.Data.Services
+namespace Cineaste.Data.Services;
+
+public interface ISettingsService
 {
-    public interface ISettingsService
-    {
-        Settings GetSettings();
-        void UpdateSettings(Settings settings);
-    }
+    Settings GetSettings();
+    void UpdateSettings(Settings settings);
 }

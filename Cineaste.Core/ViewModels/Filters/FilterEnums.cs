@@ -1,76 +1,70 @@
-using System.Collections.Immutable;
+namespace Cineaste.Core.ViewModels.Filters;
 
-using static Cineaste.Core.ViewModels.Filters.FilterOperation;
-using static Cineaste.Core.ViewModels.Filters.FilterType;
-
-namespace Cineaste.Core.ViewModels.Filters
+public enum FilterType
 {
-    public enum FilterType
+    ByTitle,
+    ByYear,
+    ByKind,
+    ByTags,
+    ByIsStandalone,
+    ByIsMovie,
+    ByMovieIsWatched,
+    ByMovieIsReleased,
+    ByIsSeries,
+    BySeriesWatchStatus,
+    BySeriesReleaseStatus,
+    BySeriesChannel,
+    BySeriesNumberOfSeasons,
+    BySeriesNumberOfEpisodes,
+    BySeriesIsMiniseries
+}
+
+public enum FilterOperation
+{
+    None,
+    Is,
+    StartsWith,
+    EndsWith,
+    LessThan,
+    GreaterThan,
+    Between,
+    Include,
+    Exclude,
+    HaveCategory
+}
+
+public enum FilterComposition { And, Or }
+
+public static class FilterOperations
+{
+    public static readonly ImmutableDictionary<FilterType, ImmutableList<FilterOperation>> ByType;
+
+    static FilterOperations()
     {
-        ByTitle,
-        ByYear,
-        ByKind,
-        ByTags,
-        ByIsStandalone,
-        ByIsMovie,
-        ByMovieIsWatched,
-        ByMovieIsReleased,
-        ByIsSeries,
-        BySeriesWatchStatus,
-        BySeriesReleaseStatus,
-        BySeriesChannel,
-        BySeriesNumberOfSeasons,
-        BySeriesNumberOfEpisodes,
-        BySeriesIsMiniseries
+        var textOperations = Operations(Is, StartsWith, EndsWith);
+        var numberOperations = Operations(Is, LessThan, GreaterThan, Between);
+        var onlyIs = Operations(Is);
+        var tagOperations = Operations(Include, Exclude, HaveCategory);
+        var noOperations = Operations(None);
+
+        ByType = ImmutableDictionary.Create<FilterType, ImmutableList<FilterOperation>>()
+            .Add(ByTitle, textOperations)
+            .Add(ByYear, numberOperations)
+            .Add(ByKind, onlyIs)
+            .Add(ByTags, tagOperations)
+            .Add(ByIsStandalone, noOperations)
+            .Add(ByIsMovie, noOperations)
+            .Add(ByIsSeries, noOperations)
+            .Add(ByMovieIsWatched, noOperations)
+            .Add(ByMovieIsReleased, noOperations)
+            .Add(BySeriesWatchStatus, onlyIs)
+            .Add(BySeriesReleaseStatus, onlyIs)
+            .Add(BySeriesChannel, textOperations)
+            .Add(BySeriesNumberOfSeasons, numberOperations)
+            .Add(BySeriesNumberOfEpisodes, numberOperations)
+            .Add(BySeriesIsMiniseries, noOperations);
     }
 
-    public enum FilterOperation
-    {
-        None,
-        Is,
-        StartsWith,
-        EndsWith,
-        LessThan,
-        GreaterThan,
-        Between,
-        Include,
-        Exclude,
-        HaveCategory
-    }
-
-    public enum FilterComposition { And, Or }
-
-    public static class FilterOperations
-    {
-        public static readonly ImmutableDictionary<FilterType, ImmutableList<FilterOperation>> ByType;
-
-        static FilterOperations()
-        {
-            var textOperations = Operations(Is, StartsWith, EndsWith);
-            var numberOperations = Operations(Is, LessThan, GreaterThan, Between);
-            var onlyIs = Operations(Is);
-            var tagOperations = Operations(Include, Exclude, HaveCategory);
-            var noOperations = Operations(None);
-
-            ByType = ImmutableDictionary.Create<FilterType, ImmutableList<FilterOperation>>()
-                .Add(ByTitle, textOperations)
-                .Add(ByYear, numberOperations)
-                .Add(ByKind, onlyIs)
-                .Add(ByTags, tagOperations)
-                .Add(ByIsStandalone, noOperations)
-                .Add(ByIsMovie, noOperations)
-                .Add(ByIsSeries, noOperations)
-                .Add(ByMovieIsWatched, noOperations)
-                .Add(ByMovieIsReleased, noOperations)
-                .Add(BySeriesWatchStatus, onlyIs)
-                .Add(BySeriesReleaseStatus, onlyIs)
-                .Add(BySeriesChannel, textOperations)
-                .Add(BySeriesNumberOfSeasons, numberOperations)
-                .Add(BySeriesNumberOfEpisodes, numberOperations)
-                .Add(BySeriesIsMiniseries, noOperations);
-        }
-
-        private static ImmutableList<FilterOperation> Operations(params FilterOperation[] ops) =>
-            ImmutableList.Create<FilterOperation>().AddRange(ops);
-    }
+    private static ImmutableList<FilterOperation> Operations(params FilterOperation[] ops) =>
+        ImmutableList.Create<FilterOperation>().AddRange(ops);
 }

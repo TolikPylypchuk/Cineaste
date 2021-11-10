@@ -1,13 +1,8 @@
-using System.Collections.Generic;
+namespace Cineaste.Data.Services;
 
-using Cineaste.Data.Models;
-
-namespace Cineaste.Data.Services
+public interface ISettingsEntityService<TEntity>
+    where TEntity : EntityBase
 {
-    public interface ISettingsEntityService<TEntity>
-        where TEntity : EntityBase
-    {
-        IEnumerable<TEntity> GetAll();
-        void UpdateAll(IEnumerable<TEntity> entities);
-    }
+    IEnumerable<TEntity> GetAll();
+    void UpdateAll(IEnumerable<TEntity> entities);
 }

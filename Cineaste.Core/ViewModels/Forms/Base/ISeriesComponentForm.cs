@@ -1,12 +1,11 @@
-namespace Cineaste.Core.ViewModels.Forms.Base
+namespace Cineaste.Core.ViewModels.Forms.Base;
+
+public interface ISeriesComponentForm : IReactiveForm
 {
-    public interface ISeriesComponentForm : IReactiveForm
-    {
-        SeriesFormViewModel Parent { get; }
+    SeriesFormViewModel Parent { get; }
 
-        string Channel { get; set; }
-        int SequenceNumber { get; set; }
+    string Channel { get; set; }
+    int SequenceNumber { get; set; }
 
-        int GetNextYear();
-    }
+    int GetNextYear();
 }

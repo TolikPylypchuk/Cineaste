@@ -1,17 +1,11 @@
-using System.Collections.Generic;
-using System.ComponentModel;
+namespace Cineaste.Converters;
 
-using Cineaste.Properties;
-
-namespace Cineaste.Converters
+public sealed class ListSortDirectionConverter : EnumConverter<ListSortDirection>
 {
-    public sealed class ListSortDirectionConverter : EnumConverter<ListSortDirection>
-    {
-        protected override Dictionary<ListSortDirection, string> CreateConverterDictionary() =>
-            new()
-            {
-                [ListSortDirection.Ascending] = Messages.ListSortDirectionAscending,
-                [ListSortDirection.Descending] = Messages.ListSortDirectionDescending
-            };
-    }
+    protected override Dictionary<ListSortDirection, string> CreateConverterDictionary() =>
+        new()
+        {
+            [ListSortDirection.Ascending] = Messages.ListSortDirectionAscending,
+            [ListSortDirection.Descending] = Messages.ListSortDirectionDescending
+        };
 }

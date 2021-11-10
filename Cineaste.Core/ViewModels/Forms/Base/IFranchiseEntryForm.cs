@@ -1,11 +1,6 @@
-using Cineaste.Data.Models;
+namespace Cineaste.Core.ViewModels.Forms.Base;
 
-using ReactiveUI;
-
-namespace Cineaste.Core.ViewModels.Forms.Base
+public interface IFranchiseEntryForm : IReactiveObject
 {
-    public interface IFranchiseEntryForm : IReactiveObject
-    {
-        FranchiseEntry? FranchiseEntry { get; }
-    }
+    FranchiseEntry? FranchiseEntry { get; }
 }

@@ -1,14 +1,11 @@
-using Cineaste.Core.Theming;
+namespace Cineaste.Core.Preferences;
 
-namespace Cineaste.Core.Preferences
+[ToString]
+[Equals(DoNotAddEqualityOperators = true)]
+public sealed class UIPreferences
 {
-    [ToString]
-    [Equals(DoNotAddEqualityOperators = true)]
-    public sealed class UIPreferences
-    {
-        public UIPreferences(Theme theme) =>
-            this.Theme = theme;
+    public UIPreferences(Theme theme) =>
+        this.Theme = theme;
 
-        public Theme Theme { get; set; }
-    }
+    public Theme Theme { get; set; }
 }

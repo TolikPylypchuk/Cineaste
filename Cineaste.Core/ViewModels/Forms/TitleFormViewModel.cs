@@ -1,83 +1,67 @@
-using System;
-using System.Reactive;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Resources;
+namespace Cineaste.Core.ViewModels.Forms;
 
-using Cineaste.Core.ViewModels.Forms.Base;
-using Cineaste.Data.Models;
-
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using ReactiveUI.Validation.Extensions;
-
-using static Cineaste.Data.Constants;
-
-namespace Cineaste.Core.ViewModels.Forms
+public sealed class TitleFormViewModel : ReactiveForm<Title, TitleFormViewModel>
 {
-    public sealed class TitleFormViewModel : ReactiveForm<Title, TitleFormViewModel>
+    public TitleFormViewModel(
+        Title title,
+        IObservable<bool> canDelete,
+        ResourceManager? resourceManager = null,
+        IScheduler? scheduler = null)
+        : base(resourceManager, scheduler)
     {
-        public TitleFormViewModel(
-            Title title,
-            IObservable<bool> canDelete,
-            ResourceManager? resourceManager = null,
-            IScheduler? scheduler = null)
-            : base(resourceManager, scheduler)
-        {
-            this.Title = title;
-            this.CopyProperties();
+        this.Title = title;
+        this.CopyProperties();
 
-            this.ValidationRule(vm => vm.Name, name => !String.IsNullOrWhiteSpace(name), "TitleNameEmpty");
+        this.ValidationRule(vm => vm.Name, name => !String.IsNullOrWhiteSpace(name), "TitleNameEmpty");
 
-            this.CanDeleteWhen(canDelete);
+        this.CanDeleteWhen(canDelete);
 
-            var canMoveUp = this.WhenAnyValue(vm => vm.Priority)
-                .Select(priority => priority >= MinTitleCount);
+        var canMoveUp = this.WhenAnyValue(vm => vm.Priority)
+            .Select(priority => priority >= MinTitleCount);
 
-            this.MoveUp = ReactiveCommand.Create(() => { this.Priority--; }, canMoveUp);
+        this.MoveUp = ReactiveCommand.Create(() => { this.Priority--; }, canMoveUp);
 
-            this.EnableChangeTracking();
-        }
+        this.EnableChangeTracking();
+    }
 
-        public Title Title { get; }
+    public Title Title { get; }
 
-        [Reactive]
-        public string Name { get; set; } = String.Empty;
+    [Reactive]
+    public string Name { get; set; } = String.Empty;
 
-        [Reactive]
-        public int Priority { get; set; }
+    [Reactive]
+    public int Priority { get; set; }
 
-        public ReactiveCommand<Unit, Unit> MoveUp { get; }
+    public ReactiveCommand<Unit, Unit> MoveUp { get; }
 
-        public override bool IsNew =>
-            this.Title.Id == default;
+    public override bool IsNew =>
+        this.Title.Id == default;
 
-        protected override TitleFormViewModel Self => this;
+    protected override TitleFormViewModel Self => this;
 
-        protected override void EnableChangeTracking()
-        {
-            this.TrackChanges(vm => vm.Name, vm => vm.Title.Name);
-            this.TrackChanges(vm => vm.Priority, vm => vm.Title.Priority);
+    protected override void EnableChangeTracking()
+    {
+        this.TrackChanges(vm => vm.Name, vm => vm.Title.Name);
+        this.TrackChanges(vm => vm.Priority, vm => vm.Title.Priority);
 
-            base.EnableChangeTracking();
-        }
+        base.EnableChangeTracking();
+    }
 
-        protected override IObservable<Title> OnSave()
-        {
-            this.Name = this.Name.Trim().Replace(" - ", " – ");
-            this.Title.Name = this.Name;
-            this.Title.Priority = this.Priority;
+    protected override IObservable<Title> OnSave()
+    {
+        this.Name = this.Name.Trim().Replace(" - ", " – ");
+        this.Title.Name = this.Name;
+        this.Title.Priority = this.Priority;
 
-            return Observable.Return(this.Title);
-        }
+        return Observable.Return(this.Title);
+    }
 
-        protected override IObservable<Title?> OnDelete() =>
-            Observable.Return(this.Title);
+    protected override IObservable<Title?> OnDelete() =>
+        Observable.Return(this.Title);
 
-        protected override void CopyProperties()
-        {
-            this.Name = this.Title.Name;
-            this.Priority = this.Title.Priority;
-        }
+    protected override void CopyProperties()
+    {
+        this.Name = this.Title.Name;
+        this.Priority = this.Title.Priority;
     }
 }

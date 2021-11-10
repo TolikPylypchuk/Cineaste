@@ -1,8 +1,7 @@
-namespace Cineaste.Data.Services
+namespace Cineaste.Data.Services;
+
+public interface IEntityService<in TEntity>
 {
-    public interface IEntityService<in TEntity>
-    {
-        void Save(TEntity entity);
-        void Delete(TEntity entity);
-    }
+    void Save(TEntity entity);
+    void Delete(TEntity entity);
 }

@@ -1,18 +1,13 @@
-using Avalonia.Media;
+namespace Cineaste;
 
-using Cineaste.Properties;
-
-namespace Cineaste
+public static class Extensions
 {
-    public static class Extensions
-    {
-        public static string Localized(this string text) =>
-            Messages.ResourceManager.GetString(text) ?? text;
+    public static string Localized(this string text) =>
+        Messages.ResourceManager.GetString(text) ?? text;
 
-        public static Brush ToBrush(this Color color) =>
-            new SolidColorBrush
-            {
-                Color = color
-            };
-    }
+    public static Brush ToBrush(this Color color) =>
+        new SolidColorBrush
+        {
+            Color = color
+        };
 }

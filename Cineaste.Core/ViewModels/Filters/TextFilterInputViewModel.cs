@@ -1,18 +1,12 @@
-using System;
+namespace Cineaste.Core.ViewModels.Filters;
 
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-
-namespace Cineaste.Core.ViewModels.Filters
+public sealed class TextFilterInputViewModel : FilterInput
 {
-    public sealed class TextFilterInputViewModel : FilterInput
-    {
-        public TextFilterInputViewModel() =>
-            this.WhenAnyValue(vm => vm.Text)
-                .Discard()
-                .Subscribe(this.inputChanged);
+    public TextFilterInputViewModel() =>
+        this.WhenAnyValue(vm => vm.Text)
+            .Discard()
+            .Subscribe(this.inputChanged);
 
-        [Reactive]
-        public string Text { get; set; } = String.Empty;
-    }
+    [Reactive]
+    public string Text { get; set; } = String.Empty;
 }

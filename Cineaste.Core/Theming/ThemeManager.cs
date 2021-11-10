@@ -1,19 +1,13 @@
-using System;
+namespace Cineaste.Core.Theming;
 
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-
-namespace Cineaste.Core.Theming
+public sealed class ThemeManager : ReactiveObject
 {
-    public sealed class ThemeManager : ReactiveObject
-    {
-        public ThemeManager(Theme initialTheme) =>
-            this.Theme = initialTheme;
+    public ThemeManager(Theme initialTheme) =>
+        this.Theme = initialTheme;
 
-        [Reactive]
-        public Theme Theme { get; set; }
+    [Reactive]
+    public Theme Theme { get; set; }
 
-        public override string ToString() =>
-            $"Current theme: {Enum.GetName(this.Theme)}";
-    }
+    public override string ToString() =>
+        $"Current theme: {Enum.GetName(this.Theme)}";
 }

@@ -1,20 +1,17 @@
-using System;
+namespace Cineaste.Core.Preferences;
 
-namespace Cineaste.Core.Preferences
+[ToString]
+[Equals(DoNotAddEqualityOperators = true)]
+public sealed class RecentFile
 {
-    [ToString]
-    [Equals(DoNotAddEqualityOperators = true)]
-    public sealed class RecentFile
+    public RecentFile(string name, string path, DateTime closed)
     {
-        public RecentFile(string name, string path, DateTime closed)
-        {
-            this.Name = name;
-            this.Path = path;
-            this.Closed = closed;
-        }
-
-        public string Name { get; }
-        public string Path { get; }
-        public DateTime Closed { get; }
+        this.Name = name;
+        this.Path = path;
+        this.Closed = closed;
     }
+
+    public string Name { get; }
+    public string Path { get; }
+    public DateTime Closed { get; }
 }

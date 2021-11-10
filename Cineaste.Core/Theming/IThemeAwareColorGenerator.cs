@@ -1,11 +1,8 @@
-using System;
+namespace Cineaste.Core.Theming;
 
-namespace Cineaste.Core.Theming
+public interface IThemeAwareColorGenerator
 {
-    public interface IThemeAwareColorGenerator
-    {
-        string TransformColorForCurrentTheme(string color);
+    string TransformColorForCurrentTheme(string color);
 
-        IObservable<string> CreateThemeAwareColor(string color);
-    }
+    IObservable<string> CreateThemeAwareColor(string color);
 }

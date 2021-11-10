@@ -1,11 +1,6 @@
-using System.Collections.Generic;
+namespace Cineaste.Data.Services;
 
-using Cineaste.Data.Models;
-
-namespace Cineaste.Data.Services
+public interface IListService
 {
-    public interface IListService
-    {
-        DataList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags);
-    }
+    DataList GetList(IEnumerable<Kind> kinds, IEnumerable<Tag> tags);
 }

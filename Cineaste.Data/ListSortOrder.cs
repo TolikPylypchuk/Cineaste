@@ -1,11 +1,10 @@
-namespace Cineaste.Data
+namespace Cineaste.Data;
+
+public enum ListSortOrder
 {
-    public enum ListSortOrder
-    {
-        ByTitle,
-        ByOriginalTitle,
-        ByTitleSimple,
-        ByOriginalTitleSimple,
-        ByYear
-    }
+    ByTitle,
+    ByOriginalTitle,
+    ByTitleSimple,
+    ByOriginalTitleSimple,
+    ByYear
 }

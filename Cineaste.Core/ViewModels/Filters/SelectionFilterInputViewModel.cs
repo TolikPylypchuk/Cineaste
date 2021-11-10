@@ -1,24 +1,18 @@
-using System.Collections.ObjectModel;
+namespace Cineaste.Core.ViewModels.Filters;
 
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-
-namespace Cineaste.Core.ViewModels.Filters
+public sealed class SelectionFilterInputViewModel : FilterInput
 {
-    public sealed class SelectionFilterInputViewModel : FilterInput
+    public SelectionFilterInputViewModel(ReadOnlyObservableCollection<string> items)
     {
-        public SelectionFilterInputViewModel(ReadOnlyObservableCollection<string> items)
-        {
-            this.Items = items;
+        this.Items = items;
 
-            this.WhenAnyValue(vm => vm.SelectedItem)
-                .Discard()
-                .Subscribe(this.inputChanged);
-        }
-
-        public ReadOnlyObservableCollection<string> Items { get; }
-
-        [Reactive]
-        public string? SelectedItem { get; set; }
+        this.WhenAnyValue(vm => vm.SelectedItem)
+            .Discard()
+            .Subscribe(this.inputChanged);
     }
+
+    public ReadOnlyObservableCollection<string> Items { get; }
+
+    [Reactive]
+    public string? SelectedItem { get; set; }
 }
