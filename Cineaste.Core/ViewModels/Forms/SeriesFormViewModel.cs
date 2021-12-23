@@ -1,7 +1,5 @@
 namespace Cineaste.Core.ViewModels.Forms;
 
-using EnumerableEx = System.Linq.EnumerableEx;
-
 public sealed class SeriesFormViewModel : TaggedFormBase<Series, SeriesFormViewModel>
 {
     private readonly IEntityService<Series> seriesService;
@@ -84,8 +82,8 @@ public sealed class SeriesFormViewModel : TaggedFormBase<Series, SeriesFormViewM
 
         this.AddSeason
             .Merge(this.AddSpecialEpisode)
-            .SelectMany(_ => EnumerableEx.MaxBy(this.ComponentForms, season => season.SequenceNumber))
-            .InvokeCommand(this.SelectComponent);
+            .Select(_ => this.ComponentForms.MaxBy(season => season.SequenceNumber))
+            .InvokeCommand(this.SelectComponent!);
 
         this.CanDeleteWhenNotChanged();
         this.CanCreateFranchise();
