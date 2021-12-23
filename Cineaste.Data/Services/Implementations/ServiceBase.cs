@@ -49,7 +49,6 @@ internal abstract class ServiceBase : IEnableLogger
             ?? throw new InvalidOperationException($"Cannot create a DB connection to {this.DatabasePath}");
 
         connection.Open();
-        connection.Execute(@"PRAGMA journal_mode = 'wal'");
 
         return connection;
     }
