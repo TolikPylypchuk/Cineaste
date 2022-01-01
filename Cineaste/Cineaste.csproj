@@ -22,8 +22,8 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.11" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.11" />
     <PackageReference Include="DynamicData" Version="7.4.9" />
-    <PackageReference Include="FluentAvaloniaUI" Version="1.1.7" />
-    <PackageReference Include="ReactiveUI" Version="17.1.9" />
+    <PackageReference Include="FluentAvaloniaUI" Version="1.1.8" />
+    <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Validation" Version="2.2.1" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Expressions" Version="3.2.1" />

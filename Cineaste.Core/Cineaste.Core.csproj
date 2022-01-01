@@ -13,7 +13,7 @@
   <ItemGroup>
     <PackageReference Include="akavache" Version="8.1.1" />
     <PackageReference Include="DynamicData" Version="7.4.9" />
-    <PackageReference Include="Equals.Fody" Version="4.0.1">
+    <PackageReference Include="Equals.Fody" Version="4.0.2">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Fody" Version="6.6.0">
@@ -23,8 +23,8 @@
     <PackageReference Include="Nito.Comparers" Version="6.2.2" />
     <PackageReference Include="Nito.Comparers.Ix" Version="6.2.2" />
     <PackageReference Include="Nito.Comparers.Rx" Version="6.2.2" />
-    <PackageReference Include="ReactiveUI" Version="17.1.9" />
-    <PackageReference Include="ReactiveUI.Fody" Version="17.1.9" />
+    <PackageReference Include="ReactiveUI" Version="17.1.17" />
+    <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Validation" Version="2.2.1" />
     <PackageReference Include="Splat" Version="14.1.17" />
     <PackageReference Include="System.Interactive" Version="5.1.0" />

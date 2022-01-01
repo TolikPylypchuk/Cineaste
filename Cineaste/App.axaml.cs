@@ -130,7 +130,7 @@ public sealed class App : Application, IEnableLogger
 
         themeManager.WhenAnyValue(tm => tm.Theme)
             .Select(Enum.GetName)
-            .Subscribe(theme => fluentAvaloniaTheme.RequestedTheme = theme);
+            .Subscribe(theme => fluentAvaloniaTheme!.RequestedTheme = theme);
     }
 
     private MainWindow CreateMainWindow(
