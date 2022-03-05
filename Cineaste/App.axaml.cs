@@ -14,6 +14,8 @@ using Serilog.Events;
 
 using Splat.Serilog;
 
+using TransitioningContentControl = Avalonia.ReactiveUI.TransitioningContentControl;
+
 public sealed class App : Application, IEnableLogger
 {
     private readonly Mutex mutex;
