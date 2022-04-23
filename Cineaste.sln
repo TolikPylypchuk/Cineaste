@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Server", "Cineaste\Server\Cineaste.Server.csproj", "{12FDE328-2FF2-4F3C-988B-F3212EEFF349}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Client", "Cineaste\Client\Cineaste.Client.csproj", "{97A13AF8-CEB3-4C00-8DFC-44C0E55BF4AE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Shared", "Cineaste\Shared\Cineaste.Shared.csproj", "{B2774C9E-9D5E-439F-BC4E-5D650E5AB19E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F4EA0CE-667E-4607-8D02-BF08CD5B610A}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -19,6 +13,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Server", "Cineaste.Server\Cineaste.Server.csproj", "{12FDE328-2FF2-4F3C-988B-F3212EEFF349}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Client", "Cineaste.Client\Cineaste.Client.csproj", "{97A13AF8-CEB3-4C00-8DFC-44C0E55BF4AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Shared", "Cineaste.Shared\Cineaste.Shared.csproj", "{B2774C9E-9D5E-439F-BC4E-5D650E5AB19E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cineaste.Core", "Cineaste.Core\Cineaste.Core.csproj", "{39E508AA-E6D8-4924-BBFC-E860BB773E12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{B2774C9E-9D5E-439F-BC4E-5D650E5AB19E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2774C9E-9D5E-439F-BC4E-5D650E5AB19E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2774C9E-9D5E-439F-BC4E-5D650E5AB19E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39E508AA-E6D8-4924-BBFC-E860BB773E12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39E508AA-E6D8-4924-BBFC-E860BB773E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39E508AA-E6D8-4924-BBFC-E860BB773E12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39E508AA-E6D8-4924-BBFC-E860BB773E12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,16 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
-} else
-{
-    app.UseExceptionHandler("/Error");
 }
 
 app.UseBlazorFrameworkFiles();
