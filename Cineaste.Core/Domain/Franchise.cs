@@ -14,25 +14,5 @@ public sealed class Franchise : DomainObject
 
     public List<Title> Titles { get; set; } = new();
 
-    public MovieSeriesList OwnerList { get; set; } = null!;
-
-    public List<Title> ActualTitles =>
-        this.Titles.Count != 0
-            ? this.Titles
-            : this.Children.OrderBy(e => e.SequenceNumber).FirstOrDefault()?.Titles ?? new();
-
-    public Title? Title =>
-        this.Titles
-            .Where(title => !title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .FirstOrDefault();
-
-    public Title? OriginalTitle =>
-        this.Titles
-            .Where(title => title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .FirstOrDefault();
-
-    public override string ToString() =>
-        $"Franchise #{this.Id}: {Title.ToString(this.ActualTitles)}";
+    public CineasteList OwnerList { get; set; } = null!;
 }

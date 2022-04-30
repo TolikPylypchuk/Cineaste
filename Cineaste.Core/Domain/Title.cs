@@ -1,42 +1,15 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class Title : DomainObject
+public sealed record Title
 {
-    public string Name { get; set; } = String.Empty;
+    public string Name { get; }
+    public int Priority { get; }
+    public bool IsOriginal { get; }
 
-    public int Priority { get; set; } = 1;
-
-    public bool IsOriginal { get; set; }
-
-    public Movie? Movie { get; set; }
-
-    public Series? Series { get; set; }
-
-    public Season? Season { get; set; }
-
-    public SpecialEpisode? SpecialEpisode { get; set; }
-
-    public Franchise? Franchise { get; set; }
-
-    public static string ToString(IEnumerable<Title> titles)
+    public Title(string name, int priority, bool isOriginal)
     {
-        var titlesAsList = titles.ToList();
-
-        var sortedTitles = titlesAsList
-            .Where(t => !t.IsOriginal)
-            .OrderBy(t => t.Priority)
-            .Select(t => t.Name)
-            .Union(titlesAsList
-                .Where(t => t.IsOriginal)
-                .OrderBy(t => t.Priority)
-                .Select(t => t.Name))
-            .ToList();
-
-        return sortedTitles.Count == 0
-            ? String.Empty
-            : sortedTitles.Aggregate((acc, item) => $"{acc}/{item}");
+        this.Name = Require.NotBlank(name);
+        this.Priority = Require.Positive(priority);
+        this.IsOriginal = isOriginal;
     }
-
-    public override string ToString() =>
-        $"Title #{this.Id}: {this.Name}";
 }

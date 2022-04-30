@@ -32,33 +32,4 @@ public sealed class Season : DomainObject
     public List<Title> Titles { get; set; } = new();
 
     public List<Period> Periods { get; set; } = new();
-
-    public Title Title =>
-        this.Titles
-            .Where(title => !title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
-
-    public Title OriginalTitle =>
-        this.Titles
-            .Where(title => title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
-
-    public int StartYear =>
-        this.Periods
-            .OrderBy(period => period.StartYear)
-            .ThenBy(period => period.StartMonth)
-            .First()
-            .StartYear;
-
-    public int EndYear =>
-        this.Periods
-            .OrderByDescending(period => period.EndYear)
-            .ThenByDescending(period => period.EndMonth)
-            .First()
-            .EndYear;
-
-    public override string ToString() =>
-        $"Season #{this.Id}: {Title.ToString(this.Titles)} ({this.Channel})";
 }

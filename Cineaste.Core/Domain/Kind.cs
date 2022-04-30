@@ -1,20 +1,65 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class Kind : DomainObject
+public abstract class Kind<TKind> : Entity<TKind>
+    where TKind : Kind<TKind>
 {
-    public static readonly string DefaultNewKindColor = "#FF000000";
+    private string name;
+    private Color watchedColor;
+    private Color notWatchedColor;
+    private Color notReleasedColor;
 
-    public string Name { get; set; } = String.Empty;
+    public string Name
+    {
+        get => this.name;
 
-    public string ColorForWatchedMovie { get; set; } = DefaultNewKindColor;
-    public string ColorForWatchedSeries { get; set; } = DefaultNewKindColor;
+        [MemberNotNull(nameof(name))]
+        set => this.name = Require.NotBlank(value);
+    }
 
-    public string ColorForNotWatchedMovie { get; set; } = DefaultNewKindColor;
-    public string ColorForNotWatchedSeries { get; set; } = DefaultNewKindColor;
+    public Color WatchedColor
+    {
+        get => this.watchedColor;
 
-    public string ColorForNotReleasedMovie { get; set; } = DefaultNewKindColor;
-    public string ColorForNotReleasedSeries { get; set; } = DefaultNewKindColor;
+        [MemberNotNull(nameof(watchedColor))]
+        set => this.watchedColor = Require.NotNull(value);
+    }
 
-    public override string ToString() =>
-        $"Kind #{this.Id}: {this.Name}";
+    public Color NotWatchedColor
+    {
+        get => this.notWatchedColor;
+
+        [MemberNotNull(nameof(notWatchedColor))]
+        set => this.notWatchedColor = Require.NotNull(value);
+    }
+
+    public Color NotReleasedColor
+    {
+        get => this.notReleasedColor;
+
+        [MemberNotNull(nameof(notReleasedColor))]
+        set => this.notReleasedColor = Require.NotNull(value);
+    }
+
+    public Kind(Id<TKind> id, string name, Color watchedColor, Color notWatchedColor, Color notReleasedColor)
+        : base(id)
+    {
+        this.Name = name;
+        this.WatchedColor = watchedColor;
+        this.NotWatchedColor = notWatchedColor;
+        this.NotReleasedColor = notReleasedColor;
+    }
+}
+
+public sealed class MovieKind : Kind<MovieKind>
+{
+    public MovieKind(Id<MovieKind> id, string name, Color watchedColor, Color notWatchedColor, Color notReleasedColor)
+        : base(id, name, watchedColor, notWatchedColor, notReleasedColor)
+    { }
+}
+
+public sealed class SeriesKind : Kind<SeriesKind>
+{
+    public SeriesKind(Id<SeriesKind> id, string name, Color watchedColor, Color notWatchedColor, Color notReleasedColor)
+        : base(id, name, watchedColor, notWatchedColor, notReleasedColor)
+    { }
 }

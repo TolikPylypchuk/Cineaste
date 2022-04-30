@@ -20,19 +20,4 @@ public sealed class SpecialEpisode : DomainObject
     public Series Series { get; set; } = null!;
 
     public List<Title> Titles { get; set; } = new();
-
-    public Title Title =>
-        this.Titles
-            .Where(title => !title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
-
-    public Title OriginalTitle =>
-        this.Titles
-            .Where(title => title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
-
-    public override string ToString() =>
-        $"Special Episode #{this.Id}: {Title.ToString(this.Titles)}";
 }
