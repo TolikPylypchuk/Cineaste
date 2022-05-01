@@ -17,28 +17,97 @@ public enum SeriesReleaseStatus
     Unknown
 }
 
-public sealed class Series : DomainObject
+public sealed class Series : Entity<Series>
 {
+    private string? imdbId;
+    private string? rottenTomatoesLink;
+    private SeriesKind kind;
+    private CineasteList ownerList;
+
+    private readonly List<Title> titles;
+    private readonly List<Season> seasons;
+    private readonly List<SpecialEpisode> specialEpisodes;
+    private readonly HashSet<Tag> tags;
+
     public bool IsMiniseries { get; set; }
 
     public SeriesWatchStatus WatchStatus { get; set; } = SeriesWatchStatus.NotWatched;
     public SeriesReleaseStatus ReleaseStatus { get; set; } = SeriesReleaseStatus.NotStarted;
 
-    public string? ImdbId { get; set; }
-    public string? RottenTomatoesLink { get; set; }
-    public string? PosterUrl { get; set; }
+    public SeriesKind Kind
+    {
+        get => this.kind;
 
-    public SeriesKind Kind { get; set; } = null!;
+        [MemberNotNull(nameof(kind))]
+        set => this.kind = Require.NotNull(value);
+    }
+
+    public CineasteList OwnerList
+    {
+        get => this.ownerList;
+
+        [MemberNotNull(nameof(ownerList))]
+        set => this.ownerList = Require.NotNull(value);
+    }
+
+    public string? ImdbId
+    {
+        get => this.imdbId;
+        set => this.imdbId = Require.ImdbId(value);
+    }
+
+    public string? RottenTomatoesLink
+    {
+        get => this.rottenTomatoesLink;
+        set => this.rottenTomatoesLink = Require.Url(value);
+    }
+
+    public Poster? Poster { get; set; }
 
     public FranchiseItem? FranchiseItem { get; set; }
 
-    public List<Title> Titles { get; set; } = new();
+    public IReadOnlyCollection<Title> Titles =>
+        this.titles.AsReadOnly();
 
-    public List<Season> Seasons { get; set; } = new();
+    public IReadOnlyCollection<Season> Seasons =>
+        this.seasons.AsReadOnly();
 
-    public List<SpecialEpisode> SpecialEpisodes { get; set; } = new();
+    public IReadOnlyCollection<SpecialEpisode> SpecialEpisodes =>
+        this.specialEpisodes.AsReadOnly();
 
-    public HashSet<Tag> Tags { get; set; } = new();
+    public IReadOnlySet<Tag> Tags =>
+        this.tags;
 
-    public CineasteList OwnerList { get; set; } = null!;
+    public Series(
+        Id<Series> id,
+        bool isMiniseries,
+        SeriesWatchStatus watchStatus,
+        SeriesReleaseStatus releaseStatus,
+        SeriesKind kind,
+        CineasteList ownerList,
+        string? imdbId,
+        string? rottenTomatoesLink,
+        Poster? poster,
+        FranchiseItem? franchiseItem,
+        IEnumerable<Title> titles,
+        IEnumerable<Season> seasons,
+        IEnumerable<SpecialEpisode> specialEpisodes,
+        IEnumerable<Tag> tags)
+        : base(id)
+    {
+        this.IsMiniseries = isMiniseries;
+        this.WatchStatus = watchStatus;
+        this.ReleaseStatus = releaseStatus;
+        this.Kind = kind;
+        this.OwnerList = ownerList;
+        this.ImdbId = imdbId;
+        this.RottenTomatoesLink = rottenTomatoesLink;
+        this.Poster = poster;
+        this.FranchiseItem = franchiseItem;
+
+        this.titles = titles.ToList();
+        this.seasons = seasons.ToList();
+        this.specialEpisodes = specialEpisodes.ToList();
+        this.tags = tags.ToHashSet();
+    }
 }

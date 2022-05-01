@@ -1,7 +1,9 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class Period : DomainObject
+public sealed class Period : Entity<Period>
 {
+    private string? rottenTomatoesLink;
+
     public int StartMonth { get; set; }
     public int StartYear { get; set; }
 
@@ -12,24 +14,33 @@ public sealed class Period : DomainObject
 
     public int NumberOfEpisodes { get; set; }
 
-    public string? RottenTomatoesLink { get; set; }
-
-    public string? PosterUrl { get; set; }
-
-    public int SeasonId { get; set; }
-
-    public Season Season { get; set; } = null!;
-
-    public override string ToString()
+    public string? RottenTomatoesLink
     {
-        string content = this.IsSingleDayRelease
-            ? $"{this.StartMonth}.{this.StartYear}"
-            : this.StartYear == this.EndYear
-                ? this.StartMonth == this.EndMonth
-                    ? $"{this.StartMonth}.{this.StartYear}"
-                    : $"{this.StartMonth}-{this.EndMonth}.{this.StartYear}"
-                : $"{this.StartMonth}.{this.StartYear}-{this.EndMonth}.{this.EndYear}";
+        get => this.rottenTomatoesLink;
+        set => this.rottenTomatoesLink = Require.Url(value);
+    }
 
-        return $"Period #{this.Id}: {content}";
+    public Poster? Poster { get; set; }
+
+    public Period(
+        Id<Period> id,
+        int startMonth,
+        int startYear,
+        int endMonth,
+        int endYear,
+        bool isSingleDayRelease,
+        int numberOfEpisodes,
+        string? rottenTomatoesLink,
+        Poster? poster)
+        : base(id)
+    {
+        this.StartMonth = startMonth;
+        this.StartYear = startYear;
+        this.EndMonth = endMonth;
+        this.EndYear = endYear;
+        this.IsSingleDayRelease = isSingleDayRelease;
+        this.NumberOfEpisodes = numberOfEpisodes;
+        this.RottenTomatoesLink = rottenTomatoesLink;
+        this.Poster = poster;
     }
 }

@@ -1,17 +1,25 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class FranchiseItem : DomainObject
+public sealed class FranchiseItem : Entity<FranchiseItem>
 {
-    public int? MovieId { get; set; }
+    private Franchise parentFranchise;
 
-    public Movie? Movie { get; set; }
+    public Franchise ParentFranchise
+    {
+        get => this.parentFranchise;
 
-    public Series? Series { get; set; }
-
-    public Franchise? Franchise { get; set; }
-
-    public Franchise ParentFranchise { get; set; } = null!;
+        [MemberNotNull(nameof(parentFranchise))]
+        set => this.parentFranchise = Require.NotNull(value);
+    }
 
     public int SequenceNumber { get; set; }
-    public int? DisplayNumber { get; set; }
+    public bool ShouldDisplayNumber { get; set; }
+
+    public FranchiseItem(Id<FranchiseItem> id, Franchise parentFranchise, int sequenceNumber, bool shouldDisplayNumber)
+        : base(id)
+    {
+        this.ParentFranchise = parentFranchise;
+        this.SequenceNumber = sequenceNumber;
+        this.ShouldDisplayNumber = shouldDisplayNumber;
+    }
 }

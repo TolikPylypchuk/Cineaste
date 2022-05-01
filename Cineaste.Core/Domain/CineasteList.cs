@@ -1,6 +1,6 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class CineasteList : DomainObject
+public sealed class CineasteList : Entity<CineasteList>
 {
     private string name;
 
@@ -28,11 +28,13 @@ public sealed class CineasteList : DomainObject
         this.franchises.AsReadOnly();
 
     public CineasteList(
+        Id<CineasteList> id,
         string name,
         ListConfiguration config,
         IEnumerable<Movie> movies,
         IEnumerable<Series> series,
         IEnumerable<Franchise> franchises)
+        : base(id)
     {
         this.Name = name;
         this.Config = Require.NotNull(config);
