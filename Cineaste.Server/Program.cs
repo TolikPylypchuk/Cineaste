@@ -1,4 +1,11 @@
+using Cineaste.Persistence;
+
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("Default"), sql => sql.MigrationsHistoryTable("Migrations")));
 
 builder.Services.AddControllers();
 

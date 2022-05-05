@@ -80,6 +80,11 @@ public sealed class Movie : Entity<Movie>
         this.tags = tags.ToHashSet();
     }
 
+    [Obsolete("Temporary constructor for Entity Framework")]
+    private Movie(Id<Movie> id)
+        : base(id)
+    { }
+
     public Title AddTitle(string name, bool isOriginal)
     {
         int priority = this.titles
