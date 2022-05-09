@@ -6,19 +6,11 @@ public class CineasteDbContext : DbContext
         : base(options)
     { }
 
+    public DbSet<Movie> Movies =>
+        this.Set<Movie>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Movie>(movie =>
-        {
-            movie.HasStronglyTypedId();
-            movie.HasCheckConstraint("CH_Movie_YearPositive", "Year > 0");
-
-            movie.Ignore(m => m.Poster);
-            movie.Ignore(m => m.Titles);
-            movie.Ignore(m => m.OwnerList);
-            movie.Ignore(m => m.Kind);
-            movie.Ignore(m => m.Tags);
-            movie.Ignore(m => m.FranchiseItem);
-        });
+        builder.ApplyConfiguration(new MovieTypeConfiguration());
     }
 }

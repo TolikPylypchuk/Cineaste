@@ -1,4 +1,4 @@
-namespace Cineaste.Core;
+namespace Cineaste.Core.Domain;
 
 public record struct Id<T>(Guid Value);
 
