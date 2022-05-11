@@ -1,6 +1,6 @@
 namespace Cineaste.Persistence.Configuration;
 
-internal class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
+internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
 {
     public void Configure(EntityTypeBuilder<Movie> movie)
     {
@@ -16,7 +16,7 @@ internal class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
                 title.Property(t => t.Priority);
                 title.Property(t => t.IsOriginal);
 
-                title.HasCheckConstraint("CH_MovieTitles_NameNonEmpty", "Name <> ''");
+                title.HasCheckConstraint("CH_MovieTitles_NameNotEmpty", "Name <> ''");
                 title.HasCheckConstraint("CH_MovieTitles_PriorityPositive", "Priority > 0");
             })
             .UsePropertyAccessMode(PropertyAccessMode.Field);
@@ -27,8 +27,10 @@ internal class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
 
         movie.Navigation(m => m.Poster).AutoInclude(false);
 
+        movie.HasOne(m => m.Kind)
+            .WithMany();
+
         movie.Ignore(m => m.OwnerList);
-        movie.Ignore(m => m.Kind);
         movie.Ignore(m => m.Tags);
         movie.Ignore(m => m.FranchiseItem);
     }

@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20220509211715_InitialMigration")]
+    [Migration("20220511191422_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -38,6 +38,9 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<bool>("IsWatched")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("KindId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("RottenTomatoesLink")
                         .HasColumnType("nvarchar(max)");
 
@@ -46,13 +49,83 @@ namespace Cineaste.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("KindId");
+
                     b.ToTable("Movies");
 
                     b.HasCheckConstraint("CH_Movies_YearPositive", "Year > 0");
                 });
 
+            modelBuilder.Entity("Cineaste.Core.Domain.MovieKind", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NotReleasedColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NotWatchedColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WatchedColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("MovieKinds");
+
+                    b.HasCheckConstraint("CH_MovieKinds_NameNotEmpty", "Name <> ''");
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.SeriesKind", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NotReleasedColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NotWatchedColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WatchedColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("SeriesKinds");
+
+                    b.HasCheckConstraint("CH_SeriesKinds_NameNotEmpty", "Name <> ''");
+                });
+
             modelBuilder.Entity("Cineaste.Core.Domain.Movie", b =>
                 {
+                    b.HasOne("Cineaste.Core.Domain.MovieKind", "Kind")
+                        .WithMany()
+                        .HasForeignKey("KindId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {
                             b1.Property<Guid>("MovieId")
@@ -96,13 +169,15 @@ namespace Cineaste.Persistence.Migrations
 
                             b1.ToTable("MovieTitles", (string)null);
 
-                            b1.HasCheckConstraint("CH_MovieTitles_NameNonEmpty", "Name <> ''");
+                            b1.HasCheckConstraint("CH_MovieTitles_NameNotEmpty", "Name <> ''");
 
                             b1.HasCheckConstraint("CH_MovieTitles_PriorityPositive", "Priority > 0");
 
                             b1.WithOwner()
                                 .HasForeignKey("MovieId");
                         });
+
+                    b.Navigation("Kind");
 
                     b.Navigation("Poster");
 
