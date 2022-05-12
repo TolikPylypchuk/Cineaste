@@ -8,10 +8,6 @@ public sealed class ListConfiguration : Entity<ListConfiguration>
     private string defaultSeasonTitle;
     private string defaultSeasonOriginalTitle;
 
-    private readonly List<MovieKind> movieKinds;
-    private readonly List<SeriesKind> seriesKinds;
-    private readonly List<Tag> tags;
-
     public CultureInfo Culture
     {
         get => this.culture;
@@ -36,53 +32,29 @@ public sealed class ListConfiguration : Entity<ListConfiguration>
         set => this.defaultSeasonOriginalTitle = Require.NotNull(value);
     }
 
-    public ListSortingConfiguration SortingConfiguration { get; }
-
-    public IReadOnlyCollection<MovieKind> MovieKinds =>
-        this.movieKinds.AsReadOnly();
-
-    public IReadOnlyCollection<SeriesKind> SeriesKinds =>
-        this.seriesKinds.AsReadOnly();
-
-    public IReadOnlyCollection<Tag> Tags =>
-        this.tags.AsReadOnly();
+    public ListSortingConfiguration SortingConfiguration { get; private set; }
 
     public ListConfiguration(
         Id<ListConfiguration> id,
         CultureInfo culture,
         string defaultSeasonTitle,
         string defaultSeasonOriginalTitle,
-        ListSortingConfiguration sortingConfiguration,
-        IEnumerable<MovieKind> movieKinds,
-        IEnumerable<SeriesKind> seriesKinds,
-        IEnumerable<Tag> tags)
+        ListSortingConfiguration sortingConfiguration)
         : base(id)
     {
         this.Culture = culture;
         this.DefaultSeasonTitle = defaultSeasonTitle;
         this.DefaultSeasonOriginalTitle = defaultSeasonOriginalTitle;
         this.SortingConfiguration = Require.NotNull(sortingConfiguration);
-
-        this.movieKinds = movieKinds.ToList();
-        this.seriesKinds = seriesKinds.ToList();
-        this.tags = tags.ToList();
     }
 
-    public void AddMovieKind(MovieKind movieKind) =>
-        this.movieKinds.Add(movieKind);
-
-    public void AddSeriesKind(SeriesKind seriesKind) =>
-        this.seriesKinds.Add(seriesKind);
-
-    public void AddTag(Tag tag) =>
-        this.tags.Add(tag);
-
-    public void RemoveMovieKind(MovieKind movieKind) =>
-        this.movieKinds.Remove(movieKind);
-
-    public void RemoveSeriesKind(SeriesKind seriesKind) =>
-        this.seriesKinds.Remove(seriesKind);
-
-    public void RemoveTag(Tag tag) =>
-        this.tags.Remove(tag);
+    [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
+    private ListConfiguration(Id<ListConfiguration> id)
+        : base(id)
+    {
+        this.culture = null!;
+        this.defaultSeasonTitle = null!;
+        this.defaultSeasonOriginalTitle = null!;
+        this.SortingConfiguration = null!;
+    }
 }

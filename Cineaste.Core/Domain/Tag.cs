@@ -12,8 +12,8 @@ public sealed class Tag : Entity<Tag>
     private string? description;
     private Color color;
 
-    private readonly List<Tag> impliedTags = new();
-    private readonly List<Tag> implyingTags = new();
+    private readonly List<Tag> impliedTags;
+    private readonly List<Tag> implyingTags;
 
     public string Name
     {
@@ -70,6 +70,8 @@ public sealed class Tag : Entity<Tag>
         this.Color = color;
         this.IsApplicableToMovies = isApplicableToMovies;
         this.IsApplicableToSeries = isApplicableToSeries;
+        this.impliedTags = new();
+        this.implyingTags = new();
     }
 
     public void AddImplication(Tag impliedTag)

@@ -22,6 +22,7 @@ public class CineasteDbContext : DbContext
     {
         builder.ApplyConfiguration(new KindTypeConfiguration<MovieKind>(nameof(MovieKinds)));
         builder.ApplyConfiguration(new KindTypeConfiguration<SeriesKind>(nameof(SeriesKinds)));
+        builder.ApplyConfiguration(new ListConfigurationTypeConfiguration());
         builder.ApplyConfiguration(new MovieTypeConfiguration());
         builder.ApplyConfiguration(new TagTypeConfiguration());
     }

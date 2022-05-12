@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20220512193821_InitialMigration")]
+    [Migration("20220512203015_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,28 @@ namespace Cineaste.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Cineaste.Core.Domain.ListConfiguration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DefaultSeasonOriginalTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DefaultSeasonTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ListConfiguration");
+                });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Movie", b =>
                 {
@@ -169,6 +191,45 @@ namespace Cineaste.Persistence.Migrations
                     b.HasIndex("ImplyingTagId");
 
                     b.ToTable("TagImplications", (string)null);
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.ListConfiguration", b =>
+                {
+                    b.OwnsOne("Cineaste.Core.Domain.ListSortingConfiguration", "SortingConfiguration", b1 =>
+                        {
+                            b1.Property<Guid>("ListConfigurationId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("DefaultFirstSortDirection")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("DefaultFirstSortDirection");
+
+                            b1.Property<string>("DefaultFirstSortOrder")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("DefaultFirstSortOrder");
+
+                            b1.Property<string>("DefaultSecondSortDirection")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("DefaultSecondSortDirection");
+
+                            b1.Property<string>("DefaultSecondSortOrder")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("DefaultSecondSortOrder");
+
+                            b1.HasKey("ListConfigurationId");
+
+                            b1.ToTable("ListConfiguration");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ListConfigurationId");
+                        });
+
+                    b.Navigation("SortingConfiguration")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Movie", b =>

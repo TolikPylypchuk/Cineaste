@@ -10,6 +10,24 @@ namespace Cineaste.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ListConfiguration",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Culture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefaultSeasonTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefaultSeasonOriginalTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefaultFirstSortOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefaultFirstSortDirection = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefaultSecondSortOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefaultSecondSortDirection = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ListConfiguration", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MovieKinds",
                 columns: table => new
                 {
@@ -194,6 +212,9 @@ namespace Cineaste.Persistence.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ListConfiguration");
+
             migrationBuilder.DropTable(
                 name: "MovieTags");
 

@@ -43,7 +43,7 @@ public sealed class Movie : Entity<Movie>
 
     public FranchiseItem? FranchiseItem { get; set; }
 
-    public CineasteList OwnerList { get; }
+    public CineasteList OwnerList { get; private set; }
 
     public IReadOnlyCollection<Title> Titles =>
         this.titles.AsReadOnly();
@@ -59,7 +59,7 @@ public sealed class Movie : Entity<Movie>
         bool isReleased,
         MovieKind kind,
         CineasteList ownerList,
-        IEnumerable<Tag>? tags)
+        IEnumerable<Tag>? tags = null)
         : base(id)
     {
         this.Year = year;
@@ -69,7 +69,7 @@ public sealed class Movie : Entity<Movie>
         this.OwnerList = ownerList;
 
         this.titles = titles.ToList();
-        this.tags = new HashSet<TagContainer>();
+        this.tags = new();
 
         if (tags != null)
         {
@@ -84,10 +84,10 @@ public sealed class Movie : Entity<Movie>
     private Movie(Id<Movie> id)
         : base(id)
     {
-        this.Kind = null!;
+        this.kind = null!;
         this.OwnerList = null!;
-        this.titles = new List<Title>();
-        this.tags = new HashSet<TagContainer>();
+        this.titles = new();
+        this.tags = new();
     }
 
     public Title AddTitle(string name, bool isOriginal)
