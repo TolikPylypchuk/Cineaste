@@ -25,13 +25,20 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
             m => m.Poster,
             poster => poster.Property(p => p.RawData).HasColumnName(nameof(Movie.Poster)));
 
-        movie.Navigation(m => m.Poster).AutoInclude(false);
+        movie.Navigation(m => m.Poster)
+            .AutoInclude(false);
 
-        movie.HasOne(m => m.Kind)
-            .WithMany();
+        movie.OwnsMany(
+            m => m.Tags,
+            tag =>
+            {
+                tag.ToTable("MovieTags");
+                tag.HasOne(t => t.Tag)
+                    .WithMany();
+            })
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
 
         movie.Ignore(m => m.OwnerList);
-        movie.Ignore(m => m.Tags);
         movie.Ignore(m => m.FranchiseItem);
     }
 }

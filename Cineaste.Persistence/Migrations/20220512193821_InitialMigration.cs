@@ -42,6 +42,25 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsApplicableToMovies = table.Column<bool>(type: "bit", nullable: false),
+                    IsApplicableToSeries = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.CheckConstraint("CH_Tag_CategoryNotEmpty", "Category <> ''");
+                    table.CheckConstraint("CH_Tag_NameNotEmpty", "Name <> ''");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Movies",
                 columns: table => new
                 {
@@ -62,6 +81,55 @@ namespace Cineaste.Persistence.Migrations
                         name: "FK_Movies_MovieKinds_KindId",
                         column: x => x.KindId,
                         principalTable: "MovieKinds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TagImplications",
+                columns: table => new
+                {
+                    ImpliedTagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImplyingTagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TagImplications", x => new { x.ImpliedTagId, x.ImplyingTagId });
+                    table.ForeignKey(
+                        name: "FK_TagImplications_Tags_ImpliedTagId",
+                        column: x => x.ImpliedTagId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TagImplications_Tags_ImplyingTagId",
+                        column: x => x.ImplyingTagId,
+                        principalTable: "Tags",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MovieTags",
+                columns: table => new
+                {
+                    MovieId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieTags", x => new { x.MovieId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_MovieTags_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -102,14 +170,33 @@ namespace Cineaste.Persistence.Migrations
                 column: "KindId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MovieTags_TagId",
+                table: "MovieTags",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SeriesKinds_Name",
                 table: "SeriesKinds",
                 column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TagImplications_ImplyingTagId",
+                table: "TagImplications",
+                column: "ImplyingTagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_Name_Category",
+                table: "Tags",
+                columns: new[] { "Name", "Category" },
                 unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "MovieTags");
+
             migrationBuilder.DropTable(
                 name: "MovieTitles");
 
@@ -117,7 +204,13 @@ namespace Cineaste.Persistence.Migrations
                 name: "SeriesKinds");
 
             migrationBuilder.DropTable(
+                name: "TagImplications");
+
+            migrationBuilder.DropTable(
                 name: "Movies");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "MovieKinds");

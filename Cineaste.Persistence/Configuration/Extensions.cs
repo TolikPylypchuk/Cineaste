@@ -1,4 +1,4 @@
-namespace Cineaste.Persistence;
+namespace Cineaste.Persistence.Configuration;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

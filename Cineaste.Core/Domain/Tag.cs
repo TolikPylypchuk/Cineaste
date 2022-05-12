@@ -1,11 +1,19 @@
 namespace Cineaste.Core.Domain;
 
+public sealed record TagContainer
+{
+    public Tag Tag { get; init; } = null!;
+}
+
 public sealed class Tag : Entity<Tag>
 {
     private string name;
     private TagCategory category;
-    private string description;
+    private string? description;
     private Color color;
+
+    private readonly List<Tag> impliedTags = new();
+    private readonly List<Tag> implyingTags = new();
 
     public string Name
     {
@@ -23,12 +31,10 @@ public sealed class Tag : Entity<Tag>
         set => this.category = Require.NotNull(value);
     }
 
-    public string Description
+    public string? Description
     {
         get => this.description;
-
-        [MemberNotNull(nameof(description))]
-        set => this.description = Require.NotBlank(value);
+        set => this.description = String.IsNullOrEmpty(value) ? null : value.Trim();
     }
 
     public Color Color
@@ -42,11 +48,17 @@ public sealed class Tag : Entity<Tag>
     public bool IsApplicableToMovies { get; set; } = true;
     public bool IsApplicableToSeries { get; set; } = true;
 
+    public IReadOnlyCollection<Tag> ImpliedTags =>
+        this.impliedTags.AsReadOnly();
+
+    public IReadOnlyCollection<Tag> ImplyingTags =>
+        this.implyingTags.AsReadOnly();
+
     public Tag(
         Id<Tag> id,
         string name,
         TagCategory category,
-        string description,
+        string? description,
         Color color,
         bool isApplicableToMovies,
         bool isApplicableToSeries)
@@ -58,5 +70,11 @@ public sealed class Tag : Entity<Tag>
         this.Color = color;
         this.IsApplicableToMovies = isApplicableToMovies;
         this.IsApplicableToSeries = isApplicableToSeries;
+    }
+
+    public void AddImplication(Tag impliedTag)
+    {
+        this.impliedTags.Add(impliedTag);
+        impliedTag.implyingTags.Add(this);
     }
 }

@@ -15,10 +15,14 @@ public class CineasteDbContext : DbContext
     public DbSet<SeriesKind> SeriesKinds =>
         this.Set<SeriesKind>();
 
+    public DbSet<Tag> Tags =>
+        this.Set<Tag>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfiguration(new KindTypeConfiguration<MovieKind>(nameof(MovieKinds)));
-        builder.ApplyConfiguration(new MovieTypeConfiguration());
         builder.ApplyConfiguration(new KindTypeConfiguration<SeriesKind>(nameof(SeriesKinds)));
+        builder.ApplyConfiguration(new MovieTypeConfiguration());
+        builder.ApplyConfiguration(new TagTypeConfiguration());
     }
 }

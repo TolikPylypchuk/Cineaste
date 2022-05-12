@@ -116,6 +116,59 @@ namespace Cineaste.Persistence.Migrations
                     b.HasCheckConstraint("CH_SeriesKinds_NameNotEmpty", "Name <> ''");
                 });
 
+            modelBuilder.Entity("Cineaste.Core.Domain.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApplicableToMovies")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApplicableToSeries")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name", "Category")
+                        .IsUnique();
+
+                    b.ToTable("Tags");
+
+                    b.HasCheckConstraint("CH_Tag_CategoryNotEmpty", "Category <> ''");
+
+                    b.HasCheckConstraint("CH_Tag_NameNotEmpty", "Name <> ''");
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.TagImplication", b =>
+                {
+                    b.Property<Guid>("ImpliedTagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ImplyingTagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ImpliedTagId", "ImplyingTagId");
+
+                    b.HasIndex("ImplyingTagId");
+
+                    b.ToTable("TagImplications", (string)null);
+                });
+
             modelBuilder.Entity("Cineaste.Core.Domain.Movie", b =>
                 {
                     b.HasOne("Cineaste.Core.Domain.MovieKind", "Kind")
@@ -140,6 +193,38 @@ namespace Cineaste.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("MovieId");
+                        });
+
+                    b.OwnsMany("Cineaste.Core.Domain.TagContainer", "Tags", b1 =>
+                        {
+                            b1.Property<Guid>("MovieId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
+
+                            b1.Property<Guid>("TagId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.HasKey("MovieId", "Id");
+
+                            b1.HasIndex("TagId");
+
+                            b1.ToTable("MovieTags", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("MovieId");
+
+                            b1.HasOne("Cineaste.Core.Domain.Tag", "Tag")
+                                .WithMany()
+                                .HasForeignKey("TagId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.Navigation("Tag");
                         });
 
                     b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
@@ -179,7 +264,24 @@ namespace Cineaste.Persistence.Migrations
 
                     b.Navigation("Poster");
 
+                    b.Navigation("Tags");
+
                     b.Navigation("Titles");
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.TagImplication", b =>
+                {
+                    b.HasOne("Cineaste.Core.Domain.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("ImpliedTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cineaste.Core.Domain.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("ImplyingTagId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

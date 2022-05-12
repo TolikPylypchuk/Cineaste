@@ -8,7 +8,7 @@ public sealed class Movie : Entity<Movie>
     private MovieKind kind;
 
     private readonly List<Title> titles;
-    private readonly HashSet<Tag> tags;
+    private readonly HashSet<TagContainer> tags;
 
     public int Year
     {
@@ -48,42 +48,47 @@ public sealed class Movie : Entity<Movie>
     public IReadOnlyCollection<Title> Titles =>
         this.titles.AsReadOnly();
 
-    public IReadOnlySet<Tag> Tags =>
+    public IReadOnlySet<TagContainer> Tags =>
         this.tags;
 
     public Movie(
         Id<Movie> id,
+        IEnumerable<Title> titles,
         int year,
         bool isWatched,
         bool isReleased,
-        string? imdbId,
-        string? rottenTomatoesLink,
-        Poster? poster,
         MovieKind kind,
-        FranchiseItem? franchiseItem,
         CineasteList ownerList,
-        IEnumerable<Title> titles,
-        IEnumerable<Tag> tags)
+        IEnumerable<Tag>? tags)
         : base(id)
     {
         this.Year = year;
         this.IsWatched = isWatched;
         this.IsReleased = isReleased;
-        this.ImdbId = imdbId;
-        this.RottenTomatoesLink = rottenTomatoesLink;
-        this.Poster = poster;
         this.Kind = kind;
-        this.FranchiseItem = franchiseItem;
         this.OwnerList = ownerList;
 
         this.titles = titles.ToList();
-        this.tags = tags.ToHashSet();
+        this.tags = new HashSet<TagContainer>();
+
+        if (tags != null)
+        {
+            foreach (var tag in tags)
+            {
+                this.AddTag(tag);
+            }
+        }
     }
 
-    [Obsolete("Temporary constructor for Entity Framework")]
+    [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
     private Movie(Id<Movie> id)
         : base(id)
-    { }
+    {
+        this.Kind = null!;
+        this.OwnerList = null!;
+        this.titles = new List<Title>();
+        this.tags = new HashSet<TagContainer>();
+    }
 
     public Title AddTitle(string name, bool isOriginal)
     {
@@ -100,4 +105,10 @@ public sealed class Movie : Entity<Movie>
 
     public void RemoveTitle(string name, bool isOriginal) =>
         this.titles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
+
+    public void AddTag(Tag tag) =>
+        this.tags.Add(new TagContainer { Tag = tag });
+
+    public void RemoveTag(Tag tag) =>
+        this.tags.Remove(new TagContainer { Tag = tag });
 }
