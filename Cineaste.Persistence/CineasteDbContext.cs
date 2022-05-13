@@ -6,11 +6,20 @@ public class CineasteDbContext : DbContext
         : base(options)
     { }
 
+    public DbSet<ListConfiguration> ListConfigurations =>
+        this.Set<ListConfiguration>();
+
     public DbSet<MovieKind> MovieKinds =>
         this.Set<MovieKind>();
 
     public DbSet<Movie> Movies =>
         this.Set<Movie>();
+
+    public DbSet<Period> Periods =>
+        this.Set<Period>();
+
+    public DbSet<Season> Seasons =>
+        this.Set<Season>();
 
     public DbSet<SeriesKind> SeriesKinds =>
         this.Set<SeriesKind>();
@@ -24,6 +33,8 @@ public class CineasteDbContext : DbContext
         builder.ApplyConfiguration(new KindTypeConfiguration<SeriesKind>(nameof(SeriesKinds)));
         builder.ApplyConfiguration(new ListConfigurationTypeConfiguration());
         builder.ApplyConfiguration(new MovieTypeConfiguration());
+        builder.ApplyConfiguration(new PeriodTypeConfiguration());
+        builder.ApplyConfiguration(new SeasonTypeConfiguration());
         builder.ApplyConfiguration(new TagTypeConfiguration());
     }
 }

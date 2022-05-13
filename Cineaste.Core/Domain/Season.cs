@@ -21,12 +21,12 @@ public enum SeasonReleaseStatus
 public sealed class Season : Entity<Season>
 {
     private string channel;
-
+    private int sequenceNumber;
     private readonly List<Title> titles;
     private readonly List<Period> periods;
 
-    public SeasonWatchStatus WatchStatus { get; set; } = SeasonWatchStatus.NotWatched;
-    public SeasonReleaseStatus ReleaseStatus { get; set; } = SeasonReleaseStatus.NotStarted;
+    public SeasonWatchStatus WatchStatus { get; set; }
+    public SeasonReleaseStatus ReleaseStatus { get; set; }
 
     public string Channel
     {
@@ -36,7 +36,11 @@ public sealed class Season : Entity<Season>
         set => this.channel = Require.NotBlank(value);
     }
 
-    public int SequenceNumber { get; set; }
+    public int SequenceNumber
+    {
+        get => this.sequenceNumber;
+        set => this.sequenceNumber = Require.Positive(value);
+    }
 
     public IReadOnlyCollection<Title> Titles =>
         this.titles.AsReadOnly();
@@ -46,15 +50,14 @@ public sealed class Season : Entity<Season>
 
     public Season(
         Id<Season> id,
+        IEnumerable<Title> titles,
         SeasonWatchStatus watchStatus,
         SeasonReleaseStatus releaseStatus,
         string channel,
         int sequenceNumber,
-        IEnumerable<Title> titles,
         IEnumerable<Period> periods)
         : base(id)
     {
-        this.Channel = channel;
         this.WatchStatus = watchStatus;
         this.ReleaseStatus = releaseStatus;
         this.Channel = channel;
@@ -62,6 +65,15 @@ public sealed class Season : Entity<Season>
 
         this.titles = titles.ToList();
         this.periods = periods.ToList();
+    }
+
+    [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
+    private Season(Id<Season> id)
+        : base(id)
+    {
+        this.channel = null!;
+        this.titles = new();
+        this.periods = new();
     }
 
     public Title AddTitle(string name, bool isOriginal)

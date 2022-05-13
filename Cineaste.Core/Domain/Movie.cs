@@ -43,8 +43,6 @@ public sealed class Movie : Entity<Movie>
 
     public FranchiseItem? FranchiseItem { get; set; }
 
-    public CineasteList OwnerList { get; private set; }
-
     public IReadOnlyCollection<Title> Titles =>
         this.titles.AsReadOnly();
 
@@ -58,7 +56,6 @@ public sealed class Movie : Entity<Movie>
         bool isWatched,
         bool isReleased,
         MovieKind kind,
-        CineasteList ownerList,
         IEnumerable<Tag>? tags = null)
         : base(id)
     {
@@ -66,7 +63,6 @@ public sealed class Movie : Entity<Movie>
         this.IsWatched = isWatched;
         this.IsReleased = isReleased;
         this.Kind = kind;
-        this.OwnerList = ownerList;
 
         this.titles = titles.ToList();
         this.tags = new();
@@ -85,7 +81,6 @@ public sealed class Movie : Entity<Movie>
         : base(id)
     {
         this.kind = null!;
-        this.OwnerList = null!;
         this.titles = new();
         this.tags = new();
     }

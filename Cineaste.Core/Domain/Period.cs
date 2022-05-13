@@ -3,6 +3,7 @@ namespace Cineaste.Core.Domain;
 public sealed class Period : Entity<Period>
 {
     private string? rottenTomatoesLink;
+    private int episodeCount;
 
     public int StartMonth { get; set; }
     public int StartYear { get; set; }
@@ -12,7 +13,11 @@ public sealed class Period : Entity<Period>
 
     public bool IsSingleDayRelease { get; set; }
 
-    public int NumberOfEpisodes { get; set; }
+    public int EpisodeCount
+    {
+        get => this.episodeCount;
+        set => this.episodeCount = Require.Positive(value);
+    }
 
     public string? RottenTomatoesLink
     {
@@ -29,9 +34,7 @@ public sealed class Period : Entity<Period>
         int endMonth,
         int endYear,
         bool isSingleDayRelease,
-        int numberOfEpisodes,
-        string? rottenTomatoesLink,
-        Poster? poster)
+        int episodeCount)
         : base(id)
     {
         this.StartMonth = startMonth;
@@ -39,8 +42,6 @@ public sealed class Period : Entity<Period>
         this.EndMonth = endMonth;
         this.EndYear = endYear;
         this.IsSingleDayRelease = isSingleDayRelease;
-        this.NumberOfEpisodes = numberOfEpisodes;
-        this.RottenTomatoesLink = rottenTomatoesLink;
-        this.Poster = poster;
+        this.EpisodeCount = episodeCount;
     }
 }

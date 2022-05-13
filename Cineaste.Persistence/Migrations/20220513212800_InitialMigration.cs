@@ -10,7 +10,7 @@ namespace Cineaste.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ListConfiguration",
+                name: "ListConfigurations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -24,7 +24,7 @@ namespace Cineaste.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ListConfiguration", x => x.Id);
+                    table.PrimaryKey("PK_ListConfigurations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,6 +41,23 @@ namespace Cineaste.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_MovieKinds", x => x.Id);
                     table.CheckConstraint("CH_MovieKinds_NameNotEmpty", "Name <> ''");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Seasons",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WatchStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReleaseStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Channel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Seasons", x => x.Id);
+                    table.CheckConstraint("CH_Seasons_ChannelNotEmpty", "Channel <> ''");
+                    table.CheckConstraint("CH_Seasons_SequenceNumberPositive", "SequenceNumber > 0");
                 });
 
             migrationBuilder.CreateTable(
@@ -99,6 +116,61 @@ namespace Cineaste.Persistence.Migrations
                         name: "FK_Movies_MovieKinds_KindId",
                         column: x => x.KindId,
                         principalTable: "MovieKinds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Periods",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartMonth = table.Column<int>(type: "int", nullable: false),
+                    StartYear = table.Column<int>(type: "int", nullable: false),
+                    EndMonth = table.Column<int>(type: "int", nullable: false),
+                    EndYear = table.Column<int>(type: "int", nullable: false),
+                    IsSingleDayRelease = table.Column<bool>(type: "bit", nullable: false),
+                    EpisodeCount = table.Column<int>(type: "int", nullable: false),
+                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Periods", x => x.Id);
+                    table.CheckConstraint("CH_Periods_EndMonthValid", "StartMonth >= 1 AND StartMonth <= 12");
+                    table.CheckConstraint("CH_Periods_EndYearPositive", "EndYear > 0");
+                    table.CheckConstraint("CH_Periods_EpisodeCountPositive", "EndYear > 0");
+                    table.CheckConstraint("CH_Periods_PeriodValid", "DATEFROMPARTS(StartYear, StartMonth, 1) <= DATEFROMPARTS(EndYear, EndMonth, 1)");
+                    table.CheckConstraint("CH_Periods_StartMonthValid", "StartMonth >= 1 AND StartMonth <= 12");
+                    table.CheckConstraint("CH_Periods_StartYearPositive", "StartYear > 0");
+                    table.ForeignKey(
+                        name: "FK_Periods_Seasons_SeasonId",
+                        column: x => x.SeasonId,
+                        principalTable: "Seasons",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SeasonTitles",
+                columns: table => new
+                {
+                    SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    IsOriginal = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeasonTitles", x => new { x.SeasonId, x.Id });
+                    table.CheckConstraint("CH_SeasonTitles_NameNotEmpty", "Name <> ''");
+                    table.CheckConstraint("CH_SeasonTitles_PriorityPositive", "Priority > 0");
+                    table.ForeignKey(
+                        name: "FK_SeasonTitles_Seasons_SeasonId",
+                        column: x => x.SeasonId,
+                        principalTable: "Seasons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -193,6 +265,11 @@ namespace Cineaste.Persistence.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Periods_SeasonId",
+                table: "Periods",
+                column: "SeasonId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SeriesKinds_Name",
                 table: "SeriesKinds",
                 column: "Name",
@@ -213,13 +290,19 @@ namespace Cineaste.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ListConfiguration");
+                name: "ListConfigurations");
 
             migrationBuilder.DropTable(
                 name: "MovieTags");
 
             migrationBuilder.DropTable(
                 name: "MovieTitles");
+
+            migrationBuilder.DropTable(
+                name: "Periods");
+
+            migrationBuilder.DropTable(
+                name: "SeasonTitles");
 
             migrationBuilder.DropTable(
                 name: "SeriesKinds");
@@ -229,6 +312,9 @@ namespace Cineaste.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Movies");
+
+            migrationBuilder.DropTable(
+                name: "Seasons");
 
             migrationBuilder.DropTable(
                 name: "Tags");

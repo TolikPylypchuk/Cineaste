@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20220512203015_InitialMigration")]
+    [Migration("20220513212800_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ListConfiguration");
+                    b.ToTable("ListConfigurations");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Movie", b =>
@@ -107,6 +107,83 @@ namespace Cineaste.Persistence.Migrations
                     b.ToTable("MovieKinds");
 
                     b.HasCheckConstraint("CH_MovieKinds_NameNotEmpty", "Name <> ''");
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.Period", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("EndMonth")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EndYear")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EpisodeCount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsSingleDayRelease")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RottenTomatoesLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SeasonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("StartMonth")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StartYear")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeasonId");
+
+                    b.ToTable("Periods");
+
+                    b.HasCheckConstraint("CH_Periods_EndMonthValid", "StartMonth >= 1 AND StartMonth <= 12");
+
+                    b.HasCheckConstraint("CH_Periods_EndYearPositive", "EndYear > 0");
+
+                    b.HasCheckConstraint("CH_Periods_EpisodeCountPositive", "EndYear > 0");
+
+                    b.HasCheckConstraint("CH_Periods_PeriodValid", "DATEFROMPARTS(StartYear, StartMonth, 1) <= DATEFROMPARTS(EndYear, EndMonth, 1)");
+
+                    b.HasCheckConstraint("CH_Periods_StartMonthValid", "StartMonth >= 1 AND StartMonth <= 12");
+
+                    b.HasCheckConstraint("CH_Periods_StartYearPositive", "StartYear > 0");
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.Season", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Channel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReleaseStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WatchStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Seasons");
+
+                    b.HasCheckConstraint("CH_Seasons_ChannelNotEmpty", "Channel <> ''");
+
+                    b.HasCheckConstraint("CH_Seasons_SequenceNumberPositive", "SequenceNumber > 0");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.SeriesKind", b =>
@@ -222,7 +299,7 @@ namespace Cineaste.Persistence.Migrations
 
                             b1.HasKey("ListConfigurationId");
 
-                            b1.ToTable("ListConfiguration");
+                            b1.ToTable("ListConfigurations");
 
                             b1.WithOwner()
                                 .HasForeignKey("ListConfigurationId");
@@ -253,6 +330,39 @@ namespace Cineaste.Persistence.Migrations
                             b1.HasKey("MovieId");
 
                             b1.ToTable("Movies");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MovieId");
+                        });
+
+                    b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
+                        {
+                            b1.Property<Guid>("MovieId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
+
+                            b1.Property<bool>("IsOriginal")
+                                .HasColumnType("bit");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("Priority")
+                                .HasColumnType("int");
+
+                            b1.HasKey("MovieId", "Id");
+
+                            b1.ToTable("MovieTitles", (string)null);
+
+                            b1.HasCheckConstraint("CH_MovieTitles_NameNotEmpty", "Name <> ''");
+
+                            b1.HasCheckConstraint("CH_MovieTitles_PriorityPositive", "Priority > 0");
 
                             b1.WithOwner()
                                 .HasForeignKey("MovieId");
@@ -290,9 +400,47 @@ namespace Cineaste.Persistence.Migrations
                             b1.Navigation("Tag");
                         });
 
+                    b.Navigation("Kind");
+
+                    b.Navigation("Poster");
+
+                    b.Navigation("Tags");
+
+                    b.Navigation("Titles");
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.Period", b =>
+                {
+                    b.HasOne("Cineaste.Core.Domain.Season", null)
+                        .WithMany("Periods")
+                        .HasForeignKey("SeasonId");
+
+                    b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
+                        {
+                            b1.Property<Guid>("PeriodId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<byte[]>("RawData")
+                                .IsRequired()
+                                .HasColumnType("varbinary(max)")
+                                .HasColumnName("Poster");
+
+                            b1.HasKey("PeriodId");
+
+                            b1.ToTable("Periods");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PeriodId");
+                        });
+
+                    b.Navigation("Poster");
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.Season", b =>
+                {
                     b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
                         {
-                            b1.Property<Guid>("MovieId")
+                            b1.Property<Guid>("SeasonId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Id")
@@ -311,23 +459,17 @@ namespace Cineaste.Persistence.Migrations
                             b1.Property<int>("Priority")
                                 .HasColumnType("int");
 
-                            b1.HasKey("MovieId", "Id");
+                            b1.HasKey("SeasonId", "Id");
 
-                            b1.ToTable("MovieTitles", (string)null);
+                            b1.ToTable("SeasonTitles", (string)null);
 
-                            b1.HasCheckConstraint("CH_MovieTitles_NameNotEmpty", "Name <> ''");
+                            b1.HasCheckConstraint("CH_SeasonTitles_NameNotEmpty", "Name <> ''");
 
-                            b1.HasCheckConstraint("CH_MovieTitles_PriorityPositive", "Priority > 0");
+                            b1.HasCheckConstraint("CH_SeasonTitles_PriorityPositive", "Priority > 0");
 
                             b1.WithOwner()
-                                .HasForeignKey("MovieId");
+                                .HasForeignKey("SeasonId");
                         });
-
-                    b.Navigation("Kind");
-
-                    b.Navigation("Poster");
-
-                    b.Navigation("Tags");
 
                     b.Navigation("Titles");
                 });
@@ -345,6 +487,11 @@ namespace Cineaste.Persistence.Migrations
                         .HasForeignKey("ImplyingTagId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.Season", b =>
+                {
+                    b.Navigation("Periods");
                 });
 #pragma warning restore 612, 618
         }

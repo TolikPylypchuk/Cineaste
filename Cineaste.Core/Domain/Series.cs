@@ -22,7 +22,6 @@ public sealed class Series : Entity<Series>
     private string? imdbId;
     private string? rottenTomatoesLink;
     private SeriesKind kind;
-    private CineasteList ownerList;
 
     private readonly List<Title> titles;
     private readonly List<Season> seasons;
@@ -40,14 +39,6 @@ public sealed class Series : Entity<Series>
 
         [MemberNotNull(nameof(kind))]
         set => this.kind = Require.NotNull(value);
-    }
-
-    public CineasteList OwnerList
-    {
-        get => this.ownerList;
-
-        [MemberNotNull(nameof(ownerList))]
-        set => this.ownerList = Require.NotNull(value);
     }
 
     public string? ImdbId
@@ -84,7 +75,6 @@ public sealed class Series : Entity<Series>
         SeriesWatchStatus watchStatus,
         SeriesReleaseStatus releaseStatus,
         SeriesKind kind,
-        CineasteList ownerList,
         string? imdbId,
         string? rottenTomatoesLink,
         Poster? poster,
@@ -99,7 +89,6 @@ public sealed class Series : Entity<Series>
         this.WatchStatus = watchStatus;
         this.ReleaseStatus = releaseStatus;
         this.Kind = kind;
-        this.OwnerList = ownerList;
         this.ImdbId = imdbId;
         this.RottenTomatoesLink = rottenTomatoesLink;
         this.Poster = poster;
