@@ -77,6 +77,29 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SpecialEpisodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Month = table.Column<int>(type: "int", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    IsWatched = table.Column<bool>(type: "bit", nullable: false),
+                    IsReleased = table.Column<bool>(type: "bit", nullable: false),
+                    Channel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
+                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpecialEpisodes", x => x.Id);
+                    table.CheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "Channel <> ''");
+                    table.CheckConstraint("CH_SpecialEpisodes_MonthValid", "Month >= 1 AND Month <= 12");
+                    table.CheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "SequenceNumber > 0");
+                    table.CheckConstraint("CH_SpecialEpisodes_YearPositive", "Year > 0");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tags",
                 columns: table => new
                 {
@@ -171,6 +194,30 @@ namespace Cineaste.Persistence.Migrations
                         name: "FK_SeasonTitles_Seasons_SeasonId",
                         column: x => x.SeasonId,
                         principalTable: "Seasons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SpecialEpisodeTitles",
+                columns: table => new
+                {
+                    SpecialEpisodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    IsOriginal = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpecialEpisodeTitles", x => new { x.SpecialEpisodeId, x.Id });
+                    table.CheckConstraint("CH_SpecialEpisodeTitles_NameNotEmpty", "Name <> ''");
+                    table.CheckConstraint("CH_SpecialEpisodeTitles_PriorityPositive", "Priority > 0");
+                    table.ForeignKey(
+                        name: "FK_SpecialEpisodeTitles_SpecialEpisodes_SpecialEpisodeId",
+                        column: x => x.SpecialEpisodeId,
+                        principalTable: "SpecialEpisodes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -308,6 +355,9 @@ namespace Cineaste.Persistence.Migrations
                 name: "SeriesKinds");
 
             migrationBuilder.DropTable(
+                name: "SpecialEpisodeTitles");
+
+            migrationBuilder.DropTable(
                 name: "TagImplications");
 
             migrationBuilder.DropTable(
@@ -315,6 +365,9 @@ namespace Cineaste.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Seasons");
+
+            migrationBuilder.DropTable(
+                name: "SpecialEpisodes");
 
             migrationBuilder.DropTable(
                 name: "Tags");

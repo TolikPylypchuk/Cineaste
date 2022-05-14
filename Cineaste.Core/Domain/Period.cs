@@ -2,14 +2,36 @@ namespace Cineaste.Core.Domain;
 
 public sealed class Period : Entity<Period>
 {
-    private string? rottenTomatoesLink;
+    private int startMonth;
+    private int startYear;
+    private int endMonth;
+    private int endYear;
     private int episodeCount;
+    private string? rottenTomatoesLink;
 
-    public int StartMonth { get; set; }
-    public int StartYear { get; set; }
+    public int StartMonth
+    {
+        get => this.startMonth;
+        set => this.startMonth = Require.Month(value);
+    }
 
-    public int EndMonth { get; set; }
-    public int EndYear { get; set; }
+    public int StartYear
+    {
+        get => this.startYear;
+        set => this.startYear = Require.Positive(value);
+    }
+
+    public int EndMonth
+    {
+        get => this.endMonth;
+        set => this.endMonth = Require.Month(value);
+    }
+
+    public int EndYear
+    {
+        get => this.endYear;
+        set => this.endYear = Require.Positive(value);
+    }
 
     public bool IsSingleDayRelease { get; set; }
 

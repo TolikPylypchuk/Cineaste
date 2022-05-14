@@ -2,26 +2,41 @@ namespace Cineaste.Core.Domain;
 
 public sealed class SpecialEpisode : Entity<SpecialEpisode>
 {
+    private int month;
     private string channel;
+    private int year;
+    private int sequenceNumber;
     private string? rottenTomatoesLink;
-
     private readonly List<Title> titles;
 
-    public int Month { get; set; }
-    public int Year { get; set; }
+    public int Month
+    {
+        get => this.month;
+        set => this.month = Require.Month(value);
+    }
+
+    public int Year
+    {
+        get => this.year;
+        set => this.year = Require.Positive(value);
+    }
 
     public bool IsWatched { get; set; }
     public bool IsReleased { get; set; }
 
     public string Channel
     {
-        get => channel;
+        get => this.channel;
 
         [MemberNotNull(nameof(channel))]
-        set => channel = Require.NotBlank(value);
+        set => this.channel = Require.NotBlank(value);
     }
 
-    public int SequenceNumber { get; set; }
+    public int SequenceNumber
+    {
+        get => this.sequenceNumber;
+        set => this.sequenceNumber = Require.Positive(value);
+    }
 
     public string? RottenTomatoesLink
     {
@@ -36,15 +51,13 @@ public sealed class SpecialEpisode : Entity<SpecialEpisode>
 
     public SpecialEpisode(
         Id<SpecialEpisode> id,
+        IEnumerable<Title> titles,
         int month,
         int year,
         bool isWatched,
         bool isReleased,
         string channel,
-        int sequenceNumber,
-        string? rottenTomatoesLink,
-        Poster? poster,
-        IEnumerable<Title> titles)
+        int sequenceNumber)
         : base(id)
     {
         this.Month = month;
@@ -53,9 +66,15 @@ public sealed class SpecialEpisode : Entity<SpecialEpisode>
         this.IsReleased = isReleased;
         this.Channel = channel;
         this.SequenceNumber = sequenceNumber;
-        this.RottenTomatoesLink = rottenTomatoesLink;
-        this.Poster = poster;
         this.titles = titles.ToList();
+    }
+
+    [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
+    private SpecialEpisode(Id<SpecialEpisode> id)
+        : base(id)
+    {
+        this.channel = null!;
+        this.titles = new();
     }
 
     public Title AddTitle(string name, bool isOriginal)

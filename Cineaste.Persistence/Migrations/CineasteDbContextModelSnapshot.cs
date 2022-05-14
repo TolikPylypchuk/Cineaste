@@ -215,6 +215,46 @@ namespace Cineaste.Persistence.Migrations
                     b.HasCheckConstraint("CH_SeriesKinds_NameNotEmpty", "Name <> ''");
                 });
 
+            modelBuilder.Entity("Cineaste.Core.Domain.SpecialEpisode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Channel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsReleased")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWatched")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RottenTomatoesLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpecialEpisodes");
+
+                    b.HasCheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "Channel <> ''");
+
+                    b.HasCheckConstraint("CH_SpecialEpisodes_MonthValid", "Month >= 1 AND Month <= 12");
+
+                    b.HasCheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "SequenceNumber > 0");
+
+                    b.HasCheckConstraint("CH_SpecialEpisodes_YearPositive", "Year > 0");
+                });
+
             modelBuilder.Entity("Cineaste.Core.Domain.Tag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -468,6 +508,64 @@ namespace Cineaste.Persistence.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("SeasonId");
                         });
+
+                    b.Navigation("Titles");
+                });
+
+            modelBuilder.Entity("Cineaste.Core.Domain.SpecialEpisode", b =>
+                {
+                    b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
+                        {
+                            b1.Property<Guid>("SpecialEpisodeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<byte[]>("RawData")
+                                .IsRequired()
+                                .HasColumnType("varbinary(max)")
+                                .HasColumnName("Poster");
+
+                            b1.HasKey("SpecialEpisodeId");
+
+                            b1.ToTable("SpecialEpisodes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SpecialEpisodeId");
+                        });
+
+                    b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
+                        {
+                            b1.Property<Guid>("SpecialEpisodeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
+
+                            b1.Property<bool>("IsOriginal")
+                                .HasColumnType("bit");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("Priority")
+                                .HasColumnType("int");
+
+                            b1.HasKey("SpecialEpisodeId", "Id");
+
+                            b1.ToTable("SpecialEpisodeTitles", (string)null);
+
+                            b1.HasCheckConstraint("CH_SpecialEpisodeTitles_NameNotEmpty", "Name <> ''");
+
+                            b1.HasCheckConstraint("CH_SpecialEpisodeTitles_PriorityPositive", "Priority > 0");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SpecialEpisodeId");
+                        });
+
+                    b.Navigation("Poster");
 
                     b.Navigation("Titles");
                 });
