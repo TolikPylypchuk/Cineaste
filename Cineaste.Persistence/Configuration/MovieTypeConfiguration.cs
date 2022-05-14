@@ -10,15 +10,7 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
 
         movie.HasCheckConstraint("CH_Movies_YearPositive", "Year > 0");
 
-        movie.OwnsMany(
-            m => m.Tags,
-            tag =>
-            {
-                tag.ToTable("MovieTags");
-                tag.HasOne(t => t.Tag)
-                    .WithMany();
-            })
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
+        movie.HasTags(m => m.Tags, "MovieTags");
 
         movie.Ignore(m => m.FranchiseItem);
     }

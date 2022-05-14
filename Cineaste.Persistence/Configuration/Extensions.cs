@@ -41,4 +41,19 @@ internal static class Extensions
         builder.Navigation(poster)
             .AutoInclude(false);
     }
+
+    public static void HasTags<T>(
+        this EntityTypeBuilder<T> builder,
+        Expression<Func<T, IEnumerable<TagContainer>?>> tags,
+        string tableName)
+        where T : Entity<T> =>
+        builder.OwnsMany(
+            tags,
+            tag =>
+            {
+                tag.ToTable(tableName);
+                tag.HasOne(t => t.Tag)
+                    .WithMany();
+            })
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
 }

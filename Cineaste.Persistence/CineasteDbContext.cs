@@ -21,6 +21,9 @@ public class CineasteDbContext : DbContext
     public DbSet<Season> Seasons =>
         this.Set<Season>();
 
+    public DbSet<Series> Series =>
+        this.Set<Series>();
+
     public DbSet<SeriesKind> SeriesKinds =>
         this.Set<SeriesKind>();
 
@@ -38,6 +41,7 @@ public class CineasteDbContext : DbContext
         builder.ApplyConfiguration(new MovieTypeConfiguration());
         builder.ApplyConfiguration(new PeriodTypeConfiguration());
         builder.ApplyConfiguration(new SeasonTypeConfiguration());
+        builder.ApplyConfiguration(new SeriesTypeConfiguration());
         builder.ApplyConfiguration(new SpecialEpisodeTypeConfiguration());
         builder.ApplyConfiguration(new TagTypeConfiguration());
     }

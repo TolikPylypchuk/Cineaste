@@ -26,12 +26,12 @@ public sealed class Series : Entity<Series>
     private readonly List<Title> titles;
     private readonly List<Season> seasons;
     private readonly List<SpecialEpisode> specialEpisodes;
-    private readonly HashSet<Tag> tags;
+    private readonly HashSet<TagContainer> tags;
 
     public bool IsMiniseries { get; set; }
 
-    public SeriesWatchStatus WatchStatus { get; set; } = SeriesWatchStatus.NotWatched;
-    public SeriesReleaseStatus ReleaseStatus { get; set; } = SeriesReleaseStatus.NotStarted;
+    public SeriesWatchStatus WatchStatus { get; set; }
+    public SeriesReleaseStatus ReleaseStatus { get; set; }
 
     public SeriesKind Kind
     {
@@ -66,37 +66,62 @@ public sealed class Series : Entity<Series>
     public IReadOnlyCollection<SpecialEpisode> SpecialEpisodes =>
         this.specialEpisodes.AsReadOnly();
 
-    public IReadOnlySet<Tag> Tags =>
+    public IReadOnlySet<TagContainer> Tags =>
         this.tags;
 
     public Series(
         Id<Series> id,
+        IEnumerable<Title> titles,
+        IEnumerable<Season> seasons,
+        IEnumerable<SpecialEpisode> specialEpisodes,
         bool isMiniseries,
         SeriesWatchStatus watchStatus,
         SeriesReleaseStatus releaseStatus,
         SeriesKind kind,
-        string? imdbId,
-        string? rottenTomatoesLink,
-        Poster? poster,
-        FranchiseItem? franchiseItem,
-        IEnumerable<Title> titles,
-        IEnumerable<Season> seasons,
-        IEnumerable<SpecialEpisode> specialEpisodes,
-        IEnumerable<Tag> tags)
+        IEnumerable<TagContainer> tags)
         : base(id)
     {
         this.IsMiniseries = isMiniseries;
         this.WatchStatus = watchStatus;
         this.ReleaseStatus = releaseStatus;
         this.Kind = kind;
-        this.ImdbId = imdbId;
-        this.RottenTomatoesLink = rottenTomatoesLink;
-        this.Poster = poster;
-        this.FranchiseItem = franchiseItem;
 
         this.titles = titles.ToList();
         this.seasons = seasons.ToList();
         this.specialEpisodes = specialEpisodes.ToList();
         this.tags = tags.ToHashSet();
     }
+
+    [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
+    private Series(Id<Series> id)
+        : base(id)
+    {
+        this.kind = null!;
+        this.titles = new();
+        this.seasons = new();
+        this.specialEpisodes = new();
+        this.tags = new();
+    }
+
+    public Title AddTitle(string name, bool isOriginal)
+    {
+        int priority = this.titles
+            .Where(title => title.IsOriginal == isOriginal)
+            .Max(title => title.Priority) + 1;
+
+        var title = new Title(name, priority, isOriginal);
+
+        this.titles.Add(title);
+
+        return title;
+    }
+
+    public void RemoveTitle(string name, bool isOriginal) =>
+        this.titles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
+
+    public void AddTag(Tag tag) =>
+        this.tags.Add(new TagContainer { Tag = tag });
+
+    public void RemoveTag(Tag tag) =>
+        this.tags.Remove(new TagContainer { Tag = tag });
 }
