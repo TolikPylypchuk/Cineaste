@@ -79,55 +79,6 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Movies",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    IsWatched = table.Column<bool>(type: "bit", nullable: false),
-                    IsReleased = table.Column<bool>(type: "bit", nullable: false),
-                    ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Movies", x => x.Id);
-                    table.CheckConstraint("CH_Movies_YearPositive", "Year > 0");
-                    table.ForeignKey(
-                        name: "FK_Movies_MovieKinds_KindId",
-                        column: x => x.KindId,
-                        principalTable: "MovieKinds",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Series",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsMiniseries = table.Column<bool>(type: "bit", nullable: false),
-                    WatchStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReleaseStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Series", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Series_SeriesKinds_KindId",
-                        column: x => x.KindId,
-                        principalTable: "SeriesKinds",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TagImplications",
                 columns: table => new
                 {
@@ -148,6 +99,130 @@ namespace Cineaste.Persistence.Migrations
                         column: x => x.ImplyingTagId,
                         principalTable: "Tags",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FranchiseItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ParentFranchiseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
+                    ShouldDisplayNumber = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FranchiseItems", x => x.Id);
+                    table.CheckConstraint("CH_FranchiseItems_SequenceNumberPositive", "SequenceNumber > 0");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Franchises",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShowTitles = table.Column<bool>(type: "bit", nullable: false),
+                    IsLooselyConnected = table.Column<bool>(type: "bit", nullable: false),
+                    MergeDisplayNumbers = table.Column<bool>(type: "bit", nullable: false),
+                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Franchises", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Franchises_FranchiseItems_FranchiseItemId",
+                        column: x => x.FranchiseItemId,
+                        principalTable: "FranchiseItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Movies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    IsWatched = table.Column<bool>(type: "bit", nullable: false),
+                    IsReleased = table.Column<bool>(type: "bit", nullable: false),
+                    ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Movies", x => x.Id);
+                    table.CheckConstraint("CH_Movies_YearPositive", "Year > 0");
+                    table.ForeignKey(
+                        name: "FK_Movies_FranchiseItems_FranchiseItemId",
+                        column: x => x.FranchiseItemId,
+                        principalTable: "FranchiseItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Movies_MovieKinds_KindId",
+                        column: x => x.KindId,
+                        principalTable: "MovieKinds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Series",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsMiniseries = table.Column<bool>(type: "bit", nullable: false),
+                    WatchStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReleaseStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Series", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Series_FranchiseItems_FranchiseItemId",
+                        column: x => x.FranchiseItemId,
+                        principalTable: "FranchiseItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Series_SeriesKinds_KindId",
+                        column: x => x.KindId,
+                        principalTable: "SeriesKinds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FranchiseTitles",
+                columns: table => new
+                {
+                    FranchiseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    IsOriginal = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FranchiseTitles", x => new { x.FranchiseId, x.Id });
+                    table.CheckConstraint("CH_FranchiseTitles_NameNotEmpty", "Name <> ''");
+                    table.CheckConstraint("CH_FranchiseTitles_PriorityPositive", "Priority > 0");
+                    table.ForeignKey(
+                        name: "FK_FranchiseTitles_Franchises_FranchiseId",
+                        column: x => x.FranchiseId,
+                        principalTable: "Franchises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -382,9 +457,26 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FranchiseItems_ParentFranchiseId",
+                table: "FranchiseItems",
+                column: "ParentFranchiseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Franchises_FranchiseItemId",
+                table: "Franchises",
+                column: "FranchiseItemId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MovieKinds_Name",
                 table: "MovieKinds",
                 column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_FranchiseItemId",
+                table: "Movies",
+                column: "FranchiseItemId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -406,6 +498,12 @@ namespace Cineaste.Persistence.Migrations
                 name: "IX_Seasons_SeriesId",
                 table: "Seasons",
                 column: "SeriesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Series_FranchiseItemId",
+                table: "Series",
+                column: "FranchiseItemId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Series_KindId",
@@ -438,10 +536,25 @@ namespace Cineaste.Persistence.Migrations
                 table: "Tags",
                 columns: new[] { "Name", "Category" },
                 unique: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FranchiseItems_Franchises_ParentFranchiseId",
+                table: "FranchiseItems",
+                column: "ParentFranchiseId",
+                principalTable: "Franchises",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_FranchiseItems_Franchises_ParentFranchiseId",
+                table: "FranchiseItems");
+
+            migrationBuilder.DropTable(
+                name: "FranchiseTitles");
+
             migrationBuilder.DropTable(
                 name: "ListConfigurations");
 
@@ -489,6 +602,12 @@ namespace Cineaste.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "SeriesKinds");
+
+            migrationBuilder.DropTable(
+                name: "Franchises");
+
+            migrationBuilder.DropTable(
+                name: "FranchiseItems");
         }
     }
 }

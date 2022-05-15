@@ -5,8 +5,8 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
     public void Configure(EntityTypeBuilder<Series> series)
     {
         series.HasStronglyTypedId();
-
         series.HasTitles(s => s.Titles, "SeriesTitles");
+        series.HasPoster(s => s.Poster);
 
         series.HasMany(s => s.Seasons)
             .WithOne();
@@ -26,10 +26,7 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
         series.Property(s => s.ReleaseStatus)
             .HasConversion<string>();
 
-        series.HasPoster(s => s.Poster);
-
         series.HasTags(s => s.Tags, "SeriesTags");
-
-        series.Ignore(s => s.FranchiseItem);
+        series.HasFranchiseItem(s => s.FranchiseItem);
     }
 }

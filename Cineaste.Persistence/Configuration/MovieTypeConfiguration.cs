@@ -11,7 +11,6 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
         movie.HasCheckConstraint("CH_Movies_YearPositive", "Year > 0");
 
         movie.HasTags(m => m.Tags, "MovieTags");
-
-        movie.Ignore(m => m.FranchiseItem);
+        movie.HasFranchiseItem(m => m.FranchiseItem);
     }
 }

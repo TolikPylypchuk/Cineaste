@@ -6,6 +6,12 @@ public class CineasteDbContext : DbContext
         : base(options)
     { }
 
+    public DbSet<Franchise> Franchises =>
+        this.Set<Franchise>();
+
+    public DbSet<FranchiseItem> FranchiseItems =>
+        this.Set<FranchiseItem>();
+
     public DbSet<ListConfiguration> ListConfigurations =>
         this.Set<ListConfiguration>();
 
@@ -35,6 +41,8 @@ public class CineasteDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.ApplyConfiguration(new FranchiseTypeConfiguration());
+        builder.ApplyConfiguration(new FranchiseItemTypeConfiguration());
         builder.ApplyConfiguration(new KindTypeConfiguration<MovieKind>(nameof(MovieKinds)));
         builder.ApplyConfiguration(new KindTypeConfiguration<SeriesKind>(nameof(SeriesKinds)));
         builder.ApplyConfiguration(new ListConfigurationTypeConfiguration());
