@@ -5,6 +5,7 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
     public void Configure(EntityTypeBuilder<Series> series)
     {
         series.HasStronglyTypedId();
+        series.HasListId();
         series.HasTitles(s => s.Titles, "SeriesTitles");
         series.HasPoster(s => s.Poster);
 

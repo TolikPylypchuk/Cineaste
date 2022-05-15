@@ -6,12 +6,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 internal static class Extensions
 {
+    internal const string ListId = "ListId";
+
     public static void HasStronglyTypedId<T>(this EntityTypeBuilder<T> builder)
         where T : Entity<T>
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
-            .HasConversion(id => id.Value, guid => new Id<T>(guid));
+            .HasConversion<IdConverter<T>>();
     }
 
     public static void HasTitles<T>(
@@ -63,10 +65,28 @@ internal static class Extensions
         const string franchiseItemId = "FranchiseItemId";
 
         builder.Property<Id<FranchiseItem>>(franchiseItemId)
-            .HasConversion(id => id.Value, guid => new Id<FranchiseItem>(guid));
+            .HasConversion<IdConverter<FranchiseItem>>();
 
         builder.HasOne(item)
             .WithOne()
             .HasForeignKey<T>(franchiseItemId);
+    }
+
+    public static void HasListId<T>(this EntityTypeBuilder<T> builder)
+        where T : Entity<T> =>
+        builder.Property<Id<CineasteList>>(ListId)
+            .HasConversion<IdConverter<CineasteList>>();
+
+    public static void HasManyToOne<T>(
+        this EntityTypeBuilder<CineasteList> list,
+        Expression<Func<CineasteList, IEnumerable<T>?>> items)
+        where T : Entity<T>
+    {
+        list.HasMany(items)
+            .WithOne()
+            .HasForeignKey(ListId);
+
+        list.Navigation(items)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

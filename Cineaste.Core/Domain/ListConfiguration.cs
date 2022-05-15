@@ -8,6 +8,8 @@ public sealed class ListConfiguration : Entity<ListConfiguration>
     private string defaultSeasonTitle;
     private string defaultSeasonOriginalTitle;
 
+    public CineasteList List { get; private set; }
+
     public CultureInfo Culture
     {
         get => this.culture;
@@ -36,12 +38,14 @@ public sealed class ListConfiguration : Entity<ListConfiguration>
 
     public ListConfiguration(
         Id<ListConfiguration> id,
+        CineasteList list,
         CultureInfo culture,
         string defaultSeasonTitle,
         string defaultSeasonOriginalTitle,
         ListSortingConfiguration sortingConfiguration)
         : base(id)
     {
+        this.List = Require.NotNull(list);
         this.Culture = culture;
         this.DefaultSeasonTitle = defaultSeasonTitle;
         this.DefaultSeasonOriginalTitle = defaultSeasonOriginalTitle;
@@ -52,6 +56,7 @@ public sealed class ListConfiguration : Entity<ListConfiguration>
     private ListConfiguration(Id<ListConfiguration> id)
         : base(id)
     {
+        this.List = null!;
         this.culture = null!;
         this.defaultSeasonTitle = null!;
         this.defaultSeasonOriginalTitle = null!;
