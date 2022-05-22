@@ -1,27 +1,48 @@
 @page "/"
 
-@if (this.IsLoading)
-{
-    <p>Loading...</p>
-}
+<div class="container d-flex flex-column align-items-center">
+    <h1 class="display-1 mt-md-2 mt-1">Cineaste</h1>
 
-@foreach (var list in this.Lists)
-{
-    <p>@list.Name</p>
-}
+    <h2 class="display-5 mt-2">My Lists</h2>
+
+    <RadzenButton Text="Create a list" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" class="mt-4" />
+
+    @if (this.IsLoading)
+    {
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+    } else
+    {
+        <RadzenDataList WrapItems="true" Data="@this.Lists" TItem="SimpleListModel" class="mt-4">
+            <Template Context="list">
+                <div role="button" class="container border-bottom" style="border: none; border-radius: 0;">
+                    <div class="row">
+                        <p class="lead m-1">@list.Name</p>
+                    </div>
+                </div>
+            </Template>
+        </RadzenDataList>
+    }
+</div>
 
 @code {
     [Inject]
     private IListService ListService { get; set; } = null!;
 
     private bool IsLoading { get; set; }
-    private List<SimpleListModel> Lists { get; } = new();
+    private ObservableCollection<SimpleListModel> Lists { get; } = new();
 
     protected override async Task OnParametersSetAsync()
     {
         this.IsLoading = true;
         this.Lists.Clear();
-        this.Lists.AddRange(await this.ListService.GetLists());
+
+        var lists = await this.ListService.GetLists();
+
+        foreach (var list in lists)
+        {
+            this.Lists.Add(list);
+        }
+
         this.IsLoading = false;
     }
 }
