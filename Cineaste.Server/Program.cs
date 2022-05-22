@@ -6,6 +6,7 @@ builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IListService, ListService>();
+builder.Services.AddScoped<TestDataProvider>();
 
 var app = builder.Build();
 
@@ -26,4 +27,10 @@ app.MapListRoutes();
 
 app.MapFallbackToFile("index.html");
 
-app.Run();
+using (var scope = app.Services.CreateScope())
+{
+    var provider = scope.ServiceProvider.GetRequiredService<TestDataProvider>();
+    await provider.CreateTestDataIfNeeded();
+}
+
+await app.RunAsync();

@@ -36,33 +36,6 @@ namespace Cineaste.Persistence.Migrations
                     b.ToTable("Lists");
 
                     b.HasCheckConstraint("CH_Lists_NameNotEmpty", "Name <> ''");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("f93ab0d0-189b-4806-850f-e129bd5af30a"),
-                            Name = "Test List 1"
-                        },
-                        new
-                        {
-                            Id = new Guid("3770d3f7-47b3-4865-9819-11268c9b965f"),
-                            Name = "Test List 2"
-                        },
-                        new
-                        {
-                            Id = new Guid("04071a9e-17ed-4aa0-855e-7c89ed16921b"),
-                            Name = "Test List 3"
-                        },
-                        new
-                        {
-                            Id = new Guid("45db8370-09d6-43bf-80e5-6818175189d6"),
-                            Name = "Test List 4"
-                        },
-                        new
-                        {
-                            Id = new Guid("c7c2dc17-dbb0-4506-989a-30a7904fd5ba"),
-                            Name = "Test List 5"
-                        });
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Franchise", b =>
@@ -574,8 +547,8 @@ namespace Cineaste.Persistence.Migrations
 
             modelBuilder.Entity("Cineaste.Core.Domain.ListConfiguration", b =>
                 {
-                    b.HasOne("Cineaste.Core.Domain.CineasteList", "List")
-                        .WithOne()
+                    b.HasOne("Cineaste.Core.Domain.CineasteList", null)
+                        .WithOne("Config")
                         .HasForeignKey("Cineaste.Core.Domain.ListConfiguration", "ListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -612,8 +585,6 @@ namespace Cineaste.Persistence.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ListConfigurationId");
                         });
-
-                    b.Navigation("List");
 
                     b.Navigation("SortingConfiguration")
                         .IsRequired();
@@ -1016,6 +987,9 @@ namespace Cineaste.Persistence.Migrations
 
             modelBuilder.Entity("Cineaste.Core.Domain.CineasteList", b =>
                 {
+                    b.Navigation("Config")
+                        .IsRequired();
+
                     b.Navigation("Franchises");
 
                     b.Navigation("MovieKinds");

@@ -9,10 +9,6 @@ internal sealed class ListConfigurationTypeConfiguration : IEntityTypeConfigurat
         config.HasStronglyTypedId();
         config.HasListId();
 
-        config.HasOne(c => c.List)
-            .WithOne()
-            .HasForeignKey<ListConfiguration>(Extensions.ListId);
-
         config.Property(c => c.Culture)
             .HasConversion(culture => culture.ToString(), code => CultureInfo.GetCultureInfo(code));
 

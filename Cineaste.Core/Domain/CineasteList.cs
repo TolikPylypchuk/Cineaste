@@ -20,6 +20,8 @@ public sealed class CineasteList : Entity<CineasteList>
         set => this.name = Require.NotBlank(value);
     }
 
+    public ListConfiguration Config { get; private set; }
+
     public IReadOnlyCollection<Movie> Movies =>
         this.movies.AsReadOnly();
 
@@ -38,10 +40,27 @@ public sealed class CineasteList : Entity<CineasteList>
     public IReadOnlyCollection<Tag> Tags =>
         this.tags.AsReadOnly();
 
-    public CineasteList(Id<CineasteList> id, string name)
+    public CineasteList(Id<CineasteList> id, string name, ListConfiguration config)
         : base(id)
     {
         this.Name = name;
+        this.Config = Require.NotNull(config);
+
+        this.movies = new();
+        this.series = new();
+        this.franchises = new();
+
+        this.movieKinds = new();
+        this.seriesKinds = new();
+        this.tags = new();
+    }
+
+    [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
+    private CineasteList(Id<CineasteList> id)
+        : base(id)
+    {
+        this.name = null!;
+        this.Config = null!;
 
         this.movies = new();
         this.series = new();
