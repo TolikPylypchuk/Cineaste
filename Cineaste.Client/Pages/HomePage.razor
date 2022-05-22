@@ -1,0 +1,27 @@
+@page "/"
+
+@if (this.IsLoading)
+{
+    <p>Loading...</p>
+}
+
+@foreach (var list in this.Lists)
+{
+    <p>@list.Name</p>
+}
+
+@code {
+    [Inject]
+    private IListService ListService { get; set; } = null!;
+
+    private bool IsLoading { get; set; }
+    private List<SimpleListModel> Lists { get; } = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        this.IsLoading = true;
+        this.Lists.Clear();
+        this.Lists.AddRange(await this.ListService.GetLists());
+        this.IsLoading = false;
+    }
+}

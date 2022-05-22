@@ -14,5 +14,14 @@ internal sealed class CineasteListTypeConfiguration : IEntityTypeConfiguration<C
         list.HasManyToOne(l => l.MovieKinds);
         list.HasManyToOne(l => l.SeriesKinds);
         list.HasManyToOne(l => l.Tags);
+
+        list.HasData(new CineasteList[]
+        {
+            new(Id.Create<CineasteList>(), "Test List 1"),
+            new(Id.Create<CineasteList>(), "Test List 2"),
+            new(Id.Create<CineasteList>(), "Test List 3"),
+            new(Id.Create<CineasteList>(), "Test List 4"),
+            new(Id.Create<CineasteList>(), "Test List 5")
+        });
     }
 }
