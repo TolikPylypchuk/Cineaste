@@ -186,6 +186,9 @@ PublishScripts/
 *.nuget.props
 *.nuget.targets
 
+# LibMan Packages
+**/wwwroot/lib/
+
 # Microsoft Azure Build Output
 csx/
 *.build.csdef
