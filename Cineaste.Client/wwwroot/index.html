@@ -11,6 +11,7 @@
     <base href="/" />
 
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <link href="_content/Radzen.Blazor/css/standard-base.css" rel="stylesheet" />
 
     <link href="css/app.css" rel="stylesheet" />
@@ -18,7 +19,15 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app" class="w-100 h-100">
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <span class="cogs" aria-label="loading">
+                <i class="fas fa-cog fa-4x fa-spin" data-fa-transform="down-5 right-5"></i>
+                <i class="fas fa-cog fa-3x fa-spin" data-fa-transform="down-17 right-3"></i>
+                <i class="fas fa-cog fa-5x fa-spin" data-fa-transform="left-7"></i>
+            </span>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -27,7 +36,8 @@
     </div>
 
     <script src="_framework/blazor.webassembly.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/font-awesome/js/all.min.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
 </body>
 
