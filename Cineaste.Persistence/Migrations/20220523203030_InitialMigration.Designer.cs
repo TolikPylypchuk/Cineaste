@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20220515204810_InitialMigration")]
+    [Migration("20220523203030_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,7 +45,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FranchiseItemId")
+                    b.Property<Guid?>("FranchiseItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsLooselyConnected")
@@ -63,7 +63,8 @@ namespace Cineaste.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FranchiseItemId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[FranchiseItemId] IS NOT NULL");
 
                     b.HasIndex("ListId");
 
@@ -126,7 +127,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FranchiseItemId")
+                    b.Property<Guid?>("FranchiseItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImdbId")
@@ -153,7 +154,8 @@ namespace Cineaste.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FranchiseItemId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[FranchiseItemId] IS NOT NULL");
 
                     b.HasIndex("KindId");
 
@@ -169,7 +171,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ListId")
+                    b.Property<Guid>("ListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -192,7 +194,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.HasIndex("ListId");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Name", "ListId")
                         .IsUnique();
 
                     b.ToTable("MovieKinds");
@@ -287,7 +289,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FranchiseItemId")
+                    b.Property<Guid?>("FranchiseItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImdbId")
@@ -316,7 +318,8 @@ namespace Cineaste.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FranchiseItemId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[FranchiseItemId] IS NOT NULL");
 
                     b.HasIndex("KindId");
 
@@ -330,7 +333,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ListId")
+                    b.Property<Guid>("ListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -353,7 +356,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.HasIndex("ListId");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Name", "ListId")
                         .IsUnique();
 
                     b.ToTable("SeriesKinds");
@@ -468,9 +471,7 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.FranchiseItem", "FranchiseItem")
                         .WithOne()
-                        .HasForeignKey("Cineaste.Core.Domain.Franchise", "FranchiseItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Cineaste.Core.Domain.Franchise", "FranchiseItemId");
 
                     b.HasOne("Cineaste.Core.Domain.CineasteList", null)
                         .WithMany("Franchises")
@@ -549,8 +550,8 @@ namespace Cineaste.Persistence.Migrations
 
             modelBuilder.Entity("Cineaste.Core.Domain.ListConfiguration", b =>
                 {
-                    b.HasOne("Cineaste.Core.Domain.CineasteList", "List")
-                        .WithOne()
+                    b.HasOne("Cineaste.Core.Domain.CineasteList", null)
+                        .WithOne("Configuration")
                         .HasForeignKey("Cineaste.Core.Domain.ListConfiguration", "ListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -588,8 +589,6 @@ namespace Cineaste.Persistence.Migrations
                                 .HasForeignKey("ListConfigurationId");
                         });
 
-                    b.Navigation("List");
-
                     b.Navigation("SortingConfiguration")
                         .IsRequired();
                 });
@@ -598,14 +597,12 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.FranchiseItem", "FranchiseItem")
                         .WithOne()
-                        .HasForeignKey("Cineaste.Core.Domain.Movie", "FranchiseItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Cineaste.Core.Domain.Movie", "FranchiseItemId");
 
                     b.HasOne("Cineaste.Core.Domain.MovieKind", "Kind")
                         .WithMany()
                         .HasForeignKey("KindId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Cineaste.Core.Domain.CineasteList", null)
@@ -712,7 +709,9 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.CineasteList", null)
                         .WithMany("MovieKinds")
-                        .HasForeignKey("ListId");
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Period", b =>
@@ -788,14 +787,12 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.FranchiseItem", "FranchiseItem")
                         .WithOne()
-                        .HasForeignKey("Cineaste.Core.Domain.Series", "FranchiseItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Cineaste.Core.Domain.Series", "FranchiseItemId");
 
                     b.HasOne("Cineaste.Core.Domain.SeriesKind", "Kind")
                         .WithMany()
                         .HasForeignKey("KindId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Cineaste.Core.Domain.CineasteList", null)
@@ -902,7 +899,9 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.CineasteList", null)
                         .WithMany("SeriesKinds")
-                        .HasForeignKey("ListId");
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.SpecialEpisode", b =>
@@ -991,6 +990,9 @@ namespace Cineaste.Persistence.Migrations
 
             modelBuilder.Entity("Cineaste.Core.Domain.CineasteList", b =>
                 {
+                    b.Navigation("Configuration")
+                        .IsRequired();
+
                     b.Navigation("Franchises");
 
                     b.Navigation("MovieKinds");

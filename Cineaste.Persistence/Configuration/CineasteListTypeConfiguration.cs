@@ -8,7 +8,7 @@ internal sealed class CineasteListTypeConfiguration : IEntityTypeConfiguration<C
 
         list.HasCheckConstraint($"CH_Lists_NameNotEmpty", "Name <> ''");
 
-        list.HasOne(l => l.Config)
+        list.HasOne(l => l.Configuration)
             .WithOne()
             .HasForeignKey<ListConfiguration>(Extensions.ListId);
 

@@ -27,6 +27,10 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
         series.Property(s => s.ReleaseStatus)
             .HasConversion<string>();
 
+        series.HasOne(s => s.Kind)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
+
         series.HasTags(s => s.Tags, "SeriesTags");
         series.HasFranchiseItem(s => s.FranchiseItem);
     }

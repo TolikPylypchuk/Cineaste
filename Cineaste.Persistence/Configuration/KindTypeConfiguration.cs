@@ -11,8 +11,9 @@ internal sealed class KindTypeConfiguration<TKind> : IEntityTypeConfiguration<TK
     public void Configure(EntityTypeBuilder<TKind> kind)
     {
         kind.HasStronglyTypedId();
+        kind.HasListId();
 
-        kind.HasIndex(k => k.Name).IsUnique();
+        kind.HasIndex(nameof(Kind<TKind>.Name), Extensions.ListId).IsUnique();
         kind.HasCheckConstraint($"CH_{tableName}_NameNotEmpty", "Name <> ''");
 
         kind.Property(k => k.WatchedColor).HasConversion<ColorConverter>();

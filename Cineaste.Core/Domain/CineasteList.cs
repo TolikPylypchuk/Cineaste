@@ -20,7 +20,7 @@ public sealed class CineasteList : Entity<CineasteList>
         set => this.name = Require.NotBlank(value);
     }
 
-    public ListConfiguration Config { get; private set; }
+    public ListConfiguration Configuration { get; private set; }
 
     public IReadOnlyCollection<Movie> Movies =>
         this.movies.AsReadOnly();
@@ -40,11 +40,11 @@ public sealed class CineasteList : Entity<CineasteList>
     public IReadOnlyCollection<Tag> Tags =>
         this.tags.AsReadOnly();
 
-    public CineasteList(Id<CineasteList> id, string name, ListConfiguration config)
+    public CineasteList(Id<CineasteList> id, string name, ListConfiguration configuration)
         : base(id)
     {
         this.Name = name;
-        this.Config = Require.NotNull(config);
+        this.Configuration = Require.NotNull(configuration);
 
         this.movies = new();
         this.series = new();
@@ -60,7 +60,7 @@ public sealed class CineasteList : Entity<CineasteList>
         : base(id)
     {
         this.name = null!;
-        this.Config = null!;
+        this.Configuration = null!;
 
         this.movies = new();
         this.series = new();

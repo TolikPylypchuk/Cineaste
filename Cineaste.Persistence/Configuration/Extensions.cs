@@ -64,7 +64,7 @@ internal static class Extensions
     {
         const string franchiseItemId = "FranchiseItemId";
 
-        builder.Property<Id<FranchiseItem>>(franchiseItemId)
+        builder.Property<Id<FranchiseItem>?>(franchiseItemId)
             .HasConversion<IdConverter<FranchiseItem>>();
 
         builder.HasOne(item)
