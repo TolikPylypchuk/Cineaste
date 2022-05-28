@@ -1,23 +1,5 @@
 namespace Cineaste.Core.Domain;
 
-public enum SeasonWatchStatus
-{
-    NotWatched,
-    Watching,
-    Hiatus,
-    Watched,
-    StoppedWatching
-}
-
-public enum SeasonReleaseStatus
-{
-    NotStarted,
-    Running,
-    Hiatus,
-    Finished,
-    Unknown
-}
-
 public sealed class Season : Entity<Season>
 {
     private string channel;
@@ -47,6 +29,32 @@ public sealed class Season : Entity<Season>
 
     public IReadOnlyCollection<Period> Periods =>
         this.periods.AsReadOnly();
+
+    public Title Title =>
+        this.Titles
+            .Where(title => !title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .First();
+
+    public Title OriginalTitle =>
+        this.Titles
+            .Where(title => title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .First();
+
+    public int StartYear =>
+        this.Periods
+            .OrderBy(period => period.StartYear)
+            .ThenBy(period => period.StartMonth)
+            .First()
+            .StartYear;
+
+    public int EndYear =>
+        this.Periods
+            .OrderByDescending(period => period.EndYear)
+            .ThenByDescending(period => period.EndMonth)
+            .First()
+            .EndYear;
 
     public Season(
         Id<Season> id,

@@ -6,5 +6,9 @@ internal sealed class FranchiseItemTypeConfiguration : IEntityTypeConfiguration<
     {
         item.HasStronglyTypedId();
         item.HasCheckConstraint("CH_FranchiseItems_SequenceNumberPositive", "SequenceNumber > 0");
+
+        item.Ignore(fi => fi.Titles);
+        item.Ignore(fi => fi.Title);
+        item.Ignore(fi => fi.OriginalTitle);
     }
 }

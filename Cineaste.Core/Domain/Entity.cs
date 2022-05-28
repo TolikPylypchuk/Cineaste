@@ -17,9 +17,9 @@ public abstract class Entity<TEntity> : IEquatable<TEntity>
     public override int GetHashCode() =>
         this.Id.GetHashCode();
 
-    public static bool operator ==(Entity<TEntity> left, Entity<TEntity> right) =>
+    public static bool operator ==(Entity<TEntity>? left, Entity<TEntity>? right) =>
         left?.Equals(right) ?? right is null;
 
-    public static bool operator !=(Entity<TEntity> left, Entity<TEntity> right) =>
+    public static bool operator !=(Entity<TEntity>? left, Entity<TEntity>? right) =>
         !(left == right);
 }

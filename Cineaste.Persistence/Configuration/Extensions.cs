@@ -59,7 +59,10 @@ internal static class Extensions
             })
             .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-    public static void HasFranchiseItem<T>(this EntityTypeBuilder<T> builder, Expression<Func<T, FranchiseItem?>> item)
+    public static void HasFranchiseItem<T>(
+        this EntityTypeBuilder<T> builder,
+        Expression<Func<T, FranchiseItem?>> item,
+        Expression<Func<FranchiseItem, T?>> entity)
         where T : Entity<T>
     {
         const string franchiseItemId = "FranchiseItemId";
@@ -68,7 +71,7 @@ internal static class Extensions
             .HasConversion<IdConverter<FranchiseItem>>();
 
         builder.HasOne(item)
-            .WithOne()
+            .WithOne(entity)
             .HasForeignKey<T>(franchiseItemId);
     }
 

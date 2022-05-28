@@ -49,6 +49,18 @@ public sealed class Movie : Entity<Movie>
     public IReadOnlySet<TagContainer> Tags =>
         this.tags;
 
+    public Title Title =>
+        this.Titles
+            .Where(title => !title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .First();
+
+    public Title OriginalTitle =>
+        this.Titles
+            .Where(title => title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .First();
+
     public Movie(
         Id<Movie> id,
         IEnumerable<Title> titles,

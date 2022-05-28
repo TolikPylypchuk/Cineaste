@@ -1,16 +1,48 @@
 namespace Cineaste.Shared;
 
+using System.ComponentModel;
+
 public sealed record SimpleListModel(Guid Id, string Name);
 
-public sealed record ListModel(Guid Id, string Name, List<ListItemModel> Items);
+public sealed record ListModel(
+    Guid Id,
+    string Name,
+    ListConfigurationModel Config,
+    List<ListItemModel> Movies,
+    List<ListItemModel> Series,
+    List<ListItemModel> Franchises,
+    List<ListKindModel> MovieKinds,
+    List<ListKindModel> SeriesKinds);
 
-public record ListItemModel(
+public sealed record ListItemModel(
     Guid Id,
     ListItemType Type,
+    bool ShouldBeShown,
     string Number,
     string Title,
     string OriginalTitle,
-    string Years,
-    string Color);
+    int StartYear,
+    int EndYear,
+    string Color,
+    Guid? FranchiseId);
 
 public enum ListItemType { Movie, Series, Franchise }
+
+public sealed record ListKindModel(
+    Guid Id,
+    string Name,
+    string WatchedColor,
+    string NotWatchedColor,
+    string NotReleasedColor,
+    ListKindTarget Target);
+
+public enum ListKindTarget { Movie, Series }
+
+public sealed record ListConfigurationModel(
+    string Culture,
+    string DefaultSeasonTitle,
+    string DefaultSeasonOriginalTitle,
+    ListSortOrder DefaultFirstSortOrder,
+    ListSortDirection DefaultFirstSortDirection,
+    ListSortOrder DefaultSecondSortOrder,
+    ListSortDirection DefaultSecondSortDirection);

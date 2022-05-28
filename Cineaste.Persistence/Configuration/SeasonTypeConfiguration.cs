@@ -22,5 +22,10 @@ internal sealed class SeasonTypeConfiguration : IEntityTypeConfiguration<Season>
 
         season.Property(s => s.ReleaseStatus)
             .HasConversion<string>();
+
+        season.Ignore(s => s.Title);
+        season.Ignore(s => s.OriginalTitle);
+        season.Ignore(s => s.StartYear);
+        season.Ignore(s => s.EndYear);
     }
 }

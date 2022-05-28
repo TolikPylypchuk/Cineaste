@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cineaste.Basic\Cineaste.Basic.csproj" />
+    <SupportedPlatform Include="browser" />
   </ItemGroup>
-
 </Project>

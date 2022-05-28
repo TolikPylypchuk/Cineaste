@@ -32,6 +32,11 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
             .OnDelete(DeleteBehavior.Restrict);
 
         series.HasTags(s => s.Tags, "SeriesTags");
-        series.HasFranchiseItem(s => s.FranchiseItem);
+        series.HasFranchiseItem(s => s.FranchiseItem, fi => fi.Series);
+
+        series.Ignore(s => s.Title);
+        series.Ignore(s => s.OriginalTitle);
+        series.Ignore(s => s.StartYear);
+        series.Ignore(s => s.EndYear);
     }
 }

@@ -1,22 +1,5 @@
 namespace Cineaste.Core.Domain;
 
-public enum SeriesWatchStatus
-{
-    NotWatched,
-    Watching,
-    Watched,
-    StoppedWatching
-}
-
-public enum SeriesReleaseStatus
-{
-    NotStarted,
-    Running,
-    Finished,
-    Cancelled,
-    Unknown
-}
-
 public sealed class Series : Entity<Series>
 {
     private string? imdbId;
@@ -69,6 +52,46 @@ public sealed class Series : Entity<Series>
     public IReadOnlySet<TagContainer> Tags =>
         this.tags;
 
+    public Title Title =>
+        this.Titles
+            .Where(title => !title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .First();
+
+    public Title OriginalTitle =>
+        this.Titles
+            .Where(title => title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .First();
+
+    public int StartYear =>
+        Math.Min(
+            this.Seasons
+                .OrderBy(season => season.StartYear)
+                .FirstOrDefault()
+                ?.StartYear
+                ?? Int32.MaxValue,
+            this.SpecialEpisodes
+                .OrderBy(episode => episode.Year)
+                .ThenBy(episode => episode.Month)
+                .FirstOrDefault()
+                ?.Year
+                ?? Int32.MaxValue);
+
+    public int EndYear =>
+        Math.Max(
+            this.Seasons
+                .OrderByDescending(season => season.EndYear)
+                .FirstOrDefault()
+                ?.EndYear
+                ?? Int32.MinValue,
+            this.SpecialEpisodes
+                .OrderByDescending(episode => episode.Year)
+                .ThenByDescending(episode => episode.Month)
+                .FirstOrDefault()
+                ?.Year
+                ?? Int32.MinValue);
+
     public Series(
         Id<Series> id,
         IEnumerable<Title> titles,
@@ -77,8 +100,7 @@ public sealed class Series : Entity<Series>
         bool isMiniseries,
         SeriesWatchStatus watchStatus,
         SeriesReleaseStatus releaseStatus,
-        SeriesKind kind,
-        IEnumerable<TagContainer> tags)
+        SeriesKind kind)
         : base(id)
     {
         this.IsMiniseries = isMiniseries;
@@ -89,7 +111,7 @@ public sealed class Series : Entity<Series>
         this.titles = titles.ToList();
         this.seasons = seasons.ToList();
         this.specialEpisodes = specialEpisodes.ToList();
-        this.tags = tags.ToHashSet();
+        this.tags = new();
     }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]

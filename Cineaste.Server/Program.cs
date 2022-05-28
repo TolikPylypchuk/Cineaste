@@ -1,7 +1,14 @@
+using System.Text.Json.Serialization;
+
+using Microsoft.AspNetCore.Http.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default"), sql => sql.MigrationsHistoryTable("Migrations")));
+
+builder.Services.Configure<JsonOptions>(options =>
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddControllers();
 

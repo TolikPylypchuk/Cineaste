@@ -14,5 +14,8 @@ internal sealed class SpecialEpisodeTypeConfiguration : IEntityTypeConfiguration
         episode.HasCheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "SequenceNumber > 0");
 
         episode.HasPoster(e => e.Poster);
+
+        episode.Ignore(e => e.Title);
+        episode.Ignore(e => e.OriginalTitle);
     }
 }

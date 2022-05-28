@@ -17,6 +17,9 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
             .OnDelete(DeleteBehavior.Restrict);
 
         movie.HasTags(m => m.Tags, "MovieTags");
-        movie.HasFranchiseItem(m => m.FranchiseItem);
+        movie.HasFranchiseItem(m => m.FranchiseItem, fi => fi.Movie);
+
+        movie.Ignore(m => m.Title);
+        movie.Ignore(m => m.OriginalTitle);
     }
 }

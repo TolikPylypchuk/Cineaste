@@ -16,7 +16,7 @@ public sealed class ListService : IListService
         logger.LogDebug("Getting all lists");
 
         var lists = await dbContext.Lists
-            .AsNoTracking()
+            .Select(list => new { list.Id, list.Name })
             .ToListAsync();
 
         return lists
@@ -32,6 +32,9 @@ public sealed class ListService : IListService
         var listId = new Id<CineasteList>(id);
 
         var list = await dbContext.Lists
+            .Include(list => list.Configuration)
+            .Include(list => list.MovieKinds)
+            .Include(list => list.SeriesKinds)
             .Include(list => list.Movies)
                 .ThenInclude(movie => movie.Titles)
             .Include(list => list.Movies)
@@ -55,14 +58,82 @@ public sealed class ListService : IListService
                 .ThenInclude(franchise => franchise.Children)
             .Include(list => list.Franchises)
                 .ThenInclude(franchise => franchise.FranchiseItem)
-            .AsNoTracking()
+            .AsSplitQuery()
             .SingleOrDefaultAsync(list => list.Id == listId);
 
-        if (list is null)
-        {
-            return null;
-        }
-
-        return null;
+        return list is not null
+            ? new ListModel(
+                list.Id.Value,
+                list.Name,
+                this.ToConfigurationModel(list.Configuration),
+                list.Movies.Select(this.ToListItemModel).ToList(),
+                list.Series.Select(this.ToListItemModel).ToList(),
+                list.Franchises.Select(this.ToListItemModel).ToList(),
+                list.MovieKinds.Select(this.ToListKindModel).ToList(),
+                list.SeriesKinds.Select(this.ToListKindModel).ToList())
+            : null;
     }
+
+    private ListConfigurationModel ToConfigurationModel(ListConfiguration config) =>
+        new(
+            config.Culture.ToString(),
+            config.DefaultSeasonTitle,
+            config.DefaultSeasonOriginalTitle,
+            config.SortingConfiguration.DefaultFirstSortOrder,
+            config.SortingConfiguration.DefaultFirstSortDirection,
+            config.SortingConfiguration.DefaultSecondSortOrder,
+            config.SortingConfiguration.DefaultSecondSortDirection);
+
+    private ListItemModel ToListItemModel(Movie movie) =>
+        new(
+            movie.Id.Value,
+            ListItemType.Movie,
+            true,
+            movie.FranchiseItem.GetDisplayNumber(),
+            movie.Title.Name,
+            movie.OriginalTitle.Name,
+            movie.Year,
+            movie.Year,
+            movie.GetActiveColor().HexValue,
+            movie.FranchiseItem is not null ? movie.FranchiseItem.ParentFranchise.Id.Value : null);
+
+    private ListItemModel ToListItemModel(Series series) =>
+        new(
+            series.Id.Value,
+            ListItemType.Series,
+            true,
+            series.FranchiseItem.GetDisplayNumber(),
+            series.Title.Name,
+            series.OriginalTitle.Name,
+            series.StartYear,
+            series.EndYear,
+            series.GetActiveColor().HexValue,
+            series.FranchiseItem is not null ? series.FranchiseItem.ParentFranchise.Id.Value : null);
+
+    private ListItemModel ToListItemModel(Franchise franchise) =>
+        new(
+            franchise.Id.Value,
+            ListItemType.Franchise,
+            franchise.ShowTitles,
+            franchise.FranchiseItem.GetDisplayNumber(),
+            franchise.ShowTitles && franchise.Title is not null
+                ? $"{franchise.Title.Name}:"
+                : String.Empty,
+            franchise.ShowTitles && franchise.OriginalTitle is not null
+                ? $"{franchise.OriginalTitle.Name}:"
+                : String.Empty,
+            franchise.GetFirstChild()?.GetStartYear() ?? 0,
+            franchise.GetLastChild()?.GetEndYear() ?? 0,
+            franchise.GetActiveColor()?.HexValue ?? String.Empty,
+            franchise.FranchiseItem is not null ? franchise.FranchiseItem.ParentFranchise.Id.Value : null);
+
+    private ListKindModel ToListKindModel<TKind>(Kind<TKind> kind)
+        where TKind : Kind<TKind> =>
+        new(
+            kind.Id.Value,
+            kind.Name,
+            kind.WatchedColor.HexValue,
+            kind.NotWatchedColor.HexValue,
+            kind.NotReleasedColor.HexValue,
+            kind is MovieKind ? ListKindTarget.Movie : ListKindTarget.Series);
 }

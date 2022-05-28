@@ -16,6 +16,10 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
         franchise.Navigation(f => f.Children)
             .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-        franchise.HasFranchiseItem(f => f.FranchiseItem);
+        franchise.HasFranchiseItem(f => f.FranchiseItem, fi => fi.Franchise);
+
+        franchise.Ignore(f => f.ActualTitles);
+        franchise.Ignore(f => f.Title);
+        franchise.Ignore(f => f.OriginalTitle);
     }
 }

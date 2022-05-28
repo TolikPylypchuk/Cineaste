@@ -2,15 +2,6 @@ namespace Cineaste.Core.Domain;
 
 using System.ComponentModel;
 
-public enum ListSortOrder
-{
-    ByTitle,
-    ByOriginalTitle,
-    ByTitleSimple,
-    ByOriginalTitleSimple,
-    ByYear
-}
-
 public sealed class ListSortingConfiguration
 {
     public ListSortOrder DefaultFirstSortOrder { get; set; } = ListSortOrder.ByTitle;

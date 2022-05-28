@@ -19,6 +19,24 @@ public sealed class Franchise : Entity<Franchise>
     public IReadOnlyCollection<Title> Titles =>
         this.titles.AsReadOnly();
 
+    public IReadOnlyCollection<Title> ActualTitles =>
+        this.Titles.Count != 0
+            ? this.Titles
+            : this.Children.OrderBy(item => item.SequenceNumber).FirstOrDefault()?.Titles
+                ?? new List<Title>().AsReadOnly();
+
+    public Title? Title =>
+        this.ActualTitles
+            .Where(title => !title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .FirstOrDefault();
+
+    public Title? OriginalTitle =>
+        this.ActualTitles
+            .Where(title => title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .FirstOrDefault();
+
     public Franchise(
         Id<Franchise> id,
         IEnumerable<Title> titles,
@@ -59,4 +77,61 @@ public sealed class Franchise : Entity<Franchise>
 
     public void RemoveTitle(string name, bool isOriginal) =>
         this.titles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
+
+    public FranchiseItem AddMovie(Movie movie)
+    {
+        var item = new FranchiseItem(Domain.Id.Create<FranchiseItem>(), movie, this, this.Children.Count + 1, true);
+
+        this.children.Add(item);
+        movie.FranchiseItem = item;
+
+        return item;
+    }
+
+    public FranchiseItem AddSeries(Series series)
+    {
+        var item = new FranchiseItem(Domain.Id.Create<FranchiseItem>(), series, this, this.Children.Count + 1, true);
+
+        this.children.Add(item);
+        series.FranchiseItem = item;
+
+        return item;
+    }
+
+    public FranchiseItem AddFranchise(Franchise franchise)
+    {
+        var item = new FranchiseItem(Domain.Id.Create<FranchiseItem>(), franchise, this, this.Children.Count + 1, true);
+
+        this.children.Add(item);
+        franchise.FranchiseItem = item;
+
+        return item;
+    }
+
+    public void RemoveMovie(Movie movie)
+    {
+        if (movie.FranchiseItem is not null && this.children.Contains(movie.FranchiseItem))
+        {
+            this.children.Remove(movie.FranchiseItem);
+            movie.FranchiseItem = null;
+        }
+    }
+
+    public void RemoveSeries(Series series)
+    {
+        if (series.FranchiseItem is not null && this.children.Contains(series.FranchiseItem))
+        {
+            this.children.Remove(series.FranchiseItem);
+            series.FranchiseItem = null;
+        }
+    }
+
+    public void RemoveSeries(Franchise franchise)
+    {
+        if (franchise.FranchiseItem is not null && this.children.Contains(franchise.FranchiseItem))
+        {
+            this.children.Remove(franchise.FranchiseItem);
+            franchise.FranchiseItem = null;
+        }
+    }
 }

@@ -49,6 +49,18 @@ public sealed class SpecialEpisode : Entity<SpecialEpisode>
     public IReadOnlyCollection<Title> Titles =>
         this.titles.AsReadOnly();
 
+    public Title Title =>
+        this.Titles
+            .Where(title => !title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .First();
+
+    public Title OriginalTitle =>
+        this.Titles
+            .Where(title => title.IsOriginal)
+            .OrderBy(title => title.Priority)
+            .First();
+
     public SpecialEpisode(
         Id<SpecialEpisode> id,
         IEnumerable<Title> titles,
