@@ -2,11 +2,12 @@ namespace Cineaste.Shared;
 
 using System.ComponentModel;
 
-public sealed record SimpleListModel(Guid Id, string Name);
+public sealed record SimpleListModel(Guid Id, string Name, string Handle);
 
 public sealed record ListModel(
     Guid Id,
     string Name,
+    string Handle,
     ListConfigurationModel Config,
     List<ListItemModel> Movies,
     List<ListItemModel> Series,
@@ -24,7 +25,11 @@ public sealed record ListItemModel(
     int StartYear,
     int EndYear,
     string Color,
-    ListFranchiseItemModel? FranchiseItem);
+    ListFranchiseItemModel? FranchiseItem)
+{
+    public string Years =>
+        this.StartYear == this.EndYear ? this.StartYear.ToString() : $"{this.StartYear}-{this.EndYear}";
+}
 
 public enum ListItemType { Movie, Series, Franchise }
 

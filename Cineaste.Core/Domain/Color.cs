@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 public sealed record Color
 {
-    private static readonly Regex ColorHexRegex = new("#[0-9A-Fa-f]{8}", RegexOptions.Compiled);
+    private static readonly Regex ColorHexRegex = new("#[0-9A-Fa-f]{6}", RegexOptions.Compiled);
 
     public string HexValue { get; }
 

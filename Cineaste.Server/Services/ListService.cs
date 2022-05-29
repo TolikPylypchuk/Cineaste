@@ -16,20 +16,18 @@ public sealed class ListService : IListService
         logger.LogDebug("Getting all lists");
 
         var lists = await dbContext.Lists
-            .Select(list => new { list.Id, list.Name })
+            .Select(list => new { list.Id, list.Name, list.Handle })
             .ToListAsync();
 
         return lists
             .OrderBy(list => list.Name)
-            .Select(list => new SimpleListModel(list.Id.Value, list.Name))
+            .Select(list => new SimpleListModel(list.Id.Value, list.Name, list.Handle))
             .ToList();
     }
 
-    public async Task<ListModel?> GetList(Guid id)
+    public async Task<ListModel?> GetList(string handle)
     {
-        logger.LogDebug("Getting the list with ID {ID}", id);
-
-        var listId = new Id<CineasteList>(id);
+        logger.LogDebug("Getting the list with handle {Handle}", handle);
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
@@ -59,12 +57,13 @@ public sealed class ListService : IListService
             .Include(list => list.Franchises)
                 .ThenInclude(franchise => franchise.FranchiseItem)
             .AsSplitQuery()
-            .SingleOrDefaultAsync(list => list.Id == listId);
+            .SingleOrDefaultAsync(list => list.Handle == handle);
 
         return list is not null
             ? new ListModel(
                 list.Id.Value,
                 list.Name,
+                list.Handle,
                 this.ToConfigurationModel(list.Configuration),
                 list.Movies.Select(this.ToListItemModel).ToList(),
                 list.Series.Select(this.ToListItemModel).ToList(),

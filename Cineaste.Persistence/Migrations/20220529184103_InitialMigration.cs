@@ -14,11 +14,13 @@ namespace Cineaste.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Handle = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lists", x => x.Id);
+                    table.CheckConstraint("CH_Lists_HandleNotEmpty", "Handle <> ''");
                     table.CheckConstraint("CH_Lists_NameNotEmpty", "Name <> ''");
                 });
 
@@ -535,6 +537,12 @@ namespace Cineaste.Persistence.Migrations
                 name: "IX_ListConfigurations_ListId",
                 table: "ListConfigurations",
                 column: "ListId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lists_Handle",
+                table: "Lists",
+                column: "Handle",
                 unique: true);
 
             migrationBuilder.CreateIndex(

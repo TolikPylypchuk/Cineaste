@@ -1,5 +1,8 @@
 @page "/"
 
+@inject NavigationManager NavigationManager
+@inject IListService ListService
+
 <div class="container d-flex flex-column align-items-center">
     <h1 class="display-1 mt-md-2 mt-1">Cineaste</h1>
 
@@ -14,7 +17,8 @@
     {
         <RadzenDataList WrapItems="true" Data="@this.Lists" TItem="SimpleListModel" class="mt-4">
             <Template Context="list">
-                <div role="button" class="container border-bottom" style="border: none; border-radius: 0;">
+                <div role="button" class="container border-bottom" style="border: none; border-radius: 0;"
+                     @ondblclick=@(() => this.NavigateToList(list))>
                     <div class="row">
                         <p class="lead m-1">@list.Name</p>
                     </div>
@@ -25,24 +29,34 @@
 </div>
 
 @code {
-    [Inject]
-    private IListService ListService { get; set; } = null!;
+    private readonly SourceCache<SimpleListModel, Guid> listsSource = new(list => list.Id);
+    private readonly ReadOnlyObservableCollection<SimpleListModel> lists;
 
     private bool IsLoading { get; set; }
-    private ObservableCollection<SimpleListModel> Lists { get; } = new();
+
+    private ReadOnlyObservableCollection<SimpleListModel> Lists =>
+        this.lists;
+
+    public HomePage()
+    {
+        this.listsSource.Connect()
+            .SortBy(list => list.Name)
+            .Bind(out this.lists)
+            .Subscribe();
+    }
 
     protected override async Task OnParametersSetAsync()
     {
         this.IsLoading = true;
-        this.Lists.Clear();
+        this.listsSource.Clear();
 
         var lists = await this.ListService.GetLists();
 
-        foreach (var list in lists)
-        {
-            this.Lists.Add(list);
-        }
+        this.listsSource.AddOrUpdate(lists);
 
         this.IsLoading = false;
     }
+
+    private void NavigateToList(SimpleListModel list) =>
+        this.NavigationManager.NavigateTo($"/list/{list.Handle}");
 }

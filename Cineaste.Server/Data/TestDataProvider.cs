@@ -20,16 +20,16 @@ internal sealed class TestDataProvider
         }
 
         this.dbContext.Lists.AddRange(
-            this.CreateList("Test List 1"),
-            this.CreateList("Test List 2"),
-            this.CreateList("Test List 3"),
-            this.CreateList("Test List 4"),
-            this.CreateList("Test List 5"));
+            this.CreateList("Test List 1", "test-list-1"),
+            this.CreateList("Test List 2", "test-list-2"),
+            this.CreateList("Test List 3", "test-list-3"),
+            this.CreateList("Test List 4", "test-list-4"),
+            this.CreateList("Test List 5", "test-list-5"));
 
         await this.dbContext.SaveChangesAsync();
     }
 
-    private CineasteList CreateList(string name)
+    private CineasteList CreateList(string name, string handle)
     {
         var config = new ListConfiguration(
             Id.Create<ListConfiguration>(),
@@ -38,12 +38,13 @@ internal sealed class TestDataProvider
             "Season #",
             new(ListSortOrder.ByTitle, ListSortDirection.Ascending, ListSortOrder.ByYear, ListSortDirection.Ascending));
 
-        var list = new CineasteList(Id.Create<CineasteList>(), name, config);
+        var list = new CineasteList(Id.Create<CineasteList>(), name, handle, config);
 
-        var black = new Color("#00000000");
+        var black = new Color("#000000");
+        var blue = new Color("#0000FF");
 
         var movieKind = new MovieKind(Id.Create<MovieKind>(), "Test Kind", black, black, black);
-        var seriesKind = new SeriesKind(Id.Create<SeriesKind>(), "Test Kind", black, black, black);
+        var seriesKind = new SeriesKind(Id.Create<SeriesKind>(), "Test Kind", blue, blue, blue);
 
         list.AddMovieKind(movieKind);
         list.AddSeriesKind(seriesKind);
@@ -60,8 +61,8 @@ internal sealed class TestDataProvider
 
         var i = this.CreateFranchise("i");
 
-        i.AddMovie(c);
         i.AddSeries(f);
+        i.AddMovie(c);
 
         list.AddMovie(a);
         list.AddMovie(b);
