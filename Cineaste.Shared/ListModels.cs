@@ -18,15 +18,17 @@ public sealed record ListItemModel(
     Guid Id,
     ListItemType Type,
     bool ShouldBeShown,
-    string Number,
+    string DisplayNumber,
     string Title,
     string OriginalTitle,
     int StartYear,
     int EndYear,
     string Color,
-    Guid? FranchiseId);
+    ListFranchiseItemModel? FranchiseItem);
 
 public enum ListItemType { Movie, Series, Franchise }
+
+public sealed record ListFranchiseItemModel(Guid FranchiseId, int SequenceNumber);
 
 public sealed record ListKindModel(
     Guid Id,

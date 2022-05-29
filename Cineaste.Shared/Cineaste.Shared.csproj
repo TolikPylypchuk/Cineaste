@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Nito.Comparers" Version="6.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Cineaste.Basic\Cineaste.Basic.csproj" />
   </ItemGroup>
 

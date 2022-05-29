@@ -95,7 +95,7 @@ public sealed class ListService : IListService
             movie.Year,
             movie.Year,
             movie.GetActiveColor().HexValue,
-            movie.FranchiseItem is not null ? movie.FranchiseItem.ParentFranchise.Id.Value : null);
+            this.ToFranchiseItemModel(movie.FranchiseItem));
 
     private ListItemModel ToListItemModel(Series series) =>
         new(
@@ -108,7 +108,7 @@ public sealed class ListService : IListService
             series.StartYear,
             series.EndYear,
             series.GetActiveColor().HexValue,
-            series.FranchiseItem is not null ? series.FranchiseItem.ParentFranchise.Id.Value : null);
+            this.ToFranchiseItemModel(series.FranchiseItem));
 
     private ListItemModel ToListItemModel(Franchise franchise) =>
         new(
@@ -125,7 +125,7 @@ public sealed class ListService : IListService
             franchise.GetFirstChild()?.GetStartYear() ?? 0,
             franchise.GetLastChild()?.GetEndYear() ?? 0,
             franchise.GetActiveColor()?.HexValue ?? String.Empty,
-            franchise.FranchiseItem is not null ? franchise.FranchiseItem.ParentFranchise.Id.Value : null);
+            this.ToFranchiseItemModel(franchise.FranchiseItem));
 
     private ListKindModel ToListKindModel<TKind>(Kind<TKind> kind)
         where TKind : Kind<TKind> =>
@@ -136,4 +136,8 @@ public sealed class ListService : IListService
             kind.NotWatchedColor.HexValue,
             kind.NotReleasedColor.HexValue,
             kind is MovieKind ? ListKindTarget.Movie : ListKindTarget.Series);
+
+    [return: NotNullIfNotNull("item")]
+    private ListFranchiseItemModel? ToFranchiseItemModel(FranchiseItem? item) =>
+        item is not null ? new(item.ParentFranchise.Id.Value, item.SequenceNumber) : null;
 }
