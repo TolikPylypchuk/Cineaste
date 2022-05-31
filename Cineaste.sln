@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Core", "Cineaste.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Persistence", "Cineaste.Persistence\Cineaste.Persistence.csproj", "{B6C5A728-B3A0-4655-BE41-16497C2E0AE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cineaste.Basic", "Cineaste.Basic\Cineaste.Basic.csproj", "{D1B9E0AA-A086-46D2-935C-DCDC5FAAA9BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Basic", "Cineaste.Basic\Cineaste.Basic.csproj", "{D1B9E0AA-A086-46D2-935C-DCDC5FAAA9BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

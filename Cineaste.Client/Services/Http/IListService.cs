@@ -1,4 +1,4 @@
-namespace Cineaste.Client.Services;
+namespace Cineaste.Client.Services.Http;
 
 public interface IListService
 {

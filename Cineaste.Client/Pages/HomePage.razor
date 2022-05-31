@@ -1,24 +1,24 @@
 @page "/"
 
-@inject NavigationManager NavigationManager
-@inject IListService ListService
+@inherits ReactiveInjectableComponentBase<HomePageViewModel>
 
 <div class="container d-flex flex-column align-items-center">
     <h1 class="display-1 mt-md-2 mt-1">Cineaste</h1>
 
     <h2 class="display-5 mt-2">My Lists</h2>
 
-    <RadzenButton Text="Create a list" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" class="mt-4" />
+    <RadzenButton Text="Create a list" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" class="mt-4"
+                  Click=@(() => this.ViewModel!.NavigateToCreateList()) />
 
-    @if (this.IsLoading)
+    @if (this.ViewModel!.IsLoading)
     {
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
     } else
     {
-        <RadzenDataList WrapItems="true" Data="@this.Lists" TItem="SimpleListModel" class="mt-4">
+        <RadzenDataList WrapItems="true" Data="this.ViewModel!.Lists" TItem="SimpleListModel" class="mt-4">
             <Template Context="list">
                 <div role="button" class="container border-bottom" style="border: none; border-radius: 0;"
-                     @ondblclick=@(() => this.NavigateToList(list))>
+                     @ondblclick=@(() => this.ViewModel!.NavigateToList(list))>
                     <div class="row">
                         <p class="lead m-1">@list.Name</p>
                     </div>
@@ -29,34 +29,9 @@
 </div>
 
 @code {
-    private readonly SourceCache<SimpleListModel, Guid> listsSource = new(list => list.Id);
-    private readonly ReadOnlyObservableCollection<SimpleListModel> lists;
-
-    private bool IsLoading { get; set; }
-
-    private ReadOnlyObservableCollection<SimpleListModel> Lists =>
-        this.lists;
-
-    public HomePage()
-    {
-        this.listsSource.Connect()
-            .SortBy(list => list.Name)
-            .Bind(out this.lists)
-            .Subscribe();
-    }
-
     protected override async Task OnParametersSetAsync()
     {
-        this.IsLoading = true;
-        this.listsSource.Clear();
-
-        var lists = await this.ListService.GetLists();
-
-        this.listsSource.AddOrUpdate(lists);
-
-        this.IsLoading = false;
+        await base.OnParametersSetAsync();
+        await this.ViewModel!.Initialize();
     }
-
-    private void NavigateToList(SimpleListModel list) =>
-        this.NavigationManager.NavigateTo($"/list/{list.Handle}");
 }

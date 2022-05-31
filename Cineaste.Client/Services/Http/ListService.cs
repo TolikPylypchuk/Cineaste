@@ -1,4 +1,4 @@
-namespace Cineaste.Client.Services;
+namespace Cineaste.Client.Services.Http;
 
 public sealed class ListService : IListService
 {
@@ -15,7 +15,7 @@ public sealed class ListService : IListService
     {
         try
         {
-            return (await this.client.GetFromJsonAsync<List<SimpleListModel>>("/api/lists", this.jsonOptions)) ?? new();
+            return await this.client.GetFromJsonAsync<List<SimpleListModel>>("/api/lists", this.jsonOptions) ?? new();
         } catch (HttpRequestException)
         {
             return new();

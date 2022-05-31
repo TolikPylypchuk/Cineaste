@@ -1,20 +1,18 @@
 @page "/list/{handle}"
 
-@using System.Globalization
-
-@inject IListService ListService
+@inherits ReactiveInjectableComponentBase<ListPageViewModel>
 
 <div class="container d-flex flex-column align-items-center">
-    @if (this.IsLoading)
+    @if (this.ViewModel!.IsLoading)
     {
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
     } else
     {
-        @if (this.List is not null)
+        @if (this.ViewModel!.List is not null)
         {
-            <h1 class="display-3 mt-md-2 mt-1">@this.List.Name</h1>
+            <h1 class="display-3 mt-md-2 mt-1">@this.ViewModel!.List.Name</h1>
 
-            <RadzenDataList WrapItems="true" Data="@this.Items" TItem="ListItemModel" class="mt-4">
+            <RadzenDataList WrapItems="true" Data="@this.ViewModel!.Items" TItem="ListItemModel" class="mt-4">
                 <Template Context="item">
                     <div role="button" class="container border-bottom"
                          style=@($"border: none; border-radius: 0; color: {item.Color};")>
@@ -46,74 +44,15 @@
 </div>
 
 @code {
-    private readonly SourceCache<ListItemModel, Guid> itemsSource = new(item => item.Id);
-    private readonly ReadOnlyObservableCollection<ListItemModel> items;
-    private readonly BehaviorSubject<IComparer<ListItemModel>> comparer = new(null!);
-    private Dictionary<Guid, ListItemModel> itemsById = new();
-
     [Parameter]
     public string Handle { get; set; } = String.Empty;
-
-    private ListModel? List { get; set; }
-
-    private bool IsLoading { get; set; }
-
-    private ReadOnlyObservableCollection<ListItemModel> Items =>
-        this.items;
-
-    public ListPage()
-    {
-        this.itemsSource.Connect()
-            .Sort(this.comparer)
-            .Bind(out this.items)
-            .Subscribe();
-    }
 
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
 
-        this.IsLoading = true;
+        this.ViewModel!.Handle = this.Handle;
 
-        this.List = await this.ListService.GetList(this.Handle);
-
-        if (this.List is not null)
-        {
-            this.itemsById = this.List.Movies
-                .Concat(this.List.Series)
-                .Concat(this.List.Franchises)
-                .ToDictionary(item => item.Id, item => item);
-
-            this.SetComparer();
-
-            this.itemsSource.Edit(list =>
-            {
-                list.AddOrUpdate(this.List.Movies);
-                list.AddOrUpdate(this.List.Series);
-                list.AddOrUpdate(this.List.Franchises);
-            });
-        }
-
-        this.IsLoading = false;
-    }
-
-    private void SetComparer()
-    {
-        if (this.List is null)
-        {
-            return;
-        }
-
-        var culture = CultureInfo.GetCultureInfo(this.List.Config.Culture);
-
-        var comparerByYear = ComparerBuilder.For<ListItemModel>()
-            .OrderBy(item => item.StartYear)
-            .ThenBy(item => item.EndYear);
-
-        this.comparer.OnNext(new ListItemTitleComparer(
-            culture,
-            comparerByYear,
-            id => this.itemsById[id],
-            item => item.Title));
+        await this.ViewModel!.Initialize();
     }
 }

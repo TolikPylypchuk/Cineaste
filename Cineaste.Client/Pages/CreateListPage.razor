@@ -1,0 +1,30 @@
+@page "/create/list"
+
+@inherits ReactiveInjectableComponentBase<CreateListPageViewModel>
+
+@using System.Globalization
+
+<div class="container d-flex flex-column align-items-center">
+    <h1 class="display-1 mb-4">Create a List</h1>
+
+    <RadzenCard class="w-50">
+        <RadzenLabel Text="Name" class="mb-2" />
+        <RadzenTextBox @bind-Value="this.ViewModel!.Name" Class="w-100" />
+
+        <RadzenLabel Text="Handle" class="mt-4 mb-2" />
+        <RadzenTextBox Value="@this.ViewModel!.Handle" ReadOnly="true" Class="w-100" />
+
+        <RadzenLabel Text="Title language" class="mt-4 mb-2" />
+        <RadzenDropDown TValue="CultureInfo" Data="this.ViewModel!.AllCultures" AllowFiltering="true"
+                        @bind-Value="this.ViewModel!.Culture" TextProperty="DisplayName" />
+    </RadzenCard>
+</div>
+
+@code {
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        this.ViewModel!.Name = String.Empty;
+        this.ViewModel!.Culture = CultureInfo.InvariantCulture;
+    }
+}

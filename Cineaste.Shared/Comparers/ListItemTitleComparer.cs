@@ -6,8 +6,7 @@ using Nito.Comparers;
 
 public sealed class ListItemTitleComparer : NullableComparerBase<ListItemModel>
 {
-    private readonly TitleComparer titleComparer;
-    private readonly IComparer<ListItemModel> titleAndOtherComparer;
+    private readonly IComparer<ListItemModel> titleComparer;
     private readonly Func<Guid, ListItemModel> getItem;
     private readonly Func<ListItemModel, string> getTitle;
 
@@ -22,9 +21,8 @@ public sealed class ListItemTitleComparer : NullableComparerBase<ListItemModel>
         this.getItem = getItem;
         this.getTitle = getTitle;
 
-        this.titleComparer = new TitleComparer(culture);
-        this.titleAndOtherComparer = ComparerBuilder.For<ListItemModel>()
-            .OrderBy(this.getTitle, this.titleComparer)
+        this.titleComparer = ComparerBuilder.For<ListItemModel>()
+            .OrderBy(this.getTitle, new TitleComparer(culture))
             .ThenBy(otherComparer);
     }
 
@@ -135,7 +133,7 @@ public sealed class ListItemTitleComparer : NullableComparerBase<ListItemModel>
     }
 
     private int CompareTitle(ListItemModel left, ListItemModel right) =>
-        this.titleAndOtherComparer.Compare(left, right);
+        this.titleComparer.Compare(left, right);
 
     private int FindSequenceNumberToCompare(ListItemModel descendant, ListItemModel ancestor) =>
         this.GetAllAncestors(descendant)
