@@ -25,8 +25,8 @@ builder.Services.AddScoped<ContextMenuService>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 
+builder.Services.AddScoped<CreateListPageViewModel>();
 builder.Services.AddScoped<HomePageViewModel>();
 builder.Services.AddScoped<ListPageViewModel>();
-builder.Services.AddScoped<CreateListPageViewModel>();
 
 await builder.Build().RunAsync();

@@ -21,4 +21,7 @@ public sealed class ListSortingConfiguration
         this.DefaultSecondSortOrder = defaultSecondSortOrder;
         this.DefaultSecondSortDirection = defaultSecondSortDirection;
     }
+
+    public static ListSortingConfiguration CreateDefault() =>
+        new(ListSortOrder.ByTitle, ListSortDirection.Ascending, ListSortOrder.ByYear, ListSortDirection.Ascending);
 }

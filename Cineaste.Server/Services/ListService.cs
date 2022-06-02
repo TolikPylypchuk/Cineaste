@@ -1,5 +1,7 @@
 namespace Cineaste.Server.Services;
 
+using System.Globalization;
+
 public sealed class ListService : IListService
 {
     private readonly CineasteDbContext dbContext;
@@ -71,6 +73,30 @@ public sealed class ListService : IListService
                 list.MovieKinds.Select(this.ToListKindModel).ToList(),
                 list.SeriesKinds.Select(this.ToListKindModel).ToList())
             : null;
+    }
+
+    public List<ListCultureModel> GetAllCultures() =>
+        CultureInfo.GetCultures(CultureTypes.AllCultures)
+            .Select(culture => new ListCultureModel(culture.ToString(), culture.EnglishName))
+            .ToList();
+
+    public async Task<SimpleListModel> CreateList(CreateListRequest request)
+    {
+        var list = new CineasteList(
+            Id.Create<CineasteList>(),
+            request.Name,
+            request.Handle,
+            new ListConfiguration(
+                Id.Create<ListConfiguration>(),
+                CultureInfo.GetCultureInfo(request.Culture),
+                request.DefaultSeasonTitle,
+                request.DefaultSeasonOriginalTitle,
+                ListSortingConfiguration.CreateDefault()));
+
+        this.dbContext.Lists.Add(list);
+        await this.dbContext.SaveChangesAsync();
+
+        return new SimpleListModel(list.Id.Value, list.Name, list.Handle);
     }
 
     private ListConfigurationModel ToConfigurationModel(ListConfiguration config) =>

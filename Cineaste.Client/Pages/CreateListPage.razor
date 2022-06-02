@@ -2,29 +2,71 @@
 
 @inherits ReactiveInjectableComponentBase<CreateListPageViewModel>
 
-@using System.Globalization
+@inject TooltipService TooltipService
 
 <div class="container d-flex flex-column align-items-center">
     <h1 class="display-1 mb-4">Create a List</h1>
 
     <RadzenCard class="w-50">
+        <h2 class="h5 mt-2 mb-4">Basic Info</h2>
+
         <RadzenLabel Text="Name" class="mb-2" />
         <RadzenTextBox @bind-Value="this.ViewModel!.Name" Class="w-100" />
 
         <RadzenLabel Text="Handle" class="mt-4 mb-2" />
         <RadzenTextBox Value="@this.ViewModel!.Handle" ReadOnly="true" Class="w-100" />
 
-        <RadzenLabel Text="Title language" class="mt-4 mb-2" />
-        <RadzenDropDown TValue="CultureInfo" Data="this.ViewModel!.AllCultures" AllowFiltering="true"
+        <div class="d-flex flex-row mt-4 mb-2">
+            <RadzenLabel Text="Title language" />
+            <RadzenIcon Icon="help" MouseEnter="this.ShowTitleLanguageTooltip" MouseLeave=@(e => this.CloseTooltip())
+                        class="ms-3" Style="cursor: pointer;" />
+        </div>
+
+        <RadzenDropDown TValue="ListCultureModel" Data="this.ViewModel!.AllCultures" AllowVirtualization="true"
+                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                         @bind-Value="this.ViewModel!.Culture" TextProperty="DisplayName" />
     </RadzenCard>
+
+    <RadzenCard class="w-50 mt-4">
+        <div class="d-flex flex-row mt-2 mb-4">
+            <h2 class="h5">Season Titles</h2>
+            <RadzenIcon Icon="help" MouseEnter="this.ShowDefaultSeasonTitlesTooltip"
+                        MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
+        </div>
+
+        <RadzenLabel Text="Default season title" class="mb-2" />
+        <RadzenTextBox @bind-Value="this.ViewModel!.DefaultSeasonTitle" Class="w-100" />
+
+        <RadzenLabel Text="Default season original title" class="mt-4 mb-2" />
+        <RadzenTextBox Value="@this.ViewModel!.DefaultSeasonOriginalTitle" Class="w-100" />
+    </RadzenCard>
+
+    <div class="d-flex flex-row">
+        <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
+                      Click="this.ViewModel!.GoToHomePage" />
+
+        <RadzenButton Text="Create" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
+                      Click="this.ViewModel!.CreateList" />
+    </div>
 </div>
 
 @code {
-    protected override void OnParametersSet()
+    private const string TitleLanguageTooltip = "Title language is used to sort titles in the list correctly";
+    private const string DefaultSeasonTitlesTooltip =
+        "Default titles used when creating new seasons - the # will be replaced with the season number";
+
+    protected override async Task OnParametersSetAsync()
     {
-        base.OnParametersSet();
-        this.ViewModel!.Name = String.Empty;
-        this.ViewModel!.Culture = CultureInfo.InvariantCulture;
+        await base.OnParametersSetAsync();
+        await this.ViewModel!.Initialize();
     }
+
+    private void ShowTitleLanguageTooltip(ElementReference elementReference) =>
+        this.TooltipService.Open(elementReference, TitleLanguageTooltip, new TooltipOptions { Duration = null });
+
+    private void ShowDefaultSeasonTitlesTooltip(ElementReference elementReference) =>
+        this.TooltipService.Open(elementReference, DefaultSeasonTitlesTooltip, new TooltipOptions { Duration = null });
+
+    private void CloseTooltip() =>
+        this.TooltipService.Close();
 }
