@@ -4,16 +4,17 @@ using System.Globalization;
 
 public sealed class CreateListPageViewModel : ReactiveObject
 {
-    private static readonly ListCultureModel DefaultCultureModel = new(
+    private static readonly SimpleCultureModel DefaultCultureModel = new(
         CultureInfo.InvariantCulture.ToString(), CultureInfo.InvariantCulture.DisplayName);
 
     private const string DefaultDefaultSeasonTitle = "Season #";
 
-    private readonly IListService listService;
+    private readonly IListApi listApi;
+    private readonly ICultureApi cultureApi;
     private readonly IPageNavigator pageNavigator;
 
-    private readonly SourceCache<ListCultureModel, string> allCulturesSource = new(culture => culture.Id);
-    private readonly ReadOnlyObservableCollection<ListCultureModel> allCultures;
+    private readonly SourceCache<SimpleCultureModel, string> allCulturesSource = new(culture => culture.Id);
+    private readonly ReadOnlyObservableCollection<SimpleCultureModel> allCultures;
 
     [Reactive]
     public string Name { get; set; } = String.Empty;
@@ -21,7 +22,7 @@ public sealed class CreateListPageViewModel : ReactiveObject
     public string Handle { [ObservableAsProperty] get; } = String.Empty;
 
     [Reactive]
-    public ListCultureModel Culture { get; set; } = DefaultCultureModel;
+    public SimpleCultureModel Culture { get; set; } = DefaultCultureModel;
 
     [Reactive]
     public string DefaultSeasonTitle { get; set; } = DefaultDefaultSeasonTitle;
@@ -29,12 +30,19 @@ public sealed class CreateListPageViewModel : ReactiveObject
     [Reactive]
     public string DefaultSeasonOriginalTitle { get; set; } = DefaultDefaultSeasonTitle;
 
-    public ReadOnlyObservableCollection<ListCultureModel> AllCultures =>
+    [Reactive]
+    public bool FailedLoadingCultures { get; set; }
+
+    [Reactive]
+    public bool FailedCreatingList { get; set; }
+
+    public ReadOnlyObservableCollection<SimpleCultureModel> AllCultures =>
         this.allCultures;
 
-    public CreateListPageViewModel(IListService listService, IPageNavigator pageNavigator)
+    public CreateListPageViewModel(IListApi listApi, ICultureApi cultureApi, IPageNavigator pageNavigator)
     {
-        this.listService = listService;
+        this.listApi = listApi;
+        this.cultureApi = cultureApi;
         this.pageNavigator = pageNavigator;
 
         this.WhenAnyValue(vm => vm.Name)
@@ -51,13 +59,28 @@ public sealed class CreateListPageViewModel : ReactiveObject
         this.Name = String.Empty;
         this.Culture = DefaultCultureModel;
 
-        var cultures = await this.listService.GetAllCultures();
+        await this.LoadCultures();
+    }
 
-        this.allCulturesSource.Edit(list =>
+    public async Task LoadCultures()
+    {
+        this.FailedLoadingCultures = false;
+
+        var response = await this.cultureApi.GetAllCultures();
+
+        if (response.IsSuccessStatusCode && response.Content is not null)
         {
-            list.Clear();
-            list.AddOrUpdate(cultures);
-        });
+            this.allCulturesSource.Edit(list =>
+            {
+                list.Clear();
+                list.AddOrUpdate(response.Content);
+            });
+
+            this.FailedLoadingCultures = false;
+        } else
+        {
+            this.FailedLoadingCultures = true;
+        }
     }
 
     public void GoToHomePage() =>
@@ -65,14 +88,19 @@ public sealed class CreateListPageViewModel : ReactiveObject
 
     public async Task CreateList()
     {
+        this.FailedCreatingList = false;
+
         var request = new CreateListRequest(
             this.Name, this.Handle, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle);
 
-        var model = await this.listService.CreateList(request);
+        var response = await this.listApi.CreateList(request);
 
-        if (model is not null)
+        if (response.IsSuccessStatusCode && response.Content is not null)
         {
-            pageNavigator.GoToListPage(model.Handle);
+            pageNavigator.GoToListPage(response.Content.Handle);
+        } else
+        {
+            this.FailedCreatingList = true;
         }
     }
 

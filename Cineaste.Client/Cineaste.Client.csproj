@@ -14,11 +14,13 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.161" />
-    <PackageReference Include="Radzen.Blazor" Version="3.18.12" />
+    <PackageReference Include="Radzen.Blazor" Version="3.18.13" />
     <PackageReference Include="ReactiveUI" Version="18.0.10" />
     <PackageReference Include="ReactiveUI.Blazor" Version="18.0.10" />
     <PackageReference Include="ReactiveUI.Fody" Version="18.0.10" />
     <PackageReference Include="ReactiveUI.Validation" Version="2.2.1" />
+    <PackageReference Include="Refit" Version="6.3.2" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="System.Text.Json" Version="6.0.4" />

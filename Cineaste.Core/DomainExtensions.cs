@@ -1,7 +1,49 @@
-namespace Cineaste.Server.Domain;
+namespace Cineaste.Core;
 
-public static class Extensions
+public static class DomainExtensions
 {
+    public static T Select<T>(
+        this FranchiseItem item,
+        Func<Movie, T> movieFunc,
+        Func<Series, T> seriesFunc,
+        Func<Franchise, T> franchiseFunc)
+    {
+        if (item.Movie is not null)
+        {
+            return movieFunc(item.Movie);
+        } else if (item.Series is not null)
+        {
+            return seriesFunc(item.Series);
+        } else if (item.Franchise is not null)
+        {
+            return franchiseFunc(item.Franchise);
+        } else
+        {
+            throw new InvalidOperationException("Exactly one franchise item component must be non-null");
+        }
+    }
+
+    public static void Do(
+        this FranchiseItem item,
+        Action<Movie> movieAction,
+        Action<Series> seriesAction,
+        Action<Franchise> franchiseAction)
+    {
+        if (item.Movie is not null)
+        {
+            movieAction(item.Movie);
+        } else if (item.Series is not null)
+        {
+            seriesAction(item.Series);
+        } else if (item.Franchise is not null)
+        {
+            franchiseAction(item.Franchise);
+        } else
+        {
+            throw new InvalidOperationException("Exactly one franchise item component must be non-null");
+        }
+    }
+
     public static string GetDisplayNumber(this FranchiseItem? item)
     {
         if (item is null)

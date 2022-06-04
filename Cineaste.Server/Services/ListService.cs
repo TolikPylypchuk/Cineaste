@@ -75,11 +75,6 @@ public sealed class ListService : IListService
             : null;
     }
 
-    public List<ListCultureModel> GetAllCultures() =>
-        CultureInfo.GetCultures(CultureTypes.AllCultures)
-            .Select(culture => new ListCultureModel(culture.ToString(), culture.EnglishName))
-            .ToList();
-
     public async Task<SimpleListModel> CreateList(CreateListRequest request)
     {
         var list = new CineasteList(

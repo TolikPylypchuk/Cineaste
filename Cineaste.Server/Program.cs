@@ -12,6 +12,7 @@ builder.Services.Configure<JsonOptions>(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<ICultureExtractor, CultureExtractor>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<TestDataProvider>();
 
@@ -30,6 +31,7 @@ app.UseRouting();
 
 app.MapControllers();
 
+app.MapCultureRoutes();
 app.MapListRoutes();
 
 app.MapFallbackToFile("index.html");

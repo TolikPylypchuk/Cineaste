@@ -15,26 +15,6 @@ public sealed record ListModel(
     List<ListKindModel> MovieKinds,
     List<ListKindModel> SeriesKinds);
 
-public sealed record ListItemModel(
-    Guid Id,
-    ListItemType Type,
-    bool ShouldBeShown,
-    string DisplayNumber,
-    string Title,
-    string OriginalTitle,
-    int StartYear,
-    int EndYear,
-    string Color,
-    ListFranchiseItemModel? FranchiseItem)
-{
-    public string Years =>
-        this.StartYear == this.EndYear ? this.StartYear.ToString() : $"{this.StartYear}-{this.EndYear}";
-}
-
-public enum ListItemType { Movie, Series, Franchise }
-
-public sealed record ListFranchiseItemModel(Guid FranchiseId, int SequenceNumber);
-
 public sealed record ListKindModel(
     Guid Id,
     string Name,
@@ -53,8 +33,6 @@ public sealed record ListConfigurationModel(
     ListSortDirection DefaultFirstSortDirection,
     ListSortOrder DefaultSecondSortOrder,
     ListSortDirection DefaultSecondSortDirection);
-
-public sealed record ListCultureModel(string Id, string DisplayName);
 
 public sealed record CreateListRequest(
     string Name,

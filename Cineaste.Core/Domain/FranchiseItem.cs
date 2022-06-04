@@ -85,38 +85,4 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
     private FranchiseItem(Id<FranchiseItem> id)
         : base(id) =>
         this.parentFranchise = null!;
-
-    public T Select<T>(Func<Movie, T> movieFunc, Func<Series, T> seriesFunc, Func<Franchise, T> franchiseFunc)
-    {
-        if (this.Movie is not null)
-        {
-            return movieFunc(this.Movie);
-        } else if (this.Series is not null)
-        {
-            return seriesFunc(this.Series);
-        } else if (this.Franchise is not null)
-        {
-            return franchiseFunc(this.Franchise);
-        } else
-        {
-            throw new InvalidOperationException("Exactly one franchise item component must be non-null");
-        }
-    }
-
-    public void Do(Action<Movie> movieAction, Action<Series> seriesAction, Action<Franchise> franchiseAction)
-    {
-        if (this.Movie is not null)
-        {
-            movieAction(this.Movie);
-        } else if (this.Series is not null)
-        {
-            seriesAction(this.Series);
-        } else if (this.Franchise is not null)
-        {
-            franchiseAction(this.Franchise);
-        } else
-        {
-            throw new InvalidOperationException("Exactly one franchise item component must be non-null");
-        }
-    }
 }

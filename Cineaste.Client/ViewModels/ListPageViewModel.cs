@@ -6,7 +6,7 @@ using Nito.Comparers;
 
 public sealed class ListPageViewModel : ReactiveObject
 {
-    private readonly IListService listService;
+    private readonly IListApi listApi;
 
     private readonly SourceCache<ListItemModel, Guid> itemsSource = new(item => item.Id);
     private readonly ReadOnlyObservableCollection<ListItemModel> items;
@@ -19,17 +19,20 @@ public sealed class ListPageViewModel : ReactiveObject
     public string Handle { get; set; } = String.Empty;
 
     [Reactive]
-    public ListModel? List { get; set; }
+    public ListModel? List { get; private set; }
 
     [Reactive]
-    public bool IsLoading { get; set; }
+    public bool IsLoading { get; private set; }
+
+    [Reactive]
+    public bool FailedLoading { get; private set; }
 
     public ReadOnlyObservableCollection<ListItemModel> Items =>
         this.items;
 
-    public ListPageViewModel(IListService listService)
+    public ListPageViewModel(IListApi listApi)
     {
-        this.listService = listService;
+        this.listApi = listApi;
 
         this.itemsSource.Connect()
             .Sort(this.comparer)
@@ -37,14 +40,19 @@ public sealed class ListPageViewModel : ReactiveObject
             .Subscribe();
     }
 
-    public async Task Initialize()
+    public async Task Initialize(string handle)
     {
+        this.Handle = handle;
+
         this.IsLoading = true;
+        this.FailedLoading = false;
 
-        this.List = await this.listService.GetList(this.Handle);
+        var response = await this.listApi.GetList(this.Handle);
 
-        if (this.List is not null)
+        if (response.IsSuccessStatusCode && response.Content is not null)
         {
+            this.List = response.Content;
+
             this.itemsById = this.List.Movies
                 .Concat(this.List.Series)
                 .Concat(this.List.Franchises)
@@ -58,6 +66,14 @@ public sealed class ListPageViewModel : ReactiveObject
                 list.AddOrUpdate(this.List.Series);
                 list.AddOrUpdate(this.List.Franchises);
             });
+        } else
+        {
+            this.List = null;
+
+            this.itemsSource.Clear();
+            this.itemsById.Clear();
+
+            this.FailedLoading = true;
         }
 
         this.IsLoading = false;
