@@ -6,7 +6,7 @@
     @if (this.ViewModel!.IsLoading)
     {
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
-    } else if (!this.ViewModel!.FailedLoading)
+    } else if (!this.ViewModel!.FailedLoading && this.ViewModel!.List is not null)
     {
         <h1 class="display-3 mt-md-2 mt-1">@this.ViewModel!.List.Name</h1>
 

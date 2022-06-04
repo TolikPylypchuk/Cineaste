@@ -2,16 +2,11 @@ namespace Cineaste.Server.Services;
 
 using System.Globalization;
 
-public sealed class ListService : IListService
+[AutoConstructor]
+public sealed partial class ListService : IListService
 {
     private readonly CineasteDbContext dbContext;
     private readonly ILogger<ListService> logger;
-
-    public ListService(CineasteDbContext dbContext, ILogger<ListService> logger)
-    {
-        this.dbContext = dbContext;
-        this.logger = logger;
-    }
 
     public async Task<List<SimpleListModel>> GetAllLists()
     {
