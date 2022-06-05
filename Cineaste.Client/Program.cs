@@ -28,6 +28,8 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 
+builder.Services.AddScoped<IApiExecutorFactory, ApiExecutorFactory>();
+builder.Services.AddScoped(typeof(IApiExecutor<>), typeof(ApiExecutor<>));
 builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 
 builder.Services.AddScoped<CreateListPageViewModel>();

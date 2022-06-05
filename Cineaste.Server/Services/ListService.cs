@@ -6,6 +6,7 @@ using System.Globalization;
 public sealed partial class ListService : IListService
 {
     private readonly CineasteDbContext dbContext;
+    private readonly IListMapper mapper;
     private readonly ILogger<ListService> logger;
 
     public async Task<List<SimpleListModel>> GetAllLists()
@@ -22,7 +23,7 @@ public sealed partial class ListService : IListService
             .ToList();
     }
 
-    public async Task<ListModel?> GetList(string handle)
+    public async Task<ListModel> GetList(string handle)
     {
         logger.LogDebug("Getting the list with handle {Handle}", handle);
 
@@ -57,21 +58,14 @@ public sealed partial class ListService : IListService
             .SingleOrDefaultAsync(list => list.Handle == handle);
 
         return list is not null
-            ? new ListModel(
-                list.Id.Value,
-                list.Name,
-                list.Handle,
-                this.ToConfigurationModel(list.Configuration),
-                list.Movies.Select(this.ToListItemModel).ToList(),
-                list.Series.Select(this.ToListItemModel).ToList(),
-                list.Franchises.Select(this.ToListItemModel).ToList(),
-                list.MovieKinds.Select(this.ToListKindModel).ToList(),
-                list.SeriesKinds.Select(this.ToListKindModel).ToList())
-            : null;
+            ? this.mapper.MapToListModel(list)
+            : throw this.NotFound(handle);
     }
 
     public async Task<SimpleListModel> CreateList(CreateListRequest request)
     {
+        logger.LogDebug("Creating a list with handle {Handle}", request.Handle);
+
         var list = new CineasteList(
             Id.Create<CineasteList>(),
             request.Name,
@@ -89,70 +83,9 @@ public sealed partial class ListService : IListService
         return new SimpleListModel(list.Id.Value, list.Name, list.Handle);
     }
 
-    private ListConfigurationModel ToConfigurationModel(ListConfiguration config) =>
-        new(
-            config.Culture.ToString(),
-            config.DefaultSeasonTitle,
-            config.DefaultSeasonOriginalTitle,
-            config.SortingConfiguration.DefaultFirstSortOrder,
-            config.SortingConfiguration.DefaultFirstSortDirection,
-            config.SortingConfiguration.DefaultSecondSortOrder,
-            config.SortingConfiguration.DefaultSecondSortDirection);
-
-    private ListItemModel ToListItemModel(Movie movie) =>
-        new(
-            movie.Id.Value,
-            ListItemType.Movie,
-            true,
-            movie.FranchiseItem.GetDisplayNumber(),
-            movie.Title.Name,
-            movie.OriginalTitle.Name,
-            movie.Year,
-            movie.Year,
-            movie.GetActiveColor().HexValue,
-            this.ToFranchiseItemModel(movie.FranchiseItem));
-
-    private ListItemModel ToListItemModel(Series series) =>
-        new(
-            series.Id.Value,
-            ListItemType.Series,
-            true,
-            series.FranchiseItem.GetDisplayNumber(),
-            series.Title.Name,
-            series.OriginalTitle.Name,
-            series.StartYear,
-            series.EndYear,
-            series.GetActiveColor().HexValue,
-            this.ToFranchiseItemModel(series.FranchiseItem));
-
-    private ListItemModel ToListItemModel(Franchise franchise) =>
-        new(
-            franchise.Id.Value,
-            ListItemType.Franchise,
-            franchise.ShowTitles,
-            franchise.FranchiseItem.GetDisplayNumber(),
-            franchise.ShowTitles && franchise.Title is not null
-                ? $"{franchise.Title.Name}:"
-                : String.Empty,
-            franchise.ShowTitles && franchise.OriginalTitle is not null
-                ? $"{franchise.OriginalTitle.Name}:"
-                : String.Empty,
-            franchise.GetFirstChild()?.GetStartYear() ?? 0,
-            franchise.GetLastChild()?.GetEndYear() ?? 0,
-            franchise.GetActiveColor()?.HexValue ?? String.Empty,
-            this.ToFranchiseItemModel(franchise.FranchiseItem));
-
-    private ListKindModel ToListKindModel<TKind>(Kind<TKind> kind)
-        where TKind : Kind<TKind> =>
-        new(
-            kind.Id.Value,
-            kind.Name,
-            kind.WatchedColor.HexValue,
-            kind.NotWatchedColor.HexValue,
-            kind.NotReleasedColor.HexValue,
-            kind is MovieKind ? ListKindTarget.Movie : ListKindTarget.Series);
-
-    [return: NotNullIfNotNull("item")]
-    private ListFranchiseItemModel? ToFranchiseItemModel(FranchiseItem? item) =>
-        item is not null ? new(item.ParentFranchise.Id.Value, item.SequenceNumber) : null;
+    private Exception NotFound(string? handle) =>
+        new NotFoundException(
+            $"Could not find a list with handle {handle}",
+            "list",
+            new Dictionary<string, object?> { ["handle"] = handle });
 }

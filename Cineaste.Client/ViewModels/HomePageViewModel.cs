@@ -2,7 +2,7 @@ namespace Cineaste.Client.ViewModels;
 
 public sealed class HomePageViewModel : ReactiveObject
 {
-    private readonly IListApi api;
+    private readonly IApiExecutorFactory api;
     private readonly IPageNavigator pageNavigator;
 
     private readonly SourceCache<SimpleListModel, Guid> listsSource = new(list => list.Id);
@@ -17,7 +17,7 @@ public sealed class HomePageViewModel : ReactiveObject
     public ReadOnlyObservableCollection<SimpleListModel> Lists =>
         this.lists;
 
-    public HomePageViewModel(IListApi api, IPageNavigator pageNavigator)
+    public HomePageViewModel(IApiExecutorFactory api, IPageNavigator pageNavigator)
     {
         this.api = api;
         this.pageNavigator = pageNavigator;
@@ -35,9 +35,9 @@ public sealed class HomePageViewModel : ReactiveObject
 
         this.listsSource.Clear();
 
-        var lists = await this.api.GetLists();
+        var response = await this.api.For<IListApi>().Fetch(api => api.GetLists());
 
-        if (lists.IsSuccessStatusCode && lists.Content is not null)
+        if (response is ApiSuccess<List<SimpleListModel>> lists)
         {
             this.listsSource.AddOrUpdate(lists.Content);
         } else

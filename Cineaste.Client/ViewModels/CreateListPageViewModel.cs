@@ -9,8 +9,7 @@ public sealed class CreateListPageViewModel : ReactiveObject
 
     private const string DefaultDefaultSeasonTitle = "Season #";
 
-    private readonly IListApi listApi;
-    private readonly ICultureApi cultureApi;
+    private readonly IApiExecutorFactory api;
     private readonly IPageNavigator pageNavigator;
 
     private readonly SourceCache<SimpleCultureModel, string> allCulturesSource = new(culture => culture.Id);
@@ -39,10 +38,9 @@ public sealed class CreateListPageViewModel : ReactiveObject
     public ReadOnlyObservableCollection<SimpleCultureModel> AllCultures =>
         this.allCultures;
 
-    public CreateListPageViewModel(IListApi listApi, ICultureApi cultureApi, IPageNavigator pageNavigator)
+    public CreateListPageViewModel(IApiExecutorFactory api, IPageNavigator pageNavigator)
     {
-        this.listApi = listApi;
-        this.cultureApi = cultureApi;
+        this.api = api;
         this.pageNavigator = pageNavigator;
 
         this.WhenAnyValue(vm => vm.Name)
@@ -66,14 +64,14 @@ public sealed class CreateListPageViewModel : ReactiveObject
     {
         this.FailedLoadingCultures = false;
 
-        var response = await this.cultureApi.GetAllCultures();
+        var response = await this.api.For<ICultureApi>().Fetch(api => api.GetAllCultures());
 
-        if (response.IsSuccessStatusCode && response.Content is not null)
+        if (response is ApiSuccess<List<SimpleCultureModel>> cultures)
         {
             this.allCulturesSource.Edit(list =>
             {
                 list.Clear();
-                list.AddOrUpdate(response.Content);
+                list.AddOrUpdate(cultures.Content);
             });
 
             this.FailedLoadingCultures = false;
@@ -93,11 +91,11 @@ public sealed class CreateListPageViewModel : ReactiveObject
         var request = new CreateListRequest(
             this.Name, this.Handle, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle);
 
-        var response = await this.listApi.CreateList(request);
+        var response = await this.api.For<IListApi>().Fetch(api => api.CreateList(request));
 
-        if (response.IsSuccessStatusCode && response.Content is not null)
+        if (response is ApiSuccess<SimpleListModel> list)
         {
-            pageNavigator.GoToListPage(response.Content.Handle);
+            pageNavigator.GoToListPage(list.Content.Handle);
         } else
         {
             this.FailedCreatingList = true;

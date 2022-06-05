@@ -6,7 +6,7 @@ using Nito.Comparers;
 
 public sealed class ListPageViewModel : ReactiveObject
 {
-    private readonly IListApi listApi;
+    private readonly IApiExecutorFactory api;
 
     private readonly SourceCache<ListItemModel, Guid> itemsSource = new(item => item.Id);
     private readonly ReadOnlyObservableCollection<ListItemModel> items;
@@ -30,9 +30,9 @@ public sealed class ListPageViewModel : ReactiveObject
     public ReadOnlyObservableCollection<ListItemModel> Items =>
         this.items;
 
-    public ListPageViewModel(IListApi listApi)
+    public ListPageViewModel(IApiExecutorFactory api)
     {
-        this.listApi = listApi;
+        this.api = api;
 
         this.itemsSource.Connect()
             .Sort(this.comparer)
@@ -47,11 +47,11 @@ public sealed class ListPageViewModel : ReactiveObject
         this.IsLoading = true;
         this.FailedLoading = false;
 
-        var response = await this.listApi.GetList(this.Handle);
+        var response = await this.api.For<IListApi>().Fetch(api => api.GetList(this.Handle));
 
-        if (response.IsSuccessStatusCode && response.Content is not null)
+        if (response is ApiSuccess<ListModel> list)
         {
-            this.List = response.Content;
+            this.List = list.Content;
 
             this.itemsById = this.List.Movies
                 .Concat(this.List.Series)
