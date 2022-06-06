@@ -10,31 +10,28 @@
     <RadzenButton Text="Create a list" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" class="mt-4"
                   Click=@(() => this.ViewModel!.NavigateToCreateList()) />
 
-    @if (this.ViewModel!.IsLoading)
-    {
-        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
-    } else if (!this.ViewModel!.LoadingFailed)
-    {
-        <RadzenDataList WrapItems="true" Data="this.ViewModel!.Lists" TItem="SimpleListModel" class="mt-4">
-            <Template Context="list">
-                <div role="button" class="container border-bottom" style="border: none; border-radius: 0;"
-                     @ondblclick=@(() => this.ViewModel!.NavigateToList(list))>
-                    <div class="row">
-                        <p class="lead m-1">@list.Name</p>
+    <RemoteContent ViewModel="this.ViewModel!.GetListsCall">
+        <Loading>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+        </Loading>
+
+        <Content>
+            <RadzenDataList WrapItems="true" Data="this.ViewModel!.Lists" TItem="SimpleListModel" class="mt-4">
+                <Template Context="list">
+                    <div role="button" class="container border-bottom" style="border: none; border-radius: 0;"
+                         @ondblclick=@(() => this.ViewModel!.NavigateToList(list))>
+                        <div class="row">
+                            <p class="lead m-1">@list.Name</p>
+                        </div>
                     </div>
-                </div>
-            </Template>
-        </RadzenDataList>
-    } else
-    {
-        <div class="alert alert-danger w-50 mt-3">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <p class="m-1">Loading lists has failed</p>
-                <RadzenButton Text="Try again" Click="this.ViewModel!.LoadLists" class="m-1"
-                              ButtonStyle="ButtonStyle.Danger" />
-            </div>
-        </div>
-    }
+                </Template>
+            </RadzenDataList>
+        </Content>
+
+        <Problem Context="problem">
+            <ApiProblemAlert Text="Loading lists has failed" TryAgain="this.ViewModel!.LoadLists" Class="w-50 mt-3" />
+        </Problem>
+    </RemoteContent>
 </div>
 
 @code {

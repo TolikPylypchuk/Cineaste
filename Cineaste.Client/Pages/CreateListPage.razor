@@ -27,16 +27,12 @@
                         @bind-Value="this.ViewModel!.Culture" TextProperty="DisplayName" />
     </RadzenCard>
 
-    @if (this.ViewModel!.FailedLoadingCultures)
-    {
-        <div class="alert alert-danger w-50 mt-3">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <p class="m-1">Loading available languages has failed</p>
-                <RadzenButton Text="Try again" Click="this.ViewModel!.LoadCultures" class="m-1"
-                              ButtonStyle="ButtonStyle.Danger" />
-            </div>
-        </div>
-    }
+    <RemoteContent ViewModel="this.ViewModel!.GetAllCulturesCall">
+        <Problem Context="problem">
+            <ApiProblemAlert Text="Loading available languages has failed" TryAgain="this.ViewModel!.LoadCultures"
+                             Problem="problem" Class="w-50 mt-3" />
+        </Problem>
+    </RemoteContent>
 
     <RadzenCard class="w-50 mt-2">
         <div class="d-flex flex-row mt-2 mb-4">
@@ -52,13 +48,6 @@
         <RadzenTextBox Value="@this.ViewModel!.DefaultSeasonOriginalTitle" Class="w-100" />
     </RadzenCard>
 
-    @if (this.ViewModel!.FailedCreatingList)
-    {
-        <div class="alert alert-danger w-50 mt-3">
-            <p class="m-1">Creating the list has failed</p>
-        </div>
-    }
-
     <div class="d-flex flex-row">
         <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
                       Click="this.ViewModel!.GoToHomePage" />
@@ -66,6 +55,17 @@
         <RadzenButton Text="Create" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
                       Click="this.ViewModel!.CreateList" />
     </div>
+
+    <RemoteContent ViewModel="this.ViewModel!.CreateListCall">
+        <Loading>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+        </Loading>
+
+        <Problem Context="problem">
+            <ApiProblemAlert Text="Creating the list has failed" ShowButton="false" Problem="problem"
+                             Class="w-50 mt-3" />
+        </Problem>
+    </RemoteContent>
 </div>
 
 @code {

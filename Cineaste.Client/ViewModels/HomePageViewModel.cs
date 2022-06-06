@@ -2,25 +2,21 @@ namespace Cineaste.Client.ViewModels;
 
 public sealed class HomePageViewModel : ReactiveObject
 {
-    private readonly IApiExecutorFactory api;
     private readonly IPageNavigator pageNavigator;
 
     private readonly SourceCache<SimpleListModel, Guid> listsSource = new(list => list.Id);
     private readonly ReadOnlyObservableCollection<SimpleListModel> lists;
 
-    [Reactive]
-    public bool IsLoading { get; set; }
-
-    [Reactive]
-    public bool LoadingFailed { get; set; }
+    public RemoteCall<List<SimpleListModel>> GetListsCall { get; }
 
     public ReadOnlyObservableCollection<SimpleListModel> Lists =>
         this.lists;
 
-    public HomePageViewModel(IApiExecutorFactory api, IPageNavigator pageNavigator)
+    public HomePageViewModel(IRemoteCallFactory remoteCallFactory, IPageNavigator pageNavigator)
     {
-        this.api = api;
         this.pageNavigator = pageNavigator;
+
+        this.GetListsCall = remoteCallFactory.Create((IListApi api) => api.GetLists());
 
         this.listsSource.Connect()
             .SortBy(list => list.Name)
@@ -30,22 +26,14 @@ public sealed class HomePageViewModel : ReactiveObject
 
     public async Task LoadLists()
     {
-        this.IsLoading = true;
-        this.LoadingFailed = false;
-
         this.listsSource.Clear();
 
-        var response = await this.api.For<IListApi>().Fetch(api => api.GetLists());
+        await this.GetListsCall.Execute();
 
-        if (response is ApiSuccess<List<SimpleListModel>> lists)
+        if (this.GetListsCall.Result is not null)
         {
-            this.listsSource.AddOrUpdate(lists.Content);
-        } else
-        {
-            this.LoadingFailed = true;
+            this.listsSource.AddOrUpdate(this.GetListsCall.Result);
         }
-
-        this.IsLoading = false;
     }
 
     public void NavigateToCreateList() =>

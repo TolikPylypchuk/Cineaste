@@ -9,7 +9,6 @@ public sealed class CreateListPageViewModel : ReactiveObject
 
     private const string DefaultDefaultSeasonTitle = "Season #";
 
-    private readonly IApiExecutorFactory api;
     private readonly IPageNavigator pageNavigator;
 
     private readonly SourceCache<SimpleCultureModel, string> allCulturesSource = new(culture => culture.Id);
@@ -29,19 +28,21 @@ public sealed class CreateListPageViewModel : ReactiveObject
     [Reactive]
     public string DefaultSeasonOriginalTitle { get; set; } = DefaultDefaultSeasonTitle;
 
-    [Reactive]
-    public bool FailedLoadingCultures { get; set; }
-
-    [Reactive]
-    public bool FailedCreatingList { get; set; }
-
     public ReadOnlyObservableCollection<SimpleCultureModel> AllCultures =>
         this.allCultures;
 
-    public CreateListPageViewModel(IApiExecutorFactory api, IPageNavigator pageNavigator)
+    public RemoteCall<List<SimpleCultureModel>> GetAllCulturesCall { get; }
+
+    public RemoteCall<SimpleListModel> CreateListCall { get; }
+
+    public CreateListPageViewModel(IRemoteCallFactory remoteCallFactory, IPageNavigator pageNavigator)
     {
-        this.api = api;
         this.pageNavigator = pageNavigator;
+
+        this.GetAllCulturesCall = remoteCallFactory.Create((ICultureApi api) => api.GetAllCultures());
+
+        this.CreateListCall = remoteCallFactory.Create((IListApi api) => api.CreateList(new CreateListRequest(
+            this.Name, this.Handle, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle)));
 
         this.WhenAnyValue(vm => vm.Name)
             .Select(this.CreateHandleFromName)
@@ -62,22 +63,15 @@ public sealed class CreateListPageViewModel : ReactiveObject
 
     public async Task LoadCultures()
     {
-        this.FailedLoadingCultures = false;
+        await this.GetAllCulturesCall.Execute();
 
-        var response = await this.api.For<ICultureApi>().Fetch(api => api.GetAllCultures());
-
-        if (response is ApiSuccess<List<SimpleCultureModel>> cultures)
+        if (this.GetAllCulturesCall.Result is not null)
         {
             this.allCulturesSource.Edit(list =>
             {
                 list.Clear();
-                list.AddOrUpdate(cultures.Content);
+                list.AddOrUpdate(this.GetAllCulturesCall.Result);
             });
-
-            this.FailedLoadingCultures = false;
-        } else
-        {
-            this.FailedLoadingCultures = true;
         }
     }
 
@@ -86,19 +80,11 @@ public sealed class CreateListPageViewModel : ReactiveObject
 
     public async Task CreateList()
     {
-        this.FailedCreatingList = false;
+        await this.CreateListCall.Execute();
 
-        var request = new CreateListRequest(
-            this.Name, this.Handle, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle);
-
-        var response = await this.api.For<IListApi>().Fetch(api => api.CreateList(request));
-
-        if (response is ApiSuccess<SimpleListModel> list)
+        if (this.CreateListCall.Result is not null)
         {
-            pageNavigator.GoToListPage(list.Content.Handle);
-        } else
-        {
-            this.FailedCreatingList = true;
+            pageNavigator.GoToListPage(this.CreateListCall.Result.Handle);
         }
     }
 

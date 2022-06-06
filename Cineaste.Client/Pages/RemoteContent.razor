@@ -1,0 +1,31 @@
+@typeparam T
+@inherits ReactiveComponentBase<RemoteCall<T>>
+
+@if (this.ViewModel is not null)
+{
+    @if (this.ViewModel.IsLoading && this.Loading is not null)
+    {
+        @this.Loading
+    }
+
+    @if (this.ViewModel.Result is not null && this.Content is not null)
+    {
+        @this.Content(this.ViewModel.Result)
+    }
+
+    @if (this.ViewModel.Problem is not null && this.Problem is not null)
+    {
+        @this.Problem(this.ViewModel.Problem)
+    }
+}
+
+@code {
+    [Parameter]
+    public RenderFragment? Loading { get; set; }
+
+    [Parameter]
+    public RenderFragment<T>? Content { get; set; }
+
+    [Parameter]
+    public RenderFragment<ProblemDetails>? Problem { get; set; }
+}

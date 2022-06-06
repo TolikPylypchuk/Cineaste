@@ -1,0 +1,7 @@
+[data-bs-toggle="collapse"].collapsed .if-not-collapsed {
+    display: none;
+}
+
+[data-bs-toggle="collapse"]:not(.collapsed) .if-collapsed {
+    display: none;
+}

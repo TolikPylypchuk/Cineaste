@@ -6,8 +6,6 @@ using Nito.Comparers;
 
 public sealed class ListPageViewModel : ReactiveObject
 {
-    private readonly IApiExecutorFactory api;
-
     private readonly SourceCache<ListItemModel, Guid> itemsSource = new(item => item.Id);
     private readonly ReadOnlyObservableCollection<ListItemModel> items;
 
@@ -21,18 +19,14 @@ public sealed class ListPageViewModel : ReactiveObject
     [Reactive]
     public ListModel? List { get; private set; }
 
-    [Reactive]
-    public bool IsLoading { get; private set; }
-
-    [Reactive]
-    public bool FailedLoading { get; private set; }
-
     public ReadOnlyObservableCollection<ListItemModel> Items =>
         this.items;
 
-    public ListPageViewModel(IApiExecutorFactory api)
+    public RemoteCall<ListModel> GetListCall { get; }
+
+    public ListPageViewModel(IRemoteCallFactory remoteCallFactory)
     {
-        this.api = api;
+        this.GetListCall = remoteCallFactory.Create((IListApi api) => api.GetList(this.Handle));
 
         this.itemsSource.Connect()
             .Sort(this.comparer)
@@ -44,14 +38,11 @@ public sealed class ListPageViewModel : ReactiveObject
     {
         this.Handle = handle;
 
-        this.IsLoading = true;
-        this.FailedLoading = false;
+        await this.GetListCall.Execute();
 
-        var response = await this.api.For<IListApi>().Fetch(api => api.GetList(this.Handle));
-
-        if (response is ApiSuccess<ListModel> list)
+        if (this.GetListCall.Result is not null)
         {
-            this.List = list.Content;
+            this.List = this.GetListCall.Result;
 
             this.itemsById = this.List.Movies
                 .Concat(this.List.Series)
@@ -72,11 +63,7 @@ public sealed class ListPageViewModel : ReactiveObject
 
             this.itemsSource.Clear();
             this.itemsById.Clear();
-
-            this.FailedLoading = true;
         }
-
-        this.IsLoading = false;
     }
 
     private void SetComparer()

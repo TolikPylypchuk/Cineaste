@@ -3,47 +3,47 @@
 @inherits ReactiveInjectableComponentBase<ListPageViewModel>
 
 <div class="container d-flex flex-column align-items-center">
-    @if (this.ViewModel!.IsLoading)
-    {
-        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
-    } else if (!this.ViewModel!.FailedLoading && this.ViewModel!.List is not null)
-    {
-        <h1 class="display-3 mt-md-2 mt-1">@this.ViewModel!.List.Name</h1>
+    <RemoteContent ViewModel="this.ViewModel!.GetListCall">
+        <Loading>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+        </Loading>
 
-        <RadzenDataList WrapItems="true" Data="@this.ViewModel!.Items" TItem="ListItemModel" class="mt-4">
-            <Template Context="item">
-                <div role="button" class="container border-bottom"
-                        style=@($"border: none; border-radius: 0; color: {item.Color};")>
-                    <div class="d-flex flex-row">
-                        <p class="lead text-start m-1" style="width: 50px">
-                            @item.DisplayNumber
-                        </p>
+        <Content>
+            <h1 class="display-3 mt-md-2 mt-1">@this.ViewModel!.List.Name</h1>
 
-                        <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
-                            @item.Title
-                        </p>
+            <RadzenDataList WrapItems="true" Data="@this.ViewModel!.Items" TItem="ListItemModel" class="mt-4">
+                <Template Context="item">
+                    <div role="button" class="container border-bottom"
+                            style=@($"border: none; border-radius: 0; color: {item.Color};")>
+                        <div class="d-flex flex-row">
+                            <p class="lead text-start m-1" style="width: 50px">
+                                @item.DisplayNumber
+                            </p>
 
-                        <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
-                            @item.OriginalTitle
-                        </p>
+                            <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
+                                @item.Title
+                            </p>
 
-                        <p class="lead text-end m-1" style="width: 125px">
-                            @item.Years
-                        </p>
+                            <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
+                                @item.OriginalTitle
+                            </p>
+
+                            <p class="lead text-end m-1" style="width: 125px">
+                                @item.Years
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </Template>
-        </RadzenDataList>
-    } else
-    {
-        <div class="alert alert-danger w-50 mt-3">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <p class="m-1">Loading the list has failed - please check that the URL is correct, or try again</p>
-                <RadzenButton Text="Try again" Click=@(() => this.ViewModel!.Initialize(this.Handle)) class="m-1"
-                              ButtonStyle="ButtonStyle.Danger" />
-            </div>
-        </div>
-    }
+                </Template>
+            </RadzenDataList>
+        </Content>
+
+        <Problem Context="problem">
+            <ApiProblemAlert Text=@(problem.Status == 404
+                                ? "The list wasn't found - please check that the URL is correct"
+                                : "Loading the list has failed") Problem="problem" Class="w-50 mt-3"
+                             TryAgain=@(() => this.ViewModel!.Initialize(this.Handle)) />
+        </Problem>
+    </RemoteContent>
 </div>
 
 @code {
