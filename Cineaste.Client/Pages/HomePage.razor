@@ -1,14 +1,14 @@
 @page "/"
-
 @inherits ReactiveInjectableComponentBase<HomePageViewModel>
+@inject IStringLocalizer<Resources> Loc
 
 <div class="container d-flex flex-column align-items-center">
-    <h1 class="display-1 mt-md-2 mt-1">Cineaste</h1>
+    <h1 class="display-1 mt-md-2 mt-1">@this.Loc["Cineaste"]</h1>
 
-    <h2 class="display-5 mt-2">My Lists</h2>
+    <h2 class="display-5 mt-2">@this.Loc["HomePage.MyLists"]</h2>
 
-    <RadzenButton Text="Create a list" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" class="mt-4"
-                  Click=@(() => this.ViewModel!.NavigateToCreateList()) />
+    <RadzenButton Text="@this.Loc["HomePage.CreateList"]" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary"
+                  Click=@(() => this.ViewModel!.NavigateToCreateList()) class="mt-4" />
 
     <RemoteContent ViewModel="this.ViewModel!.GetListsCall">
         <Loading>

@@ -1,7 +1,5 @@
 namespace Cineaste.Client.ViewModels;
 
-using System.Globalization;
-
 public sealed class CreateListPageViewModel : ReactiveObject
 {
     private static readonly SimpleCultureModel DefaultCultureModel = new(

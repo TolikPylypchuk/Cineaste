@@ -25,6 +25,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = baseAddress });
 builder.Services.AddRefitClient<ICultureApi>(baseAddress);
 builder.Services.AddRefitClient<IListApi>(baseAddress);
 
+builder.Services.AddLocalization();
+
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
@@ -36,5 +38,9 @@ builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 builder.Services.AddScoped<CreateListPageViewModel>();
 builder.Services.AddScoped<HomePageViewModel>();
 builder.Services.AddScoped<ListPageViewModel>();
+
+var english = new CultureInfo("en-US");
+CultureInfo.DefaultThreadCurrentCulture = english;
+CultureInfo.DefaultThreadCurrentUICulture = english;
 
 await builder.Build().RunAsync();

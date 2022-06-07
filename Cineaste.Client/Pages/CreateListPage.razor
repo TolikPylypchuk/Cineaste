@@ -1,23 +1,22 @@
 @page "/new"
-
 @inherits ReactiveInjectableComponentBase<CreateListPageViewModel>
-
 @inject TooltipService TooltipService
+@inject IStringLocalizer<Resources> Loc
 
 <div class="container d-flex flex-column align-items-center">
-    <h1 class="display-1 mb-4">Create a List</h1>
+    <h1 class="display-1 mb-4">@this.Loc["CreateListPage.CreateList"]</h1>
 
     <RadzenCard class="w-50 mb-2">
-        <h2 class="h5 mt-2 mb-4">Basic Info</h2>
+        <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
 
-        <RadzenLabel Text="Name" class="mb-2" />
+        <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
         <RadzenTextBox @bind-Value="this.ViewModel!.Name" Class="w-100" />
 
-        <RadzenLabel Text="Handle" class="mt-4 mb-2" />
+        <RadzenLabel Text="@this.Loc["CreateListPage.List.Handle"]" class="mt-4 mb-2" />
         <RadzenTextBox Value="@this.ViewModel!.Handle" ReadOnly="true" Class="w-100" />
 
         <div class="d-flex flex-row mt-4 mb-2">
-            <RadzenLabel Text="Title language" />
+            <RadzenLabel Text="@this.Loc["CreateListPage.List.TitleLanguage"]" />
             <RadzenIcon Icon="help" MouseEnter="this.ShowTitleLanguageTooltip" MouseLeave=@(e => this.CloseTooltip())
                         class="ms-3" Style="cursor: pointer;" />
         </div>
@@ -29,30 +28,30 @@
 
     <RemoteContent ViewModel="this.ViewModel!.GetAllCulturesCall">
         <Problem Context="problem">
-            <ApiProblemAlert Text="Loading available languages has failed" TryAgain="this.ViewModel!.LoadCultures"
+            <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.Cultures"]" TryAgain="this.ViewModel!.LoadCultures"
                              Problem="problem" Class="w-50 mt-3" />
         </Problem>
     </RemoteContent>
 
     <RadzenCard class="w-50 mt-2">
         <div class="d-flex flex-row mt-2 mb-4">
-            <h2 class="h5">Season Titles</h2>
+            <h2 class="h5">@this.Loc["CreateListPage.List.SeasonTitles"]</h2>
             <RadzenIcon Icon="help" MouseEnter="this.ShowDefaultSeasonTitlesTooltip"
                         MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
         </div>
 
-        <RadzenLabel Text="Default season title" class="mb-2" />
+        <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonTitle"]" class="mb-2" />
         <RadzenTextBox @bind-Value="this.ViewModel!.DefaultSeasonTitle" Class="w-100" />
 
-        <RadzenLabel Text="Default season original title" class="mt-4 mb-2" />
+        <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonOriginalTitle"]" class="mt-4 mb-2" />
         <RadzenTextBox Value="@this.ViewModel!.DefaultSeasonOriginalTitle" Class="w-100" />
     </RadzenCard>
 
     <div class="d-flex flex-row">
-        <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
+        <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
                       Click="this.ViewModel!.GoToHomePage" />
 
-        <RadzenButton Text="Create" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
+        <RadzenButton Text="@this.Loc["Button.Create"]" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
                       Click="this.ViewModel!.CreateList" />
     </div>
 
@@ -62,17 +61,13 @@
         </Loading>
 
         <Problem Context="problem">
-            <ApiProblemAlert Text="Creating the list has failed" ShowButton="false" Problem="problem"
+            <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.CreateList"]" ShowButton="false" Problem="problem"
                              Class="w-50 mt-3" />
         </Problem>
     </RemoteContent>
 </div>
 
 @code {
-    private const string TitleLanguageTooltip = "Title language is used to sort titles in the list correctly";
-    private const string DefaultSeasonTitlesTooltip =
-        "Default titles used when creating new seasons - the # will be replaced with the season number";
-
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
@@ -80,10 +75,16 @@
     }
 
     private void ShowTitleLanguageTooltip(ElementReference elementReference) =>
-        this.TooltipService.Open(elementReference, TitleLanguageTooltip, new TooltipOptions { Duration = null });
+        this.TooltipService.Open(
+            elementReference,
+            this.Loc["CreateListPage.Help.TitleLanguage"],
+            new TooltipOptions { Duration = null });
 
     private void ShowDefaultSeasonTitlesTooltip(ElementReference elementReference) =>
-        this.TooltipService.Open(elementReference, DefaultSeasonTitlesTooltip, new TooltipOptions { Duration = null });
+        this.TooltipService.Open(
+            elementReference,
+            this.Loc["CreateListPage.Help.DefaultSeasonTitles"],
+            new TooltipOptions { Duration = null });
 
     private void CloseTooltip() =>
         this.TooltipService.Close();

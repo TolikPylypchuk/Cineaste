@@ -1,4 +1,4 @@
-namespace Cineaste.Shared;
+namespace Cineaste.Shared.Lists;
 
 public sealed record ListItemModel(
     Guid Id,

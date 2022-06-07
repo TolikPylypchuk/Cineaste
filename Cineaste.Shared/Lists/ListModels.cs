@@ -1,4 +1,4 @@
-namespace Cineaste.Shared;
+namespace Cineaste.Shared.Lists;
 
 using System.ComponentModel;
 
@@ -33,10 +33,3 @@ public sealed record ListConfigurationModel(
     ListSortDirection DefaultFirstSortDirection,
     ListSortOrder DefaultSecondSortOrder,
     ListSortDirection DefaultSecondSortDirection);
-
-public sealed record CreateListRequest(
-    string Name,
-    string Handle,
-    string Culture,
-    string DefaultSeasonTitle,
-    string DefaultSeasonOriginalTitle);

@@ -1,7 +1,5 @@
 namespace Cineaste.Client.ViewModels;
 
-using System.Globalization;
-
 using Nito.Comparers;
 
 public sealed class ListPageViewModel : ReactiveObject

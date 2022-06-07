@@ -85,7 +85,8 @@ public sealed partial class ListService : IListService
 
     private Exception NotFound(string? handle) =>
         new NotFoundException(
+            "NotFound.List",
             $"Could not find a list with handle {handle}",
-            "list",
+            "Resource.List",
             new Dictionary<string, object?> { ["handle"] = handle });
 }

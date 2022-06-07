@@ -1,5 +1,4 @@
 @page "/list/{handle}"
-
 @inherits ReactiveInjectableComponentBase<ListPageViewModel>
 
 <div class="container d-flex flex-column align-items-center">
@@ -38,9 +37,7 @@
         </Content>
 
         <Problem Context="problem">
-            <ApiProblemAlert Text=@(problem.Status == 404
-                                ? "The list wasn't found - please check that the URL is correct"
-                                : "Loading the list has failed") Problem="problem" Class="w-50 mt-3"
+            <ApiProblemAlert Text="Loading the list has failed" Problem="problem" Class="w-50 mt-3"
                              TryAgain=@(() => this.ViewModel!.Initialize(this.Handle)) />
         </Problem>
     </RemoteContent>

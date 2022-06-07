@@ -26,14 +26,14 @@ builder.Services.AddProblemDetails(options =>
 
     options.IncludeExceptionDetails = (ctx, ex) => isDevelopment;
     options.ExceptionDetailsPropertyName = "exception";
-    options.ShouldLogUnhandledException = (ctx, ex, details) => ex is not ApplicationException;
+    options.ShouldLogUnhandledException = (ctx, ex, details) => ex is not CineasteException;
 
     options.Map<NotFoundException>(ex => new ProblemDetails
     {
         Type = $"https://httpstatuses.io/{StatusCodes.Status404NotFound}",
         Title = ReasonPhrases.GetReasonPhrase(StatusCodes.Status404NotFound),
         Status = StatusCodes.Status404NotFound,
-        Detail = ex.Message,
+        Detail = $"Problem.{ex.MessageCode}",
         Extensions = { ["resource"] = ex.Resource, ["properties"] = ex.Properties }
     });
 });

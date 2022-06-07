@@ -1,31 +1,33 @@
+@inject IStringLocalizer<Resources> Loc
+
 <div class="alert alert-danger @this.Class">
     <div class="d-flex flex-row justify-content-between align-items-center">
-        <p class="m-1">@this.Text</p>
+        <p class="m-1">@this.Loc[this.Text]</p>
 
         <div>
             @if (this.Problem is not null)
             {
                 <a class="alert-link collapsed m-1 ms-3" data-bs-toggle="collapse" href="#problem-details" role="button"
                     aria-expanded="false" aria-controls="details">
-                    <span class="if-collapsed">Show details</span>
-                    <span class="if-not-collapsed">Hide details</span>
+                    <span class="if-collapsed">@this.Loc["ApiProblemAlert.ShowDetails"]</span>
+                    <span class="if-not-collapsed">@this.Loc["ApiProblemAlert.HideDetails"]</span>
                 </a>
             }
 
             @if (this.ShowButton)
             {
-                <RadzenButton Text="@this.ButtonText" Click="this.TryAgain" class="m-1 ms-3"
+                <RadzenButton Text="@this.Loc[this.ButtonText]" Click="this.TryAgain" class="m-1 ms-3"
                               ButtonStyle="ButtonStyle.Danger" />
             }
         </div>
     </div>
 
-    @if (this.Problem is not null)
+    @if (this.Problem is not null && this.Problem.Detail is not null)
     {
         <div class="collapse" id="problem-details">
             <hr />
             <p class="m-1">
-                @this.Problem.Detail
+                @this.Loc[this.Problem.Detail]
                 (<a class="alert-link" href="@this.Problem.Type" target="_blank">
                     @this.Problem.Status @this.Problem.Title
                 </a>)
@@ -42,7 +44,7 @@
     public string Text { get; set; } = String.Empty;
 
     [Parameter]
-    public string ButtonText { get; set; } = "Try again";
+    public string ButtonText { get; set; } = "ApiProblemAlert.TryAgain";
 
     [Parameter]
     public bool ShowButton { get; set; } = true;
