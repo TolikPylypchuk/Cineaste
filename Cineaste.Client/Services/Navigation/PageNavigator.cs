@@ -13,7 +13,7 @@ public sealed class PageNavigator : IPageNavigator
         this.navigationManager.NavigateTo("/");
 
     public void GoToCreateListPage() =>
-        this.navigationManager.NavigateTo("/create/list");
+        this.navigationManager.NavigateTo("/new");
 
     public void GoToListPage(string handle) =>
         this.navigationManager.NavigateTo($"/list/{handle}");

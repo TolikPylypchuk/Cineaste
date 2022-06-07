@@ -9,7 +9,7 @@
         </Loading>
 
         <Content>
-            <h1 class="display-3 mt-md-2 mt-1">@this.ViewModel!.List.Name</h1>
+            <h1 class="display-3 mt-md-2 mt-1">@this.ViewModel!.List?.Name</h1>
 
             <RadzenDataList WrapItems="true" Data="@this.ViewModel!.Items" TItem="ListItemModel" class="mt-4">
                 <Template Context="item">
