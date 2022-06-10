@@ -10,6 +10,9 @@ global using Cineaste.Server.Data;
 global using Cineaste.Server.Exceptions;
 global using Cineaste.Server.Services;
 global using Cineaste.Shared;
-global using Cineaste.Shared.Lists;
+global using Cineaste.Shared.ListModels;
+global using Cineaste.Shared.Validation;
+
+global using FluentValidation;
 
 global using Microsoft.EntityFrameworkCore;

@@ -192,4 +192,10 @@
   <data name="Problem.Unknown" xml:space="preserve">
     <value>An unknown problem has occured</value>
   </data>
+  <data name="Problem.ValidationFailed" xml:space="preserve">
+    <value>The validation has failed</value>
+  </data>
+  <data name="Problem.ValidationFailed.CreateList" xml:space="preserve">
+    <value>Creating the list has failed - invalid request</value>
+  </data>
 </root>

@@ -40,10 +40,10 @@ public sealed class CreateListPageViewModel : ReactiveObject
         this.GetAllCulturesCall = remoteCallFactory.Create((ICultureApi api) => api.GetAllCultures());
 
         this.CreateListCall = remoteCallFactory.Create((IListApi api) => api.CreateList(new CreateListRequest(
-            this.Name, this.Handle, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle)));
+            this.Name, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle)));
 
         this.WhenAnyValue(vm => vm.Name)
-            .Select(this.CreateHandleFromName)
+            .Select(ListUtils.CreateHandleFromName)
             .ToPropertyEx(this, vm => vm.Handle);
 
         this.allCulturesSource.Connect()
@@ -85,28 +85,4 @@ public sealed class CreateListPageViewModel : ReactiveObject
             pageNavigator.GoToListPage(this.CreateListCall.Result.Handle);
         }
     }
-
-    private string CreateHandleFromName(string name) =>
-        Uri.EscapeDataString(name.Trim()
-            .Replace("&", "-and-")
-            .Replace("@", "-at-")
-            .Replace("/", String.Empty)
-            .Replace("\\", String.Empty)
-            .Replace(".", String.Empty)
-            .Replace(",", String.Empty)
-            .Replace("!", String.Empty)
-            .Replace("?", String.Empty)
-            .Replace("|", String.Empty)
-            .Replace("#", String.Empty)
-            .Replace("$", String.Empty)
-            .Replace("^", String.Empty)
-            .Replace("*", String.Empty)
-            .Replace("(", String.Empty)
-            .Replace(")", String.Empty)
-            .Replace(" ", "-")
-            .Replace("\t", "-")
-            .Replace("\r\n", "-")
-            .Replace("\n", "-")
-            .Replace("--", "-"))
-            .ToLowerInvariant();
 }

@@ -16,6 +16,8 @@ public static class ListRoutes
     private static async Task<ListModel> GetList(string handle, IListService listService) =>
         await listService.GetList(handle);
 
-    private static async Task<SimpleListModel> CreateList(CreateListRequest request, IListService listService) =>
+    private static async Task<SimpleListModel> CreateList(
+        Validated<CreateListRequest> request,
+        IListService listService) =>
         await listService.CreateList(request);
 }

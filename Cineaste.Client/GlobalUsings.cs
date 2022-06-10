@@ -11,7 +11,8 @@ global using Cineaste.Client.Services.Navigation;
 global using Cineaste.Client.ViewModels;
 global using Cineaste.Shared;
 global using Cineaste.Shared.Comparers;
-global using Cineaste.Shared.Lists;
+global using Cineaste.Shared.ListModels;
+global using Cineaste.Shared.Validation;
 
 global using DynamicData;
 

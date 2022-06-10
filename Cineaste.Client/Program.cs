@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 
+using Cineaste.Shared.Validation.Json;
+
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -16,6 +18,7 @@ builder.Services.Configure<JsonSerializerOptions>(options =>
 {
     options.PropertyNameCaseInsensitive = true;
     options.Converters.Add(new JsonStringEnumConverter());
+    options.Converters.Add(new ValidatedJsonConverterFactory());
 });
 
 var baseAddress = new Uri(builder.HostEnvironment.BaseAddress);

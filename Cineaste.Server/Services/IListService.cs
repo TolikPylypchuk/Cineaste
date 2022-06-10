@@ -5,5 +5,5 @@ public interface IListService
     Task<List<SimpleListModel>> GetAllLists();
     Task<ListModel> GetList(string handle);
 
-    Task<SimpleListModel> CreateList(CreateListRequest request);
+    Task<SimpleListModel> CreateList(Validated<CreateListRequest> request);
 }

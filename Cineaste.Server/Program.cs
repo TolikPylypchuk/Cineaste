@@ -1,12 +1,12 @@
 using System.Text.Json.Serialization;
 
 using Cineaste.Server.Infrastructure;
+using Cineaste.Shared.Validation.Json;
 
 using Hellang.Middleware.ProblemDetails;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.WebUtilities;
 
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
@@ -16,7 +16,10 @@ builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer
     builder.Configuration.GetConnectionString("Default"), sql => sql.MigrationsHistoryTable("Migrations")));
 
 builder.Services.Configure<JsonOptions>(options =>
-    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.SerializerOptions.Converters.Add(new ValidatedJsonConverterFactory());
+});
 
 builder.Services.AddSingleton<IActionResultExecutor<ObjectResult>, ProblemDetailsResultExecutor>();
 
@@ -26,16 +29,9 @@ builder.Services.AddProblemDetails(options =>
 
     options.IncludeExceptionDetails = (ctx, ex) => isDevelopment;
     options.ExceptionDetailsPropertyName = "exception";
-    options.ShouldLogUnhandledException = (ctx, ex, details) => ex is not CineasteException;
+    options.ShouldLogUnhandledException = (ctx, ex, details) => ex is not CineasteException and not ValidationException;
 
-    options.Map<NotFoundException>(ex => new ProblemDetails
-    {
-        Type = $"https://httpstatuses.io/{StatusCodes.Status404NotFound}",
-        Title = ReasonPhrases.GetReasonPhrase(StatusCodes.Status404NotFound),
-        Status = StatusCodes.Status404NotFound,
-        Detail = $"Problem.{ex.MessageCode}",
-        Extensions = { ["resource"] = ex.Resource, ["properties"] = ex.Properties }
-    });
+    options.MapCineasteExceptions();
 });
 
 builder.Services.AddScoped<ICultureExtractor, CultureExtractor>();

@@ -284,5 +284,23 @@ namespace Cineaste.Client.Localization {
                 return ResourceManager.GetString("Problem.Unknown", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The validation has failed.
+        /// </summary>
+        public static string Problem_ValidationFailed {
+            get {
+                return ResourceManager.GetString("Problem.ValidationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating the list has failed - invalid request.
+        /// </summary>
+        public static string Problem_ValidationFailed_CreateList {
+            get {
+                return ResourceManager.GetString("Problem.ValidationFailed.CreateList", resourceCulture);
+            }
+        }
     }
 }

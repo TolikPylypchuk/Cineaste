@@ -62,19 +62,21 @@ public sealed partial class ListService : IListService
             : throw this.NotFound(handle);
     }
 
-    public async Task<SimpleListModel> CreateList(CreateListRequest request)
+    public async Task<SimpleListModel> CreateList(Validated<CreateListRequest> request)
     {
-        logger.LogDebug("Creating a list with handle {Handle}", request.Handle);
+        string handle = ListUtils.CreateHandleFromName(request.Value.Name);
+
+        logger.LogDebug("Creating a list with handle {Handle}", handle);
 
         var list = new CineasteList(
             Id.Create<CineasteList>(),
-            request.Name,
-            request.Handle,
+            request.Value.Name,
+            handle,
             new ListConfiguration(
                 Id.Create<ListConfiguration>(),
-                CultureInfo.GetCultureInfo(request.Culture),
-                request.DefaultSeasonTitle,
-                request.DefaultSeasonOriginalTitle,
+                CultureInfo.GetCultureInfo(request.Value.Culture),
+                request.Value.DefaultSeasonTitle,
+                request.Value.DefaultSeasonOriginalTitle,
                 ListSortingConfiguration.CreateDefault()));
 
         this.dbContext.Lists.Add(list);
