@@ -16,7 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="DynamicData" Version="7.8.6" />
+    <PackageReference Include="DynamicData" Version="7.9.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
@@ -27,9 +27,9 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.161" />
     <PackageReference Include="Radzen.Blazor" Version="3.18.14" />
-    <PackageReference Include="ReactiveUI" Version="18.0.10" />
-    <PackageReference Include="ReactiveUI.Blazor" Version="18.0.10" />
-    <PackageReference Include="ReactiveUI.Fody" Version="18.0.10" />
+    <PackageReference Include="ReactiveUI" Version="18.1.8" />
+    <PackageReference Include="ReactiveUI.Blazor" Version="18.1.8" />
+    <PackageReference Include="ReactiveUI.Fody" Version="18.1.8" />
     <PackageReference Include="ReactiveUI.Validation" Version="2.2.1" />
     <PackageReference Include="Refit" Version="6.3.2" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />

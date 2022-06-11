@@ -3,7 +3,7 @@ namespace Cineaste.Client.Api;
 [AutoConstructor]
 public sealed partial class RemoteCall<T> : ReactiveObject
 {
-    private readonly Func<Task<ApiResult<T>>> call;
+    private readonly Func<Task<IApiResponse<T>>> call;
 
     [Reactive]
     public bool IsLoading { get; private set; }
@@ -21,12 +21,12 @@ public sealed partial class RemoteCall<T> : ReactiveObject
 
         var result = await this.call();
 
-        if (result is ApiSuccess<T> successfulResult)
+        if (result.IsSuccessStatusCode)
         {
-            this.Result = successfulResult.Content;
-        } else if (result is ApiFailure<T> failedResult)
+            this.Result = result.Content;
+        } else if (result.Error is ValidationApiException exception)
         {
-            this.Problem = failedResult.Problem;
+            this.Problem = exception.Content;
         }
 
         this.IsLoading = false;
@@ -35,6 +35,6 @@ public sealed partial class RemoteCall<T> : ReactiveObject
 
 public static class RemoteCall
 {
-    public static RemoteCall<T> Create<T>(Func<Task<ApiResult<T>>> call) =>
+    public static RemoteCall<T> Create<T>(Func<Task<IApiResponse<T>>> call) =>
         new(call);
 }
