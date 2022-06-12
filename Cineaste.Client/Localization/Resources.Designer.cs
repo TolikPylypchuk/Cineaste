@@ -259,6 +259,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A list with this handle already exists.
+        /// </summary>
+        public static string Problem_Conflict_List {
+            get {
+                return ResourceManager.GetString("Problem.Conflict.List", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The list couldn&apos;t be found - please check that the URL is correct.
         /// </summary>
         public static string Problem_NotFound_List {
@@ -295,7 +304,7 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating the list has failed - invalid request.
+        ///   Looks up a localized string similar to The list to create is invalid.
         /// </summary>
         public static string Problem_ValidationFailed_CreateList {
             get {

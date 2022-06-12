@@ -68,6 +68,11 @@ public sealed partial class ListService : IListService
 
         logger.LogDebug("Creating a list with handle {Handle}", handle);
 
+        if (await this.dbContext.Lists.AnyAsync(list => list.Handle == handle))
+        {
+            throw this.Conflict(handle);
+        }
+
         var list = new CineasteList(
             Id.Create<CineasteList>(),
             request.Value.Name,
@@ -89,6 +94,13 @@ public sealed partial class ListService : IListService
         new NotFoundException(
             "NotFound.List",
             $"Could not find a list with handle {handle}",
+            "Resource.List",
+            new Dictionary<string, object?> { ["handle"] = handle });
+
+    private Exception Conflict(string? handle) =>
+        new ConflictException(
+            "Conflict.List",
+            $"The list with handle {handle} already exists",
             "Resource.List",
             new Dictionary<string, object?> { ["handle"] = handle });
 }

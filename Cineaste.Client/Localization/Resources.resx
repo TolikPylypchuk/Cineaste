@@ -183,6 +183,9 @@
   <data name="HomePage.Problem.LoadingListsFailed" xml:space="preserve">
     <value>Loading lists has failed</value>
   </data>
+  <data name="Problem.Conflict.List" xml:space="preserve">
+    <value>A list with this handle already exists</value>
+  </data>
   <data name="Problem.NotFound.List" xml:space="preserve">
     <value>The list couldn't be found - please check that the URL is correct</value>
   </data>
@@ -196,6 +199,6 @@
     <value>The validation has failed</value>
   </data>
   <data name="Problem.ValidationFailed.CreateList" xml:space="preserve">
-    <value>Creating the list has failed - invalid request</value>
+    <value>The list to create is invalid</value>
   </data>
 </root>

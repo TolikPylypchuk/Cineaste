@@ -1,5 +1,6 @@
 namespace Cineaste.Shared.Validation;
 
+using System.Collections.Immutable;
 using System.Globalization;
 
 using static ValidationErrorCodes;
@@ -8,7 +9,7 @@ public sealed class CreateListRequestValidator : AbstractValidator<CreateListReq
 {
     private static readonly IReadOnlySet<string> AvailableCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
         .Select(culture => culture.ToString())
-        .ToHashSet();
+        .ToImmutableHashSet();
 
     public CreateListRequestValidator()
     {
@@ -19,8 +20,6 @@ public sealed class CreateListRequestValidator : AbstractValidator<CreateListReq
             .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.Name), TooLong));
 
         this.RuleFor(req => req.Culture)
-            .NotEmpty()
-            .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.Culture), Empty))
             .Must(AvailableCultures.Contains)
             .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.Culture), Invalid));
 

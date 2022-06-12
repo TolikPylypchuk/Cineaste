@@ -35,5 +35,14 @@ public static class ExceptionMappingExtensions
             Detail = $"Problem.{ex.MessageCode}",
             Extensions = { ["resource"] = ex.Resource, ["properties"] = ex.Properties }
         });
+
+        options.Map<ConflictException>(ex => new ProblemDetails
+        {
+            Type = $"https://httpstatuses.io/{Status409Conflict}",
+            Title = ReasonPhrases.GetReasonPhrase(Status409Conflict),
+            Status = Status409Conflict,
+            Detail = $"Problem.{ex.MessageCode}",
+            Extensions = { ["resource"] = ex.Resource, ["properties"] = ex.Properties }
+        });
     }
 }
