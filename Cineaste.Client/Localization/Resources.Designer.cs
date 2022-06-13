@@ -268,6 +268,33 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to home page.
+        /// </summary>
+        public static string ListPage_Menu_Back {
+            get {
+                return ResourceManager.GetString("ListPage.Menu.Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List.
+        /// </summary>
+        public static string ListPage_Menu_List {
+            get {
+                return ResourceManager.GetString("ListPage.Menu.List", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string ListPage_Menu_Settings {
+            get {
+                return ResourceManager.GetString("ListPage.Menu.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A list with this handle already exists.
         /// </summary>
         public static string Problem_Conflict_List {

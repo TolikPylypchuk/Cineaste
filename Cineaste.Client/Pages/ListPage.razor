@@ -1,46 +1,58 @@
 @page "/list/{handle}"
 @inherits ReactiveInjectableComponentBase<ListPageViewModel>
 
-<div class="container d-flex flex-column align-items-center">
-    <RemoteContent ViewModel="this.ViewModel!.GetListCall">
-        <Loading>
-            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
-        </Loading>
+<div class="d-flex row w-100 h-100">
+    <div class="col-2">
+        <ListSidebar Handle="@this.Handle" />
+    </div>
 
-        <Content>
-            <h1 class="display-3 mt-md-2 mt-1">@this.ViewModel!.List?.Name</h1>
+    <div class="col-8 d-flex flex-column align-items-center h-100">
+        <RemoteContent ViewModel="this.ViewModel!.GetListCall">
+            <Loading>
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"
+                                   class="w-25 mt-4" />
+            </Loading>
 
-            <RadzenDataList WrapItems="true" Data="@this.ViewModel!.Items" TItem="ListItemModel" class="mt-4">
-                <Template Context="item">
-                    <div role="button" class="container border-bottom"
-                            style=@($"border: none; border-radius: 0; color: {item.Color};")>
-                        <div class="d-flex flex-row">
-                            <p class="lead text-start m-1" style="width: 50px">
-                                @item.DisplayNumber
-                            </p>
+            <Content>
+                <h1 class="display-5 mt-md-1 mt-1 flex-shrink-0">@this.ViewModel!.List?.Name</h1>
 
-                            <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
-                                @item.Title
-                            </p>
+                <RadzenDataList WrapItems="true" Data="@this.ViewModel!.Items" TItem="ListItemModel"
+                                class="overflow-auto h-100">
+                    <Template Context="item">
+                        <div role="button" class="container border-bottom"
+                                style=@($"border: none; border-radius: 0; color: {item.Color};")>
+                            <div class="d-flex flex-row">
+                                <p class="lead text-start m-1" style="width: 50px">
+                                    @item.DisplayNumber
+                                </p>
 
-                            <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
-                                @item.OriginalTitle
-                            </p>
+                                <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
+                                    @item.Title
+                                </p>
 
-                            <p class="lead text-end m-1" style="width: 125px">
-                                @item.Years
-                            </p>
+                                <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
+                                    @item.OriginalTitle
+                                </p>
+
+                                <p class="lead text-end m-1" style="width: 125px">
+                                    @item.Years
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                </Template>
-            </RadzenDataList>
-        </Content>
+                    </Template>
+                </RadzenDataList>
+            </Content>
 
-        <Problem Context="problem">
-            <ApiProblemAlert Text="Loading the list has failed" Problem="problem" Class="w-50 mt-3"
-                             TryAgain=@(() => this.ViewModel!.Initialize(this.Handle)) />
-        </Problem>
-    </RemoteContent>
+            <Problem Context="problem">
+                <ApiProblemAlert Text="Loading the list has failed" Problem="problem" Class="w-50 mt-3"
+                                 TryAgain=@(() => this.ViewModel!.Initialize(this.Handle)) />
+            </Problem>
+        </RemoteContent>
+    </div>
+
+    <div class="col-2">
+
+    </div>
 </div>
 
 @code {

@@ -1,0 +1,13 @@
+@inject IStringLocalizer<Resources> Loc
+
+<RadzenPanelMenu Match="NavLinkMatch.All" class="h-100">
+    <RadzenPanelMenuItem Text="@this.Loc["ListPage.Menu.List"]" Icon="list" Path=@($"/list/{this.Handle}") />
+    <RadzenPanelMenuItem Text="@this.Loc["ListPage.Menu.Settings"]" Icon="settings"
+                         Path=@($"/list/{this.Handle}/settings") />
+    <RadzenPanelMenuItem Text="@this.Loc["ListPage.Menu.Back"]" Icon="navigate_before" Path="/" />
+</RadzenPanelMenu>
+
+@code {
+    [Parameter]
+    public string Handle { get; set; } = String.Empty;
+}

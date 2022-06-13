@@ -1,0 +1,16 @@
+@page "/list/{handle}/settings"
+
+<div class="row w-100 h-100">
+    <div class="col-2">
+        <ListSidebar Handle="@this.Handle" />
+    </div>
+
+    <div class="col-10">
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Handle { get; set; } = String.Empty;
+}

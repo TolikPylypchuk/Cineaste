@@ -2,13 +2,15 @@
 @inherits ReactiveInjectableComponentBase<HomePageViewModel>
 @inject IStringLocalizer<Resources> Loc
 
-<div class="container d-flex flex-column align-items-center">
-    <h1 class="display-1 mt-md-2 mt-1">@this.Loc["Cineaste"]</h1>
+<div class="container d-flex flex-column align-items-center h-100">
+    <div class="d-flex flex-column align-items-center flex-shrink-0">
+        <h1 class="display-1 mt-md-2 mt-1">@this.Loc["Cineaste"]</h1>
 
-    <h2 class="display-5 mt-2">@this.Loc["HomePage.MyLists"]</h2>
+        <h2 class="display-5 mt-2">@this.Loc["HomePage.MyLists"]</h2>
 
-    <RadzenButton Text="@this.Loc["HomePage.CreateList"]" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary"
-                  Click=@(() => this.ViewModel!.NavigateToCreateList()) class="mt-4" />
+        <RadzenButton Text="@this.Loc["HomePage.CreateList"]" Icon="add_circle_outline" class="mt-4"
+                      ButtonStyle="ButtonStyle.Primary" Click=@(() => this.ViewModel!.NavigateToCreateList()) />
+    </div>
 
     <RemoteContent ViewModel="this.ViewModel!.GetListsCall">
         <Loading>
@@ -16,7 +18,8 @@
         </Loading>
 
         <Content>
-            <RadzenDataList WrapItems="true" Data="this.ViewModel!.Lists" TItem="SimpleListModel" class="mt-4">
+            <RadzenDataList WrapItems="true" Data="this.ViewModel!.Lists" TItem="SimpleListModel"
+                            class="mt-4 overflow-auto">
                 <Template Context="list">
                     <div role="button" class="container border-bottom" style="border: none; border-radius: 0;"
                          @ondblclick=@(() => this.ViewModel!.NavigateToList(list))>

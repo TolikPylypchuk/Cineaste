@@ -186,6 +186,15 @@
   <data name="HomePage.Problem.LoadingListsFailed" xml:space="preserve">
     <value>Loading lists has failed</value>
   </data>
+  <data name="ListPage.Menu.Back" xml:space="preserve">
+    <value>Back to home page</value>
+  </data>
+  <data name="ListPage.Menu.List" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="ListPage.Menu.Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
   <data name="Problem.Conflict.List" xml:space="preserve">
     <value>A list with this handle already exists</value>
   </data>
