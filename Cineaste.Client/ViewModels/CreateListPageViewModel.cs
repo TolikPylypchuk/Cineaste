@@ -37,6 +37,9 @@ public sealed class CreateListPageViewModel : ReactiveValidationObject
     public ValidationHelper DefaultSeasonTitleRule { get; }
     public ValidationHelper DefaultSeasonOriginalTitleRule { get; }
 
+    public bool IsValid { [ObservableAsProperty] get; }
+    public bool IsInvalid { [ObservableAsProperty] get; }
+
     public CreateListPageViewModel(IRemoteCallFactory remoteCallFactory, IPageNavigator pageNavigator)
     {
         this.pageNavigator = pageNavigator;
@@ -57,6 +60,9 @@ public sealed class CreateListPageViewModel : ReactiveValidationObject
 
         this.DefaultSeasonOriginalTitleRule = this.ValidationRule(
             vm => vm.DefaultSeasonOriginalTitle, this.UsingValidator<CreateListRequest>());
+
+        this.IsValid().ToPropertyEx(this, vm => vm.IsValid);
+        this.IsValid().Select(isValid => !isValid).ToPropertyEx(this, vm => vm.IsInvalid);
 
         this.allCulturesSource.Connect()
             .Bind(out this.allCultures)
