@@ -6,54 +6,67 @@
 <div class="container d-flex flex-column align-items-center">
     <h1 class="display-1 mb-4">@this.Loc["CreateListPage.CreateList"]</h1>
 
-    <RadzenCard class="w-50 mb-2">
-        <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
+    <RadzenTemplateForm TItem="CreateListPageViewModel" Data="@this.ViewModel" Submit="@this.ViewModel!.CreateList"
+                        OnInvalidSubmit=@(() => { }) class="w-50">
+        <RadzenCard class="mb-2">
+            <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
 
-        <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
-        <RadzenTextBox @bind-Value="this.ViewModel!.Name" Class="w-100" />
+            <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
+            <RadzenTextBox @bind-Value="this.ViewModel!.Name" Name="Name" Class="w-100" />
+            <ReactiveValidator Rule="this.ViewModel!.NameRule" Component="Name" />
 
-        <RadzenLabel Text="@this.Loc["CreateListPage.List.Handle"]" class="mt-4 mb-2" />
-        <RadzenTextBox Value="@this.ViewModel!.Handle" ReadOnly="true" Class="w-100" />
+            <div class="d-flex flex-row mt-4 mb-2">
+                <RadzenLabel Text="@this.Loc["CreateListPage.List.Handle"]" />
+                <RadzenIcon Icon="help" MouseEnter="this.ShowHandleTooltip" MouseLeave=@(e => this.CloseTooltip())
+                            class="ms-3" Style="cursor: pointer;" />
+            </div>
 
-        <div class="d-flex flex-row mt-4 mb-2">
-            <RadzenLabel Text="@this.Loc["CreateListPage.List.TitleLanguage"]" />
-            <RadzenIcon Icon="help" MouseEnter="this.ShowTitleLanguageTooltip" MouseLeave=@(e => this.CloseTooltip())
-                        class="ms-3" Style="cursor: pointer;" />
+            <RadzenTextBox Value="@this.ViewModel!.Handle" ReadOnly="true" Class="w-100" />
+
+            <div class="d-flex flex-row mt-4 mb-2">
+                <RadzenLabel Text="@this.Loc["CreateListPage.List.TitleLanguage"]" />
+                <RadzenIcon Icon="help" MouseEnter="this.ShowTitleLanguageTooltip"
+                            MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
+            </div>
+
+            <RadzenDropDown TValue="SimpleCultureModel" Data="this.ViewModel!.AllCultures" AllowVirtualization="true"
+                            AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            @bind-Value="this.ViewModel!.Culture" TextProperty="DisplayName" />
+        </RadzenCard>
+
+        <RemoteContent ViewModel="this.ViewModel!.GetAllCulturesCall">
+            <Problem Context="problem">
+                <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.Cultures"]" Problem="problem" Class="w-50 my-2"
+                                 TryAgain="this.ViewModel!.LoadCultures" />
+            </Problem>
+        </RemoteContent>
+
+        <RadzenCard class="mt-2">
+            <div class="d-flex flex-row mt-2 mb-4">
+                <h2 class="h5">@this.Loc["CreateListPage.List.SeasonTitles"]</h2>
+                <RadzenIcon Icon="help" MouseEnter="this.ShowDefaultSeasonTitlesTooltip"
+                            MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
+            </div>
+
+            <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonTitle"]" class="mb-2" />
+            <RadzenTextBox @bind-Value="this.ViewModel!.DefaultSeasonTitle" Name="DefaultSeasonTitle" Class="w-100" />
+            <ReactiveValidator Rule="this.ViewModel!.DefaultSeasonTitleRule" Component="DefaultSeasonTitle" />
+
+            <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonOriginalTitle"]" class="mt-4 mb-2" />
+            <RadzenTextBox @bind-Value="@this.ViewModel!.DefaultSeasonOriginalTitle" Name="DefaultSeasonOriginalTitle"
+                           Class="w-100" />
+            <ReactiveValidator Rule="this.ViewModel!.DefaultSeasonOriginalTitleRule"
+                               Component="DefaultSeasonOriginalTitle" />
+        </RadzenCard>
+
+        <div class="d-flex flex-row justify-content-center">
+            <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
+                          Click="this.ViewModel!.GoToHomePage" />
+
+            <RadzenButton Text="@this.Loc["Button.Create"]" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
+                          Click="this.ViewModel!.CreateList" ButtonType="ButtonType.Submit" />
         </div>
-
-        <RadzenDropDown TValue="SimpleCultureModel" Data="this.ViewModel!.AllCultures" AllowVirtualization="true"
-                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                        @bind-Value="this.ViewModel!.Culture" TextProperty="DisplayName" />
-    </RadzenCard>
-
-    <RemoteContent ViewModel="this.ViewModel!.GetAllCulturesCall">
-        <Problem Context="problem">
-            <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.Cultures"]" TryAgain="this.ViewModel!.LoadCultures"
-                             Problem="problem" Class="w-50 mt-3" />
-        </Problem>
-    </RemoteContent>
-
-    <RadzenCard class="w-50 mt-2">
-        <div class="d-flex flex-row mt-2 mb-4">
-            <h2 class="h5">@this.Loc["CreateListPage.List.SeasonTitles"]</h2>
-            <RadzenIcon Icon="help" MouseEnter="this.ShowDefaultSeasonTitlesTooltip"
-                        MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
-        </div>
-
-        <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonTitle"]" class="mb-2" />
-        <RadzenTextBox @bind-Value="this.ViewModel!.DefaultSeasonTitle" Class="w-100" />
-
-        <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonOriginalTitle"]" class="mt-4 mb-2" />
-        <RadzenTextBox Value="@this.ViewModel!.DefaultSeasonOriginalTitle" Class="w-100" />
-    </RadzenCard>
-
-    <div class="d-flex flex-row">
-        <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
-                      Click="this.ViewModel!.GoToHomePage" />
-
-        <RadzenButton Text="@this.Loc["Button.Create"]" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
-                      Click="this.ViewModel!.CreateList" />
-    </div>
+    </RadzenTemplateForm>
 
     <RemoteContent ViewModel="this.ViewModel!.CreateListCall">
         <Loading>
@@ -73,6 +86,12 @@
         await base.OnParametersSetAsync();
         await this.ViewModel!.Initialize();
     }
+
+    private void ShowHandleTooltip(ElementReference elementReference) =>
+        this.TooltipService.Open(
+            elementReference,
+            this.Loc["CreateListPage.Help.Handle"],
+            new TooltipOptions { Duration = null });
 
     private void ShowTitleLanguageTooltip(ElementReference elementReference) =>
         this.TooltipService.Open(

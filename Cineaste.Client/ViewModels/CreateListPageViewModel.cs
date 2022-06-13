@@ -1,6 +1,6 @@
 namespace Cineaste.Client.ViewModels;
 
-public sealed class CreateListPageViewModel : ReactiveObject
+public sealed class CreateListPageViewModel : ReactiveValidationObject
 {
     private static readonly SimpleCultureModel DefaultCultureModel = new(
         CultureInfo.InvariantCulture.ToString(), CultureInfo.InvariantCulture.DisplayName);
@@ -33,6 +33,10 @@ public sealed class CreateListPageViewModel : ReactiveObject
 
     public RemoteCall<SimpleListModel> CreateListCall { get; }
 
+    public ValidationHelper NameRule { get; }
+    public ValidationHelper DefaultSeasonTitleRule { get; }
+    public ValidationHelper DefaultSeasonOriginalTitleRule { get; }
+
     public CreateListPageViewModel(IRemoteCallFactory remoteCallFactory, IPageNavigator pageNavigator)
     {
         this.pageNavigator = pageNavigator;
@@ -45,6 +49,14 @@ public sealed class CreateListPageViewModel : ReactiveObject
         this.WhenAnyValue(vm => vm.Name)
             .Select(ListUtils.CreateHandleFromName)
             .ToPropertyEx(this, vm => vm.Handle);
+
+        this.NameRule = this.ValidationRule(vm => vm.Name, this.UsingValidator<CreateListRequest>());
+
+        this.DefaultSeasonTitleRule = this.ValidationRule(
+            vm => vm.DefaultSeasonTitle, this.UsingValidator<CreateListRequest>());
+
+        this.DefaultSeasonOriginalTitleRule = this.ValidationRule(
+            vm => vm.DefaultSeasonOriginalTitle, this.UsingValidator<CreateListRequest>());
 
         this.allCulturesSource.Connect()
             .Bind(out this.allCultures)

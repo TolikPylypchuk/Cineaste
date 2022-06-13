@@ -5,37 +5,35 @@ using System.Globalization;
 
 using static ValidationErrorCodes;
 
-public sealed class CreateListRequestValidator : AbstractValidator<CreateListRequest>
+public sealed class CreateListRequestValidator : CineasteValidator<CreateListRequest>
 {
     private static readonly IReadOnlySet<string> AvailableCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
         .Select(culture => culture.ToString())
         .ToImmutableHashSet();
 
     public CreateListRequestValidator()
+        : base("CreateList")
     {
         this.RuleFor(req => req.Name)
             .NotEmpty()
-            .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.Name), Empty))
+            .WithErrorCode(this.ErrorCode(req => req.Name, Empty))
             .MaximumLength(100)
-            .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.Name), TooLong));
+            .WithErrorCode(this.ErrorCode(req => req.Name, TooLong));
 
         this.RuleFor(req => req.Culture)
             .Must(AvailableCultures.Contains)
-            .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.Culture), Invalid));
+            .WithErrorCode(this.ErrorCode(req => req.Culture, Invalid));
 
         this.RuleFor(req => req.DefaultSeasonTitle)
             .NotEmpty()
-            .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.DefaultSeasonTitle), Empty))
+            .WithErrorCode(this.ErrorCode(req => req.DefaultSeasonTitle, Empty))
             .MaximumLength(100)
-            .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.DefaultSeasonTitle), TooLong));
+            .WithErrorCode(this.ErrorCode(req => req.DefaultSeasonTitle, TooLong));
 
         this.RuleFor(req => req.DefaultSeasonOriginalTitle)
             .NotEmpty()
-            .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.DefaultSeasonOriginalTitle), Empty))
+            .WithErrorCode(this.ErrorCode(req => req.DefaultSeasonOriginalTitle, Empty))
             .MaximumLength(100)
-            .WithErrorCode(this.ErrorCode(nameof(CreateListRequest.DefaultSeasonOriginalTitle), TooLong));
+            .WithErrorCode(this.ErrorCode(req => req.DefaultSeasonOriginalTitle, TooLong));
     }
-
-    private string ErrorCode(string property, string error) =>
-        $"CreateList.{property}.{error}";
 }

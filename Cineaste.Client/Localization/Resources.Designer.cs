@@ -151,6 +151,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The list handle is used to identify a list in a URL.
+        /// </summary>
+        public static string CreateListPage_Help_Handle {
+            get {
+                return ResourceManager.GetString("CreateListPage.Help.Handle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title language is used to sort titles in the list correctly.
         /// </summary>
         public static string CreateListPage_Help_TitleLanguage {
@@ -309,6 +318,69 @@ namespace Cineaste.Client.Localization {
         public static string Problem_ValidationFailed_CreateList {
             get {
                 return ResourceManager.GetString("Problem.ValidationFailed.CreateList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The language is invalid.
+        /// </summary>
+        public static string Validation_CreateList_Culture_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.CreateList.Culture.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default season original title is empty.
+        /// </summary>
+        public static string Validation_CreateList_DefaultSeasonOriginalTitle_Empty {
+            get {
+                return ResourceManager.GetString("Validation.CreateList.DefaultSeasonOriginalTitle.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default season original title is too long.
+        /// </summary>
+        public static string Validation_CreateList_DefaultSeasonOriginalTitle_TooLong {
+            get {
+                return ResourceManager.GetString("Validation.CreateList.DefaultSeasonOriginalTitle.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default season title is empty.
+        /// </summary>
+        public static string Validation_CreateList_DefaultSeasonTitle_Empty {
+            get {
+                return ResourceManager.GetString("Validation.CreateList.DefaultSeasonTitle.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default season title is too long.
+        /// </summary>
+        public static string Validation_CreateList_DefaultSeasonTitle_TooLong {
+            get {
+                return ResourceManager.GetString("Validation.CreateList.DefaultSeasonTitle.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name is empty.
+        /// </summary>
+        public static string Validation_CreateList_Name_Empty {
+            get {
+                return ResourceManager.GetString("Validation.CreateList.Name.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name is too long.
+        /// </summary>
+        public static string Validation_CreateList_Name_TooLong {
+            get {
+                return ResourceManager.GetString("Validation.CreateList.Name.TooLong", resourceCulture);
             }
         }
     }

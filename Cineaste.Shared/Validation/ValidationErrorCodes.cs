@@ -1,8 +1,8 @@
 namespace Cineaste.Shared.Validation;
 
-public static class ValidationErrorCodes
+internal static class ValidationErrorCodes
 {
-    public static readonly string Empty = "Empty";
-    public static readonly string TooLong = "Empty";
-    public static readonly string Invalid = "Invalid";
+    public static readonly string Empty = nameof(Empty);
+    public static readonly string TooLong = nameof(TooLong);
+    public static readonly string Invalid = nameof(Invalid);
 }

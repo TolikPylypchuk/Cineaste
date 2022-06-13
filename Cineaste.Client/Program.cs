@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 using Radzen;
 
+using ReactiveUI.Validation.Formatters.Abstractions;
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.RootComponents.Add<App>("#app");
@@ -37,6 +39,7 @@ builder.Services.AddScoped<ContextMenuService>();
 
 builder.Services.AddScoped<IRemoteCallFactory, RemoteCallFactory>();
 builder.Services.AddScoped<IPageNavigator, PageNavigator>();
+builder.Services.AddScoped<IValidationTextFormatter<string>, LocalizedValidationTextFormatter>();
 
 builder.Services.AddScoped<CreateListPageViewModel>();
 builder.Services.AddScoped<HomePageViewModel>();
