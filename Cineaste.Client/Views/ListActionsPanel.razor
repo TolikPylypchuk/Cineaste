@@ -1,0 +1,11 @@
+@inherits ReactiveComponentBase<ListActionsViewModel>
+@inject IStringLocalizer<Resources> Loc
+
+<div class="d-flex flex-column h-100 pt-4">
+    <RadzenButton Text="@this.Loc["ListActionsPanel.AddMovie"]" Icon="add_circle_outline" class="big mb-2 w-100" />
+    <RadzenButton Text="@this.Loc["ListActionsPanel.AddSeries"]" Icon="add_circle_outline" class="big mt-2 w-100" />
+</div>
+
+@code {
+
+}

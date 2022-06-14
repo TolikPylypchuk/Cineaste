@@ -20,10 +20,17 @@ public sealed class ListPageViewModel : ReactiveObject
     public ReadOnlyObservableCollection<ListItemModel> Items =>
         this.items;
 
+    [Reactive]
+    public ListItemModel? SelectedItem { get; set; }
+
+    public ListActionsViewModel ListActionsViewModel { get; private set; }
+
     public RemoteCall<ListModel> GetListCall { get; }
 
     public ListPageViewModel(IRemoteCallFactory remoteCallFactory)
     {
+        this.ListActionsViewModel = new();
+
         this.GetListCall = remoteCallFactory.Create((IListApi api) => api.GetList(this.Handle));
 
         this.itemsSource.Connect()

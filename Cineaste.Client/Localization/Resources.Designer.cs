@@ -268,6 +268,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new movie.
+        /// </summary>
+        public static string ListActionsPanel_AddMovie {
+            get {
+                return ResourceManager.GetString("ListActionsPanel.AddMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new series.
+        /// </summary>
+        public static string ListActionsPanel_AddSeries {
+            get {
+                return ResourceManager.GetString("ListActionsPanel.AddSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to home page.
         /// </summary>
         public static string ListPage_Menu_Back {

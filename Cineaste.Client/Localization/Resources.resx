@@ -186,6 +186,12 @@
   <data name="HomePage.Problem.LoadingListsFailed" xml:space="preserve">
     <value>Loading lists has failed</value>
   </data>
+  <data name="ListActionsPanel.AddMovie" xml:space="preserve">
+    <value>Add new movie</value>
+  </data>
+  <data name="ListActionsPanel.AddSeries" xml:space="preserve">
+    <value>Add new series</value>
+  </data>
   <data name="ListPage.Menu.Back" xml:space="preserve">
     <value>Back to home page</value>
   </data>

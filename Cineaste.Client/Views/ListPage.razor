@@ -21,20 +21,20 @@
                     <Template Context="item">
                         <div role="button" class="container border-bottom"
                                 style=@($"border: none; border-radius: 0; color: {item.Color};")>
-                            <div class="d-flex flex-row">
-                                <p class="lead text-start m-1" style="width: 50px">
+                            <div class="d-flex flex-row align-items-center">
+                                <p class="list-item text-start m-0" style="width: 50px">
                                     @item.DisplayNumber
                                 </p>
 
-                                <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
+                                <p class="list-item text-center m-0" style="width: calc((100% - 175px) / 2)">
                                     @item.Title
                                 </p>
 
-                                <p class="lead text-center m-1" style="width: calc((100% - 175px) / 2)">
+                                <p class="list-item text-center m-0" style="width: calc((100% - 175px) / 2)">
                                     @item.OriginalTitle
                                 </p>
 
-                                <p class="lead text-end m-1" style="width: 125px">
+                                <p class="list-item text-end m-0" style="width: 125px">
                                     @item.Years
                                 </p>
                             </div>
@@ -50,8 +50,11 @@
         </RemoteContent>
     </div>
 
-    <div class="col-2">
-
+    <div class="col-2 h-100">
+        @if (this.ViewModel!.SelectedItem is null)
+        {
+            <ListActionsPanel ViewModel="this.ViewModel!.ListActionsViewModel" />
+        }
     </div>
 </div>
 
