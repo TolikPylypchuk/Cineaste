@@ -4,17 +4,12 @@ public abstract record ApiResult<T>;
 
 public sealed record ApiSuccess<T>(T Value) : ApiResult<T>;
 
-public sealed record ApiEmptySuccess<T> : ApiResult<T>;
-
 public sealed record ApiFailure<T>(ProblemDetails Problem) : ApiResult<T>;
 
 public static class ApiResult
 {
     public static ApiSuccess<T> Success<T>(T value) =>
         new(value);
-
-    public static ApiEmptySuccess<T> EmptySuccess<T>() =>
-        new();
 
     public static ApiFailure<T> Failure<T>(ProblemDetails problem) =>
         new(problem);
@@ -26,7 +21,9 @@ public static class ApiResultExtensions
     {
         if (response.IsSuccessStatusCode)
         {
-            return response.Content is not null ? ApiResult.Success(response.Content) : ApiResult.EmptySuccess<T>();
+            return response.Content is not null
+                ? ApiResult.Success(response.Content)
+                : throw new InvalidOperationException("The response's content is empty");
         } else if (response.Error is ValidationApiException exception && exception.Content is not null)
         {
             return ApiResult.Failure<T>(exception.Content);

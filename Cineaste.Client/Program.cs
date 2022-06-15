@@ -52,7 +52,6 @@ builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 builder.Services.AddScoped<IValidationTextFormatter<string>, LocalizedValidationTextFormatter>();
 
 builder.Services.AddScoped<CreateListPageViewModel>();
-builder.Services.AddScoped<ListPageViewModel>();
 
 var english = new CultureInfo("en-US");
 CultureInfo.DefaultThreadCurrentCulture = english;

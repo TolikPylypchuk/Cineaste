@@ -1,3 +1,4 @@
+global using System.Collections.Immutable;
 global using System.Collections.ObjectModel;
 global using System.Globalization;
 global using System.Reactive.Linq;

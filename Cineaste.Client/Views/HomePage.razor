@@ -18,7 +18,11 @@
     @if (this.State.Value.IsLoading)
     {
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
-    } else if (this.State.Value.Lists.Any())
+    } else if (this.State.Value.Problem is not null)
+    {
+        <ApiProblemAlert Problem="this.State.Value.Problem" Text="Loading lists has failed" TryAgain="this.FetchLists"
+                         Class="w-50 mt-3" />
+    } else
     {
         <RadzenDataList WrapItems="true" Data="this.State.Value.Lists" TItem="SimpleListModel"
                         class="mt-4 overflow-auto">
@@ -31,12 +35,6 @@
                 </div>
             </Template>
         </RadzenDataList>
-    }
-
-    @if (this.State.Value.Problem is not null)
-    {
-        <ApiProblemAlert Problem="this.State.Value.Problem" Text="Loading lists has failed" TryAgain="this.FetchLists"
-                         Class="w-50 mt-3" />
     }
 </div>
 

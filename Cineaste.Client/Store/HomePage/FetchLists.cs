@@ -14,8 +14,8 @@ public static class FetchListsReducers
     public static HomePageState ReduceFetchListsResultAction(HomePageState state, FetchListsResultAction action) =>
         action.Result switch
         {
-            ApiSuccess<List<SimpleListModel>> success => new() { IsLoading = false, Lists = success.Value },
-            ApiFailure<List<SimpleListModel>> failure => new() { IsLoading = false, Problem = failure.Problem },
+            ApiSuccess<List<SimpleListModel>> success => new() { Lists = success.Value.ToImmutableList() },
+            ApiFailure<List<SimpleListModel>> failure => new() { Problem = failure.Problem },
             _ => state
         };
 }

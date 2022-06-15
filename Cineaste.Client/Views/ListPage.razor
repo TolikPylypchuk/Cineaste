@@ -1,5 +1,7 @@
 @page "/list/{handle}"
-@inherits ReactiveInjectableComponentBase<ListPageViewModel>
+@inherits FluxorComponent
+@inject IState<ListPageState> State
+@inject IDispatcher Dispatcher
 
 <div class="d-flex row w-100 h-100">
     <div class="col-2">
@@ -7,53 +9,49 @@
     </div>
 
     <div class="col-8 d-flex flex-column align-items-center h-100">
-        <RemoteContent ViewModel="this.ViewModel!.GetListCall">
-            <Loading>
-                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"
-                                   class="w-25 mt-4" />
-            </Loading>
+        @if (this.State.Value.IsLoading)
+        {
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+        } else if (this.State.Value.Problem is not null)
+        {
+            <ApiProblemAlert Text="Loading the list has failed" Problem="this.State.Value.Problem" Class="w-50 mt-3"
+                             TryAgain="this.FetchList" />
+        } else
+        {
+            <h1 class="display-5 mt-md-1 mt-1 flex-shrink-0">@this.State.Value.Name</h1>
 
-            <Content>
-                <h1 class="display-5 mt-md-1 mt-1 flex-shrink-0">@this.ViewModel!.List?.Name</h1>
+            <RadzenDataList WrapItems="true" Data="@this.State.Value.Items" TItem="ListItemModel"
+                            class="overflow-auto h-100">
+                <Template Context="item">
+                    <div role="button" class="container border-bottom"
+                            style=@($"border: none; border-radius: 0; color: {item.Color};")>
+                        <div class="d-flex flex-row align-items-center">
+                            <p class="list-item text-start m-0" style="width: 50px">
+                                @item.DisplayNumber
+                            </p>
 
-                <RadzenDataList WrapItems="true" Data="@this.ViewModel!.Items" TItem="ListItemModel"
-                                class="overflow-auto h-100">
-                    <Template Context="item">
-                        <div role="button" class="container border-bottom"
-                                style=@($"border: none; border-radius: 0; color: {item.Color};")>
-                            <div class="d-flex flex-row align-items-center">
-                                <p class="list-item text-start m-0" style="width: 50px">
-                                    @item.DisplayNumber
-                                </p>
+                            <p class="list-item text-center m-0" style="width: calc((100% - 175px) / 2)">
+                                @item.Title
+                            </p>
 
-                                <p class="list-item text-center m-0" style="width: calc((100% - 175px) / 2)">
-                                    @item.Title
-                                </p>
+                            <p class="list-item text-center m-0" style="width: calc((100% - 175px) / 2)">
+                                @item.OriginalTitle
+                            </p>
 
-                                <p class="list-item text-center m-0" style="width: calc((100% - 175px) / 2)">
-                                    @item.OriginalTitle
-                                </p>
-
-                                <p class="list-item text-end m-0" style="width: 125px">
-                                    @item.Years
-                                </p>
-                            </div>
+                            <p class="list-item text-end m-0" style="width: 125px">
+                                @item.Years
+                            </p>
                         </div>
-                    </Template>
-                </RadzenDataList>
-            </Content>
-
-            <Problem Context="problem">
-                <ApiProblemAlert Text="Loading the list has failed" Problem="problem" Class="w-50 mt-3"
-                                 TryAgain=@(() => this.ViewModel!.Initialize(this.Handle)) />
-            </Problem>
-        </RemoteContent>
+                    </div>
+                </Template>
+            </RadzenDataList>
+        }
     </div>
 
     <div class="col-2 h-100">
-        @if (this.ViewModel!.SelectedItem is null)
+        @if (this.State.Value.SelectedItem is null)
         {
-            <ListActionsPanel ViewModel="this.ViewModel!.ListActionsViewModel" />
+            <ListActionsPanel />
         }
     </div>
 </div>
@@ -62,9 +60,16 @@
     [Parameter]
     public string Handle { get; set; } = String.Empty;
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
-        await base.OnParametersSetAsync();
-        await this.ViewModel!.Initialize(this.Handle);
+        base.OnParametersSet();
+
+        if (!this.State.Value.IsLoaded)
+        {
+            this.FetchList();
+        }
     }
+
+    private void FetchList() =>
+        this.Dispatcher.Dispatch(new FetchListAction(this.Handle));
 }
