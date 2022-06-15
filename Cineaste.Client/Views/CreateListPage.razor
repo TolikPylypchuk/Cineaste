@@ -1,19 +1,21 @@
 @page "/new"
-@inherits ReactiveInjectableComponentBase<CreateListPageViewModel>
+@inherits FluxorComponent
+@inject IState<CreateListPageState> State
+@inject IDispatcher Dispatcher
+@inject IPageNavigator PageNavigator
 @inject TooltipService TooltipService
 @inject IStringLocalizer<Resources> Loc
 
 <div class="container d-flex flex-column align-items-center">
     <h1 class="display-1 mb-4">@this.Loc["CreateListPage.CreateList"]</h1>
 
-    <RadzenTemplateForm TItem="CreateListPageViewModel" Data="@this.ViewModel" Submit="@this.ViewModel!.CreateList"
-                        class="w-50">
+    <RadzenTemplateForm TItem="CreateListPage" Data="this" Submit="@(p => this.CreateList())" class="w-50">
         <RadzenCard class="mb-2">
             <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
 
             <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
-            <RadzenTextBox @bind-Value="this.ViewModel!.Name" Name="Name" Class="w-100" />
-            <ReactiveValidator Rule="this.ViewModel!.NameRule" Component="Name" />
+            <RadzenTextBox @bind-Value="this.Name" Name="Name" Class="w-100" />
+            <RadzenPropertyValidator Validator="this.NameValidator" Component="Name" />
 
             <div class="d-flex flex-row mt-4 mb-2">
                 <RadzenLabel Text="@this.Loc["CreateListPage.List.Handle"]" />
@@ -21,7 +23,7 @@
                             class="ms-3" Style="cursor: pointer;" />
             </div>
 
-            <RadzenTextBox Value="@this.ViewModel!.Handle" ReadOnly="true" Class="w-100" />
+            <RadzenTextBox Value="@this.Handle" ReadOnly="true" Class="w-100" />
 
             <div class="d-flex flex-row mt-4 mb-2">
                 <RadzenLabel Text="@this.Loc["CreateListPage.List.TitleLanguage"]" />
@@ -29,17 +31,16 @@
                             MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
             </div>
 
-            <RadzenDropDown TValue="SimpleCultureModel" Data="this.ViewModel!.AllCultures" AllowVirtualization="true"
+            <RadzenDropDown TValue="SimpleCultureModel" Data="this.State.Value.AllCultures" AllowVirtualization="true"
                             AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                            @bind-Value="this.ViewModel!.Culture" TextProperty="DisplayName" />
+                            @bind-Value="this.Culture" TextProperty="DisplayName" />
         </RadzenCard>
 
-        <RemoteContent ViewModel="this.ViewModel!.GetAllCulturesCall">
-            <Problem Context="problem">
-                <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.Cultures"]" Problem="problem" Class="w-50 my-2"
-                                 TryAgain="this.ViewModel!.LoadCultures" />
-            </Problem>
-        </RemoteContent>
+        @if (this.State.Value.CulturesProblem is not null)
+        {
+            <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.Cultures"]" TryAgain="this.FetchCultures"
+                             Problem="this.State.Value.CulturesProblem" Class="w-50 my-2" />
+        }
 
         <RadzenCard class="mt-2">
             <div class="d-flex flex-row mt-2 mb-4">
@@ -49,62 +50,106 @@
             </div>
 
             <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonTitle"]" class="mb-2" />
-            <RadzenTextBox @bind-Value="this.ViewModel!.DefaultSeasonTitle" Name="DefaultSeasonTitle" Class="w-100" />
-            <ReactiveValidator Rule="this.ViewModel!.DefaultSeasonTitleRule" Component="DefaultSeasonTitle" />
+            <RadzenTextBox @bind-Value="this.DefaultSeasonTitle" Name="DefaultSeasonTitle" Class="w-100" />
+            <RadzenPropertyValidator Validator="this.DefaultSeasonTitleValidator" Component="DefaultSeasonTitle" />
 
             <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonOriginalTitle"]" class="mt-4 mb-2" />
-            <RadzenTextBox @bind-Value="@this.ViewModel!.DefaultSeasonOriginalTitle" Name="DefaultSeasonOriginalTitle"
+            <RadzenTextBox @bind-Value="@this.DefaultSeasonOriginalTitle" Name="DefaultSeasonOriginalTitle"
                            Class="w-100" />
-            <ReactiveValidator Rule="this.ViewModel!.DefaultSeasonOriginalTitleRule"
-                               Component="DefaultSeasonOriginalTitle" />
+            <RadzenPropertyValidator Validator="this.DefaultSeasonOriginalTitleValidator"
+                                     Component="DefaultSeasonOriginalTitle" />
         </RadzenCard>
 
         <div class="d-flex flex-row justify-content-center">
             <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
-                          Click="this.ViewModel!.GoToHomePage" />
+                          Click="@this.NavigateToHomePage" />
 
             <RadzenButton Text="@this.Loc["Button.Create"]" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
-                          Click="this.ViewModel!.CreateList" ButtonType="ButtonType.Submit"
-                          Disabled="@this.ViewModel!.IsInvalid" />
+                          ButtonType="ButtonType.Submit" />
         </div>
     </RadzenTemplateForm>
 
-    <RemoteContent ViewModel="this.ViewModel!.CreateListCall">
-        <Loading>
-            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
-        </Loading>
+    @if (this.State.Value.IsCreatingList)
+    {
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+    }
 
-        <Problem Context="problem">
-            <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.CreateList"]" ShowButton="false" Problem="problem"
-                             Class="w-50 mt-3" />
-        </Problem>
-    </RemoteContent>
+    @if (this.State.Value.CreateListProblem is not null)
+    {
+        <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.CreateList"]" ShowButton="false" Class="w-50 mt-3"
+                         Problem="this.State.Value.CreateListProblem" />
+    }
 </div>
 
 @code {
-    protected override async Task OnParametersSetAsync()
+    private const string DefaultDefaultSeasonTitle = "Season #";
+
+    private string name = String.Empty;
+
+    private string Name
     {
-        await base.OnParametersSetAsync();
-        await this.ViewModel!.Initialize();
+        get => this.name;
+        set
+        {
+            this.name = value;
+            this.Handle = ListUtils.CreateHandleFromName(value);
+        }
     }
 
+    private string Handle { get; set; } = String.Empty;
+
+    private SimpleCultureModel Culture { get; set; } =
+        new(CultureInfo.InvariantCulture.ToString(), CultureInfo.InvariantCulture.DisplayName);
+
+    private string DefaultSeasonTitle { get; set; } = DefaultDefaultSeasonTitle;
+    private string DefaultSeasonOriginalTitle { get; set; } = DefaultDefaultSeasonTitle;
+
+    private PropertyValidator<CreateListRequest, string>? NameValidator { get; set; }
+    private PropertyValidator<CreateListRequest, string>? DefaultSeasonTitleValidator { get; set; }
+    private PropertyValidator<CreateListRequest, string>? DefaultSeasonOriginalTitleValidator { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        this.InitializeValidators();
+        this.Dispatcher.Dispatch(new InitializeCreateListPageAction());
+        this.FetchCultures();
+    }
+
+    private void InitializeValidators()
+    {
+        var validator = CreateListRequest.CreateValidator();
+
+        this.NameValidator = new PropertyValidator<CreateListRequest, string>(validator, nameof(this.Name), this.Loc);
+
+        this.DefaultSeasonTitleValidator = new PropertyValidator<CreateListRequest, string>(
+            validator, nameof(this.DefaultSeasonTitle), this.Loc);
+
+        this.DefaultSeasonOriginalTitleValidator = new PropertyValidator<CreateListRequest, string>(
+            validator, nameof(this.DefaultSeasonOriginalTitle), this.Loc);
+    }
+
+    private void FetchCultures() =>
+        this.Dispatcher.Dispatch(new FetchCulturesAction());
+
+    private void CreateList() =>
+        this.Dispatcher.Dispatch(new CreateListAction(new CreateListRequest(
+            this.Name, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle)));
+
+    private void NavigateToHomePage() =>
+        this.PageNavigator.GoToHomePage();
+
     private void ShowHandleTooltip(ElementReference elementReference) =>
-        this.TooltipService.Open(
-            elementReference,
-            this.Loc["CreateListPage.Help.Handle"],
-            new TooltipOptions { Duration = null });
+        this.OpenTooltip(elementReference, "CreateListPage.Help.Handle");
 
     private void ShowTitleLanguageTooltip(ElementReference elementReference) =>
-        this.TooltipService.Open(
-            elementReference,
-            this.Loc["CreateListPage.Help.TitleLanguage"],
-            new TooltipOptions { Duration = null });
+        this.OpenTooltip(elementReference, "CreateListPage.Help.TitleLanguage");
 
     private void ShowDefaultSeasonTitlesTooltip(ElementReference elementReference) =>
-        this.TooltipService.Open(
-            elementReference,
-            this.Loc["CreateListPage.Help.DefaultSeasonTitles"],
-            new TooltipOptions { Duration = null });
+        this.OpenTooltip(elementReference, "CreateListPage.Help.DefaultSeasonTitles");
+
+    private void OpenTooltip(ElementReference elementReference, string text) =>
+        this.TooltipService.Open(elementReference, this.Loc[text], new TooltipOptions { Duration = null });
 
     private void CloseTooltip() =>
         this.TooltipService.Close();
