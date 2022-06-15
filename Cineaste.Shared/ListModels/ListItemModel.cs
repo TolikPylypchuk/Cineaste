@@ -13,7 +13,9 @@ public sealed record ListItemModel(
     ListFranchiseItemModel? FranchiseItem)
 {
     public string Years =>
-        this.StartYear == this.EndYear ? this.StartYear.ToString() : $"{this.StartYear}-{this.EndYear}";
+        this.Type == ListItemType.Franchise
+            ? String.Empty
+            : this.StartYear == this.EndYear ? this.StartYear.ToString() : $"{this.StartYear}-{this.EndYear}";
 }
 
 public enum ListItemType { Movie, Series, Franchise }

@@ -2,6 +2,7 @@
 @inherits FluxorComponent
 @inject IState<ListPageState> State
 @inject IDispatcher Dispatcher
+@inject IPageNavigator PageNavigator
 
 <div class="d-flex row w-100 h-100">
     <div class="col-2">
@@ -64,12 +65,25 @@
     {
         base.OnParametersSet();
 
+        this.PageNavigator.PageChanged += this.OnPageChanged;
+
         if (!this.State.Value.IsLoaded)
         {
             this.FetchList();
         }
     }
 
+    protected override void Dispose(bool disposing) =>
+        this.PageNavigator.PageChanged -= this.OnPageChanged;
+
     private void FetchList() =>
         this.Dispatcher.Dispatch(new FetchListAction(this.Handle));
+
+    private void OnPageChanged(object? sender, LocationChangedEventArgs e)
+    {
+        if (!e.Location.Contains($"/list/{this.Handle}"))
+        {
+            this.Dispatcher.Dispatch(new ResetListPageAction());
+        }
+    }
 }

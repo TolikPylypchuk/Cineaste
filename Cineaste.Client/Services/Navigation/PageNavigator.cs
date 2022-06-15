@@ -1,6 +1,7 @@
 namespace Cineaste.Client.Services.Navigation;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 
 public sealed class PageNavigator : IPageNavigator
 {
@@ -17,4 +18,10 @@ public sealed class PageNavigator : IPageNavigator
 
     public void GoToListPage(string handle) =>
         this.navigationManager.NavigateTo($"/list/{handle}");
+
+    public event EventHandler<LocationChangedEventArgs> PageChanged
+    {
+        add => this.navigationManager.LocationChanged += value;
+        remove => this.navigationManager.LocationChanged -= value;
+    }
 }
