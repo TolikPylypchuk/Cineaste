@@ -19,6 +19,8 @@ global using Cineaste.Shared.Validation;
 
 global using DynamicData;
 
+global using Fluxor;
+
 global using Microsoft.Extensions.Options;
 
 global using ReactiveUI;

@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 using Cineaste.Shared.Validation.Json;
@@ -32,6 +33,15 @@ builder.Services.AddRefitClient<IListApi>(baseAddress);
 
 builder.Services.AddLocalization();
 
+builder.Services.AddFluxor(options =>
+{
+    options.ScanAssemblies(Assembly.GetExecutingAssembly());
+
+#if DEBUG
+    options.UseReduxDevTools();
+#endif
+});
+
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
@@ -42,7 +52,6 @@ builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 builder.Services.AddScoped<IValidationTextFormatter<string>, LocalizedValidationTextFormatter>();
 
 builder.Services.AddScoped<CreateListPageViewModel>();
-builder.Services.AddScoped<HomePageViewModel>();
 builder.Services.AddScoped<ListPageViewModel>();
 
 var english = new CultureInfo("en-US");

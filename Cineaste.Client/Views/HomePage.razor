@@ -1,5 +1,8 @@
 @page "/"
-@inherits ReactiveInjectableComponentBase<HomePageViewModel>
+@inherits FluxorComponent
+@inject IState<HomePageState> State
+@inject IDispatcher Dispatcher
+@inject IPageNavigator PageNavigator
 @inject IStringLocalizer<Resources> Loc
 
 <div class="container d-flex flex-column align-items-center h-100">
@@ -9,38 +12,47 @@
         <h2 class="display-5 mt-2">@this.Loc["HomePage.MyLists"]</h2>
 
         <RadzenButton Text="@this.Loc["HomePage.CreateList"]" Icon="add_circle_outline" class="mt-4"
-                      ButtonStyle="ButtonStyle.Primary" Click=@(() => this.ViewModel!.NavigateToCreateList()) />
+                      ButtonStyle="ButtonStyle.Primary" Click="this.NavigateToCreateList" />
     </div>
 
-    <RemoteContent ViewModel="this.ViewModel!.GetListsCall">
-        <Loading>
-            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
-        </Loading>
-
-        <Content>
-            <RadzenDataList WrapItems="true" Data="this.ViewModel!.Lists" TItem="SimpleListModel"
-                            class="mt-4 overflow-auto">
-                <Template Context="list">
-                    <div role="button" class="container border-bottom" style="border: none; border-radius: 0;"
-                         @ondblclick=@(() => this.ViewModel!.NavigateToList(list))>
-                        <div class="row">
-                            <p class="lead m-1">@list.Name</p>
-                        </div>
+    @if (this.State.Value.IsLoading)
+    {
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+    } else if (this.State.Value.Lists.Any())
+    {
+        <RadzenDataList WrapItems="true" Data="this.State.Value.Lists" TItem="SimpleListModel"
+                        class="mt-4 overflow-auto">
+            <Template Context="list">
+                <div role="button" class="container border-bottom" style="border: none; border-radius: 0;"
+                        @ondblclick=@(() => this.NavigateToList(list.Handle))>
+                    <div class="row">
+                        <p class="lead m-1">@list.Name</p>
                     </div>
-                </Template>
-            </RadzenDataList>
-        </Content>
+                </div>
+            </Template>
+        </RadzenDataList>
+    }
 
-        <Problem Context="problem">
-            <ApiProblemAlert Text="Loading lists has failed" TryAgain="this.ViewModel!.LoadLists" Class="w-50 mt-3" />
-        </Problem>
-    </RemoteContent>
+    @if (this.State.Value.Problem is not null)
+    {
+        <ApiProblemAlert Problem="this.State.Value.Problem" Text="Loading lists has failed" TryAgain="this.FetchLists"
+                         Class="w-50 mt-3" />
+    }
 </div>
 
 @code {
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
-        await base.OnParametersSetAsync();
-        await this.ViewModel!.LoadLists();
+        base.OnParametersSet();
+        this.FetchLists();
     }
+
+    private void NavigateToCreateList() =>
+        this.PageNavigator.GoToCreateListPage();
+
+    private void NavigateToList(string handle) =>
+        this.PageNavigator.GoToListPage(handle);
+
+    private void FetchLists() =>
+        this.Dispatcher.Dispatch(new FetchListsAction());
 }
