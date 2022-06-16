@@ -15,16 +15,6 @@ public sealed record ListModel(
     List<ListKindModel> MovieKinds,
     List<ListKindModel> SeriesKinds);
 
-public sealed record ListKindModel(
-    Guid Id,
-    string Name,
-    string WatchedColor,
-    string NotWatchedColor,
-    string NotReleasedColor,
-    ListKindTarget Target);
-
-public enum ListKindTarget { Movie, Series }
-
 public sealed record ListConfigurationModel(
     string Culture,
     string DefaultSeasonTitle,

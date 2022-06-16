@@ -1,4 +1,4 @@
-namespace Cineaste.Server.Infrastructure;
+namespace Cineaste.Server.Infrastructure.Problems;
 
 using Hellang.Middleware.ProblemDetails;
 
@@ -12,20 +12,20 @@ public static class ExceptionMappingExtensions
     public static void MapCineasteExceptions(this ProblemDetailsOptions options)
     {
         options.Map<ValidationException>(ex => new ProblemDetails
-            {
-                Type = $"https://httpstatuses.io/{Status400BadRequest}",
-                Title = ReasonPhrases.GetReasonPhrase(Status400BadRequest),
-                Status = Status400BadRequest,
-                Detail = !ex.Errors.Any()
+        {
+            Type = $"https://httpstatuses.io/{Status400BadRequest}",
+            Title = ReasonPhrases.GetReasonPhrase(Status400BadRequest),
+            Status = Status400BadRequest,
+            Detail = !ex.Errors.Any()
                     ? "Problem.ValidationFailed"
                     : $"Problem.ValidationFailed.{ex.Errors.First().ErrorCode.Split('.')[0]}",
-                Extensions =
+            Extensions =
                 {
                     ["errors"] = ex.Errors
                         .GroupBy(error => error.PropertyName, error => error.ErrorCode)
                         .ToDictionary(errors => errors.Key, errors => errors.ToList())
                 }
-            });
+        });
 
         options.Map<NotFoundException>(ex => new ProblemDetails
         {

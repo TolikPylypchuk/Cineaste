@@ -1,4 +1,4 @@
-namespace Cineaste.Server.Infrastructure;
+namespace Cineaste.Server.Infrastructure.Problems;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;

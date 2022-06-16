@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 
-using Cineaste.Server.Infrastructure;
+using Cineaste.Server.Infrastructure.Json;
+using Cineaste.Server.Infrastructure.Problems;
 using Cineaste.Shared.Validation.Json;
 
 using Hellang.Middleware.ProblemDetails;
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.SerializerOptions.Converters.Add(new IdJsonConverterFactory());
     options.SerializerOptions.Converters.Add(new ValidatedJsonConverterFactory());
 });
 
@@ -35,7 +37,6 @@ builder.Services.AddProblemDetails(options =>
 });
 
 builder.Services.AddScoped<ICultureExtractor, CultureExtractor>();
-builder.Services.AddScoped<IListMapper, ListMapper>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<TestDataProvider>();
 

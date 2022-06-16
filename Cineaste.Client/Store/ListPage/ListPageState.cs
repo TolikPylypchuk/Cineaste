@@ -1,7 +1,7 @@
 namespace Cineaste.Client.Store.ListPage;
 
 [FeatureState]
-public sealed class ListPageState
+public sealed record ListPageState
 {
     public bool IsLoading { get; init; }
     public bool IsLoaded { get; init; }

@@ -1,20 +1,20 @@
-namespace Cineaste.Server.Services;
+namespace Cineaste.Server.Mappers;
 
-public sealed class ListMapper : IListMapper
+public static class ListMappingExtensions
 {
-    public ListModel MapToListModel(CineasteList list) =>
+    public static ListModel ToListModel(this CineasteList list) =>
         new(
             list.Id.Value,
             list.Name,
             list.Handle,
-            this.ToConfigurationModel(list.Configuration),
-            list.Movies.Select(this.ToListItemModel).ToList(),
-            list.Series.Select(this.ToListItemModel).ToList(),
-            list.Franchises.Select(this.ToListItemModel).ToList(),
-            list.MovieKinds.Select(this.ToListKindModel).ToList(),
-            list.SeriesKinds.Select(this.ToListKindModel).ToList());
+            list.Configuration.ToConfigurationModel(),
+            list.Movies.Select(ToListItemModel).ToList(),
+            list.Series.Select(ToListItemModel).ToList(),
+            list.Franchises.Select(ToListItemModel).ToList(),
+            list.MovieKinds.Select(kind => kind.ToListKindModel()).ToList(),
+            list.SeriesKinds.Select(kind => kind.ToListKindModel()).ToList());
 
-    private ListConfigurationModel ToConfigurationModel(ListConfiguration config) =>
+    public static ListConfigurationModel ToConfigurationModel(this ListConfiguration config) =>
         new(
             config.Culture.ToString(),
             config.DefaultSeasonTitle,
@@ -24,7 +24,7 @@ public sealed class ListMapper : IListMapper
             config.SortingConfiguration.DefaultSecondSortOrder,
             config.SortingConfiguration.DefaultSecondSortDirection);
 
-    private ListItemModel ToListItemModel(Movie movie) =>
+    public static ListItemModel ToListItemModel(this Movie movie) =>
         new(
             movie.Id.Value,
             ListItemType.Movie,
@@ -35,9 +35,9 @@ public sealed class ListMapper : IListMapper
             movie.Year,
             movie.Year,
             movie.GetActiveColor().HexValue,
-            this.ToFranchiseItemModel(movie.FranchiseItem));
+            movie.FranchiseItem.ToFranchiseItemModel());
 
-    private ListItemModel ToListItemModel(Series series) =>
+    public static ListItemModel ToListItemModel(this Series series) =>
         new(
             series.Id.Value,
             ListItemType.Series,
@@ -48,9 +48,9 @@ public sealed class ListMapper : IListMapper
             series.StartYear,
             series.EndYear,
             series.GetActiveColor().HexValue,
-            this.ToFranchiseItemModel(series.FranchiseItem));
+            series.FranchiseItem.ToFranchiseItemModel());
 
-    private ListItemModel ToListItemModel(Franchise franchise) =>
+    public static ListItemModel ToListItemModel(this Franchise franchise) =>
         new(
             franchise.Id.Value,
             ListItemType.Franchise,
@@ -65,19 +65,9 @@ public sealed class ListMapper : IListMapper
             franchise.GetFirstChild()?.GetStartYear() ?? 0,
             franchise.GetLastChild()?.GetEndYear() ?? 0,
             franchise.GetActiveColor()?.HexValue ?? String.Empty,
-            this.ToFranchiseItemModel(franchise.FranchiseItem));
-
-    private ListKindModel ToListKindModel<TKind>(Kind<TKind> kind)
-        where TKind : Kind<TKind> =>
-        new(
-            kind.Id.Value,
-            kind.Name,
-            kind.WatchedColor.HexValue,
-            kind.NotWatchedColor.HexValue,
-            kind.NotReleasedColor.HexValue,
-            kind is MovieKind ? ListKindTarget.Movie : ListKindTarget.Series);
+            franchise.FranchiseItem.ToFranchiseItemModel());
 
     [return: NotNullIfNotNull("item")]
-    private ListFranchiseItemModel? ToFranchiseItemModel(FranchiseItem? item) =>
+    private static ListFranchiseItemModel? ToFranchiseItemModel(this FranchiseItem? item) =>
         item is not null ? new(item.ParentFranchise.Id.Value, item.SequenceNumber) : null;
 }

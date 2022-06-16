@@ -6,7 +6,6 @@ using System.Globalization;
 public sealed partial class ListService : IListService
 {
     private readonly CineasteDbContext dbContext;
-    private readonly IListMapper mapper;
     private readonly ILogger<ListService> logger;
 
     public async Task<List<SimpleListModel>> GetAllLists()
@@ -58,7 +57,7 @@ public sealed partial class ListService : IListService
             .SingleOrDefaultAsync(list => list.Handle == handle);
 
         return list is not null
-            ? this.mapper.MapToListModel(list)
+            ? list.ToListModel()
             : throw this.NotFound(handle);
     }
 
