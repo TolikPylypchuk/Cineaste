@@ -1,7 +1,7 @@
 namespace Cineaste.Server.Services;
 
 [AutoConstructor]
-public sealed partial class MovieService
+public sealed partial class MovieService : IMovieService
 {
     private readonly CineasteDbContext dbContext;
     private readonly ILogger<MovieService> logger;
@@ -19,6 +19,19 @@ public sealed partial class MovieService
         return movie is not null
             ? movie.ToMovieModel()
             : throw this.NotFound(id);
+    }
+
+    public async Task DeleteMovie(Id<Movie> id)
+    {
+        var movie = await this.dbContext.Movies.FindAsync(id);
+
+        if (movie is null)
+        {
+            throw this.NotFound(id);
+        }
+
+        this.dbContext.Movies.Remove(movie);
+        await this.dbContext.SaveChangesAsync();
     }
 
     private Exception NotFound(Id<Movie> id) =>
