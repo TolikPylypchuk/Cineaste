@@ -1,6 +1,6 @@
 namespace Cineaste.Client.Api;
 
-public interface IListApi : IApi
+public interface IListApi
 {
     [Get("/lists")]
     Task<IApiResponse<List<SimpleListModel>>> GetLists();

@@ -1,0 +1,35 @@
+@inherits FluxorComponent
+@inject IState<MovieFormState> State
+@inject IDispatcher Dispatcher
+@inject IStringLocalizer<Resources> Loc
+
+<div class="d-flex flex-column">
+    <div class="d-flex flex-row justify-content-between">
+        <div></div>
+        <div></div>
+        <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Click="this.Close" class="my-1" />
+    </div>
+
+    @if (this.State.Value.IsLoading)
+    {
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
+    } else if (this.State.Value.Problem is not null)
+    {
+        <ApiProblemAlert Text="Loading the movie has failed" Problem="this.State.Value.Problem" Class="w-100 m-4"
+                         TryAgain="this.FetchMovie" />
+    } else if (this.State.Value.MovieModel is { } movie)
+    {
+        <p class="m-2">@(movie.Titles.FirstOrDefault()?.Name ?? this.Loc["MovieForm.NewMovie"])</p>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public ListItemModel ListItem { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback Close { get; set; }
+
+    private void FetchMovie() =>
+        this.Dispatcher.Dispatch(new FetchMovieAction(this.ListItem.Id));
+}

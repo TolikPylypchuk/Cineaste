@@ -1,6 +1,6 @@
 namespace Cineaste.Client.Api;
 
-public interface ICultureApi : IApi
+public interface ICultureApi
 {
     [Get("/cultures")]
     Task<IApiResponse<List<SimpleCultureModel>>> GetAllCultures();

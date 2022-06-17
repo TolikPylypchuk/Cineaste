@@ -6,7 +6,8 @@
 
 <div class="d-flex row w-100 h-100">
     <div class="col-2">
-        <ListSidebar Handle="@this.Handle" />
+        <ListSidebar Handle="@this.Handle"
+                     IsListLoaded="this.State.Value.IsLoaded && this.State.Value.Problem is null" />
     </div>
 
     <div class="col-8 d-flex flex-column align-items-center h-100">
@@ -22,11 +23,11 @@
             <h1 class="display-5 mt-md-1 mt-1 flex-shrink-0">@this.State.Value.Name</h1>
 
             <RadzenDataList WrapItems="true" Data="@this.State.Value.Items" TItem="ListItemModel"
-                            class="overflow-auto h-100">
+                            class="overflow-auto w-100 h-100">
                 <Template Context="item">
-                    <div role="button" class="container border-bottom"
+                    <div role="button" class="container border-bottom" @onclick="@(() => this.SelectItem(item))"
                             style=@($"border: none; border-radius: 0; color: {item.Color};")>
-                        <div class="d-flex flex-row align-items-center">
+                        <div class="d-flex flex-row flex-fill align-items-center">
                             <p class="list-item text-start m-0" style="width: 50px">
                                 @item.DisplayNumber
                             </p>
@@ -50,9 +51,15 @@
     </div>
 
     <div class="col-2 h-100">
-        @if (this.State.Value.SelectedItem is null)
+        @if (this.State.Value.IsLoaded && this.State.Value.Problem is null)
         {
-            <ListActionsPanel />
+            @if (this.State.Value.SelectedItem is null)
+            {
+                <ListActionsPanel />
+            } else if (this.State.Value.SelectedItem.Type == ListItemType.Movie)
+            {
+                <MovieForm ListItem="this.State.Value.SelectedItem" Close="this.OnItemClosed" />
+            }
         }
     </div>
 </div>
@@ -78,6 +85,12 @@
 
     private void FetchList() =>
         this.Dispatcher.Dispatch(new FetchListAction(this.Handle));
+
+    private void SelectItem(ListItemModel item) =>
+        this.Dispatcher.Dispatch(new SelectItemAction(item));
+
+    private void OnItemClosed() =>
+        this.Dispatcher.Dispatch(new CloseItemAction());
 
     private void OnPageChanged(object? sender, LocationChangedEventArgs e)
     {

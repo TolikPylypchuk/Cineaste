@@ -313,6 +313,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Movie.
+        /// </summary>
+        public static string MovieForm_NewMovie {
+            get {
+                return ResourceManager.GetString("MovieForm.NewMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A list with this handle already exists.
         /// </summary>
         public static string Problem_Conflict_List {
@@ -331,11 +340,29 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The movie couldn&apos;t be found.
+        /// </summary>
+        public static string Problem_NotFound_Movie {
+            get {
+                return ResourceManager.GetString("Problem.NotFound.Movie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to list.
         /// </summary>
         public static string Problem_NotFound_Resource_List {
             get {
                 return ResourceManager.GetString("Problem.NotFound.Resource.List", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to movie.
+        /// </summary>
+        public static string Problem_NotFound_Resource_Movie {
+            get {
+                return ResourceManager.GetString("Problem.NotFound.Resource.Movie", resourceCulture);
             }
         }
         

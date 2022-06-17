@@ -9,6 +9,7 @@ global using Cineaste.Client.Services.Navigation;
 global using Cineaste.Shared;
 global using Cineaste.Shared.Comparers;
 global using Cineaste.Shared.ListModels;
+global using Cineaste.Shared.MovieModels;
 
 global using Fluxor;
 

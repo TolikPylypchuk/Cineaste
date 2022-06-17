@@ -14,7 +14,7 @@
             <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
 
             <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
-            <RadzenTextBox @bind-Value="this.Name" Name="Name" Class="w-100" />
+            <RadzenTextBox @bind-Value="this.Name" Name="Name" Change="this.OnNameChanged" Class="w-100" />
             <RadzenPropertyValidator Validator="this.NameValidator" Component="Name" />
 
             <div class="d-flex flex-row mt-4 mb-2">
@@ -84,17 +84,7 @@
 @code {
     private const string DefaultDefaultSeasonTitle = "Season #";
 
-    private string name = String.Empty;
-
-    private string Name
-    {
-        get => this.name;
-        set
-        {
-            this.name = value;
-            this.Handle = ListUtils.CreateHandleFromName(value);
-        }
-    }
+    private string Name { get; set; } = String.Empty;
 
     private string Handle { get; set; } = String.Empty;
 
@@ -128,6 +118,9 @@
         this.DefaultSeasonOriginalTitleValidator = new PropertyValidator<CreateListRequest, string>(
             validator, nameof(this.DefaultSeasonOriginalTitle), this.Loc);
     }
+
+    private void OnNameChanged() =>
+        this.Handle = ListUtils.CreateHandleFromName(this.Name);
 
     private void FetchCultures() =>
         this.Dispatcher.Dispatch(new FetchCulturesAction());
