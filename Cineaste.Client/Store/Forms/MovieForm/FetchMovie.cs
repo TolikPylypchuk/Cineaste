@@ -39,21 +39,20 @@ public sealed partial class FetchMovieEffect
     private readonly IMovieApi api;
 
     [EffectMethod]
-    public async Task HandleSelectItem(SelectItemAction action, IDispatcher dispatcher)
+    public Task HandleSelectItem(SelectItemAction action, IDispatcher dispatcher)
     {
-        if (state.Value.MovieModel?.Id != action.Item.Id)
+        if (state.Value.MovieModel?.Id != action.Item.Id && action.Item.Type == ListItemType.Movie)
         {
-            await this.FetchMovie(action.Item.Id, dispatcher);
+            dispatcher.Dispatch(new FetchMovieAction(action.Item.Id));
         }
+
+        return Task.CompletedTask;
     }
 
     [EffectMethod]
-    public async Task HandleFetchMovie(FetchMovieAction action, IDispatcher dispatcher) =>
-        await this.FetchMovie(action.Id, dispatcher);
-
-    private async Task FetchMovie(Guid id, IDispatcher dispatcher)
+    public async Task HandleFetchMovie(FetchMovieAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.GetMovie(id).ToApiResultAsync();
+        var result = await this.api.GetMovie(action.Id).ToApiResultAsync();
         dispatcher.Dispatch(new FetchMovieResultAction(result));
     }
 }

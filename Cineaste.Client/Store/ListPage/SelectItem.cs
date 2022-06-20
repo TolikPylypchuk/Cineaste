@@ -8,7 +8,9 @@ public static class SelectItemReducers
 {
     [ReducerMethod]
     public static ListPageState ReduceSelectItemAction(ListPageState state, SelectItemAction action) =>
-        state with { SelectedItem = action.Item };
+        action.Item.Type == ListItemType.Movie
+            ? state with { SelectedItem = action.Item }
+            : state;
 
     [ReducerMethod(typeof(CloseItemAction))]
     public static ListPageState ReduceCloseItemAction(ListPageState state) =>

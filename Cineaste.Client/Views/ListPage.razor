@@ -25,24 +25,13 @@
             <RadzenDataList WrapItems="true" Data="@this.State.Value.Items" TItem="ListItemModel"
                             class="overflow-auto w-100 h-100">
                 <Template Context="item">
-                    <div role="button" class="container border-bottom" @onclick="@(() => this.SelectItem(item))"
-                            style=@($"border: none; border-radius: 0; color: {item.Color};")>
+                    <div role="button" class="list-item-container border-bottom"
+                         @onclick="@(() => this.SelectItem(item))" style="@($"color: {item.Color};")">
                         <div class="d-flex flex-row flex-fill align-items-center">
-                            <p class="list-item text-start m-0" style="width: 50px">
-                                @item.DisplayNumber
-                            </p>
-
-                            <p class="list-item text-center m-0" style="width: calc((100% - 175px) / 2)">
-                                @item.Title
-                            </p>
-
-                            <p class="list-item text-center m-0" style="width: calc((100% - 175px) / 2)">
-                                @item.OriginalTitle
-                            </p>
-
-                            <p class="list-item text-end m-0" style="width: 125px">
-                                @item.Years
-                            </p>
+                            <p class="list-item item-number text-start m-0">@item.DisplayNumber</p>
+                            <p class="list-item item-title text-center m-0">@item.Title</p>
+                            <p class="list-item item-title text-center m-0">@item.OriginalTitle</p>
+                            <p class="list-item item-years text-end m-0">@item.Years</p>
                         </div>
                     </div>
                 </Template>

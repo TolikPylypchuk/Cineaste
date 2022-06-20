@@ -1,3 +1,28 @@
 .list-item {
     font-size: 1rem;
 }
+
+.list-item-container {
+    border: none;
+    border-radius: 0;
+}
+
+.item-number {
+    width: 50px;
+}
+
+.item-title {
+    width: calc((100% - 175px) / 2)
+}
+
+.item-years {
+    width: 125px
+}
+
+::deep .rz-g {
+    flex-direction: column;
+}
+
+::deep .rz-g > div {
+    margin: 0;
+}

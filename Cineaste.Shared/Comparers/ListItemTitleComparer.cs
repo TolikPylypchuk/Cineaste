@@ -37,11 +37,11 @@ public sealed class ListItemTitleComparer : NullableComparerBase<ListItemModel>
         {
             (ListItemType.Movie, ListItemType.Movie) => this.CompareConsideringFranchiseItems(x, y),
             (ListItemType.Movie, ListItemType.Series) => this.CompareConsideringFranchiseItems(x, y),
-            (ListItemType.Movie, ListItemType.Franchise) => this.CompareWithFranchise(x, y) * -1,
+            (ListItemType.Movie, ListItemType.Franchise) => this.CompareWithFranchise(y, x) * -1,
 
             (ListItemType.Series, ListItemType.Movie) => this.CompareConsideringFranchiseItems(x, y),
             (ListItemType.Series, ListItemType.Series) => this.CompareConsideringFranchiseItems(x, y),
-            (ListItemType.Series, ListItemType.Franchise) => this.CompareWithFranchise(x, y) * -1,
+            (ListItemType.Series, ListItemType.Franchise) => this.CompareWithFranchise(y, x) * -1,
 
             (ListItemType.Franchise, ListItemType.Movie) => this.CompareWithFranchise(x, y),
             (ListItemType.Franchise, ListItemType.Series) => this.CompareWithFranchise(x, y),
