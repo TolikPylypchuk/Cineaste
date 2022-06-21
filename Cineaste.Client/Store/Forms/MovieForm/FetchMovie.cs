@@ -43,6 +43,7 @@ public sealed partial class FetchMovieEffect
     {
         if (state.Value.MovieModel?.Id != action.Item.Id && action.Item.Type == ListItemType.Movie)
         {
+            dispatcher.Dispatch(new SetAvailableMovieKindsAction(action.AvailableKinds));
             dispatcher.Dispatch(new FetchMovieAction(action.Item.Id));
         }
 

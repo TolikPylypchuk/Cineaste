@@ -313,11 +313,74 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to IMDb ID.
+        /// </summary>
+        public static string MovieForm_ImdbId {
+            get {
+                return ResourceManager.GetString("MovieForm.ImdbId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string MovieForm_Kind {
+            get {
+                return ResourceManager.GetString("MovieForm.Kind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Movie.
         /// </summary>
         public static string MovieForm_NewMovie {
             get {
                 return ResourceManager.GetString("MovieForm.NewMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original titles.
+        /// </summary>
+        public static string MovieForm_OriginalTitles {
+            get {
+                return ResourceManager.GetString("MovieForm.OriginalTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading the movie has failed.
+        /// </summary>
+        public static string MovieForm_Problem_LoadingFailed {
+            get {
+                return ResourceManager.GetString("MovieForm.Problem.LoadingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes link.
+        /// </summary>
+        public static string MovieForm_RottenTomatoesLink {
+            get {
+                return ResourceManager.GetString("MovieForm.RottenTomatoesLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titles.
+        /// </summary>
+        public static string MovieForm_Titles {
+            get {
+                return ResourceManager.GetString("MovieForm.Titles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string MovieForm_Year {
+            get {
+                return ResourceManager.GetString("MovieForm.Year", resourceCulture);
             }
         }
         

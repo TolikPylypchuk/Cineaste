@@ -201,8 +201,29 @@
   <data name="ListPage.Menu.Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="MovieForm.ImdbId" xml:space="preserve">
+    <value>IMDb ID</value>
+  </data>
+  <data name="MovieForm.Kind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
   <data name="MovieForm.NewMovie" xml:space="preserve">
     <value>New Movie</value>
+  </data>
+  <data name="MovieForm.OriginalTitles" xml:space="preserve">
+    <value>Original titles</value>
+  </data>
+  <data name="MovieForm.Problem.LoadingFailed" xml:space="preserve">
+    <value>Loading the movie has failed</value>
+  </data>
+  <data name="MovieForm.RottenTomatoesLink" xml:space="preserve">
+    <value>Rotten Tomatoes link</value>
+  </data>
+  <data name="MovieForm.Titles" xml:space="preserve">
+    <value>Titles</value>
+  </data>
+  <data name="MovieForm.Year" xml:space="preserve">
+    <value>Year</value>
   </data>
   <data name="Problem.Conflict.List" xml:space="preserve">
     <value>A list with this handle already exists</value>

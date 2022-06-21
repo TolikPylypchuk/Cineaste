@@ -5,7 +5,7 @@
 @inject IPageNavigator PageNavigator
 
 <div class="d-flex row w-100 h-100">
-    <div class="col-2">
+    <div class="col-2 pe-0">
         <ListSidebar Handle="@this.Handle"
                      IsListLoaded="this.State.Value.IsLoaded && this.State.Value.Problem is null" />
     </div>
@@ -39,7 +39,7 @@
         }
     </div>
 
-    <div class="col-2 h-100">
+    <div class="col-2 p-0 h-100">
         @if (this.State.Value.IsLoaded && this.State.Value.Problem is null)
         {
             @if (this.State.Value.SelectedItem is null)
@@ -76,7 +76,14 @@
         this.Dispatcher.Dispatch(new FetchListAction(this.Handle));
 
     private void SelectItem(ListItemModel item) =>
-        this.Dispatcher.Dispatch(new SelectItemAction(item));
+        this.Dispatcher.Dispatch(new SelectItemAction(
+            item,
+            item.Type switch
+            {
+                ListItemType.Movie => this.State.Value.AvailableMovieKinds,
+                ListItemType.Series => this.State.Value.AvailableSeriesKinds,
+                _ => ImmutableList.Create<SimpleKindModel>()
+            }));
 
     private void OnItemClosed() =>
         this.Dispatcher.Dispatch(new CloseItemAction());

@@ -7,6 +7,4 @@ public sealed record MovieModel(
     int Year,
     SimpleKindModel Kind,
     string? ImdbId,
-    string? RottenTomatoesLink)
-{
-}
+    string? RottenTomatoesLink);

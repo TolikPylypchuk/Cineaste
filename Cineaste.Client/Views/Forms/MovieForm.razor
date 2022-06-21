@@ -7,7 +7,8 @@
     <div class="d-flex flex-row justify-content-between">
         <div></div>
         <div></div>
-        <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Click="this.Close" class="my-1" />
+        <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
+                      class="my-2" />
     </div>
 
     @if (this.State.Value.IsLoading)
@@ -15,21 +16,122 @@
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
     } else if (this.State.Value.Problem is not null)
     {
-        <ApiProblemAlert Text="Loading the movie has failed" Problem="this.State.Value.Problem" Class="w-100 m-4"
-                         TryAgain="this.FetchMovie" />
+        <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.LoadingFailed"]" Problem="this.State.Value.Problem"
+                         Class="w-100 m-4" TryAgain="this.FetchMovie" />
     } else if (this.State.Value.MovieModel is { } movie)
     {
-        <p class="m-2">@(movie.Titles.FirstOrDefault()?.Name ?? this.Loc["MovieForm.NewMovie"])</p>
+        <h1 style="font-weight: 300">
+            @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem != null
+                ? this.FormTitle
+                : this.Loc["MovieForm.NewMovie"])
+        </h1>
+
+        <RadzenTemplateForm TItem="MovieForm" Data="this" class="w-100">
+            <RadzenLabel Text="@this.Loc["MovieForm.Titles"]" class="mt-2" />
+
+            <div>
+                @for (int i = 0; i < this.Titles.Count; i++)
+                {
+                    int index = i;
+                    <RadzenTextBox Value="@this.Titles[index]" class="w-100"
+                                   Change="@(value => this.UpdateTitle(value, index))" />
+                }
+            </div>
+
+            <RadzenLabel Text="@this.Loc["MovieForm.OriginalTitles"]" class="mt-2" />
+
+            <div>
+                @for (int i = 0; i < this.OriginalTitles.Count; i++)
+                {
+                    int index = i;
+                    <RadzenTextBox Value="@this.OriginalTitles[index]" class="w-100"
+                                   Change="@(value => this.UpdateOriginalTitle(value, index))" />
+                }
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md pe-md-1">
+                    <RadzenLabel Text="@this.Loc["MovieForm.Year"]" />
+                    <RadzenNumeric @bind-Value="this.Year" />
+                </div>
+                <div class="col-md ps-md-1">
+                    <RadzenLabel Text="@this.Loc["MovieForm.Kind"]" />
+                    <RadzenDropDown @bind-Value="this.Kind" Data="this.State.Value.AvailableKinds" TextProperty="Name"
+                                    AllowVirtualization="false" AllowClear="false" AllowFiltering="false" />
+                </div>
+            </div>
+
+            <RadzenLabel Text="@this.Loc["MovieForm.ImdbId"]" class="mt-2" />
+            <RadzenTextBox @bind-Value="@this.ImdbId" class="w-100" />
+
+            <RadzenLabel Text="@this.Loc["MovieForm.RottenTomatoesLink"]" class="mt-2" />
+            <RadzenTextBox @bind-Value="@this.RottenTomatoesLink" class="w-100" />
+        </RadzenTemplateForm>
     }
 </div>
 
 @code {
     [Parameter]
-    public ListItemModel ListItem { get; set; } = null!;
+    public ListItemModel? ListItem { get; set; }
 
     [Parameter]
     public EventCallback Close { get; set; }
 
-    private void FetchMovie() =>
-        this.Dispatcher.Dispatch(new FetchMovieAction(this.ListItem.Id));
+    private string FormTitle { get; set; } = String.Empty;
+
+    private List<string> Titles { get; set; } = new();
+    private List<string> OriginalTitles { get; set; } = new();
+
+    private int Year { get; set; }
+
+    private SimpleKindModel? Kind { get; set; }
+
+    private string ImdbId { get; set; } = String.Empty;
+    private string RottenTomatoesLink { get; set; } = String.Empty;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        this.SetPropertyValues();
+        this.SubscribeToAction<FetchMovieResultAction>(action => this.SetPropertyValues());
+    }
+
+    private void FetchMovie()
+    {
+        if (this.ListItem != null)
+        {
+            this.Dispatcher.Dispatch(new FetchMovieAction(this.ListItem.Id));
+        }
+    }
+
+    private void SetPropertyValues()
+    {
+        var movie = this.State.Value.MovieModel;
+
+        this.Titles = movie?.Titles?.Select(title => title.Name)?.ToList() ?? new();
+        this.OriginalTitles = movie?.OriginalTitles?.Select(title => title.Name)?.ToList() ?? new();
+        this.Year = movie?.Year ?? DateTime.Now.Year;
+        this.Kind = movie?.Kind;
+        this.ImdbId = movie?.ImdbId ?? String.Empty;
+        this.RottenTomatoesLink = movie?.RottenTomatoesLink ?? String.Empty;
+
+        this.UpdateFormTitle();
+    }
+
+    private void UpdateTitle(string title, int index)
+    {
+        this.Titles[index] = title;
+
+        if (index == 0)
+        {
+            this.UpdateFormTitle();
+        }
+    }
+
+    private void UpdateOriginalTitle(string title, int index) =>
+        this.OriginalTitles[index] = title;
+
+    private void UpdateFormTitle() =>
+        this.FormTitle = this.Titles.FirstOrDefault() ?? String.Empty;
 }

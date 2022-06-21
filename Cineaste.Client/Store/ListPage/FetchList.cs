@@ -21,7 +21,15 @@ public static class FetchListReducers
                 {
                     IsLoaded = true,
                     Name = success.Value.Name,
-                    Items = SortItems(success.Value)
+                    Items = SortItems(success.Value),
+                    AvailableMovieKinds = success.Value
+                        .MovieKinds
+                        .Select(model => model.ToSimpleModel())
+                        .ToImmutableList(),
+                    AvailableSeriesKinds = success.Value
+                        .SeriesKinds
+                        .Select(model => model.ToSimpleModel())
+                        .ToImmutableList(),
                 },
             ApiFailure<ListModel> failure =>
                 new() { IsLoaded = true, Problem = failure.Problem },

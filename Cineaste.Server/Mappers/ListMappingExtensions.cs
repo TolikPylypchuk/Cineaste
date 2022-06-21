@@ -8,11 +8,11 @@ public static class ListMappingExtensions
             list.Name,
             list.Handle,
             list.Configuration.ToConfigurationModel(),
-            list.Movies.Select(ToListItemModel).ToList(),
-            list.Series.Select(ToListItemModel).ToList(),
-            list.Franchises.Select(ToListItemModel).ToList(),
-            list.MovieKinds.Select(kind => kind.ToListKindModel()).ToList(),
-            list.SeriesKinds.Select(kind => kind.ToListKindModel()).ToList());
+            list.Movies.Select(ToListItemModel).ToImmutableList(),
+            list.Series.Select(ToListItemModel).ToImmutableList(),
+            list.Franchises.Select(ToListItemModel).ToImmutableList(),
+            list.MovieKinds.Select(kind => kind.ToListKindModel()).ToImmutableList(),
+            list.SeriesKinds.Select(kind => kind.ToListKindModel()).ToImmutableList());
 
     public static ListConfigurationModel ToConfigurationModel(this ListConfiguration config) =>
         new(

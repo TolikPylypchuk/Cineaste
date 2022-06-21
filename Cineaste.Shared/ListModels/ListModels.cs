@@ -9,11 +9,11 @@ public sealed record ListModel(
     string Name,
     string Handle,
     ListConfigurationModel Config,
-    List<ListItemModel> Movies,
-    List<ListItemModel> Series,
-    List<ListItemModel> Franchises,
-    List<ListKindModel> MovieKinds,
-    List<ListKindModel> SeriesKinds);
+    ImmutableList<ListItemModel> Movies,
+    ImmutableList<ListItemModel> Series,
+    ImmutableList<ListItemModel> Franchises,
+    ImmutableList<ListKindModel> MovieKinds,
+    ImmutableList<ListKindModel> SeriesKinds);
 
 public sealed record ListConfigurationModel(
     string Culture,

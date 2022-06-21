@@ -11,3 +11,9 @@ public sealed record ListKindModel(
 public sealed record SimpleKindModel(Guid Id, string Name, ListKindTarget Target);
 
 public enum ListKindTarget { Movie, Series }
+
+public static class Extensions
+{
+    public static SimpleKindModel ToSimpleModel(this ListKindModel model) =>
+        new(model.Id, model.Name, model.Target);
+}
