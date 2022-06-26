@@ -1,12 +1,11 @@
 namespace Cineaste.Core;
 
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
+
+using static Cineaste.Basic.Constants;
 
 public static class Require
 {
-    private static readonly Regex ImdbIdRegex = new(@"tt\d+", RegexOptions.Compiled);
-
     public static T NotNull<T>(T? value, [CallerArgumentExpression("value")] string? paramName = null) =>
         value ?? throw new ArgumentNullException(paramName);
 
@@ -26,8 +25,10 @@ public static class Require
         value == null || ImdbIdRegex.IsMatch(value) ? value : throw new ArgumentOutOfRangeException(paramName);
 
     [return: NotNullIfNotNull("value")]
-    public static string? Url(string? value, [CallerArgumentExpression("value")] string? paramName = null) =>
-        value == null || Uri.IsWellFormedUriString(value, UriKind.Absolute) && value.StartsWith("http")
+    public static string? RottenTomatoesLink(
+        string? value,
+        [CallerArgumentExpression("value")] string? paramName = null) =>
+        value == null || RottenTomatoesLinkRegex.IsMatch(value)
             ? value
             : throw new ArgumentOutOfRangeException(paramName);
 }

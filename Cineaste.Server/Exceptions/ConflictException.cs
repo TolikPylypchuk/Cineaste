@@ -3,7 +3,6 @@ namespace Cineaste.Server.Exceptions;
 public sealed class ConflictException : CineasteException
 {
     public string? Resource { get; }
-    public IDictionary<string, object?>? Properties { get; }
 
     public ConflictException(
         string messageCode,
@@ -11,9 +10,6 @@ public sealed class ConflictException : CineasteException
         string? resource = null,
         IDictionary<string, object?>? properties = null,
         Exception? innerException = null)
-        : base(messageCode, message, innerException)
-    {
+        : base(messageCode, message, properties, innerException) =>
         this.Resource = resource;
-        this.Properties = properties;
-    }
 }

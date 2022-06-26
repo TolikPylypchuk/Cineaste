@@ -5,6 +5,8 @@ public sealed record MovieModel(
     ImmutableList<TitleModel> Titles,
     ImmutableList<TitleModel> OriginalTitles,
     int Year,
+    bool IsWatched,
+    bool IsReleased,
     SimpleKindModel Kind,
     string? ImdbId,
     string? RottenTomatoesLink);

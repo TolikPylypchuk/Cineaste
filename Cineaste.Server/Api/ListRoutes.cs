@@ -19,6 +19,6 @@ public static class ListRoutes
     private static async Task<IResult> CreateList(Validated<CreateListRequest> request, IListService listService)
     {
         var response = await listService.CreateList(request);
-        return Results.Created($"/lists/{response.Handle}", response);
+        return Results.Created($"/api/lists/{response.Handle}", response);
     }
 }

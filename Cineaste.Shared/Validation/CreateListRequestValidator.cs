@@ -3,8 +3,6 @@ namespace Cineaste.Shared.Validation;
 using System.Collections.Immutable;
 using System.Globalization;
 
-using static ValidationErrorCodes;
-
 public sealed class CreateListRequestValidator : CineasteValidator<CreateListRequest>
 {
     private static readonly IReadOnlySet<string> AvailableCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)

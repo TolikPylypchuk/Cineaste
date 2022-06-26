@@ -28,7 +28,7 @@ public sealed class Movie : Entity<Movie>
     public string? RottenTomatoesLink
     {
         get => this.rottenTomatoesLink;
-        set => this.rottenTomatoesLink = Require.Url(value);
+        set => this.rottenTomatoesLink = Require.RottenTomatoesLink(value);
     }
 
     public Poster? Poster { get; set; }
