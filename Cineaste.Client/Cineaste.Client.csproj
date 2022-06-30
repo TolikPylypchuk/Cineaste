@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoConstructor" Version="3.2.1">
+    <PackageReference Include="AutoConstructor" Version="3.2.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -27,8 +27,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.161" />
-    <PackageReference Include="Radzen.Blazor" Version="3.18.15" />
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.174" />
+    <PackageReference Include="Radzen.Blazor" Version="3.19.1" />
     <PackageReference Include="Refit" Version="6.3.2" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
