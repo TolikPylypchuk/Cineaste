@@ -2,8 +2,6 @@ namespace Cineaste.Client.Store.CreateListPage;
 
 public sealed record FetchCulturesAction;
 
-public sealed record FetchCulturesResultAction(ApiResult<List<SimpleCultureModel>> Result);
-
 public static class FetchCulturesReducers
 {
     [ReducerMethod(typeof(FetchCulturesAction))]
@@ -13,14 +11,14 @@ public static class FetchCulturesReducers
     [ReducerMethod]
     public static CreateListPageState ReduceFetchCulturesResultAction(
         CreateListPageState state,
-        FetchCulturesResultAction action) =>
+        ResultAction<List<SimpleCultureModel>> action) =>
         action.Result switch
         {
             ApiSuccess<List<SimpleCultureModel>> success =>
                 state with { AllCultures = success.Value.ToImmutableList() },
             ApiFailure<List<SimpleCultureModel>> failure =>
                 state with { CulturesProblem = failure.Problem },
-            _ => state
+            _ => Match.ImpossibleType<CreateListPageState>(action.Result)
         };
 }
 
@@ -33,6 +31,6 @@ public sealed partial class FetchListsEffect
     public async Task HandleFetchListsAction(IDispatcher dispatcher)
     {
         var result = await this.api.GetAllCultures().ToApiResultAsync();
-        dispatcher.Dispatch(new FetchCulturesResultAction(result));
+        dispatcher.Dispatch(ResultAction.Create(result));
     }
 }

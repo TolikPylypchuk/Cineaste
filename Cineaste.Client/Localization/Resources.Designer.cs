@@ -313,11 +313,47 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add original title.
+        /// </summary>
+        public static string MovieForm_AddOriginalTitle {
+            get {
+                return ResourceManager.GetString("MovieForm.AddOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add title.
+        /// </summary>
+        public static string MovieForm_AddTitle {
+            get {
+                return ResourceManager.GetString("MovieForm.AddTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IMDb ID.
         /// </summary>
         public static string MovieForm_ImdbId {
             get {
                 return ResourceManager.GetString("MovieForm.ImdbId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is released.
+        /// </summary>
+        public static string MovieForm_IsReleased {
+            get {
+                return ResourceManager.GetString("MovieForm.IsReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is watched.
+        /// </summary>
+        public static string MovieForm_IsWatched {
+            get {
+                return ResourceManager.GetString("MovieForm.IsWatched", resourceCulture);
             }
         }
         
@@ -354,6 +390,24 @@ namespace Cineaste.Client.Localization {
         public static string MovieForm_Problem_LoadingFailed {
             get {
                 return ResourceManager.GetString("MovieForm.Problem.LoadingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove original title.
+        /// </summary>
+        public static string MovieForm_RemoveOriginalTitle {
+            get {
+                return ResourceManager.GetString("MovieForm.RemoveOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove title.
+        /// </summary>
+        public static string MovieForm_RemoveTitle {
+            get {
+                return ResourceManager.GetString("MovieForm.RemoveTitle", resourceCulture);
             }
         }
         
@@ -516,6 +570,69 @@ namespace Cineaste.Client.Localization {
         public static string Validation_CreateList_Name_TooLong {
             get {
                 return ResourceManager.GetString("Validation.CreateList.Name.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The IMDb ID must be in the form &apos;tt[digits]&apos; e.g. &apos;tt123456&apos;.
+        /// </summary>
+        public static string Validation_Movie_ImdbId_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Movie.ImdbId.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The original titles must all be different.
+        /// </summary>
+        public static string Validation_Movie_OriginalTitles_Distinct_Names {
+            get {
+                return ResourceManager.GetString("Validation.Movie.OriginalTitles.Distinct.Names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Rotten Tomatoes link must be a URL to an RT page.
+        /// </summary>
+        public static string Validation_Movie_RottenTomatoesLink_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Movie.RottenTomatoesLink.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The titles must all be different.
+        /// </summary>
+        public static string Validation_Movie_Titles_Distinct_Names {
+            get {
+                return ResourceManager.GetString("Validation.Movie.Titles.Distinct.Names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The year must be after 1900.
+        /// </summary>
+        public static string Validation_Movie_Year_TooLow {
+            get {
+                return ResourceManager.GetString("Validation.Movie.Year.TooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title is empty.
+        /// </summary>
+        public static string Validation_Title_Name_Empty {
+            get {
+                return ResourceManager.GetString("Validation.Title.Name.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title is too long.
+        /// </summary>
+        public static string Validation_Title_Name_TooLong {
+            get {
+                return ResourceManager.GetString("Validation.Title.Name.TooLong", resourceCulture);
             }
         }
     }

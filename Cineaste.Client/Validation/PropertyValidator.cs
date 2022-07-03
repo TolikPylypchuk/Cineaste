@@ -1,5 +1,7 @@
 namespace Cineaste.Client.Validation;
 
+using System.Linq.Expressions;
+
 using Cineaste.Client.Localization;
 
 using FluentValidation;
@@ -14,11 +16,16 @@ public sealed partial class PropertyValidator<T, TProperty>
     private readonly IReadOnlyCollection<(IPropertyValidator<T, TProperty> Validator, string ErrorCode)> validators;
     private readonly IStringLocalizer<Resources> localizer;
 
-    public PropertyValidator(IValidator<T> validator, string property, IStringLocalizer<Resources> localizer)
+    public PropertyValidator(
+        IValidator<T> validator,
+        Expression<Func<T, TProperty?>> property,
+        IStringLocalizer<Resources> localizer)
     {
+        var propertyName = property.GetMemberName();
+
         this.validators = validator
             .CreateDescriptor()
-            .GetValidatorsForMember(property)
+            .GetValidatorsForMember(propertyName)
             .Select(validatorAndOptions =>
                 validatorAndOptions.Validator is IPropertyValidator<T, TProperty> validator
                     ? (Validator: validator, validatorAndOptions.Options.ErrorCode)
@@ -31,10 +38,19 @@ public sealed partial class PropertyValidator<T, TProperty>
     }
 
     public IReadOnlyCollection<string> Validate(TProperty value) =>
-        validators
+        this.validators
             .Select(v => v.Validator.IsValid(this.Context, value) ? null : v.ErrorCode)
             .WhereNotNull()
             .Select(errorCode => this.localizer[$"Validation.{errorCode}"].ToString())
             .ToList()
             .AsReadOnly();
+}
+
+public static class PropertyValidator
+{
+    public static PropertyValidator<T, TProperty> Create<T, TProperty>(
+        IValidator<T> validator,
+        Expression<Func<T, TProperty?>> property,
+        IStringLocalizer<Resources> localizer) =>
+        new(validator, property, localizer);
 }

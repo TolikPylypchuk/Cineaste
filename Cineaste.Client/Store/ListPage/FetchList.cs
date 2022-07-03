@@ -4,8 +4,6 @@ using Nito.Comparers;
 
 public sealed record FetchListAction(string Handle);
 
-public sealed record FetchListResultAction(ApiResult<ListModel> Result);
-
 public static class FetchListReducers
 {
     [ReducerMethod(typeof(FetchListAction))]
@@ -13,7 +11,7 @@ public static class FetchListReducers
         new() { IsLoading = true };
 
     [ReducerMethod]
-    public static ListPageState ReduceFetchListsResultAction(ListPageState state, FetchListResultAction action) =>
+    public static ListPageState ReduceFetchListsResultAction(ListPageState state, ResultAction<ListModel> action) =>
         action.Result switch
         {
             ApiSuccess<ListModel> success =>
@@ -33,7 +31,7 @@ public static class FetchListReducers
                 },
             ApiFailure<ListModel> failure =>
                 new() { IsLoaded = true, Problem = failure.Problem },
-            _ => state
+            _ => Match.ImpossibleType<ListPageState>(action.Result)
         };
 
     private static ImmutableSortedSet<ListItemModel> SortItems(ListModel list)
@@ -71,6 +69,6 @@ public sealed partial class FetchListEffect
     public async Task HandleFetchListAction(FetchListAction action, IDispatcher dispatcher)
     {
         var result = await this.api.GetList(action.Handle).ToApiResultAsync();
-        dispatcher.Dispatch(new FetchListResultAction(result));
+        dispatcher.Dispatch(ResultAction.Create(result));
     }
 }

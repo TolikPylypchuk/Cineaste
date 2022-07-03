@@ -1,5 +1,6 @@
 namespace Cineaste.Basic;
 
+using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
 public static class Extensions
@@ -14,5 +15,8 @@ public static class Extensions
 
     public static IEnumerable<T> WhereNotDefault<T>(this IEnumerable<T> items)
         where T : struct =>
-        items.Where(item => !item.Equals(default));
+        items.Where(item => !item.Equals(default(T)));
+
+    public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> items) =>
+        new(items);
 }

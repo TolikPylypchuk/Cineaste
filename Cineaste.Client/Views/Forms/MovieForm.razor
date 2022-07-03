@@ -3,7 +3,7 @@
 @inject IDispatcher Dispatcher
 @inject IStringLocalizer<Resources> Loc
 
-<div class="d-flex flex-column">
+<div class="d-flex flex-column h-100">
     <div class="d-flex flex-row justify-content-between">
         <div></div>
         <div></div>
@@ -26,47 +26,65 @@
                 : this.Loc["MovieForm.NewMovie"])
         </h1>
 
-        <RadzenTemplateForm TItem="MovieForm" Data="this" class="w-100">
-            <RadzenLabel Text="@this.Loc["MovieForm.Titles"]" class="mt-2" />
-
-            <div>
-                @for (int i = 0; i < this.Titles.Count; i++)
-                {
-                    int index = i;
-                    <RadzenTextBox Value="@this.Titles[index]" class="w-100"
-                                   Change="@(value => this.UpdateTitle(value, index))" />
-                }
-            </div>
-
-            <RadzenLabel Text="@this.Loc["MovieForm.OriginalTitles"]" class="mt-2" />
-
-            <div>
-                @for (int i = 0; i < this.OriginalTitles.Count; i++)
-                {
-                    int index = i;
-                    <RadzenTextBox Value="@this.OriginalTitles[index]" class="w-100"
-                                   Change="@(value => this.UpdateOriginalTitle(value, index))" />
-                }
-            </div>
-
-            <div class="row mt-2">
-                <div class="col-md pe-md-1">
-                    <RadzenLabel Text="@this.Loc["MovieForm.Year"]" />
-                    <RadzenNumeric @bind-Value="this.Year" />
+        <div class="w-100 h-100 d-flex flex-column justify-content-between">
+            <div class="h-100">
+                <div class="d-md-flex justify-content-md-center mt-2">
+                    <div class="me-md-1">
+                        <RadzenCheckBox @bind-Value="@this.IsWatched" Name="IsWatchedCheckBox" />
+                        <RadzenLabel Text="@this.Loc["MovieForm.IsWatched"]" Component="IsWatchedCheckBox" />
+                    </div>
+                    <div class="ms-md-1">
+                        <RadzenCheckBox @bind-Value="@this.IsReleased" Name="IsReleasedCheckBox" />
+                        <RadzenLabel Text="@this.Loc["MovieForm.IsReleased"]" Component="IsReleasedCheckBox" />
+                    </div>
                 </div>
-                <div class="col-md ps-md-1">
-                    <RadzenLabel Text="@this.Loc["MovieForm.Kind"]" />
-                    <RadzenDropDown @bind-Value="this.Kind" Data="this.State.Value.AvailableKinds" TextProperty="Name"
-                                    AllowVirtualization="false" AllowClear="false" AllowFiltering="false" />
+
+                <RadzenLabel Text="@this.Loc["MovieForm.Titles"]" class="mt-2" />
+                <TitlesForm Titles="@this.Titles" Validator="@this.TitlesValidator" />
+
+                <RadzenLabel Text="@this.Loc["MovieForm.OriginalTitles"]" class="mt-2" />
+                <TitlesForm Titles="@this.OriginalTitles" Validator="@this.OriginalTitlesValidator" />
+
+                <div class="row mt-2">
+                    <div class="col-md pe-md-1">
+                        <RadzenLabel Text="@this.Loc["MovieForm.Year"]" Component="YearNumeric" />
+                        <RadzenNumeric @bind-Value="this.Year" Name="YearNumeric" />
+                        <FormValidator Validator="@this.YearValidator" Value="@this.Year" />
+                    </div>
+                    <div class="col-md ps-md-1">
+                        <RadzenLabel Text="@this.Loc["MovieForm.Kind"]" Component="KindDropDown" />
+                        <RadzenDropDown @bind-Value="@this.Kind" Data="this.State.Value.AvailableKinds"
+                                        AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
+                                        Name="KindDropDown" TextProperty="Name" />
+                    </div>
+                </div>
+
+                <RadzenLabel Text="@this.Loc["MovieForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-2" />
+                <RadzenTextBox @bind-Value="@this.ImdbId" Name="ImdbIdTextBox" class="w-100" />
+                <FormValidator Validator="@this.ImdbIdValidator" Value="@this.ImdbId" />
+
+                <RadzenLabel Text="@this.Loc["MovieForm.RottenTomatoesLink"]" Component="RottenTomatoesTextBox"
+                             class="mt-2" />
+                <RadzenTextBox @bind-Value="@this.RottenTomatoesLink" Name="RottenTomatoesTextBox" class="w-100" />
+                <FormValidator Validator="@this.RottenTomatoesLinkValidator" Value="@this.RottenTomatoesLink" />
+
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
+                        <RadzenButton Text="@this.Loc["MovieForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
+                                      Click="@(e => this.AddTitle(this.Titles))" class="d-inline-block me-1" />
+                        <RadzenButton Text="@this.Loc["MovieForm.AddOriginalTitle"]" ButtonStyle="ButtonStyle.Secondary"
+                                      Click="@(e => this.AddTitle(this.OriginalTitles))" class="d-inline-block ms-1" />
+                    </div>
                 </div>
             </div>
 
-            <RadzenLabel Text="@this.Loc["MovieForm.ImdbId"]" class="mt-2" />
-            <RadzenTextBox @bind-Value="@this.ImdbId" class="w-100" />
-
-            <RadzenLabel Text="@this.Loc["MovieForm.RottenTomatoesLink"]" class="mt-2" />
-            <RadzenTextBox @bind-Value="@this.RottenTomatoesLink" class="w-100" />
-        </RadzenTemplateForm>
+            <div class="d-flex flex-row my-2">
+                <RadzenButton Text="@this.Loc["Button.Save"]" ButtonStyle="ButtonStyle.Primary"
+                              Click="@this.Save" class="me-1" />
+                <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
+                              Click="@this.Cancel" class="ms-1" />
+            </div>
+        </div>
     }
 </div>
 
@@ -79,8 +97,11 @@
 
     private string FormTitle { get; set; } = String.Empty;
 
-    private List<string> Titles { get; set; } = new();
-    private List<string> OriginalTitles { get; set; } = new();
+    private ObservableCollection<string> Titles { get; set; } = new();
+    private ObservableCollection<string> OriginalTitles { get; set; } = new();
+
+    private bool IsWatched { get; set; }
+    private bool IsReleased { get; set; }
 
     private int Year { get; set; }
 
@@ -89,12 +110,37 @@
     private string ImdbId { get; set; } = String.Empty;
     private string RottenTomatoesLink { get; set; } = String.Empty;
 
+    private PropertyValidator<MovieRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }
+    private PropertyValidator<MovieRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
+    private PropertyValidator<MovieRequest, int>? YearValidator { get; set; }
+    private PropertyValidator<MovieRequest, string>? ImdbIdValidator { get; set; }
+    private PropertyValidator<MovieRequest, string>? RottenTomatoesLinkValidator { get; set; }
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
+        this.InitializeValidators();
+
         this.SetPropertyValues();
-        this.SubscribeToAction<FetchMovieResultAction>(action => this.SetPropertyValues());
+        this.SubscribeToAction<ResultAction<MovieModel>>(action => this.SetPropertyValues());
+    }
+
+    private void InitializeValidators()
+    {
+        var validator = MovieRequest.CreateValidator();
+
+        this.TitlesValidator = PropertyValidator.Create(validator, (MovieRequest req) => req.Titles, this.Loc);
+
+        this.OriginalTitlesValidator = PropertyValidator.Create(
+            validator, (MovieRequest req) => req.OriginalTitles, this.Loc);
+
+        this.YearValidator = PropertyValidator.Create(validator, (MovieRequest req) => req.Year, this.Loc);
+
+        this.ImdbIdValidator = PropertyValidator.Create(validator, (MovieRequest req) => req.ImdbId, this.Loc);
+
+        this.RottenTomatoesLinkValidator = PropertyValidator.Create(
+            validator, (MovieRequest req) => req.RottenTomatoesLink, this.Loc);
     }
 
     private void FetchMovie()
@@ -109,8 +155,10 @@
     {
         var movie = this.State.Value.MovieModel;
 
-        this.Titles = movie?.Titles?.Select(title => title.Name)?.ToList() ?? new();
-        this.OriginalTitles = movie?.OriginalTitles?.Select(title => title.Name)?.ToList() ?? new();
+        this.Titles = movie?.Titles?.Select(title => title.Name)?.ToObservableCollection() ?? new();
+        this.OriginalTitles = movie?.OriginalTitles?.Select(title => title.Name)?.ToObservableCollection() ?? new();
+        this.IsWatched = movie?.IsWatched ?? false;
+        this.IsReleased = movie?.IsReleased ?? true;
         this.Year = movie?.Year ?? DateTime.Now.Year;
         this.Kind = movie?.Kind;
         this.ImdbId = movie?.ImdbId ?? String.Empty;
@@ -118,6 +166,9 @@
 
         this.UpdateFormTitle();
     }
+
+    private void AddTitle(ObservableCollection<string> titles) =>
+        titles.Add(String.Empty);
 
     private void UpdateTitle(string title, int index)
     {
@@ -134,4 +185,10 @@
 
     private void UpdateFormTitle() =>
         this.FormTitle = this.Titles.FirstOrDefault() ?? String.Empty;
+
+    private void Save() =>
+        this.FormTitle = $"Saved {this.FormTitle}";
+
+    private void Cancel() =>
+        this.SetPropertyValues();
 }

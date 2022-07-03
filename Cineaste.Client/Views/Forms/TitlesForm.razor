@@ -1,0 +1,47 @@
+@typeparam T
+@inject IStringLocalizer<Resources> Loc
+
+@for (int i = 0; i < this.Titles.Count; i++)
+{
+    int index = i;
+    <div>
+        <RadzenTextBox Value="@this.Titles[index]" Change="@(value => this.UpdateTitle(value, index))"
+                       class="@($"{(index != 0 ? "mt-2" : "")} w-100")" />
+        <FormValidator Validator="this.TitleNameValidator" Value="@this.Titles[index]" />
+    </div>
+}
+
+<div>
+    <FormValidator Validator="@this.Validator" Value="@this.TitlesRequests" />
+</div>
+
+@code {
+    [Parameter]
+    public ObservableCollection<string> Titles { get; set; } = new();
+
+    public ImmutableList<TitleRequest> TitlesRequests { get; private set; } = ImmutableList.Create<TitleRequest>();
+
+    [Parameter]
+    public PropertyValidator<T, ImmutableList<TitleRequest>>? Validator { get; set; }
+
+    private PropertyValidator<TitleRequest, string>? TitleNameValidator { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        this.TitlesRequests = this.ConvertTitles();
+        this.Titles.CollectionChanged += (sender, e) => this.TitlesRequests = this.ConvertTitles();
+
+        this.TitleNameValidator = PropertyValidator.Create(
+            TitleRequest.CreateValidator(), (TitleRequest req) => req.Name, this.Loc);
+    }
+
+    private void UpdateTitle(string title, int index) =>
+        this.Titles[index] = title;
+
+    private ImmutableList<TitleRequest> ConvertTitles() =>
+        this.Titles
+            .Select((title, index) => new TitleRequest(title, index + 1))
+            .ToImmutableList();
+}

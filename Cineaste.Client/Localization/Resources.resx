@@ -201,8 +201,20 @@
   <data name="ListPage.Menu.Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="MovieForm.AddOriginalTitle" xml:space="preserve">
+    <value>Add original title</value>
+  </data>
+  <data name="MovieForm.AddTitle" xml:space="preserve">
+    <value>Add title</value>
+  </data>
   <data name="MovieForm.ImdbId" xml:space="preserve">
     <value>IMDb ID</value>
+  </data>
+  <data name="MovieForm.IsReleased" xml:space="preserve">
+    <value>Is released</value>
+  </data>
+  <data name="MovieForm.IsWatched" xml:space="preserve">
+    <value>Is watched</value>
   </data>
   <data name="MovieForm.Kind" xml:space="preserve">
     <value>Kind</value>
@@ -215,6 +227,12 @@
   </data>
   <data name="MovieForm.Problem.LoadingFailed" xml:space="preserve">
     <value>Loading the movie has failed</value>
+  </data>
+  <data name="MovieForm.RemoveOriginalTitle" xml:space="preserve">
+    <value>Remove original title</value>
+  </data>
+  <data name="MovieForm.RemoveTitle" xml:space="preserve">
+    <value>Remove title</value>
   </data>
   <data name="MovieForm.RottenTomatoesLink" xml:space="preserve">
     <value>Rotten Tomatoes link</value>
@@ -269,5 +287,26 @@
   </data>
   <data name="Validation.CreateList.Name.TooLong" xml:space="preserve">
     <value>The name is too long</value>
+  </data>
+  <data name="Validation.Movie.ImdbId.Invalid" xml:space="preserve">
+    <value>The IMDb ID must be in the form 'tt[digits]' e.g. 'tt123456'</value>
+  </data>
+  <data name="Validation.Movie.OriginalTitles.Distinct.Names" xml:space="preserve">
+    <value>The original titles must all be different</value>
+  </data>
+  <data name="Validation.Movie.RottenTomatoesLink.Invalid" xml:space="preserve">
+    <value>The Rotten Tomatoes link must be a URL to an RT page</value>
+  </data>
+  <data name="Validation.Movie.Titles.Distinct.Names" xml:space="preserve">
+    <value>The titles must all be different</value>
+  </data>
+  <data name="Validation.Movie.Year.TooLow" xml:space="preserve">
+    <value>The year must be after 1900</value>
+  </data>
+  <data name="Validation.Title.Name.Empty" xml:space="preserve">
+    <value>The title is empty</value>
+  </data>
+  <data name="Validation.Title.Name.TooLong" xml:space="preserve">
+    <value>The title is too long</value>
   </data>
 </root>

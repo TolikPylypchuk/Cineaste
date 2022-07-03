@@ -4,8 +4,6 @@ using Cineaste.Client.Store.ListPage;
 
 public sealed record FetchMovieAction(Guid Id);
 
-public sealed record FetchMovieResultAction(ApiResult<MovieModel> Result);
-
 public static class FetchMovieReducers
 {
     [ReducerMethod(typeof(FetchMovieAction))]
@@ -21,14 +19,14 @@ public static class FetchMovieReducers
     }
 
     [ReducerMethod]
-    public static MovieFormState ReduceFetchMovieResultAction(MovieFormState state, FetchMovieResultAction action) =>
+    public static MovieFormState ReduceFetchMovieResultAction(MovieFormState state, ResultAction<MovieModel> action) =>
         action.Result switch
         {
             ApiSuccess<MovieModel> success =>
                 new() { IsLoading = false, IsLoaded = true, MovieModel = success.Value },
             ApiFailure<MovieModel> failure =>
                 new() { IsLoading = false, IsLoaded = true, Problem = failure.Problem },
-            _ => state
+            _ => Match.ImpossibleType<MovieFormState>(action.Result)
         };
 }
 
@@ -54,6 +52,6 @@ public sealed partial class FetchMovieEffect
     public async Task HandleFetchMovie(FetchMovieAction action, IDispatcher dispatcher)
     {
         var result = await this.api.GetMovie(action.Id).ToApiResultAsync();
-        dispatcher.Dispatch(new FetchMovieResultAction(result));
+        dispatcher.Dispatch(ResultAction.Create(result));
     }
 }

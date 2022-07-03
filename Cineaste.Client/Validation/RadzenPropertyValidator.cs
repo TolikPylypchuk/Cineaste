@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
 
-public sealed partial class RadzenPropertyValidator<T, TProperty> : ValidatorBase
+public sealed class RadzenPropertyValidator<T, TProperty> : ValidatorBase
 {
     public override string Text { get; set; } = String.Empty;
 

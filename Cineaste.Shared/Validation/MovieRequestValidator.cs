@@ -6,10 +6,8 @@ using static Cineaste.Basic.Constants;
 
 public class MovieRequestValidator : CineasteValidator<MovieRequest>
 {
-    private const string NotOriginal = nameof(NotOriginal);
-    private const string Original = nameof(Original);
-    private const string Names = nameof(Original);
-    private const string Priorities = nameof(Original);
+    private const string Names = nameof(Names);
+    private const string Priorities = nameof(Priorities);
 
     private static readonly IValidator<TitleRequest> titleValidator = TitleRequest.CreateValidator();
 
@@ -50,7 +48,6 @@ public class MovieRequestValidator : CineasteValidator<MovieRequest>
         this.RuleFor(titles)
             .NotEmpty()
             .WithErrorCode(this.ErrorCode(titles, Empty))
-            .WithErrorCode(this.ErrorCode(titles, Original))
             .Must(HaveDifferentNames)
             .WithErrorCode(this.ErrorCode(titles, Distinct, Names))
             .Must(HaveDifferentPriorities)

@@ -110,13 +110,13 @@
     {
         var validator = CreateListRequest.CreateValidator();
 
-        this.NameValidator = new PropertyValidator<CreateListRequest, string>(validator, nameof(this.Name), this.Loc);
+        this.NameValidator = PropertyValidator.Create(validator, (CreateListRequest req) => req.Name, this.Loc);
 
-        this.DefaultSeasonTitleValidator = new PropertyValidator<CreateListRequest, string>(
-            validator, nameof(this.DefaultSeasonTitle), this.Loc);
+        this.DefaultSeasonTitleValidator = PropertyValidator.Create(
+            validator, (CreateListRequest req) => req.DefaultSeasonTitle, this.Loc);
 
-        this.DefaultSeasonOriginalTitleValidator = new PropertyValidator<CreateListRequest, string>(
-            validator, nameof(this.DefaultSeasonOriginalTitle), this.Loc);
+        this.DefaultSeasonOriginalTitleValidator = PropertyValidator.Create(
+            validator, (CreateListRequest req) => req.DefaultSeasonOriginalTitle, this.Loc);
     }
 
     private void OnNameChanged() =>
