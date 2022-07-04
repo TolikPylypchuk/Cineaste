@@ -1,9 +1,5 @@
 @page "/"
-@inherits FluxorComponent
-@inject IState<HomePageState> State
-@inject IDispatcher Dispatcher
-@inject IPageNavigator PageNavigator
-@inject IStringLocalizer<Resources> Loc
+@inherits StatefulComponent<HomePageState>
 
 <div class="container d-flex flex-column align-items-center h-100">
     <div class="d-flex flex-column align-items-center flex-shrink-0">

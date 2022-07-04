@@ -1,8 +1,5 @@
 @page "/list/{handle}"
-@inherits FluxorComponent
-@inject IState<ListPageState> State
-@inject IDispatcher Dispatcher
-@inject IPageNavigator PageNavigator
+@inherits StatefulComponent<ListPageState>
 
 <div class="d-flex row w-100 h-100">
     <div class="col-2 pe-0">

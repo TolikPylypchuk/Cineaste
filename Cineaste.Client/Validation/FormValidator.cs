@@ -16,6 +16,11 @@ public sealed class FormValidator<T, TValue> : ComponentBase
         get => this.value;
         set
         {
+            if (Equals(this.value, value))
+            {
+                return;
+            }
+
             this.value = value;
 
             if (!this.settingValueFirstTime)
@@ -58,6 +63,24 @@ public sealed class FormValidator<T, TValue> : ComponentBase
         }
 
         this.IsValid = String.IsNullOrEmpty(this.Text);
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (this.Validator is { Executor: { } executor })
+        {
+            executor.Validation += (sender, e) =>
+            {
+                this.Validate();
+
+                if (!this.IsValid)
+                {
+                    e.ValidationFailed();
+                }
+            };
+        }
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)

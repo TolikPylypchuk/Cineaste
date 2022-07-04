@@ -1,4 +1,4 @@
-@inject IStringLocalizer<Resources> Loc
+@inherits CineasteComponent
 
 <RadzenPanelMenu Match="NavLinkMatch.All" class="h-100">
     <RadzenPanelMenuItem Text="@this.Loc["ListPage.Menu.List"]" Icon="list" Path="@($"/list/{this.Handle}")" />

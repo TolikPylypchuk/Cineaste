@@ -1,5 +1,5 @@
+@inherits CineasteComponent
 @typeparam T
-@inject IStringLocalizer<Resources> Loc
 
 @for (int i = 0; i < this.Titles.Count; i++)
 {
@@ -34,7 +34,7 @@
         this.Titles.CollectionChanged += (sender, e) => this.TitlesRequests = this.ConvertTitles();
 
         this.TitleNameValidator = PropertyValidator.Create(
-            TitleRequest.CreateValidator(), (TitleRequest req) => req.Name, this.Loc);
+            TitleRequest.CreateValidator(), (TitleRequest req) => req.Name, this);
     }
 
     private void UpdateTitle(string title, int index) =>

@@ -1,21 +1,16 @@
 @page "/new"
-@inherits FluxorComponent
-@inject IState<CreateListPageState> State
-@inject IDispatcher Dispatcher
-@inject IPageNavigator PageNavigator
-@inject TooltipService TooltipService
-@inject IStringLocalizer<Resources> Loc
+@inherits StatefulComponent<CreateListPageState>
 
 <div class="container d-flex flex-column align-items-center">
     <h1 class="display-1 mb-4">@this.Loc["CreateListPage.CreateList"]</h1>
 
-    <RadzenTemplateForm TItem="CreateListPage" Data="this" Submit="@(p => this.CreateList())" class="w-50">
+    <div class="w-50">
         <RadzenCard class="mb-2">
             <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
 
             <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
-            <RadzenTextBox @bind-Value="this.Name" Name="Name" Change="this.OnNameChanged" Class="w-100" />
-            <RadzenPropertyValidator Validator="this.NameValidator" Component="Name" />
+            <RadzenTextBox @bind-Value="this.Name" Change="this.OnNameChanged" Class="w-100" />
+            <FormValidator Validator="this.NameValidator" Value="@this.Name" />
 
             <div class="d-flex flex-row mt-4 mb-2">
                 <RadzenLabel Text="@this.Loc["CreateListPage.List.Handle"]" />
@@ -50,14 +45,14 @@
             </div>
 
             <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonTitle"]" class="mb-2" />
-            <RadzenTextBox @bind-Value="this.DefaultSeasonTitle" Name="DefaultSeasonTitle" Class="w-100" />
-            <RadzenPropertyValidator Validator="this.DefaultSeasonTitleValidator" Component="DefaultSeasonTitle" />
+            <RadzenTextBox @bind-Value="this.DefaultSeasonTitle" Class="w-100" />
+            <FormValidator Validator="this.DefaultSeasonTitleValidator" Value="@this.DefaultSeasonTitle" />
 
             <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonOriginalTitle"]" class="mt-4 mb-2" />
             <RadzenTextBox @bind-Value="@this.DefaultSeasonOriginalTitle" Name="DefaultSeasonOriginalTitle"
                            Class="w-100" />
-            <RadzenPropertyValidator Validator="this.DefaultSeasonOriginalTitleValidator"
-                                     Component="DefaultSeasonOriginalTitle" />
+            <FormValidator Validator="this.DefaultSeasonOriginalTitleValidator"
+                           Value="@this.DefaultSeasonOriginalTitle" />
         </RadzenCard>
 
         <div class="d-flex flex-row justify-content-center">
@@ -65,9 +60,9 @@
                           Click="@this.NavigateToHomePage" />
 
             <RadzenButton Text="@this.Loc["Button.Create"]" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
-                          ButtonType="ButtonType.Submit" />
+                          Click="@this.CreateList" />
         </div>
-    </RadzenTemplateForm>
+    </div>
 
     @if (this.State.Value.IsCreatingList)
     {
@@ -110,13 +105,13 @@
     {
         var validator = CreateListRequest.CreateValidator();
 
-        this.NameValidator = PropertyValidator.Create(validator, (CreateListRequest req) => req.Name, this.Loc);
+        this.NameValidator = PropertyValidator.Create(validator, (CreateListRequest req) => req.Name, this);
 
         this.DefaultSeasonTitleValidator = PropertyValidator.Create(
-            validator, (CreateListRequest req) => req.DefaultSeasonTitle, this.Loc);
+            validator, (CreateListRequest req) => req.DefaultSeasonTitle, this);
 
         this.DefaultSeasonOriginalTitleValidator = PropertyValidator.Create(
-            validator, (CreateListRequest req) => req.DefaultSeasonOriginalTitle, this.Loc);
+            validator, (CreateListRequest req) => req.DefaultSeasonOriginalTitle, this);
     }
 
     private void OnNameChanged() =>
@@ -126,8 +121,9 @@
         this.Dispatcher.Dispatch(new FetchCulturesAction());
 
     private void CreateList() =>
-        this.Dispatcher.Dispatch(new CreateListAction(new CreateListRequest(
-            this.Name, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle)));
+        this.WithValidation(() =>
+            this.Dispatcher.Dispatch(new CreateListAction(new CreateListRequest(
+                this.Name, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle))));
 
     private void NavigateToHomePage() =>
         this.PageNavigator.GoToHomePage();
