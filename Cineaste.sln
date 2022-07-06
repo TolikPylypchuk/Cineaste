@@ -26,6 +26,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Persistence", "Cin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Basic", "Cineaste.Basic\Cineaste.Basic.csproj", "{D1B9E0AA-A086-46D2-935C-DCDC5FAAA9BA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ADR", "ADR", "{6FE17DA8-692F-4516-90F2-470FABEBF3C3}"
+	ProjectSection(SolutionItems) = preProject
+		ADR\0000-use-adr.md = ADR\0000-use-adr.md
+		ADR\0001-use-dotnet.md = ADR\0001-use-dotnet.md
+		ADR\0002-use-asp-net.md = ADR\0002-use-asp-net.md
+		ADR\0003-have-a-rich-domain-model.md = ADR\0003-have-a-rich-domain-model.md
+		ADR\0004-use-ms-sql-server.md = ADR\0004-use-ms-sql-server.md
+		ADR\0005-use-ef.md = ADR\0005-use-ef.md
+		ADR\0006-use-radzen.md = ADR\0006-use-radzen.md
+		ADR\0007-use-reactiveui.md = ADR\0007-use-reactiveui.md
+		ADR\0008-use-problem-json.md = ADR\0008-use-problem-json.md
+		ADR\0009-use-fluxor.md = ADR\0009-use-fluxor.md
+		ADR\0010-have-dry-validation.md = ADR\0010-have-dry-validation.md
+		ADR\README.md = ADR\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
