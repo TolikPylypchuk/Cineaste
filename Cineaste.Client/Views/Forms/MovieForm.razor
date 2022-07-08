@@ -11,9 +11,9 @@
     @if (this.State.Value.IsLoading)
     {
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-    } else if (this.State.Value.Problem is not null)
+    } else if (this.State.Value.FetchProblem is not null)
     {
-        <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.LoadingFailed"]" Problem="this.State.Value.Problem"
+        <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.LoadingFailed"]" Problem="this.State.Value.FetchProblem"
                          Class="w-100 m-4" TryAgain="this.FetchMovie" />
     } else if (this.State.Value.MovieModel is { } movie)
     {
@@ -27,30 +27,37 @@
             <div class="h-100">
                 <div class="d-md-flex justify-content-md-center mt-2">
                     <div class="me-md-1">
-                        <RadzenCheckBox @bind-Value="@this.IsWatched" Name="IsWatchedCheckBox" />
+                        <RadzenCheckBox @bind-Value="@this.IsWatched" Disabled="@(!this.CanChangeIsWatched)"
+                                        Change="@((bool value) => this.OnIsWatchedChanged())"
+                                        Name="IsWatchedCheckBox" />
                         <RadzenLabel Text="@this.Loc["MovieForm.IsWatched"]" Component="IsWatchedCheckBox" />
                     </div>
                     <div class="ms-md-1">
-                        <RadzenCheckBox @bind-Value="@this.IsReleased" Name="IsReleasedCheckBox" />
+                        <RadzenCheckBox @bind-Value="@this.IsReleased" Disabled="@(!this.CanChangeIsReleased)"
+                                        Change="@((bool value) => this.OnIsReleasedChanged())"
+                                        Name="IsReleasedCheckBox" />
                         <RadzenLabel Text="@this.Loc["MovieForm.IsReleased"]" Component="IsReleasedCheckBox" />
                     </div>
                 </div>
 
                 <RadzenLabel Text="@this.Loc["MovieForm.Titles"]" class="mt-2" />
-                <TitlesForm Titles="@this.Titles" Validator="@this.TitlesValidator" />
+                <TitlesForm @ref="this.TitlesForm" Titles="@this.Titles" Validator="@this.TitlesValidator"
+                            FirstTitleChanged="@this.UpdateFormTitle" />
 
                 <RadzenLabel Text="@this.Loc["MovieForm.OriginalTitles"]" class="mt-2" />
-                <TitlesForm Titles="@this.OriginalTitles" Validator="@this.OriginalTitlesValidator" />
+                <TitlesForm @ref="this.OriginalTitlesForm" Titles="@this.OriginalTitles"
+                            Validator="@this.OriginalTitlesValidator" />
 
                 <div class="row mt-2">
                     <div class="col-md pe-md-1">
                         <RadzenLabel Text="@this.Loc["MovieForm.Year"]" Component="YearNumeric" />
-                        <RadzenNumeric @bind-Value="this.Year" Name="YearNumeric" />
+                        <RadzenNumeric @bind-Value="this.Year" Change="@((int year) => this.OnYearChanged())"
+                                       Name="YearNumeric" />
                         <FormValidator Validator="@this.YearValidator" Value="@this.Year" />
                     </div>
                     <div class="col-md ps-md-1">
                         <RadzenLabel Text="@this.Loc["MovieForm.Kind"]" Component="KindDropDown" />
-                        <RadzenDropDown @bind-Value="@this.Kind" Data="this.State.Value.AvailableKinds"
+                        <RadzenDropDown @bind-Value="@this.Kind" Data="@this.State.Value.AvailableKinds"
                                         AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
                                         Name="KindDropDown" TextProperty="Name" />
                     </div>
@@ -87,6 +94,9 @@
 
 @code {
     [Parameter]
+    public Guid ListId { get; set; }
+
+    [Parameter]
     public ListItemModel? ListItem { get; set; }
 
     [Parameter]
@@ -97,12 +107,18 @@
     private ObservableCollection<string> Titles { get; set; } = new();
     private ObservableCollection<string> OriginalTitles { get; set; } = new();
 
+    private TitlesForm<MovieRequest> TitlesForm { get; set; } = null!;
+    private TitlesForm<MovieRequest> OriginalTitlesForm { get; set; } = null!;
+
     private bool IsWatched { get; set; }
     private bool IsReleased { get; set; }
 
+    private bool CanChangeIsWatched { get; set; } = true;
+    private bool CanChangeIsReleased { get; set; } = true;
+
     private int Year { get; set; }
 
-    private SimpleKindModel? Kind { get; set; }
+    private SimpleKindModel Kind { get; set; } = null!;
 
     private string ImdbId { get; set; } = String.Empty;
     private string RottenTomatoesLink { get; set; } = String.Empty;
@@ -119,8 +135,8 @@
 
         this.InitializeValidators();
 
-        this.SetPropertyValues();
-        this.SubscribeToAction<ResultAction<MovieModel>>(action => this.SetPropertyValues());
+        this.SubscribeToAction<FetchMovieResultAction>(_ => this.SetPropertyValues());
+        this.SubscribeToAction<CreateMovieResultAction>(_ => this.SetPropertyValues());
     }
 
     private void InitializeValidators()
@@ -144,7 +160,7 @@
     {
         if (this.ListItem != null)
         {
-            this.Dispatcher.Dispatch(new FetchMovieAction(this.ListItem.Id));
+            this.Dispatcher.Dispatch(new FetchMovieAction(this.ListItem.Id, this.State.Value.AvailableKinds));
         }
     }
 
@@ -157,7 +173,7 @@
         this.IsWatched = movie?.IsWatched ?? false;
         this.IsReleased = movie?.IsReleased ?? true;
         this.Year = movie?.Year ?? DateTime.Now.Year;
-        this.Kind = movie?.Kind;
+        this.Kind = movie?.Kind ?? this.State.Value.AvailableKinds.First();
         this.ImdbId = movie?.ImdbId ?? String.Empty;
         this.RottenTomatoesLink = movie?.RottenTomatoesLink ?? String.Empty;
 
@@ -167,25 +183,68 @@
     private void AddTitle(ObservableCollection<string> titles) =>
         titles.Add(String.Empty);
 
-    private void UpdateTitle(string title, int index)
-    {
-        this.Titles[index] = title;
-
-        if (index == 0)
-        {
-            this.UpdateFormTitle();
-        }
-    }
-
-    private void UpdateOriginalTitle(string title, int index) =>
-        this.OriginalTitles[index] = title;
-
     private void UpdateFormTitle() =>
         this.FormTitle = this.Titles.FirstOrDefault() ?? String.Empty;
 
+    private void OnYearChanged()
+    {
+        int currentYear = DateTime.Now.Year;
+
+        if (this.Year < currentYear)
+        {
+            this.IsReleased = true;
+            this.CanChangeIsWatched = true;
+            this.CanChangeIsReleased = false;
+        } else if (this.Year > currentYear)
+        {
+            this.IsWatched = false;
+            this.IsReleased = false;
+            this.CanChangeIsWatched = false;
+            this.CanChangeIsReleased = false;
+        } else
+        {
+            this.CanChangeIsWatched = true;
+            this.CanChangeIsReleased = true;
+        }
+    }
+
+    private void OnIsWatchedChanged()
+    {
+        if (this.IsWatched)
+        {
+            this.IsReleased = true;
+        }
+    }
+
+    private void OnIsReleasedChanged()
+    {
+        if (!this.IsReleased)
+        {
+            this.IsWatched = false;
+        }
+    }
+
     private void Save() =>
-        this.WithValidation(() => this.FormTitle = $"Saved {this.FormTitle}");
+        this.WithValidation(() =>
+        {
+            if (this.ListItem == null)
+            {
+                this.Dispatcher.Dispatch(new CreateMovieAction(this.CreateMovieRequest()));
+            }
+        });
 
     private void Cancel() =>
         this.SetPropertyValues();
+
+    private MovieRequest CreateMovieRequest() =>
+        new(
+            this.ListId,
+            this.TitlesForm.TitlesRequests,
+            this.OriginalTitlesForm.TitlesRequests,
+            this.Year,
+            this.IsWatched,
+            this.IsReleased,
+            this.Kind.Id,
+            this.ImdbId,
+            this.RottenTomatoesLink);
 }

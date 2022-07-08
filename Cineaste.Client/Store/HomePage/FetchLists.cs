@@ -2,6 +2,9 @@ namespace Cineaste.Client.Store.HomePage;
 
 public sealed record FetchListsAction;
 
+public sealed record FetchListsResultAction(ApiResult<List<SimpleListModel>> Result)
+    : ResultAction<List<SimpleListModel>>(Result);
+
 public static class FetchListsReducers
 {
     [ReducerMethod(typeof(FetchListsAction))]
@@ -9,15 +12,10 @@ public static class FetchListsReducers
         new() { IsLoading = true };
 
     [ReducerMethod]
-    public static HomePageState ReduceFetchListsResultAction(
-        HomePageState _,
-        ResultAction<List<SimpleListModel>> action) =>
-        action.Result switch
-        {
-            ApiSuccess<List<SimpleListModel>> success => new() { Lists = success.Value.ToImmutableList() },
-            ApiFailure<List<SimpleListModel>> failure => new() { Problem = failure.Problem },
-            _ => Match.ImpossibleType<HomePageState>(action.Result)
-        };
+    public static HomePageState ReduceFetchListsResultAction(HomePageState state, FetchListsResultAction action) =>
+        action.Handle(
+            onSuccess: lists => state with { IsLoading = false, Lists = lists.ToImmutableList() },
+            onFailure: problem => state with { IsLoading = false, Problem = problem });
 }
 
 [AutoConstructor]
@@ -29,6 +27,6 @@ public sealed partial class FetchListsEffect
     public async Task HandleFetchListsAction(IDispatcher dispatcher)
     {
         var result = await this.api.GetLists().ToApiResultAsync();
-        dispatcher.Dispatch(ResultAction.Create(result));
+        dispatcher.Dispatch(new FetchListsResultAction(result));
     }
 }

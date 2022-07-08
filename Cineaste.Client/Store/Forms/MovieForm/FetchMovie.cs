@@ -2,32 +2,25 @@ namespace Cineaste.Client.Store.Forms.MovieForm;
 
 using Cineaste.Client.Store.ListPage;
 
-public sealed record FetchMovieAction(Guid Id);
+public sealed record FetchMovieAction(Guid Id, ImmutableList<SimpleKindModel> AvailableKinds);
+
+public sealed record FetchMovieResultAction(ApiResult<MovieModel> Result) : ResultAction<MovieModel>(Result);
 
 public static class FetchMovieReducers
 {
-    [ReducerMethod(typeof(FetchMovieAction))]
-    public static MovieFormState ReduceFetchMovieAction(MovieFormState _) =>
-        new() { IsLoading = true };
+    [ReducerMethod]
+    public static MovieFormState ReduceFetchMovieAction(MovieFormState _, FetchMovieAction action) =>
+        new() { IsLoading = true, AvailableKinds = action.AvailableKinds };
 
     [ReducerMethod]
-    public static MovieFormState ReduceSelectItemAction(MovieFormState state, SelectItemAction action)
-    {
-        return action.Item.Id == state.MovieModel?.Id
-            ? state
-            : new() { IsLoading = true };
-    }
+    public static MovieFormState ReduceSelectItemAction(MovieFormState state, SelectItemAction action) =>
+        action.Item.Id == state.MovieModel?.Id ? state : new() { IsLoading = true };
 
     [ReducerMethod]
-    public static MovieFormState ReduceFetchMovieResultAction(MovieFormState state, ResultAction<MovieModel> action) =>
-        action.Result switch
-        {
-            ApiSuccess<MovieModel> success =>
-                new() { IsLoading = false, IsLoaded = true, MovieModel = success.Value },
-            ApiFailure<MovieModel> failure =>
-                new() { IsLoading = false, IsLoaded = true, Problem = failure.Problem },
-            _ => Match.ImpossibleType<MovieFormState>(action.Result)
-        };
+    public static MovieFormState ReduceMovieResultAction(MovieFormState state, FetchMovieResultAction action) =>
+        action.Handle(
+            onSuccess: movie => state with { IsLoading = false, IsLoaded = true, MovieModel = movie },
+            onFailure: problem => state with { IsLoading = false, IsLoaded = true, FetchProblem = problem });
 }
 
 [AutoConstructor]
@@ -41,8 +34,7 @@ public sealed partial class FetchMovieEffect
     {
         if (state.Value.MovieModel?.Id != action.Item.Id && action.Item.Type == ListItemType.Movie)
         {
-            dispatcher.Dispatch(new SetAvailableMovieKindsAction(action.AvailableKinds));
-            dispatcher.Dispatch(new FetchMovieAction(action.Item.Id));
+            dispatcher.Dispatch(new FetchMovieAction(action.Item.Id, action.AvailableKinds));
         }
 
         return Task.CompletedTask;
@@ -52,6 +44,6 @@ public sealed partial class FetchMovieEffect
     public async Task HandleFetchMovie(FetchMovieAction action, IDispatcher dispatcher)
     {
         var result = await this.api.GetMovie(action.Id).ToApiResultAsync();
-        dispatcher.Dispatch(ResultAction.Create(result));
+        dispatcher.Dispatch(new FetchMovieResultAction(result));
     }
 }

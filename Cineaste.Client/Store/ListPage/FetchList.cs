@@ -4,6 +4,8 @@ using Nito.Comparers;
 
 public sealed record FetchListAction(string Handle);
 
+public sealed record FetchListResultAction(ApiResult<ListModel> Result) : ResultAction<ListModel>(Result);
+
 public static class FetchListReducers
 {
     [ReducerMethod(typeof(FetchListAction))]
@@ -11,28 +13,24 @@ public static class FetchListReducers
         new() { IsLoading = true };
 
     [ReducerMethod]
-    public static ListPageState ReduceFetchListsResultAction(ListPageState state, ResultAction<ListModel> action) =>
-        action.Result switch
-        {
-            ApiSuccess<ListModel> success =>
-                new()
+    public static ListPageState ReduceFetchListsResultAction(ListPageState state, FetchListResultAction action) =>
+        action.Handle(
+            onSuccess: list =>
+                state with
                 {
+                    IsLoading = false,
                     IsLoaded = true,
-                    Name = success.Value.Name,
-                    Items = SortItems(success.Value),
-                    AvailableMovieKinds = success.Value
-                        .MovieKinds
+                    Id = list.Id,
+                    Name = list.Name,
+                    Items = SortItems(list),
+                    AvailableMovieKinds = list.MovieKinds
                         .Select(model => model.ToSimpleModel())
                         .ToImmutableList(),
-                    AvailableSeriesKinds = success.Value
-                        .SeriesKinds
+                    AvailableSeriesKinds = list.SeriesKinds
                         .Select(model => model.ToSimpleModel())
                         .ToImmutableList(),
                 },
-            ApiFailure<ListModel> failure =>
-                new() { IsLoaded = true, Problem = failure.Problem },
-            _ => Match.ImpossibleType<ListPageState>(action.Result)
-        };
+            onFailure: problem => new() { IsLoaded = true, Problem = problem });
 
     private static ImmutableSortedSet<ListItemModel> SortItems(ListModel list)
     {
@@ -69,6 +67,6 @@ public sealed partial class FetchListEffect
     public async Task HandleFetchListAction(FetchListAction action, IDispatcher dispatcher)
     {
         var result = await this.api.GetList(action.Handle).ToApiResultAsync();
-        dispatcher.Dispatch(ResultAction.Create(result));
+        dispatcher.Dispatch(new FetchListResultAction(result));
     }
 }

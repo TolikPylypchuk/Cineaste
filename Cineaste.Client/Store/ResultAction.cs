@@ -1,18 +1,22 @@
 namespace Cineaste.Client.Store;
 
-public sealed record ResultAction<T>
+public abstract record ResultAction<T>
 {
     public ApiResult<T> Result { get; }
 
-    public ResultAction(ApiResult<T> result)
+    protected ResultAction(ApiResult<T> result)
     {
         ArgumentNullException.ThrowIfNull(result);
         this.Result = result;
     }
-}
 
-public static class ResultAction
-{
-    public static ResultAction<T> Create<T>(ApiResult<T> result) =>
-        new(result);
+    public TResult Handle<TResult>(
+        Func<T, TResult> onSuccess,
+        Func<ProblemDetails, TResult> onFailure) =>
+        this.Result switch
+        {
+            ApiSuccess<T> success => onSuccess(success.Value),
+            ApiFailure<MovieModel> failure => onFailure(failure.Problem),
+            _ => Match.ImpossibleType<TResult>(this.Result)
+        };
 }

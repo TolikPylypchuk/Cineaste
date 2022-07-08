@@ -19,10 +19,13 @@
     [Parameter]
     public ObservableCollection<string> Titles { get; set; } = new();
 
-    public ImmutableList<TitleRequest> TitlesRequests { get; private set; } = ImmutableList.Create<TitleRequest>();
-
     [Parameter]
     public PropertyValidator<T, ImmutableList<TitleRequest>>? Validator { get; set; }
+
+    [Parameter]
+    public EventCallback<string> FirstTitleChanged { get; set; }
+
+    public ImmutableList<TitleRequest> TitlesRequests { get; private set; } = ImmutableList.Create<TitleRequest>();
 
     private PropertyValidator<TitleRequest, string>? TitleNameValidator { get; set; }
 
@@ -37,8 +40,15 @@
             TitleRequest.CreateValidator(), (TitleRequest req) => req.Name, this);
     }
 
-    private void UpdateTitle(string title, int index) =>
+    private async Task UpdateTitle(string title, int index)
+    {
         this.Titles[index] = title;
+
+        if (index == 0)
+        {
+            await this.FirstTitleChanged.InvokeAsync(title);
+        }
+    }
 
     private ImmutableList<TitleRequest> ConvertTitles() =>
         this.Titles

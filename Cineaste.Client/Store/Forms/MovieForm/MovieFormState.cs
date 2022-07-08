@@ -7,7 +7,10 @@ public sealed record MovieFormState
     public bool IsLoaded { get; init; }
 
     public MovieModel? MovieModel { get; init; }
-    public ProblemDetails? Problem { get; init; }
+    public ProblemDetails? FetchProblem { get; init; }
 
     public ImmutableList<SimpleKindModel> AvailableKinds { get; init; } = ImmutableList.Create<SimpleKindModel>();
+
+    public bool IsCreatingMovie { get; init; }
+    public ProblemDetails? CreateMovieProblem { get; init; }
 }

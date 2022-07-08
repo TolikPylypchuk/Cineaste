@@ -44,7 +44,8 @@
                 <ListActionsPanel />
             } else if (this.State.Value.SelectedItem.Type == ListItemType.Movie)
             {
-                <MovieForm ListItem="this.State.Value.SelectedItem" Close="this.OnItemClosed" />
+                <MovieForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
+                           Close="@this.OnItemClosed" />
             }
         }
     </div>

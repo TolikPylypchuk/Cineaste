@@ -6,6 +6,7 @@ public sealed record ListPageState
     public bool IsLoading { get; init; }
     public bool IsLoaded { get; init; }
 
+    public Guid Id { get; init; }
     public string Name { get; init; } = String.Empty;
 
     public ImmutableSortedSet<ListItemModel> Items { get; init; } = ImmutableSortedSet.Create<ListItemModel>();
