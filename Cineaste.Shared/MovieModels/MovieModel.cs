@@ -7,6 +7,7 @@ public sealed record MovieModel(
     int Year,
     bool IsWatched,
     bool IsReleased,
-    SimpleKindModel Kind,
+    ListKindModel Kind,
     string? ImdbId,
-    string? RottenTomatoesLink);
+    string? RottenTomatoesLink,
+    string DisplayNumber);

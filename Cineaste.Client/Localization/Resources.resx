@@ -207,6 +207,9 @@
   <data name="MovieForm.AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>
+  <data name="MovieForm.CreateMovie.Success" xml:space="preserve">
+    <value>Movie created successfully</value>
+  </data>
   <data name="MovieForm.ImdbId" xml:space="preserve">
     <value>IMDb ID</value>
   </data>
@@ -224,6 +227,9 @@
   </data>
   <data name="MovieForm.OriginalTitles" xml:space="preserve">
     <value>Original titles</value>
+  </data>
+  <data name="MovieForm.Problem.CreatingFailed" xml:space="preserve">
+    <value>Creating the moive has failed</value>
   </data>
   <data name="MovieForm.Problem.LoadingFailed" xml:space="preserve">
     <value>Loading the movie has failed</value>

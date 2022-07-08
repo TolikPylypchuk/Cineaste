@@ -19,11 +19,13 @@
         {
             <h1 class="display-5 mt-md-1 mt-1 flex-shrink-0">@this.State.Value.Name</h1>
 
-            <RadzenDataList WrapItems="true" Data="@this.State.Value.Items" TItem="ListItemModel"
+            var selectedItem = this.State.Value.SelectedItem;
+
+            <RadzenDataList WrapItems="true" Data="@this.State.Value.Container.Items" TItem="ListItemModel"
                             class="overflow-auto w-100 h-100">
                 <Template Context="item">
-                    <div role="button" class="list-item-container border-bottom"
-                         @onclick="@(() => this.SelectItem(item))" style="@($"color: {item.Color};")">
+                    <div role="button" @onclick="@(() => this.SelectItem(item))" style="@($"color: {item.Color};")"
+                         class="@($"list-item-container border-bottom {(item == selectedItem ? "bg-light" : "")}")">
                         <div class="d-flex flex-row flex-fill align-items-center">
                             <p class="list-item item-number text-start m-0">@item.DisplayNumber</p>
                             <p class="list-item item-title text-center m-0">@item.Title</p>
@@ -39,13 +41,15 @@
     <div class="col-2 p-0 h-100">
         @if (this.State.Value.IsLoaded && this.State.Value.Problem is null)
         {
-            @if (this.State.Value.SelectedItem is null)
+            @switch (this.State.Value.SelectionMode)
             {
-                <ListActionsPanel />
-            } else if (this.State.Value.SelectedItem.Type == ListItemType.Movie)
-            {
-                <MovieForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
-                           Close="@this.OnItemClosed" />
+                case ListPageSelectionMode.None:
+                    <ListActionsPanel CreateMovie="@this.CreateMovie" />
+                    break;
+                case ListPageSelectionMode.Movie:
+                    <MovieForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
+                               Close="@this.OnItemClosed" />
+                    break;
             }
         }
     </div>
@@ -80,8 +84,11 @@
             {
                 ListItemType.Movie => this.State.Value.AvailableMovieKinds,
                 ListItemType.Series => this.State.Value.AvailableSeriesKinds,
-                _ => ImmutableList.Create<SimpleKindModel>()
+                _ => ImmutableList.Create<ListKindModel>()
             }));
+
+    private void CreateMovie() =>
+        this.Dispatcher.Dispatch(new StartCreatingMovieAction(this.State.Value.AvailableMovieKinds));
 
     private void OnItemClosed() =>
         this.Dispatcher.Dispatch(new CloseItemAction());

@@ -8,6 +8,4 @@ public sealed record ListKindModel(
     string NotReleasedColor,
     ListKindTarget Target);
 
-public sealed record SimpleKindModel(Guid Id, string Name, ListKindTarget Target);
-
 public enum ListKindTarget { Movie, Series }

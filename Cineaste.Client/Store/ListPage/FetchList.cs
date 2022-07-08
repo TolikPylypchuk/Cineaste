@@ -1,6 +1,6 @@
-namespace Cineaste.Client.Store.ListPage;
+using Cineaste.Shared.Mapping;
 
-using Nito.Comparers;
+namespace Cineaste.Client.Store.ListPage;
 
 public sealed record FetchListAction(string Handle);
 
@@ -22,40 +22,11 @@ public static class FetchListReducers
                     IsLoaded = true,
                     Id = list.Id,
                     Name = list.Name,
-                    Items = SortItems(list),
-                    AvailableMovieKinds = list.MovieKinds
-                        .Select(model => model.ToSimpleModel())
-                        .ToImmutableList(),
-                    AvailableSeriesKinds = list.SeriesKinds
-                        .Select(model => model.ToSimpleModel())
-                        .ToImmutableList(),
+                    Container = ListItemContainer.Create(list),
+                    AvailableMovieKinds = list.MovieKinds,
+                    AvailableSeriesKinds = list.SeriesKinds,
                 },
             onFailure: problem => new() { IsLoaded = true, Problem = problem });
-
-    private static ImmutableSortedSet<ListItemModel> SortItems(ListModel list)
-    {
-        var culture = CultureInfo.GetCultureInfo(list.Config.Culture);
-
-        var comparerByYear = ComparerBuilder.For<ListItemModel>()
-            .OrderBy(item => item.StartYear, descending: false)
-            .ThenBy(item => item.EndYear, descending: false);
-
-        var itemsById = list.Movies
-            .Concat(list.Series)
-            .Concat(list.Franchises)
-            .ToImmutableDictionary(item => item.Id, item => item);
-
-        var comparer = new ListItemTitleComparer(
-            culture,
-            comparerByYear,
-            id => itemsById[id],
-            item => item.Title);
-
-        return list.Movies
-            .Concat(list.Series)
-            .Concat(list.Franchises)
-            .ToImmutableSortedSet(comparer);
-    }
 }
 
 [AutoConstructor]

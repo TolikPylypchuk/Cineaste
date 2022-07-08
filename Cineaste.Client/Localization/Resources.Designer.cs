@@ -331,6 +331,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Movie created successfully.
+        /// </summary>
+        public static string MovieForm_CreateMovie_Success {
+            get {
+                return ResourceManager.GetString("MovieForm.CreateMovie.Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IMDb ID.
         /// </summary>
         public static string MovieForm_ImdbId {
@@ -381,6 +390,15 @@ namespace Cineaste.Client.Localization {
         public static string MovieForm_OriginalTitles {
             get {
                 return ResourceManager.GetString("MovieForm.OriginalTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating the moive has failed.
+        /// </summary>
+        public static string MovieForm_Problem_CreatingFailed {
+            get {
+                return ResourceManager.GetString("MovieForm.Problem.CreatingFailed", resourceCulture);
             }
         }
         

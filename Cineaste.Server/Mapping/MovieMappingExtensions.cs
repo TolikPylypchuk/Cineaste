@@ -18,9 +18,10 @@ public static class MovieMappingExtensions
             movie.Year,
             movie.IsWatched,
             movie.IsReleased,
-            movie.Kind.ToSimpleKindModel(),
+            movie.Kind.ToListKindModel(),
             movie.ImdbId,
-            movie.RottenTomatoesLink);
+            movie.RottenTomatoesLink,
+            movie.FranchiseItem.GetDisplayNumber());
 
     public static Movie ToMovie(this Validated<MovieRequest> request, Id<Movie> id, MovieKind kind) =>
         new(

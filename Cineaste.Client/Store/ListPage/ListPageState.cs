@@ -1,5 +1,7 @@
 namespace Cineaste.Client.Store.ListPage;
 
+public enum ListPageSelectionMode { None, Movie, Series, Franchise }
+
 [FeatureState]
 public sealed record ListPageState
 {
@@ -9,12 +11,13 @@ public sealed record ListPageState
     public Guid Id { get; init; }
     public string Name { get; init; } = String.Empty;
 
-    public ImmutableSortedSet<ListItemModel> Items { get; init; } = ImmutableSortedSet.Create<ListItemModel>();
+    public ListItemContainer Container { get; init; } = ListItemContainer.Empty;
 
-    public ImmutableList<SimpleKindModel> AvailableMovieKinds { get; init; } = ImmutableList.Create<SimpleKindModel>();
-    public ImmutableList<SimpleKindModel> AvailableSeriesKinds { get; init; } = ImmutableList.Create<SimpleKindModel>();
+    public ImmutableList<ListKindModel> AvailableMovieKinds { get; init; } = ImmutableList.Create<ListKindModel>();
+    public ImmutableList<ListKindModel> AvailableSeriesKinds { get; init; } = ImmutableList.Create<ListKindModel>();
 
     public ListItemModel? SelectedItem { get; init; }
+    public ListPageSelectionMode SelectionMode { get; init; }
 
     public ProblemDetails? Problem { get; init; }
 }

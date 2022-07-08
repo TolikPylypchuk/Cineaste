@@ -2,7 +2,7 @@ namespace Cineaste.Client.Store.Forms.MovieForm;
 
 using Cineaste.Client.Store.ListPage;
 
-public sealed record FetchMovieAction(Guid Id, ImmutableList<SimpleKindModel> AvailableKinds);
+public sealed record FetchMovieAction(Guid Id, ImmutableList<ListKindModel> AvailableKinds);
 
 public sealed record FetchMovieResultAction(ApiResult<MovieModel> Result) : ResultAction<MovieModel>(Result);
 
@@ -26,19 +26,7 @@ public static class FetchMovieReducers
 [AutoConstructor]
 public sealed partial class FetchMovieEffect
 {
-    private readonly IState<MovieFormState> state;
     private readonly IMovieApi api;
-
-    [EffectMethod]
-    public Task HandleSelectItem(SelectItemAction action, IDispatcher dispatcher)
-    {
-        if (state.Value.MovieModel?.Id != action.Item.Id && action.Item.Type == ListItemType.Movie)
-        {
-            dispatcher.Dispatch(new FetchMovieAction(action.Item.Id, action.AvailableKinds));
-        }
-
-        return Task.CompletedTask;
-    }
 
     [EffectMethod]
     public async Task HandleFetchMovie(FetchMovieAction action, IDispatcher dispatcher)
