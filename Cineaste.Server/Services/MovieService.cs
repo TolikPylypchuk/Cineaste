@@ -1,6 +1,7 @@
 namespace Cineaste.Server.Services;
 
 [AutoConstructor]
+[GenerateAutoInterface]
 public sealed partial class MovieService : IMovieService
 {
     private readonly CineasteDbContext dbContext;

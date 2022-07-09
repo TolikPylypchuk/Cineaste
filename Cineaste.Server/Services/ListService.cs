@@ -3,6 +3,7 @@ namespace Cineaste.Server.Services;
 using System.Globalization;
 
 [AutoConstructor]
+[GenerateAutoInterface]
 public sealed partial class ListService : IListService
 {
     private readonly CineasteDbContext dbContext;

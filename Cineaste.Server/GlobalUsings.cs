@@ -19,4 +19,6 @@ global using Cineaste.Shared.Validation;
 
 global using FluentValidation;
 
+global using InterfaceGenerator;
+
 global using Microsoft.EntityFrameworkCore;
