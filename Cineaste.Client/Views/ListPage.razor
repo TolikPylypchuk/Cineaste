@@ -13,8 +13,8 @@
             <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
         } else if (this.State.Value.Problem is not null)
         {
-            <ApiProblemAlert Text="Loading the list has failed" Problem="this.State.Value.Problem" Class="w-50 mt-3"
-                             TryAgain="this.FetchList" />
+            <ApiProblemAlert Text="@this.Loc["ListPage.Problem.LoadingListFailed"]" Problem="@this.State.Value.Problem"
+                             TryAgain="@this.FetchList" Class="w-50 mt-3" />
         } else
         {
             <h1 class="display-5 mt-md-1 mt-1 flex-shrink-0">@this.State.Value.Name</h1>

@@ -106,6 +106,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Button_Delete {
+            get {
+                return ResourceManager.GetString("Button.Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Button_Save {
@@ -120,6 +129,24 @@ namespace Cineaste.Client.Localization {
         public static string Cineaste {
             get {
                 return ResourceManager.GetString("Cineaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Confirmation_Cancel {
+            get {
+                return ResourceManager.GetString("Confirmation.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Confirmation_Confirm {
+            get {
+                return ResourceManager.GetString("Confirmation.Confirm", resourceCulture);
             }
         }
         
@@ -313,6 +340,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading the list has failed.
+        /// </summary>
+        public static string ListPage_Problem_LoadingListFailed {
+            get {
+                return ResourceManager.GetString("ListPage.Problem.LoadingListFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add original title.
         /// </summary>
         public static string MovieForm_AddOriginalTitle {
@@ -336,6 +372,24 @@ namespace Cineaste.Client.Localization {
         public static string MovieForm_CreateMovie_Success {
             get {
                 return ResourceManager.GetString("MovieForm.CreateMovie.Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this movie?.
+        /// </summary>
+        public static string MovieForm_DeleteDialog_Body {
+            get {
+                return ResourceManager.GetString("MovieForm.DeleteDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Movie.
+        /// </summary>
+        public static string MovieForm_DeleteDialog_Title {
+            get {
+                return ResourceManager.GetString("MovieForm.DeleteDialog.Title", resourceCulture);
             }
         }
         
@@ -399,6 +453,15 @@ namespace Cineaste.Client.Localization {
         public static string MovieForm_Problem_CreatingFailed {
             get {
                 return ResourceManager.GetString("MovieForm.Problem.CreatingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleting the movie has failed.
+        /// </summary>
+        public static string MovieForm_Problem_DeletingFailed {
+            get {
+                return ResourceManager.GetString("MovieForm.Problem.DeletingFailed", resourceCulture);
             }
         }
         

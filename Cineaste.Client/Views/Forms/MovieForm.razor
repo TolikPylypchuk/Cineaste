@@ -11,10 +11,10 @@
     @if (this.State.Value.IsLoading)
     {
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-    } else if (this.State.Value.FetchProblem is not null)
+    } else if (this.State.Value.FetchMovieProblem is not null)
     {
-        <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.LoadingFailed"]" Problem="@this.State.Value.FetchProblem"
-                         Class="w-100 m-4" TryAgain="@this.FetchMovie" />
+        <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.LoadingFailed"]" TryAgain="@this.FetchMovie"
+                         Problem="@this.State.Value.FetchMovieProblem" Class="w-100 m-4" />
     } else
     {
         <h1 style="font-weight: 300">
@@ -80,6 +80,14 @@
                                       Click="@(e => this.AddTitle(this.OriginalTitles))" class="d-inline-block ms-1" />
                     </div>
                 </div>
+
+                @if (this.ListItem is not null)
+                {
+                    <div class="d-flex justify-content-center mt-4">
+                        <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
+                                      Click="@this.Delete" />
+                    </div>
+                }
             </div>
 
             @if (this.State.Value.IsCreatingMovie)
@@ -89,6 +97,15 @@
             {
                 <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.CreatingFailed"]" TryAgain="@this.Save"
                                  Problem="@this.State.Value.CreateMovieProblem" Class="w-100 m-4" />
+            }
+
+            @if (this.State.Value.IsDeletingMovie)
+            {
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
+            } else if (this.State.Value.DeleteMovieProblem is not null)
+            {
+                <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.DeletingFailed"]" TryAgain="@this.Delete"
+                                 Problem="@this.State.Value.DeleteMovieProblem" Class="w-100 m-4" />
             }
 
             <div class="d-flex flex-row my-2">
@@ -257,6 +274,25 @@
 
     private void Cancel() =>
         this.SetPropertyValues();
+
+    private async Task Delete()
+    {
+        bool? delete = await this.DialogService.Confirm(
+            this.Loc["MovieForm.DeleteDialog.Body"],
+            this.Loc["MovieForm.DeleteDialog.Title"],
+            new()
+            {
+                OkButtonText = this.Loc["Confirmation.Confirm"],
+                CancelButtonText = this.Loc["Confirmation.Cancel"],
+                CloseDialogOnEsc = true,
+                CloseDialogOnOverlayClick = true
+            });
+
+        if (delete == true && this.ListItem is { Id: var id })
+        {
+            this.Dispatcher.Dispatch(new DeleteMovieAction(id));
+        }
+    }
 
     private void OnMovieCreated()
     {

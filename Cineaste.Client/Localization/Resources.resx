@@ -132,11 +132,20 @@
   <data name="Button.Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="Button.Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
   <data name="Button.Save" xml:space="preserve">
     <value>Save</value>
   </data>
   <data name="Cineaste" xml:space="preserve">
     <value>Cineaste</value>
+  </data>
+  <data name="Confirmation.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Confirmation.Confirm" xml:space="preserve">
+    <value>Confirm</value>
   </data>
   <data name="CreateListPage.BasicInfo" xml:space="preserve">
     <value>Basic Info</value>
@@ -201,6 +210,9 @@
   <data name="ListPage.Menu.Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="ListPage.Problem.LoadingListFailed" xml:space="preserve">
+    <value>Loading the list has failed</value>
+  </data>
   <data name="MovieForm.AddOriginalTitle" xml:space="preserve">
     <value>Add original title</value>
   </data>
@@ -209,6 +221,12 @@
   </data>
   <data name="MovieForm.CreateMovie.Success" xml:space="preserve">
     <value>Movie created successfully</value>
+  </data>
+  <data name="MovieForm.DeleteDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to delete this movie?</value>
+  </data>
+  <data name="MovieForm.DeleteDialog.Title" xml:space="preserve">
+    <value>Delete Movie</value>
   </data>
   <data name="MovieForm.ImdbId" xml:space="preserve">
     <value>IMDb ID</value>
@@ -230,6 +248,9 @@
   </data>
   <data name="MovieForm.Problem.CreatingFailed" xml:space="preserve">
     <value>Creating the moive has failed</value>
+  </data>
+  <data name="MovieForm.Problem.DeletingFailed" xml:space="preserve">
+    <value>Deleting the movie has failed</value>
   </data>
   <data name="MovieForm.Problem.LoadingFailed" xml:space="preserve">
     <value>Loading the movie has failed</value>

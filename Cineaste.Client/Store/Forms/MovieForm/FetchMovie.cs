@@ -20,7 +20,7 @@ public static class FetchMovieReducers
     public static MovieFormState ReduceMovieResultAction(MovieFormState state, FetchMovieResultAction action) =>
         action.Handle(
             onSuccess: movie => state with { IsLoading = false, IsLoaded = true, MovieModel = movie },
-            onFailure: problem => state with { IsLoading = false, IsLoaded = true, FetchProblem = problem });
+            onFailure: problem => state with { IsLoading = false, IsLoaded = true, FetchMovieProblem = problem });
 }
 
 [AutoConstructor]

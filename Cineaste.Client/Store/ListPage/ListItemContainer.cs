@@ -58,4 +58,21 @@ public sealed partial class ListItemContainer
 
         return new(newItems, newItemsById, this.culture);
     }
+
+    public ListItemContainer RemoveItem(Guid id)
+    {
+        var newItemsById = this.itemsById.Remove(id);
+
+        var newComparer = new ListItemTitleComparer(
+            this.culture,
+            ComparerByYear,
+            id => newItemsById[id],
+            item => item.Title);
+
+        var newItems = this.items
+            .Where(item => item.Id != id)
+            .ToImmutableSortedSet(newComparer);
+
+        return new(newItems, newItemsById, this.culture);
+    }
 }
