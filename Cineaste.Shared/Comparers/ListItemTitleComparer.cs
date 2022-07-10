@@ -32,8 +32,9 @@ public sealed class ListItemTitleComparer : NullableComparerBase<ListItemModel>
     protected override int GetHashCodeSafe(ListItemModel item) =>
         item.GetHashCode();
 
-    protected override int CompareSafe(ListItemModel x, ListItemModel y) =>
-        (x.Type, y.Type) switch
+    protected override int CompareSafe(ListItemModel x, ListItemModel y)
+    {
+        int result = (x.Type, y.Type) switch
         {
             (ListItemType.Movie, ListItemType.Movie) => this.CompareConsideringFranchiseItems(x, y),
             (ListItemType.Movie, ListItemType.Series) => this.CompareConsideringFranchiseItems(x, y),
@@ -47,9 +48,11 @@ public sealed class ListItemTitleComparer : NullableComparerBase<ListItemModel>
             (ListItemType.Franchise, ListItemType.Series) => this.CompareWithFranchise(x, y),
             (ListItemType.Franchise, ListItemType.Franchise) => this.CompareFranchises(x, y),
 
-            _ => throw new NotSupportedException(
-                $"Types of list items to compare are not supported: {x.Type}, {y.Type}")
+            _ => Match.ImpossibleType<int>((x.Type, y.Type))
         };
+
+        return result != 0 ? result : x.Id.CompareTo(y.Id);
+    }
 
     private int CompareConsideringFranchiseItems(ListItemModel left, ListItemModel right) =>
         left.Id == right.Id && left.Type == right.Type

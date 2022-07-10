@@ -14,6 +14,8 @@ using Radzen;
 
 public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
 {
+    protected const int ShortNotificationDuration = 2000;
+
     [Inject]
     public IStringLocalizer<Resources> Loc { get; private set; } = null!;
 
@@ -29,7 +31,7 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
     [Inject]
     protected TooltipService TooltipService { get; private set; } = null!;
 
-    public bool RunValidation()
+    protected bool RunValidation()
     {
         var args = new RunValidationEventArgs();
         this.Validation?.Invoke(this, args);
@@ -39,7 +41,7 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
         return args.IsSuccessful;
     }
 
-    public void WithValidation(Action action)
+    protected void WithValidation(Action action)
     {
         bool success = this.RunValidation();
 
@@ -48,6 +50,14 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
             action();
         }
     }
+
+    protected void ShowSuccessNotification(string text, int duration) =>
+        this.NotificationService.Notify(new()
+        {
+            Summary = this.Loc[text],
+            Severity = NotificationSeverity.Success,
+            Duration = duration
+        });
 
     public event EventHandler<RunValidationEventArgs>? Validation;
 }

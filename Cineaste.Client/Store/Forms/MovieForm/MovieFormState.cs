@@ -14,6 +14,9 @@ public sealed record MovieFormState
     public bool IsCreatingMovie { get; init; }
     public ProblemDetails? CreateMovieProblem { get; init; }
 
+    public bool IsUpdatingMovie { get; init; }
+    public ProblemDetails? UpdateMovieProblem { get; init; }
+
     public bool IsDeletingMovie { get; init; }
     public ProblemDetails? DeleteMovieProblem { get; init; }
 }

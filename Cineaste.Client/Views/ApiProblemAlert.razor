@@ -1,8 +1,8 @@
 @inherits CineasteComponent
 
 <div class="alert alert-danger @this.Class">
-    <div class="d-flex flex-row justify-content-between align-items-center">
-        <p class="m-1">@this.Loc[this.Text]</p>
+    <div class="d-flex flex-row justify-content-between align-items-center flex-wrap">
+        <p class="text-wrap m-1">@this.Loc[this.Text]</p>
 
         <div>
             @if (this.Problem is not null)

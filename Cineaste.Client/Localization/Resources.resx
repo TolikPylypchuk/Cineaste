@@ -255,6 +255,9 @@
   <data name="MovieForm.Problem.LoadingFailed" xml:space="preserve">
     <value>Loading the movie has failed</value>
   </data>
+  <data name="MovieForm.Problem.UpdatingFailed" xml:space="preserve">
+    <value>Updating the movie has failed</value>
+  </data>
   <data name="MovieForm.RemoveOriginalTitle" xml:space="preserve">
     <value>Remove original title</value>
   </data>
@@ -266,6 +269,9 @@
   </data>
   <data name="MovieForm.Titles" xml:space="preserve">
     <value>Titles</value>
+  </data>
+  <data name="MovieForm.UpdateMovie.Success" xml:space="preserve">
+    <value>Movie updated successfully</value>
   </data>
   <data name="MovieForm.Year" xml:space="preserve">
     <value>Year</value>

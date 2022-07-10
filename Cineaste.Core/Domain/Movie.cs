@@ -113,6 +113,26 @@ public sealed class Movie : Entity<Movie>
     public void RemoveTitle(string name, bool isOriginal) =>
         this.titles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
 
+    public IReadOnlyCollection<Title> ReplaceTitles(IEnumerable<string> names, bool isOriginal)
+    {
+        var namesList = Require.NotNull(names).ToList();
+
+        if (namesList.Count == 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(names), "The list of title names is empty");
+        }
+
+        this.titles.RemoveAll(title => title.IsOriginal == isOriginal);
+
+        var newTitles = namesList
+            .Select((name, index) => new Title(name, index + 1, isOriginal))
+            .ToList();
+
+        this.titles.AddRange(newTitles);
+
+        return newTitles.AsReadOnly();
+    }
+
     public void AddTag(Tag tag) =>
         this.tags.Add(new TagContainer { Tag = tag });
 

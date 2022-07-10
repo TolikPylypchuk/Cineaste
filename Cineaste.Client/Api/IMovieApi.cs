@@ -8,6 +8,9 @@ public interface IMovieApi
     [Post("/api/movies")]
     public Task<IApiResponse<MovieModel>> CreateMovie([Body] MovieRequest request);
 
+    [Put("/api/movies/{id}")]
+    public Task<IApiResponse<MovieModel>> UpdateMovie(Guid id, [Body] MovieRequest request);
+
     [Delete("/api/movies/{id}")]
     public Task<IApiResponse> DeleteMovie(Guid id);
 }

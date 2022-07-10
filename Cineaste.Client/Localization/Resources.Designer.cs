@@ -475,6 +475,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updating the movie has failed.
+        /// </summary>
+        public static string MovieForm_Problem_UpdatingFailed {
+            get {
+                return ResourceManager.GetString("MovieForm.Problem.UpdatingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove original title.
         /// </summary>
         public static string MovieForm_RemoveOriginalTitle {
@@ -507,6 +516,15 @@ namespace Cineaste.Client.Localization {
         public static string MovieForm_Titles {
             get {
                 return ResourceManager.GetString("MovieForm.Titles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movie updated successfully.
+        /// </summary>
+        public static string MovieForm_UpdateMovie_Success {
+            get {
+                return ResourceManager.GetString("MovieForm.UpdateMovie.Success", resourceCulture);
             }
         }
         

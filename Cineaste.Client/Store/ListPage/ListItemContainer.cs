@@ -54,7 +54,33 @@ public sealed partial class ListItemContainer
             id => newItemsById[id],
             item => item.Title);
 
-        var newItems = this.items.Add(item).ToImmutableSortedSet(newComparer);
+        var itemsBuilder = this.items.ToBuilder();
+        itemsBuilder.KeyComparer = newComparer;
+        itemsBuilder.Add(item);
+
+        return new(itemsBuilder.ToImmutable(), newItemsById, this.culture);
+    }
+
+    public ListItemContainer UpdateItem(ListItemModel item)
+    {
+        var itemsByIdBuilder = this.itemsById.ToBuilder();
+        itemsByIdBuilder.Remove(item.Id);
+        itemsByIdBuilder.Add(item.Id, item);
+
+        var newItemsById = itemsByIdBuilder.ToImmutable();
+
+        var newComparer = new ListItemTitleComparer(
+            this.culture,
+            ComparerByYear,
+            id => newItemsById[id],
+            item => item.Title);
+
+        var itemsBuilder = this.items.ToBuilder();
+        itemsBuilder.Remove(itemsBuilder.First(i => i.Id == item.Id));
+        itemsBuilder.Add(item);
+        itemsBuilder.KeyComparer = newComparer;
+
+        var newItems = itemsBuilder.ToImmutable();
 
         return new(newItems, newItemsById, this.culture);
     }
@@ -69,10 +95,10 @@ public sealed partial class ListItemContainer
             id => newItemsById[id],
             item => item.Title);
 
-        var newItems = this.items
-            .Where(item => item.Id != id)
-            .ToImmutableSortedSet(newComparer);
+        var itemsBuilder = this.items.ToBuilder();
+        itemsBuilder.Remove(itemsBuilder.First(item => item.Id == id));
+        itemsBuilder.KeyComparer = newComparer;
 
-        return new(newItems, newItemsById, this.culture);
+        return new(itemsBuilder.ToImmutable(), newItemsById, this.culture);
     }
 }

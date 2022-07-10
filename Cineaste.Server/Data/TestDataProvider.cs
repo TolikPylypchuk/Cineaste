@@ -32,19 +32,19 @@ internal sealed class TestDataProvider
     private CineasteList CreateList(string name, string handle)
     {
         var config = new ListConfiguration(
-            Id.Create<ListConfiguration>(),
+            Id.CreateNew<ListConfiguration>(),
             CultureInfo.InvariantCulture,
             "Season #",
             "Season #",
             new(ListSortOrder.ByTitle, ListSortDirection.Ascending, ListSortOrder.ByYear, ListSortDirection.Ascending));
 
-        var list = new CineasteList(Id.Create<CineasteList>(), name, handle, config);
+        var list = new CineasteList(Id.CreateNew<CineasteList>(), name, handle, config);
 
         var black = new Color("#000000");
         var blue = new Color("#0000FF");
 
-        var movieKind = new MovieKind(Id.Create<MovieKind>(), "Test Kind", black, black, black);
-        var seriesKind = new SeriesKind(Id.Create<SeriesKind>(), "Test Kind", blue, blue, blue);
+        var movieKind = new MovieKind(Id.CreateNew<MovieKind>(), "Test Kind", black, black, black);
+        var seriesKind = new SeriesKind(Id.CreateNew<SeriesKind>(), "Test Kind", blue, blue, blue);
 
         list.AddMovieKind(movieKind);
         list.AddSeriesKind(seriesKind);
@@ -81,7 +81,7 @@ internal sealed class TestDataProvider
 
     private Movie CreateMovie(string title, MovieKind kind) =>
         new(
-            Id.Create<Movie>(),
+            Id.CreateNew<Movie>(),
             new List<Title> { new(title, 1, false), new(title, 1, true) },
             DateTime.Now.Year,
             isWatched: true,
@@ -92,10 +92,10 @@ internal sealed class TestDataProvider
     {
         const string channel = "HBO";
 
-        var period1 = new Period(Id.Create<Period>(), 1, 2000, 2, 2000, false, 10);
+        var period1 = new Period(Id.CreateNew<Period>(), 1, 2000, 2, 2000, false, 10);
 
         var season1 = new Season(
-            Id.Create<Season>(),
+            Id.CreateNew<Season>(),
             new List<Title> { new("Season 1", 1, false), new("Season 2", 1, true) },
             SeasonWatchStatus.Watched,
             SeasonReleaseStatus.Finished,
@@ -104,7 +104,7 @@ internal sealed class TestDataProvider
             new List<Period> { period1 });
 
         var episode = new SpecialEpisode(
-            Id.Create<SpecialEpisode>(),
+            Id.CreateNew<SpecialEpisode>(),
             new List<Title> { new("Special Episode", 1, false), new("Special Episode", 1, true) },
             month: 5,
             year: 2001,
@@ -113,10 +113,10 @@ internal sealed class TestDataProvider
             channel,
             sequenceNumber: 2);
 
-        var period2 = new Period(Id.Create<Period>(), 1, 2002, 2, 2002, false, 10);
+        var period2 = new Period(Id.CreateNew<Period>(), 1, 2002, 2, 2002, false, 10);
 
         var season2 = new Season(
-            Id.Create<Season>(),
+            Id.CreateNew<Season>(),
             new List<Title> { new("Season 2", 1, false), new("Season 2", 1, true) },
             SeasonWatchStatus.Watched,
             SeasonReleaseStatus.Finished,
@@ -125,7 +125,7 @@ internal sealed class TestDataProvider
             new List<Period> { period2 });
 
         return new(
-            Id.Create<Series>(),
+            Id.CreateNew<Series>(),
             new List<Title> { new(title, 1, false), new(title, 1, true) },
             new List<Season> { season1, season2 },
             new List<SpecialEpisode> { episode },
@@ -137,7 +137,7 @@ internal sealed class TestDataProvider
 
     private Franchise CreateFranchise(string? title = null) =>
         new(
-            Id.Create<Franchise>(),
+            Id.CreateNew<Franchise>(),
             title is not null ? new List<Title> { new(title, 1, false), new(title, 1, true) } : new List<Title>(),
             new List<FranchiseItem>(),
             showTitles: title is not null,

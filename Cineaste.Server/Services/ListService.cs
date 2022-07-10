@@ -74,11 +74,11 @@ public sealed partial class ListService : IListService
         }
 
         var list = new CineasteList(
-            Id.Create<CineasteList>(),
+            Id.CreateNew<CineasteList>(),
             request.Value.Name,
             handle,
             new ListConfiguration(
-                Id.Create<ListConfiguration>(),
+                Id.CreateNew<ListConfiguration>(),
                 CultureInfo.GetCultureInfo(request.Value.Culture),
                 request.Value.DefaultSeasonTitle,
                 request.Value.DefaultSeasonOriginalTitle,

@@ -34,4 +34,22 @@ public static class MovieMappingExtensions
             request.Value.IsWatched,
             request.Value.IsReleased,
             kind);
+
+    public static void Update(this Movie movie, Validated<MovieRequest> request, MovieKind kind)
+    {
+        movie.ReplaceTitles(
+            request.Value.Titles.OrderBy(title => title.Priority).Select(title => title.Name),
+            isOriginal: false);
+
+        movie.ReplaceTitles(
+            request.Value.OriginalTitles.OrderBy(title => title.Priority).Select(title => title.Name),
+            isOriginal: true);
+
+        movie.Year = request.Value.Year;
+        movie.IsWatched = request.Value.IsWatched;
+        movie.IsReleased = request.Value.IsReleased;
+        movie.Kind = kind;
+        movie.ImdbId = request.Value.ImdbId;
+        movie.RottenTomatoesLink = request.Value.RottenTomatoesLink;
+    }
 }
