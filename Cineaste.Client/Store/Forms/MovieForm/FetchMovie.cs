@@ -17,7 +17,7 @@ public static class FetchMovieReducers
         action.Item.Id == state.MovieModel?.Id ? state : new() { IsLoading = true };
 
     [ReducerMethod]
-    public static MovieFormState ReduceMovieResultAction(MovieFormState state, FetchMovieResultAction action) =>
+    public static MovieFormState ReduceFetchMovieResultAction(MovieFormState state, FetchMovieResultAction action) =>
         action.Handle(
             onSuccess: movie => state with { IsLoading = false, IsLoaded = true, MovieModel = movie },
             onFailure: problem => state with { IsLoading = false, IsLoaded = true, FetchMovieProblem = problem });

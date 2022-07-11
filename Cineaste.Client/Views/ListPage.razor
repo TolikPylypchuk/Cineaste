@@ -44,11 +44,15 @@
             @switch (this.State.Value.SelectionMode)
             {
                 case ListPageSelectionMode.None:
-                    <ListActionsPanel CreateMovie="@this.CreateMovie" />
+                    <ListActionsPanel CreateMovie="@this.CreateMovie" CreateSeries="@this.CreateSeries" />
                     break;
                 case ListPageSelectionMode.Movie:
                     <MovieForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
                                Close="@this.OnItemClosed" />
+                    break;
+                case ListPageSelectionMode.Series:
+                    <SeriesForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
+                                Close="@this.OnItemClosed" />
                     break;
             }
         }
@@ -89,6 +93,9 @@
 
     private void CreateMovie() =>
         this.Dispatcher.Dispatch(new StartCreatingMovieAction(this.State.Value.AvailableMovieKinds));
+
+    private void CreateSeries() =>
+        this.Dispatcher.Dispatch(new StartCreatingSeriesAction(this.State.Value.AvailableSeriesKinds));
 
     private void OnItemClosed() =>
         this.Dispatcher.Dispatch(new CloseItemAction());

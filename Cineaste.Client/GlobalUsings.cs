@@ -13,6 +13,7 @@ global using Cineaste.Shared.Comparers;
 global using Cineaste.Shared.ListModels;
 global using Cineaste.Shared.Mapping;
 global using Cineaste.Shared.MovieModels;
+global using Cineaste.Shared.SeriesModels;
 global using Cineaste.Shared.SharedModels;
 
 global using Fluxor;

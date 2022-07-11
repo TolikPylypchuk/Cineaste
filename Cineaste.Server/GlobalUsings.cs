@@ -9,11 +9,12 @@ global using Cineaste.Persistence;
 global using Cineaste.Server.Api;
 global using Cineaste.Server.Data;
 global using Cineaste.Server.Exceptions;
-global using Cineaste.Server.Mappers;
+global using Cineaste.Server.Mapping;
 global using Cineaste.Server.Services;
 global using Cineaste.Shared;
 global using Cineaste.Shared.ListModels;
 global using Cineaste.Shared.MovieModels;
+global using Cineaste.Shared.SeriesModels;
 global using Cineaste.Shared.SharedModels;
 global using Cineaste.Shared.Validation;
 

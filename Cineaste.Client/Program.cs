@@ -29,6 +29,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = baseAddress });
 builder.Services.AddRefitClient<ICultureApi>(baseAddress);
 builder.Services.AddRefitClient<IListApi>(baseAddress);
 builder.Services.AddRefitClient<IMovieApi>(baseAddress);
+builder.Services.AddRefitClient<ISeriesApi>(baseAddress);
 
 builder.Services.AddLocalization();
 

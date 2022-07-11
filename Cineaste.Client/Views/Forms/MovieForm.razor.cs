@@ -34,7 +34,6 @@ public partial class MovieForm
     private ListKindModel Kind { get; set; } = null!;
 
     private string ImdbId { get; set; } = String.Empty;
-
     private string RottenTomatoesLink { get; set; } = String.Empty;
 
     private PropertyValidator<MovieRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }

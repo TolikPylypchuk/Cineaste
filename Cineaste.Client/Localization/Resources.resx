@@ -300,6 +300,81 @@
   <data name="Problem.ValidationFailed.CreateList" xml:space="preserve">
     <value>The list to create is invalid</value>
   </data>
+  <data name="SeriesForm.AddOriginalTitle" xml:space="preserve">
+    <value>Add original title</value>
+  </data>
+  <data name="SeriesForm.AddTitle" xml:space="preserve">
+    <value>Add title</value>
+  </data>
+  <data name="SeriesForm.ImdbId" xml:space="preserve">
+    <value>IMDb ID</value>
+  </data>
+  <data name="SeriesForm.Kind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="SeriesForm.NewSeries" xml:space="preserve">
+    <value>New Series</value>
+  </data>
+  <data name="SeriesForm.OriginalTitles" xml:space="preserve">
+    <value>Original titles</value>
+  </data>
+  <data name="SeriesForm.Problem.CreatingFailed" xml:space="preserve">
+    <value>Creating the series has failed</value>
+  </data>
+  <data name="SeriesForm.Problem.DeletingFailed" xml:space="preserve">
+    <value>Deleting the series has failed</value>
+  </data>
+  <data name="SeriesForm.Problem.LoadingFailed" xml:space="preserve">
+    <value>Loading the series has failed</value>
+  </data>
+  <data name="SeriesForm.Problem.UpdatingFailed" xml:space="preserve">
+    <value>Updating the series has failed</value>
+  </data>
+  <data name="SeriesForm.ReleaseStatus" xml:space="preserve">
+    <value>Release status</value>
+  </data>
+  <data name="SeriesForm.ReleaseStatus.Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="SeriesForm.ReleaseStatus.Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="SeriesForm.ReleaseStatus.Hiatus" xml:space="preserve">
+    <value>Hiatus</value>
+  </data>
+  <data name="SeriesForm.ReleaseStatus.NotStarted" xml:space="preserve">
+    <value>Not started</value>
+  </data>
+  <data name="SeriesForm.ReleaseStatus.Running" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="SeriesForm.ReleaseStatus.Unknown" xml:space="preserve">
+    <value>Don't care</value>
+  </data>
+  <data name="SeriesForm.RottenTomatoesLink" xml:space="preserve">
+    <value>Rotten Tomatoes Link</value>
+  </data>
+  <data name="SeriesForm.Titles" xml:space="preserve">
+    <value>Titles</value>
+  </data>
+  <data name="SeriesForm.WatchStatus" xml:space="preserve">
+    <value>Watch status</value>
+  </data>
+  <data name="SeriesForm.WatchStatus.Hiatus" xml:space="preserve">
+    <value>Hiatus</value>
+  </data>
+  <data name="SeriesForm.WatchStatus.NotWatched" xml:space="preserve">
+    <value>Not watched</value>
+  </data>
+  <data name="SeriesForm.WatchStatus.StoppedWatching" xml:space="preserve">
+    <value>Stopped watching</value>
+  </data>
+  <data name="SeriesForm.WatchStatus.Watched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
+  <data name="SeriesForm.WatchStatus.Watching" xml:space="preserve">
+    <value>Watching</value>
+  </data>
   <data name="Validation.CreateList.Culture.Invalid" xml:space="preserve">
     <value>The language is invalid</value>
   </data>

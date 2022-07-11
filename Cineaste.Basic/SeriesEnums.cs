@@ -4,6 +4,7 @@ public enum SeriesWatchStatus
 {
     NotWatched,
     Watching,
+    Hiatus,
     Watched,
     StoppedWatching
 }
@@ -12,6 +13,7 @@ public enum SeriesReleaseStatus
 {
     NotStarted,
     Running,
+    Hiatus,
     Finished,
     Cancelled,
     Unknown

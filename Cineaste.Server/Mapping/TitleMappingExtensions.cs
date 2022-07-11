@@ -1,4 +1,4 @@
-namespace Cineaste.Server.Mappers;
+namespace Cineaste.Server.Mapping;
 
 public static class TitleMappingExtensions
 {

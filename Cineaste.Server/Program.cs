@@ -37,6 +37,7 @@ builder.Services.AddProblemDetails(options =>
 builder.Services.AddScoped<ICultureExtractor, CultureExtractor>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ISeriesService, SeriesService>();
 builder.Services.AddScoped<TestDataProvider>();
 
 var app = builder.Build();
@@ -57,6 +58,7 @@ app.UseRouting();
 app.MapCultureRoutes();
 app.MapListRoutes();
 app.MapMovieRoutes();
+app.MapSeriesRoutes();
 
 app.MapFallbackToFile("index.html");
 
