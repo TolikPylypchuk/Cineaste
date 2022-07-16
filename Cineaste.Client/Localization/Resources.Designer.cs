@@ -619,6 +619,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add season.
+        /// </summary>
+        public static string SeriesForm_AddSeason {
+            get {
+                return ResourceManager.GetString("SeriesForm.AddSeason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add special episode.
+        /// </summary>
+        public static string SeriesForm_AddSpecialEpisode {
+            get {
+                return ResourceManager.GetString("SeriesForm.AddSpecialEpisode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add title.
         /// </summary>
         public static string SeriesForm_AddTitle {

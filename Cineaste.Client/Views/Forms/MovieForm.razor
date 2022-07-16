@@ -63,7 +63,7 @@
                     </div>
                 </div>
 
-                <RadzenLabel Text="@this.Loc["MovieForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-2" />
+                <RadzenLabel Text="@this.Loc["MovieForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-1" />
                 <RadzenTextBox @bind-Value="@this.ImdbId" Name="ImdbIdTextBox" class="w-100" />
                 <FormValidator Validator="@this.ImdbIdValidator" Value="@this.ImdbId" />
 

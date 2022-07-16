@@ -5,16 +5,8 @@ public static class MovieMappingExtensions
     public static MovieModel ToMovieModel(this Movie movie) =>
         new(
             movie.Id.Value,
-            movie.Titles
-                .Where(title => !title.IsOriginal)
-                .Select(title => title.ToTitleModel())
-                .OrderBy(title => title.Priority)
-                .ToImmutableList(),
-            movie.Titles
-                .Where(title => title.IsOriginal)
-                .Select(title => title.ToTitleModel())
-                .OrderBy(title => title.Priority)
-                .ToImmutableList(),
+            movie.Titles.ToTitleModels(isOriginal: false),
+            movie.Titles.ToTitleModels(isOriginal: true),
             movie.Year,
             movie.IsWatched,
             movie.IsReleased,

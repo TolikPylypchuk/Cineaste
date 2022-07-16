@@ -4,6 +4,7 @@ global using System.Diagnostics.CodeAnalysis;
 global using Cineaste.Basic;
 global using Cineaste.Shared.ListModels;
 global using Cineaste.Shared.MovieModels;
+global using Cineaste.Shared.SeriesModels;
 global using Cineaste.Shared.SharedModels;
 global using Cineaste.Shared.Validation;
 

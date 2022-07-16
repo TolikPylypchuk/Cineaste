@@ -30,6 +30,8 @@ public partial class SeriesForm
 
     private bool IsMiniseries { get; set; }
 
+    private ObservableCollection<SeriesComponentModel> Components { get; set; } = new();
+
     private string ImdbId { get; set; } = String.Empty;
     private string RottenTomatoesLink { get; set; } = String.Empty;
 
@@ -71,6 +73,14 @@ public partial class SeriesForm
         this.ReleaseStatus = series?.ReleaseStatus ?? SeriesReleaseStatus.NotStarted;
         this.Kind = series?.Kind ?? this.State.Value.AvailableKinds.FirstOrDefault()!;
         this.IsMiniseries = series?.IsMiniseries ?? false;
+
+        this.Components.Clear();
+
+        foreach (var component in series?.Components ?? Enumerable.Empty<SeriesComponentModel>())
+        {
+            this.Components.Add(component);
+        }
+
         this.ImdbId = series?.ImdbId ?? String.Empty;
         this.RottenTomatoesLink = series?.RottenTomatoesLink ?? String.Empty;
 

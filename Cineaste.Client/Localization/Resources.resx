@@ -303,6 +303,12 @@
   <data name="SeriesForm.AddOriginalTitle" xml:space="preserve">
     <value>Add original title</value>
   </data>
+  <data name="SeriesForm.AddSeason" xml:space="preserve">
+    <value>Add season</value>
+  </data>
+  <data name="SeriesForm.AddSpecialEpisode" xml:space="preserve">
+    <value>Add special episode</value>
+  </data>
   <data name="SeriesForm.AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>

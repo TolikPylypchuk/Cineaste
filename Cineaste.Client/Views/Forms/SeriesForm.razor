@@ -55,10 +55,30 @@
                     </div>
                 </div>
 
-                <RadzenLabel Text="@this.Loc["SeriesForm.Kind"]" Component="KindDropDown" class="mt-2" />
+                <RadzenLabel Text="@this.Loc["SeriesForm.Kind"]" Component="KindDropDown" class="mt-1" />
                 <RadzenDropDown @bind-Value="@this.Kind" Data="@this.State.Value.AvailableKinds"
                                 AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
                                 Name="KindDropDown" TextProperty="Name" class="w-100" />
+
+                <RadzenDataList WrapItems="true" Data="@this.Components" TItem="SeriesComponentModel"
+                                class="overflow-auto w-100 mt-1">
+                    <Template Context="component">
+                        <div class="list-item-container d-flex flex-row justify-content-between border-bottom"
+                             role="button">
+                            <p class="m-0">@component.Title</p>
+                            <p class="m-0">@component.Years</p>
+                        </div>
+                    </Template>
+                </RadzenDataList>
+
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
+                        <RadzenButton Text="@this.Loc["SeriesForm.AddSeason"]" ButtonStyle="ButtonStyle.Secondary"
+                                      class="d-inline-block me-1" />
+                        <RadzenButton Text="@this.Loc["SeriesForm.AddSpecialEpisode"]"
+                                      ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1" />
+                    </div>
+                </div>
 
                 <RadzenLabel Text="@this.Loc["SeriesForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-2" />
                 <RadzenTextBox @bind-Value="@this.ImdbId" Name="ImdbIdTextBox" class="w-100" />
