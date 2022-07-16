@@ -25,6 +25,23 @@
 
         <div class="w-100 h-100 d-flex flex-column justify-content-between">
             <div class="h-100">
+                <div class="d-md-flex justify-content-md-center mt-2">
+                    @if (!String.IsNullOrEmpty(this.ImdbId))
+                    {
+                        <RadzenLink Path="@($"https://www.imdb.com/title/{this.ImdbId}")" Text="@this.Loc["Link.Imdb"]"
+                                    class="@($"{(!String.IsNullOrEmpty(this.RottenTomatoesLink) ? "me-md-2" : "")}")"
+                                    target="_blank" />
+                    }
+
+                    @if (!String.IsNullOrEmpty(this.RottenTomatoesLink))
+                    {
+                        <RadzenLink Path="@this.RottenTomatoesLink" Text="@this.Loc["Link.RottenTomatoes"]"
+                                    class="@($"{(!String.IsNullOrEmpty(this.ImdbId) ? "me-md-2" : "")}")"
+                                    target="_blank">
+                        </RadzenLink>
+                    }
+                </div>
+
                 <RadzenLabel Text="@this.Loc["SeriesForm.Titles"]" class="mt-2" />
                 <TitlesForm T="SeriesForm" @ref="this.TitlesForm" Titles="@this.Titles"
                             FirstTitleChanged="@this.UpdateFormTitle" />

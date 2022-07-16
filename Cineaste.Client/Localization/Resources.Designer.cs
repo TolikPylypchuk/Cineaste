@@ -295,6 +295,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to IMDb.
+        /// </summary>
+        public static string Link_Imdb {
+            get {
+                return ResourceManager.GetString("Link.Imdb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes.
+        /// </summary>
+        public static string Link_RottenTomatoes {
+            get {
+                return ResourceManager.GetString("Link.RottenTomatoes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new movie.
         /// </summary>
         public static string ListActionsPanel_AddMovie {

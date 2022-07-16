@@ -5,8 +5,17 @@
 {
     int index = i;
     <div>
-        <RadzenTextBox Value="@this.Titles[index]" Change="@(value => this.UpdateTitle(value, index))"
-                       class="@($"{(index != 0 ? "mt-2" : "")} w-100")" />
+        <div class="@($"{(index != 0 ? "mt-2" : "")} d-flex flex-row align-items-center w-100")">
+            <RadzenTextBox Value="@this.Titles[index]" Change="@(value => this.UpdateTitle(value, index))"
+                           class="w-100" />
+
+            @if (this.Titles.Count > 1)
+            {
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                              Click="@(() => this.Titles.RemoveAt(index))" class="ms-2" />
+            }
+        </div>
+
         <FormValidator Validator="this.TitleNameValidator" Value="@this.Titles[index]" />
     </div>
 }
