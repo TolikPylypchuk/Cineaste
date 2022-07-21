@@ -55,9 +55,9 @@ public partial class MovieForm
 
         if (firstRender)
         {
-            this.SubscribeToAction<FetchMovieResultAction>(_ => this.SetPropertyValues());
-            this.SubscribeToAction<CreateMovieResultAction>(_ => this.OnMovieCreated());
-            this.SubscribeToAction<UpdateMovieResultAction>(_ => this.OnMovieUpdated());
+            this.SubsribeToSuccessfulResult<FetchMovieResultAction>(this.SetPropertyValues);
+            this.SubsribeToSuccessfulResult<CreateMovieResultAction>(this.OnMovieCreated);
+            this.SubsribeToSuccessfulResult<UpdateMovieResultAction>(this.OnMovieUpdated);
         }
     }
 

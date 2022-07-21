@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.Components;
-
 namespace Cineaste.Client.Views.Base;
+
+using Cineaste.Client.Store;
+
+using Microsoft.AspNetCore.Components;
 
 public abstract class StatefulComponent<TState> : CineasteComponent
 {
@@ -9,4 +11,14 @@ public abstract class StatefulComponent<TState> : CineasteComponent
 
     [Inject]
     protected IDispatcher Dispatcher { get; private set; } = null!;
+
+    protected void SubsribeToSuccessfulResult<TAction>(Action action)
+        where TAction : ResultAction =>
+        this.SubscribeToAction<TAction>(result =>
+        {
+            if (result.IsSuccessful)
+            {
+                action();
+            }
+        });
 }

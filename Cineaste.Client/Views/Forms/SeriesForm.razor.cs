@@ -47,7 +47,7 @@ public partial class SeriesForm
 
         if (firstRender)
         {
-            this.SubscribeToAction<FetchSeriesResultAction>(_ => this.SetPropertyValues());
+            this.SubsribeToSuccessfulResult<FetchSeriesResultAction>(this.SetPropertyValues);
         }
     }
 

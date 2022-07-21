@@ -5,7 +5,7 @@
         <p class="text-wrap m-1">@this.Loc[this.Text]</p>
 
         <div>
-            @if (this.Problem is not null)
+            @if (this.Problem is not null && this.Problem.Detail is not null)
             {
                 <a class="alert-link collapsed m-1 ms-3" data-bs-toggle="collapse" href="#problem-details" role="button"
                     aria-expanded="false" aria-controls="details">

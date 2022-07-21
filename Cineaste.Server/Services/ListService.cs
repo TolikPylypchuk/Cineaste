@@ -91,16 +91,10 @@ public sealed partial class ListService : IListService
     }
 
     private Exception NotFound(string? handle) =>
-        new NotFoundException(
-            "NotFound.List",
-            $"Could not find a list with handle {handle}",
-            "Resource.List",
-            new Dictionary<string, object?> { ["handle"] = handle });
+        new NotFoundException(Resources.List, $"Could not find a list with handle {handle}")
+            .WithProperty(handle);
 
     private Exception Conflict(string? handle) =>
-        new ConflictException(
-            "Conflict.List",
-            $"The list with handle {handle} already exists",
-            "Resource.List",
-            new Dictionary<string, object?> { ["handle"] = handle });
+        new ConflictException(Resources.List, $"The list with handle {handle} already exists")
+            .WithProperty(handle);
 }

@@ -1,10 +1,10 @@
 namespace Cineaste.Client.Api;
 
-public abstract record ApiResult<T>;
+public abstract record ApiResult<T>(bool IsSuccessful);
 
-public sealed record ApiSuccess<T>(T Value) : ApiResult<T>;
+public sealed record ApiSuccess<T>(T Value) : ApiResult<T>(true);
 
-public sealed record ApiFailure<T>(ProblemDetails Problem) : ApiResult<T>;
+public sealed record ApiFailure<T>(ProblemDetails Problem) : ApiResult<T>(false);
 
 public static class ApiResult
 {

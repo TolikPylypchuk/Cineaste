@@ -38,3 +38,7 @@ h1, h2, h3, h4, h5, h6, p {
 a {
     text-decoration: none;
 }
+
+.rz-dropdown-items-wrapper {
+    max-height: 300px !important;
+}

@@ -2,12 +2,12 @@ namespace Cineaste.Server.Api;
 
 public static class MovieRoutes
 {
-    public static void MapMovieRoutes(this IEndpointRouteBuilder routes)
+    public static void MapMovieRoutes(this IEndpointRouteBuilder routes, PathString prefix)
     {
-        routes.MapGet("/movies/{id}", GetMovie);
-        routes.MapPost("/movies", CreateMovie);
-        routes.MapPut("/movies/{id}", UpdateMovie);
-        routes.MapDelete("/movies/{id}", DeleteMovie);
+        routes.MapGet(prefix + "/movies/{id}", GetMovie);
+        routes.MapPost(prefix + "/movies", CreateMovie);
+        routes.MapPut(prefix + "/movies/{id}", UpdateMovie);
+        routes.MapDelete(prefix + "/movies/{id}", DeleteMovie);
     }
 
     private static async Task<IResult> GetMovie(Guid id, IMovieService movieService) =>

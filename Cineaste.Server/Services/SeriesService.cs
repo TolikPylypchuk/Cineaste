@@ -34,9 +34,6 @@ public sealed partial class SeriesService : ISeriesService
     }
 
     private Exception NotFound(Id<Series> id) =>
-        new NotFoundException(
-            "NotFound.Series",
-            $"Could not find a series with id {id.Value}",
-            "Resource.Series",
-            new Dictionary<string, object?> { [nameof(id)] = id });
+        new NotFoundException(Resources.Series, $"Could not find a series with id {id.Value}")
+            .WithProperty(id);
 }

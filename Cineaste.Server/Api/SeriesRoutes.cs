@@ -2,9 +2,9 @@ namespace Cineaste.Server.Api;
 
 public static class SeriesRoutes
 {
-    public static void MapSeriesRoutes(this IEndpointRouteBuilder routes)
+    public static void MapSeriesRoutes(this IEndpointRouteBuilder routes, PathString prefix)
     {
-        routes.MapGet("/series/{id}", GetSeries);
+        routes.MapGet(prefix + "/series/{id}", GetSeries);
     }
 
     private static async Task<IResult> GetSeries(Guid id, ISeriesService seriesService) =>

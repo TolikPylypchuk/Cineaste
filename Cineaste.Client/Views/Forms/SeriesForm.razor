@@ -14,7 +14,7 @@
     } else if (this.State.Value.FetchSeriesProblem is not null)
     {
         <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.LoadingFailed"]" TryAgain="@this.FetchSeries"
-                         Problem="@this.State.Value.FetchSeriesProblem" Class="w-100 m-4" />
+                         Problem="@this.State.Value.FetchSeriesProblem" Class="w-100" />
     } else
     {
         <h1 style="font-weight: 300">
@@ -121,7 +121,7 @@
             } else if (this.State.Value.CreateSeriesProblem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.CreatingFailed"]" TryAgain="@this.Save"
-                                 Problem="@this.State.Value.CreateSeriesProblem" Class="w-100 m-4" />
+                                 Problem="@this.State.Value.CreateSeriesProblem" Class="w-100" />
             }
 
             @if (this.State.Value.IsUpdatingSeries)
@@ -130,7 +130,7 @@
             } else if (this.State.Value.UpdateSeriesProblem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.UpdatingFailed"]" TryAgain="@this.Save"
-                                 Problem="@this.State.Value.UpdateSeriesProblem" Class="w-100 m-4" />
+                                 Problem="@this.State.Value.UpdateSeriesProblem" Class="w-100" />
             }
 
             @if (this.State.Value.IsDeletingSeries)
@@ -139,7 +139,7 @@
             } else if (this.State.Value.DeleteSeriesProblem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.DeletingFailed"]"
-                                 Problem="@this.State.Value.DeleteSeriesProblem" Class="w-100 m-4" />
+                                 Problem="@this.State.Value.DeleteSeriesProblem" Class="w-100" />
             }
 
             <div class="d-flex flex-row my-2">

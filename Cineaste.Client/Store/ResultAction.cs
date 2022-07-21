@@ -1,10 +1,13 @@
 namespace Cineaste.Client.Store;
 
-public abstract record ResultAction<T>
+public abstract record ResultAction(bool IsSuccessful);
+
+public abstract record ResultAction<T> : ResultAction
 {
     public ApiResult<T> Result { get; }
 
     protected ResultAction(ApiResult<T> result)
+        : base(result?.IsSuccessful ?? false)
     {
         ArgumentNullException.ThrowIfNull(result);
         this.Result = result;

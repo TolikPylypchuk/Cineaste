@@ -22,7 +22,7 @@ builder.Services.Configure<JsonSerializerOptions>(options =>
     options.Converters.Add(new ValidatedJsonConverterFactory());
 });
 
-var baseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+var baseAddress = new Uri(new Uri(builder.HostEnvironment.BaseAddress), "/api");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = baseAddress });
 

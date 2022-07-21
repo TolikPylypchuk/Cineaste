@@ -1,6 +1,6 @@
 namespace Cineaste.Client.Api;
 
-public abstract record EmptyApiResult
+public abstract record EmptyApiResult(bool IsSuccessful)
 {
     public static EmptyApiSuccess Success { get; } = new();
 
@@ -8,9 +8,9 @@ public abstract record EmptyApiResult
         new(problem);
 }
 
-public sealed record EmptyApiSuccess : EmptyApiResult;
+public sealed record EmptyApiSuccess() : EmptyApiResult(true);
 
-public sealed record EmptyApiFailure(ProblemDetails Problem) : EmptyApiResult;
+public sealed record EmptyApiFailure(ProblemDetails Problem) : EmptyApiResult(false);
 
 public static class EmptyApiResultExtensions
 {

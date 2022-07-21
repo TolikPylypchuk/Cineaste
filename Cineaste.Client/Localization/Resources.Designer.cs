@@ -565,6 +565,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The resource couldn&apos;t be found.
+        /// </summary>
+        public static string Problem_NotFound_Any {
+            get {
+                return ResourceManager.GetString("Problem.NotFound.Any", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The list couldn&apos;t be found - please check that the URL is correct.
         /// </summary>
         public static string Problem_NotFound_List {
@@ -583,6 +592,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to any.
+        /// </summary>
+        public static string Problem_NotFound_Resource_Any {
+            get {
+                return ResourceManager.GetString("Problem.NotFound.Resource.Any", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to list.
         /// </summary>
         public static string Problem_NotFound_Resource_List {
@@ -597,6 +615,15 @@ namespace Cineaste.Client.Localization {
         public static string Problem_NotFound_Resource_Movie {
             get {
                 return ResourceManager.GetString("Problem.NotFound.Resource.Movie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The series couldn&apos;t be found.
+        /// </summary>
+        public static string Problem_NotFound_Series {
+            get {
+                return ResourceManager.GetString("Problem.NotFound.Series", resourceCulture);
             }
         }
         

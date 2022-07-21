@@ -14,7 +14,7 @@
     } else if (this.State.Value.FetchMovieProblem is not null)
     {
         <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.LoadingFailed"]" TryAgain="@this.FetchMovie"
-                         Problem="@this.State.Value.FetchMovieProblem" Class="w-100 m-4" />
+                         Problem="@this.State.Value.FetchMovieProblem" Class="w-100" />
     } else
     {
         <h1 style="font-weight: 300">
@@ -113,7 +113,7 @@
             } else if (this.State.Value.CreateMovieProblem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.CreatingFailed"]" TryAgain="@this.Save"
-                                 Problem="@this.State.Value.CreateMovieProblem" Class="w-100 m-4" />
+                                 Problem="@this.State.Value.CreateMovieProblem" Class="w-100" />
             }
 
             @if (this.State.Value.IsUpdatingMovie)
@@ -122,7 +122,7 @@
             } else if (this.State.Value.UpdateMovieProblem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.UpdatingFailed"]" TryAgain="@this.Save"
-                                 Problem="@this.State.Value.UpdateMovieProblem" Class="w-100 m-4" />
+                                 Problem="@this.State.Value.UpdateMovieProblem" Class="w-100" />
             }
 
             @if (this.State.Value.IsDeletingMovie)
@@ -131,7 +131,7 @@
             } else if (this.State.Value.DeleteMovieProblem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.DeletingFailed"]" TryAgain="@this.Delete"
-                                 Problem="@this.State.Value.DeleteMovieProblem" Class="w-100 m-4" />
+                                 Problem="@this.State.Value.DeleteMovieProblem" Class="w-100" />
             }
 
             <div class="d-flex flex-row my-2">

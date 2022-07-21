@@ -120,35 +120,27 @@ public sealed partial class MovieService : IMovieService
     }
 
     private Exception NotFound(Id<Movie> id) =>
-        new NotFoundException(
-            "NotFound.Movie",
-            $"Could not find a movie with id {id.Value}",
-            "Resource.Movie",
-            new Dictionary<string, object?> { [nameof(id)] = id });
+        new NotFoundException(Resources.Movie, $"Could not find a movie with id {id.Value}")
+            .WithProperty(id);
 
     private Exception NotFound(Id<CineasteList> id) =>
-        new NotFoundException(
-            "NotFound.List",
-            $"Could not find a list with id {id.Value}",
-            "Resource.List",
-            new Dictionary<string, object?> { [nameof(id)] = id });
+        new NotFoundException(Resources.List, $"Could not find a list with id {id.Value}")
+            .WithProperty(id);
 
     private Exception NotFound(Id<MovieKind> id) =>
-        new NotFoundException(
-            "NotFound.MovieKind",
-            $"Could not find a movie kind with id {id.Value}",
-            "Resource.MovieKind",
-            new Dictionary<string, object?> { [nameof(id)] = id });
+        new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with id {id.Value}")
+            .WithProperty(id);
 
     private Exception MovieDoesNotBelongToList(Id<Movie> movieId, Id<CineasteList> listId) =>
         new BadRequestException(
-            "BadRequest.Movie.WrongList",
-            $"Movie with ID {movieId.Value} does not belong to list with ID {listId}",
-            new Dictionary<string, object?> { [nameof(movieId)] = movieId, [nameof(listId)] = listId });
+            $"{Resources.Movie}.WrongList", $"Movie with ID {movieId.Value} does not belong to list with ID {listId}")
+            .WithProperty(movieId)
+            .WithProperty(listId);
 
     private Exception KindDoesNotBelongToList(Id<MovieKind> kindId, Id<CineasteList> listId) =>
         new BadRequestException(
-            "BadRequest.MovieKind.WrongList",
-            $"Movie kind with ID {kindId.Value} does not belong to list with ID {listId}",
-            new Dictionary<string, object?> { [nameof(kindId)] = kindId, [nameof(listId)] = listId });
+            $"{Resources.MovieKind}.WrongList",
+            $"Movie kind with ID {kindId.Value} does not belong to list with ID {listId}")
+            .WithProperty(kindId)
+            .WithProperty(listId);
 }

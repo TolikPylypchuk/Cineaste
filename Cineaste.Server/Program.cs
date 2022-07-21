@@ -52,15 +52,16 @@ app.UseProblemDetails();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
-app.UsePathBase(new PathString("/api"));
 app.UseRouting();
 
-app.MapCultureRoutes();
-app.MapListRoutes();
-app.MapMovieRoutes();
-app.MapSeriesRoutes();
+var api = new PathString("/api");
 
-app.MapFallbackToFile("index.html");
+app.MapCultureRoutes(api);
+app.MapListRoutes(api);
+app.MapMovieRoutes(api);
+app.MapSeriesRoutes(api);
+
+app.MapFallbackRoutes(api);
 
 using (var scope = app.Services.CreateScope())
 {
