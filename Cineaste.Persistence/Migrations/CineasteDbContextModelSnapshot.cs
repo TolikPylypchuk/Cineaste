@@ -17,7 +17,7 @@ namespace Cineaste.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -725,7 +725,8 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.Season", null)
                         .WithMany("Periods")
-                        .HasForeignKey("SeasonId");
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {
@@ -752,7 +753,8 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.Series", null)
                         .WithMany("Seasons")
-                        .HasForeignKey("SeriesId");
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
                         {
@@ -915,7 +917,8 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.Series", null)
                         .WithMany("SpecialEpisodes")
-                        .HasForeignKey("SeriesId");
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {

@@ -98,4 +98,23 @@ public partial class SeriesForm
 
     private void Cancel() =>
         this.SetPropertyValues();
+
+    private async Task Delete()
+    {
+        bool? delete = await this.DialogService.Confirm(
+            this.Loc["SeriesForm.DeleteDialog.Body"],
+            this.Loc["SeriesForm.DeleteDialog.Title"],
+            new()
+            {
+                OkButtonText = this.Loc["Confirmation.Confirm"],
+                CancelButtonText = this.Loc["Confirmation.Cancel"],
+                CloseDialogOnEsc = true,
+                CloseDialogOnOverlayClick = true
+            });
+
+        if (delete == true && this.ListItem is { Id: var id })
+        {
+            this.Dispatcher.Dispatch(new DeleteSeriesAction(id));
+        }
+    }
 }

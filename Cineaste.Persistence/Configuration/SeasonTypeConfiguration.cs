@@ -12,7 +12,8 @@ internal sealed class SeasonTypeConfiguration : IEntityTypeConfiguration<Season>
         season.HasCheckConstraint("CH_Seasons_SequenceNumberPositive", "SequenceNumber > 0");
 
         season.HasMany(s => s.Periods)
-            .WithOne();
+            .WithOne()
+            .OnDelete(DeleteBehavior.Cascade);
 
         season.Navigation(s => s.Periods)
             .UsePropertyAccessMode(PropertyAccessMode.Field);

@@ -113,6 +113,14 @@
                                       Click="@(e => this.AddTitle(this.OriginalTitles))" />
                     </div>
                 </div>
+
+                @if (this.ListItem is not null)
+                {
+                    <div class="d-flex justify-content-center mt-4">
+                        <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
+                                      Click="@this.Delete" />
+                    </div>
+                }
             </div>
 
             @if (this.State.Value.IsCreatingSeries)

@@ -327,6 +327,12 @@
   <data name="SeriesForm.AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>
+  <data name="SeriesForm.DeleteDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to delete this series?</value>
+  </data>
+  <data name="SeriesForm.DeleteDialog.Title" xml:space="preserve">
+    <value>Delete Series</value>
+  </data>
   <data name="SeriesForm.ImdbId" xml:space="preserve">
     <value>IMDb ID</value>
   </data>

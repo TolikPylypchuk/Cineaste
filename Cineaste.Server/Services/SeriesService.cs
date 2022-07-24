@@ -15,6 +15,21 @@ public sealed partial class SeriesService : ISeriesService
         return series.ToSeriesModel();
     }
 
+    public async Task DeleteSeries(Id<Series> id)
+    {
+        this.logger.LogDebug("Deleting the series with id: {Id}", id.Value);
+
+        var series = await this.dbContext.Series.FindAsync(id);
+
+        if (series is null)
+        {
+            throw this.NotFound(id);
+        }
+
+        this.dbContext.Series.Remove(series);
+        await this.dbContext.SaveChangesAsync();
+    }
+
     private async Task<Series> FindSeries(Id<Series> id)
     {
         var series = await this.dbContext.Series

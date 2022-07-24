@@ -10,13 +10,15 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
         series.HasPoster(s => s.Poster);
 
         series.HasMany(s => s.Seasons)
-            .WithOne();
+            .WithOne()
+            .OnDelete(DeleteBehavior.Cascade);
 
         series.Navigation(s => s.Seasons)
             .UsePropertyAccessMode(PropertyAccessMode.Field);
 
         series.HasMany(s => s.SpecialEpisodes)
-            .WithOne();
+            .WithOne()
+            .OnDelete(DeleteBehavior.Cascade);
 
         series.Navigation(s => s.SpecialEpisodes)
             .UsePropertyAccessMode(PropertyAccessMode.Field);

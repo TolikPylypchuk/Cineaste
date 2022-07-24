@@ -691,6 +691,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this series?.
+        /// </summary>
+        public static string SeriesForm_DeleteDialog_Body {
+            get {
+                return ResourceManager.GetString("SeriesForm.DeleteDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Series.
+        /// </summary>
+        public static string SeriesForm_DeleteDialog_Title {
+            get {
+                return ResourceManager.GetString("SeriesForm.DeleteDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IMDb ID.
         /// </summary>
         public static string SeriesForm_ImdbId {

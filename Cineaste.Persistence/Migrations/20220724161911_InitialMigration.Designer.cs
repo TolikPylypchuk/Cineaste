@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20220529184103_InitialMigration")]
+    [Migration("20220724161911_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -727,7 +727,8 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.Season", null)
                         .WithMany("Periods")
-                        .HasForeignKey("SeasonId");
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {
@@ -754,7 +755,8 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.Series", null)
                         .WithMany("Seasons")
-                        .HasForeignKey("SeriesId");
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
                         {
@@ -917,7 +919,8 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.Series", null)
                         .WithMany("SpecialEpisodes")
-                        .HasForeignKey("SeriesId");
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {
