@@ -8,13 +8,13 @@
                       class="my-2" />
     </div>
 
-    @if (this.State.Value.IsLoading)
+    @if (this.State.Value.Fetch.IsInProgress)
     {
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-    } else if (this.State.Value.FetchSeriesProblem is not null)
+    } else if (this.State.Value.Fetch.Problem is not null)
     {
         <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.LoadingFailed"]" TryAgain="@this.FetchSeries"
-                         Problem="@this.State.Value.FetchSeriesProblem" Class="w-100" />
+                         Problem="@this.State.Value.Fetch.Problem" Class="w-100" />
     } else
     {
         <h1 style="font-weight: 300">
@@ -123,31 +123,31 @@
                 }
             </div>
 
-            @if (this.State.Value.IsCreatingSeries)
+            @if (this.State.Value.Create.IsInProgress)
             {
                 <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-            } else if (this.State.Value.CreateSeriesProblem is not null)
+            } else if (this.State.Value.Create.Problem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.CreatingFailed"]" TryAgain="@this.Save"
-                                 Problem="@this.State.Value.CreateSeriesProblem" Class="w-100" />
+                                 Problem="@this.State.Value.Create.Problem" Class="w-100" />
             }
 
-            @if (this.State.Value.IsUpdatingSeries)
+            @if (this.State.Value.Update.IsInProgress)
             {
                 <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-            } else if (this.State.Value.UpdateSeriesProblem is not null)
+            } else if (this.State.Value.Update.Problem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.UpdatingFailed"]" TryAgain="@this.Save"
-                                 Problem="@this.State.Value.UpdateSeriesProblem" Class="w-100" />
+                                 Problem="@this.State.Value.Update.Problem" Class="w-100" />
             }
 
-            @if (this.State.Value.IsDeletingSeries)
+            @if (this.State.Value.Delete.IsInProgress)
             {
                 <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-            } else if (this.State.Value.DeleteSeriesProblem is not null)
+            } else if (this.State.Value.Delete.Problem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.DeletingFailed"]"
-                                 Problem="@this.State.Value.DeleteSeriesProblem" Class="w-100" />
+                                 Problem="@this.State.Value.Delete.Problem" Class="w-100" />
             }
 
             <div class="d-flex flex-row my-2">

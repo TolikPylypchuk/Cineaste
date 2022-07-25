@@ -10,17 +10,17 @@ public static class FetchMovieReducers
 {
     [ReducerMethod]
     public static MovieFormState ReduceFetchMovieAction(MovieFormState _, FetchMovieAction action) =>
-        new() { IsLoading = true, AvailableKinds = action.AvailableKinds };
+        new() { Fetch = ApiCall.InProgress(), AvailableKinds = action.AvailableKinds };
 
     [ReducerMethod]
     public static MovieFormState ReduceSelectItemAction(MovieFormState state, SelectItemAction action) =>
-        action.Item.Id == state.MovieModel?.Id ? state : new() { IsLoading = true };
+        action.Item.Id == state.Model?.Id ? state : new() { Fetch = ApiCall.InProgress() };
 
     [ReducerMethod]
     public static MovieFormState ReduceFetchMovieResultAction(MovieFormState state, FetchMovieResultAction action) =>
         action.Handle(
-            onSuccess: movie => state with { IsLoading = false, IsLoaded = true, MovieModel = movie },
-            onFailure: problem => state with { IsLoading = false, IsLoaded = true, FetchMovieProblem = problem });
+            onSuccess: movie => state with { Fetch = ApiCall.Success(), Model = movie },
+            onFailure: problem => state with { Fetch = ApiCall.Failure(problem) });
 }
 
 [AutoConstructor]

@@ -8,13 +8,13 @@ public static class CreateMovieReducers
 {
     [ReducerMethod(typeof(CreateMovieAction))]
     public static MovieFormState ReduceCreateMovieAction(MovieFormState state) =>
-        state with { IsCreatingMovie = true };
+        state with { Create = ApiCall.InProgress() };
 
     [ReducerMethod]
     public static MovieFormState ReduceCreateMovieResultAction(MovieFormState state, CreateMovieResultAction action) =>
         action.Handle(
-            onSuccess: movie => state with { IsCreatingMovie = false, MovieModel = movie },
-            onFailure: problem => state with { IsCreatingMovie = false, CreateMovieProblem = problem });
+            onSuccess: movie => state with { Create = ApiCall.Success(), Model = movie },
+            onFailure: problem => state with { Create = ApiCall.Failure(problem) });
 }
 
 [AutoConstructor]

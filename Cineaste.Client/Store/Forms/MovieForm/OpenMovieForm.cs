@@ -6,7 +6,7 @@ public static class OpenMovieFormReducers
 {
     [ReducerMethod]
     public static MovieFormState ReduceStartCreatingMovieAction(MovieFormState _, StartCreatingMovieAction action) =>
-        new() { IsLoaded = true, AvailableKinds = action.AvailableKinds };
+        new() { Fetch = ApiCall.Success(), AvailableKinds = action.AvailableKinds };
 }
 
 [AutoConstructor]
@@ -17,7 +17,7 @@ public sealed partial class OpenMovieFormEffect
     [EffectMethod]
     public Task HandleSelectItem(SelectItemAction action, IDispatcher dispatcher)
     {
-        if (state.Value.MovieModel?.Id != action.Item.Id && action.Item.Type == ListItemType.Movie)
+        if (state.Value.Model?.Id != action.Item.Id && action.Item.Type == ListItemType.Movie)
         {
             dispatcher.Dispatch(new FetchMovieAction(action.Item.Id, action.AvailableKinds));
         }

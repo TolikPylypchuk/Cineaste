@@ -55,4 +55,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Store\Forms\SeasonForm\" />
+  </ItemGroup>
+
 </Project>

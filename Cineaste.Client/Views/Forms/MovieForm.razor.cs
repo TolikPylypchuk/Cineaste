@@ -85,7 +85,7 @@ public partial class MovieForm
 
     private void SetPropertyValues()
     {
-        var movie = this.State.Value.MovieModel;
+        var movie = this.State.Value.Model;
 
         this.Titles = movie?.Titles?.Select(title => title.Name)?.ToObservableCollection()
             ?? new() { String.Empty };

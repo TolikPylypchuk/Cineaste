@@ -8,13 +8,13 @@
                       class="my-2" />
     </div>
 
-    @if (this.State.Value.IsLoading)
+    @if (this.State.Value.Fetch.IsInProgress)
     {
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-    } else if (this.State.Value.FetchMovieProblem is not null)
+    } else if (this.State.Value.Fetch.Problem is not null)
     {
         <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.LoadingFailed"]" TryAgain="@this.FetchMovie"
-                         Problem="@this.State.Value.FetchMovieProblem" Class="w-100" />
+                         Problem="@this.State.Value.Fetch.Problem" Class="w-100" />
     } else
     {
         <h1 style="font-weight: 300">
@@ -107,31 +107,31 @@
                 }
             </div>
 
-            @if (this.State.Value.IsCreatingMovie)
+            @if (this.State.Value.Create.IsInProgress)
             {
                 <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-            } else if (this.State.Value.CreateMovieProblem is not null)
+            } else if (this.State.Value.Create.Problem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.CreatingFailed"]" TryAgain="@this.Save"
-                                 Problem="@this.State.Value.CreateMovieProblem" Class="w-100" />
+                                 Problem="@this.State.Value.Create.Problem" Class="w-100" />
             }
 
-            @if (this.State.Value.IsUpdatingMovie)
+            @if (this.State.Value.Update.IsInProgress)
             {
                 <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-            } else if (this.State.Value.UpdateMovieProblem is not null)
+            } else if (this.State.Value.Update.Problem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.UpdatingFailed"]" TryAgain="@this.Save"
-                                 Problem="@this.State.Value.UpdateMovieProblem" Class="w-100" />
+                                 Problem="@this.State.Value.Update.Problem" Class="w-100" />
             }
 
-            @if (this.State.Value.IsDeletingMovie)
+            @if (this.State.Value.Delete.IsInProgress)
             {
                 <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-            } else if (this.State.Value.DeleteMovieProblem is not null)
+            } else if (this.State.Value.Delete.Problem is not null)
             {
                 <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.DeletingFailed"]" TryAgain="@this.Delete"
-                                 Problem="@this.State.Value.DeleteMovieProblem" Class="w-100" />
+                                 Problem="@this.State.Value.Delete.Problem" Class="w-100" />
             }
 
             <div class="d-flex flex-row my-2">

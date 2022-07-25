@@ -8,13 +8,13 @@ public static class DeleteMovieReducers
 {
     [ReducerMethod(typeof(DeleteMovieAction))]
     public static MovieFormState ReduceDeleteMovieAction(MovieFormState state) =>
-        state with { IsDeletingMovie = true };
+        state with { Delete = ApiCall.InProgress() };
 
     [ReducerMethod]
     public static MovieFormState ReduceDeleteMovieResultAction(MovieFormState state, DeleteMovieResultAction action) =>
         action.Handle(
             onSuccess: () => new MovieFormState(),
-            onFailure: problem => state with { IsDeletingMovie = false, DeleteMovieProblem = problem });
+            onFailure: problem => state with { Delete = ApiCall.Failure(problem) });
 }
 
 [AutoConstructor]

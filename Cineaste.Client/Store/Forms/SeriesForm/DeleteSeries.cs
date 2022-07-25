@@ -8,7 +8,7 @@ public static class DeleteSeriesReducers
 {
     [ReducerMethod(typeof(DeleteSeriesAction))]
     public static SeriesFormState ReduceDeleteSeriesAction(SeriesFormState state) =>
-        state with { IsDeletingSeries = true };
+        state with { Delete = ApiCall.InProgress() };
 
     [ReducerMethod]
     public static SeriesFormState ReduceDeleteSeriesResultAction(
@@ -16,7 +16,7 @@ public static class DeleteSeriesReducers
         DeleteSeriesResultAction action) =>
         action.Handle(
             onSuccess: () => new SeriesFormState(),
-            onFailure: problem => state with { IsDeletingSeries = false, DeleteSeriesProblem = problem });
+            onFailure: problem => state with { Delete = ApiCall.Failure(problem) });
 }
 
 [AutoConstructor]

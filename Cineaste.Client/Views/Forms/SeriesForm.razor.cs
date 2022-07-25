@@ -61,7 +61,7 @@ public partial class SeriesForm
 
     private void SetPropertyValues()
     {
-        var series = this.State.Value.SeriesModel;
+        var series = this.State.Value.Model;
 
         this.Titles = series?.Titles?.Select(title => title.Name)?.ToObservableCollection()
             ?? new() { String.Empty };
