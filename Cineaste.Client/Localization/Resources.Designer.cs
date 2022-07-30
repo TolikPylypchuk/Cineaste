@@ -657,6 +657,168 @@ namespace Cineaste.Client.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Add original title.
         /// </summary>
+        public static string SeasonForm_AddOriginalTitle {
+            get {
+                return ResourceManager.GetString("SeasonForm.AddOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add title.
+        /// </summary>
+        public static string SeasonForm_AddTitle {
+            get {
+                return ResourceManager.GetString("SeasonForm.AddTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Channel.
+        /// </summary>
+        public static string SeasonForm_Channel {
+            get {
+                return ResourceManager.GetString("SeasonForm.Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to series.
+        /// </summary>
+        public static string SeasonForm_GoToSeries {
+            get {
+                return ResourceManager.GetString("SeasonForm.GoToSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original titles.
+        /// </summary>
+        public static string SeasonForm_OriginalTitles {
+            get {
+                return ResourceManager.GetString("SeasonForm.OriginalTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release status.
+        /// </summary>
+        public static string SeasonForm_ReleaseStatus {
+            get {
+                return ResourceManager.GetString("SeasonForm.ReleaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        public static string SeasonForm_ReleaseStatus_Finished {
+            get {
+                return ResourceManager.GetString("SeasonForm.ReleaseStatus.Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiatus.
+        /// </summary>
+        public static string SeasonForm_ReleaseStatus_Hiatus {
+            get {
+                return ResourceManager.GetString("SeasonForm.ReleaseStatus.Hiatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not started.
+        /// </summary>
+        public static string SeasonForm_ReleaseStatus_NotStarted {
+            get {
+                return ResourceManager.GetString("SeasonForm.ReleaseStatus.NotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running.
+        /// </summary>
+        public static string SeasonForm_ReleaseStatus_Running {
+            get {
+                return ResourceManager.GetString("SeasonForm.ReleaseStatus.Running", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t care.
+        /// </summary>
+        public static string SeasonForm_ReleaseStatus_Unknown {
+            get {
+                return ResourceManager.GetString("SeasonForm.ReleaseStatus.Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titles.
+        /// </summary>
+        public static string SeasonForm_Titles {
+            get {
+                return ResourceManager.GetString("SeasonForm.Titles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch status.
+        /// </summary>
+        public static string SeasonForm_WatchStatus {
+            get {
+                return ResourceManager.GetString("SeasonForm.WatchStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiatus.
+        /// </summary>
+        public static string SeasonForm_WatchStatus_Hiatus {
+            get {
+                return ResourceManager.GetString("SeasonForm.WatchStatus.Hiatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not watched.
+        /// </summary>
+        public static string SeasonForm_WatchStatus_NotWatched {
+            get {
+                return ResourceManager.GetString("SeasonForm.WatchStatus.NotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopped watching.
+        /// </summary>
+        public static string SeasonForm_WatchStatus_StoppedWatching {
+            get {
+                return ResourceManager.GetString("SeasonForm.WatchStatus.StoppedWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched.
+        /// </summary>
+        public static string SeasonForm_WatchStatus_Watched {
+            get {
+                return ResourceManager.GetString("SeasonForm.WatchStatus.Watched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watching.
+        /// </summary>
+        public static string SeasonForm_WatchStatus_Watching {
+            get {
+                return ResourceManager.GetString("SeasonForm.WatchStatus.Watching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add original title.
+        /// </summary>
         public static string SeriesForm_AddOriginalTitle {
             get {
                 return ResourceManager.GetString("SeriesForm.AddOriginalTitle", resourceCulture);

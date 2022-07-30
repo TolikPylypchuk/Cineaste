@@ -2,9 +2,7 @@ namespace Cineaste.Client.Views.Forms;
 
 using Cineaste.Client.Store.Forms.SeriesForm;
 
-using Microsoft.AspNetCore.Components;
-
-public partial class SeriesForm
+public partial class SeriesMainForm
 {
     [Parameter]
     public Guid ListId { get; set; }
@@ -20,8 +18,8 @@ public partial class SeriesForm
     private ObservableCollection<string> Titles { get; set; } = new();
     private ObservableCollection<string> OriginalTitles { get; set; } = new();
 
-    private TitlesForm<SeriesForm> TitlesForm { get; set; } = null!;
-    private TitlesForm<SeriesForm> OriginalTitlesForm { get; set; } = null!;
+    private TitlesForm<SeriesMainForm> TitlesForm { get; set; } = null!;
+    private TitlesForm<SeriesMainForm> OriginalTitlesForm { get; set; } = null!;
 
     private SeriesWatchStatus WatchStatus { get; set; }
     private SeriesReleaseStatus ReleaseStatus { get; set; }
@@ -34,6 +32,12 @@ public partial class SeriesForm
 
     private string ImdbId { get; set; } = String.Empty;
     private string RottenTomatoesLink { get; set; } = String.Empty;
+
+    public ImmutableArray<SeriesWatchStatus> AllWatchStatuses { get; } =
+        Enum.GetValues<SeriesWatchStatus>().ToImmutableArray();
+
+    public ImmutableArray<SeriesReleaseStatus> AllReleaseStatuses { get; } =
+        Enum.GetValues<SeriesReleaseStatus>().ToImmutableArray();
 
     protected override void OnParametersSet()
     {
@@ -92,6 +96,9 @@ public partial class SeriesForm
 
     private void UpdateFormTitle() =>
         this.FormTitle = this.Titles.FirstOrDefault() ?? String.Empty;
+
+    private void OpenSeriesComponentForm(SeriesComponentModel component) =>
+        this.Dispatcher.Dispatch(new OpenSeriesComponentFormAction(component));
 
     private void Save()
     { }

@@ -18,6 +18,7 @@ global using Cineaste.Shared.SharedModels;
 
 global using Fluxor;
 
+global using Microsoft.AspNetCore.Components;
 global using Microsoft.Extensions.Options;
 
 global using Refit;

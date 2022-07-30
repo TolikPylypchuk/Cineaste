@@ -1,0 +1,162 @@
+@inherits StatefulComponent<SeriesFormState>
+
+<div class="d-flex flex-column h-100">
+    <div class="d-flex flex-row justify-content-between">
+        <div></div>
+        <div></div>
+        <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
+                      class="my-2" />
+    </div>
+
+    @if (this.State.Value.Fetch.IsInProgress)
+    {
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
+    } else if (this.State.Value.Fetch.Problem is not null)
+    {
+        <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.LoadingFailed"]" TryAgain="@this.FetchSeries"
+                         Problem="@this.State.Value.Fetch.Problem" Class="w-100" />
+    } else
+    {
+        <h1 style="font-weight: 300">
+            @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem != null
+                ? this.FormTitle
+                : this.Loc["SeriesForm.NewSeries"])
+        </h1>
+
+        <div class="w-100 h-100 d-flex flex-column justify-content-between">
+            <div class="h-100">
+                <div class="d-md-flex justify-content-md-center mt-2">
+                    @if (!String.IsNullOrEmpty(this.ImdbId))
+                    {
+                        <RadzenLink Path="@($"https://www.imdb.com/title/{this.ImdbId}")" Text="@this.Loc["Link.Imdb"]"
+                                    class="@($"{(!String.IsNullOrEmpty(this.RottenTomatoesLink) ? "me-md-2" : "")}")"
+                                    target="_blank" />
+                    }
+
+                    @if (!String.IsNullOrEmpty(this.RottenTomatoesLink))
+                    {
+                        <RadzenLink Path="@this.RottenTomatoesLink" Text="@this.Loc["Link.RottenTomatoes"]"
+                                    class="@($"{(!String.IsNullOrEmpty(this.ImdbId) ? "me-md-2" : "")}")"
+                                    target="_blank">
+                        </RadzenLink>
+                    }
+                </div>
+
+                <RadzenLabel Text="@this.Loc["SeriesForm.Titles"]" class="mt-2" />
+                <TitlesForm T="SeriesMainForm" @ref="this.TitlesForm" Titles="@this.Titles"
+                            FirstTitleChanged="@this.UpdateFormTitle" />
+
+                <RadzenLabel Text="@this.Loc["SeriesForm.OriginalTitles"]" class="mt-2" />
+                <TitlesForm T="SeriesMainForm" @ref="this.OriginalTitlesForm" Titles="@this.OriginalTitles" />
+
+                <div class="row mt-2">
+                    <div class="col-md pe-md-1">
+                        <RadzenLabel Text="@this.Loc["SeriesForm.WatchStatus"]" Component="WatchStatusDropDown" />
+                        <RadzenDropDown @bind-Value="@this.WatchStatus" Data="@this.AllWatchStatuses"
+                                        AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
+                                        Name="WatchStatusDropDown">
+                            <Template>
+                                @this.Loc[$"SeriesForm.WatchStatus.{context}"]
+                            </Template>
+                        </RadzenDropDown>
+                    </div>
+
+                    <div class="col-md ps-md-1">
+                        <RadzenLabel Text="@this.Loc["SeriesForm.ReleaseStatus"]" Component="ReleaseStatusDropDown" />
+                        <RadzenDropDown @bind-Value="@this.ReleaseStatus" Data="@this.AllReleaseStatuses"
+                                        AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
+                                        Name="ReleaseStatusDropDown">
+                            <Template>
+                                @this.Loc[$"SeriesForm.ReleaseStatus.{context}"]
+                            </Template>
+                        </RadzenDropDown>
+                    </div>
+                </div>
+
+                <RadzenLabel Text="@this.Loc["SeriesForm.Kind"]" Component="KindDropDown" class="mt-1" />
+                <RadzenDropDown @bind-Value="@this.Kind" Data="@this.State.Value.AvailableKinds"
+                                AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
+                                Name="KindDropDown" TextProperty="Name" class="w-100" />
+
+                <RadzenDataList WrapItems="true" Data="@this.Components" TItem="SeriesComponentModel"
+                                class="overflow-auto w-100 mt-1">
+                    <Template Context="component">
+                        <div class="list-item-container d-flex flex-row justify-content-between border-bottom"
+                             role="button" @onclick="() => this.OpenSeriesComponentForm(component)">
+                            <p class="m-0">@component.Title</p>
+                            <p class="m-0">@component.Years</p>
+                        </div>
+                    </Template>
+                </RadzenDataList>
+
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
+                        <RadzenButton Text="@this.Loc["SeriesForm.AddSeason"]" ButtonStyle="ButtonStyle.Secondary"
+                                      class="d-inline-block me-1" />
+                        <RadzenButton Text="@this.Loc["SeriesForm.AddSpecialEpisode"]"
+                                      ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1" />
+                    </div>
+                </div>
+
+                <RadzenLabel Text="@this.Loc["SeriesForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-2" />
+                <RadzenTextBox @bind-Value="@this.ImdbId" Name="ImdbIdTextBox" class="w-100" />
+
+                <RadzenLabel Text="@this.Loc["SeriesForm.RottenTomatoesLink"]" Component="RottenTomatoesTextBox"
+                             class="mt-2" />
+                <RadzenTextBox @bind-Value="@this.RottenTomatoesLink" Name="RottenTomatoesTextBox" class="w-100" />
+
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
+                        <RadzenButton Text="@this.Loc["SeriesForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
+                                      Click="@(e => this.AddTitle(this.Titles))" class="d-inline-block me-1" />
+                        <RadzenButton Text="@this.Loc["SeriesForm.AddOriginalTitle"]"
+                                      ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1"
+                                      Click="@(e => this.AddTitle(this.OriginalTitles))" />
+                    </div>
+                </div>
+
+                @if (this.ListItem is not null)
+                {
+                    <div class="d-flex justify-content-center mt-4">
+                        <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
+                                      Click="@this.Delete" />
+                    </div>
+                }
+            </div>
+
+            @if (this.State.Value.Create.IsInProgress)
+            {
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
+            } else if (this.State.Value.Create.Problem is not null)
+            {
+                <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.CreatingFailed"]" TryAgain="@this.Save"
+                                 Problem="@this.State.Value.Create.Problem" Class="w-100" />
+            }
+
+            @if (this.State.Value.Update.IsInProgress)
+            {
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
+            } else if (this.State.Value.Update.Problem is not null)
+            {
+                <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.UpdatingFailed"]" TryAgain="@this.Save"
+                                 Problem="@this.State.Value.Update.Problem" Class="w-100" />
+            }
+
+            @if (this.State.Value.Delete.IsInProgress)
+            {
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
+            } else if (this.State.Value.Delete.Problem is not null)
+            {
+                <ApiProblemAlert Text="@this.Loc["SeriesForm.Problem.DeletingFailed"]"
+                                 Problem="@this.State.Value.Delete.Problem" Class="w-100" />
+            }
+
+            <div class="d-flex flex-row my-2">
+                <RadzenButton Text="@this.Loc["Button.Save"]" ButtonStyle="ButtonStyle.Primary"
+                              Click="@this.Save" class="me-1" />
+                <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
+                              Click="@this.Cancel" class="ms-1" />
+            </div>
+        </div>
+    }
+</div>

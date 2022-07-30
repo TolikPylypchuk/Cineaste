@@ -315,6 +315,60 @@
   <data name="Problem.ValidationFailed.CreateList" xml:space="preserve">
     <value>The list to create is invalid</value>
   </data>
+  <data name="SeasonForm.AddOriginalTitle" xml:space="preserve">
+    <value>Add original title</value>
+  </data>
+  <data name="SeasonForm.AddTitle" xml:space="preserve">
+    <value>Add title</value>
+  </data>
+  <data name="SeasonForm.Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="SeasonForm.GoToSeries" xml:space="preserve">
+    <value>Go to series</value>
+  </data>
+  <data name="SeasonForm.OriginalTitles" xml:space="preserve">
+    <value>Original titles</value>
+  </data>
+  <data name="SeasonForm.ReleaseStatus" xml:space="preserve">
+    <value>Release status</value>
+  </data>
+  <data name="SeasonForm.ReleaseStatus.Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="SeasonForm.ReleaseStatus.Hiatus" xml:space="preserve">
+    <value>Hiatus</value>
+  </data>
+  <data name="SeasonForm.ReleaseStatus.NotStarted" xml:space="preserve">
+    <value>Not started</value>
+  </data>
+  <data name="SeasonForm.ReleaseStatus.Running" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="SeasonForm.ReleaseStatus.Unknown" xml:space="preserve">
+    <value>Don't care</value>
+  </data>
+  <data name="SeasonForm.Titles" xml:space="preserve">
+    <value>Titles</value>
+  </data>
+  <data name="SeasonForm.WatchStatus" xml:space="preserve">
+    <value>Watch status</value>
+  </data>
+  <data name="SeasonForm.WatchStatus.Hiatus" xml:space="preserve">
+    <value>Hiatus</value>
+  </data>
+  <data name="SeasonForm.WatchStatus.NotWatched" xml:space="preserve">
+    <value>Not watched</value>
+  </data>
+  <data name="SeasonForm.WatchStatus.StoppedWatching" xml:space="preserve">
+    <value>Stopped watching</value>
+  </data>
+  <data name="SeasonForm.WatchStatus.Watched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
+  <data name="SeasonForm.WatchStatus.Watching" xml:space="preserve">
+    <value>Watching</value>
+  </data>
   <data name="SeriesForm.AddOriginalTitle" xml:space="preserve">
     <value>Add original title</value>
   </data>
