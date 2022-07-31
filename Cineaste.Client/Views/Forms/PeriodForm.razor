@@ -1,0 +1,44 @@
+@inherits CineasteComponent
+
+<MonthYearPicker @bind-Month="this.FormModel.StartMonth" @bind-Year="this.FormModel.StartYear" Class="mt-2"
+                 MonthText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonth" : "ReleaseMonth")}")"
+                 YearText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartYear" : "ReleaseYear")}")"
+                 Changed="@this.OnPeriodChanged" />
+
+@if (!this.FormModel.IsSingleDayRelease)
+{
+    <MonthYearPicker @bind-Month="this.FormModel.EndMonth" @bind-Year="this.FormModel.EndYear" Class="mt-2"
+                     MonthText="PeriodForm.EndMonth" YearText="PeriodForm.EndYear" Changed="@this.OnPeriodChanged" />
+}
+
+<RadzenLabel Text="@this.Loc["PeriodForm.EpisodeCount"]" Component="EpisodeCountNumeric" />
+<div class="row mt-2">
+    <div class="col-md pe-md-1">
+        <RadzenNumeric @bind-Value="this.FormModel.EpisodeCount" Name="EpisodeCountNumeric" />
+    </div>
+    <div class="col-md ps-md-1 d-flex align-items-center">
+        <div>
+            <RadzenCheckBox @bind-Value="@this.FormModel.IsSingleDayRelease" Name="IsSingleDayReleaseCheckBox"
+                            Disabled="@(!this.CanChangeIsSingleDayRelease)" />
+            <RadzenLabel Text="@this.Loc["PeriodForm.IsSingleDayRelease"]" Component="IsSingleDayReleaseCheckBox" />
+        </div>
+    </div>
+</div>
+
+<RadzenLabel Text="@this.Loc["PeriodForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox" class="mt-2" />
+<RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox" class="w-100" />
+
+@code {
+    [Parameter]
+    public PeriodFormModel FormModel { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback Removed { get; set; }
+
+    private bool CanChangeIsSingleDayRelease { get; set; }
+
+    private void OnPeriodChanged() =>
+        this.CanChangeIsSingleDayRelease =
+            this.FormModel.StartMonth == this.FormModel.EndMonth &&
+            this.FormModel.StartYear == this.FormModel.EndYear;
+}

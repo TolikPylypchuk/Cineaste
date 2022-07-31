@@ -225,6 +225,42 @@
   <data name="ListPage.Problem.LoadingListFailed" xml:space="preserve">
     <value>Loading the list has failed</value>
   </data>
+  <data name="Month.1" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="Month.10" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="Month.11" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="Month.12" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Month.2" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="Month.3" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="Month.4" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="Month.5" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Month.6" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Month.7" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="Month.8" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Month.9" xml:space="preserve">
+    <value>September</value>
+  </data>
   <data name="MovieForm.AddOriginalTitle" xml:space="preserve">
     <value>Add original title</value>
   </data>
@@ -287,6 +323,33 @@
   </data>
   <data name="MovieForm.Year" xml:space="preserve">
     <value>Year</value>
+  </data>
+  <data name="PeriodForm.EndMonth" xml:space="preserve">
+    <value>End month</value>
+  </data>
+  <data name="PeriodForm.EndYear" xml:space="preserve">
+    <value>End year</value>
+  </data>
+  <data name="PeriodForm.EpisodeCount" xml:space="preserve">
+    <value>Number of episodes</value>
+  </data>
+  <data name="PeriodForm.IsSingleDayRelease" xml:space="preserve">
+    <value>Is single-day release</value>
+  </data>
+  <data name="PeriodForm.ReleaseMonth" xml:space="preserve">
+    <value>Release month</value>
+  </data>
+  <data name="PeriodForm.ReleaseYear" xml:space="preserve">
+    <value>Release year</value>
+  </data>
+  <data name="PeriodForm.RottenTomatoesId" xml:space="preserve">
+    <value>Rotten Tomatoes ID</value>
+  </data>
+  <data name="PeriodForm.StartMonth" xml:space="preserve">
+    <value>Start month</value>
+  </data>
+  <data name="PeriodForm.StartYear" xml:space="preserve">
+    <value>Start year</value>
   </data>
   <data name="Problem.Conflict.List" xml:space="preserve">
     <value>A list with this handle already exists</value>

@@ -385,6 +385,114 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to January.
+        /// </summary>
+        public static string Month_1 {
+            get {
+                return ResourceManager.GetString("Month.1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to October.
+        /// </summary>
+        public static string Month_10 {
+            get {
+                return ResourceManager.GetString("Month.10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to November.
+        /// </summary>
+        public static string Month_11 {
+            get {
+                return ResourceManager.GetString("Month.11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to December.
+        /// </summary>
+        public static string Month_12 {
+            get {
+                return ResourceManager.GetString("Month.12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to February.
+        /// </summary>
+        public static string Month_2 {
+            get {
+                return ResourceManager.GetString("Month.2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to March.
+        /// </summary>
+        public static string Month_3 {
+            get {
+                return ResourceManager.GetString("Month.3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to April.
+        /// </summary>
+        public static string Month_4 {
+            get {
+                return ResourceManager.GetString("Month.4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to May.
+        /// </summary>
+        public static string Month_5 {
+            get {
+                return ResourceManager.GetString("Month.5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to June.
+        /// </summary>
+        public static string Month_6 {
+            get {
+                return ResourceManager.GetString("Month.6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to July.
+        /// </summary>
+        public static string Month_7 {
+            get {
+                return ResourceManager.GetString("Month.7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to August.
+        /// </summary>
+        public static string Month_8 {
+            get {
+                return ResourceManager.GetString("Month.8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to September.
+        /// </summary>
+        public static string Month_9 {
+            get {
+                return ResourceManager.GetString("Month.9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add original title.
         /// </summary>
         public static string MovieForm_AddOriginalTitle {
@@ -570,6 +678,87 @@ namespace Cineaste.Client.Localization {
         public static string MovieForm_Year {
             get {
                 return ResourceManager.GetString("MovieForm.Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End month.
+        /// </summary>
+        public static string PeriodForm_EndMonth {
+            get {
+                return ResourceManager.GetString("PeriodForm.EndMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End year.
+        /// </summary>
+        public static string PeriodForm_EndYear {
+            get {
+                return ResourceManager.GetString("PeriodForm.EndYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of episodes.
+        /// </summary>
+        public static string PeriodForm_EpisodeCount {
+            get {
+                return ResourceManager.GetString("PeriodForm.EpisodeCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is single-day release.
+        /// </summary>
+        public static string PeriodForm_IsSingleDayRelease {
+            get {
+                return ResourceManager.GetString("PeriodForm.IsSingleDayRelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release month.
+        /// </summary>
+        public static string PeriodForm_ReleaseMonth {
+            get {
+                return ResourceManager.GetString("PeriodForm.ReleaseMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release year.
+        /// </summary>
+        public static string PeriodForm_ReleaseYear {
+            get {
+                return ResourceManager.GetString("PeriodForm.ReleaseYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes ID.
+        /// </summary>
+        public static string PeriodForm_RottenTomatoesId {
+            get {
+                return ResourceManager.GetString("PeriodForm.RottenTomatoesId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start month.
+        /// </summary>
+        public static string PeriodForm_StartMonth {
+            get {
+                return ResourceManager.GetString("PeriodForm.StartMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start year.
+        /// </summary>
+        public static string PeriodForm_StartYear {
+            get {
+                return ResourceManager.GetString("PeriodForm.StartYear", resourceCulture);
             }
         }
         

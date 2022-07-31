@@ -1,0 +1,54 @@
+@inherits CineasteComponent
+
+<div class="row @this.Class">
+    <div class="col-md pe-md-1">
+        @if (!String.IsNullOrWhiteSpace(this.MonthText))
+        {
+            <RadzenLabel Text="@this.Loc[this.MonthText]" Component="MonthDropDown" />
+        }
+
+        <RadzenDropDown Value="@this.Month" ValueChanged="@this.MonthChanged" Data="@this.Months" Change="@this.Changed"
+                        Name="MonthDropDown" AllowVirtualization="false" AllowClear="false" AllowFiltering="false">
+            <Template>
+                @this.Loc[$"Month.{context}"]
+            </Template>
+        </RadzenDropDown>
+    </div>
+    <div class="col-md ps-md-1">
+        @if (!String.IsNullOrWhiteSpace(this.YearText))
+        {
+            <RadzenLabel Text="@this.Loc[this.YearText]" Component="YearNumeric" />
+        }
+
+        <RadzenNumeric Value="@this.Year" ValueChanged="@this.YearChanged" Name="YearNumeric"
+                       Change="@((int value) => this.Changed.InvokeAsync())" />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Month { get; set; }
+
+    [Parameter]
+    public EventCallback<int> MonthChanged { get; set; }
+
+    [Parameter]
+    public int Year { get; set; }
+
+    [Parameter]
+    public EventCallback<int> YearChanged { get; set; }
+
+    [Parameter]
+    public EventCallback Changed { get; set; }
+
+    [Parameter]
+    public string MonthText { get; set; } = String.Empty;
+
+    [Parameter]
+    public string YearText { get; set; } = String.Empty;
+
+    [Parameter]
+    public string Class { get; set; } = String.Empty;
+
+    private ImmutableArray<int> Months { get; } = Enumerable.Range(1, 12).ToImmutableArray();
+}
