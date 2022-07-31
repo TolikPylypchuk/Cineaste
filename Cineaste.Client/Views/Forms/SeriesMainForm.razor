@@ -30,15 +30,15 @@
                     {
                         <RadzenLink Path="@String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId)"
                                     Text="@this.Loc["Link.Imdb"]" target="_blank"
-                                    class="@($"{(this.HasRottenTomatoesLink() ? "me-md-2" : "")}")" />
+                                    class="@($"{(this.HasRottenTomatoesId() ? "me-md-2" : "")}")" />
                     }
 
-                    @if (this.HasRottenTomatoesLink())
+                    @if (this.HasRottenTomatoesId())
                     {
-                        <RadzenLink Path="@this.FormModel.RottenTomatoesLink" Text="@this.Loc["Link.RottenTomatoes"]"
-                                    class="@($"{(this.HasImdbId() ? "me-md-2" : "")}")"
-                                    target="_blank">
-                        </RadzenLink>
+                        <RadzenLink Path="@String.Format(
+                                        this.Loc["Link.RottenTomatoesUrlFormat"], this.FormModel.RottenTomatoesId)"
+                                    Text="@this.Loc["Link.RottenTomatoes"]" target="_blank"
+                                    class="@($"{(this.HasImdbId() ? "me-md-2" : "")}")" />
                     }
                 </div>
 
@@ -101,9 +101,9 @@
                 <RadzenLabel Text="@this.Loc["SeriesForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-2" />
                 <RadzenTextBox @bind-Value="@this.FormModel.ImdbId" Name="ImdbIdTextBox" class="w-100" />
 
-                <RadzenLabel Text="@this.Loc["SeriesForm.RottenTomatoesLink"]" Component="RottenTomatoesTextBox"
+                <RadzenLabel Text="@this.Loc["SeriesForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox"
                              class="mt-2" />
-                <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesLink" Name="RottenTomatoesTextBox"
+                <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox"
                                class="w-100" />
 
                 <div class="d-flex justify-content-center">

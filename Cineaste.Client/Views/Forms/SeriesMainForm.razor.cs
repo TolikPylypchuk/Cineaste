@@ -67,8 +67,8 @@ public partial class SeriesMainForm
     private bool HasImdbId() =>
         !String.IsNullOrEmpty(this.FormModel.ImdbId);
 
-    private bool HasRottenTomatoesLink() =>
-        !String.IsNullOrEmpty(this.FormModel.RottenTomatoesLink);
+    private bool HasRottenTomatoesId() =>
+        !String.IsNullOrEmpty(this.FormModel.RottenTomatoesId);
 
     private void Save()
     { }

@@ -8,4 +8,4 @@ public sealed record PeriodModel(
     int EndYear,
     int EpisodeCount,
     bool IsSingleDayRelease,
-    string? RottenTomatoesLink);
+    string? RottenTomatoesId);

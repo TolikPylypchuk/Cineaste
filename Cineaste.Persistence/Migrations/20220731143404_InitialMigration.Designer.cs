@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20220724161911_InitialMigration")]
+    [Migration("20220731143404_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,7 +154,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("ListId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RottenTomatoesLink")
+                    b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Year")
@@ -228,7 +228,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<bool>("IsSingleDayRelease")
                         .HasColumnType("bit");
 
-                    b.Property<string>("RottenTomatoesLink")
+                    b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("SeasonId")
@@ -317,7 +317,7 @@ namespace Cineaste.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RottenTomatoesLink")
+                    b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WatchStatus")
@@ -391,7 +391,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
-                    b.Property<string>("RottenTomatoesLink")
+                    b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SequenceNumber")

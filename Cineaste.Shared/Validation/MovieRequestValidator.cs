@@ -29,9 +29,9 @@ public class MovieRequestValidator : CineasteValidator<MovieRequest>
             .Matches(ImdbIdRegex)
             .WithErrorCode(this.ErrorCode(req => req.ImdbId, Invalid));
 
-        this.RuleFor(req => req.RottenTomatoesLink)
-            .Matches(RottenTomatoesLinkRegex)
-            .WithErrorCode(this.ErrorCode(req => req.RottenTomatoesLink, Invalid));
+        this.RuleFor(req => req.RottenTomatoesId)
+            .Matches(RottenTomatoesIdRegex)
+            .WithErrorCode(this.ErrorCode(req => req.RottenTomatoesId, Invalid));
     }
 
     private static bool HaveDifferentNames(IEnumerable<TitleRequest> titles) =>

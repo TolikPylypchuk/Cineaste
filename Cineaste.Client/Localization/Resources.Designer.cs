@@ -322,6 +322,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://www.rottentomatoes.com/{0}.
+        /// </summary>
+        public static string Link_RottenTomatoesUrlFormat {
+            get {
+                return ResourceManager.GetString("Link.RottenTomatoesUrlFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new movie.
         /// </summary>
         public static string ListActionsPanel_AddMovie {
@@ -529,11 +538,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rotten Tomatoes link.
+        ///   Looks up a localized string similar to Rotten Tomatoes ID.
         /// </summary>
-        public static string MovieForm_RottenTomatoesLink {
+        public static string MovieForm_RottenTomatoesId {
             get {
-                return ResourceManager.GetString("MovieForm.RottenTomatoesLink", resourceCulture);
+                return ResourceManager.GetString("MovieForm.RottenTomatoesId", resourceCulture);
             }
         }
         
@@ -1015,11 +1024,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rotten Tomatoes Link.
+        ///   Looks up a localized string similar to Rotten Tomatoes ID.
         /// </summary>
-        public static string SeriesForm_RottenTomatoesLink {
+        public static string SeriesForm_RottenTomatoesId {
             get {
-                return ResourceManager.GetString("SeriesForm.RottenTomatoesLink", resourceCulture);
+                return ResourceManager.GetString("SeriesForm.RottenTomatoesId", resourceCulture);
             }
         }
         
@@ -1168,11 +1177,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Rotten Tomatoes link must be a URL to an RT page.
+        ///   Looks up a localized string similar to The Rotten Tomatoes ID must start with &apos;m/&apos; or &apos;tv/&apos;.
         /// </summary>
-        public static string Validation_Movie_RottenTomatoesLink_Invalid {
+        public static string Validation_Movie_RottenTomatoesId_Invalid {
             get {
-                return ResourceManager.GetString("Validation.Movie.RottenTomatoesLink.Invalid", resourceCulture);
+                return ResourceManager.GetString("Validation.Movie.RottenTomatoesId.Invalid", resourceCulture);
             }
         }
         

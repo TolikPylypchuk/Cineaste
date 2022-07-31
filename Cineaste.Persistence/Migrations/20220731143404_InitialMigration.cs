@@ -195,7 +195,7 @@ namespace Cineaste.Persistence.Migrations
                     IsWatched = table.Column<bool>(type: "bit", nullable: false),
                     IsReleased = table.Column<bool>(type: "bit", nullable: false),
                     ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -234,7 +234,7 @@ namespace Cineaste.Persistence.Migrations
                     ReleaseStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -420,7 +420,7 @@ namespace Cineaste.Persistence.Migrations
                     IsReleased = table.Column<bool>(type: "bit", nullable: false),
                     Channel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SequenceNumber = table.Column<int>(type: "int", nullable: false),
-                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
@@ -450,7 +450,7 @@ namespace Cineaste.Persistence.Migrations
                     EndYear = table.Column<int>(type: "int", nullable: false),
                     IsSingleDayRelease = table.Column<bool>(type: "bit", nullable: false),
                     EpisodeCount = table.Column<int>(type: "int", nullable: false),
-                    RottenTomatoesLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },

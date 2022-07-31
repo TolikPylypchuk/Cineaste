@@ -13,7 +13,7 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
     public ReadOnlyObservableCollection<ISeriesComponentFormModel> Components { get; }
 
     public string ImdbId { get; set; } = String.Empty;
-    public string RottenTomatoesLink { get; set; } = String.Empty;
+    public string RottenTomatoesId { get; set; } = String.Empty;
 
     public SeriesFormModel(IReadOnlyCollection<ListKindModel> availableKinds)
     {
@@ -62,7 +62,7 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
         this.ReleaseStatus = series?.ReleaseStatus ?? SeriesReleaseStatus.NotStarted;
         this.Kind = series?.Kind ?? this.defaultKind;
         this.ImdbId = series?.ImdbId ?? String.Empty;
-        this.RottenTomatoesLink = series?.RottenTomatoesLink ?? String.Empty;
+        this.RottenTomatoesId = series?.RottenTomatoesId ?? String.Empty;
 
         this.components.Clear();
 

@@ -204,6 +204,9 @@
   <data name="Link.RottenTomatoes" xml:space="preserve">
     <value>Rotten Tomatoes</value>
   </data>
+  <data name="Link.RottenTomatoesUrlFormat" xml:space="preserve">
+    <value>https://www.rottentomatoes.com/{0}</value>
+  </data>
   <data name="ListActionsPanel.AddMovie" xml:space="preserve">
     <value>Add new movie</value>
   </data>
@@ -273,8 +276,8 @@
   <data name="MovieForm.RemoveTitle" xml:space="preserve">
     <value>Remove title</value>
   </data>
-  <data name="MovieForm.RottenTomatoesLink" xml:space="preserve">
-    <value>Rotten Tomatoes link</value>
+  <data name="MovieForm.RottenTomatoesId" xml:space="preserve">
+    <value>Rotten Tomatoes ID</value>
   </data>
   <data name="MovieForm.Titles" xml:space="preserve">
     <value>Titles</value>
@@ -435,8 +438,8 @@
   <data name="SeriesForm.ReleaseStatus.Unknown" xml:space="preserve">
     <value>Don't care</value>
   </data>
-  <data name="SeriesForm.RottenTomatoesLink" xml:space="preserve">
-    <value>Rotten Tomatoes Link</value>
+  <data name="SeriesForm.RottenTomatoesId" xml:space="preserve">
+    <value>Rotten Tomatoes ID</value>
   </data>
   <data name="SeriesForm.Titles" xml:space="preserve">
     <value>Titles</value>
@@ -486,8 +489,8 @@
   <data name="Validation.Movie.OriginalTitles.Distinct.Names" xml:space="preserve">
     <value>The original titles must all be different</value>
   </data>
-  <data name="Validation.Movie.RottenTomatoesLink.Invalid" xml:space="preserve">
-    <value>The Rotten Tomatoes link must be a URL to an RT page</value>
+  <data name="Validation.Movie.RottenTomatoesId.Invalid" xml:space="preserve">
+    <value>The Rotten Tomatoes ID must start with 'm/' or 'tv/'</value>
   </data>
   <data name="Validation.Movie.Titles.Distinct.Names" xml:space="preserve">
     <value>The titles must all be different</value>

@@ -25,10 +25,10 @@ public static class Require
         value == null || ImdbIdRegex.IsMatch(value) ? value : throw new ArgumentOutOfRangeException(paramName);
 
     [return: NotNullIfNotNull("value")]
-    public static string? RottenTomatoesLink(
+    public static string? RottenTomatoesId(
         string? value,
         [CallerArgumentExpression("value")] string? paramName = null) =>
-        value == null || RottenTomatoesLinkRegex.IsMatch(value)
+        value == null || RottenTomatoesIdRegex.IsMatch(value)
             ? value
             : throw new ArgumentOutOfRangeException(paramName);
 }

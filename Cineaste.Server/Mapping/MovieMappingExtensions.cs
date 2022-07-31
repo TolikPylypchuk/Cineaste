@@ -12,7 +12,7 @@ public static class MovieMappingExtensions
             movie.IsReleased,
             movie.Kind.ToListKindModel(),
             movie.ImdbId,
-            movie.RottenTomatoesLink,
+            movie.RottenTomatoesId,
             movie.FranchiseItem.GetDisplayNumber());
 
     public static Movie ToMovie(this Validated<MovieRequest> request, Id<Movie> id, MovieKind kind) =>
@@ -42,6 +42,6 @@ public static class MovieMappingExtensions
         movie.IsReleased = request.Value.IsReleased;
         movie.Kind = kind;
         movie.ImdbId = request.Value.ImdbId;
-        movie.RottenTomatoesLink = request.Value.RottenTomatoesLink;
+        movie.RottenTomatoesId = request.Value.RottenTomatoesId;
     }
 }

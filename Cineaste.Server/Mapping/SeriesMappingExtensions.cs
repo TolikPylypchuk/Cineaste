@@ -14,7 +14,7 @@ public static class SeriesMappingExtensions
             series.Seasons.Select(season => season.ToSeasonModel()).ToImmutableList(),
             series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel()).ToImmutableList(),
             series.ImdbId,
-            series.RottenTomatoesLink,
+            series.RottenTomatoesId,
             series.FranchiseItem.GetDisplayNumber());
 
     public static SeasonModel ToSeasonModel(this Season season) =>
@@ -43,7 +43,7 @@ public static class SeriesMappingExtensions
             period.EndYear,
             period.EpisodeCount,
             period.IsSingleDayRelease,
-            period.RottenTomatoesLink);
+            period.RottenTomatoesId);
 
     public static SpecialEpisodeModel ToSpecialEpisodeModel(this SpecialEpisode episode) =>
         new(
@@ -56,5 +56,5 @@ public static class SeriesMappingExtensions
             episode.Channel,
             episode.Month,
             episode.Year,
-            episode.RottenTomatoesLink);
+            episode.RottenTomatoesId);
 }

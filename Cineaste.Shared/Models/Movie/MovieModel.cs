@@ -9,5 +9,5 @@ public sealed record MovieModel(
     bool IsReleased,
     ListKindModel Kind,
     string? ImdbId,
-    string? RottenTomatoesLink,
+    string? RottenTomatoesId,
     string DisplayNumber) : ITitledModel;

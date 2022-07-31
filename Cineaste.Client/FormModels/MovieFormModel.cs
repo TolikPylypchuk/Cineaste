@@ -12,7 +12,7 @@ public sealed class MovieFormModel : TitledFormModel<MovieModel, MovieRequest>
     public ListKindModel Kind { get; set; }
 
     public string ImdbId { get; set; } = String.Empty;
-    public string RottenTomatoesLink { get; set; } = String.Empty;
+    public string RottenTomatoesId { get; set; } = String.Empty;
 
     public MovieFormModel(IReadOnlyCollection<ListKindModel> availableKinds)
     {
@@ -37,7 +37,7 @@ public sealed class MovieFormModel : TitledFormModel<MovieModel, MovieRequest>
             this.IsReleased,
             this.Kind.Id,
             this.ImdbId,
-            this.RottenTomatoesLink);
+            this.RottenTomatoesId);
 
     protected override void CopyFromModel()
     {
@@ -49,5 +49,7 @@ public sealed class MovieFormModel : TitledFormModel<MovieModel, MovieRequest>
         this.IsWatched = movie?.IsWatched ?? false;
         this.IsReleased = movie?.IsReleased ?? true;
         this.Kind = movie?.Kind ?? this.defaultKind;
+        this.ImdbId = movie?.ImdbId ?? String.Empty;
+        this.RottenTomatoesId = movie?.RottenTomatoesId ?? String.Empty;
     }
 }

@@ -13,7 +13,7 @@ public sealed record SeriesModel(
     ImmutableList<SeasonModel> Seasons,
     ImmutableList<SpecialEpisodeModel> SpecialEpisodes,
     string? ImdbId,
-    string? RottenTomatoesLink,
+    string? RottenTomatoesId,
     string DisplayNumber) : ITitledModel
 {
     [JsonIgnore]

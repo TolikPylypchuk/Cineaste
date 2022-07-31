@@ -24,7 +24,7 @@ public partial class MovieForm
     private PropertyValidator<MovieRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
     private PropertyValidator<MovieRequest, int>? YearValidator { get; set; }
     private PropertyValidator<MovieRequest, string>? ImdbIdValidator { get; set; }
-    private PropertyValidator<MovieRequest, string>? RottenTomatoesLinkValidator { get; set; }
+    private PropertyValidator<MovieRequest, string>? RottenTomatoesIdValidator { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -57,8 +57,8 @@ public partial class MovieForm
 
         this.YearValidator = PropertyValidator.Create(validator, (MovieRequest req) => req.Year, this);
         this.ImdbIdValidator = PropertyValidator.Create(validator, (MovieRequest req) => req.ImdbId, this);
-        this.RottenTomatoesLinkValidator = PropertyValidator.Create(
-            validator, (MovieRequest req) => req.RottenTomatoesLink, this);
+        this.RottenTomatoesIdValidator = PropertyValidator.Create(
+            validator, (MovieRequest req) => req.RottenTomatoesId, this);
     }
 
     private void FetchMovie()
@@ -122,8 +122,8 @@ public partial class MovieForm
     private bool HasImdbId() =>
         !String.IsNullOrEmpty(this.FormModel.ImdbId);
 
-    private bool HasRottenTomatoesLink() =>
-        !String.IsNullOrEmpty(this.FormModel.RottenTomatoesLink);
+    private bool HasRottenTomatoesId() =>
+        !String.IsNullOrEmpty(this.FormModel.RottenTomatoesId);
 
     private void Save() =>
         this.WithValidation(() =>

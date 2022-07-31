@@ -11,7 +11,7 @@ public sealed class PeriodFormModel : FormModel<PeriodModel, PeriodRequest>
     public int EpisodeCount { get; set; }
     public bool IsSingleDayRelease { get; set; }
 
-    public string RottenTomatoesLink { get; set; } = String.Empty;
+    public string RottenTomatoesId { get; set; } = String.Empty;
 
     protected override void CopyFromModel()
     {
@@ -27,6 +27,6 @@ public sealed class PeriodFormModel : FormModel<PeriodModel, PeriodRequest>
         this.EpisodeCount = period?.EpisodeCount ?? 1;
         this.IsSingleDayRelease = period?.IsSingleDayRelease ?? false;
 
-        this.RottenTomatoesLink = period?.RottenTomatoesLink ?? String.Empty;
+        this.RottenTomatoesId = period?.RottenTomatoesId ?? String.Empty;
     }
 }

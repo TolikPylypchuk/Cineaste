@@ -12,7 +12,7 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
     public int Month { get; set; }
     public int Year { get; set; }
 
-    public string RottenTomatoesLink { get; set; } = String.Empty;
+    public string RottenTomatoesId { get; set; } = String.Empty;
 
     public override string Years =>
         this.Year.ToString();
@@ -36,8 +36,7 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
         this.Month = episode?.Month ?? today.Month;
         this.Year = episode?.Year ?? today.Year;
 
-        this.RottenTomatoesLink = episode?.RottenTomatoesLink ?? String.Empty;
-
+        this.RottenTomatoesId = episode?.RottenTomatoesId ?? String.Empty;
         this.SequenceNumber = episode?.SequenceNumber ?? this.getDefaultSequenceNumber();
     }
 }

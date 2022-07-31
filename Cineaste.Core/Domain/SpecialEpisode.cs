@@ -6,7 +6,7 @@ public sealed class SpecialEpisode : Entity<SpecialEpisode>
     private string channel;
     private int year;
     private int sequenceNumber;
-    private string? rottenTomatoesLink;
+    private string? rottenTomatoesId;
     private readonly List<Title> titles;
 
     public int Month
@@ -38,10 +38,10 @@ public sealed class SpecialEpisode : Entity<SpecialEpisode>
         set => this.sequenceNumber = Require.Positive(value);
     }
 
-    public string? RottenTomatoesLink
+    public string? RottenTomatoesId
     {
-        get => this.rottenTomatoesLink;
-        set => this.rottenTomatoesLink = Require.RottenTomatoesLink(value);
+        get => this.rottenTomatoesId;
+        set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
     }
 
     public Poster? Poster { get; set; }

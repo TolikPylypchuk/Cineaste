@@ -3,7 +3,7 @@ namespace Cineaste.Core.Domain;
 public sealed class Series : Entity<Series>
 {
     private string? imdbId;
-    private string? rottenTomatoesLink;
+    private string? rottenTomatoesId;
     private SeriesKind kind;
 
     private readonly List<Title> titles;
@@ -30,10 +30,10 @@ public sealed class Series : Entity<Series>
         set => this.imdbId = Require.ImdbId(value);
     }
 
-    public string? RottenTomatoesLink
+    public string? RottenTomatoesId
     {
-        get => this.rottenTomatoesLink;
-        set => this.rottenTomatoesLink = Require.RottenTomatoesLink(value);
+        get => this.rottenTomatoesId;
+        set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
     }
 
     public Poster? Poster { get; set; }

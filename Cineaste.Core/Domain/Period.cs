@@ -7,7 +7,7 @@ public sealed class Period : Entity<Period>
     private int endMonth;
     private int endYear;
     private int episodeCount;
-    private string? rottenTomatoesLink;
+    private string? rottenTomatoesId;
 
     public int StartMonth
     {
@@ -41,10 +41,10 @@ public sealed class Period : Entity<Period>
         set => this.episodeCount = Require.Positive(value);
     }
 
-    public string? RottenTomatoesLink
+    public string? RottenTomatoesId
     {
-        get => this.rottenTomatoesLink;
-        set => this.rottenTomatoesLink = Require.RottenTomatoesLink(value);
+        get => this.rottenTomatoesId;
+        set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
     }
 
     public Poster? Poster { get; set; }

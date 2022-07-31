@@ -152,7 +152,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("ListId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RottenTomatoesLink")
+                    b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Year")
@@ -226,7 +226,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<bool>("IsSingleDayRelease")
                         .HasColumnType("bit");
 
-                    b.Property<string>("RottenTomatoesLink")
+                    b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("SeasonId")
@@ -315,7 +315,7 @@ namespace Cineaste.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RottenTomatoesLink")
+                    b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WatchStatus")
@@ -389,7 +389,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
-                    b.Property<string>("RottenTomatoesLink")
+                    b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SequenceNumber")
