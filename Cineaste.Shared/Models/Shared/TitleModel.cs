@@ -1,3 +1,3 @@
-namespace Cineaste.Shared.SharedModels;
+namespace Cineaste.Shared.Models.Shared;
 
 public sealed record TitleModel(string Name, int Priority);

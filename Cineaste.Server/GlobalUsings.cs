@@ -12,10 +12,10 @@ global using Cineaste.Server.Exceptions;
 global using Cineaste.Server.Mapping;
 global using Cineaste.Server.Services;
 global using Cineaste.Shared;
-global using Cineaste.Shared.ListModels;
-global using Cineaste.Shared.MovieModels;
-global using Cineaste.Shared.SeriesModels;
-global using Cineaste.Shared.SharedModels;
+global using Cineaste.Shared.Models.List;
+global using Cineaste.Shared.Models.Movie;
+global using Cineaste.Shared.Models.Series;
+global using Cineaste.Shared.Models.Shared;
 global using Cineaste.Shared.Validation;
 
 global using FluentValidation;

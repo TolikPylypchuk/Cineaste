@@ -15,24 +15,10 @@ public partial class MovieForm
 
     private string FormTitle { get; set; } = String.Empty;
 
-    private ObservableCollection<string> Titles { get; set; } = new();
-    private ObservableCollection<string> OriginalTitles { get; set; } = new();
-
-    private TitlesForm<MovieRequest> TitlesForm { get; set; } = null!;
-    private TitlesForm<MovieRequest> OriginalTitlesForm { get; set; } = null!;
-
-    private bool IsWatched { get; set; }
-    private bool IsReleased { get; set; }
+    private MovieFormModel FormModel { get; set; } = null!;
 
     private bool CanChangeIsWatched { get; set; } = true;
     private bool CanChangeIsReleased { get; set; } = true;
-
-    private int Year { get; set; }
-
-    private ListKindModel Kind { get; set; } = null!;
-
-    private string ImdbId { get; set; } = String.Empty;
-    private string RottenTomatoesLink { get; set; } = String.Empty;
 
     private PropertyValidator<MovieRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }
     private PropertyValidator<MovieRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
@@ -44,6 +30,8 @@ public partial class MovieForm
     {
         base.OnParametersSet();
         this.InitializeValidators();
+
+        this.FormModel = new(this.State.Value.AvailableKinds);
         this.SetPropertyValues();
     }
 
@@ -83,21 +71,7 @@ public partial class MovieForm
 
     private void SetPropertyValues()
     {
-        var movie = this.State.Value.Model;
-
-        this.Titles = movie?.Titles?.Select(title => title.Name)?.ToObservableCollection()
-            ?? new() { String.Empty };
-
-        this.OriginalTitles = movie?.OriginalTitles?.Select(title => title.Name)?.ToObservableCollection()
-            ?? new() { String.Empty };
-
-        this.IsWatched = movie?.IsWatched ?? false;
-        this.IsReleased = movie?.IsReleased ?? true;
-        this.Year = movie?.Year ?? DateTime.Now.Year;
-        this.Kind = movie?.Kind ?? this.State.Value.AvailableKinds.FirstOrDefault()!;
-        this.ImdbId = movie?.ImdbId ?? String.Empty;
-        this.RottenTomatoesLink = movie?.RottenTomatoesLink ?? String.Empty;
-
+        this.FormModel.CopyFrom(this.State.Value.Model);
         this.UpdateFormTitle();
     }
 
@@ -105,21 +79,21 @@ public partial class MovieForm
         titles.Add(String.Empty);
 
     private void UpdateFormTitle() =>
-        this.FormTitle = this.Titles.FirstOrDefault() ?? String.Empty;
+        this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
 
     private void OnYearChanged()
     {
         int currentYear = DateTime.Now.Year;
 
-        if (this.Year < currentYear)
+        if (this.FormModel.Year < currentYear)
         {
-            this.IsReleased = true;
+            this.FormModel.IsReleased = true;
             this.CanChangeIsWatched = true;
             this.CanChangeIsReleased = false;
-        } else if (this.Year > currentYear)
+        } else if (this.FormModel.Year > currentYear)
         {
-            this.IsWatched = false;
-            this.IsReleased = false;
+            this.FormModel.IsWatched = false;
+            this.FormModel.IsReleased = false;
             this.CanChangeIsWatched = false;
             this.CanChangeIsReleased = false;
         } else
@@ -131,29 +105,36 @@ public partial class MovieForm
 
     private void OnIsWatchedChanged()
     {
-        if (this.IsWatched)
+        if (this.FormModel.IsWatched)
         {
-            this.IsReleased = true;
+            this.FormModel.IsReleased = true;
         }
     }
 
     private void OnIsReleasedChanged()
     {
-        if (!this.IsReleased)
+        if (!this.FormModel.IsReleased)
         {
-            this.IsWatched = false;
+            this.FormModel.IsWatched = false;
         }
     }
+
+    private bool HasImdbId() =>
+        !String.IsNullOrEmpty(this.FormModel.ImdbId);
+
+    private bool HasRottenTomatoesLink() =>
+        !String.IsNullOrEmpty(this.FormModel.RottenTomatoesLink);
 
     private void Save() =>
         this.WithValidation(() =>
         {
             if (this.ListItem is not null)
             {
-                this.Dispatcher.Dispatch(new UpdateMovieAction(this.ListItem.Id, this.CreateMovieRequest()));
+                this.Dispatcher.Dispatch(new UpdateMovieAction(
+                    this.ListItem.Id, this.FormModel.ToMovieRequest(this.ListId)));
             } else
             {
-                this.Dispatcher.Dispatch(new CreateMovieAction(this.CreateMovieRequest()));
+                this.Dispatcher.Dispatch(new CreateMovieAction(this.FormModel.ToMovieRequest(this.ListId)));
             }
         });
 
@@ -190,16 +171,4 @@ public partial class MovieForm
         this.SetPropertyValues();
         this.ShowSuccessNotification("MovieForm.UpdateMovie.Success", ShortNotificationDuration);
     }
-
-    private MovieRequest CreateMovieRequest() =>
-        new(
-            this.ListId,
-            this.TitlesForm.TitlesRequests,
-            this.OriginalTitlesForm.TitlesRequests,
-            this.Year,
-            this.IsWatched,
-            this.IsReleased,
-            this.Kind.Id,
-            this.ImdbId,
-            this.RottenTomatoesLink);
 }

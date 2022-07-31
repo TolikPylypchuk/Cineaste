@@ -1,4 +1,4 @@
-namespace Cineaste.Shared.MovieModels;
+namespace Cineaste.Shared.Models.Movie;
 
 public sealed record MovieRequest(
     Guid ListId,

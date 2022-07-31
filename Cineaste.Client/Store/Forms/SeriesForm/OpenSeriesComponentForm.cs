@@ -1,6 +1,6 @@
 namespace Cineaste.Client.Store.Forms.SeriesForm;
 
-public sealed record OpenSeriesComponentFormAction(SeriesComponentModel Component);
+public sealed record OpenSeriesComponentFormAction(ISeriesComponentFormModel Component);
 
 public static class OpenSeriesComponentFormReducers
 {

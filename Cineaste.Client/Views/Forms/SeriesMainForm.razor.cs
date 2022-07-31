@@ -15,33 +15,19 @@ public partial class SeriesMainForm
 
     private string FormTitle { get; set; } = String.Empty;
 
-    private ObservableCollection<string> Titles { get; set; } = new();
-    private ObservableCollection<string> OriginalTitles { get; set; } = new();
+    private SeriesFormModel FormModel { get; set; } = null!;
 
-    private TitlesForm<SeriesMainForm> TitlesForm { get; set; } = null!;
-    private TitlesForm<SeriesMainForm> OriginalTitlesForm { get; set; } = null!;
-
-    private SeriesWatchStatus WatchStatus { get; set; }
-    private SeriesReleaseStatus ReleaseStatus { get; set; }
-
-    private ListKindModel Kind { get; set; } = null!;
-
-    private bool IsMiniseries { get; set; }
-
-    private ObservableCollection<SeriesComponentModel> Components { get; set; } = new();
-
-    private string ImdbId { get; set; } = String.Empty;
-    private string RottenTomatoesLink { get; set; } = String.Empty;
-
-    public ImmutableArray<SeriesWatchStatus> AllWatchStatuses { get; } =
+    private ImmutableArray<SeriesWatchStatus> AllWatchStatuses { get; } =
         Enum.GetValues<SeriesWatchStatus>().ToImmutableArray();
 
-    public ImmutableArray<SeriesReleaseStatus> AllReleaseStatuses { get; } =
+    private ImmutableArray<SeriesReleaseStatus> AllReleaseStatuses { get; } =
         Enum.GetValues<SeriesReleaseStatus>().ToImmutableArray();
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+
+        this.FormModel = new(this.State.Value.AvailableKinds);
         this.SetPropertyValues();
     }
 
@@ -65,29 +51,7 @@ public partial class SeriesMainForm
 
     private void SetPropertyValues()
     {
-        var series = this.State.Value.Model;
-
-        this.Titles = series?.Titles?.Select(title => title.Name)?.ToObservableCollection()
-            ?? new() { String.Empty };
-
-        this.OriginalTitles = series?.OriginalTitles?.Select(title => title.Name)?.ToObservableCollection()
-            ?? new() { String.Empty };
-
-        this.WatchStatus = series?.WatchStatus ?? SeriesWatchStatus.NotWatched;
-        this.ReleaseStatus = series?.ReleaseStatus ?? SeriesReleaseStatus.NotStarted;
-        this.Kind = series?.Kind ?? this.State.Value.AvailableKinds.FirstOrDefault()!;
-        this.IsMiniseries = series?.IsMiniseries ?? false;
-
-        this.Components.Clear();
-
-        foreach (var component in series?.Components ?? Enumerable.Empty<SeriesComponentModel>())
-        {
-            this.Components.Add(component);
-        }
-
-        this.ImdbId = series?.ImdbId ?? String.Empty;
-        this.RottenTomatoesLink = series?.RottenTomatoesLink ?? String.Empty;
-
+        this.FormModel.CopyFrom(this.State.Value.Model);
         this.UpdateFormTitle();
     }
 
@@ -95,10 +59,16 @@ public partial class SeriesMainForm
         titles.Add(String.Empty);
 
     private void UpdateFormTitle() =>
-        this.FormTitle = this.Titles.FirstOrDefault() ?? String.Empty;
+        this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
 
-    private void OpenSeriesComponentForm(SeriesComponentModel component) =>
+    private void OpenSeriesComponentForm(ISeriesComponentFormModel component) =>
         this.Dispatcher.Dispatch(new OpenSeriesComponentFormAction(component));
+
+    private bool HasImdbId() =>
+        !String.IsNullOrEmpty(this.FormModel.ImdbId);
+
+    private bool HasRottenTomatoesLink() =>
+        !String.IsNullOrEmpty(this.FormModel.RottenTomatoesLink);
 
     private void Save()
     { }

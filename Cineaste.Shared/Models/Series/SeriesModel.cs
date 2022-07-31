@@ -1,4 +1,4 @@
-namespace Cineaste.Shared.SeriesModels;
+namespace Cineaste.Shared.Models.Series;
 
 using System.Text.Json.Serialization;
 
@@ -14,12 +14,12 @@ public sealed record SeriesModel(
     ImmutableList<SpecialEpisodeModel> SpecialEpisodes,
     string? ImdbId,
     string? RottenTomatoesLink,
-    string DisplayNumber)
+    string DisplayNumber) : ITitledModel
 {
     [JsonIgnore]
-    public ImmutableList<SeriesComponentModel> Components =>
-        this.Seasons.Cast<SeriesComponentModel>()
-            .Concat(this.SpecialEpisodes.Cast<SeriesComponentModel>())
+    public ImmutableList<ISeriesComponentModel> Components =>
+        this.Seasons.Cast<ISeriesComponentModel>()
+            .Concat(this.SpecialEpisodes.Cast<ISeriesComponentModel>())
             .OrderBy(component => component.SequenceNumber)
             .ToImmutableList();
 

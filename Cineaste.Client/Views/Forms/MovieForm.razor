@@ -26,31 +26,30 @@
         <div class="w-100 h-100 d-flex flex-column justify-content-between">
             <div class="h-100">
                 <div class="d-md-flex justify-content-md-center mt-2">
-                    @if (!String.IsNullOrEmpty(this.ImdbId))
+                    @if (this.HasImdbId())
                     {
-                        <RadzenLink Path="@($"https://www.imdb.com/title/{this.ImdbId}")" Text="@this.Loc["Link.Imdb"]"
-                                    class="@($"{(!String.IsNullOrEmpty(this.RottenTomatoesLink) ? "me-md-2" : "")}")"
-                                    target="_blank" />
+                        <RadzenLink Path="@String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId)"
+                                    Text="@this.Loc["Link.Imdb"]" target="_blank"
+                                    class="@($"{(this.HasRottenTomatoesLink() ? "me-md-2" : "")}")" />
                     }
 
-                    @if (!String.IsNullOrEmpty(this.RottenTomatoesLink))
+                    @if (this.HasRottenTomatoesLink())
                     {
-                        <RadzenLink Path="@this.RottenTomatoesLink" Text="@this.Loc["Link.RottenTomatoes"]"
-                                    class="@($"{(!String.IsNullOrEmpty(this.ImdbId) ? "me-md-2" : "")}")"
-                                    target="_blank">
+                        <RadzenLink Path="@this.FormModel.RottenTomatoesLink" Text="@this.Loc["Link.RottenTomatoes"]"
+                                    class="@($"{(this.HasImdbId() ? "me-md-2" : "")}")" target="_blank">
                         </RadzenLink>
                     }
                 </div>
 
                 <div class="d-md-flex justify-content-md-center mt-2">
                     <div class="me-md-1">
-                        <RadzenCheckBox @bind-Value="@this.IsWatched" Disabled="@(!this.CanChangeIsWatched)"
+                        <RadzenCheckBox @bind-Value="@this.FormModel.IsWatched" Disabled="@(!this.CanChangeIsWatched)"
                                         Change="@((bool value) => this.OnIsWatchedChanged())"
                                         Name="IsWatchedCheckBox" />
                         <RadzenLabel Text="@this.Loc["MovieForm.IsWatched"]" Component="IsWatchedCheckBox" />
                     </div>
                     <div class="ms-md-1">
-                        <RadzenCheckBox @bind-Value="@this.IsReleased" Disabled="@(!this.CanChangeIsReleased)"
+                        <RadzenCheckBox @bind-Value="@this.FormModel.IsReleased" Disabled="@(!this.CanChangeIsReleased)"
                                         Change="@((bool value) => this.OnIsReleasedChanged())"
                                         Name="IsReleasedCheckBox" />
                         <RadzenLabel Text="@this.Loc["MovieForm.IsReleased"]" Component="IsReleasedCheckBox" />
@@ -58,43 +57,48 @@
                 </div>
 
                 <RadzenLabel Text="@this.Loc["MovieForm.Titles"]" class="mt-2" />
-                <TitlesForm @ref="this.TitlesForm" Titles="@this.Titles" Validator="@this.TitlesValidator"
+                <TitlesForm Titles="@this.FormModel.Titles" Validator="@this.TitlesValidator"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests"
                             FirstTitleChanged="@this.UpdateFormTitle" />
 
                 <RadzenLabel Text="@this.Loc["MovieForm.OriginalTitles"]" class="mt-2" />
-                <TitlesForm @ref="this.OriginalTitlesForm" Titles="@this.OriginalTitles"
-                            Validator="@this.OriginalTitlesValidator" />
+                <TitlesForm Titles="@this.FormModel.OriginalTitles" Validator="@this.OriginalTitlesValidator"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
 
                 <div class="row mt-2">
                     <div class="col-md pe-md-1">
                         <RadzenLabel Text="@this.Loc["MovieForm.Year"]" Component="YearNumeric" />
-                        <RadzenNumeric @bind-Value="this.Year" Change="@((int year) => this.OnYearChanged())"
+                        <RadzenNumeric @bind-Value="this.FormModel.Year" Change="@((int year) => this.OnYearChanged())"
                                        Name="YearNumeric" />
-                        <FormValidator Validator="@this.YearValidator" Value="@this.Year" />
+                        <FormValidator Validator="@this.YearValidator" Value="@this.FormModel.Year" />
                     </div>
                     <div class="col-md ps-md-1">
                         <RadzenLabel Text="@this.Loc["MovieForm.Kind"]" Component="KindDropDown" />
-                        <RadzenDropDown @bind-Value="@this.Kind" Data="@this.State.Value.AvailableKinds"
+                        <RadzenDropDown @bind-Value="@this.FormModel.Kind" Data="@this.State.Value.AvailableKinds"
                                         AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
                                         Name="KindDropDown" TextProperty="Name" />
                     </div>
                 </div>
 
                 <RadzenLabel Text="@this.Loc["MovieForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-1" />
-                <RadzenTextBox @bind-Value="@this.ImdbId" Name="ImdbIdTextBox" class="w-100" />
-                <FormValidator Validator="@this.ImdbIdValidator" Value="@this.ImdbId" />
+                <RadzenTextBox @bind-Value="@this.FormModel.ImdbId" Name="ImdbIdTextBox" class="w-100" />
+                <FormValidator Validator="@this.ImdbIdValidator" Value="@this.FormModel.ImdbId" />
 
                 <RadzenLabel Text="@this.Loc["MovieForm.RottenTomatoesLink"]" Component="RottenTomatoesTextBox"
                              class="mt-2" />
-                <RadzenTextBox @bind-Value="@this.RottenTomatoesLink" Name="RottenTomatoesTextBox" class="w-100" />
-                <FormValidator Validator="@this.RottenTomatoesLinkValidator" Value="@this.RottenTomatoesLink" />
+                <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesLink" Name="RottenTomatoesTextBox"
+                               class="w-100" />
+                <FormValidator Validator="@this.RottenTomatoesLinkValidator"
+                               Value="@this.FormModel.RottenTomatoesLink" />
 
                 <div class="d-flex justify-content-center">
                     <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
                         <RadzenButton Text="@this.Loc["MovieForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
-                                      Click="@(e => this.AddTitle(this.Titles))" class="d-inline-block me-1" />
+                                      Click="@(e => this.AddTitle(this.FormModel.Titles))"
+                                      class="d-inline-block me-1" />
                         <RadzenButton Text="@this.Loc["MovieForm.AddOriginalTitle"]" ButtonStyle="ButtonStyle.Secondary"
-                                      Click="@(e => this.AddTitle(this.OriginalTitles))" class="d-inline-block ms-1" />
+                                      Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))"
+                                      class="d-inline-block ms-1" />
                     </div>
                 </div>
 

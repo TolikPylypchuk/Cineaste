@@ -32,9 +32,12 @@
     public PropertyValidator<T, ImmutableList<TitleRequest>>? Validator { get; set; }
 
     [Parameter]
+    public Func<IReadOnlyCollection<string>, ImmutableList<TitleRequest>> ConvertTitlesToRequests { get; set; } = null!;
+
+    [Parameter]
     public EventCallback<string> FirstTitleChanged { get; set; }
 
-    public ImmutableList<TitleRequest> TitlesRequests { get; private set; } = ImmutableList.Create<TitleRequest>();
+    private ImmutableList<TitleRequest> TitlesRequests { get; set; } = ImmutableList.Create<TitleRequest>();
 
     private PropertyValidator<TitleRequest, string>? TitleNameValidator { get; set; }
 
@@ -42,8 +45,7 @@
     {
         base.OnParametersSet();
 
-        this.TitlesRequests = this.ConvertTitles();
-        this.Titles.CollectionChanged += (sender, e) => this.TitlesRequests = this.ConvertTitles();
+        this.Titles.CollectionChanged += (sender, e) => this.TitlesRequests = this.ConvertTitlesToRequests(this.Titles);
 
         this.TitleNameValidator = PropertyValidator.Create(
             TitleRequest.CreateValidator(), (TitleRequest req) => req.Name, this);
@@ -58,9 +60,4 @@
             await this.FirstTitleChanged.InvokeAsync(title);
         }
     }
-
-    private ImmutableList<TitleRequest> ConvertTitles() =>
-        this.Titles
-            .Select((title, index) => new TitleRequest(title, index + 1))
-            .ToImmutableList();
 }

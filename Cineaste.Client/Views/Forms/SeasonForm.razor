@@ -15,16 +15,17 @@
     <div class="w-100 h-100 d-flex flex-column justify-content-between">
         <div class="h-100">
             <RadzenLabel Text="@this.Loc["SeasonForm.Titles"]" class="mt-2" />
-            <TitlesForm T="SeasonForm" @ref="this.TitlesForm" Titles="@this.Titles"
-                        FirstTitleChanged="@this.UpdateFormTitle" />
+            <TitlesForm T="SeasonForm" Titles="@this.FormModel.Titles" FirstTitleChanged="@this.UpdateFormTitle"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
 
             <RadzenLabel Text="@this.Loc["SeasonForm.OriginalTitles"]" class="mt-2" />
-            <TitlesForm T="SeasonForm" @ref="this.OriginalTitlesForm" Titles="@this.OriginalTitles" />
+            <TitlesForm T="SeasonForm" Titles="@this.FormModel.OriginalTitles"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
 
             <div class="row mt-2">
                 <div class="col-md pe-md-1">
                     <RadzenLabel Text="@this.Loc["SeasonForm.WatchStatus"]" Component="WatchStatusDropDown" />
-                    <RadzenDropDown @bind-Value="@this.WatchStatus" Data="@this.AllWatchStatuses"
+                    <RadzenDropDown @bind-Value="@this.FormModel.WatchStatus" Data="@this.AllWatchStatuses"
                                     AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
                                     Name="WatchStatusDropDown">
                         <Template>
@@ -35,7 +36,7 @@
 
                 <div class="col-md ps-md-1">
                     <RadzenLabel Text="@this.Loc["SeasonForm.ReleaseStatus"]" Component="ReleaseStatusDropDown" />
-                    <RadzenDropDown @bind-Value="@this.ReleaseStatus" Data="@this.AllReleaseStatuses"
+                    <RadzenDropDown @bind-Value="@this.FormModel.ReleaseStatus" Data="@this.AllReleaseStatuses"
                                     AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
                                     Name="ReleaseStatusDropDown">
                         <Template>
@@ -46,15 +47,15 @@
             </div>
 
             <RadzenLabel Text="@this.Loc["SeasonForm.Channel"]" Component="ChannelTextBox" class="mt-2" />
-            <RadzenTextBox @bind-Value="@this.Channel" Name="ChannelTextBox" class="w-100" />
+            <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
 
             <div class="d-flex justify-content-center">
                 <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
                     <RadzenButton Text="@this.Loc["SeasonForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
-                                  Click="@(e => this.AddTitle(this.Titles))" class="d-inline-block me-1" />
+                                  Click="@(e => this.AddTitle(this.FormModel.Titles))" class="d-inline-block me-1" />
                     <RadzenButton Text="@this.Loc["SeasonForm.AddOriginalTitle"]"
                                   ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1"
-                                  Click="@(e => this.AddTitle(this.OriginalTitles))" />
+                                  Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))" />
                 </div>
             </div>
 

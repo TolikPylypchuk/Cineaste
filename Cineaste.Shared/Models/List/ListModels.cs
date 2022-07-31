@@ -1,4 +1,4 @@
-namespace Cineaste.Shared.ListModels;
+namespace Cineaste.Shared.Models.List;
 
 using System.ComponentModel;
 

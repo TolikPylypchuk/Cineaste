@@ -26,33 +26,34 @@
         <div class="w-100 h-100 d-flex flex-column justify-content-between">
             <div class="h-100">
                 <div class="d-md-flex justify-content-md-center mt-2">
-                    @if (!String.IsNullOrEmpty(this.ImdbId))
+                    @if (this.HasImdbId())
                     {
-                        <RadzenLink Path="@($"https://www.imdb.com/title/{this.ImdbId}")" Text="@this.Loc["Link.Imdb"]"
-                                    class="@($"{(!String.IsNullOrEmpty(this.RottenTomatoesLink) ? "me-md-2" : "")}")"
-                                    target="_blank" />
+                        <RadzenLink Path="@String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId)"
+                                    Text="@this.Loc["Link.Imdb"]" target="_blank"
+                                    class="@($"{(this.HasRottenTomatoesLink() ? "me-md-2" : "")}")" />
                     }
 
-                    @if (!String.IsNullOrEmpty(this.RottenTomatoesLink))
+                    @if (this.HasRottenTomatoesLink())
                     {
-                        <RadzenLink Path="@this.RottenTomatoesLink" Text="@this.Loc["Link.RottenTomatoes"]"
-                                    class="@($"{(!String.IsNullOrEmpty(this.ImdbId) ? "me-md-2" : "")}")"
+                        <RadzenLink Path="@this.FormModel.RottenTomatoesLink" Text="@this.Loc["Link.RottenTomatoes"]"
+                                    class="@($"{(this.HasImdbId() ? "me-md-2" : "")}")"
                                     target="_blank">
                         </RadzenLink>
                     }
                 </div>
 
                 <RadzenLabel Text="@this.Loc["SeriesForm.Titles"]" class="mt-2" />
-                <TitlesForm T="SeriesMainForm" @ref="this.TitlesForm" Titles="@this.Titles"
-                            FirstTitleChanged="@this.UpdateFormTitle" />
+                <TitlesForm T="SeriesMainForm" Titles="@this.FormModel.Titles" FirstTitleChanged="@this.UpdateFormTitle"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
 
                 <RadzenLabel Text="@this.Loc["SeriesForm.OriginalTitles"]" class="mt-2" />
-                <TitlesForm T="SeriesMainForm" @ref="this.OriginalTitlesForm" Titles="@this.OriginalTitles" />
+                <TitlesForm T="SeriesMainForm" Titles="@this.FormModel.OriginalTitles"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
 
                 <div class="row mt-2">
                     <div class="col-md pe-md-1">
                         <RadzenLabel Text="@this.Loc["SeriesForm.WatchStatus"]" Component="WatchStatusDropDown" />
-                        <RadzenDropDown @bind-Value="@this.WatchStatus" Data="@this.AllWatchStatuses"
+                        <RadzenDropDown @bind-Value="@this.FormModel.WatchStatus" Data="@this.AllWatchStatuses"
                                         AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
                                         Name="WatchStatusDropDown">
                             <Template>
@@ -63,7 +64,7 @@
 
                     <div class="col-md ps-md-1">
                         <RadzenLabel Text="@this.Loc["SeriesForm.ReleaseStatus"]" Component="ReleaseStatusDropDown" />
-                        <RadzenDropDown @bind-Value="@this.ReleaseStatus" Data="@this.AllReleaseStatuses"
+                        <RadzenDropDown @bind-Value="@this.FormModel.ReleaseStatus" Data="@this.AllReleaseStatuses"
                                         AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
                                         Name="ReleaseStatusDropDown">
                             <Template>
@@ -74,12 +75,11 @@
                 </div>
 
                 <RadzenLabel Text="@this.Loc["SeriesForm.Kind"]" Component="KindDropDown" class="mt-1" />
-                <RadzenDropDown @bind-Value="@this.Kind" Data="@this.State.Value.AvailableKinds"
+                <RadzenDropDown @bind-Value="@this.FormModel.Kind" Data="@this.State.Value.AvailableKinds"
                                 AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
                                 Name="KindDropDown" TextProperty="Name" class="w-100" />
 
-                <RadzenDataList WrapItems="true" Data="@this.Components" TItem="SeriesComponentModel"
-                                class="overflow-auto w-100 mt-1">
+                <RadzenDataList WrapItems="true" Data="@this.FormModel.Components" class="overflow-auto w-100 mt-1">
                     <Template Context="component">
                         <div class="list-item-container d-flex flex-row justify-content-between border-bottom"
                              role="button" @onclick="() => this.OpenSeriesComponentForm(component)">
@@ -99,19 +99,21 @@
                 </div>
 
                 <RadzenLabel Text="@this.Loc["SeriesForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-2" />
-                <RadzenTextBox @bind-Value="@this.ImdbId" Name="ImdbIdTextBox" class="w-100" />
+                <RadzenTextBox @bind-Value="@this.FormModel.ImdbId" Name="ImdbIdTextBox" class="w-100" />
 
                 <RadzenLabel Text="@this.Loc["SeriesForm.RottenTomatoesLink"]" Component="RottenTomatoesTextBox"
                              class="mt-2" />
-                <RadzenTextBox @bind-Value="@this.RottenTomatoesLink" Name="RottenTomatoesTextBox" class="w-100" />
+                <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesLink" Name="RottenTomatoesTextBox"
+                               class="w-100" />
 
                 <div class="d-flex justify-content-center">
                     <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
                         <RadzenButton Text="@this.Loc["SeriesForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
-                                      Click="@(e => this.AddTitle(this.Titles))" class="d-inline-block me-1" />
+                                      Click="@(e => this.AddTitle(this.FormModel.Titles))"
+                                      class="d-inline-block me-1" />
                         <RadzenButton Text="@this.Loc["SeriesForm.AddOriginalTitle"]"
                                       ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1"
-                                      Click="@(e => this.AddTitle(this.OriginalTitles))" />
+                                      Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))" />
                     </div>
                 </div>
 

@@ -304,6 +304,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://www.imdb.com/title/{0}.
+        /// </summary>
+        public static string Link_ImdbUrlFormat {
+            get {
+                return ResourceManager.GetString("Link.ImdbUrlFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotten Tomatoes.
         /// </summary>
         public static string Link_RottenTomatoes {

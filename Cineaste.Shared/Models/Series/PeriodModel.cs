@@ -1,4 +1,4 @@
-namespace Cineaste.Shared.SeriesModels;
+namespace Cineaste.Shared.Models.Series;
 
 public sealed record PeriodModel(
     Guid Id,

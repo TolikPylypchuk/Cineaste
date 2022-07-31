@@ -1,4 +1,4 @@
-namespace Cineaste.Shared.MovieModels;
+namespace Cineaste.Shared.Models.Movie;
 
 public sealed record MovieModel(
     Guid Id,
@@ -10,4 +10,4 @@ public sealed record MovieModel(
     ListKindModel Kind,
     string? ImdbId,
     string? RottenTomatoesLink,
-    string DisplayNumber);
+    string DisplayNumber) : ITitledModel;

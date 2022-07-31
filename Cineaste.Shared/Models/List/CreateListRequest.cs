@@ -1,4 +1,4 @@
-namespace Cineaste.Shared.ListModels;
+namespace Cineaste.Shared.Models.List;
 
 public sealed record CreateListRequest(
     string Name,

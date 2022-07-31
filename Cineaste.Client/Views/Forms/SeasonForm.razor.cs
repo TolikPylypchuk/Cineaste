@@ -5,28 +5,20 @@ using Cineaste.Client.Store.Forms.SeriesForm;
 public partial class SeasonForm
 {
     [Parameter]
-    public SeasonModel? Model { get; set; }
+    public SeasonModel? Season { get; set; }
 
     [Parameter]
     public EventCallback Close { get; set; }
 
+    [Parameter]
+    public SeasonFormModel FormModel { get; set; } = null!;
+
     private string FormTitle { get; set; } = String.Empty;
 
-    private ObservableCollection<string> Titles { get; set; } = new();
-    private ObservableCollection<string> OriginalTitles { get; set; } = new();
-
-    private TitlesForm<SeasonForm> TitlesForm { get; set; } = null!;
-    private TitlesForm<SeasonForm> OriginalTitlesForm { get; set; } = null!;
-
-    private SeasonWatchStatus WatchStatus { get; set; }
-    private SeasonReleaseStatus ReleaseStatus { get; set; }
-
-    private string Channel { get; set; } = String.Empty;
-
-    public ImmutableArray<SeasonWatchStatus> AllWatchStatuses { get; } =
+    private ImmutableArray<SeasonWatchStatus> AllWatchStatuses { get; } =
         Enum.GetValues<SeasonWatchStatus>().ToImmutableArray();
 
-    public ImmutableArray<SeasonReleaseStatus> AllReleaseStatuses { get; } =
+    private ImmutableArray<SeasonReleaseStatus> AllReleaseStatuses { get; } =
         Enum.GetValues<SeasonReleaseStatus>().ToImmutableArray();
 
     protected override void OnParametersSet()
@@ -37,21 +29,7 @@ public partial class SeasonForm
 
     private void SetPropertyValues()
     {
-        if (this.Model is null)
-        {
-            return;
-        }
-
-        this.Titles = this.Model?.Titles?.Select(title => title.Name)?.ToObservableCollection()
-            ?? new() { String.Empty };
-
-        this.OriginalTitles = this.Model?.OriginalTitles?.Select(title => title.Name)?.ToObservableCollection()
-            ?? new() { String.Empty };
-
-        this.WatchStatus = this.Model?.WatchStatus ?? SeasonWatchStatus.NotWatched;
-        this.ReleaseStatus = this.Model?.ReleaseStatus ?? SeasonReleaseStatus.NotStarted;
-        this.Channel = this.Model?.Channel ?? String.Empty;
-
+        this.FormModel.CopyFrom(this.Season);
         this.UpdateFormTitle();
     }
 
@@ -59,7 +37,7 @@ public partial class SeasonForm
         titles.Add(String.Empty);
 
     private void UpdateFormTitle() =>
-        this.FormTitle = this.Titles.FirstOrDefault() ?? String.Empty;
+        this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
 
     private void GoToSeries() =>
         this.Dispatcher.Dispatch(new GoToSeriesAction());

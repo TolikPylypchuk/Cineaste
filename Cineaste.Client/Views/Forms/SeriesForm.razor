@@ -2,8 +2,8 @@
 
 @switch (this.State.Value.SelectedSeriesComponent)
 {
-    case SeasonModel model:
-        <SeasonForm Model="@model" Close="@this.Close" />
+    case SeasonFormModel model:
+        <SeasonForm Season="@model.BackingModel" FormModel="@model" Close="@this.Close" />
         break;
     default:
         <SeriesMainForm ListId="@this.ListId" ListItem="@this.ListItem" Close="@this.Close" />

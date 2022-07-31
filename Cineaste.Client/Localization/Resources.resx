@@ -198,6 +198,9 @@
   <data name="Link.Imdb" xml:space="preserve">
     <value>IMDb</value>
   </data>
+  <data name="Link.ImdbUrlFormat" xml:space="preserve">
+    <value>https://www.imdb.com/title/{0}</value>
+  </data>
   <data name="Link.RottenTomatoes" xml:space="preserve">
     <value>Rotten Tomatoes</value>
   </data>
