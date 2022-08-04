@@ -14,6 +14,23 @@
 
     <div class="w-100 h-100 d-flex flex-column justify-content-between">
         <div class="h-100">
+            <div class="d-flex flex-column align-items-center mt-2">
+                @{
+                    int part = 1;
+                    bool multiple = this.FormModel.Periods
+                        .Count(period => !String.IsNullOrWhiteSpace(period.RottenTomatoesId)) > 1;
+                }
+
+                @foreach (var period in this.FormModel.Periods
+                    .Where(p => !String.IsNullOrWhiteSpace(p.RottenTomatoesId)))
+                {
+                    <RadzenLink Path="@String.Format(this.Loc["Link.RottenTomatoesUrlFormat"], period.RottenTomatoesId)"
+                                Text="@($"{this.Loc["Link.RottenTomatoes"]}{(multiple ? $" (Part {part})" : "")}")"
+                                target="_blank" />
+                    part++;
+                }
+            </div>
+
             <RadzenLabel Text="@this.Loc["SeasonForm.Titles"]" class="mt-2" />
             <TitlesForm T="SeasonForm" Titles="@this.FormModel.Titles" FirstTitleChanged="@this.UpdateFormTitle"
                             ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
@@ -51,7 +68,9 @@
 
             @foreach (var period in this.FormModel.Periods)
             {
-                <PeriodForm FormModel="@period" />
+                <PeriodForm FormModel="@period" CanRemove="@(this.FormModel.Periods.Count > 1)"
+                            Removed="@(() => this.OnPeriodRemoved(period))"
+                            RottenTomatoesIdChanged="@this.StateHasChanged" />
             }
 
             <div class="d-flex justify-content-center">
@@ -62,6 +81,11 @@
                                   ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1"
                                   Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))" />
                 </div>
+            </div>
+
+            <div class="d-flex justify-content-center mt-2">
+                <RadzenButton Text="@this.Loc["SeasonForm.AddPeriod"]" ButtonStyle="ButtonStyle.Secondary"
+                              Click="@(e => this.AddPeriod())" class="" />
             </div>
 
             <div class="d-flex justify-content-center mt-4">

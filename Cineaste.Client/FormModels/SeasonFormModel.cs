@@ -28,8 +28,15 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
         this.Periods = new(this.periods);
     }
 
-    public void AddNewPeriod() =>
-        this.periods.Add(new());
+    public void AddNewPeriod()
+    {
+        var lastPeriod = this.periods
+            .OrderByDescending(period => period.EndYear)
+            .ThenByDescending(period => period.EndMonth)
+            .First();
+
+        this.periods.Add(new PeriodFormModel(new DateTime(lastPeriod.EndYear + 1, lastPeriod.StartMonth, 1)));
+    }
 
     public void RemovePeriod(PeriodFormModel period)
     {
@@ -62,7 +69,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
             }
         } else
         {
-            this.AddNewPeriod();
+            this.periods.Add(new());
         }
     }
 }

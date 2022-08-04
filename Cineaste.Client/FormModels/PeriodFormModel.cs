@@ -11,7 +11,23 @@ public sealed class PeriodFormModel : FormModel<PeriodModel, PeriodRequest>
     public int EpisodeCount { get; set; }
     public bool IsSingleDayRelease { get; set; }
 
-    public string RottenTomatoesId { get; set; } = String.Empty;
+    public string RottenTomatoesId { get; set; }
+
+    public PeriodFormModel()
+        : this(DateTime.Now)
+    { }
+
+    public PeriodFormModel(DateTime date)
+    {
+        this.StartMonth = date.Month;
+        this.StartYear = date.Year;
+
+        this.EndMonth = date.Month;
+        this.EndYear = date.Year;
+
+        this.EpisodeCount = 1;
+        this.RottenTomatoesId = String.Empty;
+    }
 
     protected override void CopyFromModel()
     {

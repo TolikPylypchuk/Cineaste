@@ -387,6 +387,9 @@
   <data name="SeasonForm.AddOriginalTitle" xml:space="preserve">
     <value>Add original title</value>
   </data>
+  <data name="SeasonForm.AddPeriod" xml:space="preserve">
+    <value>Add period</value>
+  </data>
   <data name="SeasonForm.AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>

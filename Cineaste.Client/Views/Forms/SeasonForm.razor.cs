@@ -36,6 +36,12 @@ public partial class SeasonForm
     private void AddTitle(ObservableCollection<string> titles) =>
         titles.Add(String.Empty);
 
+    private void AddPeriod() =>
+        this.FormModel.AddNewPeriod();
+
+    private void OnPeriodRemoved(PeriodFormModel period) =>
+        this.FormModel.RemovePeriod(period);
+
     private void UpdateFormTitle() =>
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
 

@@ -26,14 +26,30 @@
 </div>
 
 <RadzenLabel Text="@this.Loc["PeriodForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox" class="mt-2" />
-<RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox" class="w-100" />
+
+<div class="d-flex flex-row align-items-center w-100">
+    <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Change="@this.RottenTomatoesIdChanged"
+                   Name="RottenTomatoesTextBox" class="w-100" />
+
+    @if (this.CanRemove)
+    {
+        <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                      Click="@this.Removed" class="ms-2" />
+    }
+</div>
 
 @code {
     [Parameter]
     public PeriodFormModel FormModel { get; set; } = null!;
 
     [Parameter]
+    public bool CanRemove { get; set; }
+
+    [Parameter]
     public EventCallback Removed { get; set; }
+
+    [Parameter]
+    public EventCallback RottenTomatoesIdChanged { get; set; }
 
     private bool CanChangeIsSingleDayRelease { get; set; }
 

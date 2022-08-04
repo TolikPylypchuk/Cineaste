@@ -871,6 +871,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add period.
+        /// </summary>
+        public static string SeasonForm_AddPeriod {
+            get {
+                return ResourceManager.GetString("SeasonForm.AddPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add title.
         /// </summary>
         public static string SeasonForm_AddTitle {
