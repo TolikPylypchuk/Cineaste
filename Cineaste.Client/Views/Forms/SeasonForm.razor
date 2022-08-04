@@ -12,8 +12,8 @@
         @this.FormTitle
     </h1>
 
-    <div class="w-100 h-100 d-flex flex-column justify-content-between">
-        <div class="h-100">
+    <div class="w-100 h-100 d-flex flex-column justify-content-between overflow-y-auto overflow-x-hidden">
+        <div class="h-100 overflow-y-auto overflow-x-hidden">
             <div class="d-flex flex-column align-items-center mt-2">
                 @{
                     int part = 1;
@@ -88,7 +88,7 @@
                               Click="@(e => this.AddPeriod())" class="" />
             </div>
 
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center my-4">
                 <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
                               Click="@this.Delete" />
             </div>

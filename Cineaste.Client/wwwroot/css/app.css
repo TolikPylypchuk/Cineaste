@@ -42,3 +42,11 @@ a {
 .rz-dropdown-items-wrapper {
     max-height: 300px !important;
 }
+
+.overflow-x-hidden {
+    overflow-x: hidden;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
