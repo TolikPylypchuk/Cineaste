@@ -59,8 +59,8 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
         return season;
     }
 
-    public void RemoveSeason(SeasonFormModel season) =>
-        this.components.Remove(season);
+    public void RemoveComponent(ISeriesComponentFormModel component) =>
+        this.components.Remove(component);
 
     public SpecialEpisodeFormModel AddSpecialEpisode()
     {
@@ -69,9 +69,6 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
 
         return episode;
     }
-
-    public void RemoveSpecialEpisode(SpecialEpisodeFormModel episode) =>
-        this.components.Remove(episode);
 
     protected override void CopyFromModel()
     {

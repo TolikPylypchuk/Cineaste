@@ -11,6 +11,9 @@ public partial class SeasonForm
     public EventCallback Close { get; set; }
 
     [Parameter]
+    public EventCallback Delete { get; set; }
+
+    [Parameter]
     public SeasonFormModel FormModel { get; set; } = null!;
 
     private string FormTitle { get; set; } = String.Empty;
@@ -50,7 +53,4 @@ public partial class SeasonForm
 
     private void Cancel() =>
         this.SetPropertyValues();
-
-    private void Delete() =>
-        this.Dispatcher.Dispatch(new GoToSeriesAction());
 }

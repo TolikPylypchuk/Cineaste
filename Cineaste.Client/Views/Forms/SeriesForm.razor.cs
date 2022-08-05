@@ -45,6 +45,12 @@ public partial class SeriesForm
     private void UpdateFormTitle() =>
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
 
+    private void RemoveComponent(ISeriesComponentFormModel component)
+    {
+        this.FormModel.RemoveComponent(component);
+        this.Dispatcher.Dispatch(new GoToSeriesAction());
+    }
+
     private void Save()
     { }
 

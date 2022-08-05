@@ -3,7 +3,8 @@
 @switch (this.State.Value.SelectedSeriesComponent)
 {
     case SeasonFormModel model:
-        <SeasonForm Season="@model.BackingModel" FormModel="@model" Close="@this.Close" />
+        <SeasonForm Season="@model.BackingModel" FormModel="@model" Close="@this.Close"
+                    Delete="@(() => this.RemoveComponent(model))" />
         break;
     default:
         <SeriesMainForm FormTitle="@this.FormTitle" FormTitleUpdated="@this.UpdateFormTitle" FormModel="@this.FormModel"
