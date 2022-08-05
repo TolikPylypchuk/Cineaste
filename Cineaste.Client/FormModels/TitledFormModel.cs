@@ -3,8 +3,8 @@ namespace Cineaste.Client.FormModels;
 public abstract class TitledFormModel<TModel, TRequest> : FormModel<TModel, TRequest>
     where TModel : ITitledModel
 {
-    public ObservableCollection<string> Titles { get; } = new();
-    public ObservableCollection<string> OriginalTitles { get; } = new();
+    public ObservableCollection<string> Titles { get; } = new() { String.Empty };
+    public ObservableCollection<string> OriginalTitles { get; } = new() { String.Empty };
 
     public ImmutableList<TitleRequest> ToTitleRequests(IEnumerable<string> titles) =>
         titles.Select((title, index) => new TitleRequest(title, index + 1)).ToImmutableList();

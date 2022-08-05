@@ -6,17 +6,8 @@
         <SeasonForm Season="@model.BackingModel" FormModel="@model" Close="@this.Close" />
         break;
     default:
-        <SeriesMainForm ListId="@this.ListId" ListItem="@this.ListItem" Close="@this.Close" />
+        <SeriesMainForm FormTitle="@this.FormTitle" FormTitleUpdated="@this.UpdateFormTitle" FormModel="@this.FormModel"
+                        ListId="@this.ListId" ListItem="@this.ListItem" Save="@this.Save" Cancel="@this.Cancel"
+                        Close="@this.Close" />
         break;
-}
-
-@code {
-    [Parameter]
-    public Guid ListId { get; set; }
-
-    [Parameter]
-    public ListItemModel? ListItem { get; set; }
-
-    [Parameter]
-    public EventCallback Close { get; set; }
 }

@@ -1,9 +1,14 @@
 namespace Cineaste.Client.FormModels;
 
+using static Cineaste.Basic.Constants;
+
 public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest>
 {
     private readonly ListKindModel defaultKind;
     private readonly ObservableCollection<ISeriesComponentFormModel> components = new();
+
+    private readonly string defaultSeasonTitle;
+    private readonly string defaultSeasonOriginalTitle;
 
     public SeriesWatchStatus WatchStatus { get; set; }
     public SeriesReleaseStatus ReleaseStatus { get; set; }
@@ -15,9 +20,14 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
     public string ImdbId { get; set; } = String.Empty;
     public string RottenTomatoesId { get; set; } = String.Empty;
 
-    public SeriesFormModel(IReadOnlyCollection<ListKindModel> availableKinds)
+    public SeriesFormModel(
+        IReadOnlyCollection<ListKindModel> availableKinds,
+        string defaultSeasonTitle,
+        string defaultSeasonOriginalTitle)
     {
         ArgumentNullException.ThrowIfNull(availableKinds);
+        ArgumentNullException.ThrowIfNull(defaultSeasonTitle);
+        ArgumentNullException.ThrowIfNull(defaultSeasonOriginalTitle);
 
         if (availableKinds.Count == 0)
         {
@@ -28,11 +38,22 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
         this.Kind = this.defaultKind;
 
         this.Components = new(this.components);
+
+        this.defaultSeasonTitle = defaultSeasonTitle;
+        this.defaultSeasonOriginalTitle = defaultSeasonOriginalTitle;
     }
 
     public SeasonFormModel AddSeason()
     {
-        var season = new SeasonFormModel(this.GetNextSequenceNumber);
+        int lastYear = this.GetLastYear();
+        string seasonNumber = (this.components.OfType<SeasonFormModel>().Count() + 1).ToString();
+
+        var season = new SeasonFormModel(
+            this.defaultSeasonTitle.Replace(SeasonTitleNumberPlaceholder, seasonNumber),
+            this.defaultSeasonOriginalTitle.Replace(SeasonTitleNumberPlaceholder, seasonNumber),
+            new DateTime(lastYear + 1, 1, 1),
+            this.GetNextSequenceNumber);
+
         this.components.Add(season);
 
         return season;
@@ -85,4 +106,20 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
 
     private int GetNextSequenceNumber() =>
         this.components.Max(c => c.SequenceNumber) + 1;
+
+    private int GetLastYear()
+    {
+        if (this.components.Count == 0)
+        {
+            return DateTime.Now.Year - 1;
+        }
+
+        return this.components
+            .Max(component => component switch
+            {
+                SeasonFormModel season => season.Periods.Max(period => period.EndYear),
+                SpecialEpisodeFormModel episode => episode.Year,
+                _ => Match.ImpossibleType<int>(component)
+            });
+    }
 }

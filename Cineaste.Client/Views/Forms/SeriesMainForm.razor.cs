@@ -13,9 +13,20 @@ public partial class SeriesMainForm
     [Parameter]
     public EventCallback Close { get; set; }
 
-    private string FormTitle { get; set; } = String.Empty;
+    [Parameter]
+    public SeriesFormModel FormModel { get; set; } = null!;
 
-    private SeriesFormModel FormModel { get; set; } = null!;
+    [Parameter]
+    public string FormTitle { get; set; } = String.Empty;
+
+    [Parameter]
+    public EventCallback FormTitleUpdated { get; set; }
+
+    [Parameter]
+    public EventCallback Save { get; set; }
+
+    [Parameter]
+    public EventCallback Cancel { get; set; }
 
     private ImmutableArray<SeriesWatchStatus> AllWatchStatuses { get; } =
         Enum.GetValues<SeriesWatchStatus>().ToImmutableArray();
@@ -23,43 +34,26 @@ public partial class SeriesMainForm
     private ImmutableArray<SeriesReleaseStatus> AllReleaseStatuses { get; } =
         Enum.GetValues<SeriesReleaseStatus>().ToImmutableArray();
 
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-
-        this.FormModel = new(this.State.Value.AvailableKinds);
-        this.SetPropertyValues();
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-
-        if (firstRender)
-        {
-            this.SubsribeToSuccessfulResult<FetchSeriesResultAction>(this.SetPropertyValues);
-        }
-    }
-
     private void FetchSeries()
     {
         if (this.ListItem != null)
         {
-            this.Dispatcher.Dispatch(new FetchSeriesAction(this.ListItem.Id, this.State.Value.AvailableKinds));
+            this.Dispatcher.Dispatch(new FetchSeriesAction(
+                this.ListItem.Id, this.State.Value.AvailableKinds, this.State.Value.ListConfiguration));
         }
-    }
-
-    private void SetPropertyValues()
-    {
-        this.FormModel.CopyFrom(this.State.Value.Model);
-        this.UpdateFormTitle();
     }
 
     private void AddTitle(ObservableCollection<string> titles) =>
         titles.Add(String.Empty);
 
-    private void UpdateFormTitle() =>
-        this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
+    private void AddSeason()
+    {
+        var season = this.FormModel.AddSeason();
+        this.OpenSeriesComponentForm(season);
+    }
+
+    private async Task UpdateFormTitle() =>
+        await this.FormTitleUpdated.InvokeAsync();
 
     private void OpenSeriesComponentForm(ISeriesComponentFormModel component) =>
         this.Dispatcher.Dispatch(new OpenSeriesComponentFormAction(component));
@@ -69,12 +63,6 @@ public partial class SeriesMainForm
 
     private bool HasRottenTomatoesId() =>
         !String.IsNullOrEmpty(this.FormModel.RottenTomatoesId);
-
-    private void Save()
-    { }
-
-    private void Cancel() =>
-        this.SetPropertyValues();
 
     private async Task Delete()
     {

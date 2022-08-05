@@ -8,7 +8,12 @@ public static class OpenSeriesFormReducers
     public static SeriesFormState ReduceStartCreatingSeriesAction(
         SeriesFormState _,
         StartCreatingSeriesAction action) =>
-        new() { Fetch = ApiCall.Success(), AvailableKinds = action.AvailableKinds };
+        new()
+        {
+            Fetch = ApiCall.Success(),
+            AvailableKinds = action.AvailableKinds,
+            ListConfiguration = action.ListConfiguration
+        };
 }
 
 [AutoConstructor]
@@ -21,7 +26,7 @@ public sealed partial class OpenSeriesFormEffect
     {
         if (state.Value.Model?.Id != action.Item.Id && action.Item.Type == ListItemType.Series)
         {
-            dispatcher.Dispatch(new FetchSeriesAction(action.Item.Id, action.AvailableKinds));
+            dispatcher.Dispatch(new FetchSeriesAction(action.Item.Id, action.AvailableKinds, action.ListConfiguration));
         }
 
         return Task.CompletedTask;

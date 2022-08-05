@@ -16,6 +16,8 @@ public sealed record ListPageState
     public ImmutableList<ListKindModel> AvailableMovieKinds { get; init; } = ImmutableList.Create<ListKindModel>();
     public ImmutableList<ListKindModel> AvailableSeriesKinds { get; init; } = ImmutableList.Create<ListKindModel>();
 
+    public ListConfigurationModel ListConfiguration { get; init; } = null!;
+
     public ListItemModel? SelectedItem { get; init; }
     public ListPageSelectionMode SelectionMode { get; init; }
 

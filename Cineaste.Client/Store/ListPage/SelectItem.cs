@@ -1,10 +1,15 @@
 namespace Cineaste.Client.Store.ListPage;
 
-public sealed record SelectItemAction(ListItemModel Item, ImmutableList<ListKindModel> AvailableKinds);
+public sealed record SelectItemAction(
+    ListItemModel Item,
+    ImmutableList<ListKindModel> AvailableKinds,
+    ListConfigurationModel ListConfiguration);
 
 public sealed record StartCreatingMovieAction(ImmutableList<ListKindModel> AvailableKinds);
 
-public sealed record StartCreatingSeriesAction(ImmutableList<ListKindModel> AvailableKinds);
+public sealed record StartCreatingSeriesAction(
+    ImmutableList<ListKindModel> AvailableKinds,
+    ListConfigurationModel ListConfiguration);
 
 public sealed record CloseItemAction;
 

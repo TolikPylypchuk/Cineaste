@@ -3,7 +3,11 @@ namespace Cineaste.Client.FormModels;
 public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, SeasonRequest>
 {
     private readonly Func<int> getDefaultSequenceNumber;
-    public readonly ObservableCollection<PeriodFormModel> periods = new() { new() };
+    private readonly ObservableCollection<PeriodFormModel> periods;
+
+    private readonly string defaultTitle;
+    private readonly string defaultOriginalTitle;
+    private readonly DateTime defaultDate;
 
     public SeasonWatchStatus WatchStatus { get; set; }
     public SeasonReleaseStatus ReleaseStatus { get; set; }
@@ -22,9 +26,24 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
         }
     }
 
-    public SeasonFormModel(Func<int> getDefaultSequenceNumber)
+    public SeasonFormModel(string title, string originalTitle, Func<int> getDefaultSequenceNumber)
+        : this(title, originalTitle, DateTime.Now, getDefaultSequenceNumber)
+    { }
+
+    public SeasonFormModel(string title, string originalTitle, DateTime date, Func<int> getDefaultSequenceNumber)
     {
+        this.defaultTitle = title;
+        this.Titles.Clear();
+        this.Titles.Add(title);
+
+        this.defaultOriginalTitle = originalTitle;
+        this.OriginalTitles.Clear();
+        this.Titles.Add(originalTitle);
+
+        this.defaultDate = date;
         this.getDefaultSequenceNumber = getDefaultSequenceNumber;
+
+        this.periods = new() { new(date) };
         this.Periods = new(this.periods);
     }
 
@@ -52,6 +71,16 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
 
         this.CopyTitles(season);
 
+        if (this.Titles.Count == 0)
+        {
+            this.Titles.Add(this.defaultTitle);
+        }
+
+        if (this.OriginalTitles.Count == 0)
+        {
+            this.OriginalTitles.Add(this.defaultOriginalTitle);
+        }
+
         this.WatchStatus = season?.WatchStatus ?? SeasonWatchStatus.NotWatched;
         this.ReleaseStatus = season?.ReleaseStatus ?? SeasonReleaseStatus.NotStarted;
         this.Channel = season?.Channel ?? String.Empty;
@@ -69,7 +98,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
             }
         } else
         {
-            this.periods.Add(new());
+            this.periods.Add(new(this.defaultDate));
         }
     }
 }

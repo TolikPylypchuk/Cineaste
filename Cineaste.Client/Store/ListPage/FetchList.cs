@@ -1,5 +1,3 @@
-using Cineaste.Shared.Mapping;
-
 namespace Cineaste.Client.Store.ListPage;
 
 public sealed record FetchListAction(string Handle);
@@ -25,6 +23,7 @@ public static class FetchListReducers
                     Container = ListItemContainer.Create(list),
                     AvailableMovieKinds = list.MovieKinds,
                     AvailableSeriesKinds = list.SeriesKinds,
+                    ListConfiguration = list.Config
                 },
             onFailure: problem => new() { IsLoaded = true, Problem = problem });
 }
