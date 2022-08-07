@@ -73,6 +73,7 @@ public partial class MovieForm
     {
         this.FormModel.CopyFrom(this.State.Value.Model);
         this.UpdateFormTitle();
+        this.OnYearChanged();
     }
 
     private void AddTitle(ObservableCollection<string> titles) =>

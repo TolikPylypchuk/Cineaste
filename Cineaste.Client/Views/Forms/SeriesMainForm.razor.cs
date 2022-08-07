@@ -52,6 +52,12 @@ public partial class SeriesMainForm
         this.OpenSeriesComponentForm(season);
     }
 
+    private void AddSpecialEpisode()
+    {
+        var episode = this.FormModel.AddSpecialEpisode();
+        this.OpenSeriesComponentForm(episode);
+    }
+
     private async Task UpdateFormTitle() =>
         await this.FormTitleUpdated.InvokeAsync();
 

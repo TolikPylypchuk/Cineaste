@@ -17,8 +17,8 @@
                          Problem="@this.State.Value.Fetch.Problem" Class="w-100" />
     } else
     {
-        <h1 style="font-weight: 300">
-            @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem != null
+        <h1 class="form-title">
+            @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem is not null
                 ? this.FormTitle
                 : this.Loc["MovieForm.NewMovie"])
         </h1>
@@ -38,8 +38,7 @@
                         <RadzenLink Path="@String.Format(
                                         this.Loc["Link.RottenTomatoesUrlFormat"], this.FormModel.RottenTomatoesId)"
                                     Text="@this.Loc["Link.RottenTomatoes"]" target="_blank"
-                                    class="@($"{(this.HasImdbId() ? "me-md-2" : "")}")">
-                        </RadzenLink>
+                                    class="@($"{(this.HasImdbId() ? "me-md-2" : "")}")" />
                     }
                 </div>
 

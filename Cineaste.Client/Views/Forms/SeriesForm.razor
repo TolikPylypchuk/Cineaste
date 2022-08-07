@@ -2,6 +2,10 @@
 
 @switch (this.State.Value.SelectedSeriesComponent)
 {
+    case SpecialEpisodeFormModel model:
+        <SpecialEpisodeForm Episode="@model.BackingModel" FormModel="@model" Close="@this.Close"
+                            Delete="@(() => this.RemoveComponent(model))" />
+        break;
     case SeasonFormModel model:
         <SeasonForm Season="@model.BackingModel" FormModel="@model" Close="@this.Close"
                     Delete="@(() => this.RemoveComponent(model))" />

@@ -50,3 +50,7 @@ a {
 .overflow-y-auto {
     overflow-y: auto;
 }
+
+.form-title {
+    font-weight: 300;
+}

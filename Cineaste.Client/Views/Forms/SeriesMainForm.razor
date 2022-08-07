@@ -17,7 +17,7 @@
                          Problem="@this.State.Value.Fetch.Problem" Class="w-100" />
     } else
     {
-        <h1 style="font-weight: 300">
+        <h1 class="form-title">
             @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem != null
                 ? this.FormTitle
                 : this.Loc["SeriesForm.NewSeries"])

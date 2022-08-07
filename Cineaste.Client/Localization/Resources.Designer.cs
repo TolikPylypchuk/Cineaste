@@ -1294,6 +1294,114 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add original title.
+        /// </summary>
+        public static string SpecialEpisodeForm_AddOriginalTitle {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.AddOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add title.
+        /// </summary>
+        public static string SpecialEpisodeForm_AddTitle {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.AddTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chanel.
+        /// </summary>
+        public static string SpecialEpisodeForm_Channel {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to series.
+        /// </summary>
+        public static string SpecialEpisodeForm_GoToSeries {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.GoToSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month.
+        /// </summary>
+        public static string SpecialEpisodeForm_Month {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.Month", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Special Episode.
+        /// </summary>
+        public static string SpecialEpisodeForm_NewSpecialEpisode {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.NewSpecialEpisode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original titles.
+        /// </summary>
+        public static string SpecialEpisodeForm_OriginalTitles {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.OriginalTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes ID.
+        /// </summary>
+        public static string SpecialEpisodeForm_RottenTomatoesId {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.RottenTomatoesId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titles.
+        /// </summary>
+        public static string SpecialEpisodeForm_Titles {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.Titles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string SpecialEpisodeForm_Year {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is released.
+        /// </summary>
+        public static string SpeicalEpisodeForm_IsReleased {
+            get {
+                return ResourceManager.GetString("SpeicalEpisodeForm.IsReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is watched.
+        /// </summary>
+        public static string SpeicalEpisodeForm_IsWatched {
+            get {
+                return ResourceManager.GetString("SpeicalEpisodeForm.IsWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The language is invalid.
         /// </summary>
         public static string Validation_CreateList_Culture_Invalid {
