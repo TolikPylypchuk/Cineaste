@@ -79,16 +79,35 @@
                                 AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
                                 Name="KindDropDown" TextProperty="Name" class="w-100" />
 
-                <RadzenDataList WrapItems="true" Data="@this.FormModel.Components" class="overflow-auto w-100 mt-1">
+                <RadzenDataList WrapItems="true" Data="@this.FormModel.Components" class="overflow-visible w-100 mt-1">
                     <Template Context="component">
                         <div class="list-item-container d-flex flex-row justify-content-between border-bottom"
                              role="button" @onclick="() => this.OpenSeriesComponentForm(component)">
                             <p class="m-0">@component.Title</p>
                             <div class="d-flex flex-row">
                                 <p class="m-0">@component.Years</p>
-                                <div role="button" class="ms-1">
-                                    <RadzenIcon Icon="more_vert" class="m-0" />
-                                </div>
+                                @if (this.FormModel.Components.Count > 1)
+                                {
+                                    <div role="button" class="ms-1">
+                                        <RadzenMenu>
+                                            <RadzenMenuItem>
+                                                @if (this.CanMoveComponentUp(component))
+                                                {
+                                                    <RadzenMenuItem Text="@this.Loc["SeriesForm.Component.MoveUp"]"
+                                                                    Click="@(e => this.MoveComponentUp(component))"
+                                                                    Icon="keyboard_arrow_up" />
+                                                }
+
+                                                @if (this.CanMoveComponentDown(component))
+                                                {
+                                                    <RadzenMenuItem Text="@this.Loc["SeriesForm.Component.MoveDown"]"
+                                                                    Click="@(e => this.MoveComponentDown(component))"
+                                                                    Icon="keyboard_arrow_down" />
+                                                }
+                                            </RadzenMenuItem>
+                                        </RadzenMenu>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </Template>
@@ -96,9 +115,9 @@
 
                 <div class="d-flex justify-content-center">
                     <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
-                        <RadzenButton Text="@this.Loc["SeriesForm.AddSeason"]" ButtonStyle="ButtonStyle.Secondary"
-                                      Click="@this.AddSeason" class="d-inline-block me-1" />
-                        <RadzenButton Text="@this.Loc["SeriesForm.AddSpecialEpisode"]"
+                        <RadzenButton Text="@this.Loc["SeriesForm.AddSeason"]" Click="@this.AddSeason"
+                                      ButtonStyle="ButtonStyle.Secondary" class="d-inline-block me-1" />
+                        <RadzenButton Text="@this.Loc["SeriesForm.AddSpecialEpisode"]" Click="@this.AddSpecialEpisode"
                                       ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1" />
                     </div>
                 </div>

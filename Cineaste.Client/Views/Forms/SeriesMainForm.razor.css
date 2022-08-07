@@ -11,3 +11,12 @@
     margin: 0;
     padding: 0.5rem;
 }
+
+::deep .rz-menu > .rz-navigation-item {
+    justify-items: flex-end;
+    direction: rtl;
+}
+
+::deep .rz-menu > .rz-navigation-item > .rz-navigation-item-wrapper > .rz-navigation-item-link {
+    padding: 0 !important;
+}

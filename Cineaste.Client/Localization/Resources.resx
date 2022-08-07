@@ -453,6 +453,12 @@
   <data name="SeriesForm.AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>
+  <data name="SeriesForm.Component.MoveDown" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="SeriesForm.Component.MoveUp" xml:space="preserve">
+    <value>Move up</value>
+  </data>
   <data name="SeriesForm.DeleteDialog.Body" xml:space="preserve">
     <value>Are you sure you want to delete this series?</value>
   </data>

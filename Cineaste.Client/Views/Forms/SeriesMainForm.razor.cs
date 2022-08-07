@@ -58,6 +58,18 @@ public partial class SeriesMainForm
         this.OpenSeriesComponentForm(episode);
     }
 
+    private bool CanMoveComponentUp(ISeriesComponentFormModel component) =>
+        component.SequenceNumber != 1;
+
+    private void MoveComponentUp(ISeriesComponentFormModel component) =>
+        this.FormModel.MoveComponentUp(component);
+
+    private bool CanMoveComponentDown(ISeriesComponentFormModel component) =>
+        component.SequenceNumber != this.FormModel.Components.Count;
+
+    private void MoveComponentDown(ISeriesComponentFormModel component) =>
+        this.FormModel.MoveComponentDown(component);
+
     private async Task UpdateFormTitle() =>
         await this.FormTitleUpdated.InvokeAsync();
 

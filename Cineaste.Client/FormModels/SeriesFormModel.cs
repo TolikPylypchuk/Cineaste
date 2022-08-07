@@ -59,15 +59,51 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
         return season;
     }
 
-    public void RemoveComponent(ISeriesComponentFormModel component) =>
-        this.components.Remove(component);
-
     public SpecialEpisodeFormModel AddSpecialEpisode()
     {
         var episode = new SpecialEpisodeFormModel(this.GetNextSequenceNumber);
         this.components.Add(episode);
 
         return episode;
+    }
+
+    public void RemoveComponent(ISeriesComponentFormModel component) =>
+        this.components.Remove(component);
+
+    public void MoveComponentUp(ISeriesComponentFormModel component)
+    {
+        if (component.SequenceNumber == 1)
+        {
+            return;
+        }
+
+        int index = component.SequenceNumber - 1;
+
+        var previousComponent = this.components[index - 1];
+
+        previousComponent.SequenceNumber++;
+        component.SequenceNumber--;
+
+        this.components[index - 1] = component;
+        this.components[index] = previousComponent;
+    }
+
+    public void MoveComponentDown(ISeriesComponentFormModel component)
+    {
+        if (component.SequenceNumber == this.components.Count)
+        {
+            return;
+        }
+
+        int index = component.SequenceNumber - 1;
+
+        var nextComponent = this.components[index + 1];
+
+        nextComponent.SequenceNumber--;
+        component.SequenceNumber++;
+
+        this.components[index + 1] = component;
+        this.components[index] = nextComponent;
     }
 
     protected override void CopyFromModel()
@@ -102,7 +138,7 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
     }
 
     private int GetNextSequenceNumber() =>
-        this.components.Max(c => c.SequenceNumber) + 1;
+        (this.components.Max(c => c.SequenceNumber as int?) ?? 0) + 1;
 
     private int GetLastYear()
     {

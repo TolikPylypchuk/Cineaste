@@ -1069,6 +1069,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move down.
+        /// </summary>
+        public static string SeriesForm_Component_MoveDown {
+            get {
+                return ResourceManager.GetString("SeriesForm.Component.MoveDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move up.
+        /// </summary>
+        public static string SeriesForm_Component_MoveUp {
+            get {
+                return ResourceManager.GetString("SeriesForm.Component.MoveUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this series?.
         /// </summary>
         public static string SeriesForm_DeleteDialog_Body {
