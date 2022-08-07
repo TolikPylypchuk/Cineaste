@@ -53,6 +53,12 @@
 
     private bool CanChangeIsSingleDayRelease { get; set; }
 
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        this.OnPeriodChanged();
+    }
+
     private void OnPeriodChanged() =>
         this.CanChangeIsSingleDayRelease =
             this.FormModel.StartMonth == this.FormModel.EndMonth &&

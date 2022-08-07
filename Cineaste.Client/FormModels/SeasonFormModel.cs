@@ -7,12 +7,11 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
 
     private readonly string defaultTitle;
     private readonly string defaultOriginalTitle;
-    private readonly DateTime defaultDate;
+    private readonly DateOnly defaultDate;
+    private readonly string defaultChannel;
 
     public SeasonWatchStatus WatchStatus { get; set; }
     public SeasonReleaseStatus ReleaseStatus { get; set; }
-
-    public string Channel { get; set; } = String.Empty;
 
     public ReadOnlyObservableCollection<PeriodFormModel> Periods { get; }
 
@@ -26,11 +25,16 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
         }
     }
 
-    public SeasonFormModel(string title, string originalTitle, Func<int> getDefaultSequenceNumber)
-        : this(title, originalTitle, DateTime.Now, getDefaultSequenceNumber)
+    public SeasonFormModel(string title, string originalTitle, string channel, Func<int> getDefaultSequenceNumber)
+        : this(title, originalTitle, DateOnly.FromDateTime(DateTime.Now), channel, getDefaultSequenceNumber)
     { }
 
-    public SeasonFormModel(string title, string originalTitle, DateTime date, Func<int> getDefaultSequenceNumber)
+    public SeasonFormModel(
+        string title,
+        string originalTitle,
+        DateOnly date,
+        string channel,
+        Func<int> getDefaultSequenceNumber)
     {
         this.defaultTitle = title;
         this.Titles.Clear();
@@ -39,6 +43,8 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
         this.defaultOriginalTitle = originalTitle;
         this.OriginalTitles.Clear();
         this.Titles.Add(originalTitle);
+
+        this.Channel = this.defaultChannel = channel;
 
         this.defaultDate = date;
         this.getDefaultSequenceNumber = getDefaultSequenceNumber;
@@ -54,7 +60,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
             .ThenByDescending(period => period.EndMonth)
             .First();
 
-        this.periods.Add(new PeriodFormModel(new DateTime(lastPeriod.EndYear + 1, lastPeriod.StartMonth, 1)));
+        this.periods.Add(new PeriodFormModel(new DateOnly(lastPeriod.EndYear + 1, lastPeriod.StartMonth, 1)));
     }
 
     public void RemovePeriod(PeriodFormModel period)
@@ -69,21 +75,11 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
     {
         var season = this.BackingModel;
 
-        this.CopyTitles(season);
-
-        if (this.Titles.Count == 0)
-        {
-            this.Titles.Add(this.defaultTitle);
-        }
-
-        if (this.OriginalTitles.Count == 0)
-        {
-            this.OriginalTitles.Add(this.defaultOriginalTitle);
-        }
+        this.CopyTitles(season, this.defaultTitle, this.defaultOriginalTitle);
 
         this.WatchStatus = season?.WatchStatus ?? SeasonWatchStatus.NotWatched;
         this.ReleaseStatus = season?.ReleaseStatus ?? SeasonReleaseStatus.NotStarted;
-        this.Channel = season?.Channel ?? String.Empty;
+        this.Channel = season?.Channel ?? this.defaultChannel;
         this.SequenceNumber = season?.SequenceNumber ?? this.getDefaultSequenceNumber();
 
         this.periods.Clear();

@@ -51,7 +51,8 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
         var season = new SeasonFormModel(
             this.defaultSeasonTitle.Replace(SeasonTitleNumberPlaceholder, seasonNumber),
             this.defaultSeasonOriginalTitle.Replace(SeasonTitleNumberPlaceholder, seasonNumber),
-            new DateTime(lastYear + 1, 1, 1),
+            new DateOnly(lastYear + 1, 1, 1),
+            this.components.Count > 0 ? this.components[^1].Channel : String.Empty,
             this.GetNextSequenceNumber);
 
         this.components.Add(season);
@@ -61,7 +62,13 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
 
     public SpecialEpisodeFormModel AddSpecialEpisode()
     {
-        var episode = new SpecialEpisodeFormModel(this.GetNextSequenceNumber);
+        int lastYear = this.GetLastYear();
+
+        var episode = new SpecialEpisodeFormModel(
+            new DateOnly(lastYear + 1, 1, 1),
+            this.components.Count > 0 ? this.components[^1].Channel : String.Empty,
+            this.GetNextSequenceNumber);
+
         this.components.Add(episode);
 
         return episode;

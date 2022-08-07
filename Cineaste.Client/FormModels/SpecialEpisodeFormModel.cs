@@ -4,10 +4,11 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
 {
     private readonly Func<int> getDefaultSequenceNumber;
 
+    private readonly DateOnly defaultDate;
+    private readonly string defaultChannel;
+
     public bool IsWatched { get; set; }
     public bool IsReleased { get; set; }
-
-    public string Channel { get; set; } = String.Empty;
 
     public int Month { get; set; }
     public int Year { get; set; }
@@ -17,8 +18,19 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
     public override string Years =>
         this.Year.ToString();
 
-    public SpecialEpisodeFormModel(Func<int> getDefaultSequenceNumber) =>
+    public SpecialEpisodeFormModel(string channel, Func<int> getDefaultSequenceNumber)
+        : this(DateOnly.FromDateTime(DateTime.Now), channel, getDefaultSequenceNumber)
+    { }
+
+    public SpecialEpisodeFormModel(DateOnly date, string channel, Func<int> getDefaultSequenceNumber)
+    {
+        this.Titles.Add(String.Empty);
+        this.OriginalTitles.Add(String.Empty);
+
+        this.defaultDate = date;
+        this.Channel = this.defaultChannel = channel;
         this.getDefaultSequenceNumber = getDefaultSequenceNumber;
+    }
 
     protected override void CopyFromModel()
     {
@@ -29,12 +41,10 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
         this.IsWatched = episode?.IsWatched ?? false;
         this.IsReleased = episode?.IsReleased ?? true;
 
-        this.Channel = episode?.Channel ?? String.Empty;
+        this.Channel = episode?.Channel ?? this.defaultChannel;
 
-        var today = DateTime.Now;
-
-        this.Month = episode?.Month ?? today.Month;
-        this.Year = episode?.Year ?? today.Year;
+        this.Month = episode?.Month ?? this.defaultDate.Month;
+        this.Year = episode?.Year ?? this.defaultDate.Year;
 
         this.RottenTomatoesId = episode?.RottenTomatoesId ?? String.Empty;
         this.SequenceNumber = episode?.SequenceNumber ?? this.getDefaultSequenceNumber();

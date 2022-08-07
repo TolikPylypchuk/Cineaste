@@ -96,7 +96,7 @@ internal sealed class TestDataProvider
 
         var season1 = new Season(
             Id.CreateNew<Season>(),
-            new List<Title> { new("Season 1", 1, false), new("Season 2", 1, true) },
+            new List<Title> { new("Season 1", 1, false), new("Season 1", 1, true) },
             SeasonWatchStatus.Watched,
             SeasonReleaseStatus.Finished,
             channel,

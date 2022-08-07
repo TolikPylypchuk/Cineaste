@@ -2,6 +2,8 @@ namespace Cineaste.Client.FormModels;
 
 public sealed class PeriodFormModel : FormModel<PeriodModel, PeriodRequest>
 {
+    private DateOnly defaultDate;
+
     public int StartMonth { get; set; }
     public int StartYear { get; set; }
 
@@ -14,11 +16,13 @@ public sealed class PeriodFormModel : FormModel<PeriodModel, PeriodRequest>
     public string RottenTomatoesId { get; set; }
 
     public PeriodFormModel()
-        : this(DateTime.Now)
+        : this(DateOnly.FromDateTime(DateTime.Now))
     { }
 
-    public PeriodFormModel(DateTime date)
+    public PeriodFormModel(DateOnly date)
     {
+        this.defaultDate = date;
+
         this.StartMonth = date.Month;
         this.StartYear = date.Year;
 
@@ -32,13 +36,12 @@ public sealed class PeriodFormModel : FormModel<PeriodModel, PeriodRequest>
     protected override void CopyFromModel()
     {
         var period = this.BackingModel;
-        var today = DateTime.Now;
 
-        this.StartMonth = period?.StartMonth ?? today.Month;
-        this.StartYear = period?.StartYear ?? today.Year;
+        this.StartMonth = period?.StartMonth ?? this.defaultDate.Month;
+        this.StartYear = period?.StartYear ?? this.defaultDate.Year;
 
-        this.EndMonth = period?.EndMonth ?? today.Month;
-        this.EndYear = period?.EndYear ?? today.Year;
+        this.EndMonth = period?.EndMonth ?? this.defaultDate.Month;
+        this.EndYear = period?.EndYear ?? this.defaultDate.Year;
 
         this.EpisodeCount = period?.EpisodeCount ?? 1;
         this.IsSingleDayRelease = period?.IsSingleDayRelease ?? false;
