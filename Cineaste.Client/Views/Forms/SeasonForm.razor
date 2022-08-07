@@ -2,10 +2,11 @@
 
 <div class="d-flex flex-column h-100">
     <div class="d-flex flex-row justify-content-between">
-        <div></div>
+        <RadzenButton Icon="keyboard_arrow_up" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                      Click="this.GoToSeries" class="btn-transparent my-2" />
         <div></div>
         <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
-                      class="my-2" />
+                      class="btn-transparent my-2" />
     </div>
 
     <h1 class="form-title">
@@ -63,7 +64,7 @@
                 </div>
             </div>
 
-            <RadzenLabel Text="@this.Loc["SeasonForm.Channel"]" Component="ChannelTextBox" class="mt-2" />
+            <RadzenLabel Text="@this.Loc["SeasonForm.Channel"]" Component="ChannelTextBox" class="mt-1" />
             <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
 
             @foreach (var period in this.FormModel.Periods)

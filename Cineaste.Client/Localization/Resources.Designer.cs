@@ -1330,15 +1330,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Month.
-        /// </summary>
-        public static string SpecialEpisodeForm_Month {
-            get {
-                return ResourceManager.GetString("SpecialEpisodeForm.Month", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New Special Episode.
         /// </summary>
         public static string SpecialEpisodeForm_NewSpecialEpisode {
@@ -1357,6 +1348,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Release month.
+        /// </summary>
+        public static string SpecialEpisodeForm_ReleaseMonth {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.ReleaseMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release year.
+        /// </summary>
+        public static string SpecialEpisodeForm_ReleaseYear {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.ReleaseYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotten Tomatoes ID.
         /// </summary>
         public static string SpecialEpisodeForm_RottenTomatoesId {
@@ -1371,15 +1380,6 @@ namespace Cineaste.Client.Localization {
         public static string SpecialEpisodeForm_Titles {
             get {
                 return ResourceManager.GetString("SpecialEpisodeForm.Titles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Year.
-        /// </summary>
-        public static string SpecialEpisodeForm_Year {
-            get {
-                return ResourceManager.GetString("SpecialEpisodeForm.Year", resourceCulture);
             }
         }
         

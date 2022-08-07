@@ -540,23 +540,23 @@
   <data name="SpecialEpisodeForm.GoToSeries" xml:space="preserve">
     <value>Go to series</value>
   </data>
-  <data name="SpecialEpisodeForm.Month" xml:space="preserve">
-    <value>Month</value>
-  </data>
   <data name="SpecialEpisodeForm.NewSpecialEpisode" xml:space="preserve">
     <value>New Special Episode</value>
   </data>
   <data name="SpecialEpisodeForm.OriginalTitles" xml:space="preserve">
     <value>Original titles</value>
   </data>
+  <data name="SpecialEpisodeForm.ReleaseMonth" xml:space="preserve">
+    <value>Release month</value>
+  </data>
+  <data name="SpecialEpisodeForm.ReleaseYear" xml:space="preserve">
+    <value>Release year</value>
+  </data>
   <data name="SpecialEpisodeForm.RottenTomatoesId" xml:space="preserve">
     <value>Rotten Tomatoes ID</value>
   </data>
   <data name="SpecialEpisodeForm.Titles" xml:space="preserve">
     <value>Titles</value>
-  </data>
-  <data name="SpecialEpisodeForm.Year" xml:space="preserve">
-    <value>Year</value>
   </data>
   <data name="SpeicalEpisodeForm.IsReleased" xml:space="preserve">
     <value>Is released</value>

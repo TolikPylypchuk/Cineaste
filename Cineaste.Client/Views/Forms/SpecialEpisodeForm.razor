@@ -2,10 +2,11 @@
 
 <div class="d-flex flex-column h-100">
     <div class="d-flex flex-row justify-content-between">
-        <div></div>
+        <RadzenButton Icon="keyboard_arrow_up" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                      Click="this.GoToSeries" class="btn-transparent my-2" />
         <div></div>
         <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
-                      class="my-2" />
+                      class="btn-transparent my-2" />
     </div>
 
     <h1 class="form-title">
@@ -48,11 +49,11 @@
             <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
 
             <MonthYearPicker @bind-Month="this.FormModel.Month" @bind-Year="this.FormModel.Year" Class="mt-2"
-                             MonthText="SpecialEpisodeForm.Month" YearText="SpecialEpisodeForm.Year"
+                             MonthText="SpecialEpisodeForm.ReleaseMonth" YearText="SpecialEpisodeForm.ReleaseYear"
                              Changed="@this.OnMonthYearChanged" />
 
             <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox"
-                         class="mt-2" />
+                         class="mt-1" />
             <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox"
                            class="w-100" />
 

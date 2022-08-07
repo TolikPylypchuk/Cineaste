@@ -54,3 +54,7 @@ a {
 .form-title {
     font-weight: 300;
 }
+
+.btn-transparent {
+    background-color: transparent !important;
+}

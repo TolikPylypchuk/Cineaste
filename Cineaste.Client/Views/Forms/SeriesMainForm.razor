@@ -5,7 +5,7 @@
         <div></div>
         <div></div>
         <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
-                      class="my-2" />
+                      class="btn-transparent my-2" />
     </div>
 
     @if (this.State.Value.Fetch.IsInProgress)
@@ -84,7 +84,12 @@
                         <div class="list-item-container d-flex flex-row justify-content-between border-bottom"
                              role="button" @onclick="() => this.OpenSeriesComponentForm(component)">
                             <p class="m-0">@component.Title</p>
-                            <p class="m-0">@component.Years</p>
+                            <div class="d-flex flex-row">
+                                <p class="m-0">@component.Years</p>
+                                <div role="button" class="ms-1">
+                                    <RadzenIcon Icon="more_vert" class="m-0" />
+                                </div>
+                            </div>
                         </div>
                     </Template>
                 </RadzenDataList>
