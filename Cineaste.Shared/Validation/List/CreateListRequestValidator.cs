@@ -1,4 +1,4 @@
-namespace Cineaste.Shared.Validation;
+namespace Cineaste.Shared.Validation.List;
 
 using System.Collections.Immutable;
 using System.Globalization;

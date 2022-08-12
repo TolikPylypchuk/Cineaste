@@ -1,5 +1,7 @@
 namespace Cineaste.Shared.Models.List;
 
+using Cineaste.Shared.Validation.List;
+
 public sealed record CreateListRequest(
     string Name,
     string Culture,

@@ -1,5 +1,7 @@
 namespace Cineaste.Shared.Models.Movie;
 
+using Cineaste.Shared.Validation.Movie;
+
 public sealed record MovieRequest(
     Guid ListId,
     ImmutableList<TitleRequest> Titles,

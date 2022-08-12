@@ -1,4 +1,4 @@
-namespace Cineaste.Shared.Validation;
+namespace Cineaste.Shared.Validation.Movie;
 
 using System.Linq.Expressions;
 
