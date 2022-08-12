@@ -2,7 +2,7 @@ namespace Cineaste.Client.FormModels;
 
 using static Cineaste.Basic.Constants;
 
-public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest>
+public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
 {
     private readonly ListKindModel defaultKind;
     private readonly ObservableCollection<ISeriesComponentFormModel> components = new();
@@ -112,6 +112,20 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel, SeriesRequest
         this.components[index + 1] = component;
         this.components[index] = nextComponent;
     }
+
+    public SeriesRequest ToRequest(Guid listId) =>
+        new(
+            listId,
+            this.ToTitleRequests(this.Titles),
+            this.ToTitleRequests(this.OriginalTitles),
+            this.WatchStatus,
+            this.ReleaseStatus,
+            this.Kind,
+            IsMiniseries: false,
+            this.Components.OfType<SeasonFormModel>().Select(season => season.ToRequest()).ToImmutableList(),
+            this.Components.OfType<SpecialEpisodeFormModel>().Select(episode => episode.ToRequest()).ToImmutableList(),
+            this.ImdbId,
+            this.RottenTomatoesId);
 
     protected override void CopyFromModel()
     {

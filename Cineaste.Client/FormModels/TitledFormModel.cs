@@ -1,6 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public abstract class TitledFormModel<TModel, TRequest> : FormModel<TModel, TRequest>
+public abstract class TitledFormModel<TModel> : FormModel<TModel>
     where TModel : ITitledModel
 {
     public ObservableCollection<string> Titles { get; } = new() { String.Empty };

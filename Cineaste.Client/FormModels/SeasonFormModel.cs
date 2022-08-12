@@ -1,6 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, SeasonRequest>
+public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
 {
     private readonly Func<int> getDefaultSequenceNumber;
     private readonly ObservableCollection<PeriodFormModel> periods;
@@ -70,6 +70,17 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel, Seas
             this.periods.Remove(period);
         }
     }
+
+    public SeasonRequest ToRequest() =>
+        new(
+            this.BackingModel?.Id,
+            this.ToTitleRequests(this.Titles),
+            this.ToTitleRequests(this.OriginalTitles),
+            this.SequenceNumber,
+            this.WatchStatus,
+            this.ReleaseStatus,
+            this.Channel,
+            this.Periods.Select(period => period.ToRequest()).ToImmutableList());
 
     protected override void CopyFromModel()
     {

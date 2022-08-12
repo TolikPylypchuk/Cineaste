@@ -132,10 +132,10 @@ public partial class MovieForm
             if (this.ListItem is not null)
             {
                 this.Dispatcher.Dispatch(new UpdateMovieAction(
-                    this.ListItem.Id, this.FormModel.ToMovieRequest(this.ListId)));
+                    this.ListItem.Id, this.FormModel.ToRequest(this.ListId)));
             } else
             {
-                this.Dispatcher.Dispatch(new CreateMovieAction(this.FormModel.ToMovieRequest(this.ListId)));
+                this.Dispatcher.Dispatch(new CreateMovieAction(this.FormModel.ToRequest(this.ListId)));
             }
         });
 

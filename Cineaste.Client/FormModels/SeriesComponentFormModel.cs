@@ -1,7 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public abstract class SeriesComponentFormModel<TModel, TRequest>
-    : TitledFormModel<TModel, TRequest>, ISeriesComponentFormModel
+public abstract class SeriesComponentFormModel<TModel> : TitledFormModel<TModel>, ISeriesComponentFormModel
     where TModel : ISeriesComponentModel
 {
     public string Title =>

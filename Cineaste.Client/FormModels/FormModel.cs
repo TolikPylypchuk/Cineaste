@@ -1,6 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public abstract class FormModel<TModel, TRequest>
+public abstract class FormModel<TModel>
 {
     public TModel? BackingModel { get; private set; }
 

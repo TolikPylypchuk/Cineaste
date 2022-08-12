@@ -1,6 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public sealed class PeriodFormModel : FormModel<PeriodModel, PeriodRequest>
+public sealed class PeriodFormModel : FormModel<PeriodModel>
 {
     private DateOnly defaultDate;
 
@@ -32,6 +32,17 @@ public sealed class PeriodFormModel : FormModel<PeriodModel, PeriodRequest>
         this.EpisodeCount = 1;
         this.RottenTomatoesId = String.Empty;
     }
+
+    public PeriodRequest ToRequest() =>
+        new(
+            this.BackingModel?.Id,
+            this.StartMonth,
+            this.StartYear,
+            this.EndMonth,
+            this.EndYear,
+            this.EpisodeCount,
+            this.IsSingleDayRelease,
+            this.RottenTomatoesId);
 
     protected override void CopyFromModel()
     {

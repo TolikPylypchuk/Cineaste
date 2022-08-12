@@ -1,6 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEpisodeModel, SpecialEpisodeRequest>
+public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEpisodeModel>
 {
     private readonly Func<int> getDefaultSequenceNumber;
 
@@ -31,6 +31,19 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
         this.Channel = this.defaultChannel = channel;
         this.getDefaultSequenceNumber = getDefaultSequenceNumber;
     }
+
+    public SpecialEpisodeRequest ToRequest() =>
+        new(
+            this.BackingModel?.Id,
+            this.ToTitleRequests(this.Titles),
+            this.ToTitleRequests(this.OriginalTitles),
+            this.SequenceNumber,
+            this.IsWatched,
+            this.IsReleased,
+            this.Channel,
+            this.Month,
+            this.Year,
+            this.RottenTomatoesId);
 
     protected override void CopyFromModel()
     {

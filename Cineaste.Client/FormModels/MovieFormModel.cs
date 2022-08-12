@@ -1,6 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public sealed class MovieFormModel : TitledFormModel<MovieModel, MovieRequest>
+public sealed class MovieFormModel : TitledFormModel<MovieModel>
 {
     private readonly ListKindModel defaultKind;
 
@@ -27,7 +27,7 @@ public sealed class MovieFormModel : TitledFormModel<MovieModel, MovieRequest>
         this.Kind = this.defaultKind;
     }
 
-    public MovieRequest ToMovieRequest(Guid listId) =>
+    public MovieRequest ToRequest(Guid listId) =>
         new(
             listId,
             this.ToTitleRequests(this.Titles),
