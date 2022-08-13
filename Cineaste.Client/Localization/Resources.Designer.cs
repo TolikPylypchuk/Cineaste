@@ -1492,6 +1492,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The release value is invalid.
+        /// </summary>
+        public static string Validation_Movie_IsReleased_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Movie.IsReleased.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A non-released movie cannot be watched.
+        /// </summary>
+        public static string Validation_Movie_IsWatched_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Movie.IsWatched.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The original titles must all be different.
         /// </summary>
         public static string Validation_Movie_OriginalTitles_Distinct_Names {
@@ -1524,6 +1542,267 @@ namespace Cineaste.Client.Localization {
         public static string Validation_Movie_Year_TooLow {
             get {
                 return ResourceManager.GetString("Validation.Movie.Year.TooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The end month is invalid.
+        /// </summary>
+        public static string Validation_Period_EndMonth_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Period.EndMonth.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The end year must be after 1900.
+        /// </summary>
+        public static string Validation_Period_EndYear_TooLow {
+            get {
+                return ResourceManager.GetString("Validation.Period.EndYear.TooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The episode count is invalid.
+        /// </summary>
+        public static string Validation_Period_EpisodeCount_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Period.EpisodeCount.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period is invalid.
+        /// </summary>
+        public static string Validation_Period_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Period.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The start and end dates must be the same.
+        /// </summary>
+        public static string Validation_Period_IsSingleDayRelease_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Period.IsSingleDayRelease.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period must be a single-day release.
+        /// </summary>
+        public static string Validation_Period_IsSingleDayRelease_MustBeTrue {
+            get {
+                return ResourceManager.GetString("Validation.Period.IsSingleDayRelease.MustBeTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Rotten Tomatoes ID must start with &apos;m/&apos; or &apos;tv/&apos;.
+        /// </summary>
+        public static string Validation_Period_RottenTomatoesId_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Period.RottenTomatoesId.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The start month is invalid.
+        /// </summary>
+        public static string Validation_Period_StartMonth_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Period.StartMonth.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The start year must be after 1900.
+        /// </summary>
+        public static string Validation_Period_StartYear_TooLow {
+            get {
+                return ResourceManager.GetString("Validation.Period.StartYear.TooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The channel is empty.
+        /// </summary>
+        public static string Validation_Season_Channel_Empty {
+            get {
+                return ResourceManager.GetString("Validation.Season.Channel.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The channel is too long.
+        /// </summary>
+        public static string Validation_Season_Channel_TooLong {
+            get {
+                return ResourceManager.GetString("Validation.Season.Channel.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The periods are absent.
+        /// </summary>
+        public static string Validation_Season_Periods_Empty {
+            get {
+                return ResourceManager.GetString("Validation.Season.Periods.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The periods must not overlap.
+        /// </summary>
+        public static string Validation_Season_Periods_Overlap {
+            get {
+                return ResourceManager.GetString("Validation.Season.Periods.Overlap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The release status is invalid.
+        /// </summary>
+        public static string Validation_Season_ReleaseStatus_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Season.ReleaseStatus.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The titles must all be different.
+        /// </summary>
+        public static string Validation_Season_Titles_Distinct_Names {
+            get {
+                return ResourceManager.GetString("Validation.Season.Titles.Distinct.Names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The watch status is invalid.
+        /// </summary>
+        public static string Validation_Season_WatchStatus_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Season.WatchStatus.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The IMDb ID must be in the form &apos;tt[digits]&apos; e.g. &apos;tt123456&apos;.
+        /// </summary>
+        public static string Validation_Series_ImdbId_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Series.ImdbId.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A miniseries must only contain one season with one period.
+        /// </summary>
+        public static string Validation_Series_IsMiniseries_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Series.IsMiniseries.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The release status is invalid.
+        /// </summary>
+        public static string Validation_Series_ReleaseStatus_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Series.ReleaseStatus.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Rotten Tomatoes ID must start with &apos;m/&apos; or &apos;tv/&apos;.
+        /// </summary>
+        public static string Validation_Series_RottenTomatoesId_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Series.RottenTomatoesId.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There must be at least one season.
+        /// </summary>
+        public static string Validation_Series_Seasons_Empty {
+            get {
+                return ResourceManager.GetString("Validation.Series.Seasons.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The watch status is invalid.
+        /// </summary>
+        public static string Validation_Series_WatchStatus_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Series.WatchStatus.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The channel is empty.
+        /// </summary>
+        public static string Validation_SpecialEpisode_Channel_Empty {
+            get {
+                return ResourceManager.GetString("Validation.SpecialEpisode.Channel.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The channel is too long.
+        /// </summary>
+        public static string Validation_SpecialEpisode_Channel_TooLong {
+            get {
+                return ResourceManager.GetString("Validation.SpecialEpisode.Channel.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The release value is invalid.
+        /// </summary>
+        public static string Validation_SpecialEpisode_IsReleased_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.SpecialEpisode.IsReleased.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A non-released episode cannot be watched.
+        /// </summary>
+        public static string Validation_SpecialEpisode_IsWatched_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.SpecialEpisode.IsWatched.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The month is invalid.
+        /// </summary>
+        public static string Validation_SpecialEpisode_Month_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.SpecialEpisode.Month.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Rotten Tomatoes ID must start with &apos;m/&apos; or &apos;tv/&apos;.
+        /// </summary>
+        public static string Validation_SpecialEpisode_RottenTomatoesId_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.SpecialEpisode.RottenTomatoesId.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The year is too low.
+        /// </summary>
+        public static string Validation_SpecialEpisode_Year_TooLow {
+            get {
+                return ResourceManager.GetString("Validation.SpecialEpisode.Year.TooLow", resourceCulture);
             }
         }
         

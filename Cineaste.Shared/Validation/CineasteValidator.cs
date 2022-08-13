@@ -12,6 +12,8 @@ public abstract class CineasteValidator<T> : AbstractValidator<T>
     protected static readonly string Null = nameof(Null);
     protected static readonly string TooLong = nameof(TooLong);
     protected static readonly string TooLow = nameof(TooLow);
+    protected static readonly string MustBeTrue = nameof(MustBeTrue);
+    protected static readonly string Overlap = nameof(Overlap);
 
     private readonly string errorCodePrefix;
 
@@ -20,4 +22,7 @@ public abstract class CineasteValidator<T> : AbstractValidator<T>
 
     protected string ErrorCode<TProp>(Expression<Func<T, TProp>> property, params string[] errorComponents) =>
         $"{this.errorCodePrefix}.{property.GetMemberName()}.{String.Join(".", errorComponents)}";
+
+    protected string ErrorCode(params string[] errorComponents) =>
+        $"{this.errorCodePrefix}.{String.Join(".", errorComponents)}";
 }

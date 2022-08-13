@@ -1,5 +1,7 @@
 namespace Cineaste.Shared.Models.Series;
 
+using Cineaste.Shared.Validation.Series;
+
 public sealed record SpecialEpisodeRequest(
     Guid? Id,
     ImmutableList<TitleRequest> Titles,
@@ -10,4 +12,8 @@ public sealed record SpecialEpisodeRequest(
     string Channel,
     int Month,
     int Year,
-    string? RottenTomatoesId);
+    string? RottenTomatoesId) : IValidatable<SpecialEpisodeRequest>, ITitledRequest
+{
+    public static IValidator<SpecialEpisodeRequest> CreateValidator() =>
+        new SpecialEpisodeRequestValidator();
+}

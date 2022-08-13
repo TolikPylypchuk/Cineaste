@@ -19,4 +19,7 @@ public static class Extensions
 
     public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> items) =>
         new(items);
+
+    public static bool Implies(this bool antecedent, bool consequent) =>
+        !antecedent || consequent;
 }

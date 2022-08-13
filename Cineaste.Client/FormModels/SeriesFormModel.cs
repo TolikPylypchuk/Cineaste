@@ -120,7 +120,7 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
             this.ToTitleRequests(this.OriginalTitles),
             this.WatchStatus,
             this.ReleaseStatus,
-            this.Kind,
+            this.Kind.Id,
             IsMiniseries: false,
             this.Components.OfType<SeasonFormModel>().Select(season => season.ToRequest()).ToImmutableList(),
             this.Components.OfType<SpecialEpisodeFormModel>().Select(episode => episode.ToRequest()).ToImmutableList(),

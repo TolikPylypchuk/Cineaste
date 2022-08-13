@@ -1,5 +1,7 @@
 namespace Cineaste.Shared.Models.Series;
 
+using Cineaste.Shared.Validation.Series;
+
 public sealed record SeasonRequest(
     Guid? Id,
     ImmutableList<TitleRequest> Titles,
@@ -8,4 +10,8 @@ public sealed record SeasonRequest(
     SeasonWatchStatus WatchStatus,
     SeasonReleaseStatus ReleaseStatus,
     string Channel,
-    ImmutableList<PeriodRequest> Periods);
+    ImmutableList<PeriodRequest> Periods) : IValidatable<SeasonRequest>, ITitledRequest
+{
+    public static IValidator<SeasonRequest> CreateValidator() =>
+        new SeasonRequestValidator();
+}
