@@ -14,17 +14,20 @@ public static class OpenSeriesFormReducers
             AvailableKinds = action.AvailableKinds,
             ListConfiguration = action.ListConfiguration
         };
+
+    [ReducerMethod]
+    public static SeriesFormState ReduceSelectItemAction(SeriesFormState state, SelectItemAction action) =>
+        action.Item.Type == ListItemType.Series
+            ? new() { Fetch = ApiCall.InProgress() }
+            : state;
 }
 
-[AutoConstructor]
-public sealed partial class OpenSeriesFormEffect
+public sealed class OpenSeriesFormEffect
 {
-    private readonly IState<SeriesFormState> state;
-
     [EffectMethod]
     public Task HandleSelectItem(SelectItemAction action, IDispatcher dispatcher)
     {
-        if (state.Value.Model?.Id != action.Item.Id && action.Item.Type == ListItemType.Series)
+        if (action.Item.Type == ListItemType.Series)
         {
             dispatcher.Dispatch(new FetchSeriesAction(action.Item.Id, action.AvailableKinds, action.ListConfiguration));
         }

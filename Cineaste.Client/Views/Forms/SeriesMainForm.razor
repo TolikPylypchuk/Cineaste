@@ -81,7 +81,7 @@
 
                 <RadzenDataList WrapItems="true" Data="@this.FormModel.Components" class="overflow-visible w-100 mt-1">
                     <Template Context="component">
-                        <div class="list-item-container d-flex flex-row justify-content-between border-bottom"
+                        <div class="list-item-container d-flex flex-row justify-content-between border-bottom m-0 p-2"
                              role="button" @onclick="() => this.OpenSeriesComponentForm(component)">
                             <p class="m-0">@component.Title</p>
                             <div class="d-flex flex-row">

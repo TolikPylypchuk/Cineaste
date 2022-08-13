@@ -349,6 +349,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading the list has failed.
+        /// </summary>
+        public static string ListComponent_Problem_LoadingListFailed {
+            get {
+                return ResourceManager.GetString("ListComponent.Problem.LoadingListFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to home page.
         /// </summary>
         public static string ListPage_Menu_Back {
@@ -372,15 +381,6 @@ namespace Cineaste.Client.Localization {
         public static string ListPage_Menu_Settings {
             get {
                 return ResourceManager.GetString("ListPage.Menu.Settings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Loading the list has failed.
-        /// </summary>
-        public static string ListPage_Problem_LoadingListFailed {
-            get {
-                return ResourceManager.GetString("ListPage.Problem.LoadingListFailed", resourceCulture);
             }
         }
         

@@ -213,6 +213,9 @@
   <data name="ListActionsPanel.AddSeries" xml:space="preserve">
     <value>Add new series</value>
   </data>
+  <data name="ListComponent.Problem.LoadingListFailed" xml:space="preserve">
+    <value>Loading the list has failed</value>
+  </data>
   <data name="ListPage.Menu.Back" xml:space="preserve">
     <value>Back to home page</value>
   </data>
@@ -221,9 +224,6 @@
   </data>
   <data name="ListPage.Menu.Settings" xml:space="preserve">
     <value>Settings</value>
-  </data>
-  <data name="ListPage.Problem.LoadingListFailed" xml:space="preserve">
-    <value>Loading the list has failed</value>
   </data>
   <data name="Month.1" xml:space="preserve">
     <value>January</value>

@@ -1,7 +1,5 @@
 namespace Cineaste.Client.Store.Forms.MovieForm;
 
-using Cineaste.Client.Store.ListPage;
-
 public sealed record FetchMovieAction(Guid Id, ImmutableList<ListKindModel> AvailableKinds);
 
 public sealed record FetchMovieResultAction(ApiResult<MovieModel> Result) : ResultAction<MovieModel>(Result);
@@ -11,10 +9,6 @@ public static class FetchMovieReducers
     [ReducerMethod]
     public static MovieFormState ReduceFetchMovieAction(MovieFormState _, FetchMovieAction action) =>
         new() { Fetch = ApiCall.InProgress(), AvailableKinds = action.AvailableKinds };
-
-    [ReducerMethod]
-    public static MovieFormState ReduceSelectItemAction(MovieFormState state, SelectItemAction action) =>
-        action.Item.Id == state.Model?.Id ? state : new() { Fetch = ApiCall.InProgress() };
 
     [ReducerMethod]
     public static MovieFormState ReduceFetchMovieResultAction(MovieFormState state, FetchMovieResultAction action) =>

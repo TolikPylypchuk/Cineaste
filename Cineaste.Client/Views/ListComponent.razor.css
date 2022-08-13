@@ -1,10 +1,10 @@
-.list-item {
-    font-size: 1rem;
-}
-
 .list-item-container {
     border: none;
     border-radius: 0;
+}
+
+.list-item {
+    font-size: 1rem;
 }
 
 .item-number {
@@ -21,8 +21,4 @@
 
 ::deep .rz-g {
     flex-direction: column;
-}
-
-::deep .rz-g > div {
-    margin: 0;
 }

@@ -1,0 +1,48 @@
+@inherits StatefulComponent<ListPageState>
+
+<div class="d-flex flex-column align-items-center h-100">
+    @if (this.State.Value.IsLoading)
+    {
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+    } else if (this.State.Value.Problem is not null)
+    {
+        <ApiProblemAlert Text="@this.Loc["ListComponent.Problem.LoadingListFailed"]" Problem="@this.State.Value.Problem"
+                     TryAgain="@this.FetchList" Class="w-50 mt-3" />
+    } else
+    {
+        <h1 class="display-5 mt-md-1 mt-1 flex-shrink-0">@this.State.Value.Name</h1>
+
+        var selectedItem = this.State.Value.SelectedItem;
+
+        <RadzenDataList WrapItems="true" Data="@this.State.Value.Container.Items" TItem="ListItemModel"
+                    class="overflow-auto w-100 h-100">
+            <Template Context="item">
+                <div role="button" @onclick="@(() => this.SelectItem(item))" style="@($"color: {item.Color};")"
+                 class="@($"list-item-container border-bottom {(item == selectedItem ? "bg-light " : "")}m-0")">
+                    <div class="d-flex flex-row flex-fill align-items-center">
+                        <p class="list-item item-number text-start m-0">@item.DisplayNumber</p>
+                        <p class="list-item item-title text-center m-0">@item.Title</p>
+                        <p class="list-item item-title text-center m-0">@item.OriginalTitle</p>
+                        <p class="list-item item-years text-end m-0">@item.Years</p>
+                    </div>
+                </div>
+            </Template>
+        </RadzenDataList>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<ListItemModel> ItemSelected { get; set; }
+
+    [Parameter]
+    public Action FetchList { get; set; } = null!;
+
+    private async Task SelectItem(ListItemModel item)
+    {
+        if (item != this.State.Value.SelectedItem)
+        {
+            await this.ItemSelected.InvokeAsync(item);
+        }
+    }
+}

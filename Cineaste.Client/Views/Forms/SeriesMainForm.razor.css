@@ -7,11 +7,6 @@
     flex-direction: column;
 }
 
-::deep .rz-g > div {
-    margin: 0;
-    padding: 0.5rem;
-}
-
 ::deep .rz-menu > .rz-navigation-item {
     justify-items: flex-end;
     direction: rtl;

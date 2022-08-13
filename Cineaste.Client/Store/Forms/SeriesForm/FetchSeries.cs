@@ -1,7 +1,5 @@
 namespace Cineaste.Client.Store.Forms.SeriesForm;
 
-using Cineaste.Client.Store.ListPage;
-
 public sealed record FetchSeriesAction(
     Guid Id,
     ImmutableList<ListKindModel> AvailableKinds,
@@ -16,16 +14,9 @@ public static class FetchSeriesReducers
         new()
         {
             Fetch = ApiCall.InProgress(),
-            SelectedSeriesComponent = null,
             AvailableKinds = action.AvailableKinds,
             ListConfiguration = action.ListConfiguration
         };
-
-    [ReducerMethod]
-    public static SeriesFormState ReduceSelectItemAction(SeriesFormState state, SelectItemAction action) =>
-        action.Item.Id == state.Model?.Id
-            ? state with { SelectedSeriesComponent = null }
-            : new() { Fetch = ApiCall.InProgress(), SelectedSeriesComponent = null };
 
     [ReducerMethod]
     public static SeriesFormState ReduceFetchSeriesResultAction(

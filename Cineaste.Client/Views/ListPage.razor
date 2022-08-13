@@ -7,35 +7,8 @@
                      IsListLoaded="this.State.Value.IsLoaded && this.State.Value.Problem is null" />
     </div>
 
-    <div class="col-8 d-flex flex-column align-items-center h-100">
-        @if (this.State.Value.IsLoading)
-        {
-            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
-        } else if (this.State.Value.Problem is not null)
-        {
-            <ApiProblemAlert Text="@this.Loc["ListPage.Problem.LoadingListFailed"]" Problem="@this.State.Value.Problem"
-                             TryAgain="@this.FetchList" Class="w-50 mt-3" />
-        } else
-        {
-            <h1 class="display-5 mt-md-1 mt-1 flex-shrink-0">@this.State.Value.Name</h1>
-
-            var selectedItem = this.State.Value.SelectedItem;
-
-            <RadzenDataList WrapItems="true" Data="@this.State.Value.Container.Items" TItem="ListItemModel"
-                            class="overflow-auto w-100 h-100">
-                <Template Context="item">
-                    <div role="button" @onclick="@(() => this.SelectItem(item))" style="@($"color: {item.Color};")"
-                         class="@($"list-item-container border-bottom {(item == selectedItem ? "bg-light" : "")}")">
-                        <div class="d-flex flex-row flex-fill align-items-center">
-                            <p class="list-item item-number text-start m-0">@item.DisplayNumber</p>
-                            <p class="list-item item-title text-center m-0">@item.Title</p>
-                            <p class="list-item item-title text-center m-0">@item.OriginalTitle</p>
-                            <p class="list-item item-years text-end m-0">@item.Years</p>
-                        </div>
-                    </div>
-                </Template>
-            </RadzenDataList>
-        }
+    <div class="col-8 h-100">
+        <ListComponent ItemSelected="@this.SelectItem" FetchList="@this.FetchList" />
     </div>
 
     <div class="col-2 ps-0 h-100">
@@ -81,7 +54,8 @@
     private void FetchList() =>
         this.Dispatcher.Dispatch(new FetchListAction(this.Handle));
 
-    private void SelectItem(ListItemModel item) =>
+    private void SelectItem(ListItemModel item)
+    {
         this.Dispatcher.Dispatch(new SelectItemAction(
             item,
             item.Type switch
@@ -91,6 +65,7 @@
                 _ => ImmutableList.Create<ListKindModel>()
             },
             this.State.Value.ListConfiguration));
+    }
 
     private void CreateMovie() =>
         this.Dispatcher.Dispatch(new StartCreatingMovieAction(this.State.Value.AvailableMovieKinds));
