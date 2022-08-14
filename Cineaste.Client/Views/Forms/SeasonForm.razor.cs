@@ -27,7 +27,7 @@ public partial class SeasonForm
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        this.SetPropertyValues();
+        this.UpdateFormTitle();
     }
 
     private void SetPropertyValues()

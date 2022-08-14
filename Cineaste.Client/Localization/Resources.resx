@@ -459,6 +459,9 @@
   <data name="SeriesForm.Component.MoveUp" xml:space="preserve">
     <value>Move up</value>
   </data>
+  <data name="SeriesForm.CreateSeries.Success" xml:space="preserve">
+    <value>Series created successfully</value>
+  </data>
   <data name="SeriesForm.DeleteDialog.Body" xml:space="preserve">
     <value>Are you sure you want to delete this series?</value>
   </data>
@@ -674,6 +677,9 @@
   </data>
   <data name="Validation.Series.Seasons.Empty" xml:space="preserve">
     <value>There must be at least one season</value>
+  </data>
+  <data name="Validation.Series.Sequence.Invalid" xml:space="preserve">
+    <value>The sequence of seasons and special episodes is invalid</value>
   </data>
   <data name="Validation.Series.WatchStatus.Invalid" xml:space="preserve">
     <value>The watch status is invalid</value>

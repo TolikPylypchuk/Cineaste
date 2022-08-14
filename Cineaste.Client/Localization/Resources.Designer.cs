@@ -1087,6 +1087,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Series created successfully.
+        /// </summary>
+        public static string SeriesForm_CreateSeries_Success {
+            get {
+                return ResourceManager.GetString("SeriesForm.CreateSeries.Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this series?.
         /// </summary>
         public static string SeriesForm_DeleteDialog_Body {
@@ -1731,6 +1740,15 @@ namespace Cineaste.Client.Localization {
         public static string Validation_Series_Seasons_Empty {
             get {
                 return ResourceManager.GetString("Validation.Series.Seasons.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The sequence of seasons and special episodes is invalid.
+        /// </summary>
+        public static string Validation_Series_Sequence_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Series.Sequence.Invalid", resourceCulture);
             }
         }
         

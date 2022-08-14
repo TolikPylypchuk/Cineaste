@@ -2,12 +2,12 @@ namespace Cineaste.Server.Api;
 
 public static class ListRoutes
 {
-    public static void MapListRoutes(this IEndpointRouteBuilder routes, PathString prefix)
+    public static void MapListRoutes(this IEndpointRouteBuilder routes)
     {
-        routes.MapGet(prefix + "/lists", GetAllLists);
-        routes.MapGet(prefix + "/lists/{handle}", GetList);
+        routes.MapGet("/api/lists", GetAllLists);
+        routes.MapGet("/api/lists/{handle}", GetList);
 
-        routes.MapPost(prefix + "/lists", CreateList);
+        routes.MapPost("/api/lists", CreateList);
     }
 
     private static async Task<IResult> GetAllLists(IListService listService) =>

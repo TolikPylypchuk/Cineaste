@@ -2,9 +2,9 @@ namespace Cineaste.Server.Api;
 
 public static class FallbackRoutes
 {
-    public static void MapFallbackRoutes(this IEndpointRouteBuilder routes, PathString prefix)
+    public static void MapFallbackRoutes(this IEndpointRouteBuilder routes)
     {
-        routes.MapFallback(prefix + "/{**path}", NotFound);
+        routes.MapFallback("/api/{**path}", NotFound);
         routes.MapFallbackToFile("/{**path}", "index.html");
     }
 

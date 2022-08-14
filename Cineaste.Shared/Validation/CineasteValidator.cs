@@ -14,6 +14,7 @@ public abstract class CineasteValidator<T> : AbstractValidator<T>
     protected static readonly string TooLow = nameof(TooLow);
     protected static readonly string MustBeTrue = nameof(MustBeTrue);
     protected static readonly string Overlap = nameof(Overlap);
+    protected static readonly string Sequence = nameof(Sequence);
 
     private readonly string errorCodePrefix;
 

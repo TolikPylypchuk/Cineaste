@@ -3,8 +3,8 @@ namespace Cineaste.Core.Domain;
 public sealed class SpecialEpisode : Entity<SpecialEpisode>
 {
     private int month;
-    private string channel;
     private int year;
+    private string channel;
     private int sequenceNumber;
     private string? rottenTomatoesId;
     private readonly List<Title> titles;

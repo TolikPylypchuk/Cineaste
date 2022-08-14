@@ -13,26 +13,17 @@ public abstract class TitledFormModel<TModel> : FormModel<TModel>
     {
         this.Titles.Clear();
 
-        foreach (var title in model?.Titles.OrderBy(t => t.Priority) ?? Enumerable.Empty<TitleModel>())
+        foreach (var title in model?.Titles.OrderBy(t => t.Priority).Select(t => t.Name) ?? new[] { defaultTitle })
         {
-            this.Titles.Add(title.Name);
+            this.Titles.Add(title);
         }
 
         this.OriginalTitles.Clear();
 
-        foreach (var title in model?.OriginalTitles.OrderBy(t => t.Priority) ?? Enumerable.Empty<TitleModel>())
+        foreach (var title in model?.OriginalTitles.OrderBy(t => t.Priority).Select(t => t.Name)
+            ?? new[] { defaultOriginalTitle })
         {
-            this.OriginalTitles.Add(title.Name);
-        }
-
-        if (this.Titles.Count == 0)
-        {
-            this.Titles.Add(defaultTitle);
-        }
-
-        if (this.OriginalTitles.Count == 0)
-        {
-            this.OriginalTitles.Add(defaultOriginalTitle);
+            this.OriginalTitles.Add(title);
         }
     }
 }

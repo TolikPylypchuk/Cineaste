@@ -37,6 +37,15 @@ public sealed class SeriesRequestValidator : TitledRequestValidator<SeriesReques
             .NotEmpty()
             .WithErrorCode(this.ErrorCode(req => req.Seasons, Empty));
 
+        this.RuleFor(req => new { req.Seasons, req.SpecialEpisodes })
+            .Must(x => Enumerable.Concat(
+                x.Seasons.Select(season => season.SequenceNumber),
+                x.SpecialEpisodes.Select(episode => episode.SequenceNumber))
+                .OrderBy(num => num)
+                .Select((num, index) => num == index + 1)
+                .All(isValid => isValid))
+            .WithErrorCode(this.ErrorCode(Sequence, Invalid));
+
         this.RuleForEach(req => req.Seasons)
             .SetValidator(seasonValidator);
 

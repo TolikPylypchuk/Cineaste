@@ -15,6 +15,23 @@ public sealed partial class SeriesService : ISeriesService
         return series.ToSeriesModel();
     }
 
+    public async Task<SeriesModel> CreateSeries(Validated<SeriesRequest> request)
+    {
+        this.logger.LogDebug("Creating a new series");
+
+        var list = await this.FindList(request.Value.ListId);
+        var kind = await this.FindKind(request.Value.KindId, list);
+
+        var series = request.ToSeries(Id.CreateNew<Series>(), kind);
+
+        list.AddSeries(series);
+        dbContext.Series.Add(series);
+
+        await dbContext.SaveChangesAsync();
+
+        return series.ToSeriesModel();
+    }
+
     public async Task DeleteSeries(Id<Series> id)
     {
         this.logger.LogDebug("Deleting the series with id: {Id}", id.Value);
@@ -48,7 +65,70 @@ public sealed partial class SeriesService : ISeriesService
         return series is not null ? series : throw this.NotFound(id);
     }
 
+    private async Task<CineasteList> FindList(Guid id)
+    {
+        var listId = Id.Create<CineasteList>(id);
+
+        var list = await this.dbContext.Lists
+            .Include(list => list.Series)
+                .ThenInclude(series => series.Titles)
+            .Include(list => list.Series)
+                .ThenInclude(series => series.Kind)
+            .Include(list => list.Series)
+                .ThenInclude(series => series.Seasons)
+                    .ThenInclude(season => season.Titles)
+            .Include(list => list.Series)
+                .ThenInclude(series => series.Seasons)
+                    .ThenInclude(season => season.Periods)
+            .Include(list => list.Series)
+                .ThenInclude(series => series.SpecialEpisodes)
+                    .ThenInclude(episode => episode.Titles)
+            .Include(list => list.Series)
+                .ThenInclude(series => series.Tags)
+            .Include(list => list.SeriesKinds)
+            .AsSplitQuery()
+            .SingleOrDefaultAsync(list => list.Id == listId);
+
+        if (list is null)
+        {
+            throw this.NotFound(listId);
+        }
+
+        return list;
+    }
+
+    private async Task<SeriesKind> FindKind(Guid id, CineasteList list)
+    {
+        var kindId = Id.Create<SeriesKind>(id);
+        var kind = await this.dbContext.SeriesKinds.FindAsync(kindId);
+
+        if (kind is null)
+        {
+            throw this.NotFound(kindId);
+        } else if (!list.SeriesKinds.Contains(kind))
+        {
+            throw this.KindDoesNotBelongToList(kindId, list.Id);
+        }
+
+        return kind;
+    }
+
     private Exception NotFound(Id<Series> id) =>
         new NotFoundException(Resources.Series, $"Could not find a series with id {id.Value}")
             .WithProperty(id);
+
+    private Exception NotFound(Id<CineasteList> id) =>
+        new NotFoundException(Resources.List, $"Could not find a list with id {id.Value}")
+            .WithProperty(id);
+
+    private Exception NotFound(Id<SeriesKind> id) =>
+        new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with id {id.Value}")
+            .WithProperty(id);
+
+    private Exception KindDoesNotBelongToList(Id<SeriesKind> kindId, Id<CineasteList> listId) =>
+        new BadRequestException(
+            $"{Resources.SeriesKind}.WrongList",
+            $"Movie kind with ID {kindId.Value} does not belong to list with ID {listId}")
+            .WithProperty(kindId)
+            .WithProperty(listId);
 }

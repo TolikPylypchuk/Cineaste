@@ -57,4 +57,52 @@ public static class SeriesMappingExtensions
             episode.Month,
             episode.Year,
             episode.RottenTomatoesId);
+
+    public static Series ToSeries(this Validated<SeriesRequest> request, Id<Series> id, SeriesKind kind) =>
+        new(
+            id,
+            request.Value.ToTitles(),
+            request.Value.Seasons.Select(ToSeason),
+            request.Value.SpecialEpisodes.Select(ToSpecialEpisode),
+            isMiniseries: false,
+            request.Value.WatchStatus,
+            request.Value.ReleaseStatus,
+            kind);
+
+    private static Season ToSeason(this SeasonRequest request) =>
+        new(
+            Id.CreateFromNullable<Season>(request.Id),
+            request.ToTitles(),
+            request.WatchStatus,
+            request.ReleaseStatus,
+            request.Channel,
+            request.SequenceNumber,
+            request.Periods.Select(ToPeriod));
+
+    private static Period ToPeriod(this PeriodRequest request) =>
+        new(
+            Id.CreateFromNullable<Period>(request.Id),
+            request.StartMonth,
+            request.StartYear,
+            request.EndMonth,
+            request.EndYear,
+            request.IsSingleDayRelease,
+            request.EpisodeCount)
+        {
+            RottenTomatoesId = request.RottenTomatoesId
+        };
+
+    private static SpecialEpisode ToSpecialEpisode(this SpecialEpisodeRequest request) =>
+        new(
+            Id.CreateFromNullable<SpecialEpisode>(request.Id),
+            request.ToTitles(),
+            request.Month,
+            request.Year,
+            request.IsWatched,
+            request.IsReleased,
+            request.Channel,
+            request.SequenceNumber)
+        {
+            RottenTomatoesId = request.RottenTomatoesId
+        };
 }

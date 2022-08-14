@@ -42,9 +42,10 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
 
         this.defaultOriginalTitle = originalTitle;
         this.OriginalTitles.Clear();
-        this.Titles.Add(originalTitle);
+        this.OriginalTitles.Add(originalTitle);
 
         this.Channel = this.defaultChannel = channel;
+        this.SequenceNumber = getDefaultSequenceNumber();
 
         this.defaultDate = date;
         this.getDefaultSequenceNumber = getDefaultSequenceNumber;

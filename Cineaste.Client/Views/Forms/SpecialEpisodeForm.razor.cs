@@ -24,7 +24,8 @@ public partial class SpecialEpisodeForm
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        this.SetPropertyValues();
+        this.UpdateFormTitle();
+        this.OnMonthYearChanged();
     }
 
     private void SetPropertyValues()

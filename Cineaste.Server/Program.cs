@@ -54,14 +54,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-var api = new PathString("/api");
+app.MapCultureRoutes();
+app.MapListRoutes();
+app.MapMovieRoutes();
+app.MapSeriesRoutes();
 
-app.MapCultureRoutes(api);
-app.MapListRoutes(api);
-app.MapMovieRoutes(api);
-app.MapSeriesRoutes(api);
-
-app.MapFallbackRoutes(api);
+app.MapFallbackRoutes();
 
 using (var scope = app.Services.CreateScope())
 {

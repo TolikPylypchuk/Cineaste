@@ -14,4 +14,9 @@ public static class TitleMappingExtensions
             .Select(title => title.ToTitleModel())
             .OrderBy(title => title.Priority)
             .ToImmutableList();
+
+    public static IEnumerable<Title> ToTitles(this ITitledRequest request) =>
+        Enumerable.Concat(
+            request.Titles.Select(titleRequest => titleRequest.ToTitle(isOriginal: false)),
+            request.OriginalTitles.Select(titleRequest => titleRequest.ToTitle(isOriginal: true)));
 }

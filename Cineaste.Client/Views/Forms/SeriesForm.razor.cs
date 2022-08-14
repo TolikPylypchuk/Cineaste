@@ -33,6 +33,7 @@ public partial class SeriesForm
         if (firstRender)
         {
             this.SubsribeToSuccessfulResult<FetchSeriesResultAction>(this.SetPropertyValues);
+            this.SubsribeToSuccessfulResult<CreateSeriesResultAction>(this.OnSeriesCreated);
         }
     }
 
@@ -51,9 +52,21 @@ public partial class SeriesForm
         this.Dispatcher.Dispatch(new GoToSeriesAction());
     }
 
-    private void Save()
-    { }
+    private void Save() =>
+        this.WithValidation(() =>
+        {
+            if (this.ListItem is null)
+            {
+                this.Dispatcher.Dispatch(new CreateSeriesAction(this.FormModel.ToRequest(this.ListId)));
+            }
+        });
 
     private void Cancel() =>
         this.SetPropertyValues();
+
+    private void OnSeriesCreated()
+    {
+        this.SetPropertyValues();
+        this.ShowSuccessNotification("SeriesForm.CreateSeries.Success", ShortNotificationDuration);
+    }
 }

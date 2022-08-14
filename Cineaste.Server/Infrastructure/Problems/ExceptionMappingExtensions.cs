@@ -9,7 +9,7 @@ using static StatusCodes;
 
 public static class ExceptionMappingExtensions
 {
-    private const string Problem = "Problem";
+    private const string Problem = nameof(Problem);
 
     private const string Errors = "errors";
     private const string Properties = "properties";

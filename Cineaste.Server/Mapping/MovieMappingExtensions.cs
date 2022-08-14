@@ -18,10 +18,7 @@ public static class MovieMappingExtensions
     public static Movie ToMovie(this Validated<MovieRequest> request, Id<Movie> id, MovieKind kind) =>
         new(
             id,
-            request.Value.Titles
-                .Select(titleRequest => titleRequest.ToTitle(isOriginal: false))
-                .Concat(request.Value.OriginalTitles
-                    .Select(titleRequest => titleRequest.ToTitle(isOriginal: true))),
+            request.Value.ToTitles(),
             request.Value.Year,
             request.Value.IsWatched,
             request.Value.IsReleased,
