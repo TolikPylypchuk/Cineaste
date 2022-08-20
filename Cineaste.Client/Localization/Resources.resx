@@ -666,9 +666,6 @@
   <data name="Validation.Series.ImdbId.Invalid" xml:space="preserve">
     <value>The IMDb ID must be in the form 'tt[digits]' e.g. 'tt123456'</value>
   </data>
-  <data name="Validation.Series.IsMiniseries.Invalid" xml:space="preserve">
-    <value>A miniseries must only contain one season with one period</value>
-  </data>
   <data name="Validation.Series.ReleaseStatus.Invalid" xml:space="preserve">
     <value>The release status is invalid</value>
   </data>

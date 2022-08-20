@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20220731143404_InitialMigration")]
+    [Migration("20220820163449_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -303,9 +303,6 @@ namespace Cineaste.Persistence.Migrations
 
                     b.Property<string>("ImdbId")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsMiniseries")
-                        .HasColumnType("bit");
 
                     b.Property<Guid>("KindId")
                         .HasColumnType("uniqueidentifier");

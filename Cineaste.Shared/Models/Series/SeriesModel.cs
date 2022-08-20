@@ -9,7 +9,6 @@ public sealed record SeriesModel(
     SeriesWatchStatus WatchStatus,
     SeriesReleaseStatus ReleaseStatus,
     ListKindModel Kind,
-    bool IsMiniseries,
     ImmutableList<SeasonModel> Seasons,
     ImmutableList<SpecialEpisodeModel> SpecialEpisodes,
     string? ImdbId,

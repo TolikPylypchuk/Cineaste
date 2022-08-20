@@ -52,11 +52,6 @@ public sealed class SeriesRequestValidator : TitledRequestValidator<SeriesReques
         this.RuleForEach(req => req.SpecialEpisodes)
             .SetValidator(specialEpisodeValidator);
 
-        this.RuleFor(req => new { req.IsMiniseries, req.Seasons, req.SpecialEpisodes })
-            .Must(x => x.IsMiniseries.Implies(
-                x.Seasons.Count == 1 && x.Seasons[0].Periods.Count == 1 && x.SpecialEpisodes.Count == 0))
-            .WithErrorCode(this.ErrorCode(req => req.IsMiniseries, Invalid));
-
         this.RuleFor(req => req.ImdbId)
             .Matches(ImdbIdRegex)
             .WithErrorCode(this.ErrorCode(req => req.ImdbId, Invalid));

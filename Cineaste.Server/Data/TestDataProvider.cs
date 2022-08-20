@@ -129,7 +129,6 @@ internal sealed class TestDataProvider
             new List<Title> { new(title, 1, false), new(title, 1, true) },
             new List<Season> { season1, season2 },
             new List<SpecialEpisode> { episode },
-            isMiniseries: false,
             SeriesWatchStatus.Watched,
             SeriesReleaseStatus.Finished,
             kind);

@@ -11,8 +11,6 @@ public sealed class Series : Entity<Series>
     private readonly List<SpecialEpisode> specialEpisodes;
     private readonly HashSet<TagContainer> tags;
 
-    public bool IsMiniseries { get; set; }
-
     public SeriesWatchStatus WatchStatus { get; set; }
     public SeriesReleaseStatus ReleaseStatus { get; set; }
 
@@ -97,13 +95,11 @@ public sealed class Series : Entity<Series>
         IEnumerable<Title> titles,
         IEnumerable<Season> seasons,
         IEnumerable<SpecialEpisode> specialEpisodes,
-        bool isMiniseries,
         SeriesWatchStatus watchStatus,
         SeriesReleaseStatus releaseStatus,
         SeriesKind kind)
         : base(id)
     {
-        this.IsMiniseries = isMiniseries;
         this.WatchStatus = watchStatus;
         this.ReleaseStatus = releaseStatus;
         this.Kind = kind;

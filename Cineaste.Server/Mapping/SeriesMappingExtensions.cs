@@ -10,7 +10,6 @@ public static class SeriesMappingExtensions
             series.WatchStatus,
             series.ReleaseStatus,
             series.Kind.ToListKindModel(),
-            series.IsMiniseries,
             series.Seasons.Select(season => season.ToSeasonModel()).ToImmutableList(),
             series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel()).ToImmutableList(),
             series.ImdbId,
@@ -64,7 +63,6 @@ public static class SeriesMappingExtensions
             request.Value.ToTitles(),
             request.Value.Seasons.Select(ToSeason),
             request.Value.SpecialEpisodes.Select(ToSpecialEpisode),
-            isMiniseries: false,
             request.Value.WatchStatus,
             request.Value.ReleaseStatus,
             kind);

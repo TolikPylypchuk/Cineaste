@@ -229,7 +229,6 @@ namespace Cineaste.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsMiniseries = table.Column<bool>(type: "bit", nullable: false),
                     WatchStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReleaseStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),

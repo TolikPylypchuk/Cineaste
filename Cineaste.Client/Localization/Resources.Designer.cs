@@ -1708,15 +1708,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A miniseries must only contain one season with one period.
-        /// </summary>
-        public static string Validation_Series_IsMiniseries_Invalid {
-            get {
-                return ResourceManager.GetString("Validation.Series.IsMiniseries.Invalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The release status is invalid.
         /// </summary>
         public static string Validation_Series_ReleaseStatus_Invalid {

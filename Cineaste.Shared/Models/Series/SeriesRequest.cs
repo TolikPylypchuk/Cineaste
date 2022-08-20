@@ -9,7 +9,6 @@ public sealed record SeriesRequest(
     SeriesWatchStatus WatchStatus,
     SeriesReleaseStatus ReleaseStatus,
     Guid KindId,
-    bool IsMiniseries,
     ImmutableList<SeasonRequest> Seasons,
     ImmutableList<SpecialEpisodeRequest> SpecialEpisodes,
     string? ImdbId,
