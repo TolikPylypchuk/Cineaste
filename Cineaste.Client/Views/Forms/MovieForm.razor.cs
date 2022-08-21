@@ -63,7 +63,7 @@ public partial class MovieForm
 
     private void FetchMovie()
     {
-        if (this.ListItem != null)
+        if (this.ListItem is not null)
         {
             this.Dispatcher.Dispatch(new FetchMovieAction(this.ListItem.Id, this.State.Value.AvailableKinds));
         }

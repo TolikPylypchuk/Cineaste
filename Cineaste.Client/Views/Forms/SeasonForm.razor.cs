@@ -36,6 +36,11 @@ public partial class SeasonForm
         this.UpdateFormTitle();
     }
 
+    private string RottenTomatoesLinkText(int part, bool multiple) =>
+        multiple
+            ? String.Format(this.Loc["Link.RottenTomatoesWithPartFormat"], part)
+            : this.Loc["Link.RottenTomatoes"];
+
     private void AddTitle(ObservableCollection<string> titles) =>
         titles.Add(String.Empty);
 

@@ -5,13 +5,13 @@ using System.Collections.Specialized;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 
-public sealed class FormValidator<T, TValue> : ComponentBase
+public sealed class FormValidator<TRequest, TProperty> : ComponentBase
 {
-    private TValue? value;
-    private bool settingValueFirstTime = true;
+    private TProperty? value;
+    private bool isInitialized = false;
 
     [Parameter]
-    public TValue? Value
+    public TProperty? Value
     {
         get => this.value;
         set
@@ -23,17 +23,18 @@ public sealed class FormValidator<T, TValue> : ComponentBase
 
             this.value = value;
 
-            if (!this.settingValueFirstTime)
+            if (this.isInitialized)
             {
                 this.Validate();
             }
-
-            this.settingValueFirstTime = false;
         }
     }
 
+    [CascadingParameter]
+    public Func<TRequest> Request { get; set; } = null!;
+
     [Parameter]
-    public PropertyValidator<T, TValue?>? Validator { get; set; }
+    public PropertyValidator<TRequest, TProperty?>? Validator { get; set; }
 
     [Parameter]
     public string Class { get; set; } = String.Empty;
@@ -55,8 +56,8 @@ public sealed class FormValidator<T, TValue> : ComponentBase
     {
         if (this.Validator is not null)
         {
-            var result = this.Validator.Validate(this.Value);
-            this.Text = result.Any() ? result.Aggregate((acc, item) => $"{acc}; {item}") : String.Empty;
+            var result = this.Validator.Validate(this.Request(), this.Value);
+            this.Text = result.Any() ? result.Distinct().Aggregate((acc, item) => $"{acc}; {item}") : String.Empty;
         } else
         {
             this.Text = String.Empty;
@@ -81,6 +82,8 @@ public sealed class FormValidator<T, TValue> : ComponentBase
                 }
             };
         }
+
+        this.isInitialized = true;
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)

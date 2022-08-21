@@ -1,105 +1,108 @@
 @inherits StatefulComponent<SeriesFormState>
 
-<div class="d-flex flex-column h-100">
-    <div class="d-flex flex-row justify-content-between">
-        <RadzenButton Icon="keyboard_arrow_up" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                      Click="this.GoToSeries" class="btn-transparent my-2" />
-        <div></div>
-        <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
-                      class="btn-transparent my-2" />
-    </div>
+<CascadingValue Value="@(() => this.FormModel.ToRequest())" IsFixed="true">
+    <div class="d-flex flex-column h-100">
+        <div class="d-flex flex-row justify-content-between">
+            <RadzenButton Icon="keyboard_arrow_up" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                          Click="this.GoToSeries" class="btn-transparent my-2" />
+            <div></div>
+            <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
+                          class="btn-transparent my-2" />
+        </div>
 
-    <h1 class="form-title">
-        @this.FormTitle
-    </h1>
+        <h1 class="form-title">
+            @this.FormTitle
+        </h1>
 
-    <div class="w-100 h-100 d-flex flex-column justify-content-between overflow-y-auto overflow-x-hidden">
-        <div class="h-100 overflow-y-auto overflow-x-hidden">
-            <div class="d-flex flex-column align-items-center mt-2">
-                @{
-                    int part = 1;
-                    bool multiple = this.FormModel.Periods
-                        .Count(period => !String.IsNullOrWhiteSpace(period.RottenTomatoesId)) > 1;
-                }
+        <div class="w-100 h-100 d-flex flex-column justify-content-between overflow-y-auto overflow-x-hidden">
+            <div class="h-100 overflow-y-auto overflow-x-hidden">
+                <div class="d-flex flex-column align-items-center mt-2">
+                    @{
+                        int part = 1;
+                        bool multiple = this.FormModel.Periods
+                            .Count(period => !String.IsNullOrWhiteSpace(period.RottenTomatoesId)) > 1;
+                    }
 
-                @foreach (var period in this.FormModel.Periods
-                    .Where(p => !String.IsNullOrWhiteSpace(p.RottenTomatoesId)))
+                    @foreach (var period in this.FormModel.Periods
+                        .Where(p => !String.IsNullOrWhiteSpace(p.RottenTomatoesId)))
+                    {
+                        <RadzenLink Path="@String.Format(
+                                        this.Loc["Link.RottenTomatoesUrlFormat"], period.RottenTomatoesId)"
+                                    Text="@this.RottenTomatoesLinkText(part, multiple)" target="_blank" />
+                        part++;
+                    }
+                </div>
+
+                <RadzenLabel Text="@this.Loc["SeasonForm.Titles"]" class="mt-2" />
+                <TitlesForm T="SeasonForm" Titles="@this.FormModel.Titles" FirstTitleChanged="@this.UpdateFormTitle"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
+
+                <RadzenLabel Text="@this.Loc["SeasonForm.OriginalTitles"]" class="mt-2" />
+                <TitlesForm T="SeasonForm" Titles="@this.FormModel.OriginalTitles"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
+
+                <div class="row mt-2">
+                    <div class="col-md pe-md-1">
+                        <RadzenLabel Text="@this.Loc["SeasonForm.WatchStatus"]" Component="WatchStatusDropDown" />
+                        <RadzenDropDown @bind-Value="@this.FormModel.WatchStatus" Data="@this.AllWatchStatuses"
+                                        AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
+                                        Name="WatchStatusDropDown">
+                            <Template>
+                                @this.Loc[$"SeasonForm.WatchStatus.{context}"]
+                            </Template>
+                        </RadzenDropDown>
+                    </div>
+
+                    <div class="col-md ps-md-1">
+                        <RadzenLabel Text="@this.Loc["SeasonForm.ReleaseStatus"]" Component="ReleaseStatusDropDown" />
+                        <RadzenDropDown @bind-Value="@this.FormModel.ReleaseStatus" Data="@this.AllReleaseStatuses"
+                                        AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
+                                        Name="ReleaseStatusDropDown">
+                            <Template>
+                                @this.Loc[$"SeasonForm.ReleaseStatus.{context}"]
+                            </Template>
+                        </RadzenDropDown>
+                    </div>
+                </div>
+
+                <RadzenLabel Text="@this.Loc["SeasonForm.Channel"]" Component="ChannelTextBox" class="mt-1" />
+                <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
+
+                @foreach (var period in this.FormModel.Periods)
                 {
-                    <RadzenLink Path="@String.Format(this.Loc["Link.RottenTomatoesUrlFormat"], period.RottenTomatoesId)"
-                                Text="@($"{this.Loc["Link.RottenTomatoes"]}{(multiple ? $" (Part {part})" : "")}")"
-                                target="_blank" />
-                    part++;
+                    <PeriodForm FormModel="@period" CanRemove="@(this.FormModel.Periods.Count > 1)"
+                                Removed="@(() => this.OnPeriodRemoved(period))"
+                                RottenTomatoesIdChanged="@this.StateHasChanged" />
                 }
-            </div>
 
-            <RadzenLabel Text="@this.Loc["SeasonForm.Titles"]" class="mt-2" />
-            <TitlesForm T="SeasonForm" Titles="@this.FormModel.Titles" FirstTitleChanged="@this.UpdateFormTitle"
-                        ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
-
-            <RadzenLabel Text="@this.Loc["SeasonForm.OriginalTitles"]" class="mt-2" />
-            <TitlesForm T="SeasonForm" Titles="@this.FormModel.OriginalTitles"
-                        ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
-
-            <div class="row mt-2">
-                <div class="col-md pe-md-1">
-                    <RadzenLabel Text="@this.Loc["SeasonForm.WatchStatus"]" Component="WatchStatusDropDown" />
-                    <RadzenDropDown @bind-Value="@this.FormModel.WatchStatus" Data="@this.AllWatchStatuses"
-                                    AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
-                                    Name="WatchStatusDropDown">
-                        <Template>
-                            @this.Loc[$"SeasonForm.WatchStatus.{context}"]
-                        </Template>
-                    </RadzenDropDown>
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
+                        <RadzenButton Text="@this.Loc["SeasonForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
+                                      Click="@(e => this.AddTitle(this.FormModel.Titles))"
+                                      class="d-inline-block me-1" />
+                        <RadzenButton Text="@this.Loc["SeasonForm.AddOriginalTitle"]"
+                                      ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1"
+                                      Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))" />
+                    </div>
                 </div>
 
-                <div class="col-md ps-md-1">
-                    <RadzenLabel Text="@this.Loc["SeasonForm.ReleaseStatus"]" Component="ReleaseStatusDropDown" />
-                    <RadzenDropDown @bind-Value="@this.FormModel.ReleaseStatus" Data="@this.AllReleaseStatuses"
-                                    AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
-                                    Name="ReleaseStatusDropDown">
-                        <Template>
-                            @this.Loc[$"SeasonForm.ReleaseStatus.{context}"]
-                        </Template>
-                    </RadzenDropDown>
+                <div class="d-flex justify-content-center mt-2">
+                    <RadzenButton Text="@this.Loc["SeasonForm.AddPeriod"]" ButtonStyle="ButtonStyle.Secondary"
+                                  Click="@(e => this.AddPeriod())" class="" />
+                </div>
+
+                <div class="d-flex justify-content-center my-4">
+                    <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
+                                  Click="@this.Delete" />
                 </div>
             </div>
 
-            <RadzenLabel Text="@this.Loc["SeasonForm.Channel"]" Component="ChannelTextBox" class="mt-1" />
-            <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
-
-            @foreach (var period in this.FormModel.Periods)
-            {
-                <PeriodForm FormModel="@period" CanRemove="@(this.FormModel.Periods.Count > 1)"
-                            Removed="@(() => this.OnPeriodRemoved(period))"
-                            RottenTomatoesIdChanged="@this.StateHasChanged" />
-            }
-
-            <div class="d-flex justify-content-center">
-                <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
-                    <RadzenButton Text="@this.Loc["SeasonForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
-                                  Click="@(e => this.AddTitle(this.FormModel.Titles))" class="d-inline-block me-1" />
-                    <RadzenButton Text="@this.Loc["SeasonForm.AddOriginalTitle"]"
-                                  ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1"
-                                  Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))" />
-                </div>
+            <div class="d-flex flex-row my-2">
+                <RadzenButton Text="@this.Loc["SeasonForm.GoToSeries"]" ButtonStyle="ButtonStyle.Primary"
+                              Click="@this.GoToSeries" class="me-1" />
+                <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
+                              Click="@this.Cancel" class="ms-1" />
             </div>
-
-            <div class="d-flex justify-content-center mt-2">
-                <RadzenButton Text="@this.Loc["SeasonForm.AddPeriod"]" ButtonStyle="ButtonStyle.Secondary"
-                              Click="@(e => this.AddPeriod())" class="" />
-            </div>
-
-            <div class="d-flex justify-content-center my-4">
-                <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
-                              Click="@this.Delete" />
-            </div>
-        </div>
-
-        <div class="d-flex flex-row my-2">
-            <RadzenButton Text="@this.Loc["SeasonForm.GoToSeries"]" ButtonStyle="ButtonStyle.Primary"
-                          Click="@this.GoToSeries" class="me-1" />
-            <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
-                          Click="@this.Cancel" class="ms-1" />
         </div>
     </div>
-</div>
+</CascadingValue>

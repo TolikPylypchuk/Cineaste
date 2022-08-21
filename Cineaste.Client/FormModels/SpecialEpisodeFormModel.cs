@@ -25,6 +25,8 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
     public SpecialEpisodeFormModel(DateOnly date, string channel, Func<int> getDefaultSequenceNumber)
     {
         this.defaultDate = date;
+        this.Month = date.Month;
+        this.Year = date.Year;
         this.Channel = this.defaultChannel = channel;
         this.SequenceNumber = getDefaultSequenceNumber();
         this.getDefaultSequenceNumber = getDefaultSequenceNumber;

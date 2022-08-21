@@ -2,17 +2,11 @@ namespace Cineaste.Client.Validation;
 
 using System.Linq.Expressions;
 
-using Cineaste.Client.Localization;
-
 using FluentValidation;
 using FluentValidation.Validators;
 
-using Microsoft.Extensions.Localization;
-
 public sealed partial class PropertyValidator<T, TProperty>
 {
-    public readonly ValidationContext<T> Context = new(default!);
-
     private readonly IReadOnlyCollection<(IPropertyValidator<T, TProperty> Validator, string ErrorCode)> validators;
 
     public IValidationExecutor Executor { get; }
@@ -42,13 +36,17 @@ public sealed partial class PropertyValidator<T, TProperty>
             .AsReadOnly();
     }
 
-    public IReadOnlyCollection<string> Validate(TProperty value) =>
-        this.validators
-            .Select(v => v.Validator.IsValid(this.Context, value) ? null : v.ErrorCode)
+    public IReadOnlyCollection<string> Validate(T instance, TProperty property)
+    {
+        var ctx = new ValidationContext<T>(instance);
+
+        return this.validators
+            .Select(v => v.Validator.IsValid(ctx, property) ? null : v.ErrorCode)
             .WhereNotNull()
             .Select(errorCode => this.Executor.Loc[$"Validation.{errorCode}"].ToString())
             .ToList()
             .AsReadOnly();
+    }
 }
 
 public static class PropertyValidator

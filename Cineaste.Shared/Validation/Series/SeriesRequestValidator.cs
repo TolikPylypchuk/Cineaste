@@ -13,25 +13,23 @@ public sealed class SeriesRequestValidator : TitledRequestValidator<SeriesReques
     {
         this.RuleFor(req => req.WatchStatus)
             .IsInEnum()
+            .WithErrorCode(this.ErrorCode(req => req.WatchStatus, Invalid))
+            .Must((req, status) => req.ReleaseStatus switch
+            {
+                SeriesReleaseStatus.NotStarted => status is SeriesWatchStatus.NotWatched,
+                SeriesReleaseStatus.Running or SeriesReleaseStatus.Hiatus => status is
+                    SeriesWatchStatus.NotWatched or SeriesWatchStatus.Watching or SeriesWatchStatus.Hiatus,
+                SeriesReleaseStatus.Finished or SeriesReleaseStatus.Cancelled => status is
+                    SeriesWatchStatus.NotWatched or SeriesWatchStatus.Watching or
+                    SeriesWatchStatus.Hiatus or SeriesWatchStatus.Watched,
+                SeriesReleaseStatus.Unknown => status is SeriesWatchStatus.StoppedWatching,
+                _ => true
+            })
             .WithErrorCode(this.ErrorCode(req => req.WatchStatus, Invalid));
 
         this.RuleFor(req => req.ReleaseStatus)
             .IsInEnum()
             .WithErrorCode(this.ErrorCode(req => req.ReleaseStatus, Invalid));
-
-        this.RuleFor(req => new { req.WatchStatus, req.ReleaseStatus })
-            .Must(x => x.ReleaseStatus switch
-            {
-                SeriesReleaseStatus.NotStarted => x.WatchStatus is SeriesWatchStatus.NotWatched,
-                SeriesReleaseStatus.Running or SeriesReleaseStatus.Hiatus => x.WatchStatus is
-                    SeriesWatchStatus.NotWatched or SeriesWatchStatus.Watching or SeriesWatchStatus.Hiatus,
-                SeriesReleaseStatus.Finished or SeriesReleaseStatus.Cancelled => x.WatchStatus is
-                    SeriesWatchStatus.NotWatched or SeriesWatchStatus.Watching or
-                    SeriesWatchStatus.Hiatus or SeriesWatchStatus.Watched,
-                SeriesReleaseStatus.Unknown => x.WatchStatus is SeriesWatchStatus.StoppedWatching,
-                _ => true
-            })
-            .WithErrorCode(this.ErrorCode(req => req.WatchStatus, Invalid));
 
         this.RuleFor(req => req.Seasons)
             .NotEmpty()

@@ -34,9 +34,38 @@ public partial class SeriesMainForm
     private ImmutableArray<SeriesReleaseStatus> AllReleaseStatuses { get; } =
         Enum.GetValues<SeriesReleaseStatus>().ToImmutableArray();
 
+    private PropertyValidator<SeriesRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }
+    private PropertyValidator<SeriesRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
+    private PropertyValidator<SeriesRequest, SeriesWatchStatus>? WatchStatusValidator { get; set; }
+    private PropertyValidator<SeriesRequest, ImmutableList<SeasonRequest>>? SeasonsValidator { get; set; }
+    private PropertyValidator<SeriesRequest, string>? ImdbIdValidator { get; set; }
+    private PropertyValidator<SeriesRequest, string>? RottenTomatoesIdValidator { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        this.InitializeValidators();
+    }
+
+    private void InitializeValidators()
+    {
+        var validator = SeriesRequest.CreateValidator();
+
+        this.TitlesValidator = PropertyValidator.Create(validator, (SeriesRequest req) => req.Titles, this);
+        this.OriginalTitlesValidator = PropertyValidator.Create(
+            validator, (SeriesRequest req) => req.OriginalTitles, this);
+
+        this.WatchStatusValidator = PropertyValidator.Create(validator, (SeriesRequest req) => req.WatchStatus, this);
+        this.SeasonsValidator = PropertyValidator.Create(validator, (SeriesRequest req) => req.Seasons, this);
+
+        this.ImdbIdValidator = PropertyValidator.Create(validator, (SeriesRequest req) => req.ImdbId, this);
+        this.RottenTomatoesIdValidator = PropertyValidator.Create(
+            validator, (SeriesRequest req) => req.RottenTomatoesId, this);
+    }
+
     private void FetchSeries()
     {
-        if (this.ListItem != null)
+        if (this.ListItem is not null)
         {
             this.Dispatcher.Dispatch(new FetchSeriesAction(
                 this.ListItem.Id, this.State.Value.AvailableKinds, this.State.Value.ListConfiguration));
@@ -58,16 +87,16 @@ public partial class SeriesMainForm
         this.OpenSeriesComponentForm(episode);
     }
 
-    private bool CanMoveComponentUp(ISeriesComponentFormModel component) =>
+    private bool CanMoveUp(ISeriesComponentFormModel component) =>
         component.SequenceNumber != 1;
 
-    private void MoveComponentUp(ISeriesComponentFormModel component) =>
+    private void MoveUp(ISeriesComponentFormModel component) =>
         this.FormModel.MoveComponentUp(component);
 
-    private bool CanMoveComponentDown(ISeriesComponentFormModel component) =>
+    private bool CanMoveDown(ISeriesComponentFormModel component) =>
         component.SequenceNumber != this.FormModel.Components.Count;
 
-    private void MoveComponentDown(ISeriesComponentFormModel component) =>
+    private void MoveDown(ISeriesComponentFormModel component) =>
         this.FormModel.MoveComponentDown(component);
 
     private async Task UpdateFormTitle() =>

@@ -331,6 +331,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes (Part {0}).
+        /// </summary>
+        public static string Link_RottenTomatoesWithPartFormat {
+            get {
+                return ResourceManager.GetString("Link.RottenTomatoesWithPartFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new movie.
         /// </summary>
         public static string ListActionsPanel_AddMovie {
@@ -1071,18 +1080,18 @@ namespace Cineaste.Client.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Move down.
         /// </summary>
-        public static string SeriesForm_Component_MoveDown {
+        public static string SeriesForm_Component_Down {
             get {
-                return ResourceManager.GetString("SeriesForm.Component.MoveDown", resourceCulture);
+                return ResourceManager.GetString("SeriesForm.Component.Down", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Move up.
         /// </summary>
-        public static string SeriesForm_Component_MoveUp {
+        public static string SeriesForm_Component_Up {
             get {
-                return ResourceManager.GetString("SeriesForm.Component.MoveUp", resourceCulture);
+                return ResourceManager.GetString("SeriesForm.Component.Up", resourceCulture);
             }
         }
         

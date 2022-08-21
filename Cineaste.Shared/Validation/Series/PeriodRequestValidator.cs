@@ -27,12 +27,11 @@ public sealed class PeriodRequestValidator : CineasteValidator<PeriodRequest>
             .Must(x => x.StartYear < x.EndYear || x.StartYear == x.EndYear && x.StartMonth <= x.EndMonth)
             .WithErrorCode(this.ErrorCode(Invalid));
 
-        this.RuleFor(req => new { req.IsSingleDayRelease, req.StartMonth, req.StartYear, req.EndMonth, req.EndYear })
-            .Must(x => x.IsSingleDayRelease.Implies(x.StartYear == x.EndYear && x.StartMonth == x.EndMonth))
-            .WithErrorCode(this.ErrorCode(req => req.IsSingleDayRelease, Invalid));
-
-        this.RuleFor(req => new { req.EpisodeCount, req.IsSingleDayRelease })
-            .Must(x => (x.EpisodeCount == 1).Implies(x.IsSingleDayRelease))
+        this.RuleFor(req => req.IsSingleDayRelease)
+            .Must((req, isSingleDayRelease) => isSingleDayRelease.Implies(
+                req.StartYear == req.EndYear && req.StartMonth == req.EndMonth))
+            .WithErrorCode(this.ErrorCode(req => req.IsSingleDayRelease, Invalid))
+            .Must((req, isSingleDayRelease) => (req.EpisodeCount == 1).Implies(isSingleDayRelease))
             .WithErrorCode(this.ErrorCode(req => req.IsSingleDayRelease, MustBeTrue));
 
         this.RuleFor(req => req.EpisodeCount)

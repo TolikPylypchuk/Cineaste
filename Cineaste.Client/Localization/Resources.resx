@@ -207,6 +207,9 @@
   <data name="Link.RottenTomatoesUrlFormat" xml:space="preserve">
     <value>https://www.rottentomatoes.com/{0}</value>
   </data>
+  <data name="Link.RottenTomatoesWithPartFormat" xml:space="preserve">
+    <value>Rotten Tomatoes (Part {0})</value>
+  </data>
   <data name="ListActionsPanel.AddMovie" xml:space="preserve">
     <value>Add new movie</value>
   </data>
@@ -453,10 +456,10 @@
   <data name="SeriesForm.AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>
-  <data name="SeriesForm.Component.MoveDown" xml:space="preserve">
+  <data name="SeriesForm.Component.Down" xml:space="preserve">
     <value>Move down</value>
   </data>
-  <data name="SeriesForm.Component.MoveUp" xml:space="preserve">
+  <data name="SeriesForm.Component.Up" xml:space="preserve">
     <value>Move up</value>
   </data>
   <data name="SeriesForm.CreateSeries.Success" xml:space="preserve">
