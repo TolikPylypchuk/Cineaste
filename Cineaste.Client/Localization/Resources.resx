@@ -135,8 +135,14 @@
   <data name="Button.Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Button.Delete.Busy" xml:space="preserve">
+    <value>Deleting</value>
+  </data>
   <data name="Button.Save" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="Button.Save.Busy" xml:space="preserve">
+    <value>Saving</value>
   </data>
   <data name="Cineaste" xml:space="preserve">
     <value>Cineaste</value>

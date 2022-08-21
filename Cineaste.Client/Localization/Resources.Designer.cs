@@ -115,11 +115,29 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deleting.
+        /// </summary>
+        public static string Button_Delete_Busy {
+            get {
+                return ResourceManager.GetString("Button.Delete.Busy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Button_Save {
             get {
                 return ResourceManager.GetString("Button.Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving.
+        /// </summary>
+        public static string Button_Save_Busy {
+            get {
+                return ResourceManager.GetString("Button.Save.Busy", resourceCulture);
             }
         }
         

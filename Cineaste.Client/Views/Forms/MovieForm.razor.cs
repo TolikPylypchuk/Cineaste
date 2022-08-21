@@ -26,6 +26,9 @@ public partial class MovieForm
     private PropertyValidator<MovieRequest, string>? ImdbIdValidator { get; set; }
     private PropertyValidator<MovieRequest, string>? RottenTomatoesIdValidator { get; set; }
 
+    private bool IsSaving =>
+        this.State.Value.Create.IsInProgress || this.State.Value.Update.IsInProgress;
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();

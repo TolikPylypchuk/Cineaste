@@ -41,6 +41,9 @@ public partial class SeriesMainForm
     private PropertyValidator<SeriesRequest, string>? ImdbIdValidator { get; set; }
     private PropertyValidator<SeriesRequest, string>? RottenTomatoesIdValidator { get; set; }
 
+    private bool IsSaving =>
+        this.State.Value.Create.IsInProgress || this.State.Value.Update.IsInProgress;
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
