@@ -2,7 +2,6 @@ namespace Cineaste.Client.FormModels;
 
 public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
 {
-    private readonly Func<int> getDefaultSequenceNumber;
     private readonly ObservableCollection<PeriodFormModel> periods;
 
     private readonly string defaultTitle;
@@ -25,8 +24,8 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         }
     }
 
-    public SeasonFormModel(string title, string originalTitle, string channel, Func<int> getDefaultSequenceNumber)
-        : this(title, originalTitle, DateOnly.FromDateTime(DateTime.Now), channel, getDefaultSequenceNumber)
+    public SeasonFormModel(string title, string originalTitle, string channel, Func<int> nextSequenceNumber)
+        : this(title, originalTitle, DateOnly.FromDateTime(DateTime.Now), channel, nextSequenceNumber)
     { }
 
     public SeasonFormModel(
@@ -34,7 +33,8 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         string originalTitle,
         DateOnly date,
         string channel,
-        Func<int> getDefaultSequenceNumber)
+        Func<int> nextSequenceNumber)
+        : base(nextSequenceNumber)
     {
         this.defaultTitle = title;
         this.Titles.Clear();
@@ -45,10 +45,9 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         this.OriginalTitles.Add(originalTitle);
 
         this.Channel = this.defaultChannel = channel;
-        this.SequenceNumber = getDefaultSequenceNumber();
+        this.SequenceNumber = nextSequenceNumber();
 
         this.defaultDate = date;
-        this.getDefaultSequenceNumber = getDefaultSequenceNumber;
 
         this.periods = new() { new(date) };
         this.Periods = new(this.periods);
@@ -92,7 +91,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         this.WatchStatus = season?.WatchStatus ?? SeasonWatchStatus.NotWatched;
         this.ReleaseStatus = season?.ReleaseStatus ?? SeasonReleaseStatus.NotStarted;
         this.Channel = season?.Channel ?? this.defaultChannel;
-        this.SequenceNumber = season?.SequenceNumber ?? this.getDefaultSequenceNumber();
+        this.SequenceNumber = season?.SequenceNumber ?? this.NextSequenceNumber();
 
         this.periods.Clear();
 

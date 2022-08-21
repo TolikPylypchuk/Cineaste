@@ -4,11 +4,13 @@
 {
     case SpecialEpisodeFormModel model:
         <SpecialEpisodeForm Episode="@model.BackingModel" FormModel="@model" Close="@this.Close"
-                            Delete="@(() => this.RemoveComponent(model))" />
+                            Delete="@(() => this.RemoveComponent(model))" GoToNextComponent="@this.GoToNextComponent"
+                            GoToPreviousComponent="@this.GoToPreviousComponent" />
         break;
     case SeasonFormModel model:
         <SeasonForm Season="@model.BackingModel" FormModel="@model" Close="@this.Close"
-                    Delete="@(() => this.RemoveComponent(model))" />
+                    Delete="@(() => this.RemoveComponent(model))" GoToNextComponent="@this.GoToNextComponent"
+                    GoToPreviousComponent="@this.GoToPreviousComponent" />
         break;
     default:
         <SeriesMainForm FormTitle="@this.FormTitle" FormTitleUpdated="@this.UpdateFormTitle" FormModel="@this.FormModel"

@@ -16,6 +16,12 @@ public partial class SeasonForm
     [Parameter]
     public SeasonFormModel FormModel { get; set; } = null!;
 
+    [Parameter]
+    public EventCallback GoToNextComponent { get; set; }
+
+    [Parameter]
+    public EventCallback GoToPreviousComponent { get; set; }
+
     private string FormTitle { get; set; } = String.Empty;
 
     private ImmutableArray<SeasonWatchStatus> AllWatchStatuses { get; } =

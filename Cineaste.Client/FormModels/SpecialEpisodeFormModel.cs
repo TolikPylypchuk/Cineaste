@@ -2,8 +2,6 @@ namespace Cineaste.Client.FormModels;
 
 public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEpisodeModel>
 {
-    private readonly Func<int> getDefaultSequenceNumber;
-
     private readonly DateOnly defaultDate;
     private readonly string defaultChannel;
 
@@ -18,18 +16,18 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
     public override string Years =>
         this.Year.ToString();
 
-    public SpecialEpisodeFormModel(string channel, Func<int> getDefaultSequenceNumber)
-        : this(DateOnly.FromDateTime(DateTime.Now), channel, getDefaultSequenceNumber)
+    public SpecialEpisodeFormModel(string channel, Func<int> nextSequenceNumber)
+        : this(DateOnly.FromDateTime(DateTime.Now), channel, nextSequenceNumber)
     { }
 
-    public SpecialEpisodeFormModel(DateOnly date, string channel, Func<int> getDefaultSequenceNumber)
+    public SpecialEpisodeFormModel(DateOnly date, string channel, Func<int> nextSequenceNumber)
+        : base(nextSequenceNumber)
     {
         this.defaultDate = date;
         this.Month = date.Month;
         this.Year = date.Year;
         this.Channel = this.defaultChannel = channel;
-        this.SequenceNumber = getDefaultSequenceNumber();
-        this.getDefaultSequenceNumber = getDefaultSequenceNumber;
+        this.SequenceNumber = nextSequenceNumber();
     }
 
     public SpecialEpisodeRequest ToRequest() =>
@@ -60,6 +58,6 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
         this.Year = episode?.Year ?? this.defaultDate.Year;
 
         this.RottenTomatoesId = episode?.RottenTomatoesId ?? String.Empty;
-        this.SequenceNumber = episode?.SequenceNumber ?? this.getDefaultSequenceNumber();
+        this.SequenceNumber = episode?.SequenceNumber ?? this.NextSequenceNumber();
     }
 }

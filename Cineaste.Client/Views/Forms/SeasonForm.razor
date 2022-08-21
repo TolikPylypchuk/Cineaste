@@ -5,7 +5,16 @@
         <div class="d-flex flex-row justify-content-between">
             <RadzenButton Icon="keyboard_arrow_up" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
                           Click="this.GoToSeries" class="btn-transparent my-2" />
-            <div></div>
+
+            <div class="d-flex flex-row">
+                <RadzenButton Icon="keyboard_arrow_left" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                              class="@($"btn-transparent{(this.FormModel.IsFirst ? " invisible" : "")} my-2 me-1")"
+                              Click="this.GoToPreviousComponent" />
+                <RadzenButton Icon="keyboard_arrow_right" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                              class="@($"btn-transparent{(this.FormModel.IsLast ? " invisible" : "")} my-2 ms-1")"
+                              Click="this.GoToNextComponent" />
+            </div>
+
             <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
                           class="btn-transparent my-2" />
         </div>

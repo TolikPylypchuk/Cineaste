@@ -16,7 +16,8 @@
             }
         </div>
 
-        <CascadingValue Value="@(() => this.TitlesRequests[index])" IsFixed="true">
+        <CascadingValue Value="@(() => this.TitlesRequests.Count > index ? this.TitlesRequests[index] : null)"
+                        IsFixed="true">
             <FormValidator Validator="this.TitleNameValidator" Value="@this.Titles[index]" />
         </CascadingValue>
     </div>

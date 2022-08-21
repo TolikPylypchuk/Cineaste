@@ -52,6 +52,12 @@ public partial class SeriesForm
         this.Dispatcher.Dispatch(new GoToSeriesAction());
     }
 
+    private void GoToNextComponent() =>
+        this.Dispatcher.Dispatch(new GoToNextComponentAction(this.FormModel));
+
+    private void GoToPreviousComponent() =>
+        this.Dispatcher.Dispatch(new GoToPreviousComponentAction(this.FormModel));
+
     private void Save() =>
         this.WithValidation(() =>
         {

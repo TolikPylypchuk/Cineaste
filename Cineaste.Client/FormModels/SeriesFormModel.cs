@@ -74,8 +74,18 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
         return episode;
     }
 
-    public void RemoveComponent(ISeriesComponentFormModel component) =>
+    public void RemoveComponent(ISeriesComponentFormModel component)
+    {
         this.components.Remove(component);
+
+        foreach (var c in this.components)
+        {
+            if (c.SequenceNumber > component.SequenceNumber)
+            {
+                c.SequenceNumber--;
+            }
+        }
+    }
 
     public void MoveComponentUp(ISeriesComponentFormModel component)
     {

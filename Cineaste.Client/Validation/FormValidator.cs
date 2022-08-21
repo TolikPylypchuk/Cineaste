@@ -31,7 +31,7 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
     }
 
     [CascadingParameter]
-    public Func<TRequest> Request { get; set; } = null!;
+    public Func<TRequest?> Request { get; set; } = null!;
 
     [Parameter]
     public PropertyValidator<TRequest, TProperty?>? Validator { get; set; }
@@ -54,9 +54,9 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
 
     public void Validate()
     {
-        if (this.Validator is not null)
+        if (this.Validator is not null && this.Request() is { } request)
         {
-            var result = this.Validator.Validate(this.Request(), this.Value);
+            var result = this.Validator.Validate(request, this.Value);
             this.Text = result.Any() ? result.Distinct().Aggregate((acc, item) => $"{acc}; {item}") : String.Empty;
         } else
         {
