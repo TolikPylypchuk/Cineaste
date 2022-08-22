@@ -59,13 +59,13 @@
                     </div>
 
                     <RadzenLabel Text="@this.Loc["MovieForm.Titles"]" class="mt-2" />
-                    <TitlesForm Titles="@this.FormModel.Titles" Validator="@this.TitlesValidator"
+                    <TitlesForm Titles="@this.FormModel.Titles" Validator="@this.TitlesValidator" Parent="@this"
                                 ConvertTitlesToRequests="@this.FormModel.ToTitleRequests"
                                 FirstTitleChanged="@this.UpdateFormTitle" />
 
                     <RadzenLabel Text="@this.Loc["MovieForm.OriginalTitles"]" class="mt-2" />
                     <TitlesForm Titles="@this.FormModel.OriginalTitles" Validator="@this.OriginalTitlesValidator"
-                                ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
+                                ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" Parent="@this" />
 
                     <div class="row mt-2">
                         <div class="col-md pe-md-1">

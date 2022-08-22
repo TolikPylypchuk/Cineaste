@@ -114,6 +114,15 @@ public partial class SeriesMainForm
     private bool HasRottenTomatoesId() =>
         !String.IsNullOrEmpty(this.FormModel.RottenTomatoesId);
 
+    private Task OnSave() =>
+        this.WithValidation(this.Save.InvokeAsync);
+
+    private async Task OnCancel()
+    {
+        this.ClearValidation();
+        await this.Cancel.InvokeAsync();
+    }
+
     private async Task Delete()
     {
         bool? delete = await this.DialogService.Confirm(

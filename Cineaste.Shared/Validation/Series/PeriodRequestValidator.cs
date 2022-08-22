@@ -23,8 +23,9 @@ public sealed class PeriodRequestValidator : CineasteValidator<PeriodRequest>
             .GreaterThan(MinYear)
             .WithErrorCode(this.ErrorCode(req => req.EndYear, TooLow));
 
-        this.RuleFor(req => new { req.StartMonth, req.StartYear, req.EndMonth, req.EndYear })
-            .Must(x => x.StartYear < x.EndYear || x.StartYear == x.EndYear && x.StartMonth <= x.EndMonth)
+        this.RuleFor(req => req.StartMonth)
+            .Must((req, _) =>
+                req.StartYear < req.EndYear || req.StartYear == req.EndYear && req.StartMonth <= req.EndMonth)
             .WithErrorCode(this.ErrorCode(Invalid));
 
         this.RuleFor(req => req.IsSingleDayRelease)

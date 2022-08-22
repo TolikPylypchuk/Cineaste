@@ -16,7 +16,7 @@
             }
         </div>
 
-        <CascadingValue Value="@(() => this.TitlesRequests.Count > index ? this.TitlesRequests[index] : null)"
+        <CascadingValue Value="@(() => this.TitleRequests.Count > index ? this.TitleRequests[index] : null)"
                         IsFixed="true">
             <FormValidator Validator="this.TitleNameValidator" Value="@this.Titles[index]" />
         </CascadingValue>
@@ -24,7 +24,7 @@
 }
 
 <div>
-    <FormValidator Validator="@this.Validator" Value="@this.TitlesRequests" />
+    <FormValidator Validator="@this.Validator" Value="@this.TitleRequests" />
 </div>
 
 @code {
@@ -40,7 +40,10 @@
     [Parameter]
     public EventCallback<string> FirstTitleChanged { get; set; }
 
-    private ImmutableList<TitleRequest> TitlesRequests { get; set; } = ImmutableList.Create<TitleRequest>();
+    [Parameter]
+    public IValidationExecutor Parent { get; set; } = null!;
+
+    private ImmutableList<TitleRequest> TitleRequests { get; set; } = ImmutableList.Create<TitleRequest>();
 
     private PropertyValidator<TitleRequest, string>? TitleNameValidator { get; set; }
 
@@ -48,10 +51,13 @@
     {
         base.OnParametersSet();
 
-        this.Titles.CollectionChanged += (sender, e) => this.TitlesRequests = this.ConvertTitlesToRequests(this.Titles);
+        this.SetTitleRequests();
+        this.Titles.CollectionChanged += (sender, e) => this.SetTitleRequests();
 
         this.TitleNameValidator = PropertyValidator.Create(
             TitleRequest.CreateValidator(), (TitleRequest req) => req.Name, this);
+
+        this.AttachValidationTo(this.Parent);
     }
 
     private async Task UpdateTitle(string title, int index)
@@ -63,4 +69,7 @@
             await this.FirstTitleChanged.InvokeAsync(title);
         }
     }
+
+    private void SetTitleRequests() =>
+        this.TitleRequests = this.ConvertTitlesToRequests(this.Titles);
 }

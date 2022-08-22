@@ -27,11 +27,33 @@ public partial class SpecialEpisodeForm
     private bool CanChangeIsWatched { get; set; } = true;
     private bool CanChangeIsReleased { get; set; } = true;
 
+    private PropertyValidator<SpecialEpisodeRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }
+    private PropertyValidator<SpecialEpisodeRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
+
+    private PropertyValidator<SpecialEpisodeRequest, int>? YearValidator { get; set; } = null!;
+    private PropertyValidator<SpecialEpisodeRequest, string>? ChannelValidator { get; set; }
+    private PropertyValidator<SpecialEpisodeRequest, string>? RottenTomatoesIdValidator { get; set; } = null!;
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+        this.InitializeValidators();
         this.UpdateFormTitle();
         this.OnMonthYearChanged();
+    }
+
+    private void InitializeValidators()
+    {
+        var validator = SpecialEpisodeRequest.CreateValidator();
+
+        this.TitlesValidator = PropertyValidator.Create(validator, (SpecialEpisodeRequest req) => req.Titles, this);
+        this.OriginalTitlesValidator = PropertyValidator.Create(
+            validator, (SpecialEpisodeRequest req) => req.OriginalTitles, this);
+
+        this.YearValidator = PropertyValidator.Create(validator, (SpecialEpisodeRequest req) => req.Year, this);
+        this.ChannelValidator = PropertyValidator.Create(validator, (SpecialEpisodeRequest req) => req.Channel, this);
+        this.RottenTomatoesIdValidator = PropertyValidator.Create(
+            validator, (SpecialEpisodeRequest req) => req.RottenTomatoesId, this);
     }
 
     private void SetPropertyValues()
@@ -87,9 +109,18 @@ public partial class SpecialEpisodeForm
         }
     }
 
-    private void GoToSeries() =>
-        this.Dispatcher.Dispatch(new GoToSeriesAction());
+    private Task OnGoToNextComponent() =>
+        this.WithValidation(this.GoToNextComponent.InvokeAsync);
 
-    private void Cancel() =>
+    private Task OnGoToPreviousComponent() =>
+        this.WithValidation(this.GoToPreviousComponent.InvokeAsync);
+
+    private void GoToSeries() =>
+        this.WithValidation(() => this.Dispatcher.Dispatch(new GoToSeriesAction()));
+
+    private void Cancel()
+    {
         this.SetPropertyValues();
+        this.ClearValidation();
+    }
 }

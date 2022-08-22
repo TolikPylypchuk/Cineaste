@@ -58,14 +58,13 @@ public partial class SeriesForm
     private void GoToPreviousComponent() =>
         this.Dispatcher.Dispatch(new GoToPreviousComponentAction(this.FormModel));
 
-    private void Save() =>
-        this.WithValidation(() =>
+    private void Save()
+    {
+        if (this.ListItem is null)
         {
-            if (this.ListItem is null)
-            {
-                this.Dispatcher.Dispatch(new CreateSeriesAction(this.FormModel.ToRequest(this.ListId)));
-            }
-        });
+            this.Dispatcher.Dispatch(new CreateSeriesAction(this.FormModel.ToRequest(this.ListId)));
+        }
+    }
 
     private void Cancel() =>
         this.SetPropertyValues();

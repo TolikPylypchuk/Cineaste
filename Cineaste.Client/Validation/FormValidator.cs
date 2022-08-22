@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 public sealed class FormValidator<TRequest, TProperty> : ComponentBase
 {
     private TProperty? value;
+    private object? trigger;
     private bool isInitialized = false;
 
     [Parameter]
@@ -27,6 +28,21 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
             {
                 this.Validate();
             }
+        }
+    }
+
+    [Parameter]
+    public object? Trigger
+    {
+        get => this.trigger;
+        set
+        {
+            if (this.isInitialized)
+            {
+                this.Validate();
+            }
+
+            this.trigger = value;
         }
     }
 
@@ -72,7 +88,7 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
 
         if (this.Validator is { Executor: { } executor })
         {
-            executor.Validation += (sender, e) =>
+            executor.ValidationExecuted += (sender, e) =>
             {
                 this.Validate();
 
@@ -81,6 +97,9 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
                     e.ValidationFailed();
                 }
             };
+
+            executor.ValidationCleared += (sender, e) =>
+                (this.Text, this.IsValid) = (String.Empty, true);
         }
 
         this.isInitialized = true;

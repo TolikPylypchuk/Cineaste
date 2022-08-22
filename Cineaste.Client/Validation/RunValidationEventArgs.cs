@@ -1,6 +1,6 @@
 namespace Cineaste.Client.Validation;
 
-public class RunValidationEventArgs : EventArgs
+public class ExecuteValidationEventArgs : EventArgs
 {
     public bool IsSuccessful { get; private set; } = true;
 

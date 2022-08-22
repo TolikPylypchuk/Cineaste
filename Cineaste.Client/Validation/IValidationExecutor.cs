@@ -8,5 +8,7 @@ public interface IValidationExecutor
 {
     IStringLocalizer<Resources> Loc { get; }
 
-    event EventHandler<RunValidationEventArgs> Validation;
+    event EventHandler<ExecuteValidationEventArgs> ValidationExecuted;
+
+    event EventHandler<EventArgs> ValidationCleared;
 }

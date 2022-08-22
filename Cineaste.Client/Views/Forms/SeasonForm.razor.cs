@@ -24,6 +24,12 @@ public partial class SeasonForm
 
     private string FormTitle { get; set; } = String.Empty;
 
+    private PropertyValidator<SeasonRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }
+    private PropertyValidator<SeasonRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
+    private PropertyValidator<SeasonRequest, SeasonWatchStatus>? WatchStatusValidator { get; set; }
+    private PropertyValidator<SeasonRequest, string>? ChannelValidator { get; set; }
+    private PropertyValidator<SeasonRequest, ImmutableList<PeriodRequest>>? PeriodsValidator { get; set; }
+
     private ImmutableArray<SeasonWatchStatus> AllWatchStatuses { get; } =
         Enum.GetValues<SeasonWatchStatus>().ToImmutableArray();
 
@@ -33,7 +39,21 @@ public partial class SeasonForm
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+        this.InitializeValidators();
         this.UpdateFormTitle();
+    }
+
+    private void InitializeValidators()
+    {
+        var validator = SeasonRequest.CreateValidator();
+
+        this.TitlesValidator = PropertyValidator.Create(validator, (SeasonRequest req) => req.Titles, this);
+        this.OriginalTitlesValidator = PropertyValidator.Create(
+            validator, (SeasonRequest req) => req.OriginalTitles, this);
+
+        this.WatchStatusValidator = PropertyValidator.Create(validator, (SeasonRequest req) => req.WatchStatus, this);
+        this.ChannelValidator = PropertyValidator.Create(validator, (SeasonRequest req) => req.Channel, this);
+        this.PeriodsValidator = PropertyValidator.Create(validator, (SeasonRequest req) => req.Periods, this);
     }
 
     private void SetPropertyValues()
@@ -59,9 +79,18 @@ public partial class SeasonForm
     private void UpdateFormTitle() =>
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
 
-    private void GoToSeries() =>
-        this.Dispatcher.Dispatch(new GoToSeriesAction());
+    private Task OnGoToNextComponent() =>
+        this.WithValidation(this.GoToNextComponent.InvokeAsync);
 
-    private void Cancel() =>
+    private Task OnGoToPreviousComponent() =>
+        this.WithValidation(this.GoToPreviousComponent.InvokeAsync);
+
+    private void GoToSeries() =>
+        this.WithValidation(() => this.Dispatcher.Dispatch(new GoToSeriesAction()));
+
+    private void Cancel()
+    {
         this.SetPropertyValues();
+        this.ClearValidation();
+    }
 }

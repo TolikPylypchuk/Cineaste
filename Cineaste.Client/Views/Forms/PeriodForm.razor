@@ -4,16 +4,22 @@
     <MonthYearPicker @bind-Month="this.FormModel.StartMonth" @bind-Year="this.FormModel.StartYear" Class="mt-2"
                      MonthText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonth" : "ReleaseMonth")}")"
                      YearText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartYear" : "ReleaseYear")}")"
-                     Changed="@this.OnPeriodChanged" />
+                     Changed="@this.OnPeriodChanged" YearValidator="@this.StartYearValidator" Parent="@this" />
 
     @if (!this.FormModel.IsSingleDayRelease)
     {
         <MonthYearPicker @bind-Month="this.FormModel.EndMonth" @bind-Year="this.FormModel.EndYear" Class="mt-1"
-                         MonthText="PeriodForm.EndMonth" YearText="PeriodForm.EndYear"
-                         Changed="@this.OnPeriodChanged" />
+                         MonthText="PeriodForm.EndMonth" YearText="PeriodForm.EndYear" Parent="@this"
+                         Changed="@this.OnPeriodChanged" YearValidator="@this.EndYearValidator" />
     }
 
+    <div>
+        <FormValidator Validator="@this.PeriodValidator" Value="@this.FormModel.StartMonth"
+                       Trigger="@(new { this.FormModel.StartYear, this.FormModel.EndMonth, this.FormModel.EndYear })"/>
+    </div>
+
     <RadzenLabel Text="@this.Loc["PeriodForm.EpisodeCount"]" Component="EpisodeCountNumeric" class="mt-1" />
+
     <div class="row">
         <div class="col-md pe-md-1">
             <RadzenNumeric @bind-Value="this.FormModel.EpisodeCount" Name="EpisodeCountNumeric" />
@@ -24,6 +30,15 @@
                                 Disabled="@(!this.CanChangeIsSingleDayRelease)" />
                 <RadzenLabel Text="@this.Loc["PeriodForm.IsSingleDayRelease"]" Component="IsSingleDayReleaseCheckBox" />
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md pe-md-1">
+            <FormValidator Validator="@this.EpisodeCountValidator" Value="@this.FormModel.EpisodeCount" />
+        </div>
+        <div class="col-md ps-md-1 d-flex align-items-center">
+            <FormValidator Validator="@this.IsSingleDayReleaseValidator" Value="@this.FormModel.IsSingleDayRelease" />
         </div>
     </div>
 
@@ -39,6 +54,10 @@
                           Click="@this.Removed" class="ms-2" />
         }
     </div>
+
+    <div>
+        <FormValidator Validator="@this.RottenTomatoesIdValidator" Value="@this.FormModel.RottenTomatoesId" />
+    </div>
 </CascadingValue>
 
 @code {
@@ -49,20 +68,59 @@
     public bool CanRemove { get; set; }
 
     [Parameter]
+    public EventCallback Changed { get; set; }
+
+    [Parameter]
     public EventCallback Removed { get; set; }
 
     [Parameter]
     public EventCallback RottenTomatoesIdChanged { get; set; }
+
+    [Parameter]
+    public IValidationExecutor Parent { get; set; } = null!;
+
+    private PropertyValidator<PeriodRequest, int>? StartYearValidator { get; set; }
+    private PropertyValidator<PeriodRequest, int>? EndYearValidator { get; set; }
+    private PropertyValidator<PeriodRequest, int>? PeriodValidator { get; set; }
+    private PropertyValidator<PeriodRequest, int>? EpisodeCountValidator { get; set; }
+    private PropertyValidator<PeriodRequest, bool>? IsSingleDayReleaseValidator { get; set; }
+    private PropertyValidator<PeriodRequest, string>? RottenTomatoesIdValidator { get; set; }
 
     private bool CanChangeIsSingleDayRelease { get; set; }
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        this.OnPeriodChanged();
+
+        this.InitializeValidators();
+        this.SetCanChangeIsSingleDayRelease();
+
+        this.AttachValidationTo(this.Parent);
     }
 
-    private void OnPeriodChanged() =>
+    private void InitializeValidators()
+    {
+        var validator = PeriodRequest.CreateValidator();
+
+        this.StartYearValidator = PropertyValidator.Create(validator, (PeriodRequest req) => req.StartYear, this);
+        this.EndYearValidator = PropertyValidator.Create(validator, (PeriodRequest req) => req.EndYear, this);
+        this.PeriodValidator = PropertyValidator.Create(validator, (PeriodRequest req) => req.StartMonth, this);
+        this.EpisodeCountValidator = PropertyValidator.Create(validator, (PeriodRequest req) => req.EpisodeCount, this);
+
+        this.IsSingleDayReleaseValidator = PropertyValidator.Create(
+            validator, (PeriodRequest req) => req.IsSingleDayRelease, this);
+
+        this.RottenTomatoesIdValidator = PropertyValidator.Create(
+            validator, (PeriodRequest req) => req.RottenTomatoesId, this);
+    }
+
+    private async Task OnPeriodChanged()
+    {
+        this.SetCanChangeIsSingleDayRelease();
+        await this.Changed.InvokeAsync();
+    }
+
+    private void SetCanChangeIsSingleDayRelease() =>
         this.CanChangeIsSingleDayRelease =
             this.FormModel.StartMonth == this.FormModel.EndMonth &&
             this.FormModel.StartYear == this.FormModel.EndYear;

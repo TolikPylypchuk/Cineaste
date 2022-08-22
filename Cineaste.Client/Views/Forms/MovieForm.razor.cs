@@ -142,8 +142,11 @@ public partial class MovieForm
             }
         });
 
-    private void Cancel() =>
+    private void Cancel()
+    {
         this.SetPropertyValues();
+        this.ClearValidation();
+    }
 
     private async Task Delete()
     {

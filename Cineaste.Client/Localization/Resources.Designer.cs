@@ -1735,6 +1735,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The title is empty.
+        /// </summary>
+        public static string Validation_Series_OriginalTitles_Empty {
+            get {
+                return ResourceManager.GetString("Validation.Series.OriginalTitles.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The release status is invalid.
         /// </summary>
         public static string Validation_Series_ReleaseStatus_Invalid {
@@ -1767,6 +1776,15 @@ namespace Cineaste.Client.Localization {
         public static string Validation_Series_Sequence_Invalid {
             get {
                 return ResourceManager.GetString("Validation.Series.Sequence.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title is empty.
+        /// </summary>
+        public static string Validation_Series_Titles_Empty {
+            get {
+                return ResourceManager.GetString("Validation.Series.Titles.Empty", resourceCulture);
             }
         }
         

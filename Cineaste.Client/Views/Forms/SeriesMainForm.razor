@@ -44,13 +44,13 @@
                     </div>
 
                     <RadzenLabel Text="@this.Loc["SeriesForm.Titles"]" class="mt-2" />
-                    <TitlesForm T="SeriesMainForm" Titles="@this.FormModel.Titles"
+                    <TitlesForm Titles="@this.FormModel.Titles" Validator="@this.TitlesValidator" Parent="@this"
                                 FirstTitleChanged="@this.UpdateFormTitle"
                                 ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
 
                     <RadzenLabel Text="@this.Loc["SeriesForm.OriginalTitles"]" class="mt-2" />
-                    <TitlesForm T="SeriesMainForm" Titles="@this.FormModel.OriginalTitles"
-                                ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
+                    <TitlesForm Titles="@this.FormModel.OriginalTitles" Validator="@this.OriginalTitlesValidator"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" Parent="@this" />
 
                     <div class="row mt-2">
                         <div class="col-md pe-md-1">
@@ -62,6 +62,8 @@
                                     @this.Loc[$"SeriesForm.WatchStatus.{context}"]
                                 </Template>
                             </RadzenDropDown>
+                            <FormValidator Validator="@this.WatchStatusValidator" Value="@this.FormModel.WatchStatus"
+                                           Trigger="@this.FormModel.ReleaseStatus" />
                         </div>
 
                         <div class="col-md ps-md-1">
@@ -126,13 +128,21 @@
                         </div>
                     </div>
 
+                    <div>
+                        <FormValidator Validator="@this.SeasonsValidator"
+                                       Value="@this.FormModel.ToRequest(this.ListId).Seasons" />
+                    </div>
+
                     <RadzenLabel Text="@this.Loc["SeriesForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-2" />
                     <RadzenTextBox @bind-Value="@this.FormModel.ImdbId" Name="ImdbIdTextBox" class="w-100" />
+                    <FormValidator Validator="@this.ImdbIdValidator" Value="@this.FormModel.ImdbId" />
 
                     <RadzenLabel Text="@this.Loc["SeriesForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox"
                                  class="mt-2" />
                     <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox"
                                    class="w-100" />
+                    <FormValidator Validator="@this.RottenTomatoesIdValidator"
+                                   Value="@this.FormModel.RottenTomatoesId" />
 
                     <div class="d-flex justify-content-center">
                         <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
@@ -176,9 +186,9 @@
                 <div class="d-flex flex-row my-2">
                     <RadzenButton Text="@this.Loc["Button.Save"]" BusyText="@this.Loc["Button.Save.Busy"]"
                                   ButtonStyle="ButtonStyle.Primary" IsBusy="@this.IsSaving"
-                                  Click="@this.Save" class="me-1" />
+                                  Click="@this.OnSave" class="me-1" />
                     <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
-                                  Click="@this.Cancel" class="ms-1" />
+                                  Click="@this.OnCancel" class="ms-1" />
                 </div>
             </div>
         }

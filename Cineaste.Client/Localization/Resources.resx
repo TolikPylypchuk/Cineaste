@@ -675,6 +675,9 @@
   <data name="Validation.Series.ImdbId.Invalid" xml:space="preserve">
     <value>The IMDb ID must be in the form 'tt[digits]' e.g. 'tt123456'</value>
   </data>
+  <data name="Validation.Series.OriginalTitles.Empty" xml:space="preserve">
+    <value>The title is empty</value>
+  </data>
   <data name="Validation.Series.ReleaseStatus.Invalid" xml:space="preserve">
     <value>The release status is invalid</value>
   </data>
@@ -686,6 +689,9 @@
   </data>
   <data name="Validation.Series.Sequence.Invalid" xml:space="preserve">
     <value>The sequence of seasons and special episodes is invalid</value>
+  </data>
+  <data name="Validation.Series.Titles.Empty" xml:space="preserve">
+    <value>The title is empty</value>
   </data>
   <data name="Validation.Series.WatchStatus.Invalid" xml:space="preserve">
     <value>The watch status is invalid</value>

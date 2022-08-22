@@ -9,10 +9,10 @@
             <div class="d-flex flex-row">
                 <RadzenButton Icon="keyboard_arrow_left" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
                               class="@($"btn-transparent{(this.FormModel.IsFirst ? " invisible" : "")} my-2 me-1")"
-                              Click="this.GoToPreviousComponent" />
+                              Click="this.OnGoToPreviousComponent" />
                 <RadzenButton Icon="keyboard_arrow_right" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
                               class="@($"btn-transparent{(this.FormModel.IsLast ? " invisible" : "")} my-2 ms-1")"
-                              Click="this.GoToNextComponent" />
+                              Click="this.OnGoToNextComponent" />
             </div>
 
             <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
@@ -50,25 +50,28 @@
                 </div>
 
                 <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.Titles"]" class="mt-2" />
-                <TitlesForm T="SpecialEpisodeForm" Titles="@this.FormModel.Titles"
+                <TitlesForm Titles="@this.FormModel.Titles" Validator="@this.TitlesValidator" Parent="@this"
                             FirstTitleChanged="@this.UpdateFormTitle"
                             ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
 
                 <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.OriginalTitles"]" class="mt-2" />
-                <TitlesForm T="SpecialEpisodeForm" Titles="@this.FormModel.OriginalTitles"
-                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
+                <TitlesForm Titles="@this.FormModel.OriginalTitles" Validator="@this.OriginalTitlesValidator"
+                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" Parent="@this" />
 
                 <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.Channel"]" Component="ChannelTextBox" class="mt-2" />
                 <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
+                <FormValidator Validator="@this.ChannelValidator" Value="@this.FormModel.Channel" />
 
                 <MonthYearPicker @bind-Month="this.FormModel.Month" @bind-Year="this.FormModel.Year" Class="mt-2"
                                  MonthText="SpecialEpisodeForm.ReleaseMonth" YearText="SpecialEpisodeForm.ReleaseYear"
-                                 Changed="@this.OnMonthYearChanged" />
+                                 Changed="@this.OnMonthYearChanged" Parent="@this"
+                                 YearValidator="@this.YearValidator" />
 
                 <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox"
                              class="mt-1" />
                 <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox"
                                class="w-100" />
+                <FormValidator Validator="@this.RottenTomatoesIdValidator" Value="@this.FormModel.RottenTomatoesId" />
 
                 <div class="d-flex justify-content-center">
                     <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
