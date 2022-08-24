@@ -11,4 +11,8 @@ public interface IValidationExecutor
     event EventHandler<ExecuteValidationEventArgs> ValidationExecuted;
 
     event EventHandler<EventArgs> ValidationCleared;
+
+    event EventHandler<EventArgs> ValidationSuspended;
+
+    event EventHandler<EventArgs> ValidationResumed;
 }

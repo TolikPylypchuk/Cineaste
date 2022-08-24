@@ -31,6 +31,12 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
     [Inject]
     protected TooltipService TooltipService { get; private set; } = null!;
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        this.ValidationResumed?.Invoke(this, EventArgs.Empty);
+    }
+
     protected bool RunValidation()
     {
         var args = new ExecuteValidationEventArgs();
@@ -61,8 +67,11 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
         }
     }
 
-    protected void ClearValidation() =>
+    protected void ClearValidation()
+    {
         this.ValidationCleared?.Invoke(this, EventArgs.Empty);
+        this.ValidationSuspended?.Invoke(this, EventArgs.Empty);
+    }
 
     protected void AttachValidationTo(IValidationExecutor parent)
     {
@@ -90,4 +99,8 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
     public event EventHandler<ExecuteValidationEventArgs>? ValidationExecuted;
 
     public event EventHandler<EventArgs>? ValidationCleared;
+
+    public event EventHandler<EventArgs>? ValidationSuspended;
+
+    public event EventHandler<EventArgs>? ValidationResumed;
 }

@@ -10,7 +10,7 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
     private TProperty? value;
     private object? trigger;
     private bool isInitialized = false;
-    private bool isCleared = false;
+    private bool isSuspended = false;
 
     [Parameter]
     public TProperty? Value
@@ -18,16 +18,9 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
         get => this.value;
         set
         {
-            if (Equals(this.value, value))
+            if (!Equals(this.value, value))
             {
-                return;
-            }
-
-            this.value = value;
-            this.isCleared = false;
-
-            if (this.isInitialized)
-            {
+                this.value = value;
                 this.Validate();
             }
         }
@@ -39,18 +32,11 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
         get => this.trigger;
         set
         {
-            if (Equals(this.trigger, value))
+            if (!Equals(this.trigger, value))
             {
-                return;
-            }
-
-            if (this.isInitialized && !this.isCleared)
-            {
+                this.trigger = value;
                 this.Validate();
             }
-
-            this.trigger = value;
-            this.isCleared = false;
         }
     }
 
@@ -78,6 +64,11 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
 
     public void Validate()
     {
+        if (!this.isInitialized || this.isSuspended)
+        {
+            return;
+        }
+
         if (this.Validator is not null && this.Request() is { } request)
         {
             var result = this.Validator.Validate(request, this.Value);
@@ -110,8 +101,10 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
             {
                 this.Text = String.Empty;
                 this.IsValid = true;
-                this.isCleared = true;
             };
+
+            executor.ValidationSuspended += (sender, e) => this.isSuspended = true;
+            executor.ValidationResumed += (sender, e) => this.isSuspended = false;
         }
 
         this.isInitialized = true;
