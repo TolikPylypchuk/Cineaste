@@ -38,14 +38,15 @@
             <FormValidator Validator="@this.EpisodeCountValidator" Value="@this.FormModel.EpisodeCount" />
         </div>
         <div class="col-md ps-md-1 d-flex align-items-center">
-            <FormValidator Validator="@this.IsSingleDayReleaseValidator" Value="@this.FormModel.IsSingleDayRelease" />
+            <FormValidator Validator="@this.IsSingleDayReleaseValidator" Value="@this.FormModel.IsSingleDayRelease"
+                           Trigger="@this.FormModel.EpisodeCount" />
         </div>
     </div>
 
     <RadzenLabel Text="@this.Loc["PeriodForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox" class="mt-2" />
 
     <div class="d-flex flex-row align-items-center w-100">
-        <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Change="@this.RottenTomatoesIdChanged"
+        <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Change="@this.Changed"
                        Name="RottenTomatoesTextBox" class="w-100" />
 
         @if (this.CanRemove)
@@ -72,9 +73,6 @@
 
     [Parameter]
     public EventCallback Removed { get; set; }
-
-    [Parameter]
-    public EventCallback RottenTomatoesIdChanged { get; set; }
 
     [Parameter]
     public IValidationExecutor Parent { get; set; } = null!;

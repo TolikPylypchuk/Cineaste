@@ -54,5 +54,5 @@ public sealed class SeasonRequestValidator : TitledRequestValidator<SeasonReques
             .Buffer(2, 1)
             .Where(periods => periods.Count == 2)
             .All(periods => periods[0].EndYear < periods[1].StartYear ||
-                periods[0].EndYear == periods[1].StartYear && periods[0].EndMonth < periods[1].StartMonth);
+                periods[0].EndYear == periods[1].StartYear && periods[0].EndMonth <= periods[1].StartMonth);
 }

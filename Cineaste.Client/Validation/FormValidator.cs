@@ -10,6 +10,7 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
     private TProperty? value;
     private object? trigger;
     private bool isInitialized = false;
+    private bool isCleared = false;
 
     [Parameter]
     public TProperty? Value
@@ -23,6 +24,7 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
             }
 
             this.value = value;
+            this.isCleared = false;
 
             if (this.isInitialized)
             {
@@ -37,12 +39,18 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
         get => this.trigger;
         set
         {
-            if (this.isInitialized)
+            if (Equals(this.trigger, value))
+            {
+                return;
+            }
+
+            if (this.isInitialized && !this.isCleared)
             {
                 this.Validate();
             }
 
             this.trigger = value;
+            this.isCleared = false;
         }
     }
 
@@ -99,7 +107,11 @@ public sealed class FormValidator<TRequest, TProperty> : ComponentBase
             };
 
             executor.ValidationCleared += (sender, e) =>
-                (this.Text, this.IsValid) = (String.Empty, true);
+            {
+                this.Text = String.Empty;
+                this.IsValid = true;
+                this.isCleared = true;
+            };
         }
 
         this.isInitialized = true;

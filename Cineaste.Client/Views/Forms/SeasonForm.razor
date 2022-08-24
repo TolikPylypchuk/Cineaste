@@ -85,7 +85,7 @@
                 {
                     <PeriodForm FormModel="@period" CanRemove="@(this.FormModel.Periods.Count > 1)"
                                 Removed="@(() => this.OnPeriodRemoved(period))" Parent="@this"
-                                RottenTomatoesIdChanged="@this.StateHasChanged" />
+                                Changed="@this.StateHasChanged" />
                 }
 
                 <div>
