@@ -343,7 +343,7 @@
     <value>Number of episodes</value>
   </data>
   <data name="PeriodForm.IsSingleDayRelease" xml:space="preserve">
-    <value>Is single-day release</value>
+    <value>Single-day release</value>
   </data>
   <data name="PeriodForm.ReleaseMonth" xml:space="preserve">
     <value>Release month</value>

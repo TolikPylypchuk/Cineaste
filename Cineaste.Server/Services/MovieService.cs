@@ -34,7 +34,7 @@ public sealed partial class MovieService : IMovieService
 
     public async Task<MovieModel> UpdateMovie(Id<Movie> id, Validated<MovieRequest> request)
     {
-        this.logger.LogDebug("Updating a new movie with ID {Id}", id.Value);
+        this.logger.LogDebug("Updating a movie with ID {Id}", id.Value);
 
         var movie = await this.FindMovie(id);
         var list = await this.FindList(request.Value.ListId);

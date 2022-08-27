@@ -3,6 +3,8 @@ namespace Cineaste.Client.FormModels;
 public abstract class SeriesComponentFormModel<TModel> : TitledFormModel<TModel>, ISeriesComponentFormModel
     where TModel : ISeriesComponentModel
 {
+    private readonly Func<int> lastSequenceNumber;
+
     public string Title =>
         this.Titles.FirstOrDefault() ?? String.Empty;
 
@@ -16,10 +18,15 @@ public abstract class SeriesComponentFormModel<TModel> : TitledFormModel<TModel>
         this.SequenceNumber == 1;
 
     public bool IsLast =>
-        this.SequenceNumber == this.NextSequenceNumber() - 1;
+        this.SequenceNumber == this.lastSequenceNumber();
 
-    protected Func<int> NextSequenceNumber { get; }
+    protected Func<int> GetSequenceNumber { get; }
 
-    public SeriesComponentFormModel(Func<int> nextSequenceNumber) =>
-        this.NextSequenceNumber = nextSequenceNumber;
+    public SeriesComponentFormModel(
+        Func<ISeriesComponentFormModel, int> getSequenceNumber,
+        Func<int> lastSequenceNumber)
+    {
+        this.GetSequenceNumber = () => getSequenceNumber(this);
+        this.lastSequenceNumber = lastSequenceNumber;
+    }
 }

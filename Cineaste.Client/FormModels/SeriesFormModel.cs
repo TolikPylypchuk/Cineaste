@@ -53,7 +53,8 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
             this.defaultSeasonOriginalTitle.Replace(SeasonTitleNumberPlaceholder, seasonNumber),
             new DateOnly(lastYear + 1, 1, 1),
             this.components.Count > 0 ? this.components[^1].Channel : String.Empty,
-            this.GetNextSequenceNumber);
+            this.GetSequenceNumberForComponent,
+            this.GetLastSequenceNumber);
 
         this.components.Add(season);
 
@@ -67,7 +68,8 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
         var episode = new SpecialEpisodeFormModel(
             new DateOnly(lastYear + 1, 1, 1),
             this.components.Count > 0 ? this.components[^1].Channel : String.Empty,
-            this.GetNextSequenceNumber);
+            this.GetSequenceNumberForComponent,
+            this.GetLastSequenceNumber);
 
         this.components.Add(episode);
 
@@ -167,8 +169,13 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
         }
     }
 
-    private int GetNextSequenceNumber() =>
-        (this.components.Max(c => c.SequenceNumber as int?) ?? 0) + 1;
+    private int GetSequenceNumberForComponent(ISeriesComponentFormModel component) =>
+        this.components.Contains(component)
+            ? this.components.IndexOf(component) + 1
+            : (this.components.Max(c => c.SequenceNumber as int?) ?? 0) + 1;
+
+    private int GetLastSequenceNumber() =>
+        this.components.Count;
 
     private int GetLastYear()
     {

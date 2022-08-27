@@ -1,13 +1,12 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class Movie : Entity<Movie>
+public sealed class Movie : TitledEntity<Movie>
 {
     private int year;
     private string? imdbId;
     private string? rottenTomatoesId;
     private MovieKind kind;
 
-    private readonly List<Title> titles;
     private readonly HashSet<TagContainer> tags;
 
     public int Year
@@ -43,23 +42,8 @@ public sealed class Movie : Entity<Movie>
 
     public FranchiseItem? FranchiseItem { get; set; }
 
-    public IReadOnlyCollection<Title> Titles =>
-        this.titles.AsReadOnly();
-
     public IReadOnlySet<TagContainer> Tags =>
         this.tags;
-
-    public Title Title =>
-        this.Titles
-            .Where(title => !title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
-
-    public Title OriginalTitle =>
-        this.Titles
-            .Where(title => title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
 
     public Movie(
         Id<Movie> id,
@@ -69,14 +53,13 @@ public sealed class Movie : Entity<Movie>
         bool isReleased,
         MovieKind kind,
         IEnumerable<Tag>? tags = null)
-        : base(id)
+        : base(id, titles)
     {
         this.Year = year;
         this.IsWatched = isWatched;
         this.IsReleased = isReleased;
         this.Kind = kind;
 
-        this.titles = titles.ToList();
         this.tags = new();
 
         if (tags != null)
@@ -93,44 +76,7 @@ public sealed class Movie : Entity<Movie>
         : base(id)
     {
         this.kind = null!;
-        this.titles = new();
         this.tags = new();
-    }
-
-    public Title AddTitle(string name, bool isOriginal)
-    {
-        int priority = this.titles
-            .Where(title => title.IsOriginal == isOriginal)
-            .Max(title => title.Priority) + 1;
-
-        var title = new Title(name, priority, isOriginal);
-
-        this.titles.Add(title);
-
-        return title;
-    }
-
-    public void RemoveTitle(string name, bool isOriginal) =>
-        this.titles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
-
-    public IReadOnlyCollection<Title> ReplaceTitles(IEnumerable<string> names, bool isOriginal)
-    {
-        var namesList = Require.NotNull(names).ToList();
-
-        if (namesList.Count == 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(names), "The list of title names is empty");
-        }
-
-        this.titles.RemoveAll(title => title.IsOriginal == isOriginal);
-
-        var newTitles = namesList
-            .Select((name, index) => new Title(name, index + 1, isOriginal))
-            .ToList();
-
-        this.titles.AddRange(newTitles);
-
-        return newTitles.AsReadOnly();
     }
 
     public void AddTag(Tag tag) =>

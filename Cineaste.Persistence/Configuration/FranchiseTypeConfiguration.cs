@@ -21,5 +21,7 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
         franchise.Ignore(f => f.ActualTitles);
         franchise.Ignore(f => f.Title);
         franchise.Ignore(f => f.OriginalTitle);
+        franchise.Ignore(f => f.ActualTitle);
+        franchise.Ignore(f => f.ActualOriginalTitle);
     }
 }

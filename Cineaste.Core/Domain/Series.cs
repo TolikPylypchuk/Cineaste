@@ -1,12 +1,11 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class Series : Entity<Series>
+public sealed class Series : TitledEntity<Series>
 {
     private string? imdbId;
     private string? rottenTomatoesId;
     private SeriesKind kind;
 
-    private readonly List<Title> titles;
     private readonly List<Season> seasons;
     private readonly List<SpecialEpisode> specialEpisodes;
     private readonly HashSet<TagContainer> tags;
@@ -38,9 +37,6 @@ public sealed class Series : Entity<Series>
 
     public FranchiseItem? FranchiseItem { get; set; }
 
-    public IReadOnlyCollection<Title> Titles =>
-        this.titles.AsReadOnly();
-
     public IReadOnlyCollection<Season> Seasons =>
         this.seasons.AsReadOnly();
 
@@ -49,18 +45,6 @@ public sealed class Series : Entity<Series>
 
     public IReadOnlySet<TagContainer> Tags =>
         this.tags;
-
-    public Title Title =>
-        this.Titles
-            .Where(title => !title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
-
-    public Title OriginalTitle =>
-        this.Titles
-            .Where(title => title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
 
     public int StartYear =>
         Math.Min(
@@ -98,13 +82,12 @@ public sealed class Series : Entity<Series>
         SeriesWatchStatus watchStatus,
         SeriesReleaseStatus releaseStatus,
         SeriesKind kind)
-        : base(id)
+        : base(id, titles)
     {
         this.WatchStatus = watchStatus;
         this.ReleaseStatus = releaseStatus;
         this.Kind = kind;
 
-        this.titles = titles.ToList();
         this.seasons = seasons.ToList();
         this.specialEpisodes = specialEpisodes.ToList();
         this.tags = new();
@@ -115,31 +98,26 @@ public sealed class Series : Entity<Series>
         : base(id)
     {
         this.kind = null!;
-        this.titles = new();
         this.seasons = new();
         this.specialEpisodes = new();
         this.tags = new();
     }
-
-    public Title AddTitle(string name, bool isOriginal)
-    {
-        int priority = this.titles
-            .Where(title => title.IsOriginal == isOriginal)
-            .Max(title => title.Priority) + 1;
-
-        var title = new Title(name, priority, isOriginal);
-
-        this.titles.Add(title);
-
-        return title;
-    }
-
-    public void RemoveTitle(string name, bool isOriginal) =>
-        this.titles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
 
     public void AddTag(Tag tag) =>
         this.tags.Add(new TagContainer { Tag = tag });
 
     public void RemoveTag(Tag tag) =>
         this.tags.Remove(new TagContainer { Tag = tag });
+
+    public void AddSeason(Season season) =>
+        this.seasons.Add(season);
+
+    public void RemoveSeason(Season season) =>
+        this.seasons.Remove(season);
+
+    public void AddSpecialEpisode(SpecialEpisode episode) =>
+        this.specialEpisodes.Add(episode);
+
+    public void RemoveSpecialEpisode(SpecialEpisode episode) =>
+        this.specialEpisodes.Remove(episode);
 }

@@ -1,3 +1,5 @@
+using Cineaste.Core.Domain;
+
 namespace Cineaste.Server.Services;
 
 [AutoConstructor]
@@ -26,6 +28,27 @@ public sealed partial class SeriesService : ISeriesService
 
         list.AddSeries(series);
         dbContext.Series.Add(series);
+
+        await dbContext.SaveChangesAsync();
+
+        return series.ToSeriesModel();
+    }
+
+    public async Task<SeriesModel> UpdateSeries(Id<Series> id, Validated<SeriesRequest> request)
+    {
+        this.logger.LogDebug("Updating a movie with ID {Id}", id.Value);
+
+        var series = await this.FindSeries(id);
+        var list = await this.FindList(request.Value.ListId);
+
+        if (!list.Series.Contains(series))
+        {
+            throw this.SeriesDoesNotBelongToList(id, list.Id);
+        }
+
+        var kind = await this.FindKind(request.Value.KindId, list);
+
+        series.Update(request, kind);
 
         await dbContext.SaveChangesAsync();
 
@@ -124,6 +147,13 @@ public sealed partial class SeriesService : ISeriesService
     private Exception NotFound(Id<SeriesKind> id) =>
         new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with id {id.Value}")
             .WithProperty(id);
+
+    private Exception SeriesDoesNotBelongToList(Id<Series> seriesId, Id<CineasteList> listId) =>
+        new BadRequestException(
+            $"{Resources.Series}.WrongList",
+            $"Series with ID {seriesId.Value} does not belong to list with ID {listId}")
+            .WithProperty(seriesId)
+            .WithProperty(listId);
 
     private Exception KindDoesNotBelongToList(Id<SeriesKind> kindId, Id<CineasteList> listId) =>
         new BadRequestException(

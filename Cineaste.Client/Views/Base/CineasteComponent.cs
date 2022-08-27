@@ -16,6 +16,8 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
 {
     protected const int ShortNotificationDuration = 2000;
 
+    private IValidationExecutor? validationParent;
+
     [Inject]
     public IStringLocalizer<Resources> Loc { get; private set; } = null!;
 
@@ -35,6 +37,16 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
     {
         base.OnAfterRender(firstRender);
         this.ValidationResumed?.Invoke(this, EventArgs.Empty);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        if (disposing)
+        {
+            this.DetachValidation();
+        }
     }
 
     protected bool RunValidation()
@@ -75,17 +87,11 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
 
     protected void AttachValidationTo(IValidationExecutor parent)
     {
-        parent.ValidationExecuted += (sender, e) =>
-        {
-            bool success = this.RunValidation();
+        this.DetachValidation();
+        this.validationParent = parent;
 
-            if (!success)
-            {
-                e.ValidationFailed();
-            }
-        };
-
-        parent.ValidationCleared += (sender, e) => this.ClearValidation();
+        parent.ValidationExecuted += this.OnParentValidationExecuted;
+        parent.ValidationCleared += this.OnParentValidationCleared;
     }
 
     protected void ShowSuccessNotification(string text, int duration) =>
@@ -95,6 +101,28 @@ public abstract class CineasteComponent : FluxorComponent, IValidationExecutor
             Severity = NotificationSeverity.Success,
             Duration = duration
         });
+
+    private void OnParentValidationExecuted(object? sender, ExecuteValidationEventArgs e)
+    {
+        bool success = this.RunValidation();
+
+        if (!success)
+        {
+            e.ValidationFailed();
+        }
+    }
+
+    private void OnParentValidationCleared(object? sender, EventArgs e) =>
+        this.ClearValidation();
+
+    private void DetachValidation()
+    {
+        if (this.validationParent is not null)
+        {
+            this.validationParent.ValidationExecuted -= this.OnParentValidationExecuted;
+            this.validationParent.ValidationCleared -= this.OnParentValidationCleared;
+        }
+    }
 
     public event EventHandler<ExecuteValidationEventArgs>? ValidationExecuted;
 

@@ -16,18 +16,25 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
     public override string Years =>
         this.Year.ToString();
 
-    public SpecialEpisodeFormModel(string channel, Func<int> nextSequenceNumber)
-        : this(DateOnly.FromDateTime(DateTime.Now), channel, nextSequenceNumber)
+    public SpecialEpisodeFormModel(
+        string channel,
+        Func<ISeriesComponentFormModel, int> getSequenceNumber,
+        Func<int> lastSequenceNumber)
+        : this(DateOnly.FromDateTime(DateTime.Now), channel, getSequenceNumber, lastSequenceNumber)
     { }
 
-    public SpecialEpisodeFormModel(DateOnly date, string channel, Func<int> nextSequenceNumber)
-        : base(nextSequenceNumber)
+    public SpecialEpisodeFormModel(
+        DateOnly date,
+        string channel,
+        Func<ISeriesComponentFormModel, int> getSequenceNumber,
+        Func<int> lastSequenceNumber)
+        : base(getSequenceNumber, lastSequenceNumber)
     {
         this.defaultDate = date;
         this.Month = date.Month;
         this.Year = date.Year;
         this.Channel = this.defaultChannel = channel;
-        this.SequenceNumber = nextSequenceNumber();
+        this.SequenceNumber = this.GetSequenceNumber();
     }
 
     public SpecialEpisodeRequest ToRequest() =>
@@ -58,6 +65,6 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
         this.Year = episode?.Year ?? this.defaultDate.Year;
 
         this.RottenTomatoesId = episode?.RottenTomatoesId ?? String.Empty;
-        this.SequenceNumber = episode?.SequenceNumber ?? this.NextSequenceNumber();
+        this.SequenceNumber = episode?.SequenceNumber ?? this.GetSequenceNumber();
     }
 }

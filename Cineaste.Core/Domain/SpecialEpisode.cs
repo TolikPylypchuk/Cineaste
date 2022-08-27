@@ -1,13 +1,12 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class SpecialEpisode : Entity<SpecialEpisode>
+public sealed class SpecialEpisode : TitledEntity<SpecialEpisode>
 {
     private int month;
     private int year;
     private string channel;
     private int sequenceNumber;
     private string? rottenTomatoesId;
-    private readonly List<Title> titles;
 
     public int Month
     {
@@ -46,21 +45,6 @@ public sealed class SpecialEpisode : Entity<SpecialEpisode>
 
     public Poster? Poster { get; set; }
 
-    public IReadOnlyCollection<Title> Titles =>
-        this.titles.AsReadOnly();
-
-    public Title Title =>
-        this.Titles
-            .Where(title => !title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
-
-    public Title OriginalTitle =>
-        this.Titles
-            .Where(title => title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .First();
-
     public SpecialEpisode(
         Id<SpecialEpisode> id,
         IEnumerable<Title> titles,
@@ -70,7 +54,7 @@ public sealed class SpecialEpisode : Entity<SpecialEpisode>
         bool isReleased,
         string channel,
         int sequenceNumber)
-        : base(id)
+        : base(id, titles)
     {
         this.Month = month;
         this.Year = year;
@@ -78,30 +62,10 @@ public sealed class SpecialEpisode : Entity<SpecialEpisode>
         this.IsReleased = isReleased;
         this.Channel = channel;
         this.SequenceNumber = sequenceNumber;
-        this.titles = titles.ToList();
     }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
     private SpecialEpisode(Id<SpecialEpisode> id)
-        : base(id)
-    {
+        : base(id) =>
         this.channel = null!;
-        this.titles = new();
-    }
-
-    public Title AddTitle(string name, bool isOriginal)
-    {
-        int priority = this.titles
-            .Where(title => title.IsOriginal == isOriginal)
-            .Max(title => title.Priority) + 1;
-
-        var title = new Title(name, priority, isOriginal);
-
-        this.titles.Add(title);
-
-        return title;
-    }
-
-    public void RemoveTitle(string name, bool isOriginal) =>
-        this.titles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
 }

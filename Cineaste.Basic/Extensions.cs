@@ -13,6 +13,10 @@ public static class Extensions
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> items) =>
         items.Where(item => item != null)!;
 
+    public static IEnumerable<T> WhereValueNotNull<T>(this IEnumerable<T?> items)
+        where T : struct =>
+        items.Where(item => item.HasValue).Select(item => item!.Value);
+
     public static IEnumerable<T> WhereNotDefault<T>(this IEnumerable<T> items)
         where T : struct =>
         items.Where(item => !item.Equals(default(T)));

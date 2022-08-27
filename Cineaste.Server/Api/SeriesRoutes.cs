@@ -6,6 +6,7 @@ public static class SeriesRoutes
     {
         routes.MapGet("/api/series/{id}", GetSeries);
         routes.MapPost("/api/series", CreateSeries);
+        routes.MapPut("/api/series/{id}", UpdateSeries);
         routes.MapDelete("/api/series/{id}", DeleteSeries);
     }
 
@@ -17,6 +18,12 @@ public static class SeriesRoutes
         var series = await seriesService.CreateSeries(request);
         return Results.Created($"/api/series/{series.Id}", series);
     }
+
+    private static async Task<IResult> UpdateSeries(
+        Guid id,
+        Validated<SeriesRequest> request,
+        ISeriesService seriesService) =>
+        Results.Ok(await seriesService.UpdateSeries(Id.Create<Series>(id), request));
 
     private static async Task<IResult> DeleteSeries(Guid id, ISeriesService seriesService)
     {

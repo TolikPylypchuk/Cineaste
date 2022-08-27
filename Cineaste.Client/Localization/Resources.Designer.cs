@@ -736,7 +736,7 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is single-day release.
+        ///   Looks up a localized string similar to Single-day release.
         /// </summary>
         public static string PeriodForm_IsSingleDayRelease {
             get {

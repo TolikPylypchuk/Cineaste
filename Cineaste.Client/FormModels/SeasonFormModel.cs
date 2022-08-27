@@ -24,8 +24,19 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         }
     }
 
-    public SeasonFormModel(string title, string originalTitle, string channel, Func<int> nextSequenceNumber)
-        : this(title, originalTitle, DateOnly.FromDateTime(DateTime.Now), channel, nextSequenceNumber)
+    public SeasonFormModel(
+        string title,
+        string originalTitle,
+        string channel,
+        Func<ISeriesComponentFormModel, int> getSequenceNumber,
+        Func<int> lastSequenceNumber)
+        : this(
+              title,
+              originalTitle,
+              DateOnly.FromDateTime(DateTime.Now),
+              channel,
+              getSequenceNumber,
+              lastSequenceNumber)
     { }
 
     public SeasonFormModel(
@@ -33,8 +44,9 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         string originalTitle,
         DateOnly date,
         string channel,
-        Func<int> nextSequenceNumber)
-        : base(nextSequenceNumber)
+        Func<ISeriesComponentFormModel, int> getSequenceNumber,
+        Func<int> lastSequenceNumber)
+        : base(getSequenceNumber, lastSequenceNumber)
     {
         this.defaultTitle = title;
         this.Titles.Clear();
@@ -45,7 +57,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         this.OriginalTitles.Add(originalTitle);
 
         this.Channel = this.defaultChannel = channel;
-        this.SequenceNumber = nextSequenceNumber();
+        this.SequenceNumber = this.GetSequenceNumber();
 
         this.defaultDate = date;
 
@@ -91,7 +103,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         this.WatchStatus = season?.WatchStatus ?? SeasonWatchStatus.NotWatched;
         this.ReleaseStatus = season?.ReleaseStatus ?? SeasonReleaseStatus.NotStarted;
         this.Channel = season?.Channel ?? this.defaultChannel;
-        this.SequenceNumber = season?.SequenceNumber ?? this.NextSequenceNumber();
+        this.SequenceNumber = season?.SequenceNumber ?? this.GetSequenceNumber();
 
         this.periods.Clear();
 

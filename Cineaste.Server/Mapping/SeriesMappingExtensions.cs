@@ -16,7 +16,37 @@ public static class SeriesMappingExtensions
             series.RottenTomatoesId,
             series.FranchiseItem.GetDisplayNumber());
 
-    public static SeasonModel ToSeasonModel(this Season season) =>
+    public static Series ToSeries(this Validated<SeriesRequest> request, Id<Series> id, SeriesKind kind) =>
+        new(
+            id,
+            request.Value.ToTitles(),
+            request.Value.Seasons.Select(ToSeason),
+            request.Value.SpecialEpisodes.Select(ToSpecialEpisode),
+            request.Value.WatchStatus,
+            request.Value.ReleaseStatus,
+            kind);
+
+    public static void Update(this Series series, Validated<SeriesRequest> request, SeriesKind kind)
+    {
+        series.ReplaceTitles(
+            request.Value.Titles.OrderBy(title => title.Priority).Select(title => title.Name),
+            isOriginal: false);
+
+        series.ReplaceTitles(
+            request.Value.OriginalTitles.OrderBy(title => title.Priority).Select(title => title.Name),
+            isOriginal: true);
+
+        series.WatchStatus = request.Value.WatchStatus;
+        series.ReleaseStatus = request.Value.ReleaseStatus;
+        series.Kind = kind;
+        series.ImdbId = request.Value.ImdbId;
+        series.RottenTomatoesId = request.Value.RottenTomatoesId;
+
+        series.UpdateSeasons(request.Value.Seasons);
+        series.UpdateSpecialEpisodes(request.Value.SpecialEpisodes);
+    }
+
+    private static SeasonModel ToSeasonModel(this Season season) =>
         new(
             season.Id.Value,
             season.Titles.ToTitleModels(isOriginal: false),
@@ -33,7 +63,7 @@ public static class SeriesMappingExtensions
                 .ThenBy(period => period.EndMonth)
                 .ToImmutableList());
 
-    public static PeriodModel ToPeriodModel(this Period period) =>
+    private static PeriodModel ToPeriodModel(this Period period) =>
         new(
             period.Id.Value,
             period.StartMonth,
@@ -44,7 +74,7 @@ public static class SeriesMappingExtensions
             period.IsSingleDayRelease,
             period.RottenTomatoesId);
 
-    public static SpecialEpisodeModel ToSpecialEpisodeModel(this SpecialEpisode episode) =>
+    private static SpecialEpisodeModel ToSpecialEpisodeModel(this SpecialEpisode episode) =>
         new(
             episode.Id.Value,
             episode.Titles.ToTitleModels(isOriginal: false),
@@ -56,16 +86,6 @@ public static class SeriesMappingExtensions
             episode.Month,
             episode.Year,
             episode.RottenTomatoesId);
-
-    public static Series ToSeries(this Validated<SeriesRequest> request, Id<Series> id, SeriesKind kind) =>
-        new(
-            id,
-            request.Value.ToTitles(),
-            request.Value.Seasons.Select(ToSeason),
-            request.Value.SpecialEpisodes.Select(ToSpecialEpisode),
-            request.Value.WatchStatus,
-            request.Value.ReleaseStatus,
-            kind);
 
     private static Season ToSeason(this SeasonRequest request) =>
         new(
@@ -103,4 +123,107 @@ public static class SeriesMappingExtensions
         {
             RottenTomatoesId = request.RottenTomatoesId
         };
+
+    private static void UpdateSeasons(this Series series, IReadOnlyCollection<SeasonRequest> requests)
+    {
+        var requestIds = requests.Select(req => req.Id).WhereValueNotNull().ToHashSet();
+
+        foreach (var season in series.Seasons.Where(e => !requestIds.Contains(e.Id.Value)).ToList())
+        {
+            series.RemoveSeason(season);
+        }
+
+        foreach (var season in series.Seasons.Where(e => requestIds.Contains(e.Id.Value)))
+        {
+            season.Update(requests.First(req => req.Id == season.Id.Value));
+        }
+
+        foreach (var request in requests.Where(req => !req.Id.HasValue))
+        {
+            series.AddSeason(request.ToSeason());
+        }
+    }
+
+    private static void UpdateSpecialEpisodes(this Series series, IReadOnlyCollection<SpecialEpisodeRequest> requests)
+    {
+        var requestIds = requests.Select(req => req.Id).WhereValueNotNull().ToHashSet();
+
+        foreach (var episode in series.SpecialEpisodes.Where(e => !requestIds.Contains(e.Id.Value)).ToList())
+        {
+            series.RemoveSpecialEpisode(episode);
+        }
+
+        foreach (var episode in series.SpecialEpisodes.Where(e => requestIds.Contains(e.Id.Value)))
+        {
+            episode.Update(requests.First(req => req.Id == episode.Id.Value));
+        }
+
+        foreach (var request in requests.Where(req => !req.Id.HasValue))
+        {
+            series.AddSpecialEpisode(request.ToSpecialEpisode());
+        }
+    }
+
+    private static void Update(this Season season, SeasonRequest request)
+    {
+        season.ReplaceTitles(
+            request.Titles.OrderBy(title => title.Priority).Select(title => title.Name),
+            isOriginal: false);
+
+        season.ReplaceTitles(
+            request.OriginalTitles.OrderBy(title => title.Priority).Select(title => title.Name),
+            isOriginal: true);
+
+        season.WatchStatus = request.WatchStatus;
+        season.ReleaseStatus = request.ReleaseStatus;
+        season.Channel = request.Channel;
+        season.SequenceNumber = request.SequenceNumber;
+
+        var requestIds = request.Periods.Select(req => req.Id).WhereValueNotNull().ToHashSet();
+
+        foreach (var period in season.Periods.Where(e => !requestIds.Contains(e.Id.Value)).ToList())
+        {
+            season.RemovePeriod(period);
+        }
+
+        foreach (var period in season.Periods.Where(e => requestIds.Contains(e.Id.Value)))
+        {
+            period.Update(request.Periods.First(req => req.Id == period.Id.Value));
+        }
+
+        foreach (var periodRequest in request.Periods.Where(req => !req.Id.HasValue))
+        {
+            season.AddPeriod(periodRequest.ToPeriod());
+        }
+    }
+
+    private static void Update(this Period period, PeriodRequest request)
+    {
+        period.StartMonth = request.StartMonth;
+        period.StartYear = request.StartYear;
+        period.EndMonth = request.EndMonth;
+        period.EndYear = request.EndYear;
+        period.IsSingleDayRelease = request.IsSingleDayRelease;
+        period.EpisodeCount = request.EpisodeCount;
+        period.RottenTomatoesId = request.RottenTomatoesId;
+    }
+
+    private static void Update(this SpecialEpisode episode, SpecialEpisodeRequest request)
+    {
+        episode.ReplaceTitles(
+            request.Titles.OrderBy(title => title.Priority).Select(title => title.Name),
+            isOriginal: false);
+
+        episode.ReplaceTitles(
+            request.OriginalTitles.OrderBy(title => title.Priority).Select(title => title.Name),
+            isOriginal: true);
+
+        episode.Month = request.Month;
+        episode.Year = request.Year;
+        episode.IsWatched = request.IsWatched;
+        episode.IsReleased = request.IsReleased;
+        episode.Channel = request.Channel;
+        episode.SequenceNumber = request.SequenceNumber;
+        episode.RottenTomatoesId = request.RottenTomatoesId;
+    }
 }

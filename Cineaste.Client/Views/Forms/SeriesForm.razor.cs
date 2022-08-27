@@ -60,7 +60,11 @@ public partial class SeriesForm
 
     private void Save()
     {
-        if (this.ListItem is null)
+        if (this.ListItem is not null)
+        {
+            this.Dispatcher.Dispatch(new UpdateSeriesAction(
+                this.ListItem.Id, this.FormModel.ToRequest(this.ListId)));
+        } else
         {
             this.Dispatcher.Dispatch(new CreateSeriesAction(this.FormModel.ToRequest(this.ListId)));
         }
