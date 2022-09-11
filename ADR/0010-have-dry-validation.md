@@ -17,9 +17,6 @@ I've decided to use FluentValidation to create validators as its API is simple a
 application services should accept already-validated requests, so that it's impossible not to run validation before
 calling these services.
 
-The UI validation will dissect the validators and extract validators for separate properties and use them to show
-validation errors for input fields.
-
 The domain will be minimally self-validating for the time being since the application services are guaranteed to accept
 validated requests. I don't like it very much, but for now it'll do. Maybe it will changed in the future.
 
