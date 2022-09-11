@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 
+using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
 using Microsoft.AspNetCore.Components.Web;
@@ -19,6 +20,7 @@ builder.Services.Configure<JsonSerializerOptions>(options =>
 {
     options.PropertyNameCaseInsensitive = true;
     options.Converters.Add(new JsonStringEnumConverter());
+    options.Converters.Add(new ImmutableValueListConverterFactory());
     options.Converters.Add(new ValidatedJsonConverterFactory());
 });
 

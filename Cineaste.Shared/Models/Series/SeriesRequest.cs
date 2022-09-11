@@ -4,13 +4,13 @@ using Cineaste.Shared.Validation.Series;
 
 public sealed record SeriesRequest(
     Guid ListId,
-    ImmutableList<TitleRequest> Titles,
-    ImmutableList<TitleRequest> OriginalTitles,
+    ImmutableValueList<TitleRequest> Titles,
+    ImmutableValueList<TitleRequest> OriginalTitles,
     SeriesWatchStatus WatchStatus,
     SeriesReleaseStatus ReleaseStatus,
     Guid KindId,
-    ImmutableList<SeasonRequest> Seasons,
-    ImmutableList<SpecialEpisodeRequest> SpecialEpisodes,
+    ImmutableValueList<SeasonRequest> Seasons,
+    ImmutableValueList<SpecialEpisodeRequest> SpecialEpisodes,
     string? ImdbId,
     string? RottenTomatoesId) : IValidatable<SeriesRequest>, ITitledRequest
 {

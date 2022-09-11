@@ -118,7 +118,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
             this.WatchStatus,
             this.ReleaseStatus,
             this.Channel,
-            this.Periods.Select(period => period.CreateRequest()).ToImmutableList());
+            this.Periods.Select(period => period.CreateRequest()).ToImmutableList().AsValue());
 
     protected override void CopyFromModel()
     {
@@ -131,6 +131,11 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
         this.Channel = season?.Channel ?? this.defaultChannel;
         this.SequenceNumber = season?.SequenceNumber ?? this.GetSequenceNumber();
 
+        foreach (var period in this.periods)
+        {
+            period.PropertyChanged -= this.OnPeriodUpdated;
+        }
+
         this.periods.Clear();
 
         if (season is not null)
@@ -139,11 +144,14 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
             {
                 var form = new PeriodFormModel();
                 form.CopyFrom(period);
+                form.PropertyChanged += this.OnPeriodUpdated;
                 this.periods.Add(form);
             }
         } else
         {
-            this.periods.Add(new(this.defaultDate));
+            var period = new PeriodFormModel(this.defaultDate);
+            period.PropertyChanged += this.OnPeriodUpdated;
+            this.periods.Add(period);
         }
     }
 

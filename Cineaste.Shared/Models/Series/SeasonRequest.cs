@@ -4,13 +4,13 @@ using Cineaste.Shared.Validation.Series;
 
 public sealed record SeasonRequest(
     Guid? Id,
-    ImmutableList<TitleRequest> Titles,
-    ImmutableList<TitleRequest> OriginalTitles,
+    ImmutableValueList<TitleRequest> Titles,
+    ImmutableValueList<TitleRequest> OriginalTitles,
     int SequenceNumber,
     SeasonWatchStatus WatchStatus,
     SeasonReleaseStatus ReleaseStatus,
     string Channel,
-    ImmutableList<PeriodRequest> Periods) : IValidatable<SeasonRequest>, ITitledRequest
+    ImmutableValueList<PeriodRequest> Periods) : IValidatable<SeasonRequest>, ITitledRequest
 {
     public static IValidator<SeasonRequest> Validator { get; } = new SeasonRequestValidator();
 }

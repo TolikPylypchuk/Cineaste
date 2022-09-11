@@ -95,7 +95,8 @@
                     <RadzenButton Text="@this.Loc["SpecialEpisodeForm.GoToSeries"]" ButtonStyle="ButtonStyle.Primary"
                                   Click="@this.GoToSeries" class="me-1" />
                     <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
-                                  Click="@this.Cancel" class="ms-1" />
+                                  class="@($"{(this.FormModel.HasChanges ? "ms-1" : "d-none")}")"
+                                  Click="@this.Cancel" />
                 </div>
             </div>
         </div>

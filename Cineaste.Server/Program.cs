@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 
 using Cineaste.Server.Infrastructure.Problems;
+using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
 using Hellang.Middleware.ProblemDetails;
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.SerializerOptions.Converters.Add(new ImmutableValueListConverterFactory());
     options.SerializerOptions.Converters.Add(new ValidatedJsonConverterFactory());
 });
 

@@ -166,11 +166,13 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
             this.Components
                 .OfType<SeasonFormModel>()
                 .Select(season => season.CreateRequest())
-                .ToImmutableList(),
+                .ToImmutableList()
+                .AsValue(),
             this.Components
                 .OfType<SpecialEpisodeFormModel>()
                 .Select(episode => episode.CreateRequest())
-                .ToImmutableList(),
+                .ToImmutableList()
+                .AsValue(),
             this.ImdbId,
             this.RottenTomatoesId);
 

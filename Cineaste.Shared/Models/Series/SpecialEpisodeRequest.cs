@@ -4,8 +4,8 @@ using Cineaste.Shared.Validation.Series;
 
 public sealed record SpecialEpisodeRequest(
     Guid? Id,
-    ImmutableList<TitleRequest> Titles,
-    ImmutableList<TitleRequest> OriginalTitles,
+    ImmutableValueList<TitleRequest> Titles,
+    ImmutableValueList<TitleRequest> OriginalTitles,
     int SequenceNumber,
     bool IsWatched,
     bool IsReleased,

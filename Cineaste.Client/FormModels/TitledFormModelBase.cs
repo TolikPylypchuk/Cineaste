@@ -13,8 +13,8 @@ public abstract class TitledFormModelBase<TRequest, TModel> : FormModelBase<TReq
         this.OriginalTitles = new TitleList(this.OnOriginalTitlesUpdated);
     }
 
-    public ImmutableList<TitleRequest> ToTitleRequests(IEnumerable<string> titles) =>
-        titles.Select((title, index) => new TitleRequest(title, index + 1)).ToImmutableList();
+    public ImmutableValueList<TitleRequest> ToTitleRequests(IEnumerable<string> titles) =>
+        titles.Select((title, index) => new TitleRequest(title, index + 1)).ToImmutableList().AsValue();
 
     protected void CopyTitles(TModel? model, string defaultTitle = "", string defaultOriginalTitle = "")
     {

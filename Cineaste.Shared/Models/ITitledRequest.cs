@@ -2,7 +2,7 @@ namespace Cineaste.Shared.Models;
 
 public interface ITitledRequest
 {
-    public ImmutableList<TitleRequest> Titles { get; }
+    public ImmutableValueList<TitleRequest> Titles { get; }
 
-    public ImmutableList<TitleRequest> OriginalTitles { get; }
+    public ImmutableValueList<TitleRequest> OriginalTitles { get; }
 }

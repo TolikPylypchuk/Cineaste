@@ -4,8 +4,8 @@ using Cineaste.Shared.Validation.Movie;
 
 public sealed record MovieRequest(
     Guid ListId,
-    ImmutableList<TitleRequest> Titles,
-    ImmutableList<TitleRequest> OriginalTitles,
+    ImmutableValueList<TitleRequest> Titles,
+    ImmutableValueList<TitleRequest> OriginalTitles,
     int Year,
     bool IsWatched,
     bool IsReleased,

@@ -183,7 +183,7 @@
                                          Problem="@this.State.Value.Delete.Problem" Class="w-100" />
                     }
 
-                    <div class="d-flex flex-row my-2">
+                    <div class="@($"{(this.FormModel.HasChanges ? "d-flex flex-row my-2" : "d-none")}")">
                         <RadzenButton Text="@this.Loc["Button.Save"]" BusyText="@this.Loc["Button.Save.Busy"]"
                                       ButtonStyle="ButtonStyle.Primary" IsBusy="@this.IsSaving"
                                       Click="@this.OnSave" class="me-1" />

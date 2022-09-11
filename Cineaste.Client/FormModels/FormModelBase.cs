@@ -1,6 +1,7 @@
 namespace Cineaste.Client.FormModels;
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 using PropertyChanged;
@@ -9,9 +10,16 @@ public abstract partial class FormModelBase<TRequest, TModel> : INotifyPropertyC
     where TRequest : IValidatable<TRequest>
 {
     private bool isInitialized = false;
+    private TRequest request = default!;
+    private TRequest? requestToCompare;
 
     [DoNotNotify]
-    public TRequest? Request { get; private set; }
+    [DisallowNull]
+    public TRequest? Request
+    {
+        get => this.ValidationErrors.Count == 0 ? this.request : default;
+        private set => this.request = value;
+    }
 
     [DoNotNotify]
     public TModel? BackingModel { get; private set; }
@@ -19,11 +27,18 @@ public abstract partial class FormModelBase<TRequest, TModel> : INotifyPropertyC
     [DoNotNotify]
     public IReadOnlySet<string> ValidationErrors { get; private set; } = ImmutableHashSet<string>.Empty;
 
+    public bool HasChanges => !Equals(this.request, this.requestToCompare);
+
     public void CopyFrom(TModel? model)
     {
+        this.isInitialized = false;
         this.BackingModel = model;
         this.CopyFromModel();
+
+        this.isInitialized = true;
         this.UpdateRequest();
+
+        this.requestToCompare = this.request;
     }
 
     public virtual void UpdateRequest()
@@ -33,11 +48,10 @@ public abstract partial class FormModelBase<TRequest, TModel> : INotifyPropertyC
             return;
         }
 
-        var request = this.CreateRequest();
+        this.request = this.CreateRequest();
         var validationResult = TRequest.Validator.Validate(request);
 
         this.ValidationErrors = validationResult.Errors.Select(error => error.ErrorCode).ToImmutableHashSet();
-        this.Request = this.ValidationErrors.Count == 0 ? request : default;
     }
 
     public abstract TRequest CreateRequest();
@@ -48,6 +62,7 @@ public abstract partial class FormModelBase<TRequest, TModel> : INotifyPropertyC
     {
         this.isInitialized = true;
         this.PropertyChanged += (sender, e) => this.UpdateRequest();
+        this.UpdateRequest();
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "") =>

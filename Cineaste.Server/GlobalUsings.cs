@@ -12,6 +12,7 @@ global using Cineaste.Server.Exceptions;
 global using Cineaste.Server.Mapping;
 global using Cineaste.Server.Services;
 global using Cineaste.Shared;
+global using Cineaste.Shared.Collections;
 global using Cineaste.Shared.Models;
 global using Cineaste.Shared.Models.List;
 global using Cineaste.Shared.Models.Movie;
