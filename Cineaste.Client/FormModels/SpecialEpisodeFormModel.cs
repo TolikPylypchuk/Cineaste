@@ -1,6 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEpisodeModel>
+public sealed class SpecialEpisodeFormModel : SeriesComponentFormModelBase<SpecialEpisodeRequest, SpecialEpisodeModel>
 {
     private readonly DateOnly defaultDate;
     private readonly string defaultChannel;
@@ -35,9 +35,11 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModel<SpecialEp
         this.Year = date.Year;
         this.Channel = this.defaultChannel = channel;
         this.SequenceNumber = this.GetSequenceNumber();
+
+        this.FinishInitialization();
     }
 
-    public SpecialEpisodeRequest ToRequest() =>
+    public override SpecialEpisodeRequest CreateRequest() =>
         new(
             this.BackingModel?.Id,
             this.ToTitleRequests(this.Titles),

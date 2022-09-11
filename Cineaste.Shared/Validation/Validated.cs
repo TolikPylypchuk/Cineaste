@@ -9,7 +9,7 @@ public sealed record Validated<T>
     private Validated(T value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        T.CreateValidator().ValidateAndThrow(value);
+        T.Validator.ValidateAndThrow(value);
         this.Value = value;
     }
 

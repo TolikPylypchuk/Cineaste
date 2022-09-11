@@ -15,16 +15,8 @@ public partial class MovieForm
 
     private string FormTitle { get; set; } = String.Empty;
 
-    private MovieFormModel FormModel { get; set; } = null!;
-
     private bool CanChangeIsWatched { get; set; } = true;
     private bool CanChangeIsReleased { get; set; } = true;
-
-    private PropertyValidator<MovieRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }
-    private PropertyValidator<MovieRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
-    private PropertyValidator<MovieRequest, int>? YearValidator { get; set; }
-    private PropertyValidator<MovieRequest, string>? ImdbIdValidator { get; set; }
-    private PropertyValidator<MovieRequest, string>? RottenTomatoesIdValidator { get; set; }
 
     private bool IsSaving =>
         this.State.Value.Create.IsInProgress || this.State.Value.Update.IsInProgress;
@@ -32,9 +24,12 @@ public partial class MovieForm
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        this.InitializeValidators();
 
-        this.FormModel = new(this.State.Value.AvailableKinds);
+        this.FormModel = new(this.ListId, this.State.Value.AvailableKinds);
+
+        this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
+        this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
+
         this.SetPropertyValues();
     }
 
@@ -48,20 +43,6 @@ public partial class MovieForm
             this.SubsribeToSuccessfulResult<CreateMovieResultAction>(this.OnMovieCreated);
             this.SubsribeToSuccessfulResult<UpdateMovieResultAction>(this.OnMovieUpdated);
         }
-    }
-
-    private void InitializeValidators()
-    {
-        var validator = MovieRequest.CreateValidator();
-
-        this.TitlesValidator = PropertyValidator.Create(validator, (MovieRequest req) => req.Titles, this);
-        this.OriginalTitlesValidator = PropertyValidator.Create(
-            validator, (MovieRequest req) => req.OriginalTitles, this);
-
-        this.YearValidator = PropertyValidator.Create(validator, (MovieRequest req) => req.Year, this);
-        this.ImdbIdValidator = PropertyValidator.Create(validator, (MovieRequest req) => req.ImdbId, this);
-        this.RottenTomatoesIdValidator = PropertyValidator.Create(
-            validator, (MovieRequest req) => req.RottenTomatoesId, this);
     }
 
     private void FetchMovie()
@@ -79,11 +60,14 @@ public partial class MovieForm
         this.OnYearChanged();
     }
 
-    private void AddTitle(ObservableCollection<string> titles) =>
+    private void AddTitle(ICollection<string> titles) =>
         titles.Add(String.Empty);
 
-    private void UpdateFormTitle() =>
+    private void UpdateFormTitle()
+    {
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
+        this.StateHasChanged();
+    }
 
     private void OnYearChanged()
     {
@@ -130,17 +114,10 @@ public partial class MovieForm
         !String.IsNullOrEmpty(this.FormModel.RottenTomatoesId);
 
     private void Save() =>
-        this.WithValidation(() =>
-        {
-            if (this.ListItem is not null)
-            {
-                this.Dispatcher.Dispatch(new UpdateMovieAction(
-                    this.ListItem.Id, this.FormModel.ToRequest(this.ListId)));
-            } else
-            {
-                this.Dispatcher.Dispatch(new CreateMovieAction(this.FormModel.ToRequest(this.ListId)));
-            }
-        });
+        this.WithValidation(request =>
+            this.Dispatcher.Dispatch(this.ListItem is not null
+                ? new UpdateMovieAction(this.ListItem.Id, request)
+                : new CreateMovieAction(request)));
 
     private void Cancel()
     {

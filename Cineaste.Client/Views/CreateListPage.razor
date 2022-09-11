@@ -1,129 +1,102 @@
 @page "/new"
-@inherits StatefulComponent<CreateListPageState>
+@inherits CineasteForm<CreateListFormModel, CreateListRequest, object, CreateListPageState>
 
-<div class="container d-flex flex-column align-items-center">
-    <h1 class="display-1 mb-4">@this.Loc["CreateListPage.CreateList"]</h1>
+<CascadingValue Name="@CascadingParameters.ValidationExecutor" Value="@this" IsFixed="true">
+    <CascadingValue Name="@CascadingParameters.ErrorCodes" Value="@this.FormModel.ValidationErrors">
+        <div class="container d-flex flex-column align-items-center">
+            <h1 class="display-1 mb-4">@this.Loc["CreateListPage.CreateList"]</h1>
 
-    <div class="w-50">
-        <RadzenCard class="mb-2">
-            <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
+            <div class="w-50">
+                <RadzenCard class="mb-2">
+                    <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
 
-            <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
-            <RadzenTextBox @bind-Value="this.Name" Change="@this.OnNameChanged" Class="w-100" />
-            <FormValidator Validator="this.NameValidator" Value="@this.Name" />
+                    <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
+                    <RadzenTextBox @bind-Value="this.FormModel.Name" Class="w-100" />
+                    <ErrorPresenter ErrorCode="CreateList.Name.*" Trigger="@this.FormModel.Name" />
 
-            <div class="d-flex flex-row mt-4 mb-2">
-                <RadzenLabel Text="@this.Loc["CreateListPage.List.Handle"]" />
-                <RadzenIcon Icon="help" MouseEnter="this.ShowHandleTooltip" MouseLeave=@(e => this.CloseTooltip())
-                            class="ms-3" Style="cursor: pointer;" />
+                    <div class="d-flex flex-row mt-4 mb-2">
+                        <RadzenLabel Text="@this.Loc["CreateListPage.List.Handle"]" />
+                        <RadzenIcon Icon="help" MouseEnter="this.ShowHandleTooltip" Style="cursor: pointer;"
+                                    MouseLeave=@(e => this.CloseTooltip()) class="ms-3" />
+                    </div>
+
+                    <RadzenTextBox Value="@this.FormModel.Handle" ReadOnly="true" Class="w-100" />
+
+                    <div class="d-flex flex-row mt-4 mb-2">
+                        <RadzenLabel Text="@this.Loc["CreateListPage.List.TitleLanguage"]" />
+                        <RadzenIcon Icon="help" MouseEnter="this.ShowTitleLanguageTooltip"
+                                    MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
+                    </div>
+
+                    <RadzenDropDown TValue="SimpleCultureModel" Data="this.State.Value.AllCultures"
+                                    AllowVirtualization="true" AllowFiltering="true" TextProperty="DisplayName"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    @bind-Value="this.FormModel.Culture" />
+                </RadzenCard>
+
+                @if (this.State.Value.CulturesProblem is not null)
+                {
+                    <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.Cultures"]" TryAgain="this.FetchCultures"
+                                     Problem="this.State.Value.CulturesProblem" Class="w-50 my-2" />
+                }
+
+                <RadzenCard class="mt-2">
+                    <div class="d-flex flex-row mt-2 mb-4">
+                        <h2 class="h5">@this.Loc["CreateListPage.List.SeasonTitles"]</h2>
+                        <RadzenIcon Icon="help" MouseEnter="this.ShowDefaultSeasonTitlesTooltip"
+                                    MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
+                    </div>
+
+                    <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonTitle"]" class="mb-2" />
+                    <RadzenTextBox @bind-Value="this.FormModel.DefaultSeasonTitle" class="w-100" />
+                    <ErrorPresenter ErrorCode="CreateList.DefaultSeasonTitle.*"
+                                    Trigger="@this.FormModel.DefaultSeasonTitle" />
+
+                    <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonOriginalTitle"]" class="mt-4 mb-2" />
+                    <RadzenTextBox @bind-Value="@this.FormModel.DefaultSeasonOriginalTitle"
+                                   Name="DefaultSeasonOriginalTitle" class="w-100" />
+                    <ErrorPresenter ErrorCode="CreateList.DefaultSeasonOriginalTitle.*"
+                                    Trigger="@this.FormModel.DefaultSeasonOriginalTitle" />
+                </RadzenCard>
+
+                <div class="d-flex flex-row justify-content-center">
+                    <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
+                                  Click="@this.NavigateToHomePage" />
+
+                    <RadzenButton Text="@this.Loc["Button.Create"]" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
+                                  Click="@this.CreateList" />
+                </div>
             </div>
 
-            <RadzenTextBox Value="@this.Handle" ReadOnly="true" Class="w-100" />
+            @if (this.State.Value.IsCreatingList)
+            {
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"
+                                   class="w-25 mt-4" />
+            }
 
-            <div class="d-flex flex-row mt-4 mb-2">
-                <RadzenLabel Text="@this.Loc["CreateListPage.List.TitleLanguage"]" />
-                <RadzenIcon Icon="help" MouseEnter="this.ShowTitleLanguageTooltip"
-                            MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
-            </div>
-
-            <RadzenDropDown TValue="SimpleCultureModel" Data="this.State.Value.AllCultures" AllowVirtualization="true"
-                            AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                            @bind-Value="this.Culture" TextProperty="DisplayName" />
-        </RadzenCard>
-
-        @if (this.State.Value.CulturesProblem is not null)
-        {
-            <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.Cultures"]" TryAgain="this.FetchCultures"
-                             Problem="this.State.Value.CulturesProblem" Class="w-50 my-2" />
-        }
-
-        <RadzenCard class="mt-2">
-            <div class="d-flex flex-row mt-2 mb-4">
-                <h2 class="h5">@this.Loc["CreateListPage.List.SeasonTitles"]</h2>
-                <RadzenIcon Icon="help" MouseEnter="this.ShowDefaultSeasonTitlesTooltip"
-                            MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
-            </div>
-
-            <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonTitle"]" class="mb-2" />
-            <RadzenTextBox @bind-Value="this.DefaultSeasonTitle" Class="w-100" />
-            <FormValidator Validator="this.DefaultSeasonTitleValidator" Value="@this.DefaultSeasonTitle" />
-
-            <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonOriginalTitle"]" class="mt-4 mb-2" />
-            <RadzenTextBox @bind-Value="@this.DefaultSeasonOriginalTitle" Name="DefaultSeasonOriginalTitle"
-                           Class="w-100" />
-            <FormValidator Validator="this.DefaultSeasonOriginalTitleValidator"
-                           Value="@this.DefaultSeasonOriginalTitle" />
-        </RadzenCard>
-
-        <div class="d-flex flex-row justify-content-center">
-            <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
-                          Click="@this.NavigateToHomePage" />
-
-            <RadzenButton Text="@this.Loc["Button.Create"]" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
-                          Click="@this.CreateList" />
+            @if (this.State.Value.CreateListProblem is not null)
+            {
+                <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.CreateList"]" ShowButton="false"
+                                 Problem="this.State.Value.CreateListProblem" Class="w-50 mt-3" />
+            }
         </div>
-    </div>
-
-    @if (this.State.Value.IsCreatingList)
-    {
-        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
-    }
-
-    @if (this.State.Value.CreateListProblem is not null)
-    {
-        <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.CreateList"]" ShowButton="false" Class="w-50 mt-3"
-                         Problem="this.State.Value.CreateListProblem" />
-    }
-</div>
+    </CascadingValue>
+</CascadingValue>
 
 @code {
-    private const string DefaultDefaultSeasonTitle = "Season #";
-
-    private string Name { get; set; } = String.Empty;
-
-    private string Handle { get; set; } = String.Empty;
-
-    private SimpleCultureModel Culture { get; set; } =
-        new(CultureInfo.InvariantCulture.ToString(), CultureInfo.InvariantCulture.DisplayName);
-
-    private string DefaultSeasonTitle { get; set; } = DefaultDefaultSeasonTitle;
-    private string DefaultSeasonOriginalTitle { get; set; } = DefaultDefaultSeasonTitle;
-
-    private PropertyValidator<CreateListRequest, string>? NameValidator { get; set; }
-    private PropertyValidator<CreateListRequest, string>? DefaultSeasonTitleValidator { get; set; }
-    private PropertyValidator<CreateListRequest, string>? DefaultSeasonOriginalTitleValidator { get; set; }
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        this.InitializeValidators();
+        this.FormModel = new();
         this.Dispatcher.Dispatch(new InitializeCreateListPageAction());
         this.FetchCultures();
     }
-
-    private void InitializeValidators()
-    {
-        var validator = CreateListRequest.CreateValidator();
-
-        this.NameValidator = PropertyValidator.Create(validator, (CreateListRequest req) => req.Name, this);
-
-        this.DefaultSeasonTitleValidator = PropertyValidator.Create(
-            validator, (CreateListRequest req) => req.DefaultSeasonTitle, this);
-
-        this.DefaultSeasonOriginalTitleValidator = PropertyValidator.Create(
-            validator, (CreateListRequest req) => req.DefaultSeasonOriginalTitle, this);
-    }
-
-    private void OnNameChanged() =>
-        this.Handle = ListUtils.CreateHandleFromName(this.Name);
 
     private void FetchCultures() =>
         this.Dispatcher.Dispatch(new FetchCulturesAction());
 
     private void CreateList() =>
-        this.WithValidation(() =>
-            this.Dispatcher.Dispatch(new CreateListAction(new CreateListRequest(
-                this.Name, this.Culture.Id, this.DefaultSeasonTitle, this.DefaultSeasonOriginalTitle))));
+        this.WithValidation(request => this.Dispatcher.Dispatch(new CreateListAction(request)));
 
     private void NavigateToHomePage() =>
         this.PageNavigator.GoToHomePage();

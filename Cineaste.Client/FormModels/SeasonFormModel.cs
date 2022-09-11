@@ -1,6 +1,8 @@
 namespace Cineaste.Client.FormModels;
 
-public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
+using System.ComponentModel;
+
+public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest, SeasonModel>
 {
     private readonly ObservableCollection<PeriodFormModel> periods;
 
@@ -48,6 +50,12 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         Func<int> lastSequenceNumber)
         : base(getSequenceNumber, lastSequenceNumber)
     {
+        var period = new PeriodFormModel(date);
+        period.PropertyChanged += this.OnPeriodUpdated;
+
+        this.periods = new() { period };
+        this.Periods = new(this.periods);
+
         this.defaultTitle = title;
         this.Titles.Clear();
         this.Titles.Add(title);
@@ -61,8 +69,8 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
 
         this.defaultDate = date;
 
-        this.periods = new() { new(date) };
-        this.Periods = new(this.periods);
+        this.FinishInitialization();
+
     }
 
     public void AddNewPeriod()
@@ -72,7 +80,12 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
             .ThenByDescending(period => period.EndMonth)
             .First();
 
-        this.periods.Add(new PeriodFormModel(new DateOnly(lastPeriod.EndYear + 1, lastPeriod.StartMonth, 1)));
+        var period = new PeriodFormModel(new DateOnly(lastPeriod.EndYear + 1, lastPeriod.StartMonth, 1));
+        period.PropertyChanged += this.OnPeriodUpdated;
+
+        this.periods.Add(period);
+
+        this.UpdateRequest();
     }
 
     public void RemovePeriod(PeriodFormModel period)
@@ -80,10 +93,23 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         if (this.periods.Count > 1)
         {
             this.periods.Remove(period);
+            period.PropertyChanged -= this.OnPeriodUpdated;
+
+            this.UpdateRequest();
         }
     }
 
-    public SeasonRequest ToRequest() =>
+    public override void UpdateRequest()
+    {
+        base.UpdateRequest();
+
+        foreach (var period in this.periods)
+        {
+            period.UpdateRequest();
+        }
+    }
+
+    public override SeasonRequest CreateRequest() =>
         new(
             this.BackingModel?.Id,
             this.ToTitleRequests(this.Titles),
@@ -92,7 +118,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
             this.WatchStatus,
             this.ReleaseStatus,
             this.Channel,
-            this.Periods.Select(period => period.ToRequest()).ToImmutableList());
+            this.Periods.Select(period => period.CreateRequest()).ToImmutableList());
 
     protected override void CopyFromModel()
     {
@@ -119,5 +145,11 @@ public sealed class SeasonFormModel : SeriesComponentFormModel<SeasonModel>
         {
             this.periods.Add(new(this.defaultDate));
         }
+    }
+
+    private void OnPeriodUpdated(object? sender, PropertyChangedEventArgs e)
+    {
+        this.UpdateRequest();
+        this.OnPropertyChanged(nameof(this.Periods));
     }
 }

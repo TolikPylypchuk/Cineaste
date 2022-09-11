@@ -4,30 +4,30 @@ using static Cineaste.Basic.Constants;
 
 public sealed class SeasonRequestValidator : TitledRequestValidator<SeasonRequest>
 {
-    private static readonly IValidator<PeriodRequest> periodValidator = PeriodRequest.CreateValidator();
-
     public SeasonRequestValidator()
         : base("Season")
     {
         this.RuleFor(req => req.WatchStatus)
             .IsInEnum()
-            .WithErrorCode(this.ErrorCode(req => req.WatchStatus, Invalid))
-            .Must((req, status) => req.ReleaseStatus switch
-            {
-                SeasonReleaseStatus.NotStarted => status is SeasonWatchStatus.NotWatched,
-                SeasonReleaseStatus.Running or SeasonReleaseStatus.Hiatus => status is
-                    SeasonWatchStatus.NotWatched or SeasonWatchStatus.Watching or SeasonWatchStatus.Hiatus,
-                SeasonReleaseStatus.Finished => status is
-                    SeasonWatchStatus.NotWatched or SeasonWatchStatus.Watching or
-                    SeasonWatchStatus.Hiatus or SeasonWatchStatus.Watched,
-                SeasonReleaseStatus.Unknown => status is SeasonWatchStatus.StoppedWatching,
-                _ => true
-            })
             .WithErrorCode(this.ErrorCode(req => req.WatchStatus, Invalid));
 
         this.RuleFor(req => req.ReleaseStatus)
             .IsInEnum()
             .WithErrorCode(this.ErrorCode(req => req.ReleaseStatus, Invalid));
+
+        this.RuleFor(req => new { req.WatchStatus, req.ReleaseStatus })
+            .Must(x => x.ReleaseStatus switch
+            {
+                SeasonReleaseStatus.NotStarted => x.WatchStatus is SeasonWatchStatus.NotWatched,
+                SeasonReleaseStatus.Running or SeasonReleaseStatus.Hiatus => x.WatchStatus is
+                    SeasonWatchStatus.NotWatched or SeasonWatchStatus.Watching or SeasonWatchStatus.Hiatus,
+                SeasonReleaseStatus.Finished => x.WatchStatus is
+                    SeasonWatchStatus.NotWatched or SeasonWatchStatus.Watching or
+                    SeasonWatchStatus.Hiatus or SeasonWatchStatus.Watched,
+                SeasonReleaseStatus.Unknown => x.WatchStatus is SeasonWatchStatus.StoppedWatching,
+                _ => true
+            })
+            .WithErrorCode(this.ErrorCode(req => req.WatchStatus, Invalid));
 
         this.RuleFor(req => req.Channel)
             .NotEmpty()
@@ -42,7 +42,7 @@ public sealed class SeasonRequestValidator : TitledRequestValidator<SeasonReques
             .WithErrorCode(this.ErrorCode(req => req.Periods, Overlap));
 
         this.RuleForEach(req => req.Periods)
-            .SetValidator(periodValidator);
+            .SetValidator(PeriodRequest.Validator);
     }
 
     private static bool NotOverlap(IEnumerable<PeriodRequest> periods) =>

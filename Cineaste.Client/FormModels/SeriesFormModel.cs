@@ -1,9 +1,12 @@
 namespace Cineaste.Client.FormModels;
 
+using System.ComponentModel;
+
 using static Cineaste.Basic.Constants;
 
-public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
+public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesModel>
 {
+    private readonly Guid listId;
     private readonly ListKindModel defaultKind;
     private readonly ObservableCollection<ISeriesComponentFormModel> components = new();
 
@@ -21,6 +24,7 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
     public string RottenTomatoesId { get; set; } = String.Empty;
 
     public SeriesFormModel(
+        Guid listId,
         IReadOnlyCollection<ListKindModel> availableKinds,
         string defaultSeasonTitle,
         string defaultSeasonOriginalTitle)
@@ -34,6 +38,7 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
             throw new ArgumentOutOfRangeException(nameof(availableKinds), $"{nameof(availableKinds)} is empty");
         }
 
+        this.listId = listId;
         this.defaultKind = availableKinds.First();
         this.Kind = this.defaultKind;
 
@@ -41,6 +46,8 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
 
         this.defaultSeasonTitle = defaultSeasonTitle;
         this.defaultSeasonOriginalTitle = defaultSeasonOriginalTitle;
+
+        this.FinishInitialization();
     }
 
     public SeasonFormModel AddSeason()
@@ -57,6 +64,9 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
             this.GetLastSequenceNumber);
 
         this.components.Add(season);
+        season.PropertyChanged += this.OnComponentUpdated;
+
+        this.UpdateRequest();
 
         return season;
     }
@@ -72,6 +82,9 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
             this.GetLastSequenceNumber);
 
         this.components.Add(episode);
+        episode.PropertyChanged += this.OnComponentUpdated;
+
+        this.UpdateRequest();
 
         return episode;
     }
@@ -79,6 +92,7 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
     public void RemoveComponent(ISeriesComponentFormModel component)
     {
         this.components.Remove(component);
+        component.PropertyChanged -= this.OnComponentUpdated;
 
         foreach (var c in this.components)
         {
@@ -87,6 +101,8 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
                 c.SequenceNumber--;
             }
         }
+
+        this.UpdateRequest();
     }
 
     public void MoveComponentUp(ISeriesComponentFormModel component)
@@ -105,6 +121,8 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
 
         this.components[index - 1] = component;
         this.components[index] = previousComponent;
+
+        this.UpdateRequest();
     }
 
     public void MoveComponentDown(ISeriesComponentFormModel component)
@@ -123,18 +141,36 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
 
         this.components[index + 1] = component;
         this.components[index] = nextComponent;
+
+        this.UpdateRequest();
     }
 
-    public SeriesRequest ToRequest(Guid listId) =>
+    public override void UpdateRequest()
+    {
+        base.UpdateRequest();
+
+        foreach (var component in this.components)
+        {
+            component.UpdateRequest();
+        }
+    }
+
+    public override SeriesRequest CreateRequest() =>
         new(
-            listId,
+            this.listId,
             this.ToTitleRequests(this.Titles),
             this.ToTitleRequests(this.OriginalTitles),
             this.WatchStatus,
             this.ReleaseStatus,
             this.Kind.Id,
-            this.Components.OfType<SeasonFormModel>().Select(season => season.ToRequest()).ToImmutableList(),
-            this.Components.OfType<SpecialEpisodeFormModel>().Select(episode => episode.ToRequest()).ToImmutableList(),
+            this.Components
+                .OfType<SeasonFormModel>()
+                .Select(season => season.CreateRequest())
+                .ToImmutableList(),
+            this.Components
+                .OfType<SpecialEpisodeFormModel>()
+                .Select(episode => episode.CreateRequest())
+                .ToImmutableList(),
             this.ImdbId,
             this.RottenTomatoesId);
 
@@ -192,4 +228,7 @@ public sealed class SeriesFormModel : TitledFormModel<SeriesModel>
                 _ => Match.ImpossibleType<int>(component)
             });
     }
+
+    private void OnComponentUpdated(object? sender, PropertyChangedEventArgs e) =>
+        this.UpdateRequest();
 }

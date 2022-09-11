@@ -8,13 +8,13 @@ public partial class SeasonForm
     public SeasonModel? Season { get; set; }
 
     [Parameter]
+    public override SeasonFormModel FormModel { get; set; } = null!;
+
+    [Parameter]
     public EventCallback Close { get; set; }
 
     [Parameter]
     public EventCallback Delete { get; set; }
-
-    [Parameter]
-    public SeasonFormModel FormModel { get; set; } = null!;
 
     [Parameter]
     public EventCallback GoToNextComponent { get; set; }
@@ -24,11 +24,7 @@ public partial class SeasonForm
 
     private string FormTitle { get; set; } = String.Empty;
 
-    private PropertyValidator<SeasonRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }
-    private PropertyValidator<SeasonRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
-    private PropertyValidator<SeasonRequest, SeasonWatchStatus>? WatchStatusValidator { get; set; }
-    private PropertyValidator<SeasonRequest, string>? ChannelValidator { get; set; }
-    private PropertyValidator<SeasonRequest, ImmutableList<PeriodRequest>>? PeriodsValidator { get; set; }
+    private object PeriodValidationTrigger { get; set; } = new();
 
     private ImmutableArray<SeasonWatchStatus> AllWatchStatuses { get; } =
         Enum.GetValues<SeasonWatchStatus>().ToImmutableArray();
@@ -39,21 +35,11 @@ public partial class SeasonForm
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        this.InitializeValidators();
+
+        this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
+        this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
+
         this.UpdateFormTitle();
-    }
-
-    private void InitializeValidators()
-    {
-        var validator = SeasonRequest.CreateValidator();
-
-        this.TitlesValidator = PropertyValidator.Create(validator, (SeasonRequest req) => req.Titles, this);
-        this.OriginalTitlesValidator = PropertyValidator.Create(
-            validator, (SeasonRequest req) => req.OriginalTitles, this);
-
-        this.WatchStatusValidator = PropertyValidator.Create(validator, (SeasonRequest req) => req.WatchStatus, this);
-        this.ChannelValidator = PropertyValidator.Create(validator, (SeasonRequest req) => req.Channel, this);
-        this.PeriodsValidator = PropertyValidator.Create(validator, (SeasonRequest req) => req.Periods, this);
     }
 
     private void SetPropertyValues()
@@ -67,7 +53,7 @@ public partial class SeasonForm
             ? String.Format(this.Loc["Link.RottenTomatoesWithPartFormat"], part)
             : this.Loc["Link.RottenTomatoes"];
 
-    private void AddTitle(ObservableCollection<string> titles) =>
+    private void AddTitle(ICollection<string> titles) =>
         titles.Add(String.Empty);
 
     private void AddPeriod() =>
@@ -76,17 +62,29 @@ public partial class SeasonForm
     private void OnPeriodRemoved(PeriodFormModel period) =>
         this.FormModel.RemovePeriod(period);
 
-    private void UpdateFormTitle() =>
+    private void OnPeriodChanged()
+    {
+        this.PeriodValidationTrigger = this.FormModel.Periods.Aggregate(
+            String.Empty,
+            (acc, period) => $"{acc}{period.StartMonth}{period.StartYear}{period.EndMonth}{period.EndYear}");
+
+        this.StateHasChanged();
+    }
+
+    private void UpdateFormTitle()
+    {
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
+        this.StateHasChanged();
+    }
 
     private Task OnGoToNextComponent() =>
-        this.WithValidation(this.GoToNextComponent.InvokeAsync);
+        this.WithValidation(r => this.GoToNextComponent.InvokeAsync());
 
     private Task OnGoToPreviousComponent() =>
-        this.WithValidation(this.GoToPreviousComponent.InvokeAsync);
+        this.WithValidation(r => this.GoToPreviousComponent.InvokeAsync());
 
     private void GoToSeries() =>
-        this.WithValidation(() => this.Dispatcher.Dispatch(new GoToSeriesAction()));
+        this.WithValidation(r => this.Dispatcher.Dispatch(new GoToSeriesAction()));
 
     private void Cancel()
     {

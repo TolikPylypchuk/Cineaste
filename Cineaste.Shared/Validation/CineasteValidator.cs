@@ -16,14 +16,17 @@ public abstract class CineasteValidator<T> : AbstractValidator<T>
     protected static readonly string Overlap = nameof(Overlap);
     protected static readonly string Sequence = nameof(Sequence);
 
+    protected static readonly string IndexPlaceholder = "{CollectionIndex}";
+
     private readonly string errorCodePrefix;
 
     protected CineasteValidator(string errorCodePrefix) =>
         this.errorCodePrefix = errorCodePrefix;
 
-    protected string ErrorCode<TProp>(Expression<Func<T, TProp>> property, params string[] errorComponents) =>
-        $"{this.errorCodePrefix}.{property.GetMemberName()}.{String.Join(".", errorComponents)}";
+    protected string ErrorCode<TProp>(Expression<Func<T, TProp>> property, params string?[] errorComponents) =>
+        $"{this.errorCodePrefix}.{property.GetMemberName()}." +
+        $"{String.Join(".", errorComponents.Where(c => !String.IsNullOrWhiteSpace(c)))}";
 
-    protected string ErrorCode(params string[] errorComponents) =>
-        $"{this.errorCodePrefix}.{String.Join(".", errorComponents)}";
+    protected string ErrorCode(params string?[] errorComponents) =>
+        $"{this.errorCodePrefix}.{String.Join(".", errorComponents.Where(c => !String.IsNullOrWhiteSpace(c)))}";
 }

@@ -4,8 +4,8 @@ using static Cineaste.Basic.Constants;
 
 public class TitleRequestValidator : CineasteValidator<TitleRequest>
 {
-    public TitleRequestValidator()
-        : base("Title")
+    public TitleRequestValidator(string? prefix = null)
+        : base(prefix is not null ? prefix : "Title")
     {
         this.RuleFor(req => req.Name)
             .NotEmpty()

@@ -13,6 +13,5 @@ public sealed record MovieRequest(
     string? ImdbId,
     string? RottenTomatoesId) : IValidatable<MovieRequest>, ITitledRequest
 {
-    public static IValidator<MovieRequest> CreateValidator() =>
-        new MovieRequestValidator();
+    public static IValidator<MovieRequest> Validator { get; } = new MovieRequestValidator();
 }

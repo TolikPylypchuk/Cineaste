@@ -1,21 +1,22 @@
-@inherits CineasteComponent
+@inherits CineasteForm<PeriodFormModel, PeriodRequest, PeriodModel, SeriesFormState>
 
-<CascadingValue Value="@(() => this.FormModel.ToRequest())" IsFixed="true">
+<CascadingValue Name="@CascadingParameters.ErrorCodes" Value="@this.FormModel.ValidationErrors">
     <MonthYearPicker @bind-Month="this.FormModel.StartMonth" @bind-Year="this.FormModel.StartYear" Class="mt-2"
-                     MonthText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonth" : "ReleaseMonth")}")"
-                     YearText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartYear" : "ReleaseYear")}")"
-                     Changed="@this.OnPeriodChanged" YearValidator="@this.StartYearValidator" Parent="@this" />
+                        MonthText="@(
+                        $"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonth" : "ReleaseMonth")}")"
+                        YearText="@(
+                        $"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartYear" : "ReleaseYear")}")"
+                        Changed="@this.OnPeriodChanged" YearErrorCode="Period.StartYear.*" />
 
     @if (!this.FormModel.IsSingleDayRelease)
     {
         <MonthYearPicker @bind-Month="this.FormModel.EndMonth" @bind-Year="this.FormModel.EndYear" Class="mt-1"
-                         MonthText="PeriodForm.EndMonth" YearText="PeriodForm.EndYear" Parent="@this"
-                         Changed="@this.OnPeriodChanged" YearValidator="@this.EndYearValidator" />
+                            MonthText="PeriodForm.EndMonth" YearText="PeriodForm.EndYear"
+                            Changed="@this.OnPeriodChanged" YearErrorCode="Period.EndYear.*" />
     }
 
     <div>
-        <FormValidator Validator="@this.PeriodValidator" Value="@this.FormModel.StartMonth"
-                       Trigger="@(new { this.FormModel.StartYear, this.FormModel.EndMonth, this.FormModel.EndYear })"/>
+        <ErrorPresenter ErrorCode="Period.Invalid" Trigger="@this.InvalidPeriodTrigger" />
     </div>
 
     <RadzenLabel Text="@this.Loc["PeriodForm.EpisodeCount"]" Component="EpisodeCountNumeric" class="mt-1" />
@@ -35,11 +36,11 @@
 
     <div class="row">
         <div class="col-md pe-md-1">
-            <FormValidator Validator="@this.EpisodeCountValidator" Value="@this.FormModel.EpisodeCount" />
+            <ErrorPresenter ErrorCode="Period.EpisodeCount.*" Trigger="@this.FormModel.EpisodeCount" />
         </div>
         <div class="col-md ps-md-1 d-flex align-items-center">
-            <FormValidator Validator="@this.IsSingleDayReleaseValidator" Value="@this.FormModel.IsSingleDayRelease"
-                           Trigger="@this.FormModel.EpisodeCount" />
+            <ErrorPresenter ErrorCode="Period.IsSingleDayRelease.*"
+                            Trigger="@(new { this.FormModel.IsSingleDayRelease, this.FormModel.EpisodeCount })" />
         </div>
     </div>
 
@@ -47,23 +48,23 @@
 
     <div class="d-flex flex-row align-items-center w-100">
         <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Change="@this.Changed"
-                       Name="RottenTomatoesTextBox" class="w-100" />
+                        Name="RottenTomatoesTextBox" class="w-100" />
 
         @if (this.CanRemove)
         {
             <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                          Click="@this.Removed" class="ms-2" />
+                            Click="@this.Removed" class="ms-2" />
         }
     </div>
 
     <div>
-        <FormValidator Validator="@this.RottenTomatoesIdValidator" Value="@this.FormModel.RottenTomatoesId" />
+        <ErrorPresenter ErrorCode="Period.RottenTomatoesId.*" Trigger="@this.FormModel.RottenTomatoesId" />
     </div>
 </CascadingValue>
 
 @code {
     [Parameter]
-    public PeriodFormModel FormModel { get; set; } = null!;
+    public override PeriodFormModel FormModel { get; set; } = null!;
 
     [Parameter]
     public bool CanRemove { get; set; }
@@ -74,42 +75,21 @@
     [Parameter]
     public EventCallback Removed { get; set; }
 
-    [Parameter]
-    public IValidationExecutor Parent { get; set; } = null!;
-
-    private PropertyValidator<PeriodRequest, int>? StartYearValidator { get; set; }
-    private PropertyValidator<PeriodRequest, int>? EndYearValidator { get; set; }
-    private PropertyValidator<PeriodRequest, int>? PeriodValidator { get; set; }
-    private PropertyValidator<PeriodRequest, int>? EpisodeCountValidator { get; set; }
-    private PropertyValidator<PeriodRequest, bool>? IsSingleDayReleaseValidator { get; set; }
-    private PropertyValidator<PeriodRequest, string>? RottenTomatoesIdValidator { get; set; }
-
     private bool CanChangeIsSingleDayRelease { get; set; }
+
+    private object InvalidPeriodTrigger =>
+        new
+        {
+            this.FormModel.StartMonth,
+            this.FormModel.StartYear,
+            this.FormModel.EndMonth,
+            this.FormModel.EndYear
+        };
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-
-        this.InitializeValidators();
         this.SetCanChangeIsSingleDayRelease();
-
-        this.AttachValidationTo(this.Parent);
-    }
-
-    private void InitializeValidators()
-    {
-        var validator = PeriodRequest.CreateValidator();
-
-        this.StartYearValidator = PropertyValidator.Create(validator, (PeriodRequest req) => req.StartYear, this);
-        this.EndYearValidator = PropertyValidator.Create(validator, (PeriodRequest req) => req.EndYear, this);
-        this.PeriodValidator = PropertyValidator.Create(validator, (PeriodRequest req) => req.StartMonth, this);
-        this.EpisodeCountValidator = PropertyValidator.Create(validator, (PeriodRequest req) => req.EpisodeCount, this);
-
-        this.IsSingleDayReleaseValidator = PropertyValidator.Create(
-            validator, (PeriodRequest req) => req.IsSingleDayRelease, this);
-
-        this.RottenTomatoesIdValidator = PropertyValidator.Create(
-            validator, (PeriodRequest req) => req.RottenTomatoesId, this);
     }
 
     private async Task OnPeriodChanged()

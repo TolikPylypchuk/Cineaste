@@ -1294,6 +1294,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Series updated successfully.
+        /// </summary>
+        public static string SeriesForm_UpdateSeries_Success {
+            get {
+                return ResourceManager.GetString("SeriesForm.UpdateSeries.Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Watch status.
         /// </summary>
         public static string SeriesForm_WatchStatus {
@@ -1582,6 +1591,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The original titles must not be empty.
+        /// </summary>
+        public static string Validation_OriginalTitles_Name_Empty {
+            get {
+                return ResourceManager.GetString("Validation.OriginalTitles.Name.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The original titles are too long.
+        /// </summary>
+        public static string Validation_OriginalTitles_Name_TooLong {
+            get {
+                return ResourceManager.GetString("Validation.OriginalTitles.Name.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The end month is invalid.
         /// </summary>
         public static string Validation_Period_EndMonth_Invalid {
@@ -1681,6 +1708,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The original titles must all be different.
+        /// </summary>
+        public static string Validation_Season_OriginalTitles_Distinct_Names {
+            get {
+                return ResourceManager.GetString("Validation.Season.OriginalTitles.Distinct.Names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The periods are absent.
         /// </summary>
         public static string Validation_Season_Periods_Empty {
@@ -1735,11 +1771,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The title is empty.
+        ///   Looks up a localized string similar to The original titles must all be different.
         /// </summary>
-        public static string Validation_Series_OriginalTitles_Empty {
+        public static string Validation_Series_OriginalTitles_Distinct_Names {
             get {
-                return ResourceManager.GetString("Validation.Series.OriginalTitles.Empty", resourceCulture);
+                return ResourceManager.GetString("Validation.Series.OriginalTitles.Distinct.Names", resourceCulture);
             }
         }
         
@@ -1780,11 +1816,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The title is empty.
+        ///   Looks up a localized string similar to The titles must all be different.
         /// </summary>
-        public static string Validation_Series_Titles_Empty {
+        public static string Validation_Series_Titles_Distinct_Names {
             get {
-                return ResourceManager.GetString("Validation.Series.Titles.Empty", resourceCulture);
+                return ResourceManager.GetString("Validation.Series.Titles.Distinct.Names", resourceCulture);
             }
         }
         
@@ -1843,6 +1879,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The original titles must all be different.
+        /// </summary>
+        public static string Validation_SpecialEpisode_OriginalTitles_Distinct_Names {
+            get {
+                return ResourceManager.GetString("Validation.SpecialEpisode.OriginalTitles.Distinct.Names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Rotten Tomatoes ID must start with &apos;m/&apos; or &apos;tv/&apos;.
         /// </summary>
         public static string Validation_SpecialEpisode_RottenTomatoesId_Invalid {
@@ -1852,7 +1897,16 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The year is too low.
+        ///   Looks up a localized string similar to The titles must all be different.
+        /// </summary>
+        public static string Validation_SpecialEpisode_Titles_Distinct_Names {
+            get {
+                return ResourceManager.GetString("Validation.SpecialEpisode.Titles.Distinct.Names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The year must be after 1900.
         /// </summary>
         public static string Validation_SpecialEpisode_Year_TooLow {
             get {
@@ -1861,20 +1915,20 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The title is empty.
+        ///   Looks up a localized string similar to The titles must not be empty.
         /// </summary>
-        public static string Validation_Title_Name_Empty {
+        public static string Validation_Titles_Name_Empty {
             get {
-                return ResourceManager.GetString("Validation.Title.Name.Empty", resourceCulture);
+                return ResourceManager.GetString("Validation.Titles.Name.Empty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The title is too long.
+        ///   Looks up a localized string similar to The titles are too long.
         /// </summary>
-        public static string Validation_Title_Name_TooLong {
+        public static string Validation_Titles_Name_TooLong {
             get {
-                return ResourceManager.GetString("Validation.Title.Name.TooLong", resourceCulture);
+                return ResourceManager.GetString("Validation.Titles.Name.TooLong", resourceCulture);
             }
         }
     }

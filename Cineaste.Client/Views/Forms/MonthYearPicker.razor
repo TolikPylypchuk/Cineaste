@@ -1,5 +1,4 @@
 @inherits CineasteComponent
-@typeparam T
 
 <div class="row @this.Class">
     <div class="col-md pe-md-1">
@@ -25,7 +24,7 @@
         <RadzenNumeric Value="@this.Year" ValueChanged="@this.YearChanged" Name="YearNumeric"
                        Change="@((int value) => this.Changed.InvokeAsync())" />
 
-        <FormValidator Validator="@this.YearValidator" Value="@this.Year" />
+        <ErrorPresenter ErrorCode="@this.YearErrorCode" Trigger="@this.Year" />
     </div>
 </div>
 
@@ -46,25 +45,16 @@
     public EventCallback<int> YearChanged { get; set; }
 
     [Parameter]
-    public PropertyValidator<T, int>? YearValidator { get; set; }
+    public string YearText { get; set; } = String.Empty;
 
     [Parameter]
-    public string YearText { get; set; } = String.Empty;
+    public string YearErrorCode { get; set; } = String.Empty;
 
     [Parameter]
     public EventCallback Changed { get; set; }
 
     [Parameter]
-    public IValidationExecutor Parent { get; set; } = null!;
-
-    [Parameter]
     public string Class { get; set; } = String.Empty;
 
     private ImmutableArray<int> Months { get; } = Enumerable.Range(1, 12).ToImmutableArray();
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-        this.AttachValidationTo(this.Parent);
-    }
 }

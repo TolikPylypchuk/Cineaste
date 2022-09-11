@@ -1,6 +1,8 @@
 namespace Cineaste.Client.FormModels;
 
-public abstract class SeriesComponentFormModel<TModel> : TitledFormModel<TModel>, ISeriesComponentFormModel
+public abstract class SeriesComponentFormModelBase<TRequest, TModel>
+    : TitledFormModelBase<TRequest, TModel>, ISeriesComponentFormModel
+    where TRequest : IValidatable<TRequest>, ITitledRequest
     where TModel : ISeriesComponentModel
 {
     private readonly Func<int> lastSequenceNumber;
@@ -22,7 +24,7 @@ public abstract class SeriesComponentFormModel<TModel> : TitledFormModel<TModel>
 
     protected Func<int> GetSequenceNumber { get; }
 
-    public SeriesComponentFormModel(
+    public SeriesComponentFormModelBase(
         Func<ISeriesComponentFormModel, int> getSequenceNumber,
         Func<int> lastSequenceNumber)
     {

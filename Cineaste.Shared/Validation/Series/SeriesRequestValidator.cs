@@ -4,32 +4,30 @@ using static Cineaste.Basic.Constants;
 
 public sealed class SeriesRequestValidator : TitledRequestValidator<SeriesRequest>
 {
-    private static readonly IValidator<SeasonRequest> seasonValidator = SeasonRequest.CreateValidator();
-    private static readonly IValidator<SpecialEpisodeRequest> specialEpisodeValidator =
-        SpecialEpisodeRequest.CreateValidator();
-
     public SeriesRequestValidator()
         : base("Series")
     {
         this.RuleFor(req => req.WatchStatus)
             .IsInEnum()
-            .WithErrorCode(this.ErrorCode(req => req.WatchStatus, Invalid))
-            .Must((req, status) => req.ReleaseStatus switch
-            {
-                SeriesReleaseStatus.NotStarted => status is SeriesWatchStatus.NotWatched,
-                SeriesReleaseStatus.Running or SeriesReleaseStatus.Hiatus => status is
-                    SeriesWatchStatus.NotWatched or SeriesWatchStatus.Watching or SeriesWatchStatus.Hiatus,
-                SeriesReleaseStatus.Finished or SeriesReleaseStatus.Cancelled => status is
-                    SeriesWatchStatus.NotWatched or SeriesWatchStatus.Watching or
-                    SeriesWatchStatus.Hiatus or SeriesWatchStatus.Watched,
-                SeriesReleaseStatus.Unknown => status is SeriesWatchStatus.StoppedWatching,
-                _ => true
-            })
             .WithErrorCode(this.ErrorCode(req => req.WatchStatus, Invalid));
 
         this.RuleFor(req => req.ReleaseStatus)
             .IsInEnum()
             .WithErrorCode(this.ErrorCode(req => req.ReleaseStatus, Invalid));
+
+        this.RuleFor(req => new { req.WatchStatus, req.ReleaseStatus })
+            .Must(x => x.ReleaseStatus switch
+            {
+                SeriesReleaseStatus.NotStarted => x.WatchStatus is SeriesWatchStatus.NotWatched,
+                SeriesReleaseStatus.Running or SeriesReleaseStatus.Hiatus => x.WatchStatus is
+                    SeriesWatchStatus.NotWatched or SeriesWatchStatus.Watching or SeriesWatchStatus.Hiatus,
+                SeriesReleaseStatus.Finished or SeriesReleaseStatus.Cancelled => x.WatchStatus is
+                    SeriesWatchStatus.NotWatched or SeriesWatchStatus.Watching or
+                    SeriesWatchStatus.Hiatus or SeriesWatchStatus.Watched,
+                SeriesReleaseStatus.Unknown => x.WatchStatus is SeriesWatchStatus.StoppedWatching,
+                _ => true
+            })
+            .WithErrorCode(this.ErrorCode(req => req.WatchStatus, Invalid));
 
         this.RuleFor(req => req.Seasons)
             .NotEmpty()
@@ -45,10 +43,10 @@ public sealed class SeriesRequestValidator : TitledRequestValidator<SeriesReques
             .WithErrorCode(this.ErrorCode(Sequence, Invalid));
 
         this.RuleForEach(req => req.Seasons)
-            .SetValidator(seasonValidator);
+            .SetValidator(SeasonRequest.Validator);
 
         this.RuleForEach(req => req.SpecialEpisodes)
-            .SetValidator(specialEpisodeValidator);
+            .SetValidator(SpecialEpisodeRequest.Validator);
 
         this.RuleFor(req => req.ImdbId)
             .Matches(ImdbIdRegex)

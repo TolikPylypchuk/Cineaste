@@ -1,101 +1,103 @@
-@inherits StatefulComponent<SeriesFormState>
+@inherits CineasteForm<SpecialEpisodeFormModel, SpecialEpisodeRequest, SpecialEpisodeModel, SeriesFormState>
 
-<CascadingValue Value="@(() => this.FormModel.ToRequest())" IsFixed="true">
-    <div class="d-flex flex-column h-100">
-        <div class="d-flex flex-row justify-content-between">
-            <RadzenButton Icon="keyboard_arrow_up" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                          Click="this.GoToSeries" class="btn-transparent my-2" />
+<CascadingValue Name="@CascadingParameters.ValidationExecutor" Value="@this" IsFixed="true">
+    <CascadingValue Name="@CascadingParameters.ErrorCodes" Value="@this.FormModel.ValidationErrors">
+        <div class="d-flex flex-column h-100">
+            <div class="d-flex flex-row justify-content-between">
+                <RadzenButton Icon="keyboard_arrow_up" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                              Click="this.GoToSeries" class="btn-transparent my-2" />
 
-            <div class="d-flex flex-row">
-                <RadzenButton Icon="keyboard_arrow_left" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                              class="@($"btn-transparent{(this.FormModel.IsFirst ? " invisible" : "")} my-2 me-1")"
-                              Click="this.OnGoToPreviousComponent" />
-                <RadzenButton Icon="keyboard_arrow_right" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                              class="@($"btn-transparent{(this.FormModel.IsLast ? " invisible" : "")} my-2 ms-1")"
-                              Click="this.OnGoToNextComponent" />
+                <div class="d-flex flex-row">
+                    <RadzenButton Icon="keyboard_arrow_left" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                                  class="@($"btn-transparent{(this.FormModel.IsFirst ? " invisible" : "")} my-2 me-1")"
+                                  Click="this.OnGoToPreviousComponent" />
+                    <RadzenButton Icon="keyboard_arrow_right" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                                  class="@($"btn-transparent{(this.FormModel.IsLast ? " invisible" : "")} my-2 ms-1")"
+                                  Click="this.OnGoToNextComponent" />
+                </div>
+
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
+                              class="btn-transparent my-2" />
             </div>
 
-            <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
-                          class="btn-transparent my-2" />
+            <h1 class="form-title">
+                @(!String.IsNullOrEmpty(this.FormTitle) || this.Episode is not null
+                    ? this.FormTitle
+                    : this.Loc["SpecialEpisodeForm.NewSpecialEpisode"])
+            </h1>
+
+            <div class="w-100 h-100 d-flex flex-column justify-content-between overflow-y-auto overflow-x-hidden">
+                <div class="h-100 overflow-y-auto overflow-x-hidden">
+                    @if (!String.IsNullOrEmpty(this.FormModel.RottenTomatoesId))
+                    {
+                        <RadzenLink Path="@String.Format(
+                                        this.Loc["Link.RottenTomatoesUrlFormat"], this.FormModel.RottenTomatoesId)"
+                                    Text="@this.Loc["Link.RottenTomatoes"]" target="_blank" />
+                    }
+
+                    <div class="d-md-flex justify-content-md-center mt-2">
+                        <div class="me-md-1">
+                            <RadzenCheckBox @bind-Value="@this.FormModel.IsWatched" Name="IsWatchedCheckBox"
+                                            Change="@((bool value) => this.OnIsWatchedChanged())"
+                                            Disabled="@(!this.CanChangeIsWatched)" />
+                            <RadzenLabel Text="@this.Loc["SpeicalEpisodeForm.IsWatched"]"
+                                         Component="IsWatchedCheckBox" />
+                        </div>
+                        <div class="ms-md-1">
+                            <RadzenCheckBox @bind-Value="@this.FormModel.IsReleased" Name="IsReleasedCheckBox"
+                                            Change="@((bool value) => this.OnIsReleasedChanged())"
+                                            Disabled="@(!this.CanChangeIsReleased)" />
+                            <RadzenLabel Text="@this.Loc["SpeicalEpisodeForm.IsReleased"]"
+                                         Component="IsReleasedCheckBox" />
+                        </div>
+                    </div>
+
+                    <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.Titles"]" class="mt-2" />
+                    <TitlesForm Titles="@this.FormModel.Titles" PropertyName="Titles" />
+
+                    <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.OriginalTitles"]" class="mt-2" />
+                    <TitlesForm Titles="@this.FormModel.OriginalTitles" PropertyName="OriginalTitles" />
+
+                    <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.Channel"]" Component="ChannelTextBox"
+                                 class="mt-2" />
+                    <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
+                    <ErrorPresenter ErrorCode="SpecialEpisode.Channel.*" Trigger="@this.FormModel.Channel" />
+
+                    <MonthYearPicker @bind-Month="this.FormModel.Month" @bind-Year="this.FormModel.Year" Class="mt-2"
+                                     MonthText="SpecialEpisodeForm.ReleaseMonth" Changed="@this.OnMonthYearChanged"
+                                     YearText="SpecialEpisodeForm.ReleaseYear" YearErrorCode="SpecialEpisode.Year.*" />
+
+                    <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.RottenTomatoesId"]"
+                                 Component="RottenTomatoesTextBox" class="mt-1" />
+                    <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox"
+                                   class="w-100" />
+                    <ErrorPresenter ErrorCode="SpecialEpisode.RottenTomatoesId.*"
+                                    Trigger="@this.FormModel.RottenTomatoesId" />
+
+                    <div class="d-flex justify-content-center">
+                        <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
+                            <RadzenButton Text="@this.Loc["SpecialEpisodeForm.AddTitle"]" class="d-inline-block me-1"
+                                          Click="@(e => this.AddTitle(this.FormModel.Titles))"
+                                          ButtonStyle="ButtonStyle.Secondary" />
+                            <RadzenButton Text="@this.Loc["SpecialEpisodeForm.AddOriginalTitle"]"
+                                          Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))"
+                                          ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1" />
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center my-4">
+                        <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
+                                      Click="@this.Delete" />
+                    </div>
+                </div>
+
+                <div class="d-flex flex-row my-2">
+                    <RadzenButton Text="@this.Loc["SpecialEpisodeForm.GoToSeries"]" ButtonStyle="ButtonStyle.Primary"
+                                  Click="@this.GoToSeries" class="me-1" />
+                    <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
+                                  Click="@this.Cancel" class="ms-1" />
+                </div>
+            </div>
         </div>
-
-        <h1 class="form-title">
-            @(!String.IsNullOrEmpty(this.FormTitle) || this.Episode is not null
-                ? this.FormTitle
-                : this.Loc["SpecialEpisodeForm.NewSpecialEpisode"])
-        </h1>
-
-        <div class="w-100 h-100 d-flex flex-column justify-content-between overflow-y-auto overflow-x-hidden">
-            <div class="h-100 overflow-y-auto overflow-x-hidden">
-                @if (!String.IsNullOrEmpty(this.FormModel.RottenTomatoesId))
-                {
-                    <RadzenLink Path="@String.Format(
-                                    this.Loc["Link.RottenTomatoesUrlFormat"], this.FormModel.RottenTomatoesId)"
-                                Text="@this.Loc["Link.RottenTomatoes"]" target="_blank" />
-                }
-
-                <div class="d-md-flex justify-content-md-center mt-2">
-                    <div class="me-md-1">
-                        <RadzenCheckBox @bind-Value="@this.FormModel.IsWatched" Disabled="@(!this.CanChangeIsWatched)"
-                                        Change="@((bool value) => this.OnIsWatchedChanged())"
-                                        Name="IsWatchedCheckBox" />
-                        <RadzenLabel Text="@this.Loc["SpeicalEpisodeForm.IsWatched"]" Component="IsWatchedCheckBox" />
-                    </div>
-                    <div class="ms-md-1">
-                        <RadzenCheckBox @bind-Value="@this.FormModel.IsReleased" Disabled="@(!this.CanChangeIsReleased)"
-                                        Change="@((bool value) => this.OnIsReleasedChanged())"
-                                        Name="IsReleasedCheckBox" />
-                        <RadzenLabel Text="@this.Loc["SpeicalEpisodeForm.IsReleased"]" Component="IsReleasedCheckBox" />
-                    </div>
-                </div>
-
-                <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.Titles"]" class="mt-2" />
-                <TitlesForm Titles="@this.FormModel.Titles" Validator="@this.TitlesValidator" Parent="@this"
-                            FirstTitleChanged="@this.UpdateFormTitle"
-                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" />
-
-                <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.OriginalTitles"]" class="mt-2" />
-                <TitlesForm Titles="@this.FormModel.OriginalTitles" Validator="@this.OriginalTitlesValidator"
-                            ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" Parent="@this" />
-
-                <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.Channel"]" Component="ChannelTextBox" class="mt-2" />
-                <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
-                <FormValidator Validator="@this.ChannelValidator" Value="@this.FormModel.Channel" />
-
-                <MonthYearPicker @bind-Month="this.FormModel.Month" @bind-Year="this.FormModel.Year" Class="mt-2"
-                                 MonthText="SpecialEpisodeForm.ReleaseMonth" YearText="SpecialEpisodeForm.ReleaseYear"
-                                 Changed="@this.OnMonthYearChanged" Parent="@this"
-                                 YearValidator="@this.YearValidator" />
-
-                <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox"
-                             class="mt-1" />
-                <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox"
-                               class="w-100" />
-                <FormValidator Validator="@this.RottenTomatoesIdValidator" Value="@this.FormModel.RottenTomatoesId" />
-
-                <div class="d-flex justify-content-center">
-                    <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
-                        <RadzenButton Text="@this.Loc["SpecialEpisodeForm.AddTitle"]" class="d-inline-block me-1"
-                                      Click="@(e => this.AddTitle(this.FormModel.Titles))"
-                                      ButtonStyle="ButtonStyle.Secondary" />
-                        <RadzenButton Text="@this.Loc["SpecialEpisodeForm.AddOriginalTitle"]"
-                                      Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))"
-                                      ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1" />
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-center my-4">
-                    <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
-                                  Click="@this.Delete" />
-                </div>
-            </div>
-
-            <div class="d-flex flex-row my-2">
-                <RadzenButton Text="@this.Loc["SpecialEpisodeForm.GoToSeries"]" ButtonStyle="ButtonStyle.Primary"
-                              Click="@this.GoToSeries" class="me-1" />
-                <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
-                              Click="@this.Cancel" class="ms-1" />
-            </div>
-        </div>
-    </div>
+    </CascadingValue>
 </CascadingValue>

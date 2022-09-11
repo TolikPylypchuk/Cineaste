@@ -8,6 +8,5 @@ public sealed record CreateListRequest(
     string DefaultSeasonTitle,
     string DefaultSeasonOriginalTitle) : IValidatable<CreateListRequest>
 {
-    public static IValidator<CreateListRequest> CreateValidator() =>
-        new CreateListRequestValidator();
+    public static IValidator<CreateListRequest> Validator { get; } = new CreateListRequestValidator();
 }

@@ -528,6 +528,9 @@
   <data name="SeriesForm.Titles" xml:space="preserve">
     <value>Titles</value>
   </data>
+  <data name="SeriesForm.UpdateSeries.Success" xml:space="preserve">
+    <value>Series updated successfully</value>
+  </data>
   <data name="SeriesForm.WatchStatus" xml:space="preserve">
     <value>Watch status</value>
   </data>
@@ -624,6 +627,12 @@
   <data name="Validation.Movie.Year.TooLow" xml:space="preserve">
     <value>The year must be after 1900</value>
   </data>
+  <data name="Validation.OriginalTitles.Name.Empty" xml:space="preserve">
+    <value>The original titles must not be empty</value>
+  </data>
+  <data name="Validation.OriginalTitles.Name.TooLong" xml:space="preserve">
+    <value>The original titles are too long</value>
+  </data>
   <data name="Validation.Period.EndMonth.Invalid" xml:space="preserve">
     <value>The end month is invalid</value>
   </data>
@@ -657,6 +666,9 @@
   <data name="Validation.Season.Channel.TooLong" xml:space="preserve">
     <value>The channel is too long</value>
   </data>
+  <data name="Validation.Season.OriginalTitles.Distinct.Names" xml:space="preserve">
+    <value>The original titles must all be different</value>
+  </data>
   <data name="Validation.Season.Periods.Empty" xml:space="preserve">
     <value>The periods are absent</value>
   </data>
@@ -675,8 +687,8 @@
   <data name="Validation.Series.ImdbId.Invalid" xml:space="preserve">
     <value>The IMDb ID must be in the form 'tt[digits]' e.g. 'tt123456'</value>
   </data>
-  <data name="Validation.Series.OriginalTitles.Empty" xml:space="preserve">
-    <value>The title is empty</value>
+  <data name="Validation.Series.OriginalTitles.Distinct.Names" xml:space="preserve">
+    <value>The original titles must all be different</value>
   </data>
   <data name="Validation.Series.ReleaseStatus.Invalid" xml:space="preserve">
     <value>The release status is invalid</value>
@@ -690,8 +702,8 @@
   <data name="Validation.Series.Sequence.Invalid" xml:space="preserve">
     <value>The sequence of seasons and special episodes is invalid</value>
   </data>
-  <data name="Validation.Series.Titles.Empty" xml:space="preserve">
-    <value>The title is empty</value>
+  <data name="Validation.Series.Titles.Distinct.Names" xml:space="preserve">
+    <value>The titles must all be different</value>
   </data>
   <data name="Validation.Series.WatchStatus.Invalid" xml:space="preserve">
     <value>The watch status is invalid</value>
@@ -711,16 +723,22 @@
   <data name="Validation.SpecialEpisode.Month.Invalid" xml:space="preserve">
     <value>The month is invalid</value>
   </data>
+  <data name="Validation.SpecialEpisode.OriginalTitles.Distinct.Names" xml:space="preserve">
+    <value>The original titles must all be different</value>
+  </data>
   <data name="Validation.SpecialEpisode.RottenTomatoesId.Invalid" xml:space="preserve">
     <value>The Rotten Tomatoes ID must start with 'm/' or 'tv/'</value>
   </data>
+  <data name="Validation.SpecialEpisode.Titles.Distinct.Names" xml:space="preserve">
+    <value>The titles must all be different</value>
+  </data>
   <data name="Validation.SpecialEpisode.Year.TooLow" xml:space="preserve">
-    <value>The year is too low</value>
+    <value>The year must be after 1900</value>
   </data>
-  <data name="Validation.Title.Name.Empty" xml:space="preserve">
-    <value>The title is empty</value>
+  <data name="Validation.Titles.Name.Empty" xml:space="preserve">
+    <value>The titles must not be empty</value>
   </data>
-  <data name="Validation.Title.Name.TooLong" xml:space="preserve">
-    <value>The title is too long</value>
+  <data name="Validation.Titles.Name.TooLong" xml:space="preserve">
+    <value>The titles are too long</value>
   </data>
 </root>

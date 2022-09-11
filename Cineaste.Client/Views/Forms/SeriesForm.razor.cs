@@ -23,7 +23,10 @@ public partial class SeriesForm
 
         var config = this.State.Value.ListConfiguration;
         this.FormModel = new(
-            this.State.Value.AvailableKinds, config.DefaultSeasonTitle, config.DefaultSeasonOriginalTitle);
+            this.ListId, this.State.Value.AvailableKinds, config.DefaultSeasonTitle, config.DefaultSeasonOriginalTitle);
+
+        this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
+        this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
     }
 
     protected override void OnAfterRender(bool firstRender)
@@ -34,6 +37,7 @@ public partial class SeriesForm
         {
             this.SubsribeToSuccessfulResult<FetchSeriesResultAction>(this.SetPropertyValues);
             this.SubsribeToSuccessfulResult<CreateSeriesResultAction>(this.OnSeriesCreated);
+            this.SubsribeToSuccessfulResult<UpdateSeriesResultAction>(this.OnSeriesUpdated);
         }
     }
 
@@ -43,8 +47,11 @@ public partial class SeriesForm
         this.UpdateFormTitle();
     }
 
-    private void UpdateFormTitle() =>
+    private void UpdateFormTitle()
+    {
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
+        this.StateHasChanged();
+    }
 
     private void RemoveComponent(ISeriesComponentFormModel component)
     {
@@ -58,17 +65,10 @@ public partial class SeriesForm
     private void GoToPreviousComponent() =>
         this.Dispatcher.Dispatch(new GoToPreviousComponentAction(this.FormModel));
 
-    private void Save()
-    {
-        if (this.ListItem is not null)
-        {
-            this.Dispatcher.Dispatch(new UpdateSeriesAction(
-                this.ListItem.Id, this.FormModel.ToRequest(this.ListId)));
-        } else
-        {
-            this.Dispatcher.Dispatch(new CreateSeriesAction(this.FormModel.ToRequest(this.ListId)));
-        }
-    }
+    private void Save(SeriesRequest request) =>
+        this.Dispatcher.Dispatch(this.ListItem is not null
+            ? new UpdateSeriesAction(this.ListItem.Id, request)
+            : new CreateSeriesAction(request));
 
     private void Cancel() =>
         this.SetPropertyValues();
@@ -77,5 +77,11 @@ public partial class SeriesForm
     {
         this.SetPropertyValues();
         this.ShowSuccessNotification("SeriesForm.CreateSeries.Success", ShortNotificationDuration);
+    }
+
+    private void OnSeriesUpdated()
+    {
+        this.SetPropertyValues();
+        this.ShowSuccessNotification("SeriesForm.UpdateSeries.Success", ShortNotificationDuration);
     }
 }

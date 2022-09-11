@@ -1,6 +1,8 @@
 namespace Cineaste.Client.FormModels;
 
-public interface ISeriesComponentFormModel
+using System.ComponentModel;
+
+public interface ISeriesComponentFormModel : INotifyPropertyChanged
 {
     public string Title { get; }
 
@@ -9,4 +11,6 @@ public interface ISeriesComponentFormModel
     public string Years { get; }
 
     public int SequenceNumber { get; set; }
+
+    public void UpdateRequest();
 }

@@ -8,13 +8,13 @@ public partial class SpecialEpisodeForm
     public SpecialEpisodeModel? Episode { get; set; }
 
     [Parameter]
+    public override SpecialEpisodeFormModel FormModel { get; set; } = null!;
+
+    [Parameter]
     public EventCallback Close { get; set; }
 
     [Parameter]
     public EventCallback Delete { get; set; }
-
-    [Parameter]
-    public SpecialEpisodeFormModel FormModel { get; set; } = null!;
 
     [Parameter]
     public EventCallback GoToNextComponent { get; set; }
@@ -27,33 +27,15 @@ public partial class SpecialEpisodeForm
     private bool CanChangeIsWatched { get; set; } = true;
     private bool CanChangeIsReleased { get; set; } = true;
 
-    private PropertyValidator<SpecialEpisodeRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }
-    private PropertyValidator<SpecialEpisodeRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
-
-    private PropertyValidator<SpecialEpisodeRequest, int>? YearValidator { get; set; } = null!;
-    private PropertyValidator<SpecialEpisodeRequest, string>? ChannelValidator { get; set; }
-    private PropertyValidator<SpecialEpisodeRequest, string>? RottenTomatoesIdValidator { get; set; } = null!;
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        this.InitializeValidators();
+
+        this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
+        this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
+
         this.UpdateFormTitle();
         this.OnMonthYearChanged();
-    }
-
-    private void InitializeValidators()
-    {
-        var validator = SpecialEpisodeRequest.CreateValidator();
-
-        this.TitlesValidator = PropertyValidator.Create(validator, (SpecialEpisodeRequest req) => req.Titles, this);
-        this.OriginalTitlesValidator = PropertyValidator.Create(
-            validator, (SpecialEpisodeRequest req) => req.OriginalTitles, this);
-
-        this.YearValidator = PropertyValidator.Create(validator, (SpecialEpisodeRequest req) => req.Year, this);
-        this.ChannelValidator = PropertyValidator.Create(validator, (SpecialEpisodeRequest req) => req.Channel, this);
-        this.RottenTomatoesIdValidator = PropertyValidator.Create(
-            validator, (SpecialEpisodeRequest req) => req.RottenTomatoesId, this);
     }
 
     private void SetPropertyValues()
@@ -63,11 +45,14 @@ public partial class SpecialEpisodeForm
         this.OnMonthYearChanged();
     }
 
-    private void AddTitle(ObservableCollection<string> titles) =>
+    private void AddTitle(ICollection<string> titles) =>
         titles.Add(String.Empty);
 
-    private void UpdateFormTitle() =>
+    private void UpdateFormTitle()
+    {
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
+        this.StateHasChanged();
+    }
 
     private void OnMonthYearChanged()
     {
@@ -110,13 +95,13 @@ public partial class SpecialEpisodeForm
     }
 
     private Task OnGoToNextComponent() =>
-        this.WithValidation(this.GoToNextComponent.InvokeAsync);
+        this.WithValidation(r => this.GoToNextComponent.InvokeAsync());
 
     private Task OnGoToPreviousComponent() =>
-        this.WithValidation(this.GoToPreviousComponent.InvokeAsync);
+        this.WithValidation(r => this.GoToPreviousComponent.InvokeAsync());
 
     private void GoToSeries() =>
-        this.WithValidation(() => this.Dispatcher.Dispatch(new GoToSeriesAction()));
+        this.WithValidation(r => this.Dispatcher.Dispatch(new GoToSeriesAction()));
 
     private void Cancel()
     {

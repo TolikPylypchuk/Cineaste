@@ -1,7 +1,8 @@
 namespace Cineaste.Client.FormModels;
 
-public sealed class MovieFormModel : TitledFormModel<MovieModel>
+public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieModel>
 {
+    private readonly Guid listId;
     private readonly ListKindModel defaultKind;
 
     public int Year { get; set; }
@@ -14,7 +15,7 @@ public sealed class MovieFormModel : TitledFormModel<MovieModel>
     public string ImdbId { get; set; } = String.Empty;
     public string RottenTomatoesId { get; set; } = String.Empty;
 
-    public MovieFormModel(IReadOnlyCollection<ListKindModel> availableKinds)
+    public MovieFormModel(Guid listId, IReadOnlyCollection<ListKindModel> availableKinds)
     {
         ArgumentNullException.ThrowIfNull(availableKinds);
 
@@ -23,13 +24,16 @@ public sealed class MovieFormModel : TitledFormModel<MovieModel>
             throw new ArgumentOutOfRangeException(nameof(availableKinds), $"{nameof(availableKinds)} is empty");
         }
 
+        this.listId = listId;
         this.defaultKind = availableKinds.First();
         this.Kind = this.defaultKind;
+
+        this.FinishInitialization();
     }
 
-    public MovieRequest ToRequest(Guid listId) =>
+    public override MovieRequest CreateRequest() =>
         new(
-            listId,
+            this.listId,
             this.ToTitleRequests(this.Titles),
             this.ToTitleRequests(this.OriginalTitles),
             this.Year,

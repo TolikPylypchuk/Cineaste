@@ -1,5 +1,4 @@
 @inherits CineasteComponent
-@typeparam T
 
 @for (int i = 0; i < this.Titles.Count; i++)
 {
@@ -12,64 +11,46 @@
             @if (this.Titles.Count > 1)
             {
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                              Click="@(() => this.Titles.RemoveAt(index))" class="ms-2" />
+                              Click="@(() => this.RemoveTitle(index))" class="ms-2" />
             }
         </div>
-
-        <CascadingValue Value="@(() => this.TitleRequests.Count > index ? this.TitleRequests[index] : null)"
-                        IsFixed="true">
-            <FormValidator Validator="this.TitleNameValidator" Value="@this.Titles[index]" />
-        </CascadingValue>
     </div>
 }
 
 <div>
-    <FormValidator Validator="@this.Validator" Value="@this.TitleRequests" />
+    <ErrorPresenter ErrorCode="@($"{this.PropertyName}.*")" Trigger="@this.ValidationTrigger" />
+</div>
+
+<div>
+    <ErrorPresenter ErrorCode="@($"*.{this.PropertyName}.*")" Trigger="@this.ValidationTrigger" />
 </div>
 
 @code {
     [Parameter]
-    public ObservableCollection<string> Titles { get; set; } = new();
+    public IList<string> Titles { get; set; } = new List<string>();
 
     [Parameter]
-    public PropertyValidator<T, ImmutableList<TitleRequest>>? Validator { get; set; }
+    public string PropertyName { get; set; } = String.Empty;
 
-    [Parameter]
-    public Func<IReadOnlyCollection<string>, ImmutableList<TitleRequest>> ConvertTitlesToRequests { get; set; } = null!;
-
-    [Parameter]
-    public EventCallback<string> FirstTitleChanged { get; set; }
-
-    [Parameter]
-    public IValidationExecutor Parent { get; set; } = null!;
-
-    private ImmutableList<TitleRequest> TitleRequests { get; set; } = ImmutableList.Create<TitleRequest>();
-
-    private PropertyValidator<TitleRequest, string>? TitleNameValidator { get; set; }
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-
-        this.SetTitleRequests();
-        this.Titles.CollectionChanged += (sender, e) => this.SetTitleRequests();
-
-        this.TitleNameValidator = PropertyValidator.Create(
-            TitleRequest.CreateValidator(), (TitleRequest req) => req.Name, this);
-
-        this.AttachValidationTo(this.Parent);
-    }
+    private object ValidationTrigger { get; set; } = new();
 
     private async Task UpdateTitle(string title, int index)
     {
         this.Titles[index] = title;
-
-        if (index == 0)
-        {
-            await this.FirstTitleChanged.InvokeAsync(title);
-        }
+        await this.ForceUpdateFormValidationState();
+        this.UpdateValidation();
     }
 
-    private void SetTitleRequests() =>
-        this.TitleRequests = this.ConvertTitlesToRequests(this.Titles);
+    private async Task RemoveTitle(int index)
+    {
+        this.Titles.RemoveAt(index);
+        await this.ForceUpdateFormValidationState();
+        this.UpdateValidation();
+    }
+
+    private void UpdateValidation() =>
+        this.ValidationTrigger = this.Titles.Aggregate(String.Empty, (acc, title) => $"{acc}{title}");
+
+    private async Task ForceUpdateFormValidationState() =>
+        await Task.Yield();
 }

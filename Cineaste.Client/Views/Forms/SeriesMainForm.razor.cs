@@ -14,7 +14,7 @@ public partial class SeriesMainForm
     public EventCallback Close { get; set; }
 
     [Parameter]
-    public SeriesFormModel FormModel { get; set; } = null!;
+    public override SeriesFormModel FormModel { get; set; } = null!;
 
     [Parameter]
     public string FormTitle { get; set; } = String.Empty;
@@ -23,7 +23,7 @@ public partial class SeriesMainForm
     public EventCallback FormTitleUpdated { get; set; }
 
     [Parameter]
-    public EventCallback Save { get; set; }
+    public EventCallback<SeriesRequest> Save { get; set; }
 
     [Parameter]
     public EventCallback Cancel { get; set; }
@@ -34,37 +34,8 @@ public partial class SeriesMainForm
     private ImmutableArray<SeriesReleaseStatus> AllReleaseStatuses { get; } =
         Enum.GetValues<SeriesReleaseStatus>().ToImmutableArray();
 
-    private PropertyValidator<SeriesRequest, ImmutableList<TitleRequest>>? TitlesValidator { get; set; }
-    private PropertyValidator<SeriesRequest, ImmutableList<TitleRequest>>? OriginalTitlesValidator { get; set; }
-    private PropertyValidator<SeriesRequest, SeriesWatchStatus>? WatchStatusValidator { get; set; }
-    private PropertyValidator<SeriesRequest, ImmutableList<SeasonRequest>>? SeasonsValidator { get; set; }
-    private PropertyValidator<SeriesRequest, string>? ImdbIdValidator { get; set; }
-    private PropertyValidator<SeriesRequest, string>? RottenTomatoesIdValidator { get; set; }
-
     private bool IsSaving =>
         this.State.Value.Create.IsInProgress || this.State.Value.Update.IsInProgress;
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-        this.InitializeValidators();
-    }
-
-    private void InitializeValidators()
-    {
-        var validator = SeriesRequest.CreateValidator();
-
-        this.TitlesValidator = PropertyValidator.Create(validator, (SeriesRequest req) => req.Titles, this);
-        this.OriginalTitlesValidator = PropertyValidator.Create(
-            validator, (SeriesRequest req) => req.OriginalTitles, this);
-
-        this.WatchStatusValidator = PropertyValidator.Create(validator, (SeriesRequest req) => req.WatchStatus, this);
-        this.SeasonsValidator = PropertyValidator.Create(validator, (SeriesRequest req) => req.Seasons, this);
-
-        this.ImdbIdValidator = PropertyValidator.Create(validator, (SeriesRequest req) => req.ImdbId, this);
-        this.RottenTomatoesIdValidator = PropertyValidator.Create(
-            validator, (SeriesRequest req) => req.RottenTomatoesId, this);
-    }
 
     private void FetchSeries()
     {
@@ -75,7 +46,7 @@ public partial class SeriesMainForm
         }
     }
 
-    private void AddTitle(ObservableCollection<string> titles) =>
+    private void AddTitle(ICollection<string> titles) =>
         titles.Add(String.Empty);
 
     private void AddSeason()
@@ -101,9 +72,6 @@ public partial class SeriesMainForm
 
     private void MoveDown(ISeriesComponentFormModel component) =>
         this.FormModel.MoveComponentDown(component);
-
-    private async Task UpdateFormTitle() =>
-        await this.FormTitleUpdated.InvokeAsync();
 
     private void OpenSeriesComponentForm(ISeriesComponentFormModel component) =>
         this.Dispatcher.Dispatch(new OpenSeriesComponentFormAction(component));

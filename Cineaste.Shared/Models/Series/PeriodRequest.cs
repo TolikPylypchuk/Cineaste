@@ -12,6 +12,5 @@ public sealed record PeriodRequest(
     bool IsSingleDayRelease,
     string? RottenTomatoesId) : IValidatable<PeriodRequest>
 {
-    public static IValidator<PeriodRequest> CreateValidator() =>
-        new PeriodRequestValidator();
+    public static IValidator<PeriodRequest> Validator { get; } = new PeriodRequestValidator();
 }

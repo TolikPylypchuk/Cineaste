@@ -12,6 +12,5 @@ public sealed record SeasonRequest(
     string Channel,
     ImmutableList<PeriodRequest> Periods) : IValidatable<SeasonRequest>, ITitledRequest
 {
-    public static IValidator<SeasonRequest> CreateValidator() =>
-        new SeasonRequestValidator();
+    public static IValidator<SeasonRequest> Validator { get; } = new SeasonRequestValidator();
 }

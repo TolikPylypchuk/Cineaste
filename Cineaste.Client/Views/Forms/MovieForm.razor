@@ -1,145 +1,145 @@
-@inherits StatefulComponent<MovieFormState>
+@inherits CineasteForm<MovieFormModel, MovieRequest, MovieModel, MovieFormState>
 
-<CascadingValue Value="@(() => this.FormModel.ToRequest(this.ListId))" IsFixed="true">
-    <div class="d-flex flex-column h-100">
-        <div class="d-flex flex-row justify-content-between">
-            <div></div>
-            <div></div>
-            <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
-                          class="btn-transparent my-2" />
-        </div>
-
-        @if (this.State.Value.Fetch.IsInProgress)
-        {
-            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
-        } else if (this.State.Value.Fetch.Problem is not null)
-        {
-            <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.LoadingFailed"]" TryAgain="@this.FetchMovie"
-                             Problem="@this.State.Value.Fetch.Problem" Class="w-100" />
-        } else
-        {
-            <h1 class="form-title">
-                @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem is not null
-                    ? this.FormTitle
-                    : this.Loc["MovieForm.NewMovie"])
-            </h1>
-
-            <div class="w-100 h-100 d-flex flex-column justify-content-between overflow-y-auto overflow-x-hidden">
-                <div class="h-100 overflow-y-auto overflow-x-hidden">
-                    <div class="d-md-flex justify-content-md-center mt-2">
-                        @if (this.HasImdbId())
-                        {
-                            <RadzenLink Path="@String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId)"
-                                        Text="@this.Loc["Link.Imdb"]" target="_blank"
-                                        class="@($"{(this.HasRottenTomatoesId() ? "me-md-2" : "")}")" />
-                        }
-
-                        @if (this.HasRottenTomatoesId())
-                        {
-                            <RadzenLink Path="@String.Format(
-                                            this.Loc["Link.RottenTomatoesUrlFormat"], this.FormModel.RottenTomatoesId)"
-                                        Text="@this.Loc["Link.RottenTomatoes"]" target="_blank"
-                                        class="@($"{(this.HasImdbId() ? "me-md-2" : "")}")" />
-                        }
-                    </div>
-
-                    <div class="d-md-flex justify-content-md-center mt-2">
-                        <div class="me-md-1">
-                            <RadzenCheckBox @bind-Value="@this.FormModel.IsWatched" Name="IsWatchedCheckBox"
-                                            Change="@((bool value) => this.OnIsWatchedChanged())"
-                                            Disabled="@(!this.CanChangeIsWatched)" />
-                            <RadzenLabel Text="@this.Loc["MovieForm.IsWatched"]" Component="IsWatchedCheckBox" />
-                        </div>
-                        <div class="ms-md-1">
-                            <RadzenCheckBox @bind-Value="@this.FormModel.IsReleased" Name="IsReleasedCheckBox"
-                                            Change="@((bool value) => this.OnIsReleasedChanged())"
-                                            Disabled="@(!this.CanChangeIsReleased)" />
-                            <RadzenLabel Text="@this.Loc["MovieForm.IsReleased"]" Component="IsReleasedCheckBox" />
-                        </div>
-                    </div>
-
-                    <RadzenLabel Text="@this.Loc["MovieForm.Titles"]" class="mt-2" />
-                    <TitlesForm Titles="@this.FormModel.Titles" Validator="@this.TitlesValidator" Parent="@this"
-                                ConvertTitlesToRequests="@this.FormModel.ToTitleRequests"
-                                FirstTitleChanged="@this.UpdateFormTitle" />
-
-                    <RadzenLabel Text="@this.Loc["MovieForm.OriginalTitles"]" class="mt-2" />
-                    <TitlesForm Titles="@this.FormModel.OriginalTitles" Validator="@this.OriginalTitlesValidator"
-                                ConvertTitlesToRequests="@this.FormModel.ToTitleRequests" Parent="@this" />
-
-                    <div class="row mt-2">
-                        <div class="col-md pe-md-1">
-                            <RadzenLabel Text="@this.Loc["MovieForm.Year"]" Component="YearNumeric" />
-                            <RadzenNumeric @bind-Value="this.FormModel.Year" Name="YearNumeric"
-                                           Change="@((int year) => this.OnYearChanged())" />
-                            <FormValidator Validator="@this.YearValidator" Value="@this.FormModel.Year" />
-                        </div>
-                        <div class="col-md ps-md-1">
-                            <RadzenLabel Text="@this.Loc["MovieForm.Kind"]" Component="KindDropDown" />
-                            <RadzenDropDown @bind-Value="@this.FormModel.Kind" Data="@this.State.Value.AvailableKinds"
-                                            AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
-                                            Name="KindDropDown" TextProperty="Name" />
-                        </div>
-                    </div>
-
-                    <RadzenLabel Text="@this.Loc["MovieForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-1" />
-                    <RadzenTextBox @bind-Value="@this.FormModel.ImdbId" Name="ImdbIdTextBox" class="w-100" />
-                    <FormValidator Validator="@this.ImdbIdValidator" Value="@this.FormModel.ImdbId" />
-
-                    <RadzenLabel Text="@this.Loc["MovieForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox"
-                                 class="mt-2" />
-                    <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox"
-                                   class="w-100" />
-                    <FormValidator Validator="@this.RottenTomatoesIdValidator"
-                                   Value="@this.FormModel.RottenTomatoesId" />
-
-                    <div class="d-flex justify-content-center">
-                        <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
-                            <RadzenButton Text="@this.Loc["MovieForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
-                                          Click="@(e => this.AddTitle(this.FormModel.Titles))"
-                                          class="d-inline-block me-1" />
-                            <RadzenButton Text="@this.Loc["MovieForm.AddOriginalTitle"]"
-                                          Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))"
-                                          ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1" />
-                        </div>
-                    </div>
-
-                    @if (this.ListItem is not null)
-                    {
-                        <div class="d-flex justify-content-center my-4">
-                            <RadzenButton Text="@this.Loc["Button.Delete"]" BusyText="@this.Loc["Button.Delete.Busy"]"
-                                          ButtonStyle="ButtonStyle.Danger" Click="@this.Delete"
-                                          IsBusy="@this.State.Value.Delete.IsInProgress" />
-                        </div>
-                    }
-                </div>
-
-                @if (this.State.Value.Create.Problem is not null)
-                {
-                    <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.CreatingFailed"]" TryAgain="@this.Save"
-                                     Problem="@this.State.Value.Create.Problem" Class="w-100" />
-                }
-
-                @if (this.State.Value.Update.Problem is not null)
-                {
-                    <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.UpdatingFailed"]" TryAgain="@this.Save"
-                                     Problem="@this.State.Value.Update.Problem" Class="w-100" />
-                }
-
-                @if (this.State.Value.Delete.Problem is not null)
-                {
-                    <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.DeletingFailed"]" TryAgain="@this.Delete"
-                                     Problem="@this.State.Value.Delete.Problem" Class="w-100" />
-                }
-
-                <div class="d-flex flex-row my-2">
-                    <RadzenButton Text="@this.Loc["Button.Save"]" BusyText="@this.Loc["Button.Save.Busy"]"
-                                  ButtonStyle="ButtonStyle.Primary" IsBusy="@this.IsSaving"
-                                  Click="@this.Save" class="me-1" />
-                    <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
-                                  Click="@this.Cancel" class="ms-1" />
-                </div>
+<CascadingValue Name="@CascadingParameters.ValidationExecutor" Value="@this" IsFixed="true">
+    <CascadingValue Name="@CascadingParameters.ErrorCodes" Value="@this.FormModel.ValidationErrors">
+        <div class="d-flex flex-column h-100">
+            <div class="d-flex flex-row justify-content-between">
+                <div></div>
+                <div></div>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
+                              class="btn-transparent my-2" />
             </div>
-        }
-    </div>
+
+            @if (this.State.Value.Fetch.IsInProgress)
+            {
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="mt-4" />
+            } else if (this.State.Value.Fetch.Problem is not null)
+            {
+                <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.LoadingFailed"]" TryAgain="@this.FetchMovie"
+                                 Problem="@this.State.Value.Fetch.Problem" Class="w-100" />
+            } else
+            {
+                <h1 class="form-title">
+                    @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem is not null
+                        ? this.FormTitle
+                        : this.Loc["MovieForm.NewMovie"])
+                </h1>
+
+                <div class="w-100 h-100 d-flex flex-column justify-content-between overflow-y-auto overflow-x-hidden">
+                    <div class="h-100 overflow-y-auto overflow-x-hidden">
+                        <div class="d-md-flex justify-content-md-center mt-2">
+                            @if (this.HasImdbId())
+                            {
+                                <RadzenLink Path="@String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId)"
+                                            Text="@this.Loc["Link.Imdb"]" target="_blank"
+                                            class="@($"{(this.HasRottenTomatoesId() ? "me-md-2" : "")}")" />
+                            }
+
+                            @if (this.HasRottenTomatoesId())
+                            {
+                                <RadzenLink Path="@String.Format(
+                                                this.Loc["Link.RottenTomatoesUrlFormat"],
+                                                this.FormModel.RottenTomatoesId)"
+                                            Text="@this.Loc["Link.RottenTomatoes"]" target="_blank"
+                                            class="@($"{(this.HasImdbId() ? "me-md-2" : "")}")" />
+                            }
+                        </div>
+
+                        <div class="d-md-flex justify-content-md-center mt-2">
+                            <div class="me-md-1">
+                                <RadzenCheckBox @bind-Value="@this.FormModel.IsWatched" Name="IsWatchedCheckBox"
+                                                Change="@((bool value) => this.OnIsWatchedChanged())"
+                                                Disabled="@(!this.CanChangeIsWatched)" />
+                                <RadzenLabel Text="@this.Loc["MovieForm.IsWatched"]" Component="IsWatchedCheckBox" />
+                            </div>
+                            <div class="ms-md-1">
+                                <RadzenCheckBox @bind-Value="@this.FormModel.IsReleased" Name="IsReleasedCheckBox"
+                                                Change="@((bool value) => this.OnIsReleasedChanged())"
+                                                Disabled="@(!this.CanChangeIsReleased)" />
+                                <RadzenLabel Text="@this.Loc["MovieForm.IsReleased"]" Component="IsReleasedCheckBox" />
+                            </div>
+                        </div>
+
+                        <RadzenLabel Text="@this.Loc["MovieForm.Titles"]" class="mt-2" />
+                        <TitlesForm Titles="@this.FormModel.Titles" PropertyName="Titles" />
+
+                        <RadzenLabel Text="@this.Loc["MovieForm.OriginalTitles"]" class="mt-2" />
+                        <TitlesForm Titles="@this.FormModel.OriginalTitles" PropertyName="OriginalTitles" />
+
+                        <div class="row mt-2">
+                            <div class="col-md pe-md-1">
+                                <RadzenLabel Text="@this.Loc["MovieForm.Year"]" Component="YearNumeric" />
+                                <RadzenNumeric @bind-Value="this.FormModel.Year" Name="YearNumeric"
+                                               Change="@((int year) => this.OnYearChanged())" />
+                                <ErrorPresenter ErrorCode="Movie.Year.*" Trigger="@this.FormModel.Year" />
+                            </div>
+                            <div class="col-md ps-md-1">
+                                <RadzenLabel Text="@this.Loc["MovieForm.Kind"]" Component="KindDropDown" />
+                                <RadzenDropDown @bind-Value="@this.FormModel.Kind" AllowVirtualization="false"
+                                                Data="@this.State.Value.AvailableKinds" AllowFiltering="false"
+                                                AllowClear="false" Name="KindDropDown" TextProperty="Name" />
+                            </div>
+                        </div>
+
+                        <RadzenLabel Text="@this.Loc["MovieForm.ImdbId"]" Component="ImdbIdTextBox" class="mt-1" />
+                        <RadzenTextBox @bind-Value="@this.FormModel.ImdbId" Name="ImdbIdTextBox" class="w-100" />
+                        <ErrorPresenter ErrorCode="Movie.ImdbId.*" Trigger="@this.FormModel.ImdbId" />
+
+                        <RadzenLabel Text="@this.Loc["MovieForm.RottenTomatoesId"]" Component="RottenTomatoesTextBox"
+                                     class="mt-2" />
+                        <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox"
+                                       class="w-100" />
+                        <ErrorPresenter ErrorCode="Movie.RottenTomatoesId.*"
+                                        Trigger="@this.FormModel.RottenTomatoesId" />
+
+                        <div class="d-flex justify-content-center">
+                            <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
+                                <RadzenButton Text="@this.Loc["MovieForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
+                                              Click="@(e => this.AddTitle(this.FormModel.Titles))"
+                                              class="d-inline-block me-1" />
+                                <RadzenButton Text="@this.Loc["MovieForm.AddOriginalTitle"]"
+                                              Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))"
+                                              ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1" />
+                            </div>
+                        </div>
+
+                        @if (this.ListItem is not null)
+                        {
+                            <div class="d-flex justify-content-center my-4">
+                                <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
+                                              BusyText="@this.Loc["Button.Delete.Busy"]" Click="@this.Delete"
+                                              IsBusy="@this.State.Value.Delete.IsInProgress" />
+                            </div>
+                        }
+                    </div>
+
+                    @if (this.State.Value.Create.Problem is not null)
+                    {
+                        <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.CreatingFailed"]" TryAgain="@this.Save"
+                                         Problem="@this.State.Value.Create.Problem" Class="w-100" />
+                    }
+
+                    @if (this.State.Value.Update.Problem is not null)
+                    {
+                        <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.UpdatingFailed"]" TryAgain="@this.Save"
+                                         Problem="@this.State.Value.Update.Problem" Class="w-100" />
+                    }
+
+                    @if (this.State.Value.Delete.Problem is not null)
+                    {
+                        <ApiProblemAlert Text="@this.Loc["MovieForm.Problem.DeletingFailed"]" TryAgain="@this.Delete"
+                                         Problem="@this.State.Value.Delete.Problem" Class="w-100" />
+                    }
+
+                    <div class="d-flex flex-row my-2">
+                        <RadzenButton Text="@this.Loc["Button.Save"]" BusyText="@this.Loc["Button.Save.Busy"]"
+                                      ButtonStyle="ButtonStyle.Primary" IsBusy="@this.IsSaving"
+                                      Click="@this.Save" class="me-1" />
+                        <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
+                                      Click="@this.Cancel" class="ms-1" />
+                    </div>
+                </div>
+            }
+        </div>
+    </CascadingValue>
 </CascadingValue>

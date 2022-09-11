@@ -14,6 +14,5 @@ public sealed record SeriesRequest(
     string? ImdbId,
     string? RottenTomatoesId) : IValidatable<SeriesRequest>, ITitledRequest
 {
-    public static IValidator<SeriesRequest> CreateValidator() =>
-        new SeriesRequestValidator();
+    public static IValidator<SeriesRequest> Validator { get; } = new SeriesRequestValidator();
 }

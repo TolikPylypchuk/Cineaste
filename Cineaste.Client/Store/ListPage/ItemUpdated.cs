@@ -1,6 +1,7 @@
 namespace Cineaste.Client.Store.ListPage;
 
 using Cineaste.Client.Store.Forms.MovieForm;
+using Cineaste.Client.Store.Forms.SeriesForm;
 
 public static class ItemUpdatedReducers
 {
@@ -15,6 +16,21 @@ public static class ItemUpdatedReducers
                     Container = state.Container.UpdateItem(item),
                     SelectedItem = item,
                     SelectionMode = ListPageSelectionMode.Movie
+                };
+            },
+            onFailure: _ => state);
+
+    [ReducerMethod]
+    public static ListPageState ReduceUpdateSeriesResultAction(ListPageState state, UpdateSeriesResultAction action) =>
+        action.Handle(
+            onSuccess: series =>
+            {
+                var item = series.ToListItemModel();
+                return state with
+                {
+                    Container = state.Container.UpdateItem(item),
+                    SelectedItem = item,
+                    SelectionMode = ListPageSelectionMode.Series
                 };
             },
             onFailure: _ => state);

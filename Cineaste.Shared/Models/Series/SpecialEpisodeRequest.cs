@@ -14,6 +14,5 @@ public sealed record SpecialEpisodeRequest(
     int Year,
     string? RottenTomatoesId) : IValidatable<SpecialEpisodeRequest>, ITitledRequest
 {
-    public static IValidator<SpecialEpisodeRequest> CreateValidator() =>
-        new SpecialEpisodeRequestValidator();
+    public static IValidator<SpecialEpisodeRequest> Validator { get; } = new SpecialEpisodeRequestValidator();
 }
