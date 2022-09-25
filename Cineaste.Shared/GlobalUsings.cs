@@ -10,3 +10,5 @@ global using Cineaste.Shared.Models.Shared;
 global using Cineaste.Shared.Validation;
 
 global using FluentValidation;
+
+global using static Cineaste.Basic.Constants;

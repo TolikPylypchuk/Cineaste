@@ -4,11 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>Cineaste</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FsCheck" Version="2.16.5" />
+    <PackageReference Include="FsCheck.Xunit" Version="2.16.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -19,6 +24,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cineaste.Basic\Cineaste.Basic.csproj" />
+    <ProjectReference Include="..\Cineaste.Client\Cineaste.Client.csproj" />
+    <ProjectReference Include="..\Cineaste.Core\Cineaste.Core.csproj" />
+    <ProjectReference Include="..\Cineaste.Persistence\Cineaste.Persistence.csproj" />
+    <ProjectReference Include="..\Cineaste.Server\Cineaste.Server.csproj" />
+    <ProjectReference Include="..\Cineaste.Shared\Cineaste.Shared.csproj" />
   </ItemGroup>
 
 </Project>

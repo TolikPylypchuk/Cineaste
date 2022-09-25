@@ -15,7 +15,7 @@ public sealed class CreateListRequestValidator : CineasteValidator<CreateListReq
         this.RuleFor(req => req.Name)
             .NotEmpty()
             .WithErrorCode(this.ErrorCode(req => req.Name, Empty))
-            .MaximumLength(100)
+            .MaximumLength(MaxNameLength)
             .WithErrorCode(this.ErrorCode(req => req.Name, TooLong));
 
         this.RuleFor(req => req.Culture)
@@ -25,13 +25,13 @@ public sealed class CreateListRequestValidator : CineasteValidator<CreateListReq
         this.RuleFor(req => req.DefaultSeasonTitle)
             .NotEmpty()
             .WithErrorCode(this.ErrorCode(req => req.DefaultSeasonTitle, Empty))
-            .MaximumLength(100)
+            .MaximumLength(MaxNameLength)
             .WithErrorCode(this.ErrorCode(req => req.DefaultSeasonTitle, TooLong));
 
         this.RuleFor(req => req.DefaultSeasonOriginalTitle)
             .NotEmpty()
             .WithErrorCode(this.ErrorCode(req => req.DefaultSeasonOriginalTitle, Empty))
-            .MaximumLength(100)
+            .MaximumLength(MaxNameLength)
             .WithErrorCode(this.ErrorCode(req => req.DefaultSeasonOriginalTitle, TooLong));
     }
 }
