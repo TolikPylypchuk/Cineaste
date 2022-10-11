@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoConstructor" Version="3.2.3">
+    <PackageReference Include="AutoConstructor" Version="3.2.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -24,17 +24,17 @@
     <PackageReference Include="Fluxor.Blazor.Web" Version="5.5.0" />
     <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.5.0" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Fody" Version="6.6.4" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.9" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.10" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.10" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
-    <PackageReference Include="PropertyChanged.Fody" Version="4.0.3" PrivateAssets="all" />
-    <PackageReference Include="Radzen.Blazor" Version="4.1.6" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.0.4" PrivateAssets="all" />
+    <PackageReference Include="Radzen.Blazor" Version="4.1.7" />
     <PackageReference Include="Refit" Version="6.3.2" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
     <PackageReference Include="System.Interactive" Version="6.0.1" />
