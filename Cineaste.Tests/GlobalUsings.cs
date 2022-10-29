@@ -1,3 +1,7 @@
+global using System.Collections.Immutable;
+
+global using Cineaste.Shared.Collections;
+
 global using FluentValidation;
 global using FluentValidation.TestHelper;
 
