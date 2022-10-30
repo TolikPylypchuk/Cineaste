@@ -4,7 +4,7 @@ internal class RottenTomatoesIdTestData : TestDataBase
 {
     public RottenTomatoesIdTestData()
     {
-        // string? imdbId, bool isValid
+        // string? rottenTomatoesId, bool isValid
         this.Add(null, true);
         this.Add(String.Empty, true);
         this.Add("m/movie", true);

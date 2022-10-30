@@ -182,10 +182,4 @@ public sealed class MovieRequestValidatorTests
             : titles.Select((title, index) => new TitleRequest(title, differentTitlePriorities ? index + 1 : 1))
                 .ToImmutableList()
                 .AsValue();
-
-    private class ArbitraryValidYear : Arbitrary<int>
-    {
-        public override Gen<int> Generator =>
-            Gen.Choose(MinYear, 20_000);
-    }
 }
