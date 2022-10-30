@@ -1,21 +1,22 @@
 @inherits CineasteComponent
 
 <div class="row @this.Class">
-    <div class="col-md pe-md-1">
+    <div class="col-md-6 pe-md-1">
         @if (!String.IsNullOrWhiteSpace(this.MonthText))
         {
             <RadzenLabel Text="@this.Loc[this.MonthText]" Component="MonthDropDown" />
         }
 
         <RadzenDropDown Value="@this.Month" ValueChanged="@this.MonthChanged" Data="@this.Months" Change="@this.Changed"
-                        Name="MonthDropDown" AllowVirtualization="false" AllowClear="false" AllowFiltering="false">
+                        Name="MonthDropDown" AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
+                        class="w-100">
             <Template>
                 @this.Loc[$"Month.{context}"]
             </Template>
         </RadzenDropDown>
     </div>
 
-    <div class="col-md ps-md-1">
+    <div class="col-md-6 ps-md-1">
         @if (!String.IsNullOrWhiteSpace(this.YearText))
         {
             <RadzenLabel Text="@this.Loc[this.YearText]" Component="YearNumeric" />

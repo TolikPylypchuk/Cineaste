@@ -11,7 +11,7 @@
                     <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
 
                     <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
-                    <RadzenTextBox @bind-Value="this.FormModel.Name" Class="w-100" />
+                    <RadzenTextBox @bind-Value="this.FormModel.Name" class="w-100" />
                     <ErrorPresenter ErrorCode="CreateList.Name.*" Trigger="@this.FormModel.Name" />
 
                     <div class="d-flex flex-row mt-4 mb-2">
@@ -20,7 +20,7 @@
                                     MouseLeave=@(e => this.CloseTooltip()) class="ms-3" />
                     </div>
 
-                    <RadzenTextBox Value="@this.FormModel.Handle" ReadOnly="true" Class="w-100" />
+                    <RadzenTextBox Value="@this.FormModel.Handle" ReadOnly="true" class="w-100" />
 
                     <div class="d-flex flex-row mt-4 mb-2">
                         <RadzenLabel Text="@this.Loc["CreateListPage.List.TitleLanguage"]" />
@@ -31,7 +31,7 @@
                     <RadzenDropDown TValue="SimpleCultureModel" Data="this.State.Value.AllCultures"
                                     AllowVirtualization="true" AllowFiltering="true" TextProperty="DisplayName"
                                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                    @bind-Value="this.FormModel.Culture" />
+                                    @bind-Value="this.FormModel.Culture" class="w-100" />
                 </RadzenCard>
 
                 @if (this.State.Value.CulturesProblem is not null)

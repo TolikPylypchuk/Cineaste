@@ -50,11 +50,11 @@
                     <TitlesForm Titles="@this.FormModel.OriginalTitles" PropertyName="OriginalTitles" />
 
                     <div class="row mt-2">
-                        <div class="col-md pe-md-1">
+                        <div class="col-md-6 pe-md-1">
                             <RadzenLabel Text="@this.Loc["SeasonForm.WatchStatus"]" Component="WatchStatusDropDown" />
                             <RadzenDropDown @bind-Value="@this.FormModel.WatchStatus" Data="@this.AllWatchStatuses"
                                             AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
-                                            Name="WatchStatusDropDown">
+                                            Name="WatchStatusDropDown" class="w-100">
                                 <Template>
                                     @this.Loc[$"SeasonForm.WatchStatus.{context}"]
                                 </Template>
@@ -63,12 +63,12 @@
                                                 { this.FormModel.WatchStatus, this.FormModel.ReleaseStatus })" />
                         </div>
 
-                        <div class="col-md ps-md-1">
+                        <div class="col-md-6 ps-md-1">
                             <RadzenLabel Text="@this.Loc["SeasonForm.ReleaseStatus"]"
                                          Component="ReleaseStatusDropDown" />
                             <RadzenDropDown @bind-Value="@this.FormModel.ReleaseStatus" Data="@this.AllReleaseStatuses"
                                             AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
-                                            Name="ReleaseStatusDropDown">
+                                            Name="ReleaseStatusDropDown" class="w-100">
                                 <Template>
                                     @this.Loc[$"SeasonForm.ReleaseStatus.{context}"]
                                 </Template>

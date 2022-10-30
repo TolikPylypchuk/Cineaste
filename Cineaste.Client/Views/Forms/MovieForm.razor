@@ -67,17 +67,18 @@
                         <TitlesForm Titles="@this.FormModel.OriginalTitles" PropertyName="OriginalTitles" />
 
                         <div class="row mt-2">
-                            <div class="col-md pe-md-1">
+                            <div class="col-md-6 pe-md-1">
                                 <RadzenLabel Text="@this.Loc["MovieForm.Year"]" Component="YearNumeric" />
                                 <RadzenNumeric @bind-Value="this.FormModel.Year" Name="YearNumeric"
                                                Change="@((int year) => this.OnYearChanged())" />
                                 <ErrorPresenter ErrorCode="Movie.Year.*" Trigger="@this.FormModel.Year" />
                             </div>
-                            <div class="col-md ps-md-1">
+                            <div class="col-md-6 ps-md-1">
                                 <RadzenLabel Text="@this.Loc["MovieForm.Kind"]" Component="KindDropDown" />
                                 <RadzenDropDown @bind-Value="@this.FormModel.Kind" AllowVirtualization="false"
                                                 Data="@this.State.Value.AvailableKinds" AllowFiltering="false"
-                                                AllowClear="false" Name="KindDropDown" TextProperty="Name" />
+                                                AllowClear="false" Name="KindDropDown" TextProperty="Name"
+                                                class="w-100" />
                             </div>
                         </div>
 

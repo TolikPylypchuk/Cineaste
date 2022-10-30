@@ -22,10 +22,10 @@
     <RadzenLabel Text="@this.Loc["PeriodForm.EpisodeCount"]" Component="EpisodeCountNumeric" class="mt-1" />
 
     <div class="row">
-        <div class="col-md pe-md-1">
+        <div class="col-md-6 pe-md-1">
             <RadzenNumeric @bind-Value="this.FormModel.EpisodeCount" Name="EpisodeCountNumeric" />
         </div>
-        <div class="col-md ps-md-1 d-flex align-items-center">
+        <div class="col-md-6 ps-md-1 d-flex align-items-center">
             <div>
                 <RadzenCheckBox @bind-Value="@this.FormModel.IsSingleDayRelease" Name="IsSingleDayReleaseCheckBox"
                                 Disabled="@(!this.CanChangeIsSingleDayRelease)" />
