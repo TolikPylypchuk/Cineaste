@@ -9,16 +9,13 @@ using FsCheck;
 
 public class PeriodRequestValidatorTests
 {
-    private readonly PeriodRequestValidator validator;
+    private readonly PeriodRequestValidator validator = new();
 
     public static Arbitrary<int> ValidYear =>
         new ArbitraryValidYear();
 
-    public static Arbitrary<(int StartMonth, int EndMonth)> ValidMonthPair =>
-        new ArbitraryValidMonthPair();
-
-    public PeriodRequestValidatorTests() =>
-        this.validator = new();
+    public static Arbitrary<byte> ValidMonth =>
+        new ArbitraryValidMonth();
 
     [Property(DisplayName = "Validator should validate start month")]
     public void ValidatorShouldValidateStartMonth(int month)
@@ -83,12 +80,12 @@ public class PeriodRequestValidatorTests
     [Property(
         DisplayName = "Validator should validate the period itself",
         Arbitrary = new[] { typeof(PeriodRequestValidatorTests) })]
-    public void ValidatorShouldValidatePeriod(int startYear, int endYear, (int StartMonth, int EndMonth) months)
+    public void ValidatorShouldValidatePeriod(int startYear, int endYear, byte startMonth, byte endMonth)
     {
         var result = validator.TestValidate(this.Request(
-            startMonth: months.StartMonth, startYear: startYear, endMonth: months.EndMonth, endYear: endYear));
+            startMonth: startMonth, startYear: startYear, endMonth: endMonth, endYear: endYear));
 
-        if (startYear < endYear || startYear == endYear && months.StartMonth <= months.EndMonth)
+        if (startYear < endYear || startYear == endYear && startMonth <= endMonth)
         {
             result.ShouldNotHaveAnyValidationErrors();
         } else
@@ -104,20 +101,24 @@ public class PeriodRequestValidatorTests
     public void ValidatorShouldValidateSingleDayRelease(
         int year1,
         int year2,
-        (int StartMonth, int EndMonth) months,
+        byte month1,
+        byte month2,
         bool isSingleDayRelease)
     {
         int startYear = Math.Min(year1, year2);
         int endYear = Math.Max(year1, year2);
 
+        byte startMonth = Math.Min(month1, month2);
+        byte endMonth = Math.Max(month1, month2);
+
         var result = validator.TestValidate(this.Request(
-            startMonth: months.StartMonth,
+            startMonth: startMonth,
             startYear: startYear,
-            endMonth: months.EndMonth,
+            endMonth: endMonth,
             endYear: endYear,
             isSingleDayRelease: isSingleDayRelease));
 
-        if (isSingleDayRelease && (startYear != endYear || months.StartMonth != months.EndMonth))
+        if (isSingleDayRelease && (startYear != endYear || startMonth != endMonth))
         {
             result.ShouldHaveAnyValidationError()
                 .WithErrorCode("Period.IsSingleDayRelease.Invalid");
@@ -182,12 +183,4 @@ public class PeriodRequestValidatorTests
         bool isSingleDayRelease = false,
         string? rottenTomatoesId = null) =>
         new(null, startMonth, startYear, endMonth, endYear, episodeCount, isSingleDayRelease, rottenTomatoesId);
-
-    private class ArbitraryValidMonthPair : Arbitrary<(int StartMonth, int EndMonth)>
-    {
-        public override Gen<(int StartMonth, int EndMonth)> Generator =>
-            from start in Gen.Choose(1, 12)
-            from end in Gen.Choose(1, 12)
-            select (StartMonth: start, EndMonth: end);
-    }
 }

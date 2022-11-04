@@ -6,10 +6,7 @@ public sealed class TitleRequestValidatorTests
 {
     private const string Placeholder = "Test";
 
-    private readonly TitleRequestValidator validator;
-
-    public TitleRequestValidatorTests() =>
-        this.validator = new();
+    private readonly TitleRequestValidator validator = new();
 
     [Property(DisplayName = "Validator should validate name")]
     public void ValidatorShouldValidateName(string name)
