@@ -89,7 +89,7 @@ public class SpecialEpisodeRequestValidatorTests
     }
 
     [Property(DisplayName = "Validator should validate channel")]
-    public void ValidatorShouldValidateName(string channel)
+    public void ValidatorShouldValidateChannel(string channel)
     {
         var result = validator.TestValidate(this.Request(channel: channel));
 

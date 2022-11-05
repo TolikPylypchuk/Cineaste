@@ -1,6 +1,6 @@
-using System.Collections;
-
 namespace Cineaste;
+
+using System.Collections;
 
 internal abstract class TestDataBase : IEnumerable<object?[]>
 {
