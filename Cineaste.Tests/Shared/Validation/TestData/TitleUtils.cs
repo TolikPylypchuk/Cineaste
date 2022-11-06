@@ -4,6 +4,9 @@ using Cineaste.Shared.Models.Shared;
 
 internal class TitleUtils
 {
+    public static ImmutableValueList<TitleRequest> TitleRequests(params string[] titles) =>
+        TitleRequests(titles, differentTitlePriorities: false);
+
     public static ImmutableValueList<TitleRequest> TitleRequests(
         IEnumerable<string>? titles,
         bool differentTitlePriorities) =>
