@@ -71,6 +71,24 @@ public class SeasonRequestValidatorTests
             .WithErrorCode("Season.OriginalTitles.Distinct.Priorities");
     }
 
+    [Fact(DisplayName = "Validator should validate titles")]
+    public void ValidatorShouldValidateTitles()
+    {
+        var result = validator.TestValidate(this.Request(titles: new[] { "" }));
+
+        result.ShouldHaveAnyValidationError()
+            .WithErrorCode("Titles.Name.Empty");
+    }
+
+    [Fact(DisplayName = "Validator should validate original titles")]
+    public void ValidatorShouldValidateOriginalTitles()
+    {
+        var result = validator.TestValidate(this.Request(originalTitles: new[] { "" }));
+
+        result.ShouldHaveAnyValidationError()
+            .WithErrorCode("OriginalTitles.Name.Empty");
+    }
+
     [Property(DisplayName = "Validator should validate watch status")]
     public void ValidatorShouldValidateWatchStatus(int watchStatus)
     {
@@ -166,6 +184,16 @@ public class SeasonRequestValidatorTests
             result.ShouldHaveValidationErrorFor(req => req.Periods)
                 .WithErrorCode("Season.Periods.Overlap");
         }
+    }
+
+    [Fact(DisplayName = "Validator should validate periods")]
+    public void ValidatorShouldValidatePeriods()
+    {
+        var result = validator.TestValidate(this.Request(
+            periods: new[] { new PeriodRequest(null, 1, 2000, 2, 1999, 5, false, null) }));
+
+        result.ShouldHaveAnyValidationError()
+            .WithErrorCode("Period.Invalid");
     }
 
     private SeasonRequest Request(

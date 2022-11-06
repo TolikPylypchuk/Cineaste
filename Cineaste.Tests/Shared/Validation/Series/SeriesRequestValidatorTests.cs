@@ -68,6 +68,24 @@ public class SeriesRequestValidatorTests
             .WithErrorCode("Series.OriginalTitles.Distinct.Priorities");
     }
 
+    [Fact(DisplayName = "Validator should validate titles")]
+    public void ValidatorShouldValidateTitles()
+    {
+        var result = validator.TestValidate(this.Request(titles: new[] { "" }));
+
+        result.ShouldHaveAnyValidationError()
+            .WithErrorCode("Titles.Name.Empty");
+    }
+
+    [Fact(DisplayName = "Validator should validate original titles")]
+    public void ValidatorShouldValidateOriginalTitles()
+    {
+        var result = validator.TestValidate(this.Request(originalTitles: new[] { "" }));
+
+        result.ShouldHaveAnyValidationError()
+            .WithErrorCode("OriginalTitles.Name.Empty");
+    }
+
     [Property(DisplayName = "Validator should validate watch status")]
     public void ValidatorShouldValidateWatchStatus(int watchStatus)
     {
@@ -143,6 +161,48 @@ public class SeriesRequestValidatorTests
         result1.ShouldNotHaveAnyValidationErrors();
         result2.ShouldHaveAnyValidationError()
             .WithErrorCode("Series.Sequence.Invalid");
+    }
+
+    [Fact(DisplayName = "Validator should validate seasons")]
+    public void ValidatorShouldValidateSeasons()
+    {
+        var result = validator.TestValidate(this.Request(seasons: new[]
+        {
+            new SeasonRequest(
+                null,
+                TitleRequests("Test"),
+                TitleRequests("Test"),
+                1,
+                SeasonWatchStatus.NotWatched,
+                SeasonReleaseStatus.Finished,
+                "",
+                ImmutableList.Create(new PeriodRequest(null, 1, 2000, 2, 2000, 5, false, null)).AsValue())
+        }));
+
+        result.ShouldHaveAnyValidationError()
+            .WithErrorCode("Season.Channel.Empty");
+    }
+
+    [Fact(DisplayName = "Validator should validate specialEpisodes")]
+    public void ValidatorShouldValidateSpecialEpisodes()
+    {
+        var result = validator.TestValidate(this.Request(specialEpisodes: new[]
+        {
+            new SpecialEpisodeRequest(
+                null,
+                TitleRequests("Test"),
+                TitleRequests("Test"),
+                1,
+                false,
+                true,
+                "",
+                1,
+                2000,
+                null)
+        }));
+
+        result.ShouldHaveAnyValidationError()
+            .WithErrorCode("SpecialEpisode.Channel.Empty");
     }
 
     [ClassData(typeof(ImdbIdTestData))]

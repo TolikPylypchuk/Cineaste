@@ -73,6 +73,24 @@ public class SpecialEpisodeRequestValidatorTests
             .WithErrorCode("SpecialEpisode.OriginalTitles.Distinct.Priorities");
     }
 
+    [Fact(DisplayName = "Validator should validate titles")]
+    public void ValidatorShouldValidateTitles()
+    {
+        var result = validator.TestValidate(this.Request(titles: new[] { "" }));
+
+        result.ShouldHaveAnyValidationError()
+            .WithErrorCode("Titles.Name.Empty");
+    }
+
+    [Fact(DisplayName = "Validator should validate original titles")]
+    public void ValidatorShouldValidateOriginalTitles()
+    {
+        var result = validator.TestValidate(this.Request(originalTitles: new[] { "" }));
+
+        result.ShouldHaveAnyValidationError()
+            .WithErrorCode("OriginalTitles.Name.Empty");
+    }
+
     [Property(DisplayName = "Validator should validate correlation of watched and released")]
     public void ValidatorShouldValidateCorrelationOfWatchedAndReleased(bool isWatched, bool isReleased)
     {
