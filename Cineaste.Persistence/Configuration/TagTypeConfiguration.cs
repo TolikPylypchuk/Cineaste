@@ -11,8 +11,8 @@ internal sealed class TagTypeConfiguration : IEntityTypeConfiguration<Tag>
         tag.Property(t => t.Category)
             .HasConversion(category => category.Name, name => new TagCategory(name));
 
-        tag.HasCheckConstraint($"CH_Tag_NameNotEmpty", "Name <> ''");
-        tag.HasCheckConstraint($"CH_Tag_CategoryNotEmpty", "Category <> ''");
+        tag.ToTable(t => t.HasCheckConstraint($"CH_Tag_NameNotEmpty", "Name <> ''"));
+        tag.ToTable(t => t.HasCheckConstraint($"CH_Tag_CategoryNotEmpty", "Category <> ''"));
 
         tag.Property(k => k.Color)
             .HasConversion<ColorConverter>();

@@ -30,8 +30,8 @@ internal static class Extensions
                 title.Property(t => t.Priority);
                 title.Property(t => t.IsOriginal);
 
-                title.HasCheckConstraint($"CH_{tableName}_NameNotEmpty", "Name <> ''");
-                title.HasCheckConstraint($"CH_{tableName}_PriorityPositive", "Priority > 0");
+                title.ToTable(t => t.HasCheckConstraint($"CH_{tableName}_NameNotEmpty", "Name <> ''"));
+                title.ToTable(t => t.HasCheckConstraint($"CH_{tableName}_PriorityPositive", "Priority > 0"));
             })
             .UsePropertyAccessMode(PropertyAccessMode.Field);
 

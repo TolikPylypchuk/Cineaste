@@ -5,7 +5,7 @@ internal sealed class FranchiseItemTypeConfiguration : IEntityTypeConfiguration<
     public void Configure(EntityTypeBuilder<FranchiseItem> item)
     {
         item.HasStronglyTypedId();
-        item.HasCheckConstraint("CH_FranchiseItems_SequenceNumberPositive", "SequenceNumber > 0");
+        item.ToTable(t => t.HasCheckConstraint("CH_FranchiseItems_SequenceNumberPositive", "SequenceNumber > 0"));
 
         item.Ignore(fi => fi.Titles);
         item.Ignore(fi => fi.Title);

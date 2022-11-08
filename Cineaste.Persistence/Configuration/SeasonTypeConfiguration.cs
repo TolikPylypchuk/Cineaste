@@ -8,8 +8,8 @@ internal sealed class SeasonTypeConfiguration : IEntityTypeConfiguration<Season>
 
         season.HasTitles(s => s.Titles, "SeasonTitles");
 
-        season.HasCheckConstraint("CH_Seasons_ChannelNotEmpty", "Channel <> ''");
-        season.HasCheckConstraint("CH_Seasons_SequenceNumberPositive", "SequenceNumber > 0");
+        season.ToTable(t => t.HasCheckConstraint("CH_Seasons_ChannelNotEmpty", "Channel <> ''"));
+        season.ToTable(t => t.HasCheckConstraint("CH_Seasons_SequenceNumberPositive", "SequenceNumber > 0"));
 
         season.HasMany(s => s.Periods)
             .WithOne()
