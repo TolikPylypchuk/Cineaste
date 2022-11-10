@@ -4,16 +4,11 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
 
   <PropertyGroup>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Views\Forms\MovieForm.razor~RF1f688cad.TMP" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoConstructor" Version="3.2.5">

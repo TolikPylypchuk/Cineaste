@@ -1,6 +1,7 @@
 namespace Cineaste.Client.Validation;
 
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 using Cineaste.Client.Localization;
 
@@ -8,32 +9,18 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.Localization;
 
+using Radzen;
+
 public sealed class ErrorPresenter : ComponentBase
 {
-    private object? trigger;
     private bool isTriggerUpdated = false;
-
     private bool isInitialized = false;
     private bool isSuspended = false;
-
-    private string errorCode = String.Empty;
     private Regex? errorCodeRegex;
-
     private IEnumerable<string> currentErrors = Array.Empty<string>();
 
     [Parameter]
-    public object? Trigger
-    {
-        get => this.trigger;
-        set
-        {
-            if (!Equals(this.trigger, value))
-            {
-                this.trigger = value;
-                this.isTriggerUpdated = true;
-            }
-        }
-    }
+    public object? Trigger { get; set; }
 
     [CascadingParameter(Name = CascadingParameters.ErrorCodes)]
     public IReadOnlyCollection<string> AllErrorCodes { get; set; } = Array.Empty<string>();
@@ -42,22 +29,7 @@ public sealed class ErrorPresenter : ComponentBase
     public IValidationExecutor? ValidationExecutor { get; set; }
 
     [Parameter]
-    public string ErrorCode
-    {
-        get => this.errorCode;
-        set
-        {
-            if (this.errorCode != value)
-            {
-                this.errorCode = value;
-                this.errorCodeRegex = String.IsNullOrWhiteSpace(errorCode)
-                    ? null
-                    : new Regex($"^{this.errorCode.Replace(".", "\\.").Replace("*", "(.*)")}$", RegexOptions.Compiled);
-
-                this.UpdateCurrentErrors();
-            }
-        }
-    }
+    public string? ErrorCode { get; set; }
 
     [Parameter]
     public string Class { get; set; } = String.Empty;
@@ -73,6 +45,26 @@ public sealed class ErrorPresenter : ComponentBase
 
     [Inject]
     public IStringLocalizer<Resources> Loc { get; set; } = null!;
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.DidParameterChange(nameof(this.Trigger), this.Trigger))
+        {
+            this.isTriggerUpdated = true;
+        }
+
+        if (parameters.DidParameterChange(nameof(this.ErrorCode), this.ErrorCode) &&
+            parameters.TryGetValue(nameof(this.ErrorCode), out string? errorCode))
+        {
+            this.errorCodeRegex = String.IsNullOrWhiteSpace(errorCode)
+                ? null
+                : new Regex($"^{errorCode.Replace(".", "\\.").Replace("*", "(.*)")}$", RegexOptions.Compiled);
+
+            this.UpdateCurrentErrors();
+        }
+
+        await base.SetParametersAsync(parameters);
+    }
 
     protected override void OnParametersSet()
     {
