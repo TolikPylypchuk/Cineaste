@@ -22,7 +22,11 @@ public static class MovieMappingExtensions
             request.Value.Year,
             request.Value.IsWatched,
             request.Value.IsReleased,
-            kind);
+            kind)
+        {
+            ImdbId = request.Value.ImdbId,
+            RottenTomatoesId = request.Value.RottenTomatoesId
+        };
 
     public static void Update(this Movie movie, Validated<MovieRequest> request, MovieKind kind)
     {

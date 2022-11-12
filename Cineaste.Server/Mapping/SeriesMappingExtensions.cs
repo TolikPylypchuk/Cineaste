@@ -24,7 +24,11 @@ public static class SeriesMappingExtensions
             request.Value.SpecialEpisodes.Select(ToSpecialEpisode),
             request.Value.WatchStatus,
             request.Value.ReleaseStatus,
-            kind);
+            kind)
+        {
+            ImdbId = request.Value.ImdbId,
+            RottenTomatoesId = request.Value.RottenTomatoesId
+        };
 
     public static void Update(this Series series, Validated<SeriesRequest> request, SeriesKind kind)
     {

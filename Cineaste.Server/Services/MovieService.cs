@@ -133,7 +133,8 @@ public sealed partial class MovieService : IMovieService
 
     private Exception MovieDoesNotBelongToList(Id<Movie> movieId, Id<CineasteList> listId) =>
         new BadRequestException(
-            $"{Resources.Movie}.WrongList", $"Movie with ID {movieId.Value} does not belong to list with ID {listId}")
+            $"{Resources.Movie}.WrongList",
+            $"Movie with ID {movieId.Value} does not belong to list with ID {listId}")
             .WithProperty(movieId)
             .WithProperty(listId);
 
