@@ -1,40 +1,27 @@
 using System.Text.Json.Serialization;
 
+using Cineaste.Server.Infrastructure.Json;
 using Cineaste.Server.Infrastructure.Problems;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
-
-using Hellang.Middleware.ProblemDetails;
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("Default"), sql => sql.MigrationsHistoryTable("Migrations")));
+    builder.Configuration.GetConnectionString("Default"),
+    sql => sql.MigrationsHistoryTable("Migrations")));
 
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
     options.SerializerOptions.Converters.Add(new ImmutableValueListConverterFactory());
+    options.SerializerOptions.Converters.Add(new IdJsonConverterFactory());
     options.SerializerOptions.Converters.Add(new ValidatedJsonConverterFactory());
 });
 
-builder.Services.AddSingleton<IActionResultExecutor<ObjectResult>, ProblemDetailsResultExecutor>();
-
-builder.Services.AddProblemDetails(options =>
-{
-    bool isDevelopment = builder.Environment.IsDevelopment();
-
-    options.IncludeExceptionDetails = (ctx, ex) => isDevelopment;
-    options.ExceptionDetailsPropertyName = "exception";
-    options.ShouldLogUnhandledException = (ctx, ex, details) => ex is not CineasteException and not ValidationException;
-
-    options.MapCineasteExceptions();
-});
+builder.Services.AddProblemDetails();
 
 builder.Services.AddScoped<ICultureExtractor, CultureExtractor>();
 builder.Services.AddScoped<IListService, ListService>();
@@ -49,7 +36,7 @@ if (app.Environment.IsDevelopment())
     app.UseWebAssemblyDebugging();
 }
 
-app.UseProblemDetails();
+app.UseCineasteExceptionHandling();
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
