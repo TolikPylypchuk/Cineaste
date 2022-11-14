@@ -9,36 +9,37 @@ using Cineaste.Shared.Models.Movie;
 using Cineaste.Shared.Models.Shared;
 using Cineaste.Shared.Validation;
 
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-public class MovieServiceTests
+public class MovieServiceTests : ServiceTestsBase
 {
     private readonly CineasteList list;
     private readonly MovieKind kind;
-
-    private readonly CineasteDbContext dbContext;
-    private readonly MovieService movieService;
+    private readonly ILogger<MovieService> logger;
 
     public MovieServiceTests()
     {
         this.list = this.CreateList();
         this.kind = this.CreateKind(this.list);
-
-        this.dbContext = this.CreateInMemoryDb(this.list, this.kind);
-        this.movieService = new MovieService(this.dbContext, new NullLogger<MovieService>());
+        this.logger = new NullLogger<MovieService>();
     }
 
     [Fact(DisplayName = "GetMovie should return the correct movie")]
     public async Task GetMovieShouldReturnCorrectMovie()
     {
+        var dbContext = this.CreateInMemoryDb();
+        var movieService = new MovieService(dbContext, this.logger);
+
+        this.SetUpDb(dbContext);
+
         var movie = this.CreateMovie();
         this.list.AddMovie(movie);
 
-        this.dbContext.Movies.Add(movie);
-        this.dbContext.SaveChanges();
+        dbContext.Movies.Add(movie);
+        dbContext.SaveChanges();
 
-        var model = await this.movieService.GetMovie(movie.Id);
+        var model = await movieService.GetMovie(movie.Id);
 
         Assert.Equal(movie.Id.Value, model.Id);
 
@@ -71,11 +72,16 @@ public class MovieServiceTests
     [Fact(DisplayName = "CreateMovie should put it into the database")]
     public async Task CreateMovieShouldPutItIntoDb()
     {
+        var dbContext = this.CreateInMemoryDb();
+        var movieService = new MovieService(dbContext, this.logger);
+
+        this.SetUpDb(dbContext);
+
         var request = this.CreateMovieRequest();
 
-        var model = await this.movieService.CreateMovie(request.Validated());
+        var model = await movieService.CreateMovie(request.Validated());
 
-        var movie = this.dbContext.Movies.Find(Id.Create<Movie>(model.Id));
+        var movie = dbContext.Movies.Find(Id.Create<Movie>(model.Id));
 
         Assert.NotNull(movie);
 
@@ -108,9 +114,14 @@ public class MovieServiceTests
     [Fact(DisplayName = "CreateMovie should return a correct model")]
     public async Task CreateMovieShouldReturnCorrectModel()
     {
+        var dbContext = this.CreateInMemoryDb();
+        var movieService = new MovieService(dbContext, this.logger);
+
+        this.SetUpDb(dbContext);
+
         var request = this.CreateMovieRequest();
 
-        var model = await this.movieService.CreateMovie(request.Validated());
+        var model = await movieService.CreateMovie(request.Validated());
 
         Assert.Equal(
             from title in request.Titles
@@ -139,17 +150,22 @@ public class MovieServiceTests
     [Fact(DisplayName = "UpdateMovie should update it in the database")]
     public async Task UpdateMovieShouldUpdateItInDb()
     {
+        var dbContext = this.CreateInMemoryDb();
+        var movieService = new MovieService(dbContext, this.logger);
+
+        this.SetUpDb(dbContext);
+
         var dbMovie = this.CreateMovie();
         this.list.AddMovie(dbMovie);
 
-        this.dbContext.Movies.Add(dbMovie);
-        this.dbContext.SaveChanges();
+        dbContext.Movies.Add(dbMovie);
+        dbContext.SaveChanges();
 
         var request = this.CreateMovieRequest();
 
-        var model = await this.movieService.UpdateMovie(dbMovie.Id, request.Validated());
+        var model = await movieService.UpdateMovie(dbMovie.Id, request.Validated());
 
-        var movie = this.dbContext.Movies.Find(Id.Create<Movie>(model.Id));
+        var movie = dbContext.Movies.Find(Id.Create<Movie>(model.Id));
 
         Assert.NotNull(movie);
 
@@ -182,15 +198,20 @@ public class MovieServiceTests
     [Fact(DisplayName = "UpdateMovie should return a correct model")]
     public async Task UpdateMovieShouldReturnCorrectModel()
     {
+        var dbContext = this.CreateInMemoryDb();
+        var movieService = new MovieService(dbContext, this.logger);
+
+        this.SetUpDb(dbContext);
+
         var dbMovie = this.CreateMovie();
         this.list.AddMovie(dbMovie);
 
-        this.dbContext.Movies.Add(dbMovie);
-        this.dbContext.SaveChanges();
+        dbContext.Movies.Add(dbMovie);
+        dbContext.SaveChanges();
 
         var request = this.CreateMovieRequest();
 
-        var model = await this.movieService.UpdateMovie(dbMovie.Id, request.Validated());
+        var model = await movieService.UpdateMovie(dbMovie.Id, request.Validated());
 
         Assert.Equal(
             from title in request.Titles
@@ -219,9 +240,14 @@ public class MovieServiceTests
     [Fact(DisplayName = "GetMovie should throw if movie isn't found")]
     public async Task GetMovieShouldThrowIfNotFound()
     {
+        var dbContext = this.CreateInMemoryDb();
+        var movieService = new MovieService(dbContext, this.logger);
+
+        this.SetUpDb(dbContext);
+
         var dummyId = Id.CreateNew<Movie>();
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => this.movieService.GetMovie(dummyId));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => movieService.GetMovie(dummyId));
 
         Assert.Equal("Resource.Movie", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -230,23 +256,33 @@ public class MovieServiceTests
     [Fact(DisplayName = "DeleteMovie should remote it from the database")]
     public async Task DeleteMovieShouldRemoveItFromDb()
     {
+        var dbContext = this.CreateInMemoryDb();
+        var movieService = new MovieService(dbContext, this.logger);
+
+        this.SetUpDb(dbContext);
+
         var movie = this.CreateMovie();
         this.list.AddMovie(movie);
 
-        this.dbContext.Movies.Add(movie);
-        this.dbContext.SaveChanges();
+        dbContext.Movies.Add(movie);
+        dbContext.SaveChanges();
 
-        await this.movieService.DeleteMovie(movie.Id);
+        await movieService.DeleteMovie(movie.Id);
 
-        Assert.True(this.dbContext.Movies.All(m => m.Id != movie.Id));
+        Assert.True(dbContext.Movies.All(m => m.Id != movie.Id));
     }
 
     [Fact(DisplayName = "DeleteMovie should throw if movie isn't found")]
     public async Task DeleteMovieShouldThrowIfNotFound()
     {
+        var dbContext = this.CreateInMemoryDb();
+        var movieService = new MovieService(dbContext, this.logger);
+
+        this.SetUpDb(dbContext);
+
         var dummyId = Id.CreateNew<Movie>();
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => this.movieService.DeleteMovie(dummyId));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => movieService.DeleteMovie(dummyId));
 
         Assert.Equal("Resource.Movie", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -292,20 +328,11 @@ public class MovieServiceTests
         return kind;
     }
 
-    private CineasteDbContext CreateInMemoryDb(CineasteList list, MovieKind kind)
+    private void SetUpDb(CineasteDbContext context)
     {
-        var options = new DbContextOptionsBuilder<CineasteDbContext>()
-            .UseInMemoryDatabase(databaseName: nameof(MovieServiceTests))
-            .Options;
-
-        var context = new CineasteDbContext(options);
-        context.Database.EnsureCreated();
-
-        context.MovieKinds.Add(kind);
-        context.Lists.Add(list);
+        context.MovieKinds.Add(this.kind);
+        context.Lists.Add(this.list);
 
         context.SaveChanges();
-
-        return context;
     }
 }

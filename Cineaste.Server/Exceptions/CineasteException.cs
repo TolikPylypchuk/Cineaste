@@ -25,7 +25,7 @@ public class CineasteException : Exception
         return this;
     }
 
-    public CineasteException WithProperty(object? value, [CallerArgumentExpression("value")] string name = "")
+    public CineasteException WithProperty(object? value, [CallerArgumentExpression(nameof(value))] string name = "")
     {
         this.Properties[name] = value;
         return this;

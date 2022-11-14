@@ -6,6 +6,7 @@ public static class ListUtils
         Uri.EscapeDataString(name.Trim()
             .Replace("&", "-and-")
             .Replace("@", "-at-")
+            .Replace("+", "-plus-")
             .Replace("/", String.Empty)
             .Replace("\\", String.Empty)
             .Replace(".", String.Empty)
