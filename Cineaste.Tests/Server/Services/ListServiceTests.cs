@@ -6,7 +6,6 @@ using Cineaste.Basic;
 using Cineaste.Core.Domain;
 using Cineaste.Server.Exceptions;
 using Cineaste.Shared.Models.List;
-using Cineaste.Shared.Models.Series;
 using Cineaste.Shared.Validation;
 
 using Microsoft.Extensions.Logging;

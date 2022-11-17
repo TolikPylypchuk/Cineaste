@@ -1,5 +1,3 @@
-using Cineaste.Core.Domain;
-
 namespace Cineaste.Server.Services;
 
 [AutoConstructor]
