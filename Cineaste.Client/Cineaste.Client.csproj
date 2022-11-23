@@ -15,9 +15,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Fluxor" Version="5.5.0" />
-    <PackageReference Include="Fluxor.Blazor.Web" Version="5.5.0" />
-    <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.5.0" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="Fluxor" Version="5.6.0" />
+    <PackageReference Include="Fluxor.Blazor.Web" Version="5.6.0" />
+    <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.6.0" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Fody" Version="6.6.4" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.0" PrivateAssets="all" />
@@ -29,7 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="all" />
-    <PackageReference Include="Radzen.Blazor" Version="4.3.6" />
+    <PackageReference Include="Radzen.Blazor" Version="4.3.7" />
     <PackageReference Include="Refit" Version="6.3.2" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
     <PackageReference Include="System.Interactive" Version="6.0.1" />

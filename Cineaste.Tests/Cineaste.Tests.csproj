@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="bunit" Version="1.12.6" />
     <PackageReference Include="FsCheck" Version="2.16.5" />
     <PackageReference Include="FsCheck.Xunit" Version="2.16.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
@@ -33,6 +34,10 @@
     <ProjectReference Include="..\Cineaste.Persistence\Cineaste.Persistence.csproj" />
     <ProjectReference Include="..\Cineaste.Server\Cineaste.Server.csproj" />
     <ProjectReference Include="..\Cineaste.Shared\Cineaste.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Client\" />
   </ItemGroup>
 
 </Project>
