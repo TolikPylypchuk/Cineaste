@@ -44,7 +44,7 @@ public sealed class ErrorPresenter : ComponentBase
     public Dictionary<string, object> Attributes { get; set; } = new();
 
     [Inject]
-    public IStringLocalizer<Resources> Loc { get; set; } = null!;
+    public required IStringLocalizer<Resources> Loc { get; init; }
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {

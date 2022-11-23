@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Components;
 public abstract class StatefulComponent<TState> : CineasteComponent
 {
     [Inject]
-    protected IState<TState> State { get; private set; } = null!;
+    public required IState<TState> State { get; init; }
 
     [Inject]
-    protected IDispatcher Dispatcher { get; private set; } = null!;
+    public required IDispatcher Dispatcher { get; init; }
 
     protected void SubsribeToSuccessfulResult<TAction>(Action action)
         where TAction : ResultAction =>

@@ -1,7 +1,5 @@
 namespace Cineaste.Client.Views.Base;
 
-using System;
-
 using Cineaste.Client.Localization;
 
 using Fluxor.Blazor.Web.Components;
@@ -16,19 +14,19 @@ public abstract class CineasteComponent : FluxorComponent
     protected const int ShortNotificationDuration = 2000;
 
     [Inject]
-    public IStringLocalizer<Resources> Loc { get; private set; } = null!;
+    public required IStringLocalizer<Resources> Loc { get; init; }
 
     [Inject]
-    protected IPageNavigator PageNavigator { get; private set; } = null!;
+    public required IPageNavigator PageNavigator { get; init; }
 
     [Inject]
-    protected DialogService DialogService { get; private set; } = null!;
+    public required DialogService DialogService { get; init; }
 
     [Inject]
-    protected NotificationService NotificationService { get; private set; } = null!;
+    public required NotificationService NotificationService { get; init; }
 
     [Inject]
-    protected TooltipService TooltipService { get; private set; } = null!;
+    public required TooltipService TooltipService { get; init; }
 
     protected void ShowSuccessNotification(string text, int duration) =>
         this.NotificationService.Notify(new()
