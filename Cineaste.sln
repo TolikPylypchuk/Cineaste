@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CHANGELOG.md = CHANGELOG.md
 		LICENSE = LICENSE
 		README.md = README.md
+		.github\workflows\tests.yml = .github\workflows\tests.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Server", "Cineaste.Server\Cineaste.Server.csproj", "{12FDE328-2FF2-4F3C-988B-F3212EEFF349}"
@@ -42,7 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ADR", "ADR", "{6FE17DA8-692
 		ADR\README.md = ADR\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cineaste.Tests", "Cineaste.Tests\Cineaste.Tests.csproj", "{F607467B-7A65-4923-B9DB-B942877347F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Tests", "Cineaste.Tests\Cineaste.Tests.csproj", "{F607467B-7A65-4923-B9DB-B942877347F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
