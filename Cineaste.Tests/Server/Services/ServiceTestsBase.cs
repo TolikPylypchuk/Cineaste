@@ -2,15 +2,12 @@ namespace Cineaste.Server.Services;
 
 using System.Runtime.CompilerServices;
 
-using Azure.Core;
-
 using Cineaste.Core.Domain;
 using Cineaste.Persistence;
 using Cineaste.Shared.Models;
 using Cineaste.Shared.Models.Shared;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.FSharp.Data.UnitSystems.SI.UnitNames;
 
 public abstract class ServiceTestsBase
 {

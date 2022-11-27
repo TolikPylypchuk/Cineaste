@@ -53,6 +53,9 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("ContinueNumbering")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("FranchiseItemId")
                         .HasColumnType("uniqueidentifier");
 
@@ -61,9 +64,6 @@ namespace Cineaste.Persistence.Migrations
 
                     b.Property<Guid>("ListId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("MergeDisplayNumbers")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("ShowTitles")
                         .HasColumnType("bit");

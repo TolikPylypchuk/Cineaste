@@ -6,7 +6,7 @@ public sealed class Franchise : TitledEntity<Franchise>
 
     public bool ShowTitles { get; set; }
     public bool IsLooselyConnected { get; set; }
-    public bool MergeDisplayNumbers { get; set; }
+    public bool ContinueNumbering { get; set; }
 
     public Poster? Poster { get; set; }
 
@@ -33,20 +33,27 @@ public sealed class Franchise : TitledEntity<Franchise>
             .OrderBy(title => title.Priority)
             .FirstOrDefault();
 
+    public int? StartYear =>
+        this.Children.Min(item => item.Select(
+            movie => movie.Year, series => series.StartYear, franchise => franchise.StartYear));
+
+    public int? EndYear =>
+        this.Children.Max(item => item.Select(
+            movie => movie.Year, series => series.EndYear, franchise => franchise.EndYear));
+
     public Franchise(
         Id<Franchise> id,
         IEnumerable<Title> titles,
-        IEnumerable<FranchiseItem> children,
         bool showTitles,
         bool isLooselyConnected,
-        bool mergeDisplayNumbers)
+        bool continueNumbering)
         : base(id, titles)
     {
         this.ShowTitles = showTitles;
         this.IsLooselyConnected = isLooselyConnected;
-        this.MergeDisplayNumbers = mergeDisplayNumbers;
+        this.ContinueNumbering = continueNumbering;
 
-        this.children = children.ToList();
+        this.children = new();
     }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]

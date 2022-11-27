@@ -138,8 +138,7 @@ internal sealed class TestDataProvider
         new(
             Id.CreateNew<Franchise>(),
             title is not null ? new List<Title> { new(title, 1, false), new(title, 1, true) } : new List<Title>(),
-            new List<FranchiseItem>(),
             showTitles: title is not null,
             isLooselyConnected: false,
-            mergeDisplayNumbers: false);
+            continueNumbering: false);
 }

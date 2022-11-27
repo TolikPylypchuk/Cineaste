@@ -27,6 +27,7 @@ builder.Services.AddScoped<ICultureExtractor, CultureExtractor>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
+builder.Services.AddScoped<IFranchiseService, FranchiseService>();
 builder.Services.AddScoped<TestDataProvider>();
 
 var app = builder.Build();
@@ -47,6 +48,7 @@ app.MapCultureRoutes();
 app.MapListRoutes();
 app.MapMovieRoutes();
 app.MapSeriesRoutes();
+app.MapFranchiseRoutes();
 
 app.MapFallbackRoutes();
 

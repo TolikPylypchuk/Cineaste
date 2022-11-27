@@ -167,7 +167,7 @@ namespace Cineaste.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ShowTitles = table.Column<bool>(type: "bit", nullable: false),
                     IsLooselyConnected = table.Column<bool>(type: "bit", nullable: false),
-                    MergeDisplayNumbers = table.Column<bool>(type: "bit", nullable: false),
+                    ContinueNumbering = table.Column<bool>(type: "bit", nullable: false),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
