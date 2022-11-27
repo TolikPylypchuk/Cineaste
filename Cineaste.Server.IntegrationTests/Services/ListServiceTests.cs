@@ -2,7 +2,6 @@ namespace Cineaste.Server.Services;
 
 using System.Globalization;
 
-using Cineaste.Basic;
 using Cineaste.Core.Domain;
 using Cineaste.Server.Exceptions;
 using Cineaste.Shared.Models.List;
@@ -21,7 +20,7 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "GetAllLists should return correct lists")]
     public async Task GetAllListsShouldReturnCorrectLists()
     {
-        var dbContext = this.CreateInMemoryDb();
+        var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
         var lists = new List<CineasteList>
@@ -32,9 +31,13 @@ public class ListServiceTests : ServiceTestsBase
         };
 
         dbContext.Lists.AddRange(lists);
-        dbContext.SaveChanges();
+        dbContext.Lists.Remove(this.List);
+        await dbContext.SaveChangesAsync();
 
         var listModels = await listService.GetAllLists();
+
+        dbContext.Lists.Add(this.List);
+        await dbContext.SaveChangesAsync();
 
         Assert.Equal(lists.Count, listModels.Count);
 
@@ -49,34 +52,23 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "GetList should return a correct list")]
     public async Task GetListShouldReturnCorrectList()
     {
-        var dbContext = this.CreateInMemoryDb();
+        var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
-        var list = this.CreateList("Test List", "test-list");
-        this.PopulateList(list);
+        var model = await listService.GetList(this.List.Handle);
 
-        dbContext.Lists.Add(list);
-        dbContext.SaveChanges();
-
-        var model = await listService.GetList(list.Handle);
-
-        Assert.Equal(list.Id.Value, model.Id);
-        Assert.Equal(list.Name, model.Name);
-        Assert.Equal(list.Handle, model.Handle);
-        Assert.Equal(list.Configuration.Culture.ToString(), model.Config.Culture);
-        Assert.Equal(list.Configuration.DefaultSeasonTitle, model.Config.DefaultSeasonTitle);
-        Assert.Equal(list.Configuration.DefaultSeasonOriginalTitle, model.Config.DefaultSeasonOriginalTitle);
-
-        Assert.Single(model.MovieKinds);
-        Assert.Single(model.SeriesKinds);
-        Assert.Single(model.Movies);
-        Assert.Single(model.Series);
+        Assert.Equal(this.List.Id.Value, model.Id);
+        Assert.Equal(this.List.Name, model.Name);
+        Assert.Equal(this.List.Handle, model.Handle);
+        Assert.Equal(this.List.Configuration.Culture.ToString(), model.Config.Culture);
+        Assert.Equal(this.List.Configuration.DefaultSeasonTitle, model.Config.DefaultSeasonTitle);
+        Assert.Equal(this.List.Configuration.DefaultSeasonOriginalTitle, model.Config.DefaultSeasonOriginalTitle);
     }
 
     [Fact(DisplayName = "CreateList should put it into the database")]
     public async Task CreateListShouldPutItIntoDb()
     {
-        var dbContext = this.CreateInMemoryDb();
+        var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
         var request = new CreateListRequest("Test List", String.Empty, "Season #", "Season #");
@@ -98,7 +90,7 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateList should return a correct model")]
     public async Task CreateListShouldReturnCorrectModel()
     {
-        var dbContext = this.CreateInMemoryDb();
+        var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
         var request = new CreateListRequest("Test List", String.Empty, "Season #", "Season #");
@@ -112,7 +104,7 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "GetList should throw if not found")]
     public async Task GetListShouldThrowIfNotFound()
     {
-        var dbContext = this.CreateInMemoryDb();
+        var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
         string dummyHandle = "test";
@@ -126,14 +118,14 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateList should throw if handle already exists")]
     public async Task CreateListShouldThrowIfHandleExists()
     {
-        var dbContext = this.CreateInMemoryDb();
+        var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
         const string name = "Test List";
         const string handle = "test-list";
 
         dbContext.Lists.Add(this.CreateList(name, handle));
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         var request = new CreateListRequest(name, String.Empty, "Season #", "Season #");
 
@@ -142,54 +134,4 @@ public class ListServiceTests : ServiceTestsBase
         Assert.Equal("Resource.List", exception.Resource);
         Assert.Equal(handle, exception.Properties["handle"]);
     }
-
-    private CineasteList CreateList(string name, string handle) =>
-        new(
-            Id.CreateNew<CineasteList>(),
-            name,
-            handle,
-            new ListConfiguration(
-                Id.CreateNew<ListConfiguration>(),
-                CultureInfo.InvariantCulture,
-                "Season #",
-                "Season #",
-                ListSortingConfiguration.CreateDefault()));
-
-    private void PopulateList(CineasteList list)
-    {
-        var black = new Color("#000000");
-
-        var movieKind = new MovieKind(Id.CreateNew<MovieKind>(), "Test Kind", black, black, black);
-        list.AddMovieKind(movieKind);
-
-        var seriesKind = new SeriesKind(Id.CreateNew<SeriesKind>(), "Test Kind", black, black, black);
-        list.AddSeriesKind(seriesKind);
-
-        var movie = new Movie(Id.CreateNew<Movie>(), this.CreateTitles(), 2000, false, true, movieKind);
-        list.AddMovie(movie);
-
-        var series = new Series(
-            Id.CreateNew<Series>(),
-            this.CreateTitles(),
-            new List<Season>
-            {
-                new(
-                    Id.CreateNew<Season>(),
-                    this.CreateTitles(),
-                    SeasonWatchStatus.NotWatched,
-                    SeasonReleaseStatus.Finished,
-                    "Test",
-                    1,
-                    new List<Period> { new(Id.CreateNew<Period>(), 1, 2000, 2, 2000, false, 10) })
-            },
-            Enumerable.Empty<SpecialEpisode>(),
-            SeriesWatchStatus.NotWatched,
-            SeriesReleaseStatus.Finished,
-            seriesKind);
-
-        list.AddSeries(series);
-    }
-
-    private IEnumerable<Title> CreateTitles() =>
-        new List<Title> { new("Test", 1, false), new("Original Test", 1, true) };
 }

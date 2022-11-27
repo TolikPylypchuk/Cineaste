@@ -1,0 +1,153 @@
+namespace Cineaste.Server.Services;
+
+using System.Globalization;
+
+using Cineaste.Basic;
+using Cineaste.Core.Domain;
+using Cineaste.Persistence;
+
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Configurations;
+using DotNet.Testcontainers.Containers;
+
+using Microsoft.EntityFrameworkCore;
+
+using static Cineaste.Server.ContainerConstants;
+
+public abstract class ServiceTestsBase : IAsyncLifetime
+{
+    private readonly TestcontainerDatabase container = new TestcontainersBuilder<MsSqlTestcontainer>()
+        .WithDatabase(new MsSqlTestcontainerConfiguration
+        {
+            Database = DbName,
+            Environments = { [SaPasswordName] = SaPasswordValue }
+        })
+        .WithImage(MsSqlServerImage)
+        .WithAutoRemove(true)
+        .WithCleanUp(true)
+        .Build();
+
+    protected CineasteList List { get; }
+    protected MovieKind MovieKind { get; }
+    protected SeriesKind SeriesKind { get; }
+
+    protected ServiceTestsBase()
+    {
+        this.List = this.CreateList($"List.{this.GetType().Name}", $"list.{this.GetType().Name.ToLower()}");
+        this.MovieKind = this.CreateMovieKind(this.List);
+        this.SeriesKind = this.CreateSeriesKind(this.List);
+    }
+
+    public Task InitializeAsync() =>
+        this.container.StartAsync();
+
+    public Task DisposeAsync() =>
+        this.container.DisposeAsync().AsTask();
+
+    protected CineasteList CreateList(string name, string handle) =>
+        new(
+            Id.CreateNew<CineasteList>(),
+            name,
+            handle,
+            new ListConfiguration(
+                Id.CreateNew<ListConfiguration>(),
+                CultureInfo.InvariantCulture,
+                "Season #",
+                "Season #",
+                ListSortingConfiguration.CreateDefault()));
+
+    protected Movie CreateMovie(CineasteList list)
+    {
+        var movie = new Movie(Id.CreateNew<Movie>(), this.CreateTitles(), 2000, true, true, this.MovieKind);
+        list.AddMovie(movie);
+
+        return movie;
+    }
+
+    protected Series CreateSeries(CineasteList list)
+    {
+        var series = new Series(
+            Id.CreateNew<Series>(),
+            this.CreateTitles(),
+            new List<Season> { this.CreateSeason(1), this.CreateSeason(2) },
+            new List<SpecialEpisode> { this.CreateSpecialEpisode(3) },
+            SeriesWatchStatus.NotWatched,
+            SeriesReleaseStatus.Finished,
+            this.SeriesKind);
+
+        list.AddSeries(series);
+
+        return series;
+    }
+
+    protected Season CreateSeason(int num) =>
+        new(
+            Id.CreateNew<Season>(),
+            new List<Title> { new($"Season {num}", 1, false), new($"Season {num}", 1, true) },
+            SeasonWatchStatus.NotWatched,
+            SeasonReleaseStatus.Finished,
+            "Test",
+            num,
+            new List<Period>
+            {
+                new(Id.CreateNew<Period>(), 1, 2000 + num, 2, 2000 + num, false, 10)
+            });
+
+    protected SpecialEpisode CreateSpecialEpisode(int num) =>
+        new(Id.CreateNew<SpecialEpisode>(), this.CreateTitles(), 1, 2000 + num, false, true, "Test", num);
+
+    protected Franchise CreateFranchise(CineasteList list)
+    {
+        var franchise = new Franchise(
+            Id.CreateNew<Franchise>(),
+            this.CreateTitles(),
+            showTitles: true,
+            isLooselyConnected: false,
+            continueNumbering: false);
+
+        list.AddFranchise(franchise);
+
+        return franchise;
+    }
+
+    protected IEnumerable<Title> CreateTitles() =>
+        new List<Title> { new("Test", 1, false), new("Original Test", 1, true) };
+
+    protected MovieKind CreateMovieKind(CineasteList list)
+    {
+        var black = new Color("#000000");
+        var kind = new MovieKind(Id.CreateNew<MovieKind>(), "Test Kind", black, black, black);
+
+        list.AddMovieKind(kind);
+
+        return kind;
+    }
+
+    protected SeriesKind CreateSeriesKind(CineasteList list)
+    {
+        var black = new Color("#000000");
+        var kind = new SeriesKind(Id.CreateNew<SeriesKind>(), "Test Kind", black, black, black);
+
+        list.AddSeriesKind(kind);
+
+        return kind;
+    }
+
+    protected async Task<CineasteDbContext> CreateDbContext()
+    {
+        var options = new DbContextOptionsBuilder<CineasteDbContext>()
+            .UseSqlServer(String.Join(';', this.container.ConnectionString.Trim(';'), "Encrypt=false"))
+            .Options;
+
+        var context = new CineasteDbContext(options);
+        await context.Database.EnsureCreatedAsync();
+
+        context.MovieKinds.Add(this.MovieKind);
+        context.SeriesKinds.Add(this.SeriesKind);
+        context.Lists.Add(this.List);
+
+        context.SaveChanges();
+
+        return context;
+    }
+}

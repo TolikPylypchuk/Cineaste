@@ -1,19 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Cineaste.Shared</RootNamespace>
     <IsPackable>false</IsPackable>
-    <RootNamespace>Cineaste</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="bunit" Version="1.12.6" />
     <PackageReference Include="FsCheck" Version="2.16.5" />
     <PackageReference Include="FsCheck.Xunit" Version="2.16.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
     <PackageReference Include="Moq" Version="4.18.2" />
     <PackageReference Include="xunit" Version="2.4.2" />
@@ -28,16 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cineaste.Basic\Cineaste.Basic.csproj" />
-    <ProjectReference Include="..\Cineaste.Client\Cineaste.Client.csproj" />
-    <ProjectReference Include="..\Cineaste.Core\Cineaste.Core.csproj" />
-    <ProjectReference Include="..\Cineaste.Persistence\Cineaste.Persistence.csproj" />
-    <ProjectReference Include="..\Cineaste.Server\Cineaste.Server.csproj" />
     <ProjectReference Include="..\Cineaste.Shared\Cineaste.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Client\" />
   </ItemGroup>
 
 </Project>

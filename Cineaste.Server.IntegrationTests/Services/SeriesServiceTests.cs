@@ -1,10 +1,7 @@
 namespace Cineaste.Server.Services;
 
-using System.Globalization;
-
 using Cineaste.Basic;
 using Cineaste.Core.Domain;
-using Cineaste.Persistence;
 using Cineaste.Server.Exceptions;
 using Cineaste.Shared.Models.Series;
 using Cineaste.Shared.Models.Shared;
@@ -15,34 +12,25 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 public class SeriesServiceTests : ServiceTestsBase
 {
-    private readonly CineasteList list;
-    private readonly SeriesKind kind;
     private readonly ILogger<SeriesService> logger;
 
-    public SeriesServiceTests()
-    {
-        this.list = this.CreateList();
-        this.kind = this.CreateKind(this.list);
+    public SeriesServiceTests() =>
         this.logger = new NullLogger<SeriesService>();
-    }
 
     [Fact(DisplayName = "GetSeries should return the correct series")]
     public async Task GetSeriesShouldReturnCorrectSeries()
     {
-        var dbContext = this.CreateInMemoryDb();
+        var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        this.SetUpDb(dbContext);
-
-        var series = this.CreateSeries();
-        this.list.AddSeries(series);
+        var series = this.CreateSeries(this.List);
 
         dbContext.Series.Add(series);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         var model = await seriesService.GetSeries(series.Id);
 
-        this.AssertTitles(series, model);
+        AssertTitles(series, model);
 
         Assert.Equal(series.Id.Value, model.Id);
         Assert.Equal(series.WatchStatus, model.WatchStatus);
@@ -54,7 +42,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (season, seasonModel) in series.Seasons.OrderBy(s => s.SequenceNumber)
             .Zip(model.Seasons.OrderBy(s => s.SequenceNumber)))
         {
-            this.AssertTitles(season, seasonModel);
+            AssertTitles(season, seasonModel);
 
             Assert.Equal(season.SequenceNumber, seasonModel.SequenceNumber);
             Assert.Equal(season.WatchStatus, seasonModel.WatchStatus);
@@ -77,7 +65,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (episode, episodeModel) in series.SpecialEpisodes.OrderBy(e => e.SequenceNumber)
             .Zip(model.SpecialEpisodes.OrderBy(e => e.SequenceNumber)))
         {
-            this.AssertTitles(episode, episodeModel);
+            AssertTitles(episode, episodeModel);
 
             Assert.Equal(episode.SequenceNumber, episodeModel.SequenceNumber);
             Assert.Equal(episode.IsWatched, episodeModel.IsWatched);
@@ -92,10 +80,8 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "GetSeries should throw if series isn't found")]
     public async Task GetSeriesShouldThrowIfNotFound()
     {
-        var dbContext = this.CreateInMemoryDb();
+        var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
-
-        this.SetUpDb(dbContext);
 
         var dummyId = Id.CreateNew<Series>();
 
@@ -108,20 +94,18 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should put it into the database")]
     public async Task CreateSeriesShouldPutItIntoDb()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
-
-        this.SetUpDb(dbContext);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
         var request = this.CreateSeriesRequest();
 
-        var model = await movieService.CreateSeries(request.Validated());
+        var model = await seriesService.CreateSeries(request.Validated());
 
         var series = dbContext.Series.Find(Id.Create<Series>(model.Id));
 
         Assert.NotNull(series);
 
-        this.AssertTitles(request, series);
+        AssertTitles(request, series);
 
         Assert.Equal(request.WatchStatus, series.WatchStatus);
         Assert.Equal(request.ReleaseStatus, series.ReleaseStatus);
@@ -132,7 +116,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (seasonRequest, season) in request.Seasons.OrderBy(s => s.SequenceNumber)
             .Zip(series.Seasons.OrderBy(s => s.SequenceNumber)))
         {
-            this.AssertTitles(seasonRequest, season);
+            AssertTitles(seasonRequest, season);
 
             Assert.Equal(seasonRequest.SequenceNumber, season.SequenceNumber);
             Assert.Equal(seasonRequest.WatchStatus, season.WatchStatus);
@@ -157,7 +141,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (episodeRequest, episode) in request.SpecialEpisodes.OrderBy(e => e.SequenceNumber)
             .Zip(series.SpecialEpisodes.OrderBy(e => e.SequenceNumber)))
         {
-            this.AssertTitles(episodeRequest, episode);
+            AssertTitles(episodeRequest, episode);
 
             Assert.Equal(episodeRequest.SequenceNumber, episode.SequenceNumber);
             Assert.Equal(episodeRequest.IsWatched, episode.IsWatched);
@@ -172,16 +156,14 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should return a correct model")]
     public async Task CreateSeriesShouldReturnCorrectModel()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
-
-        this.SetUpDb(dbContext);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
         var request = this.CreateSeriesRequest();
 
-        var model = await movieService.CreateSeries(request.Validated());
+        var model = await seriesService.CreateSeries(request.Validated());
 
-        this.AssertTitles(request, model);
+        AssertTitles(request, model);
 
         Assert.Equal(request.WatchStatus, model.WatchStatus);
         Assert.Equal(request.ReleaseStatus, model.ReleaseStatus);
@@ -192,7 +174,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (seasonRequest, seasonModel) in request.Seasons.OrderBy(s => s.SequenceNumber)
             .Zip(model.Seasons.OrderBy(s => s.SequenceNumber)))
         {
-            this.AssertTitles(seasonRequest, seasonModel);
+            AssertTitles(seasonRequest, seasonModel);
 
             Assert.Equal(seasonRequest.SequenceNumber, seasonModel.SequenceNumber);
             Assert.Equal(seasonRequest.WatchStatus, seasonModel.WatchStatus);
@@ -217,7 +199,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (episodeRequest, episodeModel) in request.SpecialEpisodes.OrderBy(e => e.SequenceNumber)
             .Zip(model.SpecialEpisodes.OrderBy(e => e.SequenceNumber)))
         {
-            this.AssertTitles(episodeRequest, episodeModel);
+            AssertTitles(episodeRequest, episodeModel);
 
             Assert.Equal(episodeRequest.SequenceNumber, episodeModel.SequenceNumber);
             Assert.Equal(episodeRequest.IsWatched, episodeModel.IsWatched);
@@ -232,16 +214,14 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should throw if the list is not found")]
     public async Task CreateSeriesShouldThrowIfListNotFound()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
-
-        this.SetUpDb(dbContext);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyListId = Id.CreateNew<CineasteList>();
         var request = this.CreateSeriesRequest() with { ListId = dummyListId.Value };
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.CreateSeries(request.Validated()));
+            seriesService.CreateSeries(request.Validated()));
 
         Assert.Equal("Resource.List", exception.Resource);
         Assert.Equal(dummyListId, exception.Properties["id"]);
@@ -250,16 +230,14 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should throw if the kind is not found")]
     public async Task CreateSeriesShouldThrowIfKindNotFound()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
-
-        this.SetUpDb(dbContext);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyKindId = Id.CreateNew<SeriesKind>();
         var request = this.CreateSeriesRequest() with { KindId = dummyKindId.Value };
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.CreateSeries(request.Validated()));
+            seriesService.CreateSeries(request.Validated()));
 
         Assert.Equal("Resource.SeriesKind", exception.Resource);
         Assert.Equal(dummyKindId, exception.Properties["id"]);
@@ -268,51 +246,46 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should throw if the kind doesn't belong to list")]
     public async Task CreateSeriesShouldThrowIfKindDoesNotBelongToList()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
-        this.SetUpDb(dbContext);
-
-        var otherList = this.CreateList();
-        var otherKind = this.CreateKind(otherList);
+        var otherList = this.CreateList("Other List for Series Kind", "other-list-for-series-kind");
+        var otherKind = this.CreateSeriesKind(otherList);
 
         dbContext.SeriesKinds.Add(otherKind);
         dbContext.Lists.Add(otherList);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         var request = this.CreateSeriesRequest() with { KindId = otherKind.Id.Value };
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
-            movieService.CreateSeries(request.Validated()));
+            seriesService.CreateSeries(request.Validated()));
 
         Assert.Equal("BadRequest.SeriesKind.WrongList", exception.MessageCode);
-        Assert.Equal(this.list.Id, exception.Properties["listId"]);
+        Assert.Equal(this.List.Id, exception.Properties["listId"]);
         Assert.Equal(otherKind.Id, exception.Properties["kindId"]);
     }
 
     [Fact(DisplayName = "UpdateSeries should update it in the database")]
     public async Task UpdateSeriesShouldUpdateItInDb()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
-        this.SetUpDb(dbContext);
-
-        var dbSeries = this.CreateSeries();
-        this.list.AddSeries(dbSeries);
+        var dbSeries = this.CreateSeries(this.List);
 
         dbContext.Series.Add(dbSeries);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         var request = this.CreateSeriesRequest();
 
-        var model = await movieService.UpdateSeries(dbSeries.Id, request.Validated());
+        var model = await seriesService.UpdateSeries(dbSeries.Id, request.Validated());
 
         var series = dbContext.Series.Find(Id.Create<Series>(model.Id));
 
         Assert.NotNull(series);
 
-        this.AssertTitles(request, series);
+        AssertTitles(request, series);
 
         Assert.Equal(request.WatchStatus, series.WatchStatus);
         Assert.Equal(request.ReleaseStatus, series.ReleaseStatus);
@@ -323,7 +296,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (seasonRequest, season) in request.Seasons.OrderBy(s => s.SequenceNumber)
             .Zip(series.Seasons.OrderBy(s => s.SequenceNumber)))
         {
-            this.AssertTitles(seasonRequest, season);
+            AssertTitles(seasonRequest, season);
 
             Assert.Equal(seasonRequest.SequenceNumber, season.SequenceNumber);
             Assert.Equal(seasonRequest.WatchStatus, season.WatchStatus);
@@ -348,7 +321,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (episodeRequest, episode) in request.SpecialEpisodes.OrderBy(e => e.SequenceNumber)
             .Zip(series.SpecialEpisodes.OrderBy(e => e.SequenceNumber)))
         {
-            this.AssertTitles(episodeRequest, episode);
+            AssertTitles(episodeRequest, episode);
 
             Assert.Equal(episodeRequest.SequenceNumber, episode.SequenceNumber);
             Assert.Equal(episodeRequest.IsWatched, episode.IsWatched);
@@ -363,22 +336,19 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateSeries should return a correct model")]
     public async Task UpdateSeriesShouldReturnCorrectModel()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
-        this.SetUpDb(dbContext);
-
-        var dbSeries = this.CreateSeries();
-        this.list.AddSeries(dbSeries);
+        var dbSeries = this.CreateSeries(this.List);
 
         dbContext.Series.Add(dbSeries);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         var request = this.CreateSeriesRequest();
 
-        var model = await movieService.UpdateSeries(dbSeries.Id, request.Validated());
+        var model = await seriesService.UpdateSeries(dbSeries.Id, request.Validated());
 
-        this.AssertTitles(request, model);
+        AssertTitles(request, model);
 
         Assert.Equal(request.WatchStatus, model.WatchStatus);
         Assert.Equal(request.ReleaseStatus, model.ReleaseStatus);
@@ -389,7 +359,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (seasonRequest, seasonModel) in request.Seasons.OrderBy(s => s.SequenceNumber)
             .Zip(model.Seasons.OrderBy(s => s.SequenceNumber)))
         {
-            this.AssertTitles(seasonRequest, seasonModel);
+            AssertTitles(seasonRequest, seasonModel);
 
             Assert.Equal(seasonRequest.SequenceNumber, seasonModel.SequenceNumber);
             Assert.Equal(seasonRequest.WatchStatus, seasonModel.WatchStatus);
@@ -414,7 +384,7 @@ public class SeriesServiceTests : ServiceTestsBase
         foreach (var (episodeRequest, episodeModel) in request.SpecialEpisodes.OrderBy(e => e.SequenceNumber)
             .Zip(model.SpecialEpisodes.OrderBy(e => e.SequenceNumber)))
         {
-            this.AssertTitles(episodeRequest, episodeModel);
+            AssertTitles(episodeRequest, episodeModel);
 
             Assert.Equal(episodeRequest.SequenceNumber, episodeModel.SequenceNumber);
             Assert.Equal(episodeRequest.IsWatched, episodeModel.IsWatched);
@@ -429,22 +399,19 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateSeries should throw if not found")]
     public async Task UpdateSeriesShouldThrowIfNotFound()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
-        this.SetUpDb(dbContext);
-
-        var series = this.CreateSeries();
-        this.list.AddSeries(series);
+        var series = this.CreateSeries(this.List);
 
         dbContext.Series.Add(series);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         var request = this.CreateSeriesRequest();
         var dummyId = Id.CreateNew<Series>();
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.UpdateSeries(dummyId, request.Validated()));
+            seriesService.UpdateSeries(dummyId, request.Validated()));
 
         Assert.Equal("NotFound.Series", exception.MessageCode);
         Assert.Equal("Resource.Series", exception.Resource);
@@ -452,27 +419,24 @@ public class SeriesServiceTests : ServiceTestsBase
     }
 
     [Fact(DisplayName = "UpdateSeries should throw if series doesn't belong to list")]
-    public async Task UpdateSeriesShouldThrowIfMovieDoesNotBelongToList()
+    public async Task UpdateSeriesShouldThrowIfSeriesDoesNotBelongToList()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
-        this.SetUpDb(dbContext);
-
-        var series = this.CreateSeries();
-        this.list.AddSeries(series);
+        var series = this.CreateSeries(this.List);
 
         dbContext.Series.Add(series);
 
-        var otherList = this.CreateList();
+        var otherList = this.CreateList("Other List for Series", "other-list-for-series");
         dbContext.Lists.Add(otherList);
 
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         var request = this.CreateSeriesRequest() with { ListId = otherList.Id.Value };
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
-            movieService.UpdateSeries(series.Id, request.Validated()));
+            seriesService.UpdateSeries(series.Id, request.Validated()));
 
         Assert.Equal("BadRequest.Series.WrongList", exception.MessageCode);
         Assert.Equal(series.Id, exception.Properties["seriesId"]);
@@ -482,18 +446,15 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "DeleteSeries should remote it from the database")]
     public async Task DeleteSeriesShouldRemoveItFromDb()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
-        this.SetUpDb(dbContext);
-
-        var series = this.CreateSeries();
-        this.list.AddSeries(series);
+        var series = this.CreateSeries(this.List);
 
         dbContext.Series.Add(series);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
-        await movieService.DeleteSeries(series.Id);
+        await seriesService.DeleteSeries(series.Id);
 
         Assert.True(dbContext.Series.All(m => m.Id != series.Id));
     }
@@ -501,57 +462,26 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "DeleteSeries should throw if series isn't found")]
     public async Task DeleteSeriesShouldThrowIfNotFound()
     {
-        var dbContext = this.CreateInMemoryDb();
-        var movieService = new SeriesService(dbContext, this.logger);
-
-        this.SetUpDb(dbContext);
+        var dbContext = await this.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyId = Id.CreateNew<Series>();
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => movieService.DeleteSeries(dummyId));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.DeleteSeries(dummyId));
 
         Assert.Equal("NotFound.Series", exception.MessageCode);
         Assert.Equal("Resource.Series", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
     }
 
-    private Series CreateSeries() =>
-        new(
-            Id.CreateNew<Series>(),
-            this.CreateTitles(),
-            new List<Season> { this.CreateSeason(1), this.CreateSeason(2) },
-            new List<SpecialEpisode> { this.CreateSpecialEpisode(3) },
-            SeriesWatchStatus.NotWatched,
-            SeriesReleaseStatus.Finished,
-            this.kind);
-
-    private Season CreateSeason(int num) =>
-        new(
-            Id.CreateNew<Season>(),
-            new List<Title> { new($"Season {num}", 1, false), new($"Season {num}", 1, true) },
-            SeasonWatchStatus.NotWatched,
-            SeasonReleaseStatus.Finished,
-            "Test",
-            num,
-            new List<Period>
-            {
-                new(Id.CreateNew<Period>(), 1, 2000 + num, 2, 2000 + num, false, 10)
-            });
-
-    private SpecialEpisode CreateSpecialEpisode(int num) =>
-        new(Id.CreateNew<SpecialEpisode>(), this.CreateTitles(), 1, 2000 + num, false, true, "Test", num);
-
-    private IEnumerable<Title> CreateTitles() =>
-        new List<Title> { new("Test", 1, false), new("Original Test", 1, true) };
-
     private SeriesRequest CreateSeriesRequest() =>
         new(
-            list.Id.Value,
+            this.List.Id.Value,
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(new TitleRequest("Original Test", 1)).AsValue(),
             SeriesWatchStatus.NotWatched,
             SeriesReleaseStatus.Finished,
-            this.kind.Id.Value,
+            this.SeriesKind.Id.Value,
             ImmutableList.Create(this.CreateSeasonRequest(1), this.CreateSeasonRequest(2)).AsValue(),
             ImmutableList.Create(this.CreateSpecialEpisodeRequest(3)).AsValue(),
             "tt12345678",
@@ -580,34 +510,4 @@ public class SeriesServiceTests : ServiceTestsBase
             1,
             2000 + num,
             null);
-
-    private CineasteList CreateList() =>
-        new(
-            Id.CreateNew<CineasteList>(),
-            "Test List",
-            "test-list",
-            new ListConfiguration(
-                Id.CreateNew<ListConfiguration>(),
-                CultureInfo.InvariantCulture,
-                "Season #",
-                "Season #",
-                ListSortingConfiguration.CreateDefault()));
-
-    private SeriesKind CreateKind(CineasteList list)
-    {
-        var black = new Color("#000000");
-        var kind = new SeriesKind(Id.CreateNew<SeriesKind>(), "Test Kind", black, black, black);
-
-        list.AddSeriesKind(kind);
-
-        return kind;
-    }
-
-    private void SetUpDb(CineasteDbContext context)
-    {
-        context.SeriesKinds.Add(this.kind);
-        context.Lists.Add(this.list);
-
-        context.SaveChanges();
-    }
 }
