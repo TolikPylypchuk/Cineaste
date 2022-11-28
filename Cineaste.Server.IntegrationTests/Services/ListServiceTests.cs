@@ -8,14 +8,14 @@ using Cineaste.Shared.Models.List;
 using Cineaste.Shared.Validation;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 public class ListServiceTests : ServiceTestsBase
 {
     private readonly ILogger<ListService> logger;
 
-    public ListServiceTests() =>
-        this.logger = new NullLogger<ListService>();
+    public ListServiceTests(ITestOutputHelper output)
+        : base(output) =>
+        this.logger = XUnitLogger.CreateLogger<ListService>(output);
 
     [Fact(DisplayName = "GetAllLists should return correct lists")]
     public async Task GetAllListsShouldReturnCorrectLists()

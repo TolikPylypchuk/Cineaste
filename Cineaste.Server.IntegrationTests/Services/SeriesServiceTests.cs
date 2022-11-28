@@ -8,14 +8,14 @@ using Cineaste.Shared.Models.Shared;
 using Cineaste.Shared.Validation;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 public class SeriesServiceTests : ServiceTestsBase
 {
     private readonly ILogger<SeriesService> logger;
 
-    public SeriesServiceTests() =>
-        this.logger = new NullLogger<SeriesService>();
+    public SeriesServiceTests(ITestOutputHelper output)
+        : base(output) =>
+        this.logger = XUnitLogger.CreateLogger<SeriesService>(output);
 
     [Fact(DisplayName = "GetSeries should return the correct series")]
     public async Task GetSeriesShouldReturnCorrectSeries()

@@ -7,11 +7,14 @@ using Cineaste.Shared.Models.Shared;
 using Cineaste.Shared.Validation;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 public class MovieServiceTests : ServiceTestsBase
 {
-    private readonly ILogger<MovieService> logger = new NullLogger<MovieService>();
+    private readonly ILogger<MovieService> logger;
+
+    public MovieServiceTests(ITestOutputHelper output)
+        : base(output) =>
+        this.logger = XUnitLogger.CreateLogger<MovieService>(output);
 
     [Fact(DisplayName = "GetMovie should return the correct movie")]
     public async Task GetMovieShouldReturnCorrectMovie()

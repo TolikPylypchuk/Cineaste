@@ -11,38 +11,41 @@ using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
 
 using Microsoft.EntityFrameworkCore;
-
-using static Cineaste.Server.ContainerConstants;
+using Microsoft.Extensions.Logging;
 
 public abstract class ServiceTestsBase : IAsyncLifetime
 {
-    private readonly TestcontainerDatabase container = new TestcontainersBuilder<MsSqlTestcontainer>()
-        .WithDatabase(new MsSqlTestcontainerConfiguration
-        {
-            Database = DbName,
-            Environments = { [SaPasswordName] = SaPasswordValue }
-        })
-        .WithImage(MsSqlServerImage)
-        .WithAutoRemove(true)
-        .WithCleanUp(true)
-        .Build();
+    private readonly TestcontainerDatabase container;
+
+    protected ILogger Logger { get; }
 
     protected CineasteList List { get; }
     protected MovieKind MovieKind { get; }
     protected SeriesKind SeriesKind { get; }
 
-    protected ServiceTestsBase()
+    protected ServiceTestsBase(ITestOutputHelper output)
     {
+        this.Logger = XUnitLogger.CreateLogger(this.GetType(), output);
+
         this.List = this.CreateList($"List.{this.GetType().Name}", $"list.{this.GetType().Name.ToLower()}");
         this.MovieKind = this.CreateMovieKind(this.List);
         this.SeriesKind = this.CreateSeriesKind(this.List);
+
+        this.container = this.CreateContainer();
+        this.Logger.LogInformation("Created a test database container: {Container}", this.container.Database);
     }
 
-    public Task InitializeAsync() =>
-        this.container.StartAsync();
+    public async Task InitializeAsync()
+    {
+        await this.container.StartAsync();
+        this.Logger.LogInformation("Started the test database container: {Container}", this.container.Database);
+    }
 
-    public Task DisposeAsync() =>
-        this.container.DisposeAsync().AsTask();
+    public async Task DisposeAsync()
+    {
+        await this.container.DisposeAsync().AsTask();
+        this.Logger.LogInformation("Stopped the test database container: {Container}", this.container.Database);
+    }
 
     protected CineasteList CreateList(string name, string handle) =>
         new(
@@ -150,4 +153,16 @@ public abstract class ServiceTestsBase : IAsyncLifetime
 
         return context;
     }
+
+    private TestcontainerDatabase CreateContainer() =>
+        new TestcontainersBuilder<MsSqlTestcontainer>()
+            .WithDatabase(new MsSqlTestcontainerConfiguration
+            {
+                Database = (this.GetType().Name ?? String.Empty) + "Db",
+                Environments = { ["SA_PASSWORD"] = "Pa$$word" }
+            })
+            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+            .WithAutoRemove(true)
+            .WithCleanUp(true)
+            .Build();
 }

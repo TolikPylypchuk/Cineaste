@@ -6,7 +6,6 @@ using Cineaste.Server.Exceptions;
 using Cineaste.Shared.Models.Franchise;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 public sealed class FranchiseServiceTests : ServiceTestsBase
 {
@@ -14,12 +13,13 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
     private readonly Series series;
     private readonly ILogger<FranchiseService> logger;
 
-    public FranchiseServiceTests()
+    public FranchiseServiceTests(ITestOutputHelper output)
+        : base(output)
     {
         this.movie = this.CreateMovie(this.List);
         this.series = this.CreateSeries(this.List);
 
-        this.logger = new NullLogger<FranchiseService>();
+        this.logger = XUnitLogger.CreateLogger<FranchiseService>(output);
     }
 
     [Fact(DisplayName = "GetFranchise should return the correct franchise")]
