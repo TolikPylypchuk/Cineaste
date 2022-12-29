@@ -16,20 +16,26 @@ public abstract class TitledRequestValidator<T> : CineasteValidator<T>
     private static readonly TitleRequestValidator TitlesValidator = new(nameof(ITitledRequest.Titles));
     private static readonly TitleRequestValidator OriginalTitlesValidator = new(nameof(ITitledRequest.OriginalTitles));
 
-    protected TitledRequestValidator(string errorCodePrefix)
+    protected TitledRequestValidator(string errorCodePrefix, bool mandatoryTitles = true)
         : base(errorCodePrefix)
     {
-        this.AddRulesForTitles(req => req.Titles, TitlesValidator);
-        this.AddRulesForTitles(req => req.OriginalTitles, OriginalTitlesValidator);
+        this.AddRulesForTitles(req => req.Titles, TitlesValidator, mandatoryTitles);
+        this.AddRulesForTitles(req => req.OriginalTitles, OriginalTitlesValidator, mandatoryTitles);
     }
 
     private void AddRulesForTitles(
         Expression<Func<T, IEnumerable<TitleRequest>>> titles,
-        IValidator<TitleRequest> validator)
+        IValidator<TitleRequest> validator,
+        bool mandatory)
     {
+        if (mandatory)
+        {
+            this.RuleFor(titles)
+                .NotEmpty()
+                .WithErrorCode(this.ErrorCode(titles, Empty));
+        }
+
         this.RuleFor(titles)
-            .NotEmpty()
-            .WithErrorCode(this.ErrorCode(titles, Empty))
             .Must(HaveDifferentNames)
             .WithErrorCode(this.ErrorCode(titles, Distinct, Names))
             .Must(HaveDifferentPriorities)

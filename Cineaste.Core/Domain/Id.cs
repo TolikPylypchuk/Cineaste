@@ -1,6 +1,13 @@
 namespace Cineaste.Core.Domain;
 
-public record struct Id<T>(Guid Value);
+public record struct Id<T>(Guid Value) : IComparable<Id<T>>, IComparable
+{
+    public int CompareTo(Id<T> other) =>
+        this.Value.CompareTo(other.Value);
+
+    int IComparable.CompareTo(object? obj) =>
+        obj != null ? this.CompareTo((Id<T>)obj) : 1;
+}
 
 public static class Id
 {

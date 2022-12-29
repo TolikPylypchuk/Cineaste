@@ -13,14 +13,14 @@ public sealed record Validated<T>
         this.Value = value;
     }
 
-    [return: NotNullIfNotNull("value")]
+    [return: NotNullIfNotNull(nameof(value))]
     public static Validated<T>? Create(T? value) =>
         value is not null ? new Validated<T>(value) : null;
 }
 
 public static class ValidationExtensions
 {
-    [return: NotNullIfNotNull("value")]
+    [return: NotNullIfNotNull(nameof(value))]
     public static Validated<T>? Validated<T>(this T? value)
         where T : IValidatable<T> =>
         Validation.Validated<T>.Create(value);

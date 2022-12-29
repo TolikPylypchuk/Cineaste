@@ -12,9 +12,8 @@ public record FranchiseModel(
 public record FranchiseItemModel(
     Guid Id,
     int SequenceNumber,
+    bool ShouldDisplayNumber,
     string Title,
     int StartYear,
     int EndYear,
     FranchiseItemType Type);
-
-public enum FranchiseItemType { Movie, Series, Franchise }
