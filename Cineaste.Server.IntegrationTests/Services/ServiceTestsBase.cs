@@ -6,16 +6,14 @@ using Cineaste.Basic;
 using Cineaste.Core.Domain;
 using Cineaste.Persistence;
 
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Configurations;
-using DotNet.Testcontainers.Containers;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
+using Testcontainers.MsSql;
+
 public abstract class ServiceTestsBase : IAsyncLifetime
 {
-    private readonly TestcontainerDatabase container;
+    private readonly MsSqlContainer container = new MsSqlBuilder().Build();
 
     protected ILogger Logger { get; }
 
@@ -30,22 +28,13 @@ public abstract class ServiceTestsBase : IAsyncLifetime
         this.List = this.CreateList($"List.{this.GetType().Name}", $"list.{this.GetType().Name.ToLower()}");
         this.MovieKind = this.CreateMovieKind(this.List);
         this.SeriesKind = this.CreateSeriesKind(this.List);
-
-        this.container = this.CreateContainer();
-        this.Logger.LogInformation("Created a test database container: {Container}", this.container.Database);
     }
 
-    public async Task InitializeAsync()
-    {
+    public async Task InitializeAsync() =>
         await this.container.StartAsync();
-        this.Logger.LogInformation("Started the test database container: {Container}", this.container.Database);
-    }
 
-    public async Task DisposeAsync()
-    {
+    public async Task DisposeAsync() =>
         await this.container.DisposeAsync().AsTask();
-        this.Logger.LogInformation("Stopped the test database container: {Container}", this.container.Database);
-    }
 
     protected CineasteList CreateList(string name, string handle) =>
         new(
@@ -139,7 +128,7 @@ public abstract class ServiceTestsBase : IAsyncLifetime
     protected async Task<CineasteDbContext> CreateDbContext()
     {
         var options = new DbContextOptionsBuilder<CineasteDbContext>()
-            .UseSqlServer(String.Join(';', this.container.ConnectionString.Trim(';'), "Encrypt=false"))
+            .UseSqlServer(this.container.GetConnectionString())
             .Options;
 
         var context = new CineasteDbContext(options);
@@ -153,16 +142,4 @@ public abstract class ServiceTestsBase : IAsyncLifetime
 
         return context;
     }
-
-    private TestcontainerDatabase CreateContainer() =>
-        new TestcontainersBuilder<MsSqlTestcontainer>()
-            .WithDatabase(new MsSqlTestcontainerConfiguration
-            {
-                Database = (this.GetType().Name ?? String.Empty) + "Db",
-                Environments = { ["SA_PASSWORD"] = "Pa$$word" }
-            })
-            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-            .WithAutoRemove(true)
-            .WithCleanUp(true)
-            .Build();
 }
