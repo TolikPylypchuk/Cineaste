@@ -40,13 +40,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ADR", "ADR", "{6FE17DA8-692
 		ADR\0008-use-problem-json.md = ADR\0008-use-problem-json.md
 		ADR\0009-use-fluxor.md = ADR\0009-use-fluxor.md
 		ADR\0010-have-dry-validation.md = ADR\0010-have-dry-validation.md
-		ADR\0011-unit-tests.md = ADR\0011-unit-tests.md
+		ADR\0011-unit-tests-be.md = ADR\0011-unit-tests-be.md
+		ADR\0012-integration-tests.md = ADR\0012-integration-tests.md
 		ADR\README.md = ADR\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cineaste.Shared.UnitTests", "Cineaste.Shared.UnitTests\Cineaste.Shared.UnitTests.csproj", "{F5F26D19-7B28-4577-9675-B1C99FFAF821}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Shared.UnitTests", "Cineaste.Shared.UnitTests\Cineaste.Shared.UnitTests.csproj", "{F5F26D19-7B28-4577-9675-B1C99FFAF821}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cineaste.Server.IntegrationTests", "Cineaste.Server.IntegrationTests\Cineaste.Server.IntegrationTests.csproj", "{900D9370-CB49-4175-861E-514F8753B4BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cineaste.Server.IntegrationTests", "Cineaste.Server.IntegrationTests\Cineaste.Server.IntegrationTests.csproj", "{900D9370-CB49-4175-861E-514F8753B4BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

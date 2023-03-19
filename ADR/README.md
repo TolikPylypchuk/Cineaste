@@ -19,4 +19,5 @@ Table of contents:
 - [ADR-0008](0008-use-problem-json.md): Use application/problem+json to Describe Problems in the API
 - [ADR-0009](0009-use-fluxor.md): Use Fluxor and the Redux Pattern for the Front-End
 - [ADR-0010](0010-have-dry-validation.md): Have Hand-Rolled DRY Validation Infrastructure
-- [ADR-0011](0011-unit-tests.md): Use xUnit, bUnit, and FsCheck for Unit Tests
+- [ADR-0011](0011-unit-tests-be.md): Use xUnit and FsCheck for Back-End Unit Tests
+- [ADR-0012](0012-integration-tests.md): Use Testcontainers for Back-End Integration Tests

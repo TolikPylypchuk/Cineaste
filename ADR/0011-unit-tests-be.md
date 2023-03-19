@@ -1,6 +1,6 @@
-# Use xUnit, bUnit, and FsCheck for Unit Tests
+# Use xUnit and FsCheck for Back-End Unit Tests
 
-**Status:** In progress
+**Status:** Implemented
 
 **Date:** 2022-11-26
 
@@ -33,8 +33,3 @@ The most obvious alternative is not to write tests at all, but that's out of the
 NUnit and MSTest are alternative unit-testing frameworks, but I'm most accustomed to xUnit. Property-based testing is
 not required, but I like this approach a lot. bUnit is not required as well, but I think it will make testing the
 front-end much easier.
-
-## In Progress
-
-I've only written unit-tests for the back-end and shared code at this point. I haven't written any tests for the
-front-end with bUnit at this point, so this ADR will be amended.
