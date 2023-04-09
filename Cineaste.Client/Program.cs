@@ -6,6 +6,7 @@ using Cineaste.Shared.Validation.Json;
 
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Fast.Components.FluentUI;
 
 using Radzen;
 
@@ -32,6 +33,8 @@ builder.Services.AddRefitClient<ICultureApi>(baseAddress);
 builder.Services.AddRefitClient<IListApi>(baseAddress);
 builder.Services.AddRefitClient<IMovieApi>(baseAddress);
 builder.Services.AddRefitClient<ISeriesApi>(baseAddress);
+
+builder.Services.AddFluentUIComponents();
 
 builder.Services.AddLocalization();
 
