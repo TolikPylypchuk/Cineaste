@@ -8,7 +8,7 @@
     },
     {
       "provider": "jsdelivr",
-      "library": "@fluentui/web-components@2.5.3",
+      "library": "@fluentui/web-components@2.5.13",
       "destination": "wwwroot/lib/fluentui/web-components/"
     }
   ]
