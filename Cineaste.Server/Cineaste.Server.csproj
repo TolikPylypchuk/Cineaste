@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoConstructor" Version="4.0.1">
+    <PackageReference Include="AutoConstructor" Version="4.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -29,7 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Fast.Components.FluentUI" Version="2.1.4" />
+    <PackageReference Include="Microsoft.Fast.Components.FluentUI" Version="2.2.0" />
     <PackageReference Include="System.Interactive" Version="6.0.1" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
