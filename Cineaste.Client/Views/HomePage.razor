@@ -1,36 +1,33 @@
 @page "/"
 @inherits StatefulComponent<HomePageState>
 
-<div class="container d-flex flex-column align-items-center h-100">
-    <div class="d-flex flex-column align-items-center flex-shrink-0">
-        <h1 class="display-1 mt-md-2 mt-1">@this.Loc["Cineaste"]</h1>
+<div class="container">
+    <header>
+        <h1 class="title">@this.Loc["Cineaste"]</h1>
+        <h2 class="subtitle">@this.Loc["HomePage.MyLists"]</h2>
 
-        <h2 class="display-5 mt-2">@this.Loc["HomePage.MyLists"]</h2>
-
-        <RadzenButton Text="@this.Loc["HomePage.CreateList"]" Icon="add_circle_outline" class="mt-4"
-                      ButtonStyle="ButtonStyle.Primary" Click="this.NavigateToCreateList" />
-    </div>
+        <FluentButton Class="create-list" Appearance="Appearance.Accent" @onclick="this.NavigateToCreateList">
+            @this.Loc["HomePage.CreateList"]
+        </FluentButton>
+    </header>
 
     @if (this.State.Value.IsLoading)
     {
-        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+        <FluentProgressRing Class="loading" />
     } else if (this.State.Value.Problem is not null)
     {
-        <ApiProblemAlert Problem="this.State.Value.Problem" Text="Loading lists has failed" TryAgain="this.FetchLists"
-                         Class="w-50 mt-3" />
+        <ApiProblemAlert Problem="this.State.Value.Problem" Text="@this.Loc["HomePage.Problem.LoadingListsFailed"]"
+                         TryAgain="this.FetchLists" Class="problem-alert" />
     } else
     {
-        <RadzenDataList WrapItems="true" Data="this.State.Value.Lists" TItem="SimpleListModel"
-                        class="mt-4 overflow-auto">
-            <Template Context="list">
-                <div role="button" class="container border-bottom" style="border: none; border-radius: 0;"
-                        @ondblclick=@(() => this.NavigateToList(list.Handle))>
-                    <div class="row">
-                        <p class="lead m-1">@list.Name</p>
-                    </div>
+        <div class="lists">
+            @foreach (var list in this.State.Value.Lists)
+            {
+                <div role="button" class="list-container" @ondblclick="@(() => this.NavigateToList(list))">
+                    <p class="list">@list.Name</p>
                 </div>
-            </Template>
-        </RadzenDataList>
+            }
+        </div>
     }
 </div>
 
@@ -44,8 +41,8 @@
     private void NavigateToCreateList() =>
         this.PageNavigator.GoToCreateListPage();
 
-    private void NavigateToList(string handle) =>
-        this.PageNavigator.GoToListPage(handle);
+    private void NavigateToList(SimpleListModel list) =>
+        this.PageNavigator.GoToListPage(list.Handle);
 
     private void FetchLists() =>
         this.Dispatcher.Dispatch(new FetchListsAction());

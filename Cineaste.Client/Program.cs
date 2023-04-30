@@ -34,7 +34,10 @@ builder.Services.AddRefitClient<IListApi>(baseAddress);
 builder.Services.AddRefitClient<IMovieApi>(baseAddress);
 builder.Services.AddRefitClient<ISeriesApi>(baseAddress);
 
-builder.Services.AddFluentUIComponents();
+builder.Services.AddFluentUIComponents(
+    new LibraryConfiguration(
+        ConfigurationGenerator.GetIconConfiguration(),
+        ConfigurationGenerator.GetEmojiConfiguration()));
 
 builder.Services.AddLocalization();
 

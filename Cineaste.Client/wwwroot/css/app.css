@@ -1,3 +1,15 @@
+:root {
+  --s1: calc(var(--design-unit) * 1px);
+  --s2: calc(var(--s1) * 2);
+  --s3: calc(var(--s1) * 3);
+  --s4: calc(var(--s1) * 4);
+  --s6: calc(var(--s1) * 6);
+  --s8: calc(var(--s1) * 8);
+  --s16: calc(var(--s1) * 16);
+  --fs-base: 1rem;
+  --fs-big: 1.25rem;
+}
+
 html, body, #app {
   height: 100%;
 }
@@ -69,7 +81,7 @@ a {
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  background: hsl(250deg 65% 60%);
+  background: #0078d4;
   animation: loading-grid 1.2s linear infinite;
 }
 
