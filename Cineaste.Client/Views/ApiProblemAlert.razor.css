@@ -1,7 +1,38 @@
-[data-bs-toggle="collapse"].collapsed .if-not-collapsed {
-    display: none;
+::deep .alert {
+  padding-block: var(--s4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
 }
 
-[data-bs-toggle="collapse"]:not(.collapsed) .if-collapsed {
-    display: none;
+.summary-container {
+  margin-inline: var(--s4);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+
+.main-text {
+  color: var(--error);
+  font-weight: 700;
+  margin-block: 0;
+}
+
+.button-panel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.details-container {
+  margin-block: 0;
+  margin-inline: var(--s4);
+}
+
+.details {
+  color: var(--error);
 }

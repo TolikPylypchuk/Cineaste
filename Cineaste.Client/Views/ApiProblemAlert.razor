@@ -1,39 +1,38 @@
 @inherits CineasteComponent
 
-<div class="alert alert-danger @this.Class">
-    <div class="d-flex flex-row justify-content-between align-items-center flex-wrap">
-        <p class="text-wrap m-1">@this.Loc[this.Text]</p>
+<div>
+    <FluentCard Class="@($"alert {this.Class}")">
+        <div class="summary-container">
+            <p class="main-text">@this.Loc[this.Text]</p>
 
-        <div>
-            @if (this.Problem is not null && this.Problem.Detail is not null)
-            {
-                <a class="alert-link collapsed m-1 ms-3" data-bs-toggle="collapse" href="#problem-details" role="button"
-                    aria-expanded="false" aria-controls="details">
-                    <span class="if-collapsed">@this.Loc["ApiProblemAlert.ShowDetails"]</span>
-                    <span class="if-not-collapsed">@this.Loc["ApiProblemAlert.HideDetails"]</span>
-                </a>
-            }
+            <div class="button-panel">
+                @if (this.Problem is not null && this.Problem.Detail is not null)
+                {
+                    <FluentButton Appearance="Appearance.Outline" @onclick="this.ToggleOpened">
+                        <slot part="content">@this.Loc[this.IsOpened ? "ApiProblemAlert.HideDetails" : "ApiProblemAlert.ShowDetails"]</slot>
+                    </FluentButton>
+                }
 
-            @if (this.ShowButton)
-            {
-                <RadzenButton Text="@this.Loc[this.ButtonText]" Click="this.TryAgain" class="m-1 ms-3"
-                              ButtonStyle="ButtonStyle.Danger" />
-            }
+                @if (this.ShowButton)
+                {
+                    <FluentButton @onclick="this.TryAgain" Appearance="Appearance.Outline">
+                        @this.Loc[this.ButtonText]
+                    </FluentButton>
+                }
+            </div>
         </div>
-    </div>
 
-    @if (this.Problem is not null && this.Problem.Detail is not null)
-    {
-        <div class="collapse" id="problem-details">
-            <hr />
-            <p class="m-1">
-                @this.Loc[this.Problem.Detail]
+        @if (this.Problem is not null && this.Problem.Detail is not null && this.IsOpened)
+        {
+            <FluentDivider Role="DividerRole.Separator"></FluentDivider>
+            <p class="details-container">
+                <span class="details">@this.Loc[this.Problem.Detail]</span>
                 (<a class="alert-link" href="@this.Problem.Type" target="_blank">
                     @this.Problem.Status @this.Problem.Title
                 </a>)
             </p>
-        </div>
-    }
+        }
+    </FluentCard>
 </div>
 
 @code {
@@ -54,4 +53,9 @@
 
     [Parameter]
     public string Class { get; set; } = String.Empty;
+
+    private bool IsOpened { get; set; }
+
+    private void ToggleOpened() =>
+        this.IsOpened = !this.IsOpened;
 }

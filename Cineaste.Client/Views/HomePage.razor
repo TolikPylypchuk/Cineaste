@@ -16,7 +16,7 @@
         <FluentProgressRing Class="loading" />
     } else if (this.State.Value.Problem is not null)
     {
-        <ApiProblemAlert Problem="this.State.Value.Problem" Text="@this.Loc["HomePage.Problem.LoadingListsFailed"]"
+        <ApiProblemAlert Problem="this.State.Value.Problem" Text="HomePage.Problem.LoadingListsFailed"
                          TryAgain="this.FetchLists" Class="problem-alert" />
     } else
     {
@@ -25,6 +25,7 @@
             {
                 <div role="button" class="list-container" @ondblclick="@(() => this.NavigateToList(list))">
                     <p class="list">@list.Name</p>
+                    <FluentDivider Role="DividerRole.Separator"></FluentDivider>
                 </div>
             }
         </div>
