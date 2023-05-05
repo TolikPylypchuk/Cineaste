@@ -1,0 +1,63 @@
+@keyframes loading-grid {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading-grid {
+  --size: 16px;
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(3, var(--size));
+  grid-template-columns: repeat(3, var(--size));
+  place-content: center;
+  gap: 16px;
+}
+
+.loading-grid div {
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: #0078d4;
+  animation: loading-grid 1.2s linear infinite;
+}
+
+.loading-grid div:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-grid div:nth-child(2) {
+  animation-delay: -0.4s;
+}
+
+.loading-grid div:nth-child(3) {
+  animation-delay: -0.8s;
+}
+
+.loading-grid div:nth-child(4) {
+  animation-delay: -0.4s;
+}
+
+.loading-grid div:nth-child(5) {
+  animation-delay: -0.8s;
+}
+
+.loading-grid div:nth-child(6) {
+  animation-delay: -1.2s;
+}
+
+.loading-grid div:nth-child(7) {
+  animation-delay: -0.8s;
+}
+
+.loading-grid div:nth-child(8) {
+  animation-delay: -1.2s;
+}
+
+.loading-grid div:nth-child(9) {
+  animation-delay: -1.6s;
+}

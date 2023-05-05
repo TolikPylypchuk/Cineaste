@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Raleway';
+  src: url('/fonts/Raleway.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('/fonts/Raleway-Italic.ttf') format('truetype');
+  font-style: italic;
+}
+
+*, *::before, *::after {
+  font-family: 'Raleway', sans-serif;
+}

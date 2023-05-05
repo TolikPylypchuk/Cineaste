@@ -14,7 +14,7 @@ header {
 }
 
 .title {
-  font-weight: 100;
+  font-weight: 300;
   font-size: 5rem;
   margin-block-start: var(--s16);
   margin-block-end: var(--s4);
@@ -24,7 +24,7 @@ header {
 .subtitle {
   font-weight: 200;
   font-size: 2.5rem;
-  margin-block-start: var(--s4);
+  margin-block: var(--s4);
 }
 
 .loading {
