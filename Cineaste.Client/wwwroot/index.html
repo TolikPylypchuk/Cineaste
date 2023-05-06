@@ -12,11 +12,11 @@
 
     <link rel="stylesheet" href="_content/Microsoft.Fast.Components.FluentUI/css/variables.css" />
 
+    <link rel="stylesheet" href="css/variables.css" />
     <link rel="stylesheet" href="css/reboot.css" />
     <link rel="stylesheet" href="css/font.css" />
     <link rel="stylesheet" href="css/blazor.css" />
     <link rel="stylesheet" href="css/loading-grid.css" />
-    <link rel="stylesheet" href="css/app.css" />
 
     <link rel="stylesheet" href="Cineaste.Client.styles.css" />
 </head>
@@ -31,9 +31,13 @@
     </div>
 
     <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
+        <div class="erorr-ui-container">
+            <div>
+                <span>An unhandled error has occurred.</span>
+                <a href="" class="reload">Reload</a>
+            </div>
+            <a class="dismiss">🗙</a>
+        </div>
     </div>
 
     <script src="_framework/blazor.webassembly.js"></script>
