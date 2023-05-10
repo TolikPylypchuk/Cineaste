@@ -6,4 +6,12 @@
   --s6: calc(var(--s1) * 6);
   --s8: calc(var(--s1) * 8);
   --s16: calc(var(--s1) * 16);
+  --fs-app-title: 5rem;
+  --fw-app-title: 300;
+  --fs-header-large: 2.5rem;
+  --fw-header-large: 200;
+  --fs-header-medium: 2rem;
+  --fw-header-medium: 200;
+  --combobox-height: 300px;
+  --content-width-narrow: min(500px, 100%);
 }

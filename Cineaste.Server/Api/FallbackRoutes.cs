@@ -5,7 +5,7 @@ public static class FallbackRoutes
     public static void MapFallbackRoutes(this IEndpointRouteBuilder routes)
     {
         routes.MapFallback("/api/{**path}", NotFound);
-        routes.MapFallbackToFile("/{**path}", "index.html");
+        routes.MapFallbackToFile("index.html");
     }
 
     private static void NotFound() =>

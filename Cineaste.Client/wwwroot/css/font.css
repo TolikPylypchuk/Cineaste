@@ -12,3 +12,7 @@
 *, *::before, *::after {
   font-family: 'Raleway', sans-serif;
 }
+
+body {
+  --body-font: 'Raleway', sans-serif;
+}

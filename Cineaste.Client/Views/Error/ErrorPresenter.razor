@@ -1,0 +1,6 @@
+@foreach (var errorCode in this.CurrentErrors)
+{
+    <p class="@($"error {this.Class}")" style="@this.Style" @attributes="this.Attributes">
+        @this.Loc[$"Validation.{errorCode}"]
+    </p>
+}

@@ -1,87 +1,123 @@
 @page "/new"
 @inherits CineasteForm<CreateListFormModel, CreateListRequest, object, CreateListPageState>
+@using TooltipPosition = Microsoft.Fast.Components.FluentUI.TooltipPosition
 
-<CascadingValue Name="@CascadingParameters.ValidationExecutor" Value="@this" IsFixed="true">
-    <CascadingValue Name="@CascadingParameters.ErrorCodes" Value="@this.FormModel.ValidationErrors">
-        <div class="container d-flex flex-column align-items-center">
-            <h1 class="display-1 mb-4">@this.Loc["CreateListPage.CreateList"]</h1>
+<FormParamsProvider For="this">
+    <div class="form-container">
+        <h1 class="form-title">@this.Loc["CreateListPage.CreateList"]</h1>
 
-            <div class="w-50">
-                <RadzenCard class="mb-2">
-                    <h2 class="h5 mt-2 mb-4">@this.Loc["CreateListPage.BasicInfo"]</h2>
+        <div class="form-content">
+            <FluentCard class="form-card">
+                <h2 class="card-header">@this.Loc["CreateListPage.BasicInfo"]</h2>
 
-                    <RadzenLabel Text="@this.Loc["CreateListPage.List.Name"]" class="mb-2" />
-                    <RadzenTextBox @bind-Value="this.FormModel.Name" class="w-100" />
+                <div>
+                    <FluentTextField @bind-Value="this.FormModel.Name" Class="form-field">
+                        @this.Loc["CreateListPage.List.Name"]
+                    </FluentTextField>
+
                     <ErrorPresenter ErrorCode="CreateList.Name.*" Trigger="@this.FormModel.Name" />
+                </div>
 
-                    <div class="d-flex flex-row mt-4 mb-2">
-                        <RadzenLabel Text="@this.Loc["CreateListPage.List.Handle"]" />
-                        <RadzenIcon Icon="help" MouseEnter="this.ShowHandleTooltip" Style="cursor: pointer;"
-                                    MouseLeave=@(e => this.CloseTooltip()) class="ms-3" />
+                <div>
+                    <FluentTextField Value="@this.FormModel.Handle" ValueExpression="@(() => this.FormModel.Handle)"
+                                     Readonly="true" Class="form-field">
+                        <div class="handle-label hint-container">
+                            <p>@this.Loc["CreateListPage.List.Handle"]</p>
+
+                            <div id="handle-help-icon">
+                                <FluentIcon Name="@FluentIcons.QuestionCircle" Color="@Color.Info"
+                                            Variant="@IconVariant.Regular" Size="IconSize.Size16" />
+                            </div>
+
+                            <FluentTooltip Anchor="handle-help-icon" Position="TooltipPosition.End">
+                                @this.Loc["CreateListPage.Help.Handle"]
+                            </FluentTooltip>
+                        </div>
+                    </FluentTextField>
+                </div>
+
+                <div>
+                    <label for="language" class="label hint-container">
+                        <p>@this.Loc["CreateListPage.List.TitleLanguage"]</p>
+
+                        <div id="lang-help-icon">
+                            <FluentIcon Name="@FluentIcons.QuestionCircle" Color="@Color.Info"
+                                        Variant="@IconVariant.Regular" Size="IconSize.Size16" />
+                        </div>
+
+                        <FluentTooltip Anchor="lang-help-icon" Position="TooltipPosition.End">
+                            @this.Loc["CreateListPage.Help.TitleLanguage"]
+                        </FluentTooltip>
+                    </label>
+
+                    <FluentCombobox TOption="SimpleCultureModel" Id="language" Items="this.State.Value.AllCultures"
+                                    OptionText="@(o => o.DisplayName)" Autocomplete="ComboboxAutocomplete.Inline"
+                                    @bind-SelectedOption="this.FormModel.Culture" Class="form-field" />
+                </div>
+            </FluentCard>
+
+            @if (this.State.Value.CulturesProblem is not null)
+            {
+                <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.Cultures"]" TryAgain="this.FetchCultures"
+                                 Problem="this.State.Value.CulturesProblem" />
+            }
+
+            <FluentCard class="form-card">
+                <div class="hint-container">
+                    <h2 class="card-header">@this.Loc["CreateListPage.List.SeasonTitles"]</h2>
+
+                    <div id="default-season-titles-help-icon">
+                        <FluentIcon Name="@FluentIcons.QuestionCircle" Color="@Color.Info"
+                                    Variant="@IconVariant.Regular" Size="IconSize.Size16" />
                     </div>
 
-                    <RadzenTextBox Value="@this.FormModel.Handle" ReadOnly="true" class="w-100" />
+                    <FluentTooltip Anchor="default-season-titles-help-icon" Position="TooltipPosition.End">
+                        @this.Loc["CreateListPage.Help.DefaultSeasonTitles"]
+                    </FluentTooltip>
+                </div>
 
-                    <div class="d-flex flex-row mt-4 mb-2">
-                        <RadzenLabel Text="@this.Loc["CreateListPage.List.TitleLanguage"]" />
-                        <RadzenIcon Icon="help" MouseEnter="this.ShowTitleLanguageTooltip"
-                                    MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
-                    </div>
+                <div>
+                    <FluentTextField @bind-Value="this.FormModel.DefaultSeasonTitle" Class="form-field">
+                        @this.Loc["CreateListPage.List.DefaultSeasonTitle"]
+                    </FluentTextField>
 
-                    <RadzenDropDown TValue="SimpleCultureModel" Data="this.State.Value.AllCultures"
-                                    AllowVirtualization="true" AllowFiltering="true" TextProperty="DisplayName"
-                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                    @bind-Value="this.FormModel.Culture" class="w-100" />
-                </RadzenCard>
-
-                @if (this.State.Value.CulturesProblem is not null)
-                {
-                    <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.Cultures"]" TryAgain="this.FetchCultures"
-                                     Problem="this.State.Value.CulturesProblem" Class="w-50 my-2" />
-                }
-
-                <RadzenCard class="mt-2">
-                    <div class="d-flex flex-row mt-2 mb-4">
-                        <h2 class="h5">@this.Loc["CreateListPage.List.SeasonTitles"]</h2>
-                        <RadzenIcon Icon="help" MouseEnter="this.ShowDefaultSeasonTitlesTooltip"
-                                    MouseLeave=@(e => this.CloseTooltip()) class="ms-3" Style="cursor: pointer;" />
-                    </div>
-
-                    <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonTitle"]" class="mb-2" />
-                    <RadzenTextBox @bind-Value="this.FormModel.DefaultSeasonTitle" class="w-100" />
                     <ErrorPresenter ErrorCode="CreateList.DefaultSeasonTitle.*"
                                     Trigger="@this.FormModel.DefaultSeasonTitle" />
+                </div>
 
-                    <RadzenLabel Text="@this.Loc["CreateListPage.List.DefaultSeasonOriginalTitle"]" class="mt-4 mb-2" />
-                    <RadzenTextBox @bind-Value="@this.FormModel.DefaultSeasonOriginalTitle"
-                                   Name="DefaultSeasonOriginalTitle" class="w-100" />
+                <div>
+                    <FluentTextField @bind-Value="this.FormModel.DefaultSeasonOriginalTitle" Class="form-field">
+                        @this.Loc["CreateListPage.List.DefaultSeasonOriginalTitle"]
+                    </FluentTextField>
+
                     <ErrorPresenter ErrorCode="CreateList.DefaultSeasonOriginalTitle.*"
                                     Trigger="@this.FormModel.DefaultSeasonOriginalTitle" />
-                </RadzenCard>
-
-                <div class="d-flex flex-row justify-content-center">
-                    <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Light" class="mt-4 me-2"
-                                  Click="@this.NavigateToHomePage" />
-
-                    <RadzenButton Text="@this.Loc["Button.Create"]" ButtonStyle="ButtonStyle.Primary" class="mt-4 ms-2"
-                                  Click="@this.CreateList" />
                 </div>
+            </FluentCard>
+
+            <div class="action-panel">
+                <FluentButton Appearance="Appearance.Outline" @onclick="@this.NavigateToHomePage">
+                    @this.Loc["Button.Cancel"]
+                </FluentButton>
+
+                <FluentButton Appearance="Appearance.Accent" @onclick="@this.CreateList">
+                    @this.Loc["Button.Create"]
+                </FluentButton>
             </div>
-
-            @if (this.State.Value.IsCreatingList)
-            {
-                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"
-                                   class="w-25 mt-4" />
-            }
-
-            @if (this.State.Value.CreateListProblem is not null)
-            {
-                <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.CreateList"]" ShowButton="false"
-                                 Problem="this.State.Value.CreateListProblem" Class="w-50 mt-3" />
-            }
         </div>
-    </CascadingValue>
-</CascadingValue>
+
+        @if (this.State.Value.IsCreatingList)
+        {
+            <FluentProgressRing Class="loading" />
+        }
+
+        @if (this.State.Value.CreateListProblem is not null)
+        {
+            <ApiProblemAlert Text="@this.Loc["CreateListPage.Problem.CreateList"]" ShowButton="false"
+                             Problem="this.State.Value.CreateListProblem" Class="create-list-problem-alert" />
+        }
+    </div>
+</FormParamsProvider>
 
 @code {
     protected override void OnParametersSet()
@@ -100,19 +136,4 @@
 
     private void NavigateToHomePage() =>
         this.PageNavigator.GoToHomePage();
-
-    private void ShowHandleTooltip(ElementReference elementReference) =>
-        this.OpenTooltip(elementReference, "CreateListPage.Help.Handle");
-
-    private void ShowTitleLanguageTooltip(ElementReference elementReference) =>
-        this.OpenTooltip(elementReference, "CreateListPage.Help.TitleLanguage");
-
-    private void ShowDefaultSeasonTitlesTooltip(ElementReference elementReference) =>
-        this.OpenTooltip(elementReference, "CreateListPage.Help.DefaultSeasonTitles");
-
-    private void OpenTooltip(ElementReference elementReference, string text) =>
-        this.TooltipService.Open(elementReference, this.Loc[text], new TooltipOptions { Duration = null });
-
-    private void CloseTooltip() =>
-        this.TooltipService.Close();
 }

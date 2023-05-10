@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  --content-width: var(--content-width-narrow);
 }
 
 header {
@@ -14,26 +15,26 @@ header {
 }
 
 .title {
-  font-weight: 300;
-  font-size: 5rem;
+  font-size: var(--fs-app-title);
+  font-weight: var(--fw-app-title);
   margin-block-start: var(--s16);
   margin-block-end: var(--s4);
   outline: none;
 }
 
 .subtitle {
-  font-weight: 200;
-  font-size: 2.5rem;
+  font-size: var(--fs-header-large);
+  font-weight: var(--fw-header-large);
   margin-block: var(--s4);
 }
 
 .loading {
-  margin-block-start: var(--s4);
+  margin-block-start: var(--s8);
 }
 
 .lists {
-  width: min(500px, 100%);
-  padding-inline: 16px;
+  width: var(--content-width);
+  padding-inline: var(--s4);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -47,6 +48,6 @@ header {
 }
 
 ::deep .problem-alert {
-  width: min(500px, 100%);
+  width: var(--content-width);
   margin-block-start: var(--s3);
 }

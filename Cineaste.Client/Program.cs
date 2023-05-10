@@ -25,19 +25,22 @@ builder.Services.Configure<JsonSerializerOptions>(options =>
     options.Converters.Add(new ValidatedJsonConverterFactory());
 });
 
-var baseAddress = new Uri(new Uri(builder.HostEnvironment.BaseAddress), "/api");
+var baseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+var apiBaseAddress = new Uri(baseAddress, "/api");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = baseAddress });
 
-builder.Services.AddRefitClient<ICultureApi>(baseAddress);
-builder.Services.AddRefitClient<IListApi>(baseAddress);
-builder.Services.AddRefitClient<IMovieApi>(baseAddress);
-builder.Services.AddRefitClient<ISeriesApi>(baseAddress);
+builder.Services.AddFluentUIComponents(options =>
+{
+    options.HostingModel = BlazorHostingModel.WebAssembly;
+    options.IconConfiguration = ConfigurationGenerator.GetIconConfiguration();
+    options.EmojiConfiguration = ConfigurationGenerator.GetEmojiConfiguration();
+});
 
-builder.Services.AddFluentUIComponents(
-    new LibraryConfiguration(
-        ConfigurationGenerator.GetIconConfiguration(),
-        ConfigurationGenerator.GetEmojiConfiguration()));
+builder.Services.AddRefitClient<ICultureApi>(apiBaseAddress);
+builder.Services.AddRefitClient<IListApi>(apiBaseAddress);
+builder.Services.AddRefitClient<IMovieApi>(apiBaseAddress);
+builder.Services.AddRefitClient<ISeriesApi>(apiBaseAddress);
 
 builder.Services.AddLocalization();
 

@@ -9,7 +9,7 @@
                 @if (this.Problem is not null && this.Problem.Detail is not null)
                 {
                     <FluentButton Appearance="Appearance.Outline" @onclick="this.ToggleOpened">
-                        <slot part="content">@this.Loc[this.IsOpened ? "ApiProblemAlert.HideDetails" : "ApiProblemAlert.ShowDetails"]</slot>
+                        @this.Loc[this.IsOpened ? "ApiProblemAlert.HideDetails" : "ApiProblemAlert.ShowDetails"]
                     </FluentButton>
                 }
 
@@ -27,9 +27,11 @@
             <FluentDivider Role="DividerRole.Separator"></FluentDivider>
             <p class="details-container">
                 <span class="details">@this.Loc[this.Problem.Detail]</span>
-                (<a class="alert-link" href="@this.Problem.Type" target="_blank">
+                <span>(</span>
+                <a class="alert-link" href="@this.Problem.Type" target="_blank">
                     @this.Problem.Status @this.Problem.Title
-                </a>)
+                </a>
+                <span>)</span>
             </p>
         }
     </FluentCard>
