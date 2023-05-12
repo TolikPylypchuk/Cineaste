@@ -41,6 +41,10 @@ header {
   align-items: stretch;
 }
 
+.list-container {
+  cursor: pointer;
+}
+
 .list {
   font-size: var(--fs-big);
   margin-block: var(--s4);

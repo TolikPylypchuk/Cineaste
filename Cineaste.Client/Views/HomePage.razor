@@ -23,7 +23,7 @@
         <div class="lists">
             @foreach (var list in this.State.Value.Lists)
             {
-                <div role="button" class="list-container" @ondblclick="@(() => this.NavigateToList(list))">
+                <div role="button" class="list-container" @onclick="@(() => this.NavigateToList(list))">
                     <p class="list">@list.Name</p>
                     <FluentDivider Role="DividerRole.Separator"></FluentDivider>
                 </div>
