@@ -15,19 +15,19 @@
     <link rel="stylesheet" href="css/variables.css" />
     <link rel="stylesheet" href="css/reboot.css" />
     <link rel="stylesheet" href="css/font.css" />
+    <link rel="stylesheet" href="css/loader.css" />
     <link rel="stylesheet" href="css/blazor.css" />
-    <link rel="stylesheet" href="css/loading-grid.css" />
 
     <link rel="stylesheet" href="Cineaste.Client.styles.css" />
 </head>
 
 <body>
     <div id="app">
-        <div class="loading-grid">
-            <div></div> <div></div> <div></div>
-            <div></div> <div></div> <div></div>
-            <div></div> <div></div> <div></div>
-        </div>
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
     </div>
 
     <div id="blazor-error-ui">
