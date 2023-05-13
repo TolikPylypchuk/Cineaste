@@ -8,6 +8,8 @@ public interface IPageNavigator
 
     void GoToListPage(string handle);
 
+    void GoToListSettingsPage(string handle);
+
     void GoToCreateListPage();
 
     event EventHandler<LocationChangedEventArgs> PageChanged;

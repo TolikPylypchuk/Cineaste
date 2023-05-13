@@ -19,6 +19,9 @@ public sealed class PageNavigator : IPageNavigator
     public void GoToListPage(string handle) =>
         this.navigationManager.NavigateTo($"/list/{handle}");
 
+    public void GoToListSettingsPage(string handle) =>
+        this.navigationManager.NavigateTo($"/list/{handle}/settings");
+
     public event EventHandler<LocationChangedEventArgs> PageChanged
     {
         add => this.navigationManager.LocationChanged += value;

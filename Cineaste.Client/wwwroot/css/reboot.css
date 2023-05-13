@@ -13,6 +13,7 @@ html, body, #app {
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background-color: var(--neutral-layer-1);
 }
 
 img, picture, video, canvas, svg {

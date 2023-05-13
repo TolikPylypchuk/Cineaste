@@ -1,0 +1,30 @@
+::deep .navmenu {
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+::deep .navmenu-main-button {
+  width: 40px;
+  margin-bottom: var(--s1);
+}
+
+::deep :not(.collapsed) .navmenu-link::part(start) {
+  margin-inline-end: var(--s1);
+}
+
+::deep :not(.collapsed) .navmenu-link .text {
+  margin-inline-end: var(--s2);
+}
+
+::deep :not(.collapsed) .navmenu-link svg:first-of-type {
+  min-width: 20px;
+}
+
+::deep .collapsed .navmenu-link {
+  padding-inline-end: 0;
+}
+
+::deep .collapsed .navmenu-link svg:first-of-type {
+  min-width: 16px;
+}
