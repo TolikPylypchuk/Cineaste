@@ -2,12 +2,12 @@
   height: 100%;
   display: grid;
   grid-template-columns: fit-content(200px) 4fr 1fr;
-  grid-template-areas: 'sidebar list actions';
+  grid-template-areas: 'nav list sidebar';
   gap: var(--s2);
 }
 
-.sidebar-container {
-  grid-area: sidebar;
+.nav-menu-container {
+  grid-area: nav;
   height: 100%;
 }
 
@@ -16,7 +16,7 @@
   height: 100%;
 }
 
-.action-panel-container {
-  grid-area: actions;
+.sidebar-container {
+  grid-area: sidebar;
   height: 100%;
 }

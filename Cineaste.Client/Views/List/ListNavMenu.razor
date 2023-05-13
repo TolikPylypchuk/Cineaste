@@ -1,0 +1,19 @@
+@inherits CineasteComponent
+
+<NavMenu>
+    <NavMenuLink Icon="@FluentIcons.List" OnClick="@(() => this.PageNavigator.GoToListPage(this.Handle))"
+                    Text="@this.Loc["ListPage.Menu.List"]" Selected="true" />
+    <NavMenuLink Icon="@FluentIcons.Settings" Disabled="true"
+                    OnClick="@(() => this.PageNavigator.GoToListSettingsPage(this.Handle))"
+                    Text="@this.Loc["ListPage.Menu.Settings"]" />
+    <NavMenuLink Icon="@FluentIcons.Home" OnClick="@(() => this.PageNavigator.GoToHomePage())"
+                    Text="@this.Loc["ListPage.Menu.Back"]" />
+</NavMenu>
+
+@code {
+    [Parameter]
+    public string Handle { get; set; } = String.Empty;
+
+    [Parameter]
+    public bool IsListLoaded { get; set; }
+}

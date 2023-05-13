@@ -1,10 +1,13 @@
 @inherits CineasteComponent
 
-<div class="d-flex flex-column h-100 pt-4">
-    <RadzenButton Text="@this.Loc["ListActionsPanel.AddMovie"]" Click="@this.CreateMovie" Icon="add_circle_outline"
-                  class="big mb-2 w-100" />
-    <RadzenButton Text="@this.Loc["ListActionsPanel.AddSeries"]" Click="@this.CreateSeries" Icon="add_circle_outline"
-                  class="big mt-2 w-100" />
+<div class="container">
+    <FluentButton Appearance="Appearance.Accent" Class="add" @onclick="@this.CreateMovie">
+        @this.Loc["ListActionsPanel.AddMovie"]
+    </FluentButton>
+
+    <FluentButton Appearance="Appearance.Accent" Class="add" @onclick="@this.CreateSeries">
+        @this.Loc["ListActionsPanel.AddSeries"]
+    </FluentButton>
 </div>
 
 @code {
