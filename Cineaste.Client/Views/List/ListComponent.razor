@@ -1,33 +1,57 @@
 @inherits StatefulComponent<ListPageState>
 
-<div class="d-flex flex-column align-items-center h-100">
+<div class="container">
     @if (this.State.Value.IsLoading)
     {
-        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="w-25 mt-4" />
+        <FluentProgressRing Class="loading" />
     } else if (this.State.Value.Problem is not null)
     {
-        <ApiProblemAlert Text="@this.Loc["ListComponent.Problem.LoadingListFailed"]" Problem="@this.State.Value.Problem"
-                         TryAgain="@this.FetchList" Class="w-50 mt-3" />
+        <ApiProblemAlert Text="ListComponent.Problem.LoadingListFailed" Problem="@this.State.Value.Problem"
+                         TryAgain="@this.FetchList" Class="problem-alert" />
     } else
     {
-        <h1 class="display-5 mt-md-1 mt-1 flex-shrink-0">@this.State.Value.Name</h1>
+        <h1 class="list-name">@this.State.Value.Name</h1>
 
         var selectedItem = this.State.Value.SelectedItem;
 
-        <RadzenDataList WrapItems="true" Data="@this.State.Value.Container.Items" TItem="ListItemModel"
-                        class="overflow-auto w-100 h-100">
-            <Template Context="item">
-                <div role="button" @onclick="@(() => this.SelectItem(item))" style="@($"color: {item.Color};")"
-                     class="@($"list-item-container border-bottom {(item == selectedItem ? "bg-light " : "")}m-0")">
-                    <div class="d-flex flex-row flex-fill align-items-center">
-                        <p class="list-item item-number text-start m-0">@item.DisplayNumber</p>
-                        <p class="list-item item-title text-center m-0">@item.Title</p>
-                        <p class="list-item item-title text-center m-0">@item.OriginalTitle</p>
-                        <p class="list-item item-years text-end m-0">@item.Years</p>
-                    </div>
+        <FluentDataGrid TGridItem="ListItemModel" RowsData="@this.State.Value.Container.Items.AsQueryable()"
+                        GenerateHeader="GenerateHeaderOption.Sticky" Virtualize="true" Class="list"
+                        GridTemplateColumns="48px calc((100% - 120px) / 2) calc((100% - 120px) / 2) 72px"
+                        RowClass="@(item => $"{(item == selectedItem ? "selected-row" : "")}")"
+                        RowsDataKey="@(item => item.Id)" RowsDataSize="56">
+            <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.Number"]"
+                            Align="Align.Start" Sortable="false">
+                <div class="cell-content number" @onclick="@(() => this.SelectItem(item))">
+                    @item?.DisplayNumber
                 </div>
-            </Template>
-        </RadzenDataList>
+            </TemplateColumn>
+            <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.Title"]"
+                            Align="Align.Center" Sortable="false">
+                <div class="cell-content title" @onclick="@(() => this.SelectItem(item))">
+                    @item?.Title
+                </div>
+            </TemplateColumn>
+            <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.OriginalTitle"]"
+                            Align="Align.Center" Sortable="false">
+                <div class="cell-content title" @onclick="@(() => this.SelectItem(item))">
+                    @item?.OriginalTitle
+                </div>
+            </TemplateColumn>
+            <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.Year"]"
+                            Align="Align.End" Sortable="false">
+                <div class="cell-content year" @onclick="@(() => this.SelectItem(item))">
+                    @if (item?.StartYear == item?.EndYear)
+                    {
+                        @item?.StartYear
+                    } else
+                    {
+                        @item?.StartYear
+                        <br />
+                        @item?.EndYear
+                    }
+                </div>
+            </TemplateColumn>
+        </FluentDataGrid>
     }
 </div>
 
@@ -36,11 +60,11 @@
     public EventCallback<ListItemModel> ItemSelected { get; set; }
 
     [Parameter]
-    public Action FetchList { get; set; } = null!;
+    public required Action FetchList { get; set; }
 
-    private async Task SelectItem(ListItemModel item)
+    public async Task SelectItem(ListItemModel? item)
     {
-        if (item != this.State.Value.SelectedItem)
+        if (item is not null && item != this.State.Value.SelectedItem)
         {
             await this.ItemSelected.InvokeAsync(item);
         }

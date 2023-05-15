@@ -376,6 +376,42 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #.
+        /// </summary>
+        public static string ListComponent_List_Number {
+            get {
+                return ResourceManager.GetString("ListComponent.List.Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original Title.
+        /// </summary>
+        public static string ListComponent_List_OriginalTitle {
+            get {
+                return ResourceManager.GetString("ListComponent.List.OriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string ListComponent_List_Title {
+            get {
+                return ResourceManager.GetString("ListComponent.List.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string ListComponent_List_Year {
+            get {
+                return ResourceManager.GetString("ListComponent.List.Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading the list has failed.
         /// </summary>
         public static string ListComponent_Problem_LoadingListFailed {

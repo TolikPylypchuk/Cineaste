@@ -1,24 +1,68 @@
-.list-item-container {
-    border: none;
-    border-radius: 0;
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.list-item {
-    font-size: 1rem;
+::deep .loading {
+  margin-block-start: var(--s8);
 }
 
-.item-number {
-    width: 50px;
+::deep .problem-alert {
+  width: var(--content-width);
+  margin-block-start: var(--s3);
 }
 
-.item-title {
-    width: calc((100% - 175px) / 2)
+.list-name {
+  font-size: var(--fs-header-large);
+  font-weight: var(--fw-header-large);
 }
 
-.item-years {
-    width: 125px
+::deep .list {
+  width: 100%;
+  flex: 0;
+  --type-ramp-base-font-size: 1.25rem;
+  --type-ramp-base-line-height: initial;
 }
 
-::deep .rz-g {
-    flex-direction: column;
+::deep .row {
+}
+
+::deep .selected-row {
+  background-color: var(--neutral-layer-3);
+}
+
+::deep .list fluent-data-grid-cell {
+  justify-self: stretch;
+  align-self: stretch;
+  white-space: break-spaces;
+}
+
+::deep .list fluent-data-grid-cell:not(.column-header) {
+  --type-ramp-base-line-height: 1em;
+  padding: 0;
+}
+
+.cell-content {
+  height: 100%;
+  cursor: pointer;
+  padding:
+    calc((var(--design-unit) + var(--focus-stroke-width) - var(--stroke-width)) * 1px)
+    calc(((var(--design-unit) * 3) + var(--focus-stroke-width) - var(--stroke-width)) * 1px);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.number {
+  justify-content: start;
+}
+
+.title {
+  justify-content: center;
+}
+
+.year {
+  justify-content: end;
 }
