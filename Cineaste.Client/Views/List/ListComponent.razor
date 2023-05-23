@@ -3,7 +3,7 @@
 <div class="container">
     @if (this.State.Value.IsLoading)
     {
-        <FluentProgressRing Class="loading" />
+        <FluentProgressRing Class="loading-circle" />
     } else if (this.State.Value.Problem is not null)
     {
         <ApiProblemAlert Text="ListComponent.Problem.LoadingListFailed" Problem="@this.State.Value.Problem"
@@ -21,25 +21,29 @@
                         RowsDataKey="@(item => item.Id)" RowsDataSize="56">
             <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.Number"]"
                             Align="Align.Start" Sortable="false">
-                <div class="cell-content number" @onclick="@(() => this.SelectItem(item))">
+                <div class="cell-content number" style="@($"--cell-color: {item?.Color}")"
+                     @onclick="@(() => this.SelectItem(item))">
                     @item?.DisplayNumber
                 </div>
             </TemplateColumn>
             <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.Title"]"
                             Align="Align.Center" Sortable="false">
-                <div class="cell-content title" @onclick="@(() => this.SelectItem(item))">
+                <div class="cell-content title" style="@($"--cell-color: {item?.Color}")"
+                     @onclick="@(() => this.SelectItem(item))">
                     @item?.Title
                 </div>
             </TemplateColumn>
             <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.OriginalTitle"]"
                             Align="Align.Center" Sortable="false">
-                <div class="cell-content title" @onclick="@(() => this.SelectItem(item))">
+                <div class="cell-content title" style="@($"--cell-color: {item?.Color}")"
+                     @onclick="@(() => this.SelectItem(item))">
                     @item?.OriginalTitle
                 </div>
             </TemplateColumn>
             <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.Year"]"
                             Align="Align.End" Sortable="false">
-                <div class="cell-content year" @onclick="@(() => this.SelectItem(item))">
+                <div class="cell-content year" style="@($"--cell-color: {item?.Color}")"
+                     @onclick="@(() => this.SelectItem(item))">
                     @if (item?.StartYear == item?.EndYear)
                     {
                         @item?.StartYear

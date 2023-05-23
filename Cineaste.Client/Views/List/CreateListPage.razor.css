@@ -8,8 +8,7 @@
 }
 
 .form-title {
-  font-size: var(--fs-header-large);
-  font-weight: var(--fw-header-large);
+  font: var(--font-header-large);
   margin-block: var(--s4);
   outline: none;
 }
@@ -32,8 +31,7 @@
 }
 
 .card-header {
-  font-size: var(--fs-header-medium);
-  font-weight: var(--fw-header-medium);
+  font: var(--font-header-medium);
 }
 
 ::deep .form-field {
@@ -64,17 +62,8 @@
   cursor: pointer;
 }
 
-.label {
-  color: var(--neutral-foreground-rest);
-  cursor: pointer;
-  font-family: var(--body-font);
-  font-size: var(--type-ramp-base-font-size);
-  line-height: var(--type-ramp-base-line-height);
-  font-weight: initial;
-  font-variation-settings: var(--type-ramp-base-font-variations);
-  margin-bottom: 4px;
-}
-
 ::deep .create-list-problem-alert {
+  --card-width: var(--content-width);
+  --card-height: auto;
   margin-block-start: var(--s4);
 }

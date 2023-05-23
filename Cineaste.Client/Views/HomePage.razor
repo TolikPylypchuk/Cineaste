@@ -13,7 +13,7 @@
 
     @if (this.State.Value.IsLoading)
     {
-        <FluentProgressRing Class="loading" />
+        <FluentProgressRing Class="loading-circle" />
     } else if (this.State.Value.Problem is not null)
     {
         <ApiProblemAlert Problem="this.State.Value.Problem" Text="HomePage.Problem.LoadingListsFailed"

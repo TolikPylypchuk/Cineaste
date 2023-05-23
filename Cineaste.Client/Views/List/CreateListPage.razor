@@ -50,9 +50,9 @@
                         </FluentTooltip>
                     </label>
 
-                    <FluentCombobox TOption="SimpleCultureModel" Id="language" Items="this.State.Value.AllCultures"
+                    <FluentCombobox Id="language" Items="this.State.Value.AllCultures" Class="form-field"
                                     OptionText="@(o => o.DisplayName)" Autocomplete="ComboboxAutocomplete.Inline"
-                                    @bind-SelectedOption="this.FormModel.Culture" Class="form-field" />
+                                    @bind-SelectedOption="this.FormModel.Culture" />
                 </div>
             </FluentCard>
 

@@ -1,33 +1,38 @@
 @inherits CineasteComponent
 
-@for (int i = 0; i < this.Titles.Count; i++)
-{
-    int index = i;
-    <div>
-        <div class="@($"{(index != 0 ? "mt-2" : "")} d-flex flex-row align-items-center w-100")">
-            <RadzenTextBox Value="@this.Titles[index]" Change="@(value => this.UpdateTitle(value, index))"
-                           class="w-100" />
+<div>
+    <label for="@($"{this.PropertyName}-0")" class="label">@this.Loc[this.Label]</label>
 
-            @if (this.Titles.Count > 1)
-            {
-                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                              Click="@(() => this.RemoveTitle(index))" class="ms-2" />
-            }
-        </div>
+    <div class="titles-container">
+        @for (int i = 0; i < this.Titles.Count; i++)
+        {
+            int index = i;
+            string title = this.Titles[index];
+            <div class="title-container">
+                <FluentTextField Id="@($"{this.PropertyName}-{index}")" Value="@title" ValueExpression="@(() => title)"
+                                 ValueChanged="@(value => this.UpdateTitle(value, index))" Class="title form-field" />
+
+                @if (this.Titles.Count > 1)
+                {
+                    <FluentButton Appearance="Appearance.Stealth" @onclick="@(() => this.RemoveTitle(index))">
+                        <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
+                    </FluentButton>
+                }
+            </div>
+        }
     </div>
-}
 
-<div>
     <ErrorPresenter ErrorCode="@($"{this.PropertyName}.*")" Trigger="@this.ValidationTrigger" />
-</div>
 
-<div>
     <ErrorPresenter ErrorCode="@($"*.{this.PropertyName}.*")" Trigger="@this.ValidationTrigger" />
 </div>
 
 @code {
     [Parameter]
     public IList<string> Titles { get; set; } = new List<string>();
+
+    [Parameter]
+    public string Label { get; set; } = String.Empty;
 
     [Parameter]
     public string PropertyName { get; set; } = String.Empty;
@@ -37,19 +42,20 @@
     private async Task UpdateTitle(string title, int index)
     {
         this.Titles[index] = title;
-        await this.ForceUpdateFormValidationState();
-        this.UpdateValidation();
+        await this.UpdateValidation();
     }
 
     private async Task RemoveTitle(int index)
     {
         this.Titles.RemoveAt(index);
-        await this.ForceUpdateFormValidationState();
-        this.UpdateValidation();
+        await this.UpdateValidation();
     }
 
-    private void UpdateValidation() =>
+    private async Task UpdateValidation()
+    {
+        await this.ForceUpdateFormValidationState();
         this.ValidationTrigger = this.Titles.Aggregate(String.Empty, (acc, title) => $"{acc}{title}");
+    }
 
     private async Task ForceUpdateFormValidationState() =>
         await Task.Yield();

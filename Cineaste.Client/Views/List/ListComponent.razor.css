@@ -5,18 +5,18 @@
   align-items: center;
 }
 
-::deep .loading {
+::deep .loading-circle {
   margin-block-start: var(--s8);
 }
 
 ::deep .problem-alert {
-  width: var(--content-width);
+  --card-width: var(--content-width-narrow);
+  --card-height: auto;
   margin-block-start: var(--s3);
 }
 
 .list-name {
-  font-size: var(--fs-header-large);
-  font-weight: var(--fw-header-large);
+  font: var(--font-header-large);
 }
 
 ::deep .list {
@@ -47,6 +47,7 @@
 .cell-content {
   height: 100%;
   cursor: pointer;
+  color: var(--cell-color);
   padding:
     calc((var(--design-unit) + var(--focus-stroke-width) - var(--stroke-width)) * 1px)
     calc(((var(--design-unit) * 3) + var(--focus-stroke-width) - var(--stroke-width)) * 1px);

@@ -10,9 +10,5 @@
 }
 
 *, *::before, *::after {
-  font-family: 'Raleway', sans-serif;
-}
-
-body {
-  --body-font: 'Raleway', sans-serif;
+  font-family: var(--body-font);
 }

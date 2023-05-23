@@ -15,20 +15,18 @@ header {
 }
 
 .title {
-  font-size: var(--fs-app-title);
-  font-weight: var(--fw-app-title);
+  font: var(--font-app-title);
   margin-block-start: var(--s16);
   margin-block-end: var(--s4);
   outline: none;
 }
 
 .subtitle {
-  font-size: var(--fs-header-large);
-  font-weight: var(--fw-header-large);
+  font: var(--font-header-large);
   margin-block: var(--s4);
 }
 
-.loading {
+::deep .loading-circle {
   margin-block-start: var(--s8);
 }
 
@@ -46,7 +44,6 @@ header {
 }
 
 .list {
-  font-size: var(--fs-big);
   margin-block: var(--s4);
   margin-inline: 0;
 }

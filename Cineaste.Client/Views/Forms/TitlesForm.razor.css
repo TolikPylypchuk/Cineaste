@@ -1,0 +1,17 @@
+.titles-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s2);
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.title {
+  flex: 1;
+}

@@ -1,0 +1,24 @@
+::deep fluent-dialog.confirmation-dialog::part(control) {
+  --dialog-width: auto;
+  --dialog-height: auto;
+  margin-inline: var(--s2);
+  max-width: var(--content-width-narrow);
+}
+
+.title {
+  font: var(--font-header-dialog);
+  margin: var(--s3);
+  line-height: 1;
+}
+
+.body {
+  margin: var(--s3);
+}
+
+.action-panel {
+  margin: var(--s3);
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  gap: var(--s2);
+}

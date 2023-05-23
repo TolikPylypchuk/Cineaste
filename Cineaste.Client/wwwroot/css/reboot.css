@@ -6,12 +6,12 @@
   box-sizing: border-box;
 }
 
-html, body, #app {
+html, body, #app, fluent-design-system-provider {
   height: 100%;
 }
 
 body {
-  line-height: 1.5;
+  line-height: var(--default-line-height);
   -webkit-font-smoothing: antialiased;
   background-color: var(--neutral-layer-1);
 }

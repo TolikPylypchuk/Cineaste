@@ -2,8 +2,12 @@ namespace Cineaste.Client.Views.Forms;
 
 using Cineaste.Client.Store.Forms.MovieForm;
 
+using Microsoft.Fast.Components.FluentUI;
+
 public partial class MovieForm
 {
+    private ConfirmationDialog? deleteConfirmationDialog;
+
     [Parameter]
     public Guid ListId { get; set; }
 
@@ -57,7 +61,7 @@ public partial class MovieForm
     {
         this.FormModel.CopyFrom(this.State.Value.Model);
         this.UpdateFormTitle();
-        this.OnYearChanged();
+        this.OnYearChanged(this.State.Value.Model?.Year ?? DateTime.Now.Year);
     }
 
     private void AddTitle(ICollection<string> titles) =>
@@ -69,8 +73,9 @@ public partial class MovieForm
         this.StateHasChanged();
     }
 
-    private void OnYearChanged()
+    private void OnYearChanged(int year)
     {
+        this.FormModel.Year = year;
         int currentYear = DateTime.Now.Year;
 
         if (this.FormModel.Year < currentYear)
@@ -91,17 +96,19 @@ public partial class MovieForm
         }
     }
 
-    private void OnIsWatchedChanged()
+    private void OnIsWatchedChanged(bool isWatched)
     {
-        if (this.FormModel.IsWatched)
+        this.FormModel.IsWatched = isWatched;
+        if (isWatched)
         {
             this.FormModel.IsReleased = true;
         }
     }
 
-    private void OnIsReleasedChanged()
+    private void OnIsReleasedChanged(bool isReleased)
     {
-        if (!this.FormModel.IsReleased)
+        this.FormModel.IsReleased = isReleased;
+        if (!isReleased)
         {
             this.FormModel.IsWatched = false;
         }
@@ -127,16 +134,12 @@ public partial class MovieForm
 
     private async Task Delete()
     {
-        bool? delete = await this.DialogService.Confirm(
-            this.Loc["MovieForm.DeleteDialog.Body"],
-            this.Loc["MovieForm.DeleteDialog.Title"],
-            new()
-            {
-                OkButtonText = this.Loc["Confirmation.Confirm"],
-                CancelButtonText = this.Loc["Confirmation.Cancel"],
-                CloseDialogOnEsc = true,
-                CloseDialogOnOverlayClick = true
-            });
+        if (this.deleteConfirmationDialog is null)
+        {
+            return;
+        }
+
+        bool? delete = await this.deleteConfirmationDialog.RequestConfirmation();
 
         if (delete == true && this.ListItem is { Id: var id })
         {
@@ -144,15 +147,9 @@ public partial class MovieForm
         }
     }
 
-    private void OnMovieCreated()
-    {
+    private void OnMovieCreated() =>
         this.SetPropertyValues();
-        this.ShowSuccessNotification("MovieForm.CreateMovie.Success", ShortNotificationDuration);
-    }
 
-    private void OnMovieUpdated()
-    {
+    private void OnMovieUpdated() =>
         this.SetPropertyValues();
-        this.ShowSuccessNotification("MovieForm.UpdateMovie.Success", ShortNotificationDuration);
-    }
 }
