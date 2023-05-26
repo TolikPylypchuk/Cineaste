@@ -1,104 +1,118 @@
 @inherits CineasteForm<SpecialEpisodeFormModel, SpecialEpisodeRequest, SpecialEpisodeModel, SeriesFormState>
 
-<CascadingValue Name="@CascadingParameters.ValidationExecutor" Value="@this" IsFixed="true">
-    <CascadingValue Name="@CascadingParameters.ErrorCodes" Value="@this.FormModel.ValidationErrors">
-        <div class="d-flex flex-column h-100">
-            <div class="d-flex flex-row justify-content-between">
-                <RadzenButton Icon="keyboard_arrow_up" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                              Click="this.GoToSeries" class="btn-transparent my-2" />
+<FormParamsProvider For="this">
+    <div class="container">
+        <div class="form-header">
+            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.GoToSeries">
+                <FluentIcon Name="@FluentIcons.ChevronUp" Color="Color.Neutral" />
+            </FluentButton>
 
-                <div class="d-flex flex-row">
-                    <RadzenButton Icon="keyboard_arrow_left" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                                  class="@($"btn-transparent{(this.FormModel.IsFirst ? " invisible" : "")} my-2 me-1")"
-                                  Click="this.OnGoToPreviousComponent" />
-                    <RadzenButton Icon="keyboard_arrow_right" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                                  class="@($"btn-transparent{(this.FormModel.IsLast ? " invisible" : "")} my-2 ms-1")"
-                                  Click="this.OnGoToNextComponent" />
-                </div>
+            <div class="go-to-other-components-container">
+                <FluentButton Appearance="Appearance.Lightweight" @onclick="this.OnGoToPreviousComponent"
+                              Class="@(this.FormModel.IsFirst ? "invisible" : null)"
+                              aria-hidden="@this.FormModel.IsFirst">
+                    <FluentIcon Name="@FluentIcons.ChevronLeft" Color="Color.Neutral" />
+                </FluentButton>
 
-                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
-                              class="btn-transparent my-2" />
+                <FluentButton Appearance="Appearance.Lightweight" @onclick="this.OnGoToNextComponent"
+                              Class="@(this.FormModel.IsLast ? "invisible" : null)"
+                              aria-hidden="@this.FormModel.IsLast">
+                    <FluentIcon Name="@FluentIcons.ChevronRight" Color="Color.Neutral" />
+                </FluentButton>
             </div>
 
-            <h1 class="form-title">
+            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.Close">
+                <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
+            </FluentButton>
+        </div>
+
+        <div class="form-container">
+            <h2 class="form-title">
                 @(!String.IsNullOrEmpty(this.FormTitle) || this.Episode is not null
                     ? this.FormTitle
                     : this.Loc["SpecialEpisodeForm.NewSpecialEpisode"])
-            </h1>
+            </h2>
 
-            <div class="w-100 h-100 d-flex flex-column justify-content-between overflow-y-auto overflow-x-hidden">
-                <div class="h-100 overflow-y-auto overflow-x-hidden">
-                    @if (!String.IsNullOrEmpty(this.FormModel.RottenTomatoesId))
+            <div class="form">
+                <div class="form-links">
+                    @if (this.HasRottenTomatoesId())
                     {
-                        <RadzenLink Path="@String.Format(
-                                        this.Loc["Link.RottenTomatoesUrlFormat"], this.FormModel.RottenTomatoesId)"
-                                    Text="@this.Loc["Link.RottenTomatoes"]" target="_blank" />
+                        <FluentAnchor Href="@String.Format(
+                                        this.Loc["Link.RottenTomatoesUrlFormat"],
+                                        this.FormModel.RottenTomatoesId)"
+                                      Target="_blank" Appearance="Appearance.Hypertext">
+                            @this.Loc["Link.RottenTomatoes"]
+                        </FluentAnchor>
                     }
+                </div>
 
-                    <div class="d-md-flex justify-content-md-center mt-2">
-                        <div class="me-md-1">
-                            <RadzenCheckBox @bind-Value="@this.FormModel.IsWatched" Name="IsWatchedCheckBox"
-                                            Change="@((bool value) => this.OnIsWatchedChanged())"
-                                            Disabled="@(!this.CanChangeIsWatched)" />
-                            <RadzenLabel Text="@this.Loc["SpeicalEpisodeForm.IsWatched"]"
-                                         Component="IsWatchedCheckBox" />
-                        </div>
-                        <div class="ms-md-1">
-                            <RadzenCheckBox @bind-Value="@this.FormModel.IsReleased" Name="IsReleasedCheckBox"
-                                            Change="@((bool value) => this.OnIsReleasedChanged())"
-                                            Disabled="@(!this.CanChangeIsReleased)" />
-                            <RadzenLabel Text="@this.Loc["SpeicalEpisodeForm.IsReleased"]"
-                                         Component="IsReleasedCheckBox" />
-                        </div>
-                    </div>
+                <div class="form-checkboxes">
+                    <FluentCheckbox Value="@this.FormModel.IsWatched"
+                                    ValueExpression="@(() => this.FormModel.IsWatched)"
+                                    ValueChanged="@this.OnIsWatchedChanged"
+                                    Disabled="@(!this.CanChangeIsWatched)">
+                        @this.Loc["SpecialEpisodeForm.IsWatched"]
+                    </FluentCheckbox>
+                    <FluentCheckbox Value="@this.FormModel.IsReleased"
+                                    ValueExpression="@(() => this.FormModel.IsReleased)"
+                                    ValueChanged="@this.OnIsReleasedChanged"
+                                    Disabled="@(!this.CanChangeIsReleased)">
+                        @this.Loc["SpecialEpisodeForm.IsReleased"]
+                    </FluentCheckbox>
+                </div>
 
-                    <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.Titles"]" class="mt-2" />
-                    <TitlesForm Titles="@this.FormModel.Titles" PropertyName="Titles" />
+                <TitlesForm Titles="@this.FormModel.Titles" Label="SpecialEpisodeForm.Titles"
+                            PropertyName="@nameof(this.FormModel.Titles)" />
 
-                    <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.OriginalTitles"]" class="mt-2" />
-                    <TitlesForm Titles="@this.FormModel.OriginalTitles" PropertyName="OriginalTitles" />
+                <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="SpecialEpisodeForm.OriginalTitles"
+                            PropertyName="@nameof(this.FormModel.OriginalTitles)" />
 
-                    <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.Channel"]" Component="ChannelTextBox"
-                                 class="mt-2" />
-                    <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
-                    <ErrorPresenter ErrorCode="SpecialEpisode.Channel.*" Trigger="@this.FormModel.Channel" />
+                <div>
+                    <FluentTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field">
+                        @this.Loc["SpecialEpisodeForm.Channel"]
+                    </FluentTextField>
+                    <ErrorPresenter ErrorCode="SpecialEpisode.Channel.*"
+                                    Trigger="@this.FormModel.Channel" />
+                </div>
 
-                    <MonthYearPicker @bind-Month="this.FormModel.Month" @bind-Year="this.FormModel.Year" Class="mt-2"
-                                     MonthText="SpecialEpisodeForm.ReleaseMonth" Changed="@this.OnMonthYearChanged"
-                                     YearText="SpecialEpisodeForm.ReleaseYear" YearErrorCode="SpecialEpisode.Year.*" />
+                <MonthYearPicker Id="month-year" @bind-Month="this.FormModel.Month" @bind-Year="this.FormModel.Year"
+                                 MonthText="SpecialEpisodeForm.ReleaseMonth" Changed="@this.OnMonthYearChanged"
+                                 YearText="SpecialEpisodeForm.ReleaseYear" YearErrorCode="SpecialEpisode.Year.*" />
 
-                    <RadzenLabel Text="@this.Loc["SpecialEpisodeForm.RottenTomatoesId"]"
-                                 Component="RottenTomatoesTextBox" class="mt-1" />
-                    <RadzenTextBox @bind-Value="@this.FormModel.RottenTomatoesId" Name="RottenTomatoesTextBox"
-                                   class="w-100" />
+                <div>
+                    <FluentTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field">
+                        @this.Loc["SpecialEpisodeForm.RottenTomatoesId"]
+                    </FluentTextField>
                     <ErrorPresenter ErrorCode="SpecialEpisode.RottenTomatoesId.*"
                                     Trigger="@this.FormModel.RottenTomatoesId" />
-
-                    <div class="d-flex justify-content-center">
-                        <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
-                            <RadzenButton Text="@this.Loc["SpecialEpisodeForm.AddTitle"]" class="d-inline-block me-1"
-                                          Click="@(e => this.AddTitle(this.FormModel.Titles))"
-                                          ButtonStyle="ButtonStyle.Secondary" />
-                            <RadzenButton Text="@this.Loc["SpecialEpisodeForm.AddOriginalTitle"]"
-                                          Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))"
-                                          ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1" />
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center my-4">
-                        <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
-                                      Click="@this.Delete" />
-                    </div>
                 </div>
 
-                <div class="d-flex flex-row my-2">
-                    <RadzenButton Text="@this.Loc["SpecialEpisodeForm.GoToSeries"]" ButtonStyle="ButtonStyle.Primary"
-                                  Click="@this.GoToSeries" class="me-1" />
-                    <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
-                                  class="@($"{(this.FormModel.HasChanges ? "ms-1" : "d-none")}")"
-                                  Click="@this.Cancel" />
+                <div class="add-titles">
+                    <FluentButton Appearance="Appearance.Neutral"
+                                  @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
+                        @this.Loc["SpecialEpisodeForm.AddTitle"]
+                    </FluentButton>
+                    <FluentButton Appearance="Appearance.Neutral"
+                                  @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
+                        @this.Loc["SpecialEpisodeForm.AddOriginalTitle"]
+                    </FluentButton>
+                </div>
+
+                <div class="delete-container">
+                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Delete">
+                        @this.Loc["Button.Delete"]
+                    </FluentButton>
                 </div>
             </div>
+
+            <div class="form-actions">
+                <FluentButton Appearance="Appearance.Accent" @onclick="@this.GoToSeries">
+                    @this.Loc["SpecialEpisodeForm.GoToSeries"]
+                </FluentButton>
+                <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Cancel">
+                    @this.Loc["Button.Cancel"]
+                </FluentButton>
+            </div>
         </div>
-    </CascadingValue>
-</CascadingValue>
+    </div>
+</FormParamsProvider>

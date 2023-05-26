@@ -561,6 +561,12 @@
   <data name="SpecialEpisodeForm.GoToSeries" xml:space="preserve">
     <value>Go to series</value>
   </data>
+  <data name="SpecialEpisodeForm.IsReleased" xml:space="preserve">
+    <value>Is released</value>
+  </data>
+  <data name="SpecialEpisodeForm.IsWatched" xml:space="preserve">
+    <value>Is watched</value>
+  </data>
   <data name="SpecialEpisodeForm.NewSpecialEpisode" xml:space="preserve">
     <value>New Special Episode</value>
   </data>
@@ -578,12 +584,6 @@
   </data>
   <data name="SpecialEpisodeForm.Titles" xml:space="preserve">
     <value>Titles</value>
-  </data>
-  <data name="SpeicalEpisodeForm.IsReleased" xml:space="preserve">
-    <value>Is released</value>
-  </data>
-  <data name="SpeicalEpisodeForm.IsWatched" xml:space="preserve">
-    <value>Is watched</value>
   </data>
   <data name="Validation.CreateList.Culture.Invalid" xml:space="preserve">
     <value>The language is invalid</value>

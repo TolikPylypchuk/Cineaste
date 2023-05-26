@@ -79,7 +79,7 @@
                         </div>
                         <div>
                             <label class="label" for="kind">@this.Loc["MovieForm.Kind"]</label>
-                            <FluentSelect Id="kind" Items="this.State.Value.AvailableKinds"
+                            <FluentSelect Id="kind" Items="@this.State.Value.AvailableKinds"
                                           @bind-SelectedOption="this.FormModel.Kind"
                                           OptionText="@(k => k.Name)" Class="kind-select form-field" />
                         </div>

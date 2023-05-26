@@ -57,7 +57,7 @@
                     <div class="form-statuses">
                         <div>
                             <label class="label" for="watch-status">@this.Loc["SeriesForm.WatchStatus"]</label>
-                            <FluentSelect Id="watch-status" Items="this.AllWatchStatuses" Class="select form-field"
+                            <FluentSelect Id="watch-status" Items="@this.AllWatchStatuses" Class="select form-field"
                                           @bind-SelectedOption="this.FormModel.WatchStatus"
                                           OptionText="@(s => this.Loc[$"SeriesForm.WatchStatus.{s}"])" />
                             <ErrorPresenter ErrorCode="Series.WatchStatus.*" Trigger="@this.StatusErrorTrigger" />

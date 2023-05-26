@@ -1,35 +1,30 @@
 @inherits CineasteComponent
 
-<div class="row @this.Class">
-    <div class="col-md-6 pe-md-1">
+<div class="month-year-container @this.Class">
+    <div>
         @if (!String.IsNullOrWhiteSpace(this.MonthText))
         {
-            <RadzenLabel Text="@this.Loc[this.MonthText]" Component="MonthDropDown" />
+            <label class="label" for="@($"{this.Id}-month")">@this.Loc[this.MonthText]</label>
         }
 
-        <RadzenDropDown Value="@this.Month" ValueChanged="@this.MonthChanged" Data="@this.Months" Change="@this.Changed"
-                        Name="MonthDropDown" AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
-                        class="w-100">
-            <Template>
-                @this.Loc[$"Month.{context}"]
-            </Template>
-        </RadzenDropDown>
+        <FluentSelect Id="@($"{this.Id}-month")" Items="@this.Months" SelectedOption="@this.Month"
+                      SelectedOptionChanged="@((int month) => this.OnMonthChanged(month))"
+                      OptionText="@(m => this.Loc[$"Month.{m}"])" Class="select form-field" />
     </div>
 
-    <div class="col-md-6 ps-md-1">
-        @if (!String.IsNullOrWhiteSpace(this.YearText))
-        {
-            <RadzenLabel Text="@this.Loc[this.YearText]" Component="YearNumeric" />
-        }
-
-        <RadzenNumeric Value="@this.Year" ValueChanged="@this.YearChanged" Name="YearNumeric"
-                       Change="@((int value) => this.Changed.InvokeAsync())" />
-
+    <div>
+        <FluentNumberField Value="@this.Year" ValueExpression="@(() => this.Year)" Class="form-field"
+                           ValueChanged="@((int year) => this.OnYearChanged(year))">
+            @this.Loc[this.YearText]
+        </FluentNumberField>
         <ErrorPresenter ErrorCode="@this.YearErrorCode" Trigger="@this.Year" />
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public string Id { get; set; } = String.Empty;
+
     [Parameter]
     public int Month { get; set; }
 
@@ -58,4 +53,16 @@
     public string Class { get; set; } = String.Empty;
 
     private ImmutableArray<int> Months { get; } = Enumerable.Range(1, 12).ToImmutableArray();
+
+    private async Task OnMonthChanged(int month)
+    {
+        await this.MonthChanged.InvokeAsync(month);
+        await this.Changed.InvokeAsync();
+    }
+
+    private async Task OnYearChanged(int month)
+    {
+        await this.YearChanged.InvokeAsync(month);
+        await this.Changed.InvokeAsync();
+    }
 }

@@ -54,6 +54,9 @@ public partial class SpecialEpisodeForm
         this.StateHasChanged();
     }
 
+    private bool HasRottenTomatoesId() =>
+        !String.IsNullOrEmpty(this.FormModel.RottenTomatoesId);
+
     private void OnMonthYearChanged()
     {
         var today = DateTime.Now;

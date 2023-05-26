@@ -1393,6 +1393,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is released.
+        /// </summary>
+        public static string SpecialEpisodeForm_IsReleased {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.IsReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is watched.
+        /// </summary>
+        public static string SpecialEpisodeForm_IsWatched {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.IsWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Special Episode.
         /// </summary>
         public static string SpecialEpisodeForm_NewSpecialEpisode {
@@ -1443,24 +1461,6 @@ namespace Cineaste.Client.Localization {
         public static string SpecialEpisodeForm_Titles {
             get {
                 return ResourceManager.GetString("SpecialEpisodeForm.Titles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Is released.
-        /// </summary>
-        public static string SpeicalEpisodeForm_IsReleased {
-            get {
-                return ResourceManager.GetString("SpeicalEpisodeForm.IsReleased", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Is watched.
-        /// </summary>
-        public static string SpeicalEpisodeForm_IsWatched {
-            get {
-                return ResourceManager.GetString("SpeicalEpisodeForm.IsWatched", resourceCulture);
             }
         }
         
