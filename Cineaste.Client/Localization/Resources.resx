@@ -288,9 +288,6 @@
   <data name="MovieForm.AddTitle" xml:space="preserve">
     <value>Add title</value>
   </data>
-  <data name="MovieForm.CreateMovie.Success" xml:space="preserve">
-    <value>Movie created successfully</value>
-  </data>
   <data name="MovieForm.DeleteDialog.Body" xml:space="preserve">
     <value>Are you sure you want to delete this movie?</value>
   </data>
@@ -338,9 +335,6 @@
   </data>
   <data name="MovieForm.Titles" xml:space="preserve">
     <value>Titles</value>
-  </data>
-  <data name="MovieForm.UpdateMovie.Success" xml:space="preserve">
-    <value>Movie updated successfully</value>
   </data>
   <data name="MovieForm.Year" xml:space="preserve">
     <value>Year</value>
@@ -480,9 +474,6 @@
   <data name="SeriesForm.Component.Up" xml:space="preserve">
     <value>Move up</value>
   </data>
-  <data name="SeriesForm.CreateSeries.Success" xml:space="preserve">
-    <value>Series created successfully</value>
-  </data>
   <data name="SeriesForm.DeleteDialog.Body" xml:space="preserve">
     <value>Are you sure you want to delete this series?</value>
   </data>
@@ -539,9 +530,6 @@
   </data>
   <data name="SeriesForm.Titles" xml:space="preserve">
     <value>Titles</value>
-  </data>
-  <data name="SeriesForm.UpdateSeries.Success" xml:space="preserve">
-    <value>Series updated successfully</value>
   </data>
   <data name="SeriesForm.WatchStatus" xml:space="preserve">
     <value>Watch status</value>

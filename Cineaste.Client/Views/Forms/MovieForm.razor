@@ -62,10 +62,11 @@
                         </FluentCheckbox>
                     </div>
 
-                    <TitlesForm Titles="@this.FormModel.Titles" Label="MovieForm.Titles" PropertyName="Titles" />
+                    <TitlesForm Titles="@this.FormModel.Titles" Label="MovieForm.Titles"
+                                PropertyName="@nameof(this.FormModel.Titles)" />
 
                     <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="MovieForm.OriginalTitles"
-                                PropertyName="OriginalTitles" />
+                                PropertyName="@nameof(this.FormModel.OriginalTitles)" />
 
                     <div class="form-year-kind">
                         <div>
@@ -80,7 +81,7 @@
                             <label class="label" for="kind">@this.Loc["MovieForm.Kind"]</label>
                             <FluentSelect Id="kind" Items="this.State.Value.AvailableKinds"
                                           @bind-SelectedOption="this.FormModel.Kind"
-                                          OptionText="@(o => o.Name)" Class="kind-select form-field" />
+                                          OptionText="@(k => k.Name)" Class="kind-select form-field" />
                         </div>
                     </div>
 

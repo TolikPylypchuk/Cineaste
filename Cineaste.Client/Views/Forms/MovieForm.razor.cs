@@ -2,8 +2,6 @@ namespace Cineaste.Client.Views.Forms;
 
 using Cineaste.Client.Store.Forms.MovieForm;
 
-using Microsoft.Fast.Components.FluentUI;
-
 public partial class MovieForm
 {
     private ConfirmationDialog? deleteConfirmationDialog;

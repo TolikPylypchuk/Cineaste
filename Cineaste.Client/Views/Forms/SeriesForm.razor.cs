@@ -73,15 +73,9 @@ public partial class SeriesForm
     private void Cancel() =>
         this.SetPropertyValues();
 
-    private void OnSeriesCreated()
-    {
+    private void OnSeriesCreated() =>
         this.SetPropertyValues();
-        this.ShowSuccessNotification("SeriesForm.CreateSeries.Success", ShortNotificationDuration);
-    }
 
-    private void OnSeriesUpdated()
-    {
+    private void OnSeriesUpdated() =>
         this.SetPropertyValues();
-        this.ShowSuccessNotification("SeriesForm.UpdateSeries.Success", ShortNotificationDuration);
-    }
 }

@@ -4,6 +4,8 @@ using Cineaste.Client.Store.Forms.SeriesForm;
 
 public partial class SeriesMainForm
 {
+    private ConfirmationDialog? deleteConfirmationDialog;
+
     [Parameter]
     public Guid ListId { get; set; }
 
@@ -14,7 +16,7 @@ public partial class SeriesMainForm
     public EventCallback Close { get; set; }
 
     [Parameter]
-    public override SeriesFormModel FormModel { get; set; } = null!;
+    public required override SeriesFormModel FormModel { get; set; }
 
     [Parameter]
     public string FormTitle { get; set; } = String.Empty;
@@ -36,6 +38,31 @@ public partial class SeriesMainForm
 
     private bool IsSaving =>
         this.State.Value.Create.IsInProgress || this.State.Value.Update.IsInProgress;
+
+    private object StatusErrorTrigger =>
+        new { this.FormModel.WatchStatus, this.FormModel.ReleaseStatus };
+
+    private ISeriesComponentFormModel? ComponentWithMenu { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        this.GlobalEventProvider.GlobalMouseClick += (sender, e) =>
+        {
+            this.HideMenu();
+            this.StateHasChanged();
+        };
+
+        this.GlobalEventProvider.GlobalKeyReleased += (sender, e) =>
+        {
+            if (e.Key == "Escape")
+            {
+                this.HideMenu();
+                this.StateHasChanged();
+            }
+        };
+    }
 
     private void FetchSeries()
     {
@@ -61,17 +88,35 @@ public partial class SeriesMainForm
         this.OpenSeriesComponentForm(episode);
     }
 
+    private void ShowMenu(ISeriesComponentFormModel component) =>
+        this.ComponentWithMenu = component;
+
+    private void HideMenu() =>
+        this.ComponentWithMenu = null;
+
+    private bool ShouldShowMenu(ISeriesComponentFormModel component) =>
+        this.ComponentWithMenu == component;
+
+    private bool ShouldShowAnyMenu() =>
+        this.ComponentWithMenu is not null;
+
     private bool CanMoveUp(ISeriesComponentFormModel component) =>
         component.SequenceNumber != 1;
 
-    private void MoveUp(ISeriesComponentFormModel component) =>
+    private void MoveUp(ISeriesComponentFormModel component)
+    {
+        this.HideMenu();
         this.FormModel.MoveComponentUp(component);
+    }
 
     private bool CanMoveDown(ISeriesComponentFormModel component) =>
         component.SequenceNumber != this.FormModel.Components.Count;
 
-    private void MoveDown(ISeriesComponentFormModel component) =>
+    private void MoveDown(ISeriesComponentFormModel component)
+    {
+        this.HideMenu();
         this.FormModel.MoveComponentDown(component);
+    }
 
     private void OpenSeriesComponentForm(ISeriesComponentFormModel component) =>
         this.Dispatcher.Dispatch(new OpenSeriesComponentFormAction(component));
@@ -93,16 +138,12 @@ public partial class SeriesMainForm
 
     private async Task Delete()
     {
-        bool? delete = await this.DialogService.Confirm(
-            this.Loc["SeriesForm.DeleteDialog.Body"],
-            this.Loc["SeriesForm.DeleteDialog.Title"],
-            new()
-            {
-                OkButtonText = this.Loc["Confirmation.Confirm"],
-                CancelButtonText = this.Loc["Confirmation.Cancel"],
-                CloseDialogOnEsc = true,
-                CloseDialogOnOverlayClick = true
-            });
+        if (this.deleteConfirmationDialog is null)
+        {
+            return;
+        }
+
+        bool? delete = await this.deleteConfirmationDialog.RequestConfirmation();
 
         if (delete == true && this.ListItem is { Id: var id })
         {

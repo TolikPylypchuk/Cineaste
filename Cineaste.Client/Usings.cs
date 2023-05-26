@@ -8,6 +8,7 @@ global using Cineaste.Client;
 global using Cineaste.Client.Api;
 global using Cineaste.Client.FormModels;
 global using Cineaste.Client.Localization;
+global using Cineaste.Client.Services.Event;
 global using Cineaste.Client.Services.Navigation;
 global using Cineaste.Client.Validation;
 global using Cineaste.Client.Views.Dialogs;

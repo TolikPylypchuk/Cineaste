@@ -574,15 +574,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Movie created successfully.
-        /// </summary>
-        public static string MovieForm_CreateMovie_Success {
-            get {
-                return ResourceManager.GetString("MovieForm.CreateMovie.Success", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this movie?.
         /// </summary>
         public static string MovieForm_DeleteDialog_Body {
@@ -723,15 +714,6 @@ namespace Cineaste.Client.Localization {
         public static string MovieForm_Titles {
             get {
                 return ResourceManager.GetString("MovieForm.Titles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Movie updated successfully.
-        /// </summary>
-        public static string MovieForm_UpdateMovie_Success {
-            get {
-                return ResourceManager.GetString("MovieForm.UpdateMovie.Success", resourceCulture);
             }
         }
         
@@ -1150,15 +1132,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Series created successfully.
-        /// </summary>
-        public static string SeriesForm_CreateSeries_Success {
-            get {
-                return ResourceManager.GetString("SeriesForm.CreateSeries.Success", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this series?.
         /// </summary>
         public static string SeriesForm_DeleteDialog_Body {
@@ -1326,15 +1299,6 @@ namespace Cineaste.Client.Localization {
         public static string SeriesForm_Titles {
             get {
                 return ResourceManager.GetString("SeriesForm.Titles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Series updated successfully.
-        /// </summary>
-        public static string SeriesForm_UpdateSeries_Success {
-            get {
-                return ResourceManager.GetString("SeriesForm.UpdateSeries.Success", resourceCulture);
             }
         }
         
