@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Fast.Components.FluentUI;
 
-using Radzen;
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.RootComponents.Add<App>("#app");
@@ -52,11 +50,6 @@ builder.Services.AddFluxor(options =>
     options.UseReduxDevTools();
 #endif
 });
-
-builder.Services.AddScoped<DialogService>();
-builder.Services.AddScoped<NotificationService>();
-builder.Services.AddScoped<TooltipService>();
-builder.Services.AddScoped<ContextMenuService>();
 
 builder.Services.AddScoped<GlobalEventMediator>();
 builder.Services.AddScoped<IGlobalEventInitiator>(services => services.GetRequiredService<GlobalEventMediator>());
