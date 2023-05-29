@@ -2,7 +2,7 @@
 @inject IGlobalEventProvider GlobalEventProvider
 
 <FormParamsProvider For="this">
-    <div class="container">
+    <div class="container list-sidebar">
         <div class="form-header">
             <div></div>
             <div></div>
@@ -20,7 +20,7 @@
                              Problem="@this.State.Value.Fetch.Problem" Class="problem-alert main" />
         } else
         {
-            <div class="form-container">
+            <div class="form-container list-sidebar">
                 <h2 class="form-title">
                     @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem is not null
                         ? this.FormTitle
@@ -31,18 +31,20 @@
                     <div class="form-links">
                         @if (this.HasImdbId())
                         {
-                            <FluentAnchor Href="@String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId)"
-                                          Target="_blank" Appearance="Appearance.Hypertext">
+                            string href = String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId);
+
+                            <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
                                 @this.Loc["Link.Imdb"]
                             </FluentAnchor>
                         }
 
                         @if (this.HasRottenTomatoesId())
                         {
-                            <FluentAnchor Href="@String.Format(
-                                            this.Loc["Link.RottenTomatoesUrlFormat"],
-                                            this.FormModel.RottenTomatoesId)"
-                                          Target="_blank" Appearance="Appearance.Hypertext">
+                            string href = String.Format(
+                                this.Loc["Link.RottenTomatoesUrlFormat"],
+                                this.FormModel.RottenTomatoesId);
+
+                            <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
                                 @this.Loc["Link.RottenTomatoes"]
                             </FluentAnchor>
                         }
@@ -59,21 +61,23 @@
                             <label class="label" for="watch-status">@this.Loc["SeriesForm.WatchStatus"]</label>
                             <FluentSelect Id="watch-status" Items="@this.AllWatchStatuses" Class="select form-field"
                                           @bind-SelectedOption="this.FormModel.WatchStatus"
-                                          OptionText="@(s => this.Loc[$"SeriesForm.WatchStatus.{s}"])" />
+                                          OptionText="@(s => this.Loc[$"SeriesForm.WatchStatus.{s}"])"
+                                          Position="SelectPosition.Below" />
                             <ErrorPresenter ErrorCode="Series.WatchStatus.*" Trigger="@this.StatusErrorTrigger" />
                         </div>
                         <div>
                             <label class="label" for="release-status">@this.Loc["SeriesForm.ReleaseStatus"]</label>
                             <FluentSelect Id="release-status" Items="this.AllReleaseStatuses" Class="select form-field"
                                           @bind-SelectedOption="this.FormModel.ReleaseStatus"
-                                          OptionText="@(s => this.Loc[$"SeriesForm.ReleaseStatus.{s}"])" />
+                                          OptionText="@(s => this.Loc[$"SeriesForm.ReleaseStatus.{s}"])"
+                                          Position="SelectPosition.Below" />
                         </div>
                     </div>
 
                     <div>
                         <label class="label" for="kind">@this.Loc["SeriesForm.Kind"]</label>
                         <FluentSelect Id="kind" Items="this.State.Value.AvailableKinds"
-                                      @bind-SelectedOption="this.FormModel.Kind"
+                                      @bind-SelectedOption="this.FormModel.Kind" Position="SelectPosition.Below"
                                       OptionText="@(o => o.Name)" Class="select form-field" />
                     </div>
 
@@ -137,42 +141,7 @@
                             </div>
                         }
                     </div>
-@*
-                    <RadzenDataList WrapItems="true" Data="@this.FormModel.Components"
-                                    class="overflow-visible w-100 mt-1">
-                        <Template Context="component">
-                            <div class="item-container d-flex flex-row justify-content-between border-bottom m-0 p-2"
-                                    role="button" @onclick="() => this.OpenSeriesComponentForm(component)">
-                                <p class="m-0">@component.Title</p>
-                                <div class="d-flex flex-row">
-                                    <p class="m-0">@component.Years</p>
-                                    @if (this.FormModel.Components.Count > 1)
-                                    {
-                                        <div role="button" class="ms-1">
-                                            <RadzenMenu>
-                                                <RadzenMenuItem>
-                                                    @if (this.CanMoveUp(component))
-                                                    {
-                                                        <RadzenMenuItem Text="@this.Loc["SeriesForm.Component.Up"]"
-                                                                        Click="@(e => this.MoveUp(component))"
-                                                                        Icon="keyboard_arrow_up" />
-                                                    }
 
-                                                    @if (this.CanMoveDown(component))
-                                                    {
-                                                        <RadzenMenuItem Text="@this.Loc["SeriesForm.Component.Down"]"
-                                                                        Click="@(e => this.MoveDown(component))"
-                                                                        Icon="keyboard_arrow_down" />
-                                                    }
-                                                </RadzenMenuItem>
-                                            </RadzenMenu>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </Template>
-                    </RadzenDataList>
-*@
                     <div class="add-components">
                         <FluentButton Appearance="Appearance.Neutral" @onclick="@this.AddSeason">
                             @this.Loc["SeriesForm.AddSeason"]

@@ -1,125 +1,137 @@
 @inherits CineasteForm<SeasonFormModel, SeasonRequest, SeasonModel, SeriesFormState>
 
-<CascadingValue Name="@CascadingParameters.ValidationExecutor" Value="@this" IsFixed="true">
-    <CascadingValue Name="@CascadingParameters.ErrorCodes" Value="@this.FormModel.ValidationErrors">
-        <div class="d-flex flex-column h-100">
-            <div class="d-flex flex-row justify-content-between">
-                <RadzenButton Icon="keyboard_arrow_up" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                              Click="this.GoToSeries" class="btn-transparent my-2" />
+<FormParamsProvider For="this">
+    <div class="container list-sidebar">
+        <div class="form-header">
+            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.GoToSeries">
+                <FluentIcon Name="@FluentIcons.ChevronUp" Color="Color.Neutral" />
+            </FluentButton>
 
-                <div class="d-flex flex-row">
-                    <RadzenButton Icon="keyboard_arrow_left" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                                  class="@($"btn-transparent{(this.FormModel.IsFirst ? " invisible" : "")} my-2 me-1")"
-                                  Click="this.OnGoToPreviousComponent" />
-                    <RadzenButton Icon="keyboard_arrow_right" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
-                                  class="@($"btn-transparent{(this.FormModel.IsLast ? " invisible" : "")} my-2 ms-1")"
-                                  Click="this.OnGoToNextComponent" />
-                </div>
+            <div class="go-to-other-components-container">
+                <FluentButton Appearance="Appearance.Lightweight" @onclick="this.OnGoToPreviousComponent"
+                              Class="@(this.FormModel.IsFirst ? "invisible" : null)"
+                              aria-hidden="@this.FormModel.IsFirst">
+                    <FluentIcon Name="@FluentIcons.ChevronLeft" Color="Color.Neutral" />
+                </FluentButton>
 
-                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Click="this.Close"
-                              class="btn-transparent my-2" />
+                <FluentButton Appearance="Appearance.Lightweight" @onclick="this.OnGoToNextComponent"
+                              Class="@(this.FormModel.IsLast ? "invisible" : null)"
+                              aria-hidden="@this.FormModel.IsLast">
+                    <FluentIcon Name="@FluentIcons.ChevronRight" Color="Color.Neutral" />
+                </FluentButton>
             </div>
 
-            <h1 class="form-title">
+            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.Close">
+                <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
+            </FluentButton>
+        </div>
+
+        <div class="form-container list-sidebar">
+            <h2 class="form-title">
                 @this.FormTitle
-            </h1>
+            </h2>
 
-            <div class="w-100 h-100 d-flex flex-column justify-content-between overflow-y-auto overflow-x-hidden">
-                <div class="h-100 overflow-y-auto overflow-x-hidden">
-                    <div class="d-flex flex-column align-items-center mt-2">
-                        @{
-                            int part = 1;
-                            bool multiple = this.FormModel.Periods
-                                .Count(period => !String.IsNullOrWhiteSpace(period.RottenTomatoesId)) > 1;
-                        }
+            <div class="form">
+                <div class="form-links">
+                    @{
+                        int part = 1;
 
-                        @foreach (var period in this.FormModel.Periods
-                            .Where(p => !String.IsNullOrWhiteSpace(p.RottenTomatoesId)))
-                        {
-                            <RadzenLink Path="@String.Format(
-                                            this.Loc["Link.RottenTomatoesUrlFormat"], period.RottenTomatoesId)"
-                                        Text="@this.RottenTomatoesLinkText(part, multiple)" target="_blank" />
-                            part++;
-                        }
-                    </div>
+                        var periods = this.FormModel.Periods
+                            .Where(p => !String.IsNullOrWhiteSpace(p.RottenTomatoesId))
+                            .ToList();
 
-                    <RadzenLabel Text="@this.Loc["SeasonForm.Titles"]" class="mt-2" />
-                    <TitlesForm Titles="@this.FormModel.Titles" PropertyName="Titles" />
-
-                    <RadzenLabel Text="@this.Loc["SeasonForm.OriginalTitles"]" class="mt-2" />
-                    <TitlesForm Titles="@this.FormModel.OriginalTitles" PropertyName="OriginalTitles" />
-
-                    <div class="row mt-2">
-                        <div class="col-md-6 pe-md-1">
-                            <RadzenLabel Text="@this.Loc["SeasonForm.WatchStatus"]" Component="WatchStatusDropDown" />
-                            <RadzenDropDown @bind-Value="@this.FormModel.WatchStatus" Data="@this.AllWatchStatuses"
-                                            AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
-                                            Name="WatchStatusDropDown" class="w-100">
-                                <Template>
-                                    @this.Loc[$"SeasonForm.WatchStatus.{context}"]
-                                </Template>
-                            </RadzenDropDown>
-                            <ErrorPresenter ErrorCode="Season.WatchStatus.*" Trigger="@(new
-                                                { this.FormModel.WatchStatus, this.FormModel.ReleaseStatus })" />
-                        </div>
-
-                        <div class="col-md-6 ps-md-1">
-                            <RadzenLabel Text="@this.Loc["SeasonForm.ReleaseStatus"]"
-                                         Component="ReleaseStatusDropDown" />
-                            <RadzenDropDown @bind-Value="@this.FormModel.ReleaseStatus" Data="@this.AllReleaseStatuses"
-                                            AllowVirtualization="false" AllowClear="false" AllowFiltering="false"
-                                            Name="ReleaseStatusDropDown" class="w-100">
-                                <Template>
-                                    @this.Loc[$"SeasonForm.ReleaseStatus.{context}"]
-                                </Template>
-                            </RadzenDropDown>
-                        </div>
-                    </div>
-
-                    <RadzenLabel Text="@this.Loc["SeasonForm.Channel"]" Component="ChannelTextBox" class="mt-1" />
-                    <RadzenTextBox @bind-Value="@this.FormModel.Channel" Name="ChannelTextBox" class="w-100" />
-                    <ErrorPresenter ErrorCode="Season.Channel.*" Trigger="@this.FormModel.Channel" />
-
-                    @foreach (var period in this.FormModel.Periods)
-                    {
-                        <PeriodForm FormModel="@period" CanRemove="@(this.FormModel.Periods.Count > 1)"
-                                    Removed="@(() => this.OnPeriodRemoved(period))" Changed="@this.OnPeriodChanged" />
+                        bool multiple = periods.Count > 1;
                     }
 
+                    @foreach (var period in periods)
+                    {
+                        string href = String.Format(this.Loc["Link.RottenTomatoesUrlFormat"], period.RottenTomatoesId);
+
+                        <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
+                            @this.RottenTomatoesLinkText(part, multiple)
+                        </FluentAnchor>
+
+                        part++;
+                    }
+                </div>
+
+                <TitlesForm Titles="@this.FormModel.Titles" Label="SeasonForm.Titles"
+                            PropertyName="@nameof(this.FormModel.Titles)" />
+
+                <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="SeasonForm.OriginalTitles"
+                            PropertyName="@nameof(this.FormModel.OriginalTitles)" />
+
+                <div class="form-statuses">
                     <div>
-                        <ErrorPresenter ErrorCode="Season.Periods.*" Trigger="@this.PeriodValidationTrigger" />
+                        <label class="label" for="watch-status">@this.Loc["SeasonForm.WatchStatus"]</label>
+                        <FluentSelect Id="watch-status" Items="@this.AllWatchStatuses" Class="select form-field"
+                                      @bind-SelectedOption="this.FormModel.WatchStatus"
+                                      OptionText="@(s => this.Loc[$"SeasonForm.WatchStatus.{s}"])"
+                                      Position="SelectPosition.Below" />
+                        <ErrorPresenter ErrorCode="Season.WatchStatus.*" Trigger="@this.StatusErrorTrigger" />
                     </div>
-
-                    <div class="d-flex justify-content-center">
-                        <div class="mt-2" style="display: inline-grid; grid-template-columns: 1fr 1fr">
-                            <RadzenButton Text="@this.Loc["SeasonForm.AddTitle"]" ButtonStyle="ButtonStyle.Secondary"
-                                          Click="@(e => this.AddTitle(this.FormModel.Titles))"
-                                          class="d-inline-block me-1" />
-                            <RadzenButton Text="@this.Loc["SeasonForm.AddOriginalTitle"]"
-                                          ButtonStyle="ButtonStyle.Secondary" class="d-inline-block ms-1"
-                                          Click="@(e => this.AddTitle(this.FormModel.OriginalTitles))" />
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center mt-2">
-                        <RadzenButton Text="@this.Loc["SeasonForm.AddPeriod"]" ButtonStyle="ButtonStyle.Secondary"
-                                      Click="@(e => this.AddPeriod())" class="" />
-                    </div>
-
-                    <div class="d-flex justify-content-center my-4">
-                        <RadzenButton Text="@this.Loc["Button.Delete"]" ButtonStyle="ButtonStyle.Danger"
-                                      Click="@this.Delete" />
+                    <div>
+                        <label class="label" for="release-status">@this.Loc["SeasonForm.ReleaseStatus"]</label>
+                        <FluentSelect Id="release-status" Items="this.AllReleaseStatuses" Class="select form-field"
+                                      @bind-SelectedOption="this.FormModel.ReleaseStatus"
+                                      OptionText="@(s => this.Loc[$"SeasonForm.ReleaseStatus.{s}"])"
+                                      Position="SelectPosition.Below" />
                     </div>
                 </div>
 
-                <div class="d-flex flex-row my-2">
-                    <RadzenButton Text="@this.Loc["SeasonForm.GoToSeries"]" ButtonStyle="ButtonStyle.Primary"
-                                  Click="@this.GoToSeries" class="me-1" />
-                    <RadzenButton Text="@this.Loc["Button.Cancel"]" ButtonStyle="ButtonStyle.Secondary"
-                                  class="@($"{(this.FormModel.HasChanges ? "ms-1" : "d-none")}")"
-                                  Click="@this.Cancel" />
+                <div>
+                    <FluentTextField @bind-Value="@this.FormModel.Channel" Class="form-field">
+                        @this.Loc["SeasonForm.Channel"]
+                    </FluentTextField>
+                    <ErrorPresenter ErrorCode="Season.Channel.*" Trigger="@this.FormModel.Channel" />
+                </div>
+
+                @foreach (var period in this.FormModel.Periods)
+                {
+                    <PeriodForm FormModel="@period" CanRemove="@(this.FormModel.Periods.Count > 1)"
+                                Removed="@(() => this.OnPeriodRemoved(period))" Changed="@this.OnPeriodChanged" />
+                }
+
+                <div>
+                    <ErrorPresenter ErrorCode="Season.Periods.*" Trigger="@this.PeriodValidationTrigger" />
+                </div>
+
+                <div class="add-titles">
+                    <FluentButton Appearance="Appearance.Neutral"
+                                  @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
+                        @this.Loc["SeasonForm.AddTitle"]
+                    </FluentButton>
+                    <FluentButton Appearance="Appearance.Neutral"
+                                  @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
+                        @this.Loc["SeasonForm.AddOriginalTitle"]
+                    </FluentButton>
+                </div>
+
+                <div class="button-container">
+                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.AddPeriod">
+                        @this.Loc["SeasonForm.AddPeriod"]
+                    </FluentButton>
+                </div>
+
+                <div class="button-container">
+                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Delete">
+                        @this.Loc["Button.Delete"]
+                    </FluentButton>
                 </div>
             </div>
+
+            <div class="form-actions">
+                <FluentButton Appearance="Appearance.Accent" @onclick="@this.GoToSeries">
+                    @this.Loc["SeasonForm.GoToSeries"]
+                </FluentButton>
+
+                @if (this.FormModel.HasChanges)
+                {
+                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Cancel">
+                        @this.Loc["Button.Cancel"]
+                    </FluentButton>
+                }
+            </div>
         </div>
-    </CascadingValue>
-</CascadingValue>
+    </div>
+</FormParamsProvider>

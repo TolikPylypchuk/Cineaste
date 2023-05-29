@@ -24,6 +24,9 @@ public partial class SeasonForm
 
     private string FormTitle { get; set; } = String.Empty;
 
+    private object StatusErrorTrigger =>
+        new { this.FormModel.WatchStatus, this.FormModel.ReleaseStatus };
+
     private object PeriodValidationTrigger { get; set; } = new();
 
     private ImmutableArray<SeasonWatchStatus> AllWatchStatuses { get; } =

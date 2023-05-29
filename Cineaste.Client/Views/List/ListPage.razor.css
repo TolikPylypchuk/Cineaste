@@ -3,7 +3,6 @@
   display: grid;
   grid-template-columns: fit-content(200px) 4fr 1fr;
   grid-template-areas: 'nav list sidebar';
-  gap: var(--s2);
 }
 
 .nav-menu-container {
@@ -20,6 +19,4 @@
   grid-area: sidebar;
   height: 100%;
   overflow-y: auto;
-  margin-inline-start: calc(var(--s2) * -1);
-  padding-inline-start: var(--s2);
 }

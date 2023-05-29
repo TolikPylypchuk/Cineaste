@@ -1,0 +1,20 @@
+.episode-count-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
+  justify-items: stretch;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.rotten-tomatoes-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--s2);
+}
+
+.rotten-tomatoes {
+  flex: 1;
+}

@@ -51,8 +51,11 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--s2);
-  --wrap-width-small: 132px;
+  --wrap-width-small: 128px;
   --wrap-width-large: 148px;
+  /* Needed to not cut selectors' shadows inside sidebar forms */
+  margin-inline-start: calc(var(--s16) * -1);
+  padding-inline-start: calc(var(--s16) + var(--s2));
 }
 
 .form-actions {

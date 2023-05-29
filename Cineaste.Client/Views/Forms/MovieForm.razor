@@ -1,7 +1,7 @@
 @inherits CineasteForm<MovieFormModel, MovieRequest, MovieModel, MovieFormState>
 
 <FormParamsProvider For="this">
-    <div class="container">
+    <div class="container list-sidebar">
         <div class="form-header">
             <div></div>
             <div></div>
@@ -19,7 +19,7 @@
                              TryAgain="@this.FetchMovie" Class="problem-alert main" />
         } else
         {
-            <div class="form-container">
+            <div class="form-container list-sidebar">
                 <h2 class="form-title">
                     @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem is not null
                         ? this.FormTitle
@@ -30,18 +30,20 @@
                     <div class="form-links">
                         @if (this.HasImdbId())
                         {
-                            <FluentAnchor Href="@String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId)"
-                                          Target="_blank" Appearance="Appearance.Hypertext">
+                            string href = String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId);
+
+                            <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
                                 @this.Loc["Link.Imdb"]
                             </FluentAnchor>
                         }
 
                         @if (this.HasRottenTomatoesId())
                         {
-                            <FluentAnchor Href="@String.Format(
-                                            this.Loc["Link.RottenTomatoesUrlFormat"],
-                                            this.FormModel.RottenTomatoesId)"
-                                          Target="_blank" Appearance="Appearance.Hypertext">
+                            string href = String.Format(
+                                this.Loc["Link.RottenTomatoesUrlFormat"],
+                                this.FormModel.RottenTomatoesId);
+
+                            <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
                                 @this.Loc["Link.RottenTomatoes"]
                             </FluentAnchor>
                         }
@@ -80,7 +82,7 @@
                         <div>
                             <label class="label" for="kind">@this.Loc["MovieForm.Kind"]</label>
                             <FluentSelect Id="kind" Items="@this.State.Value.AvailableKinds"
-                                          @bind-SelectedOption="this.FormModel.Kind"
+                                          @bind-SelectedOption="this.FormModel.Kind" Position="SelectPosition.Below"
                                           OptionText="@(k => k.Name)" Class="kind-select form-field" />
                         </div>
                     </div>

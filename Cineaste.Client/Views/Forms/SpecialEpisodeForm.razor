@@ -1,7 +1,7 @@
 @inherits CineasteForm<SpecialEpisodeFormModel, SpecialEpisodeRequest, SpecialEpisodeModel, SeriesFormState>
 
 <FormParamsProvider For="this">
-    <div class="container">
+    <div class="container list-sidebar">
         <div class="form-header">
             <FluentButton Appearance="Appearance.Lightweight" @onclick="this.GoToSeries">
                 <FluentIcon Name="@FluentIcons.ChevronUp" Color="Color.Neutral" />
@@ -26,7 +26,7 @@
             </FluentButton>
         </div>
 
-        <div class="form-container">
+        <div class="form-container list-sidebar">
             <h2 class="form-title">
                 @(!String.IsNullOrEmpty(this.FormTitle) || this.Episode is not null
                     ? this.FormTitle
@@ -37,10 +37,11 @@
                 <div class="form-links">
                     @if (this.HasRottenTomatoesId())
                     {
-                        <FluentAnchor Href="@String.Format(
-                                        this.Loc["Link.RottenTomatoesUrlFormat"],
-                                        this.FormModel.RottenTomatoesId)"
-                                      Target="_blank" Appearance="Appearance.Hypertext">
+                        string href = String.Format(
+                            this.Loc["Link.RottenTomatoesUrlFormat"],
+                            this.FormModel.RottenTomatoesId);
+
+                        <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
                             @this.Loc["Link.RottenTomatoes"]
                         </FluentAnchor>
                     }
@@ -68,7 +69,7 @@
                             PropertyName="@nameof(this.FormModel.OriginalTitles)" />
 
                 <div>
-                    <FluentTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field">
+                    <FluentTextField @bind-Value="@this.FormModel.Channel" Class="form-field">
                         @this.Loc["SpecialEpisodeForm.Channel"]
                     </FluentTextField>
                     <ErrorPresenter ErrorCode="SpecialEpisode.Channel.*"
@@ -109,9 +110,13 @@
                 <FluentButton Appearance="Appearance.Accent" @onclick="@this.GoToSeries">
                     @this.Loc["SpecialEpisodeForm.GoToSeries"]
                 </FluentButton>
-                <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Cancel">
-                    @this.Loc["Button.Cancel"]
-                </FluentButton>
+
+                @if (this.FormModel.HasChanges)
+                {
+                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Cancel">
+                        @this.Loc["Button.Cancel"]
+                    </FluentButton>
+                }
             </div>
         </div>
     </div>

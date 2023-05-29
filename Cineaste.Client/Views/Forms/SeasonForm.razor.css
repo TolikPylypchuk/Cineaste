@@ -62,10 +62,9 @@
 
 .form-links {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: var(--s2);
-  flex-wrap: wrap;
 }
 
 ::deep .form-field {
@@ -73,12 +72,20 @@
   display: block;
 }
 
-.form-checkboxes {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+.form-statuses {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
+  justify-content: stretch;
   gap: var(--s2);
-  flex-wrap: wrap;
+}
+
+::deep .select {
+  min-width: 0;
+}
+
+::deep .form-statuses .select::part(listbox) {
+  width: fit-content;
+  min-width: 100%;
 }
 
 .add-titles {
@@ -87,7 +94,7 @@
   gap: var(--s2);
 }
 
-.delete-container {
+.button-container {
   display: flex;
   justify-content: center;
   margin-block: var(--s2);

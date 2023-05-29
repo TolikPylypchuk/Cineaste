@@ -9,7 +9,8 @@
 
         <FluentSelect Id="@($"{this.Id}-month")" Items="@this.Months" SelectedOption="@this.Month"
                       SelectedOptionChanged="@((int month) => this.OnMonthChanged(month))"
-                      OptionText="@(m => this.Loc[$"Month.{m}"])" Class="select form-field" />
+                      OptionText="@(m => this.Loc[$"Month.{m}"])" Position="SelectPosition.Below"
+                      Class="select form-field" />
     </div>
 
     <div>

@@ -11,7 +11,7 @@
         <ListComponent ItemSelected="@this.SelectItem" FetchList="@this.FetchList" />
     </div>
 
-    <div class="sidebar-container">
+    <div class="sidebar-container list-sidebar">
         @if (this.State.Value.IsLoaded && this.State.Value.Problem is null)
         {
             @switch (this.State.Value.SelectionMode)
