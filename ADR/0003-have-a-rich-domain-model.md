@@ -25,7 +25,7 @@ The only reason I've chosen to have a rich domain model is to practice creating 
 ## Consequences
 
 Having a rich domain model will make reasoning about it easier. On the other hand, such a simple project may not benefit
-from a rich domain model. Thus some parts of the app may be a little too difficult than they should be.
+from a rich domain model. Thus some parts of the app may be a little more complex than they should be.
 
 Having the domain model be oblivious to the persistence technology may be unachievable, and at the very least the
 persistence concerns will have to adapt significantly.

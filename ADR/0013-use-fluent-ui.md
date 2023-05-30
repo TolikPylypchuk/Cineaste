@@ -7,8 +7,8 @@
 ## Context
 
 After studying CSS I've become much more proficient in writing UIs effectively. As such, I've decided not to use CSS
-frameworks like Bootstrap, and intead write CSS on my own. Unfortunately, Radzen comes with Bootstrap and offers little
-in terms of customizations. Also, I've come to see that it's tailored more to line-of-business applications.
+frameworks like Bootstrap, and instead write CSS on my own. Unfortunately, Radzen comes with Bootstrap and offers little
+in terms of customization. Also, I've come to see that it's tailored more to line-of-business applications.
 
 ## Decision
 

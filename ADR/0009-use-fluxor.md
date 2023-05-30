@@ -16,8 +16,8 @@ As such, alternatives to ReactiveUI should be considered in greater detail while
 
 ## Decision
 
-When it comes to state management, I've decided to give the Redux pattern a try, and Fluxor - its implementation for
-.NET.
+When it comes to state management, I've decided to give the Redux pattern a try, and
+[Fluxor](https://github.com/mrpmorris/Fluxor) - its implementation for .NET.
 
 The advantages that each component's state is immutable, and data flows in a single direction. I really like this
 approach - this makes hydrating components with pre-existing state trivial. It also reminds me of MVU, albeit the UI is

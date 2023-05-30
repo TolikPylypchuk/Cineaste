@@ -11,7 +11,8 @@ Framework (EF).
 
 ## Decision
 
-Entity Framework will be used, as it's well-optimized and well-supported. Also, it's an opportunity for me to learn.
+[Entity Framework](https://learn.microsoft.com/en-us/ef) will be used, as it's well-optimized and well-supported. Also,
+it's an opportunity for me to learn.
 
 Fluent API will be used to configure the database as persistence concerns will live in a project which is seaprate from
 the one which contains the domain.

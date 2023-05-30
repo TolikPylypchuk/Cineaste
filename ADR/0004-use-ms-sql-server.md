@@ -10,8 +10,8 @@ Data for the project has to be stored somewhere, and the relational model is the
 
 ## Decision
 
-Since Microsoft SQL Server (or MS SQL) is commonly used with .NET, that's the database I'm going to use for the project.
-The Express edition is free and more than enough for my needs.
+Since [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server) (or MS SQL) is commonly used with .NET, that's
+the database I'm going to use for the project. The Express edition is free and more than enough for my needs.
 
 ## Consequences
 

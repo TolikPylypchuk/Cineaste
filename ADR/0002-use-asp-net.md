@@ -16,10 +16,11 @@ technology will be used for the back-end and the front-end.
 
 ## Decision
 
-Using ASP.NET Core for the back-end is a no-brainer. It's the most popular web framework for .NET, it's extensive and
-well supported.
+Using [ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet) for the back-end is a no-brainer. It's the most
+popular web framework for .NET, it's extensive and well supported.
 
-For the front-end there are multiple choices. I've decided to use Blazor since it also runs on .NET so will need minimal
+For the front-end there are multiple choices. I've decided to use
+[Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) since it also runs on .NET so will need minimal
 JavaScript, if at all. Also, it's a nice opportunity to learn. There are two variants of Blazor - I've chosen Blazor
 WebAssembly since I think it's a better workflow, and will allow the app to be semi-offline in the future.
 

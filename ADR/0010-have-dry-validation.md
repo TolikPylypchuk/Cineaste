@@ -13,9 +13,9 @@ between the front-end and the back-end since they both use C#.
 
 ## Decision
 
-I've decided to use FluentValidation to create validators as its API is simple and expressive. I've also decided that
-application services should accept already-validated requests, so that it's impossible not to run validation before
-calling these services.
+I've decided to use [FluentValidation](https://docs.fluentvalidation.net) to create validators as its API is simple and
+expressive. I've also decided that application services should accept already-validated requests, so that it's
+impossible not to run validation before calling these services.
 
 The domain will be minimally self-validating for the time being since the application services are guaranteed to accept
 validated requests. I don't like it very much, but for now it'll do. Maybe it will changed in the future.

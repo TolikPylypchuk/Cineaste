@@ -11,8 +11,8 @@ There are several good UI component libraries, but most of them are not free.
 
 ## Decision
 
-Radzen Blazor will be used for UI components as it's free, easy to use, reasonably good-looking, and integrates with
-Bootstrap.
+[Radzen Blazor](https://blazor.radzen.com) will be used for UI components as it's free, easy to use, reasonably
+good-looking, and integrates with Bootstrap.
 
 Radzen also supports form validation, but I will not use it, and instead I will roll my own validation infrastructure.
 

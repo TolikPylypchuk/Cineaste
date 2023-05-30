@@ -14,8 +14,8 @@ testing the services difficult because mocking the database in a compatible way 
 I've decided not to write unit tests for the application logic. but only for self-contained nuggets of logic such as
 validation and domain. The rest will be tested using integration tests.
 
-xUnit will still be used as the testing engine, and Testcontainers will be used to spin up Docker containers with the
-MS SQL server so that the database is real.
+xUnit will still be used as the testing engine, and [Testcontainers](https://dotnet.testcontainers.org) will be used to
+spin up Docker containers with the MS SQL server so that the database is real.
 
 ## Consequences
 

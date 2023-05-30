@@ -15,11 +15,9 @@ semi-prove those properties.
 
 ## Decision
 
-I've decided to use xUnit as the testing framework and the engine for unit-tests on the back-end, bUnit as the engine
-for unit-tests on the front-end, and FsCheck to enable property-based testing.
-
-As for mocking, Moq will be used if it's required. For the database, the Entity Framework in-memory provider will be
-used as it's much easier to set up than mocking the database completely.
+I've decided to use [xUnit](https://xunit.net) as the testing framework and the engine for unit-tests on the back-end
+and [FsCheck](https://fscheck.github.io/FsCheck) to enable property-based testing. As for mocking,
+[Moq](https://moq.github.io/moq4) will be used if it's required. 
 
 ## Consequences
 
@@ -31,5 +29,4 @@ structuring my code and thinking about desgn consequences. I will also gain expe
 The most obvious alternative is not to write tests at all, but that's out of the question.
 
 NUnit and MSTest are alternative unit-testing frameworks, but I'm most accustomed to xUnit. Property-based testing is
-not required, but I like this approach a lot. bUnit is not required as well, but I think it will make testing the
-front-end much easier.
+not required, but I like this approach a lot.
