@@ -1,6 +1,6 @@
 # Use Radzen Blazor as the Library for UI Components
 
-**Status:** Implemented
+**Status:** Superseded by [ADR-0013](0013-use-fluent-ui.md)
 
 **Date:** 2022-07-05
 

@@ -42,6 +42,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ADR", "ADR", "{6FE17DA8-692
 		ADR\0010-have-dry-validation.md = ADR\0010-have-dry-validation.md
 		ADR\0011-unit-tests-be.md = ADR\0011-unit-tests-be.md
 		ADR\0012-integration-tests.md = ADR\0012-integration-tests.md
+		ADR\0013-use-fluent-ui.md = ADR\0013-use-fluent-ui.md
 		ADR\README.md = ADR\README.md
 	EndProjectSection
 EndProject
