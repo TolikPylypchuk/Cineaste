@@ -23,12 +23,16 @@ builder.Services.Configure<JsonOptions>(options =>
 
 builder.Services.AddProblemDetails();
 
-builder.Services.AddScoped<ICultureExtractor, CultureExtractor>();
-builder.Services.AddScoped<IListService, ListService>();
-builder.Services.AddScoped<IMovieService, MovieService>();
-builder.Services.AddScoped<ISeriesService, SeriesService>();
-builder.Services.AddScoped<IFranchiseService, FranchiseService>();
-builder.Services.AddScoped<TestDataProvider>();
+builder.Services.AddScoped<CultureExtractor>();
+builder.Services.AddScoped<ListService>();
+builder.Services.AddScoped<MovieService>();
+builder.Services.AddScoped<SeriesService>();
+builder.Services.AddScoped<FranchiseService>();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddScoped<TestDataProvider>();
+}
 
 var app = builder.Build();
 
@@ -52,8 +56,9 @@ app.MapFranchiseRoutes();
 
 app.MapFallbackRoutes();
 
-using (var scope = app.Services.CreateScope())
+if (builder.Environment.IsDevelopment())
 {
+    using var scope = app.Services.CreateScope();
     var provider = scope.ServiceProvider.GetRequiredService<TestDataProvider>();
     await provider.CreateTestDataIfNeeded();
 }

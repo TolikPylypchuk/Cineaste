@@ -1,8 +1,7 @@
 namespace Cineaste.Server.Services;
 
 [AutoConstructor]
-[GenerateAutoInterface]
-public sealed partial class SeriesService : ISeriesService
+public sealed partial class SeriesService
 {
     private readonly CineasteDbContext dbContext;
     private readonly ILogger<SeriesService> logger;

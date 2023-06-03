@@ -10,10 +10,10 @@ public static class MovieRoutes
         routes.MapDelete("/api/movies/{id}", DeleteMovie);
     }
 
-    private static async Task<IResult> GetMovie(Guid id, IMovieService movieService) =>
+    private static async Task<IResult> GetMovie(Guid id, MovieService movieService) =>
         Results.Ok(await movieService.GetMovie(Id.Create<Movie>(id)));
 
-    private static async Task<IResult> CreateMovie(Validated<MovieRequest> request, IMovieService movieService)
+    private static async Task<IResult> CreateMovie(Validated<MovieRequest> request, MovieService movieService)
     {
         var movie = await movieService.CreateMovie(request);
         return Results.Created($"/api/movies/{movie.Id}", movie);
@@ -22,10 +22,10 @@ public static class MovieRoutes
     private static async Task<IResult> UpdateMovie(
         Guid id,
         Validated<MovieRequest> request,
-        IMovieService movieService) =>
+        MovieService movieService) =>
         Results.Ok(await movieService.UpdateMovie(Id.Create<Movie>(id), request));
 
-    private static async Task<IResult> DeleteMovie(Guid id, IMovieService movieService)
+    private static async Task<IResult> DeleteMovie(Guid id, MovieService movieService)
     {
         await movieService.DeleteMovie(Id.Create<Movie>(id));
         return Results.NoContent();

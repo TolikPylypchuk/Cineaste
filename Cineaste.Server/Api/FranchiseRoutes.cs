@@ -8,12 +8,12 @@ public static class FranchiseRoutes
         routes.MapPost("/api/franchises", CreateFranchise);
     }
 
-    private static async Task<IResult> GetFranchise(Guid id, IFranchiseService franchiseService) =>
+    private static async Task<IResult> GetFranchise(Guid id, FranchiseService franchiseService) =>
         Results.Ok(await franchiseService.GetFranchise(Id.Create<Franchise>(id)));
 
     private static async Task<IResult> CreateFranchise(
         Validated<FranchiseRequest> request,
-        IFranchiseService franchiseService)
+        FranchiseService franchiseService)
     {
         var franchise = await franchiseService.CreateFranchise(request);
         return Results.Created($"/api/franchises/{franchise.Id}", franchise);

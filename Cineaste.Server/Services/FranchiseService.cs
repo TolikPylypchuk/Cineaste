@@ -1,8 +1,7 @@
 namespace Cineaste.Server.Services;
 
 [AutoConstructor]
-[GenerateAutoInterface]
-public sealed partial class FranchiseService : IFranchiseService
+public sealed partial class FranchiseService
 {
     private readonly CineasteDbContext dbContext;
     private readonly ILogger<FranchiseService> logger;

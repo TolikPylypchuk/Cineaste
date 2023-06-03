@@ -10,13 +10,13 @@ public static class ListRoutes
         routes.MapPost("/api/lists", CreateList);
     }
 
-    private static async Task<IResult> GetAllLists(IListService listService) =>
+    private static async Task<IResult> GetAllLists(ListService listService) =>
         Results.Ok(await listService.GetAllLists());
 
-    private static async Task<IResult> GetList(string handle, IListService listService) =>
+    private static async Task<IResult> GetList(string handle, ListService listService) =>
         Results.Ok(await listService.GetList(handle));
 
-    private static async Task<IResult> CreateList(Validated<CreateListRequest> request, IListService listService)
+    private static async Task<IResult> CreateList(Validated<CreateListRequest> request, ListService listService)
     {
         var response = await listService.CreateList(request);
         return Results.Created($"/api/lists/{response.Handle}", response);
