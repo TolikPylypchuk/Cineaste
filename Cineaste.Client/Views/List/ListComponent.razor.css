@@ -21,12 +21,10 @@
 
 ::deep .list {
   width: 100%;
-  flex: 0;
+  flex-grow: 1;
+  overflow-y: auto;
   --type-ramp-base-font-size: 1.25rem;
   --type-ramp-base-line-height: initial;
-}
-
-::deep .row {
 }
 
 ::deep .selected-row {
@@ -41,6 +39,7 @@
 
 ::deep .list fluent-data-grid-cell:not(.column-header) {
   --type-ramp-base-line-height: 1em;
+  /* Padding is defined in the cell content */
   padding: 0;
 }
 
@@ -48,6 +47,7 @@
   height: 100%;
   cursor: pointer;
   color: var(--cell-color);
+  /* Padding is defined here instead of the cell itself so that click events can be captured by the content */
   padding:
     calc((var(--design-unit) + var(--focus-stroke-width) - var(--stroke-width)) * 1px)
     calc(((var(--design-unit) * 3) + var(--focus-stroke-width) - var(--stroke-width)) * 1px);
