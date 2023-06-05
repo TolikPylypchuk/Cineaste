@@ -652,7 +652,7 @@ namespace Cineaste.Persistence.Migrations
                 column: "ParentFranchiseId",
                 principalTable: "Franchises",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />

@@ -1,6 +1,6 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class Movie : TitledEntity<Movie>
+public sealed class Movie : FranchiseItemEntity<Movie>
 {
     private int year;
     private string? imdbId;
@@ -39,8 +39,6 @@ public sealed class Movie : TitledEntity<Movie>
         [MemberNotNull(nameof(kind))]
         set => this.kind = Require.NotNull(value);
     }
-
-    public FranchiseItem? FranchiseItem { get; set; }
 
     public IReadOnlySet<TagContainer> Tags =>
         this.tags;

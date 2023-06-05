@@ -6,6 +6,7 @@ public static class FranchiseRoutes
     {
         routes.MapGet("/api/franchises/{id}", GetFranchise);
         routes.MapPost("/api/franchises", CreateFranchise);
+        routes.MapPut("/api/franchises/{id}", UpdateFranchise);
     }
 
     private static async Task<IResult> GetFranchise(Guid id, FranchiseService franchiseService) =>
@@ -18,4 +19,10 @@ public static class FranchiseRoutes
         var franchise = await franchiseService.CreateFranchise(request);
         return Results.Created($"/api/franchises/{franchise.Id}", franchise);
     }
+
+    private static async Task<IResult> UpdateFranchise(
+        Guid id,
+        Validated<FranchiseRequest> request,
+        FranchiseService franchiseService) =>
+        Results.Ok(await franchiseService.UpdateFranchise(Id.Create<Franchise>(id), request));
 }

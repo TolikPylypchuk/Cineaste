@@ -11,7 +11,7 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
 
         franchise.HasMany(f => f.Children)
             .WithOne(item => item.ParentFranchise)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         franchise.Navigation(f => f.Children)
             .UsePropertyAccessMode(PropertyAccessMode.Field);

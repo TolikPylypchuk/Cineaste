@@ -1,6 +1,6 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class Series : TitledEntity<Series>
+public sealed class Series : FranchiseItemEntity<Series>
 {
     private string? imdbId;
     private string? rottenTomatoesId;
@@ -34,8 +34,6 @@ public sealed class Series : TitledEntity<Series>
     }
 
     public Poster? Poster { get; set; }
-
-    public FranchiseItem? FranchiseItem { get; set; }
 
     public IReadOnlyCollection<Season> Seasons =>
         this.seasons.AsReadOnly();

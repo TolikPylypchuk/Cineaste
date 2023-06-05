@@ -8,7 +8,7 @@ public sealed partial class MovieService
 
     public async Task<MovieModel> GetMovie(Id<Movie> id)
     {
-        this.logger.LogDebug("Getting the movie with id: {Id}", id.Value);
+        this.logger.LogDebug("Getting the movie with ID: {Id}", id.Value);
 
         var movie = await this.FindMovie(id);
         return movie.ToMovieModel();
@@ -33,7 +33,7 @@ public sealed partial class MovieService
 
     public async Task<MovieModel> UpdateMovie(Id<Movie> id, Validated<MovieRequest> request)
     {
-        this.logger.LogDebug("Updating a movie with ID {Id}", id.Value);
+        this.logger.LogDebug("Updating the movie with ID: {Id}", id.Value);
 
         var movie = await this.FindMovie(id);
         var list = await this.FindList(request.Value.ListId);
@@ -54,14 +54,9 @@ public sealed partial class MovieService
 
     public async Task DeleteMovie(Id<Movie> id)
     {
-        this.logger.LogDebug("Deleting the movie with id: {Id}", id.Value);
+        this.logger.LogDebug("Deleting the movie with ID: {Id}", id.Value);
 
-        var movie = await this.dbContext.Movies.FindAsync(id);
-
-        if (movie is null)
-        {
-            throw this.NotFound(id);
-        }
+        var movie = await this.dbContext.Movies.FindAsync(id) ?? throw this.NotFound(id);
 
         this.dbContext.Movies.Remove(movie);
         await this.dbContext.SaveChangesAsync();
@@ -94,12 +89,9 @@ public sealed partial class MovieService
             .AsSplitQuery()
             .SingleOrDefaultAsync(list => list.Id == listId);
 
-        if (list is null)
-        {
-            throw this.NotFound(listId);
-        }
-
-        return list;
+        return list is not null
+            ? list
+            : throw this.NotFound(listId);
     }
 
     private async Task<MovieKind> FindKind(Guid id, CineasteList list)
@@ -119,15 +111,15 @@ public sealed partial class MovieService
     }
 
     private Exception NotFound(Id<Movie> id) =>
-        new NotFoundException(Resources.Movie, $"Could not find a movie with id {id.Value}")
+        new NotFoundException(Resources.Movie, $"Could not find a movie with ID {id.Value}")
             .WithProperty(id);
 
     private Exception NotFound(Id<CineasteList> id) =>
-        new NotFoundException(Resources.List, $"Could not find a list with id {id.Value}")
+        new NotFoundException(Resources.List, $"Could not find a list with ID {id.Value}")
             .WithProperty(id);
 
     private Exception NotFound(Id<MovieKind> id) =>
-        new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with id {id.Value}")
+        new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with ID {id.Value}")
             .WithProperty(id);
 
     private Exception MovieDoesNotBelongToList(Id<Movie> movieId, Id<CineasteList> listId) =>

@@ -8,7 +8,7 @@ public sealed partial class SeriesService
 
     public async Task<SeriesModel> GetSeries(Id<Series> id)
     {
-        this.logger.LogDebug("Getting the series with id: {Id}", id.Value);
+        this.logger.LogDebug("Getting the series with ID: {Id}", id.Value);
 
         var series = await this.FindSeries(id);
         return series.ToSeriesModel();
@@ -33,7 +33,7 @@ public sealed partial class SeriesService
 
     public async Task<SeriesModel> UpdateSeries(Id<Series> id, Validated<SeriesRequest> request)
     {
-        this.logger.LogDebug("Updating a movie with ID {Id}", id.Value);
+        this.logger.LogDebug("Updating the series with ID: {Id}", id.Value);
 
         var series = await this.FindSeries(id);
         var list = await this.FindList(request.Value.ListId);
@@ -54,14 +54,9 @@ public sealed partial class SeriesService
 
     public async Task DeleteSeries(Id<Series> id)
     {
-        this.logger.LogDebug("Deleting the series with id: {Id}", id.Value);
+        this.logger.LogDebug("Deleting the series with ID: {Id}", id.Value);
 
-        var series = await this.dbContext.Series.FindAsync(id);
-
-        if (series is null)
-        {
-            throw this.NotFound(id);
-        }
+        var series = await this.dbContext.Series.FindAsync(id) ?? throw this.NotFound(id);
 
         this.dbContext.Series.Remove(series);
         await this.dbContext.SaveChangesAsync();
@@ -109,12 +104,9 @@ public sealed partial class SeriesService
             .AsSplitQuery()
             .SingleOrDefaultAsync(list => list.Id == listId);
 
-        if (list is null)
-        {
-            throw this.NotFound(listId);
-        }
-
-        return list;
+        return list is not null
+            ? list
+            : throw this.NotFound(listId);
     }
 
     private async Task<SeriesKind> FindKind(Guid id, CineasteList list)
@@ -134,15 +126,15 @@ public sealed partial class SeriesService
     }
 
     private Exception NotFound(Id<Series> id) =>
-        new NotFoundException(Resources.Series, $"Could not find a series with id {id.Value}")
+        new NotFoundException(Resources.Series, $"Could not find a series with ID {id.Value}")
             .WithProperty(id);
 
     private Exception NotFound(Id<CineasteList> id) =>
-        new NotFoundException(Resources.List, $"Could not find a list with id {id.Value}")
+        new NotFoundException(Resources.List, $"Could not find a list with ID {id.Value}")
             .WithProperty(id);
 
     private Exception NotFound(Id<SeriesKind> id) =>
-        new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with id {id.Value}")
+        new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with ID {id.Value}")
             .WithProperty(id);
 
     private Exception SeriesDoesNotBelongToList(Id<Series> seriesId, Id<CineasteList> listId) =>

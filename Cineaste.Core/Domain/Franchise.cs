@@ -1,6 +1,6 @@
 namespace Cineaste.Core.Domain;
 
-public sealed class Franchise : TitledEntity<Franchise>
+public sealed class Franchise : FranchiseItemEntity<Franchise>
 {
     private readonly List<FranchiseItem> children;
 
@@ -9,8 +9,6 @@ public sealed class Franchise : TitledEntity<Franchise>
     public bool ContinueNumbering { get; set; }
 
     public Poster? Poster { get; set; }
-
-    public FranchiseItem? FranchiseItem { get; set; }
 
     public IReadOnlyCollection<FranchiseItem> Children =>
         this.children.AsReadOnly();
@@ -60,6 +58,15 @@ public sealed class Franchise : TitledEntity<Franchise>
     private Franchise(Id<Franchise> id)
         : base(id) =>
         this.children = new();
+
+    public FranchiseItem? FindMovie(Movie movie) =>
+        this.Children.FirstOrDefault(item => item.Movie == movie);
+
+    public FranchiseItem? FindSeries(Series series) =>
+        this.Children.FirstOrDefault(item => item.Series == series);
+
+    public FranchiseItem? FindFranchise(Franchise franchise) =>
+        this.Children.FirstOrDefault(item => item.Franchise == franchise);
 
     public FranchiseItem AddMovie(Movie movie)
     {
@@ -112,12 +119,20 @@ public sealed class Franchise : TitledEntity<Franchise>
         }
     }
 
-    public void RemoveSeries(Franchise franchise)
+    public void RemoveFranchise(Franchise franchise)
     {
         if (franchise.FranchiseItem is not null && this.children.Contains(franchise.FranchiseItem))
         {
             this.children.Remove(franchise.FranchiseItem);
             franchise.FranchiseItem = null;
+        }
+    }
+
+    protected override void ValidateTitles(IReadOnlyCollection<string> names, string paramName)
+    {
+        if (this.ShowTitles && names.Count == 0)
+        {
+            throw new ArgumentOutOfRangeException(paramName, "The list of title names is empty");
         }
     }
 }

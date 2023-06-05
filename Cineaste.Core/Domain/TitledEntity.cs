@@ -48,10 +48,7 @@ public abstract class TitledEntity<TEntity> : Entity<TEntity>
     {
         var namesList = Require.NotNull(names).ToList();
 
-        if (namesList.Count == 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(names), "The list of title names is empty");
-        }
+        this.ValidateTitles(namesList, nameof(names));
 
         this.titles.RemoveAll(title => title.IsOriginal == isOriginal);
 
@@ -62,5 +59,13 @@ public abstract class TitledEntity<TEntity> : Entity<TEntity>
         this.titles.AddRange(newTitles);
 
         return newTitles.AsReadOnly();
+    }
+
+    protected virtual void ValidateTitles(IReadOnlyCollection<string> names, string paramName)
+    {
+        if (names.Count == 0)
+        {
+            throw new ArgumentOutOfRangeException(paramName, "The list of title names is empty");
+        }
     }
 }

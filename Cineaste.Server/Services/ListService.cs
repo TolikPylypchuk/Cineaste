@@ -24,7 +24,7 @@ public sealed partial class ListService
 
     public async Task<ListModel> GetList(string handle)
     {
-        logger.LogDebug("Getting the list with handle {Handle}", handle);
+        logger.LogDebug("Getting the list with handle: {Handle}", handle);
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
@@ -65,7 +65,7 @@ public sealed partial class ListService
     {
         string handle = ListUtils.CreateHandleFromName(request.Value.Name);
 
-        logger.LogDebug("Creating a list with handle {Handle}", handle);
+        logger.LogDebug("Creating a list with handle: {Handle}", handle);
 
         if (await this.dbContext.Lists.AnyAsync(list => list.Handle == handle))
         {
