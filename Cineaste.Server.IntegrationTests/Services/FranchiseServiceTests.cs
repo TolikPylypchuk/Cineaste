@@ -14,15 +14,14 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
 {
     private readonly ILogger<FranchiseService> logger;
 
-    public FranchiseServiceTests(ITestOutputHelper output)
-        : base(output)
-    {
-        this.logger = XUnitLogger.CreateLogger<FranchiseService>(output);
-    }
+    public FranchiseServiceTests(ITestOutputHelper output) =>
+        this.logger = XUnitLogger.Create<FranchiseService>(output);
 
     [Fact(DisplayName = "GetFranchise should return the correct franchise")]
     public async Task GetFranchiseShouldReturnCorrectFranchise()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
@@ -33,7 +32,11 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync();
 
+        // Act
+
         var model = await franchiseService.GetFranchise(franchise.Id);
+
+        // Assert
 
         AssertTitles(franchise, model);
 
@@ -69,10 +72,14 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
     [Fact(DisplayName = "GetFranchise should throw if franchise isn't found")]
     public async Task GetFranchiseShouldThrowIfNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var dummyId = Id.CreateNew<Franchise>();
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() => franchiseService.GetFranchise(dummyId));
 
@@ -84,13 +91,19 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateFranchise should put it into the database")]
     public async Task CreateFranchiseShouldPutItIntoDb()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var movie = await this.CreateAndSaveMovie(dbContext);
         var request = this.CreateFranchiseRequest(movie.Id);
 
+        // Act
+
         var model = await franchiseService.CreateFranchise(request.Validated());
+
+        // Assert
 
         var franchise = dbContext.Franchises.Find(Id.Create<Franchise>(model.Id));
 
@@ -118,13 +131,19 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateFranchise should return a correct model")]
     public async Task CreateFranchiseShouldReturnCorrectModel()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var movie = await this.CreateAndSaveMovie(dbContext);
         var request = this.CreateFranchiseRequest(movie.Id);
 
+        // Act
+
         var model = await franchiseService.CreateFranchise(request.Validated());
+
+        // Assert
 
         AssertTitles(request, model);
 
@@ -144,12 +163,16 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateFranchise should throw if the list is not found")]
     public async Task CreateFranchiseShouldThrowIfListNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var movie = await this.CreateAndSaveMovie(dbContext);
         var dummyListId = Id.CreateNew<CineasteList>();
         var request = this.CreateFranchiseRequest(movie.Id) with { ListId = dummyListId.Value };
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
             franchiseService.CreateFranchise(request.Validated()));
@@ -162,6 +185,8 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateFranchise should throw if a franchise item is not found")]
     public async Task CreateFranchiseShouldThrowIfItemNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
@@ -170,6 +195,8 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         var request = this.CreateFranchiseRequest(movie.Id) with { Items =
             ImmutableList.Create(new FranchiseItemRequest(dummyItemId, FranchiseItemType.Movie, 1, true)).AsValue()
         };
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
             franchiseService.CreateFranchise(request.Validated()));
@@ -181,6 +208,234 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         Assert.Equal(ImmutableList.Create<Guid>(), exception.Properties["franchiseIds"]);
     }
 
+    [Fact(DisplayName = "UpdateFranchise should update it in the database")]
+    public async Task UpdateFranchiseShouldUpdateItInDb()
+    {
+        // Arrange
+
+        var dbContext = await this.CreateDbContext();
+        var franchiseService = new FranchiseService(dbContext, this.logger);
+
+        var movie1 = await this.CreateAndSaveMovie(dbContext);
+        var movie2 = await this.CreateAndSaveMovie(dbContext);
+        var movie3 = await this.CreateAndSaveMovie(dbContext);
+
+        var franchise = this.CreateFranchise(this.List);
+        franchise.AddMovie(movie1);
+        franchise.AddMovie(movie2);
+
+        dbContext.Franchises.Add(franchise);
+        await dbContext.SaveChangesAsync();
+
+        var request = this.CreateFranchiseRequest(
+            showTitles: true,
+            items: new[]
+            {
+                new FranchiseItemRequest(movie1.Id.Value, FranchiseItemType.Movie, 1, true),
+                new FranchiseItemRequest(movie3.Id.Value, FranchiseItemType.Movie, 2, true)
+            });
+
+        // Act
+
+        var model = await franchiseService.UpdateFranchise(franchise.Id, request.Validated());
+
+        // Assert
+
+        var dbFranchise = dbContext.Franchises.Find(Id.Create<Franchise>(model.Id));
+
+        Assert.NotNull(dbFranchise);
+
+        AssertTitles(request, model);
+
+        Assert.Equal(request.ShowTitles, dbFranchise.ShowTitles);
+        Assert.Equal(request.IsLooselyConnected, dbFranchise.IsLooselyConnected);
+        Assert.Equal(request.ContinueNumbering, dbFranchise.ContinueNumbering);
+
+        foreach (var (itemRequest, item) in request.Items.OrderBy(item => item.SequenceNumber)
+            .Zip(dbFranchise.Children.OrderBy(item => item.SequenceNumber)))
+        {
+            var itemType = item.Select(
+                m => FranchiseItemType.Movie,
+                s => FranchiseItemType.Series,
+                f => FranchiseItemType.Franchise);
+
+            Assert.Equal(itemRequest.Id, item.Select(m => m.Id.Value, s => s.Id.Value, f => f.Id.Value));
+            Assert.Equal(itemRequest.Type, itemType);
+            Assert.Equal(itemRequest.SequenceNumber, item.SequenceNumber);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, item.ShouldDisplayNumber);
+        }
+    }
+
+    [Fact(DisplayName = "UpdateFranchise should ignore titles if ShowTitles = false")]
+    public async Task UpdateFranchiseShouldIgnoreTitlesIfShowTitlesFalse()
+    {
+        // Arrange
+
+        var dbContext = await this.CreateDbContext();
+        var franchiseService = new FranchiseService(dbContext, this.logger);
+
+        var movie = await this.CreateAndSaveMovie(dbContext);
+        var franchise = this.CreateFranchise(this.List);
+        franchise.AddMovie(movie);
+
+        dbContext.Franchises.Add(franchise);
+        await dbContext.SaveChangesAsync();
+
+        var request = this.CreateFranchiseRequest(movie.Id, showTitles: false);
+
+        // Act
+
+        var model = await franchiseService.UpdateFranchise(franchise.Id, request.Validated());
+
+        // Assert
+
+        var dbFranchise = dbContext.Franchises.Find(Id.Create<Franchise>(model.Id));
+
+        Assert.NotNull(dbFranchise);
+        Assert.Equal(0, dbFranchise.Titles.Count);
+    }
+
+    [Fact(DisplayName = "UpdateFranchise should return a correct model")]
+    public async Task UpdateFranchiseShouldReturnCorrectModel()
+    {
+        // Arrange
+
+        var dbContext = await this.CreateDbContext();
+        var franchiseService = new FranchiseService(dbContext, this.logger);
+
+        var movie = await this.CreateAndSaveMovie(dbContext);
+        var franchise = this.CreateFranchise(this.List);
+        franchise.AddMovie(movie);
+
+        dbContext.Franchises.Add(franchise);
+        await dbContext.SaveChangesAsync();
+
+        var request = this.CreateFranchiseRequest(movie.Id, showTitles: true);
+
+        // Act
+
+        var model = await franchiseService.UpdateFranchise(franchise.Id, request.Validated());
+
+        // Assert
+
+        AssertTitles(request, model);
+
+        Assert.Equal(request.ShowTitles, model.ShowTitles);
+        Assert.Equal(request.IsLooselyConnected, model.IsLooselyConnected);
+        Assert.Equal(request.ContinueNumbering, model.ContinueNumbering);
+
+        foreach (var (itemRequest, itemModel) in request.Items.OrderBy(item => item.SequenceNumber)
+            .Zip(model.Items.OrderBy(item => item.SequenceNumber)))
+        {
+            Assert.Equal(itemRequest.Id, itemModel.Id);
+            Assert.Equal(itemRequest.Type, itemModel.Type);
+            Assert.Equal(itemRequest.SequenceNumber, itemModel.SequenceNumber);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, itemModel.ShouldDisplayNumber);
+        }
+    }
+
+    [Fact(DisplayName = "UpdateFranchise should throw if not found")]
+    public async Task UpdateFranchiseShouldThrowIfNotFound()
+    {
+        // Arrange
+
+        var dbContext = await this.CreateDbContext();
+        var franchiseService = new FranchiseService(dbContext, this.logger);
+
+        var movie = await this.CreateAndSaveMovie(dbContext);
+        var franchise = this.CreateFranchise(this.List);
+        franchise.AddMovie(movie);
+
+        dbContext.Franchises.Add(franchise);
+        await dbContext.SaveChangesAsync();
+
+        var request = this.CreateFranchiseRequest(movie.Id, showTitles: true);
+        var dummyId = Id.CreateNew<Franchise>();
+
+        // Act + Assert
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            franchiseService.UpdateFranchise(dummyId, request.Validated()));
+
+        Assert.Equal("Resource.Franchise", exception.Resource);
+        Assert.Equal(dummyId, exception.Properties["id"]);
+    }
+
+    [Fact(DisplayName = "UpdateFranchise should throw if movie doesn't belong to list")]
+    public async Task UpdateFranchiseShouldThrowIfFranchiseDoesNotBelongToList()
+    {
+        // Arrange
+
+        var dbContext = await this.CreateDbContext();
+        var franchiseService = new FranchiseService(dbContext, this.logger);
+
+        var movie = await this.CreateAndSaveMovie(dbContext);
+        var franchise = this.CreateFranchise(this.List);
+        franchise.AddMovie(movie);
+
+        dbContext.Franchises.Add(franchise);
+        await dbContext.SaveChangesAsync();
+
+        var otherList = this.CreateList("Other List for Franchises", "other-list-for-franchises");
+        dbContext.Lists.Add(otherList);
+
+        await dbContext.SaveChangesAsync();
+
+        var request = this.CreateFranchiseRequest(movie.Id) with { ListId = otherList.Id.Value };
+
+        // Act + Assert
+
+        var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
+            franchiseService.UpdateFranchise(franchise.Id, request.Validated()));
+
+        Assert.Equal("BadRequest.Franchise.WrongList", exception.MessageCode);
+        Assert.Equal(franchise.Id, exception.Properties["franchiseId"]);
+        Assert.Equal(otherList.Id, exception.Properties["listId"]);
+    }
+
+    [Fact(DisplayName = "DeleteFranchise should remote it from the database")]
+    public async Task DeleteFranchiseShouldRemoveItFromDb()
+    {
+        // Arrange
+
+        var dbContext = await this.CreateDbContext();
+        var franchiseService = new FranchiseService(dbContext, this.logger);
+
+        var movie = await this.CreateAndSaveMovie(dbContext);
+        var franchise = this.CreateFranchise(this.List);
+        franchise.AddMovie(movie);
+
+        dbContext.Franchises.Add(franchise);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+
+        await franchiseService.DeleteFranchise(franchise.Id);
+
+        // Assert
+
+        Assert.True(dbContext.Franchises.All(f => f.Id != franchise.Id));
+    }
+
+    [Fact(DisplayName = "DeleteFranchise should throw if franchise isn't found")]
+    public async Task DeleteFranchiseShouldThrowIfNotFound()
+    {
+        // Arrange
+
+        var dbContext = await this.CreateDbContext();
+        var franchiseService = new FranchiseService(dbContext, this.logger);
+
+        var dummyId = Id.CreateNew<Franchise>();
+
+        // Act + Assert
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => franchiseService.DeleteFranchise(dummyId));
+
+        Assert.Equal("NotFound.Franchise", exception.MessageCode);
+        Assert.Equal("Resource.Franchise", exception.Resource);
+        Assert.Equal(dummyId, exception.Properties["id"]);
+    }
+
     private async Task<Movie> CreateAndSaveMovie(CineasteDbContext dbContext)
     {
         var movie = this.CreateMovie(this.List);
@@ -190,13 +445,28 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         return movie;
     }
 
-    private FranchiseRequest CreateFranchiseRequest(Id<Movie> movieId) =>
+    private FranchiseRequest CreateFranchiseRequest(
+        Id<Movie> movieId,
+        bool showTitles = false,
+        bool isLooselyConnected = false,
+        bool continueNumbering = false) =>
+        this.CreateFranchiseRequest(
+            showTitles,
+            isLooselyConnected,
+            continueNumbering,
+            new FranchiseItemRequest(movieId.Value, FranchiseItemType.Movie, 1, true));
+
+    private FranchiseRequest CreateFranchiseRequest(
+        bool showTitles = false,
+        bool isLooselyConnected = false,
+        bool continueNumbering = false,
+        params FranchiseItemRequest[] items) =>
         new(
             this.List.Id.Value,
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
-            ImmutableList.Create(new FranchiseItemRequest(movieId.Value, FranchiseItemType.Movie, 1, true)).AsValue(),
-            false,
-            false,
-            false);
+            ImmutableList.Create(items).AsValue(),
+            showTitles,
+            isLooselyConnected,
+            continueNumbering);
 }

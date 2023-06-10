@@ -25,7 +25,7 @@ internal sealed class CineasteExceptionHandlerMiddleware
     {
         if (context.Features.Get<IExceptionHandlerFeature>()?.Error is Exception exception)
         {
-            var problemDetails = CreateProblemDetails(exception);
+            var problemDetails = this.CreateProblemDetails(exception);
 
             if (env.IsDevelopment())
             {

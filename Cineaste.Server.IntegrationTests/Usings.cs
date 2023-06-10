@@ -1,6 +1,7 @@
 global using System.Collections.Immutable;
 
 global using Cineaste.Shared.Collections;
+global using Cineaste.Server.Logging;
 
 global using FluentValidation;
 

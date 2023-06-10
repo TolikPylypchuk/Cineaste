@@ -1,4 +1,4 @@
-namespace Cineaste.Server;
+namespace Cineaste.Server.Logging;
 
 using System.Text;
 
@@ -10,13 +10,13 @@ public class XUnitLogger : ILogger
     private readonly LoggerExternalScopeProvider scopeProvider;
     private readonly string categoryName;
 
-    public static ILogger CreateLogger(Type type, ITestOutputHelper testOutputHelper) =>
+    public static ILogger Create(Type type, ITestOutputHelper testOutputHelper) =>
         new XUnitLogger(testOutputHelper, new LoggerExternalScopeProvider(), type.FullName ?? String.Empty);
 
-    public static ILogger CreateLogger(ITestOutputHelper testOutputHelper) =>
+    public static ILogger Create(ITestOutputHelper testOutputHelper) =>
         new XUnitLogger(testOutputHelper, new LoggerExternalScopeProvider(), String.Empty);
 
-    public static ILogger<T> CreateLogger<T>(ITestOutputHelper testOutputHelper) =>
+    public static ILogger<T> Create<T>(ITestOutputHelper testOutputHelper) =>
         new XUnitLogger<T>(testOutputHelper, new LoggerExternalScopeProvider());
 
     public XUnitLogger(

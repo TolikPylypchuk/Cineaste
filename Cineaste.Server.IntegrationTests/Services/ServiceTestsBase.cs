@@ -7,7 +7,6 @@ using Cineaste.Core.Domain;
 using Cineaste.Persistence;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 using Testcontainers.MsSql;
 
@@ -15,26 +14,22 @@ public abstract class ServiceTestsBase : IAsyncLifetime
 {
     private readonly MsSqlContainer container = new MsSqlBuilder().Build();
 
-    protected ILogger Logger { get; }
-
     protected CineasteList List { get; }
     protected MovieKind MovieKind { get; }
     protected SeriesKind SeriesKind { get; }
 
-    protected ServiceTestsBase(ITestOutputHelper output)
+    protected ServiceTestsBase()
     {
-        this.Logger = XUnitLogger.CreateLogger(this.GetType(), output);
-
         this.List = this.CreateList($"List.{this.GetType().Name}", $"list.{this.GetType().Name.ToLower()}");
         this.MovieKind = this.CreateMovieKind(this.List);
         this.SeriesKind = this.CreateSeriesKind(this.List);
     }
 
-    public async Task InitializeAsync() =>
-        await this.container.StartAsync();
+    public Task InitializeAsync() =>
+        this.container.StartAsync();
 
-    public async Task DisposeAsync() =>
-        await this.container.DisposeAsync().AsTask();
+    public Task DisposeAsync() =>
+        this.container.DisposeAsync().AsTask();
 
     protected CineasteList CreateList(string name, string handle) =>
         new(

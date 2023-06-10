@@ -12,13 +12,14 @@ public class MovieServiceTests : ServiceTestsBase
 {
     private readonly ILogger<MovieService> logger;
 
-    public MovieServiceTests(ITestOutputHelper output)
-        : base(output) =>
-        this.logger = XUnitLogger.CreateLogger<MovieService>(output);
+    public MovieServiceTests(ITestOutputHelper output) =>
+        this.logger = XUnitLogger.Create<MovieService>(output);
 
     [Fact(DisplayName = "GetMovie should return the correct movie")]
     public async Task GetMovieShouldReturnCorrectMovie()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
@@ -27,7 +28,11 @@ public class MovieServiceTests : ServiceTestsBase
         dbContext.Movies.Add(movie);
         await dbContext.SaveChangesAsync();
 
+        // Act
+
         var model = await movieService.GetMovie(movie.Id);
+
+        // Assert
 
         AssertTitles(movie, model);
 
@@ -43,10 +48,14 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "GetMovie should throw if movie isn't found")]
     public async Task GetMovieShouldThrowIfNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var dummyId = Id.CreateNew<Movie>();
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() => movieService.GetMovie(dummyId));
 
@@ -58,12 +67,18 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateMovie should put it into the database")]
     public async Task CreateMovieShouldPutItIntoDb()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var request = this.CreateMovieRequest();
 
+        // Act
+
         var model = await movieService.CreateMovie(request.Validated());
+
+        // Assert
 
         var movie = dbContext.Movies.Find(Id.Create<Movie>(model.Id));
 
@@ -82,12 +97,18 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateMovie should return a correct model")]
     public async Task CreateMovieShouldReturnCorrectModel()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var request = this.CreateMovieRequest();
 
+        // Act
+
         var model = await movieService.CreateMovie(request.Validated());
+
+        // Assert
 
         AssertTitles(request, model);
 
@@ -102,11 +123,15 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateMovie should throw if the list is not found")]
     public async Task CreateMovieShouldThrowIfListNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var dummyListId = Id.CreateNew<CineasteList>();
         var request = this.CreateMovieRequest() with { ListId = dummyListId.Value };
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
             movieService.CreateMovie(request.Validated()));
@@ -119,11 +144,15 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateMovie should throw if the kind is not found")]
     public async Task CreateMovieShouldThrowIfKindNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var dummyKindId = Id.CreateNew<MovieKind>();
         var request = this.CreateMovieRequest() with { KindId = dummyKindId.Value };
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
             movieService.CreateMovie(request.Validated()));
@@ -136,6 +165,8 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateMovie should throw if the kind doesn't belong to list")]
     public async Task CreateMovieShouldThrowIfKindDoesNotBelongToList()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
@@ -148,6 +179,8 @@ public class MovieServiceTests : ServiceTestsBase
 
         var request = this.CreateMovieRequest() with { KindId = otherKind.Id.Value };
 
+        // Act + Assert
+
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
             movieService.CreateMovie(request.Validated()));
 
@@ -159,6 +192,8 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateMovie should update it in the database")]
     public async Task UpdateMovieShouldUpdateItInDb()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
@@ -169,7 +204,11 @@ public class MovieServiceTests : ServiceTestsBase
 
         var request = this.CreateMovieRequest();
 
+        // Act
+
         var model = await movieService.UpdateMovie(movie.Id, request.Validated());
+
+        // Assert
 
         var dbMovie = dbContext.Movies.Find(Id.Create<Movie>(model.Id));
 
@@ -188,6 +227,8 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateMovie should return a correct model")]
     public async Task UpdateMovieShouldReturnCorrectModel()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
@@ -198,7 +239,11 @@ public class MovieServiceTests : ServiceTestsBase
 
         var request = this.CreateMovieRequest();
 
+        // Act
+
         var model = await movieService.UpdateMovie(movie.Id, request.Validated());
+
+        // Assert
 
         AssertTitles(request, model);
 
@@ -213,6 +258,8 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateMovie should throw if not found")]
     public async Task UpdateMovieShouldThrowIfNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
@@ -224,6 +271,8 @@ public class MovieServiceTests : ServiceTestsBase
         var request = this.CreateMovieRequest();
         var dummyId = Id.CreateNew<Movie>();
 
+        // Act + Assert
+
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
             movieService.UpdateMovie(dummyId, request.Validated()));
 
@@ -234,6 +283,8 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateMovie should throw if movie doesn't belong to list")]
     public async Task UpdateMovieShouldThrowIfMovieDoesNotBelongToList()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
@@ -248,6 +299,8 @@ public class MovieServiceTests : ServiceTestsBase
 
         var request = this.CreateMovieRequest() with { ListId = otherList.Id.Value };
 
+        // Act + Assert
+
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
             movieService.UpdateMovie(movie.Id, request.Validated()));
 
@@ -259,6 +312,8 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "DeleteMovie should remote it from the database")]
     public async Task DeleteMovieShouldRemoveItFromDb()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
@@ -267,7 +322,11 @@ public class MovieServiceTests : ServiceTestsBase
         dbContext.Movies.Add(movie);
         await dbContext.SaveChangesAsync();
 
+        // Act
+
         await movieService.DeleteMovie(movie.Id);
+
+        // Assert
 
         Assert.True(dbContext.Movies.All(m => m.Id != movie.Id));
     }
@@ -275,10 +334,14 @@ public class MovieServiceTests : ServiceTestsBase
     [Fact(DisplayName = "DeleteMovie should throw if movie isn't found")]
     public async Task DeleteMovieShouldThrowIfNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var dummyId = Id.CreateNew<Movie>();
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() => movieService.DeleteMovie(dummyId));
 

@@ -13,13 +13,14 @@ public class ListServiceTests : ServiceTestsBase
 {
     private readonly ILogger<ListService> logger;
 
-    public ListServiceTests(ITestOutputHelper output)
-        : base(output) =>
-        this.logger = XUnitLogger.CreateLogger<ListService>(output);
+    public ListServiceTests(ITestOutputHelper output) =>
+        this.logger = XUnitLogger.Create<ListService>(output);
 
     [Fact(DisplayName = "GetAllLists should return correct lists")]
     public async Task GetAllListsShouldReturnCorrectLists()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
@@ -34,7 +35,11 @@ public class ListServiceTests : ServiceTestsBase
         dbContext.Lists.Remove(this.List);
         await dbContext.SaveChangesAsync();
 
+        // Act
+
         var listModels = await listService.GetAllLists();
+
+        // Assert
 
         dbContext.Lists.Add(this.List);
         await dbContext.SaveChangesAsync();
@@ -52,10 +57,16 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "GetList should return a correct list")]
     public async Task GetListShouldReturnCorrectList()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
+        // Act
+
         var model = await listService.GetList(this.List.Handle);
+
+        // Assert
 
         Assert.Equal(this.List.Id.Value, model.Id);
         Assert.Equal(this.List.Name, model.Name);
@@ -68,12 +79,18 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateList should put it into the database")]
     public async Task CreateListShouldPutItIntoDb()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
         var request = new CreateListRequest("Test List", String.Empty, "Season #", "Season #");
 
+        // Act
+
         var model = await listService.CreateList(request.Validated());
+
+        // Assert
 
         var list = dbContext.Lists.Find(Id.Create<CineasteList>(model.Id));
 
@@ -90,13 +107,19 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateList should return a correct model")]
     public async Task CreateListShouldReturnCorrectModel()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
         var request = new CreateListRequest("Test List", String.Empty, "Season #", "Season #");
 
+        // Act
+
         var model = await listService.CreateList(request.Validated());
-        
+
+        // Assert
+
         Assert.Equal(request.Name, model.Name);
         Assert.Equal("test-list", model.Handle);
     }
@@ -104,10 +127,14 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "GetList should throw if not found")]
     public async Task GetListShouldThrowIfNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
         string dummyHandle = "test";
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() => listService.GetList(dummyHandle));
 
@@ -118,6 +145,8 @@ public class ListServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateList should throw if handle already exists")]
     public async Task CreateListShouldThrowIfHandleExists()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
 
@@ -128,6 +157,8 @@ public class ListServiceTests : ServiceTestsBase
         await dbContext.SaveChangesAsync();
 
         var request = new CreateListRequest(name, String.Empty, "Season #", "Season #");
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<ConflictException>(() => listService.CreateList(request.Validated()));
 

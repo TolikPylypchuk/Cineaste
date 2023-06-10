@@ -103,8 +103,9 @@ public static class FranchiseMappingExtensions
 
     private static IReadOnlyList<FranchiseItem> RemoveMissingItems(
         this Franchise franchise,
-        IDictionary<(Guid, FranchiseItemType), FranchiseItemRequest> itemsById) =>
-        franchise.Children
+        IDictionary<(Guid, FranchiseItemType), FranchiseItemRequest> itemsById)
+    {
+        var items = franchise.Children
             .Where(item =>
             {
                 var id = item.Select(m => m.Id.Value, s => s.Id.Value, f => f.Id.Value);
@@ -116,8 +117,15 @@ public static class FranchiseMappingExtensions
 
                 return !itemsById.ContainsKey((id, type));
             })
-            .Do(item => item.Do(franchise.RemoveMovie, franchise.RemoveSeries, franchise.RemoveFranchise))
             .ToImmutableList();
+
+        foreach (var item in items)
+        {
+            item.Do(franchise.RemoveMovie, franchise.RemoveSeries, franchise.RemoveFranchise);
+        }
+
+        return items;
+    }
 
     private static void UpdateItems<T>(
         IEnumerable<T> items,

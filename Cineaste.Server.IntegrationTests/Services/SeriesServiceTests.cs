@@ -13,13 +13,14 @@ public class SeriesServiceTests : ServiceTestsBase
 {
     private readonly ILogger<SeriesService> logger;
 
-    public SeriesServiceTests(ITestOutputHelper output)
-        : base(output) =>
-        this.logger = XUnitLogger.CreateLogger<SeriesService>(output);
+    public SeriesServiceTests(ITestOutputHelper output) =>
+        this.logger = XUnitLogger.Create<SeriesService>(output);
 
     [Fact(DisplayName = "GetSeries should return the correct series")]
     public async Task GetSeriesShouldReturnCorrectSeries()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
@@ -28,7 +29,11 @@ public class SeriesServiceTests : ServiceTestsBase
         dbContext.Series.Add(series);
         await dbContext.SaveChangesAsync();
 
+        // Act
+
         var model = await seriesService.GetSeries(series.Id);
+
+        // Assert
 
         AssertTitles(series, model);
 
@@ -80,10 +85,14 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "GetSeries should throw if series isn't found")]
     public async Task GetSeriesShouldThrowIfNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyId = Id.CreateNew<Series>();
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.GetSeries(dummyId));
 
@@ -94,12 +103,18 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should put it into the database")]
     public async Task CreateSeriesShouldPutItIntoDb()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var request = this.CreateSeriesRequest();
 
+        // Act
+
         var model = await seriesService.CreateSeries(request.Validated());
+
+        // Assert
 
         var series = dbContext.Series.Find(Id.Create<Series>(model.Id));
 
@@ -156,12 +171,18 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should return a correct model")]
     public async Task CreateSeriesShouldReturnCorrectModel()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var request = this.CreateSeriesRequest();
 
+        // Act
+
         var model = await seriesService.CreateSeries(request.Validated());
+
+        // Assert
 
         AssertTitles(request, model);
 
@@ -214,11 +235,15 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should throw if the list is not found")]
     public async Task CreateSeriesShouldThrowIfListNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyListId = Id.CreateNew<CineasteList>();
         var request = this.CreateSeriesRequest() with { ListId = dummyListId.Value };
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
             seriesService.CreateSeries(request.Validated()));
@@ -230,11 +255,15 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should throw if the kind is not found")]
     public async Task CreateSeriesShouldThrowIfKindNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyKindId = Id.CreateNew<SeriesKind>();
         var request = this.CreateSeriesRequest() with { KindId = dummyKindId.Value };
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
             seriesService.CreateSeries(request.Validated()));
@@ -246,6 +275,8 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "CreateSeries should throw if the kind doesn't belong to list")]
     public async Task CreateSeriesShouldThrowIfKindDoesNotBelongToList()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
@@ -258,6 +289,8 @@ public class SeriesServiceTests : ServiceTestsBase
 
         var request = this.CreateSeriesRequest() with { KindId = otherKind.Id.Value };
 
+        // Act + Assert
+
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
             seriesService.CreateSeries(request.Validated()));
 
@@ -269,6 +302,8 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateSeries should update it in the database")]
     public async Task UpdateSeriesShouldUpdateItInDb()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
@@ -279,7 +314,11 @@ public class SeriesServiceTests : ServiceTestsBase
 
         var request = this.CreateSeriesRequest();
 
+        // Act
+
         var model = await seriesService.UpdateSeries(dbSeries.Id, request.Validated());
+
+        // Assert
 
         var series = dbContext.Series.Find(Id.Create<Series>(model.Id));
 
@@ -336,6 +375,8 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateSeries should return a correct model")]
     public async Task UpdateSeriesShouldReturnCorrectModel()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
@@ -346,7 +387,11 @@ public class SeriesServiceTests : ServiceTestsBase
 
         var request = this.CreateSeriesRequest();
 
+        // Act
+
         var model = await seriesService.UpdateSeries(dbSeries.Id, request.Validated());
+
+        // Assert
 
         AssertTitles(request, model);
 
@@ -399,6 +444,8 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateSeries should throw if not found")]
     public async Task UpdateSeriesShouldThrowIfNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
@@ -409,6 +456,8 @@ public class SeriesServiceTests : ServiceTestsBase
 
         var request = this.CreateSeriesRequest();
         var dummyId = Id.CreateNew<Series>();
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
             seriesService.UpdateSeries(dummyId, request.Validated()));
@@ -421,6 +470,8 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "UpdateSeries should throw if series doesn't belong to list")]
     public async Task UpdateSeriesShouldThrowIfSeriesDoesNotBelongToList()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
@@ -435,6 +486,8 @@ public class SeriesServiceTests : ServiceTestsBase
 
         var request = this.CreateSeriesRequest() with { ListId = otherList.Id.Value };
 
+        // Act + Assert
+
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
             seriesService.UpdateSeries(series.Id, request.Validated()));
 
@@ -446,6 +499,8 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "DeleteSeries should remote it from the database")]
     public async Task DeleteSeriesShouldRemoveItFromDb()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
@@ -454,7 +509,11 @@ public class SeriesServiceTests : ServiceTestsBase
         dbContext.Series.Add(series);
         await dbContext.SaveChangesAsync();
 
+        // Act
+
         await seriesService.DeleteSeries(series.Id);
+
+        // Assert
 
         Assert.True(dbContext.Series.All(m => m.Id != series.Id));
     }
@@ -462,10 +521,14 @@ public class SeriesServiceTests : ServiceTestsBase
     [Fact(DisplayName = "DeleteSeries should throw if series isn't found")]
     public async Task DeleteSeriesShouldThrowIfNotFound()
     {
+        // Arrange
+
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyId = Id.CreateNew<Series>();
+
+        // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.DeleteSeries(dummyId));
 
