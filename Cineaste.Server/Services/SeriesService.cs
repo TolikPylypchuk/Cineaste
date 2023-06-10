@@ -21,7 +21,7 @@ public sealed partial class SeriesService
         var list = await this.FindList(request.Value.ListId);
         var kind = await this.FindKind(request.Value.KindId, list);
 
-        var series = request.ToSeries(Id.CreateNew<Series>(), kind);
+        var series = request.ToSeries(Id.Create<Series>(), kind);
 
         list.AddSeries(series);
         dbContext.Series.Add(series);
@@ -82,7 +82,7 @@ public sealed partial class SeriesService
 
     private async Task<CineasteList> FindList(Guid id)
     {
-        var listId = Id.Create<CineasteList>(id);
+        var listId = Id.For<CineasteList>(id);
 
         var list = await this.dbContext.Lists
             .Include(list => list.Series)
@@ -111,7 +111,7 @@ public sealed partial class SeriesService
 
     private async Task<SeriesKind> FindKind(Guid id, CineasteList list)
     {
-        var kindId = Id.Create<SeriesKind>(id);
+        var kindId = Id.For<SeriesKind>(id);
         var kind = await this.dbContext.SeriesKinds.FindAsync(kindId);
 
         if (kind is null)

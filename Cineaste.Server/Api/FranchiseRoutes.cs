@@ -10,7 +10,7 @@ public static class FranchiseRoutes
     }
 
     private static async Task<IResult> GetFranchise(Guid id, FranchiseService franchiseService) =>
-        Results.Ok(await franchiseService.GetFranchise(Id.Create<Franchise>(id)));
+        Results.Ok(await franchiseService.GetFranchise(Id.For<Franchise>(id)));
 
     private static async Task<IResult> CreateFranchise(
         Validated<FranchiseRequest> request,
@@ -24,5 +24,5 @@ public static class FranchiseRoutes
         Guid id,
         Validated<FranchiseRequest> request,
         FranchiseService franchiseService) =>
-        Results.Ok(await franchiseService.UpdateFranchise(Id.Create<Franchise>(id), request));
+        Results.Ok(await franchiseService.UpdateFranchise(Id.For<Franchise>(id), request));
 }

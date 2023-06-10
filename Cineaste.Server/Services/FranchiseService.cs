@@ -89,7 +89,7 @@ public sealed partial class FranchiseService
 
     private async Task<CineasteList> FindList(Guid id)
     {
-        var listId = Id.Create<CineasteList>(id);
+        var listId = Id.For<CineasteList>(id);
 
         var list = await this.dbContext.Lists
             .Include(list => list.Franchises)
@@ -107,7 +107,7 @@ public sealed partial class FranchiseService
         var (movies, series, franchises) = await this.GetAllItems(request.Value);
 
         return request.ToFranchise(
-            Id.CreateNew<Franchise>(),
+            Id.Create<Franchise>(),
             movies.ToDictionary(movie => movie.Id, movie => movie),
             series.ToDictionary(series => series.Id, series => series),
             franchises.ToDictionary(franchise => franchise.Id, franchise => franchise));
@@ -132,7 +132,7 @@ public sealed partial class FranchiseService
     {
         var ids = request.Items
             .Where(item => item.Type == itemType)
-            .Select(item => Id.Create<T>(item.Id))
+            .Select(item => Id.For<T>(item.Id))
             .ToImmutableHashSet();
 
         var items = ids.IsEmpty()

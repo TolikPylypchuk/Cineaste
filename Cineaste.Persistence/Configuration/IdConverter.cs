@@ -5,6 +5,6 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 internal sealed class IdConverter<T> : ValueConverter<Id<T>, Guid>
 {
     public IdConverter()
-        : base(id => id.Value, guid => Id.Create<T>(guid), null)
+        : base(id => id.Value, guid => Id.For<T>(guid), null)
     { }
 }

@@ -92,7 +92,7 @@ public class ListServiceTests : ServiceTestsBase
 
         // Assert
 
-        var list = dbContext.Lists.Find(Id.Create<CineasteList>(model.Id));
+        var list = dbContext.Lists.Find(Id.For<CineasteList>(model.Id));
 
         Assert.NotNull(list);
         Assert.NotNull(list.Configuration);

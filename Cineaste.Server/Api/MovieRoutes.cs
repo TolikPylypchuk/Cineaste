@@ -11,7 +11,7 @@ public static class MovieRoutes
     }
 
     private static async Task<IResult> GetMovie(Guid id, MovieService movieService) =>
-        Results.Ok(await movieService.GetMovie(Id.Create<Movie>(id)));
+        Results.Ok(await movieService.GetMovie(Id.For<Movie>(id)));
 
     private static async Task<IResult> CreateMovie(Validated<MovieRequest> request, MovieService movieService)
     {
@@ -23,11 +23,11 @@ public static class MovieRoutes
         Guid id,
         Validated<MovieRequest> request,
         MovieService movieService) =>
-        Results.Ok(await movieService.UpdateMovie(Id.Create<Movie>(id), request));
+        Results.Ok(await movieService.UpdateMovie(Id.For<Movie>(id), request));
 
     private static async Task<IResult> DeleteMovie(Guid id, MovieService movieService)
     {
-        await movieService.DeleteMovie(Id.Create<Movie>(id));
+        await movieService.DeleteMovie(Id.For<Movie>(id));
         return Results.NoContent();
     }
 }

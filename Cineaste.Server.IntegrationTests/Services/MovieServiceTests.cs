@@ -53,7 +53,7 @@ public class MovieServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var dummyId = Id.CreateNew<Movie>();
+        var dummyId = Id.Create<Movie>();
 
         // Act + Assert
 
@@ -80,7 +80,7 @@ public class MovieServiceTests : ServiceTestsBase
 
         // Assert
 
-        var movie = dbContext.Movies.Find(Id.Create<Movie>(model.Id));
+        var movie = dbContext.Movies.Find(Id.For<Movie>(model.Id));
 
         Assert.NotNull(movie);
 
@@ -128,7 +128,7 @@ public class MovieServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var dummyListId = Id.CreateNew<CineasteList>();
+        var dummyListId = Id.Create<CineasteList>();
         var request = this.CreateMovieRequest() with { ListId = dummyListId.Value };
 
         // Act + Assert
@@ -149,7 +149,7 @@ public class MovieServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var dummyKindId = Id.CreateNew<MovieKind>();
+        var dummyKindId = Id.Create<MovieKind>();
         var request = this.CreateMovieRequest() with { KindId = dummyKindId.Value };
 
         // Act + Assert
@@ -210,7 +210,7 @@ public class MovieServiceTests : ServiceTestsBase
 
         // Assert
 
-        var dbMovie = dbContext.Movies.Find(Id.Create<Movie>(model.Id));
+        var dbMovie = dbContext.Movies.Find(Id.For<Movie>(model.Id));
 
         Assert.NotNull(dbMovie);
 
@@ -269,7 +269,7 @@ public class MovieServiceTests : ServiceTestsBase
         await dbContext.SaveChangesAsync();
 
         var request = this.CreateMovieRequest();
-        var dummyId = Id.CreateNew<Movie>();
+        var dummyId = Id.Create<Movie>();
 
         // Act + Assert
 
@@ -339,7 +339,7 @@ public class MovieServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var dummyId = Id.CreateNew<Movie>();
+        var dummyId = Id.Create<Movie>();
 
         // Act + Assert
 

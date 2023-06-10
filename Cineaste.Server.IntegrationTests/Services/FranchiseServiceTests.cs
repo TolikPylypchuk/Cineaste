@@ -77,7 +77,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var dummyId = Id.CreateNew<Franchise>();
+        var dummyId = Id.Create<Franchise>();
 
         // Act + Assert
 
@@ -105,7 +105,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
 
         // Assert
 
-        var franchise = dbContext.Franchises.Find(Id.Create<Franchise>(model.Id));
+        var franchise = dbContext.Franchises.Find(Id.For<Franchise>(model.Id));
 
         Assert.NotNull(franchise);
 
@@ -169,7 +169,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var movie = await this.CreateAndSaveMovie(dbContext);
-        var dummyListId = Id.CreateNew<CineasteList>();
+        var dummyListId = Id.Create<CineasteList>();
         var request = this.CreateFranchiseRequest(movie.Id) with { ListId = dummyListId.Value };
 
         // Act + Assert
@@ -203,7 +203,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
 
         Assert.Equal("NotFound.FranchiseItems", exception.MessageCode);
         Assert.Equal("Resource.FranchiseItems", exception.Resource);
-        Assert.Equal(ImmutableList.Create(Id.Create<Movie>(dummyItemId)), exception.Properties["movieIds"]);
+        Assert.Equal(ImmutableList.Create(Id.For<Movie>(dummyItemId)), exception.Properties["movieIds"]);
         Assert.Equal(ImmutableList.Create<Guid>(), exception.Properties["seriesIds"]);
         Assert.Equal(ImmutableList.Create<Guid>(), exception.Properties["franchiseIds"]);
     }
@@ -241,7 +241,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
 
         // Assert
 
-        var dbFranchise = dbContext.Franchises.Find(Id.Create<Franchise>(model.Id));
+        var dbFranchise = dbContext.Franchises.Find(Id.For<Franchise>(model.Id));
 
         Assert.NotNull(dbFranchise);
 
@@ -289,7 +289,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
 
         // Assert
 
-        var dbFranchise = dbContext.Franchises.Find(Id.Create<Franchise>(model.Id));
+        var dbFranchise = dbContext.Franchises.Find(Id.For<Franchise>(model.Id));
 
         Assert.NotNull(dbFranchise);
         Assert.Equal(0, dbFranchise.Titles.Count);
@@ -350,7 +350,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         await dbContext.SaveChangesAsync();
 
         var request = this.CreateFranchiseRequest(movie.Id, showTitles: true);
-        var dummyId = Id.CreateNew<Franchise>();
+        var dummyId = Id.Create<Franchise>();
 
         // Act + Assert
 
@@ -425,7 +425,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var dummyId = Id.CreateNew<Franchise>();
+        var dummyId = Id.Create<Franchise>();
 
         // Act + Assert
 

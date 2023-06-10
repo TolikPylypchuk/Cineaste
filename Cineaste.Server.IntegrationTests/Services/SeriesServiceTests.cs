@@ -90,7 +90,7 @@ public class SeriesServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var dummyId = Id.CreateNew<Series>();
+        var dummyId = Id.Create<Series>();
 
         // Act + Assert
 
@@ -116,7 +116,7 @@ public class SeriesServiceTests : ServiceTestsBase
 
         // Assert
 
-        var series = dbContext.Series.Find(Id.Create<Series>(model.Id));
+        var series = dbContext.Series.Find(Id.For<Series>(model.Id));
 
         Assert.NotNull(series);
 
@@ -240,7 +240,7 @@ public class SeriesServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var dummyListId = Id.CreateNew<CineasteList>();
+        var dummyListId = Id.Create<CineasteList>();
         var request = this.CreateSeriesRequest() with { ListId = dummyListId.Value };
 
         // Act + Assert
@@ -260,7 +260,7 @@ public class SeriesServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var dummyKindId = Id.CreateNew<SeriesKind>();
+        var dummyKindId = Id.Create<SeriesKind>();
         var request = this.CreateSeriesRequest() with { KindId = dummyKindId.Value };
 
         // Act + Assert
@@ -320,7 +320,7 @@ public class SeriesServiceTests : ServiceTestsBase
 
         // Assert
 
-        var series = dbContext.Series.Find(Id.Create<Series>(model.Id));
+        var series = dbContext.Series.Find(Id.For<Series>(model.Id));
 
         Assert.NotNull(series);
 
@@ -455,7 +455,7 @@ public class SeriesServiceTests : ServiceTestsBase
         await dbContext.SaveChangesAsync();
 
         var request = this.CreateSeriesRequest();
-        var dummyId = Id.CreateNew<Series>();
+        var dummyId = Id.Create<Series>();
 
         // Act + Assert
 
@@ -526,7 +526,7 @@ public class SeriesServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var dummyId = Id.CreateNew<Series>();
+        var dummyId = Id.Create<Series>();
 
         // Act + Assert
 

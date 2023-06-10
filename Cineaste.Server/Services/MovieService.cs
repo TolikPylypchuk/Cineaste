@@ -21,7 +21,7 @@ public sealed partial class MovieService
         var list = await this.FindList(request.Value.ListId);
         var kind = await this.FindKind(request.Value.KindId, list);
 
-        var movie = request.ToMovie(Id.CreateNew<Movie>(), kind);
+        var movie = request.ToMovie(Id.Create<Movie>(), kind);
 
         list.AddMovie(movie);
         dbContext.Movies.Add(movie);
@@ -76,7 +76,7 @@ public sealed partial class MovieService
 
     private async Task<CineasteList> FindList(Guid id)
     {
-        var listId = Id.Create<CineasteList>(id);
+        var listId = Id.For<CineasteList>(id);
 
         var list = await this.dbContext.Lists
             .Include(list => list.Movies)
@@ -96,7 +96,7 @@ public sealed partial class MovieService
 
     private async Task<MovieKind> FindKind(Guid id, CineasteList list)
     {
-        var kindId = Id.Create<MovieKind>(id);
+        var kindId = Id.For<MovieKind>(id);
         var kind = await this.dbContext.MovieKinds.FindAsync(kindId);
 
         if (kind is null)

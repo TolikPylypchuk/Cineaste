@@ -12,7 +12,7 @@ internal sealed class IdJsonConverter<T> : JsonConverter<Id<T>>
     public override Id<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
         typeToConvert.IsGenericType && this.CreateInstance(ref reader, typeToConvert, options) is Id<T> id
             ? id
-            : Id.Create<T>(Guid.Empty);
+            : Id.For<T>(Guid.Empty);
 
     public override void Write(Utf8JsonWriter writer, Id<T> id, JsonSerializerOptions options) =>
         this.valueConverter.Write(writer, id.Value, options);

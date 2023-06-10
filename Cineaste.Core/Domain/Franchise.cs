@@ -71,7 +71,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     public FranchiseItem AddMovie(Movie movie)
     {
         var item = new FranchiseItem(
-            Domain.Id.CreateNew<FranchiseItem>(), movie, this, this.Children.Count + 1, true);
+            Domain.Id.Create<FranchiseItem>(), movie, this, this.Children.Count + 1, true);
 
         this.children.Add(item);
         movie.FranchiseItem = item;
@@ -82,7 +82,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     public FranchiseItem AddSeries(Series series)
     {
         var item = new FranchiseItem(
-            Domain.Id.CreateNew<FranchiseItem>(), series, this, this.Children.Count + 1, true);
+            Domain.Id.Create<FranchiseItem>(), series, this, this.Children.Count + 1, true);
 
         this.children.Add(item);
         series.FranchiseItem = item;
@@ -93,7 +93,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     public FranchiseItem AddFranchise(Franchise franchise)
     {
         var item = new FranchiseItem(
-            Domain.Id.CreateNew<FranchiseItem>(), franchise, this, this.Children.Count + 1, true);
+            Domain.Id.Create<FranchiseItem>(), franchise, this, this.Children.Count + 1, true);
 
         this.children.Add(item);
         franchise.FranchiseItem = item;

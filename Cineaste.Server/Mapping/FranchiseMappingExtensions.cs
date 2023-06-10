@@ -33,13 +33,13 @@ public static class FranchiseMappingExtensions
             switch (item.Type)
             {
                 case FranchiseItemType.Movie:
-                    franchise.AddMovie(moviesById[Id.Create<Movie>(item.Id)]);
+                    franchise.AddMovie(moviesById[Id.For<Movie>(item.Id)]);
                     break;
                 case FranchiseItemType.Series:
-                    franchise.AddSeries(seriesById[Id.Create<Series>(item.Id)]);
+                    franchise.AddSeries(seriesById[Id.For<Series>(item.Id)]);
                     break;
                 case FranchiseItemType.Franchise:
-                    franchise.AddFranchise(franchisesById[Id.Create<Franchise>(item.Id)]);
+                    franchise.AddFranchise(franchisesById[Id.For<Franchise>(item.Id)]);
                     break;
             }
         }

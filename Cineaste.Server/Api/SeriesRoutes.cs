@@ -11,7 +11,7 @@ public static class SeriesRoutes
     }
 
     private static async Task<IResult> GetSeries(Guid id, SeriesService seriesService) =>
-        Results.Ok(await seriesService.GetSeries(Id.Create<Series>(id)));
+        Results.Ok(await seriesService.GetSeries(Id.For<Series>(id)));
 
     private static async Task<IResult> CreateSeries(Validated<SeriesRequest> request, SeriesService seriesService)
     {
@@ -23,11 +23,11 @@ public static class SeriesRoutes
         Guid id,
         Validated<SeriesRequest> request,
         SeriesService seriesService) =>
-        Results.Ok(await seriesService.UpdateSeries(Id.Create<Series>(id), request));
+        Results.Ok(await seriesService.UpdateSeries(Id.For<Series>(id), request));
 
     private static async Task<IResult> DeleteSeries(Guid id, SeriesService seriesService)
     {
-        await seriesService.DeleteSeries(Id.Create<Series>(id));
+        await seriesService.DeleteSeries(Id.For<Series>(id));
         return Results.NoContent();
     }
 }

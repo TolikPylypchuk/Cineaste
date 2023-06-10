@@ -33,11 +33,11 @@ public abstract class ServiceTestsBase : IAsyncLifetime
 
     protected CineasteList CreateList(string name, string handle) =>
         new(
-            Id.CreateNew<CineasteList>(),
+            Id.Create<CineasteList>(),
             name,
             handle,
             new ListConfiguration(
-                Id.CreateNew<ListConfiguration>(),
+                Id.Create<ListConfiguration>(),
                 CultureInfo.InvariantCulture,
                 "Season #",
                 "Season #",
@@ -45,7 +45,7 @@ public abstract class ServiceTestsBase : IAsyncLifetime
 
     protected Movie CreateMovie(CineasteList list)
     {
-        var movie = new Movie(Id.CreateNew<Movie>(), this.CreateTitles(), 2000, true, true, this.MovieKind);
+        var movie = new Movie(Id.Create<Movie>(), this.CreateTitles(), 2000, true, true, this.MovieKind);
         list.AddMovie(movie);
 
         return movie;
@@ -54,7 +54,7 @@ public abstract class ServiceTestsBase : IAsyncLifetime
     protected Series CreateSeries(CineasteList list)
     {
         var series = new Series(
-            Id.CreateNew<Series>(),
+            Id.Create<Series>(),
             this.CreateTitles(),
             new List<Season> { this.CreateSeason(1), this.CreateSeason(2) },
             new List<SpecialEpisode> { this.CreateSpecialEpisode(3) },
@@ -69,7 +69,7 @@ public abstract class ServiceTestsBase : IAsyncLifetime
 
     protected Season CreateSeason(int num) =>
         new(
-            Id.CreateNew<Season>(),
+            Id.Create<Season>(),
             new List<Title> { new($"Season {num}", 1, false), new($"Season {num}", 1, true) },
             SeasonWatchStatus.NotWatched,
             SeasonReleaseStatus.Finished,
@@ -77,16 +77,16 @@ public abstract class ServiceTestsBase : IAsyncLifetime
             num,
             new List<Period>
             {
-                new(Id.CreateNew<Period>(), 1, 2000 + num, 2, 2000 + num, false, 10)
+                new(Id.Create<Period>(), 1, 2000 + num, 2, 2000 + num, false, 10)
             });
 
     protected SpecialEpisode CreateSpecialEpisode(int num) =>
-        new(Id.CreateNew<SpecialEpisode>(), this.CreateTitles(), 1, 2000 + num, false, true, "Test", num);
+        new(Id.Create<SpecialEpisode>(), this.CreateTitles(), 1, 2000 + num, false, true, "Test", num);
 
     protected Franchise CreateFranchise(CineasteList list)
     {
         var franchise = new Franchise(
-            Id.CreateNew<Franchise>(),
+            Id.Create<Franchise>(),
             this.CreateTitles(),
             showTitles: true,
             isLooselyConnected: false,
@@ -103,7 +103,7 @@ public abstract class ServiceTestsBase : IAsyncLifetime
     protected MovieKind CreateMovieKind(CineasteList list)
     {
         var black = new Color("#000000");
-        var kind = new MovieKind(Id.CreateNew<MovieKind>(), "Test Kind", black, black, black);
+        var kind = new MovieKind(Id.Create<MovieKind>(), "Test Kind", black, black, black);
 
         list.AddMovieKind(kind);
 
@@ -113,7 +113,7 @@ public abstract class ServiceTestsBase : IAsyncLifetime
     protected SeriesKind CreateSeriesKind(CineasteList list)
     {
         var black = new Color("#000000");
-        var kind = new SeriesKind(Id.CreateNew<SeriesKind>(), "Test Kind", black, black, black);
+        var kind = new SeriesKind(Id.Create<SeriesKind>(), "Test Kind", black, black, black);
 
         list.AddSeriesKind(kind);
 
