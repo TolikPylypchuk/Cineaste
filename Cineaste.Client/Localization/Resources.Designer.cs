@@ -286,6 +286,132 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add original title.
+        /// </summary>
+        public static string FranchiseForm_AddOriginalTitle {
+            get {
+                return ResourceManager.GetString("FranchiseForm.AddOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add title.
+        /// </summary>
+        public static string FranchiseForm_AddTitle {
+            get {
+                return ResourceManager.GetString("FranchiseForm.AddTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue numbering.
+        /// </summary>
+        public static string FranchiseForm_ContinueNumbering {
+            get {
+                return ResourceManager.GetString("FranchiseForm.ContinueNumbering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this franchise? It will not delete its items, only detach them..
+        /// </summary>
+        public static string FranchiseForm_DeleteDialog_Body {
+            get {
+                return ResourceManager.GetString("FranchiseForm.DeleteDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Franchise.
+        /// </summary>
+        public static string FranchiseForm_DeleteDialog_Title {
+            get {
+                return ResourceManager.GetString("FranchiseForm.DeleteDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loosely connected.
+        /// </summary>
+        public static string FranchiseForm_LooselyConnected {
+            get {
+                return ResourceManager.GetString("FranchiseForm.LooselyConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Franchise.
+        /// </summary>
+        public static string FranchiseForm_NewFranchise {
+            get {
+                return ResourceManager.GetString("FranchiseForm.NewFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original titles.
+        /// </summary>
+        public static string FranchiseForm_OriginalTitles {
+            get {
+                return ResourceManager.GetString("FranchiseForm.OriginalTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating the franchise has failed.
+        /// </summary>
+        public static string FranchiseForm_Problem_CreatingFailed {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Problem.CreatingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleting the franchise has failed.
+        /// </summary>
+        public static string FranchiseForm_Problem_DeletingFailed {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Problem.DeletingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading the franchise has failed.
+        /// </summary>
+        public static string FranchiseForm_Problem_LoadingFailed {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Problem.LoadingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating the franchise has failed.
+        /// </summary>
+        public static string FranchiseForm_Problem_UpdatingFailed {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Problem.UpdatingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show titles.
+        /// </summary>
+        public static string FranchiseForm_ShowTitles {
+            get {
+                return ResourceManager.GetString("FranchiseForm.ShowTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titles.
+        /// </summary>
+        public static string FranchiseForm_Titles {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Titles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a list.
         /// </summary>
         public static string HomePage_CreateList {

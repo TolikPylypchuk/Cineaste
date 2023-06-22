@@ -39,6 +39,7 @@ builder.Services.AddRefitClient<ICultureApi>(apiBaseAddress);
 builder.Services.AddRefitClient<IListApi>(apiBaseAddress);
 builder.Services.AddRefitClient<IMovieApi>(apiBaseAddress);
 builder.Services.AddRefitClient<ISeriesApi>(apiBaseAddress);
+builder.Services.AddRefitClient<IFranchiseApi>(apiBaseAddress);
 
 builder.Services.AddLocalization();
 

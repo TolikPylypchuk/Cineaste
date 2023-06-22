@@ -192,6 +192,48 @@
   <data name="CreateListPage.Problem.Cultures" xml:space="preserve">
     <value>Loading available languages has failed</value>
   </data>
+  <data name="FranchiseForm.AddOriginalTitle" xml:space="preserve">
+    <value>Add original title</value>
+  </data>
+  <data name="FranchiseForm.AddTitle" xml:space="preserve">
+    <value>Add title</value>
+  </data>
+  <data name="FranchiseForm.ContinueNumbering" xml:space="preserve">
+    <value>Continue numbering</value>
+  </data>
+  <data name="FranchiseForm.DeleteDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to delete this franchise? It will not delete its items, only detach them.</value>
+  </data>
+  <data name="FranchiseForm.DeleteDialog.Title" xml:space="preserve">
+    <value>Delete Franchise</value>
+  </data>
+  <data name="FranchiseForm.LooselyConnected" xml:space="preserve">
+    <value>Loosely connected</value>
+  </data>
+  <data name="FranchiseForm.NewFranchise" xml:space="preserve">
+    <value>New Franchise</value>
+  </data>
+  <data name="FranchiseForm.OriginalTitles" xml:space="preserve">
+    <value>Original titles</value>
+  </data>
+  <data name="FranchiseForm.Problem.CreatingFailed" xml:space="preserve">
+    <value>Creating the franchise has failed</value>
+  </data>
+  <data name="FranchiseForm.Problem.DeletingFailed" xml:space="preserve">
+    <value>Deleting the franchise has failed</value>
+  </data>
+  <data name="FranchiseForm.Problem.LoadingFailed" xml:space="preserve">
+    <value>Loading the franchise has failed</value>
+  </data>
+  <data name="FranchiseForm.Problem.UpdatingFailed" xml:space="preserve">
+    <value>Updating the franchise has failed</value>
+  </data>
+  <data name="FranchiseForm.ShowTitles" xml:space="preserve">
+    <value>Show titles</value>
+  </data>
+  <data name="FranchiseForm.Titles" xml:space="preserve">
+    <value>Titles</value>
+  </data>
   <data name="HomePage.CreateList" xml:space="preserve">
     <value>Create a list</value>
   </data>

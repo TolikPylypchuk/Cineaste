@@ -1,0 +1,109 @@
+@inherits CineasteForm<FranchiseFormModel, FranchiseRequest, FranchiseModel, FranchiseFormState>
+
+<FormParamsProvider For="this">
+    <div class="container list-sidebar">
+        <div class="form-header">
+            <div></div>
+            <div></div>
+            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.Close">
+                <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
+            </FluentButton>
+        </div>
+
+        @if (this.State.Value.Fetch.IsInProgress)
+        {
+            <FluentProgressRing Class="loading-circle" />
+        } else if (this.State.Value.Fetch.Problem is not null)
+        {
+            <ApiProblemAlert Text="FranchiseForm.Problem.LoadingFailed" Problem="@this.State.Value.Fetch.Problem"
+                             TryAgain="@this.FetchFranchise" Class="problem-alert main" />
+        } else
+        {
+            <div class="form-container list-sidebar">
+                <h2 class="form-title">
+                    @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem is not null
+                        ? this.FormTitle
+                        : this.Loc["FranchiseForm.NewFranchise"])
+                </h2>
+
+                <div class="form">
+                    <div class="form-checkboxes">
+                        <FluentCheckbox @bind-Value="this.FormModel.ShowTitles">
+                            @this.Loc["FranchiseForm.ShowTitles"]
+                        </FluentCheckbox>
+                        <FluentCheckbox @bind-Value="this.FormModel.IsLooselyConnected">
+                            @this.Loc["FranchiseForm.LooselyConnected"]
+                        </FluentCheckbox>
+                        <FluentCheckbox @bind-Value="this.FormModel.ContinueNumbering">
+                            @this.Loc["FranchiseForm.ContinueNumbering"]
+                        </FluentCheckbox>
+                    </div>
+
+                    @if (this.FormModel.ShowTitles)
+                    {
+                        <TitlesForm Titles="@this.FormModel.Titles" Label="FranchiseForm.Titles"
+                                    PropertyName="@nameof(this.FormModel.Titles)" />
+
+                        <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="FranchiseForm.OriginalTitles"
+                                    PropertyName="@nameof(this.FormModel.OriginalTitles)" />
+                    }
+
+                    @if (this.FormModel.ShowTitles)
+                    {
+                        <div class="add-titles">
+                            <FluentButton Appearance="Appearance.Neutral"
+                                          @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
+                                @this.Loc["FranchiseForm.AddTitle"]
+                            </FluentButton>
+                            <FluentButton Appearance="Appearance.Neutral"
+                                          @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
+                                @this.Loc["FranchiseForm.AddOriginalTitle"]
+                            </FluentButton>
+                        </div>
+                    }
+
+                    @if (this.ListItem is not null)
+                    {
+                        <div class="delete-container">
+                            <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Delete"
+                                          Disabled="@this.State.Value.Delete.IsInProgress">
+                                @this.Loc[this.State.Value.Delete.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
+                            </FluentButton>
+
+                            <ConfirmationDialog @ref="this.deleteConfirmationDialog"
+                                                Title="FranchiseForm.DeleteDialog.Title"
+                                                Body="FranchiseForm.DeleteDialog.Body" />
+                        </div>
+                    }
+                </div>
+
+                @if (this.State.Value.Create.Problem is not null)
+                {
+                    <ApiProblemAlert Text="FranchiseForm.Problem.CreatingFailed" TryAgain="@this.Save"
+                                     Problem="@this.State.Value.Create.Problem" Class="problem-alert" />
+                }
+
+                @if (this.State.Value.Update.Problem is not null)
+                {
+                    <ApiProblemAlert Text="FranchiseForm.Problem.UpdatingFailed" TryAgain="@this.Save"
+                                     Problem="@this.State.Value.Update.Problem" Class="problem-alert" />
+                }
+
+                @if (this.State.Value.Delete.Problem is not null)
+                {
+                    <ApiProblemAlert Text="FranchiseForm.Problem.DeletingFailed" TryAgain="@this.Delete"
+                                     Problem="@this.State.Value.Delete.Problem" Class="problem-alert" />
+                }
+
+                <div class="@($"form-actions{(this.FormModel.HasChanges ? "" : " hidden")}")">
+                    <FluentButton Appearance="Appearance.Accent" @onclick="@this.Save" Disabled="@this.IsSaving">
+                        @this.Loc[this.IsSaving ? "Button.Save.Busy" : "Button.Save"]
+                    </FluentButton>
+                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Cancel" Disabled="@this.IsSaving">
+                        @this.Loc["Button.Cancel"]
+                    </FluentButton>
+                </div>
+            </div>
+        }
+    </div>
+</FormParamsProvider>

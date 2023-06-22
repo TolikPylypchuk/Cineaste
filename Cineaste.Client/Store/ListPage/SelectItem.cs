@@ -11,6 +11,8 @@ public sealed record StartCreatingSeriesAction(
     ImmutableList<ListKindModel> AvailableKinds,
     ListConfigurationModel ListConfiguration);
 
+public sealed record StartCreatingFranchiseAction(ImmutableList<ListKindModel> AvailableKinds);
+
 public sealed record CloseItemAction;
 
 public static class SelectItemReducers

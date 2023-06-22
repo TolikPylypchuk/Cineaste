@@ -27,6 +27,10 @@
                     <SeriesForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
                                 Close="@this.OnItemClosed" />
                     break;
+                case ListPageSelectionMode.Franchise:
+                    <FranchiseForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
+                                   Close="@this.OnItemClosed" />
+                    break;
             }
         }
     </div>

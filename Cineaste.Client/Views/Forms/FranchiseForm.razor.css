@@ -1,0 +1,94 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding-block-start: var(--s2);
+}
+
+.form-header {
+  padding-inline: var(--s2);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+::deep .loading-circle {
+  margin-block-start: var(--s8);
+  align-self: center;
+}
+
+::deep .problem-alert {
+  --card-width: 100%;
+  --card-height: auto;
+}
+
+::deep .problem-alert.main {
+  margin-block-start: var(--s3);
+  margin-inline: var(--s1);
+}
+
+.form-title {
+  font: var(--font-header-medium);
+  line-height: 1;
+  padding-inline: var(--s2);
+  padding-block-end: var(--s1);
+}
+
+.form-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+}
+
+.form {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--s2);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s2);
+  --wrap-width: 128px;
+  /* Needed to not cut selectors' shadows inside sidebar forms */
+  margin-inline-start: calc(var(--s16) * -1);
+  padding-inline-start: calc(var(--s16) + var(--s2));
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: row;
+  padding-block: var(--s2);
+  gap: var(--s2);
+}
+
+.form-actions.hidden {
+  display: none;
+}
+
+::deep .form-field {
+  width: 100%;
+  display: block;
+}
+
+.form-checkboxes {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: var(--s2);
+  flex-wrap: wrap;
+}
+
+.add-titles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
+  gap: var(--s2);
+}
+
+.delete-container {
+  display: flex;
+  justify-content: center;
+  margin-block: var(--s2);
+}
