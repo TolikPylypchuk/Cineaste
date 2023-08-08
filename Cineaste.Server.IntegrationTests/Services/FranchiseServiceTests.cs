@@ -292,7 +292,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         var dbFranchise = dbContext.Franchises.Find(Id.For<Franchise>(model.Id));
 
         Assert.NotNull(dbFranchise);
-        Assert.Equal(0, dbFranchise.Titles.Count);
+        Assert.Empty(dbFranchise.Titles);
     }
 
     [Fact(DisplayName = "UpdateFranchise should return a correct model")]
