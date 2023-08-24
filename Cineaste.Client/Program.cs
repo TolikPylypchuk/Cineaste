@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Fast.Components.FluentUI;
 
+using MudBlazor.Services;
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.RootComponents.Add<App>("#app");
@@ -34,6 +36,8 @@ builder.Services.AddFluentUIComponents(options =>
     options.IconConfiguration = ConfigurationGenerator.GetIconConfiguration();
     options.EmojiConfiguration = ConfigurationGenerator.GetEmojiConfiguration();
 });
+
+builder.Services.AddMudServices();
 
 builder.Services.AddRefitClient<ICultureApi>(apiBaseAddress);
 builder.Services.AddRefitClient<IListApi>(apiBaseAddress);
