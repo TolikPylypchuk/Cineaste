@@ -1,12 +1,4 @@
-::deep .alert {
-  padding-block: var(--s4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--s2);
-}
-
 .summary-container {
-  margin-inline: var(--s4);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -16,9 +8,7 @@
 }
 
 .main-text {
-  color: var(--error);
   font-weight: 700;
-  margin-block: 0;
 }
 
 .button-panel {
@@ -28,11 +18,23 @@
   gap: var(--s2);
 }
 
-.details-container {
-  margin-block: 0;
-  margin-inline: var(--s4);
+::deep .details-divider {
+  border-color: var(--mud-palette-error-lighten) !important; /* !important used to override MudBlazor */
+  margin-block: var(--s2);
 }
 
-.details {
-  color: var(--error);
+.details-container {
+  margin-block-start: var(--s2);
+}
+
+::deep .details-link {
+  color: var(--mud-palette-error-darken) !important; /* !important used to override MudBlazor */
+}
+
+::deep .details-link::before {
+  content: '(';
+}
+
+::deep .details-link::after {
+  content: ')';
 }

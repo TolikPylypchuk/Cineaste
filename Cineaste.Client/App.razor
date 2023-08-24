@@ -1,6 +1,6 @@
 @using MudBlazor
 
-<MudThemeProvider />
+<MudThemeProvider Theme="this.CineasteTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -20,3 +20,17 @@
         </NotFound>
     </Router>
 </FluentDesignSystemProvider>
+
+@code {
+    private MudTheme CineasteTheme = new()
+    {
+        Typography = new()
+        {
+            Default = new()
+            {
+                FontFamily = new[] { "Raleway", "sans-serif" },
+                FontSize = "1rem"
+            }
+        }
+    };
+}

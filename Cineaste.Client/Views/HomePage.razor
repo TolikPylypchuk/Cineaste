@@ -1,19 +1,21 @@
 @page "/"
 @inherits StatefulComponent<HomePageState>
+@using MudBlazor
 
 <div class="container">
     <header>
         <h1 class="title">@this.Loc["Cineaste"]</h1>
         <h2 class="subtitle">@this.Loc["HomePage.MyLists"]</h2>
 
-        <FluentButton Class="create-list" Appearance="Appearance.Accent" @onclick="this.NavigateToCreateList">
+        <MudButton Class="create-list" Color="MudBlazor.Color.Primary" Variant="Variant.Filled" Size="Size.Large"
+                   @onclick="this.NavigateToCreateList">
             @this.Loc["HomePage.CreateList"]
-        </FluentButton>
+        </MudButton>
     </header>
 
     @if (this.State.Value.IsLoading)
     {
-        <FluentProgressRing Class="loading-circle" />
+        <MudProgressCircular Class="loading-circle" />
     } else if (this.State.Value.Problem is not null)
     {
         <ApiProblemAlert Problem="this.State.Value.Problem" Text="HomePage.Problem.LoadingListsFailed"
@@ -25,7 +27,7 @@
             {
                 <div role="button" class="list-container" @onclick="@(() => this.NavigateToList(list))">
                     <p class="list">@list.Name</p>
-                    <FluentDivider Role="DividerRole.Separator"></FluentDivider>
+                    <MudDivider DividerType="DividerType.FullWidth"></MudDivider>
                 </div>
             }
         </div>
