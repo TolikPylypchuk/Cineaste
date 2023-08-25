@@ -15,7 +15,8 @@
 
     @if (this.State.Value.IsLoading)
     {
-        <MudProgressCircular Class="loading-circle" />
+        <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" Size="Size.Large"
+                             Class="loading-circle" />
     } else if (this.State.Value.Problem is not null)
     {
         <ApiProblemAlert Problem="this.State.Value.Problem" Text="HomePage.Problem.LoadingListsFailed"

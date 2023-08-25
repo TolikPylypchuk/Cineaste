@@ -1,61 +1,47 @@
 @inherits StatefulComponent<ListPageState>
+@using MudBlazor
 
 <div class="container">
     @if (this.State.Value.IsLoading)
     {
-        <FluentProgressRing Class="loading-circle" />
+        <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" Size="Size.Large"
+                             Class="loading-circle" />
     } else if (this.State.Value.Problem is not null)
     {
         <ApiProblemAlert Text="ListComponent.Problem.LoadingListFailed" Problem="@this.State.Value.Problem"
                          TryAgain="@this.FetchList" Class="problem-alert" />
     } else
     {
-        <h1 class="list-name">@this.State.Value.Name</h1>
-
         var selectedItem = this.State.Value.SelectedItem;
 
-        <FluentDataGrid TGridItem="ListItemModel" RowsData="@this.State.Value.Container.Items.AsQueryable()"
-                        GenerateHeader="GenerateHeaderOption.Sticky" Virtualize="true" Class="list"
-                        GridTemplateColumns="48px calc((100% - 120px) / 2) calc((100% - 120px) / 2) 72px"
-                        RowClass="@(item => $"{(item == selectedItem ? "selected-row" : "")}")"
-                        RowsDataKey="@(item => item.Id)" RowsDataSize="56">
-            <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.Number"]"
-                            Align="Align.Start" Sortable="false">
-                <div class="cell-content number" style="@($"--cell-color: {item?.Color}")"
-                     @onclick="@(() => this.SelectItem(item))">
-                    @item?.DisplayNumber
-                </div>
-            </TemplateColumn>
-            <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.Title"]"
-                            Align="Align.Center" Sortable="false">
-                <div class="cell-content title" style="@($"--cell-color: {item?.Color}")"
-                     @onclick="@(() => this.SelectItem(item))">
-                    @item?.Title
-                </div>
-            </TemplateColumn>
-            <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.OriginalTitle"]"
-                            Align="Align.Center" Sortable="false">
-                <div class="cell-content title" style="@($"--cell-color: {item?.Color}")"
-                     @onclick="@(() => this.SelectItem(item))">
-                    @item?.OriginalTitle
-                </div>
-            </TemplateColumn>
-            <TemplateColumn Context="item" Title="@this.Loc["ListComponent.List.Year"]"
-                            Align="Align.End" Sortable="false">
-                <div class="cell-content year" style="@($"--cell-color: {item?.Color}")"
-                     @onclick="@(() => this.SelectItem(item))">
-                    @if (item?.StartYear == item?.EndYear)
-                    {
-                        @item?.StartYear
-                    } else
-                    {
-                        @item?.StartYear
-                        <br />
-                        @item?.EndYear
-                    }
-                </div>
-            </TemplateColumn>
-        </FluentDataGrid>
+        <MudDataGrid Class="list" Items="@this.State.Value.Container.Items" Virtualize="true" Hover="true"
+                     SelectedItemChanged="@((ListItemModel item) => this.SelectItem(item))" SortMode="SortMode.None"
+                     RowClassFunc="@((item, index) => "list-row" + (item == selectedItem ? " selected-row" : ""))"
+                     RowStyleFunc="@((item, index) => $"--cell-color: {item.Color}")" FixedHeader="true" Height="100%"
+                     ItemSize="64" Dense="true">
+            <Columns>
+                <MudBlazor.PropertyColumn Title="@this.Loc["ListComponent.List.Number"]"
+                                          Property="@(item => item.DisplayNumber)" CellClass="cell-content number" />
+                <MudBlazor.PropertyColumn Title="@this.Loc["ListComponent.List.Title"]"
+                                          Property="@(item => item.Title)" CellClass="cell-content title" />
+                <MudBlazor.PropertyColumn Title="@this.Loc["ListComponent.List.OriginalTitle"]"
+                                          Property="@(item => item.OriginalTitle)" CellClass="cell-content title" />
+                <MudBlazor.TemplateColumn Title="@this.Loc["ListComponent.List.Year"]" CellClass="cell-content year">
+                    <CellTemplate>
+                        @if (context.Item.StartYear == context.Item.EndYear)
+                        {
+                            @context.Item.StartYear
+                        } else
+                        {
+                            @context.Item.StartYear
+                            <br />
+                            @context.Item.EndYear
+                            @* @($"{context.Item.StartYear} - {context.Item.EndYear}") *@
+                        }
+                    </CellTemplate>
+                </MudBlazor.TemplateColumn>
+            </Columns>
+        </MudDataGrid>
     }
 </div>
 
@@ -66,9 +52,9 @@
     [Parameter]
     public required Action FetchList { get; set; }
 
-    public async Task SelectItem(ListItemModel? item)
+    public async Task SelectItem(ListItemModel item)
     {
-        if (item is not null && item != this.State.Value.SelectedItem)
+        if (item != this.State.Value.SelectedItem)
         {
             await this.ItemSelected.InvokeAsync(item);
         }

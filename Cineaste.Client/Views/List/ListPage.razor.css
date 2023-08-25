@@ -13,6 +13,7 @@
 .list-container {
   grid-area: list;
   height: 100%;
+  overflow-y: auto;
 }
 
 .sidebar-container {

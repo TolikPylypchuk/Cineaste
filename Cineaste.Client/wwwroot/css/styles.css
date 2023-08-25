@@ -9,9 +9,3 @@
   font-variation-settings: var(--type-ramp-base-font-variations);
   margin-bottom: 4px;
 }
-
-.list-sidebar {
-  /* Needed to not cut selectors' shadows inside sidebar forms */
-  margin-inline-start: calc(var(--s16) * -1);
-  padding-inline-start: var(--s16);
-}

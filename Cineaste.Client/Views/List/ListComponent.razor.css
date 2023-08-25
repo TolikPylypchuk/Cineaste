@@ -1,5 +1,6 @@
 .container {
   height: 100%;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,55 +16,76 @@
   margin-block-start: var(--s3);
 }
 
-.list-name {
-  font: var(--font-header-large);
-}
+/* Force MudDataGrid to use Flexbox since this way the column widths can actually be controlled */
 
 ::deep .list {
   width: 100%;
   flex-grow: 1;
   overflow-y: auto;
-  --type-ramp-base-font-size: 1.25rem;
-  --type-ramp-base-line-height: initial;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items:stretch;
+  --number-width: 48px;
+  --year-width: 72px;
+  --min-row-height: 60px;
 }
 
-::deep .selected-row {
-  background-color: var(--neutral-layer-3);
-}
-
-::deep .list fluent-data-grid-cell {
-  justify-self: stretch;
-  align-self: stretch;
-  white-space: break-spaces;
-}
-
-::deep .list fluent-data-grid-cell:not(.column-header) {
-  --type-ramp-base-line-height: 1em;
-  /* Padding is defined in the cell content */
-  padding: 0;
-}
-
-.cell-content {
-  height: 100%;
+::deep .list-row, ::deep .mud-table-head .mud-table-row {
   cursor: pointer;
-  color: var(--cell-color);
-  /* Padding is defined here instead of the cell itself so that click events can be captured by the content */
-  padding:
-    calc((var(--design-unit) + var(--focus-stroke-width) - var(--stroke-width)) * 1px)
-    calc(((var(--design-unit) * 3) + var(--focus-stroke-width) - var(--stroke-width)) * 1px);
+  width: 100%;
+  min-height: var(--min-row-height);
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
 }
 
-.number {
+::deep .list th.mud-table-cell:nth-child(1) {
+  flex: 0 0 var(--number-width);
+  display: flex;
   justify-content: start;
 }
 
-.title {
+::deep .list th.mud-table-cell:nth-child(2) {
+  flex: 1;
+  display: flex;
   justify-content: center;
 }
 
-.year {
+::deep .list th.mud-table-cell:nth-child(3) {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+::deep .list th.mud-table-cell:nth-child(4) {
+  flex: 0 0 var(--year-width);
+  display: flex;
+  justify-content: end;
+}
+
+::deep .selected-row {
+  background-color: var(--mud-palette-table-striped);
+}
+
+::deep .cell-content {
+  color: var(--cell-color) !important; /* !important overrides the color set by MudBlazor */
+  font-size: var(--mud-typography-default-size);
+  display: flex;
+  align-items: center;
+}
+
+::deep .number {
+  flex: 0 0 var(--number-width);
+  justify-content: start;
+}
+
+::deep .title {
+  flex: 1;
+  justify-content: center;
+}
+
+::deep .year {
+  flex: 0 0 var(--year-width);
   justify-content: end;
 }

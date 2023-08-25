@@ -1,13 +1,9 @@
 .container {
   height: 100%;
   padding-block-start: var(--s2);
-  padding-inline-end: var(--s2);
+  padding-inline: var(--s2);
   display: flex;
   flex-direction: column;
   gap: var(--s2);
   --base-height-multiplier: 16;
-}
-
-::deep .add {
-  margin: var(--s1);
 }
