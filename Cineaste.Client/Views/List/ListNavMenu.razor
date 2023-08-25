@@ -1,14 +1,20 @@
 @inherits CineasteComponent
+@using MudBlazor
 
-<NavMenu>
-    <NavMenuLink Icon="@FluentIcons.List" OnClick="@(() => this.PageNavigator.GoToListPage(this.Handle))"
-                    Text="@this.Loc["ListPage.Menu.List"]" Selected="true" />
-    <NavMenuLink Icon="@FluentIcons.Settings" Disabled="true"
-                    OnClick="@(() => this.PageNavigator.GoToListSettingsPage(this.Handle))"
-                    Text="@this.Loc["ListPage.Menu.Settings"]" />
-    <NavMenuLink Icon="@FluentIcons.Home" OnClick="@(() => this.PageNavigator.GoToHomePage())"
-                    Text="@this.Loc["ListPage.Menu.Back"]" />
-</NavMenu>
+<MudNavMenu Bordered="true">
+    <MudNavLink Href="@this.PageNavigator.ListPage(this.Handle)" Match="NavLinkMatch.All"
+                Icon="@Icons.Material.Filled.List">
+        @this.Loc["ListPage.Menu.List"]
+    </MudNavLink>
+    <MudNavLink Href="@this.PageNavigator.ListSettingsPage(this.Handle)" Match="NavLinkMatch.All" Disabled="true"
+                Icon="@Icons.Material.Filled.Settings">
+        @this.Loc["ListPage.Menu.Settings"]
+    </MudNavLink>
+    <MudNavLink Href="@this.PageNavigator.HomePage()" Match="NavLinkMatch.All"
+                Icon="@Icons.Material.Filled.Home">
+        @this.Loc["ListPage.Menu.Back"]
+    </MudNavLink>
+</MudNavMenu>
 
 @code {
     [Parameter]

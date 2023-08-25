@@ -1,7 +1,0 @@
-@inherits FluentComponentBase
-
-<FluentOption TOption="int" Class="@this.ClassValue" Style="@this.Style" Disabled="@this.Disabled"
-              Selected="@this.Selected" @onclick="this.OnClick">
-    <FluentIcon Name="@this.Icon" Size="@IconSize.Size20" Slot="start" OnClick="this.OnIconClick"/>
-    <p class="text">@(this.NavMenuExpanded ? this.Text : String.Empty)</p>
-</FluentOption>

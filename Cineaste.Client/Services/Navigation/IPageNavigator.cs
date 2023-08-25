@@ -4,13 +4,21 @@ using Microsoft.AspNetCore.Components.Routing;
 
 public interface IPageNavigator
 {
+    string HomePage();
+
     void GoToHomePage();
+
+    string CreateListPage();
+
+    void GoToCreateListPage();
+
+    string ListPage(string handle);
 
     void GoToListPage(string handle);
 
-    void GoToListSettingsPage(string handle);
+    string ListSettingsPage(string handle);
 
-    void GoToCreateListPage();
+    void GoToListSettingsPage(string handle);
 
     event EventHandler<LocationChangedEventArgs> PageChanged;
 }

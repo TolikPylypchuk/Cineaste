@@ -10,17 +10,32 @@ public sealed class PageNavigator : IPageNavigator
     public PageNavigator(NavigationManager navigationManager) =>
         this.navigationManager = navigationManager;
 
+    public string HomePage() =>
+        "/";
+
     public void GoToHomePage() =>
-        this.navigationManager.NavigateTo("/");
+        this.GoTo(this.HomePage());
+
+    public string CreateListPage() =>
+        "/new";
 
     public void GoToCreateListPage() =>
-        this.navigationManager.NavigateTo("/new");
+        this.GoTo(this.CreateListPage());
+
+    public string ListPage(string handle) =>
+        $"/list/{handle}";
 
     public void GoToListPage(string handle) =>
-        this.navigationManager.NavigateTo($"/list/{handle}");
+        this.GoTo(this.ListPage(handle));
+
+    public string ListSettingsPage(string handle) =>
+        $"/list/{handle}/settings";
 
     public void GoToListSettingsPage(string handle) =>
-        this.navigationManager.NavigateTo($"/list/{handle}/settings");
+        this.GoTo(this.ListSettingsPage(handle));
+
+    private void GoTo(string page) =>
+        this.navigationManager.NavigateTo(page);
 
     public event EventHandler<LocationChangedEventArgs> PageChanged
     {

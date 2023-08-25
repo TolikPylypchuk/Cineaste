@@ -1,7 +1,7 @@
 .container {
   height: 100%;
   display: grid;
-  grid-template-columns: fit-content(200px) 4fr 1fr;
+  grid-template-columns: auto 4fr 1fr;
   grid-template-areas: 'nav list sidebar';
 }
 
