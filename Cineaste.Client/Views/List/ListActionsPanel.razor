@@ -1,13 +1,16 @@
 @inherits CineasteComponent
+@using MudBlazor
 
 <div class="container">
-    <FluentButton Appearance="Appearance.Accent" Class="add" @onclick="@this.CreateMovie">
+    <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" Size="Size.Large" Class="add"
+               @onclick="@this.CreateMovie">
         @this.Loc["ListActionsPanel.AddMovie"]
-    </FluentButton>
+    </MudButton>
 
-    <FluentButton Appearance="Appearance.Accent" Class="add" @onclick="@this.CreateSeries">
+    <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" Size="Size.Large" Class="add"
+               @onclick="@this.CreateSeries">
         @this.Loc["ListActionsPanel.AddSeries"]
-    </FluentButton>
+    </MudButton>
 </div>
 
 @code {
