@@ -1,9 +1,0 @@
-@inherits LayoutComponentBase
-@inject IGlobalEventInitiator GlobalEventInitiator
-
-<div @onclick="@this.GlobalEventInitiator.OnGlobalMouseClick"
-     @onkeydown="@this.GlobalEventInitiator.OnGlobalKeyPressed"
-     @onkeyup="@this.GlobalEventInitiator.OnGlobalKeyReleased"
-     style="width: 100%; height: 100%">
-    @this.Body
-</div>

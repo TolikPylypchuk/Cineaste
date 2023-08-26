@@ -56,10 +56,6 @@ builder.Services.AddFluxor(options =>
 #endif
 });
 
-builder.Services.AddScoped<GlobalEventMediator>();
-builder.Services.AddScoped<IGlobalEventInitiator>(services => services.GetRequiredService<GlobalEventMediator>());
-builder.Services.AddScoped<IGlobalEventProvider>(services => services.GetRequiredService<GlobalEventMediator>());
-
 builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 
 var english = new CultureInfo("en-US");

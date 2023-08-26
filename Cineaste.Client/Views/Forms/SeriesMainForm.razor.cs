@@ -44,26 +44,6 @@ public partial class SeriesMainForm
 
     private ISeriesComponentFormModel? ComponentWithMenu { get; set; }
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        this.GlobalEventProvider.GlobalMouseClick += (sender, e) =>
-        {
-            this.HideMenu();
-            this.StateHasChanged();
-        };
-
-        this.GlobalEventProvider.GlobalKeyReleased += (sender, e) =>
-        {
-            if (e.Key == "Escape")
-            {
-                this.HideMenu();
-                this.StateHasChanged();
-            }
-        };
-    }
-
     private void FetchSeries()
     {
         if (this.ListItem is not null)

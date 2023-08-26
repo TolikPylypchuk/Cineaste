@@ -1,6 +1,8 @@
+.loading-progress-container {
+  display: flex;
+}
+
 .loading-progress {
-  position: relative;
-  display: block;
   width: 8rem;
   height: 8rem;
   margin: 20vh auto 1rem auto;
@@ -8,14 +10,14 @@
 
 .loading-progress circle {
   fill: none;
-  stroke: #e0e0e0;
+  stroke: #E0E0E0; /* MudBlazor's lighter gray color */
   stroke-width: 0.6rem;
   transform-origin: 50% 50%;
   transform: rotate(-90deg);
 }
 
 .loading-progress circle:last-child {
-  stroke: var(--accent-fill-rest);
+  stroke: rgb(89, 74, 226); /* MudBlazor's primary color */
   stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
   transition: stroke-dasharray 0.05s ease-in-out;
 }
