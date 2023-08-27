@@ -351,8 +351,8 @@
   <data name="MovieForm.NewMovie" xml:space="preserve">
     <value>New Movie</value>
   </data>
-  <data name="MovieForm.OriginalTitles" xml:space="preserve">
-    <value>Original titles</value>
+  <data name="MovieForm.OriginalTitle" xml:space="preserve">
+    <value>Original title</value>
   </data>
   <data name="MovieForm.Problem.CreatingFailed" xml:space="preserve">
     <value>Creating the moive has failed</value>
@@ -375,8 +375,8 @@
   <data name="MovieForm.RottenTomatoesId" xml:space="preserve">
     <value>Rotten Tomatoes ID</value>
   </data>
-  <data name="MovieForm.Titles" xml:space="preserve">
-    <value>Titles</value>
+  <data name="MovieForm.Title" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="MovieForm.Year" xml:space="preserve">
     <value>Year</value>

@@ -27,4 +27,6 @@ global using Fluxor;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.Extensions.Options;
 
+global using MudBlazor;
+
 global using Refit;

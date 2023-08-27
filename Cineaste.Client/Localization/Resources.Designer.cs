@@ -763,11 +763,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original titles.
+        ///   Looks up a localized string similar to Original title.
         /// </summary>
-        public static string MovieForm_OriginalTitles {
+        public static string MovieForm_OriginalTitle {
             get {
-                return ResourceManager.GetString("MovieForm.OriginalTitles", resourceCulture);
+                return ResourceManager.GetString("MovieForm.OriginalTitle", resourceCulture);
             }
         }
         
@@ -835,11 +835,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Titles.
+        ///   Looks up a localized string similar to Title.
         /// </summary>
-        public static string MovieForm_Titles {
+        public static string MovieForm_Title {
             get {
-                return ResourceManager.GetString("MovieForm.Titles", resourceCulture);
+                return ResourceManager.GetString("MovieForm.Title", resourceCulture);
             }
         }
         

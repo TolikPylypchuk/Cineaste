@@ -2,10 +2,10 @@ namespace Cineaste.Client.Views.Forms;
 
 using Cineaste.Client.Store.Forms.MovieForm;
 
+using Microsoft.AspNetCore.Components;
+
 public partial class MovieForm
 {
-    private ConfirmationDialog? deleteConfirmationDialog;
-
     [Parameter]
     public Guid ListId { get; set; }
 
@@ -14,6 +14,9 @@ public partial class MovieForm
 
     [Parameter]
     public EventCallback Close { get; set; }
+
+    [Inject]
+    public required IDialogService DialogService { get; init; }
 
     private string FormTitle { get; set; } = String.Empty;
 
@@ -132,12 +135,11 @@ public partial class MovieForm
 
     private async Task Delete()
     {
-        if (this.deleteConfirmationDialog is null)
-        {
-            return;
-        }
-
-        bool? delete = await this.deleteConfirmationDialog.RequestConfirmation();
+        bool? delete = await this.DialogService.ShowMessageBox(
+            title: this.Loc["MovieForm.DeleteDialog.Title"],
+            markupMessage: new MarkupString(this.Loc["MovieForm.DeleteDialog.Body"]),
+            yesText: this.Loc["Confirmation.Confirm"],
+            noText: this.Loc["Confirmation.Cancel"]);
 
         if (delete == true && this.ListItem is { Id: var id })
         {

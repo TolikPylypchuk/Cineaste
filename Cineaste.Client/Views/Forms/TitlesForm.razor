@@ -1,22 +1,20 @@
 @inherits CineasteComponent
+@using MudBlazor
 
 <div>
-    <label for="@($"{this.PropertyName}-0")" class="label">@this.Loc[this.Label]</label>
-
     <div class="titles-container">
         @for (int i = 0; i < this.Titles.Count; i++)
         {
             int index = i;
             string title = this.Titles[index];
             <div class="title-container">
-                <FluentTextField Id="@($"{this.PropertyName}-{index}")" Value="@title" ValueExpression="@(() => title)"
-                                 ValueChanged="@(value => this.UpdateTitle(value, index))" Class="title form-field" />
+                <MudTextField Value="@title" ValueChanged="@((string value) => this.UpdateTitle(value, index))"
+                              Label="@this.Loc[this.Label]" Class="title form-field" />
 
                 @if (this.Titles.Count > 1)
                 {
-                    <FluentButton Appearance="Appearance.Stealth" @onclick="@(() => this.RemoveTitle(index))">
-                        <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
-                    </FluentButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" aria-label="remove"
+                                   @onclick="@(() => this.RemoveTitle(index))" />
                 }
             </div>
         }

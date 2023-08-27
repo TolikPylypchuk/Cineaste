@@ -1,18 +1,18 @@
 @inherits CineasteForm<MovieFormModel, MovieRequest, MovieModel, MovieFormState>
+@using MudBlazor
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
         <div class="form-header">
             <div></div>
             <div></div>
-            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.Close">
-                <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
-            </FluentButton>
+            <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" aria-label="close"
+                           @onclick="this.Close" />
         </div>
 
         @if (this.State.Value.Fetch.IsInProgress)
         {
-            <FluentProgressRing Class="loading-circle" />
+            <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" Class="loading-circle" />
         } else if (this.State.Value.Fetch.Problem is not null)
         {
             <ApiProblemAlert Text="MovieForm.Problem.LoadingFailed" Problem="@this.State.Value.Fetch.Problem"
@@ -32,9 +32,9 @@
                         {
                             string href = String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId);
 
-                            <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
+                            <MudLink Href="@href" Target="_blank">
                                 @this.Loc["Link.Imdb"]
-                            </FluentAnchor>
+                            </MudLink>
                         }
 
                         @if (this.HasRottenTomatoesId())
@@ -43,87 +43,82 @@
                                 this.Loc["Link.RottenTomatoesUrlFormat"],
                                 this.FormModel.RottenTomatoesId);
 
-                            <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
+                            <MudLink Href="@href" Target="_blank">
                                 @this.Loc["Link.RottenTomatoes"]
-                            </FluentAnchor>
+                            </MudLink>
                         }
                     </div>
 
                     <div class="form-checkboxes">
-                        <FluentCheckbox Value="@this.FormModel.IsWatched"
-                                        ValueExpression="@(() => this.FormModel.IsWatched)"
-                                        ValueChanged="@this.OnIsWatchedChanged"
-                                        Disabled="@(!this.CanChangeIsWatched)">
+                        <MudCheckBox Checked="@this.FormModel.IsWatched" Color="MudBlazor.Color.Primary"
+                                     CheckedChanged="@((bool value) => this.OnIsWatchedChanged(value))"
+                                     Disabled="@(!this.CanChangeIsWatched)" Size="Size.Small">
                             @this.Loc["MovieForm.IsWatched"]
-                        </FluentCheckbox>
-                        <FluentCheckbox Value="@this.FormModel.IsReleased"
-                                        ValueExpression="@(() => this.FormModel.IsReleased)"
-                                        ValueChanged="@this.OnIsReleasedChanged"
-                                        Disabled="@(!this.CanChangeIsReleased)">
+                        </MudCheckBox>
+                        <MudCheckBox Checked="@this.FormModel.IsReleased" Color="MudBlazor.Color.Primary"
+                                     CheckedChanged="@((bool value) => this.OnIsReleasedChanged(value))"
+                                     Disabled="@(!this.CanChangeIsReleased)" Size="Size.Small">
                             @this.Loc["MovieForm.IsReleased"]
-                        </FluentCheckbox>
+                        </MudCheckBox>
                     </div>
 
-                    <TitlesForm Titles="@this.FormModel.Titles" Label="MovieForm.Titles"
+                    <TitlesForm Titles="@this.FormModel.Titles" Label="MovieForm.Title"
                                 PropertyName="@nameof(this.FormModel.Titles)" />
 
-                    <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="MovieForm.OriginalTitles"
+                    <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="MovieForm.OriginalTitle"
                                 PropertyName="@nameof(this.FormModel.OriginalTitles)" />
 
                     <div class="form-year-kind">
                         <div>
-                            <FluentNumberField Value="@this.FormModel.Year" Class="form-field"
-                                               ValueExpression="@(() => this.FormModel.Year)"
-                                               ValueChanged="@((int year) => this.OnYearChanged(year))">
-                                @this.Loc["MovieForm.Year"]
-                            </FluentNumberField>
+                            <MudNumericField Label="@this.Loc["MovieForm.Year"]" Value="@this.FormModel.Year"
+                                             ValueChanged="@((int year) => this.OnYearChanged(year))"
+                                             Class="form-field" />
                             <ErrorPresenter ErrorCode="Movie.Year.*" Trigger="@this.FormModel.Year" />
                         </div>
                         <div>
-                            <label class="label" for="kind">@this.Loc["MovieForm.Kind"]</label>
-                            <FluentSelect Id="kind" Items="@this.State.Value.AvailableKinds"
-                                          @bind-SelectedOption="this.FormModel.Kind" Position="SelectPosition.Below"
-                                          OptionText="@(k => k.Name)" Class="kind-select form-field" />
+                            <MudSelect T="ListKindModel" @bind-Value="this.FormModel.Kind"
+                                       Label="@this.Loc["MovieForm.Kind"]" Class="kind-select form-field">
+                                @foreach (var kind in this.State.Value.AvailableKinds)
+                                {
+                                    <MudSelectItem Value="kind">
+                                        @kind.Name
+                                    </MudSelectItem>
+                                }
+                            </MudSelect>
                         </div>
                     </div>
 
                     <div>
-                        <FluentTextField @bind-Value="@this.FormModel.ImdbId" Class="form-field">
-                            @this.Loc["MovieForm.ImdbId"]
-                        </FluentTextField>
+                        <MudTextField @bind-Value="@this.FormModel.ImdbId" Class="form-field"
+                                      Label="@this.Loc["MovieForm.ImdbId"]" />
                         <ErrorPresenter ErrorCode="Movie.ImdbId.*" Trigger="@this.FormModel.ImdbId" />
                     </div>
 
                     <div>
-                        <FluentTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field">
-                            @this.Loc["MovieForm.RottenTomatoesId"]
-                        </FluentTextField>
+                        <MudTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field"
+                                      Label="@this.Loc["MovieForm.RottenTomatoesId"]" />
                         <ErrorPresenter ErrorCode="Movie.RottenTomatoesId.*"
                                         Trigger="@this.FormModel.RottenTomatoesId" />
                     </div>
 
                     <div class="add-titles">
-                        <FluentButton Appearance="Appearance.Neutral"
-                                      @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
+                        <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Surface" Size="Size.Small"
+                                   @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
                             @this.Loc["MovieForm.AddTitle"]
-                        </FluentButton>
-                        <FluentButton Appearance="Appearance.Neutral"
-                                      @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Surface" Size="Size.Small"
+                                   @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
                             @this.Loc["MovieForm.AddOriginalTitle"]
-                        </FluentButton>
+                        </MudButton>
                     </div>
 
                     @if (this.ListItem is not null)
                     {
                         <div class="delete-container">
-                            <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Delete"
-                                          Disabled="@this.State.Value.Delete.IsInProgress">
+                            <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Secondary"
+                                       Disabled="@this.State.Value.Delete.IsInProgress" @onclick="@this.Delete">
                                 @this.Loc[this.State.Value.Delete.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
-                            </FluentButton>
-
-                            <ConfirmationDialog @ref="this.deleteConfirmationDialog"
-                                                Title="MovieForm.DeleteDialog.Title"
-                                                Body="MovieForm.DeleteDialog.Body" />
+                            </MudButton>
                         </div>
                     }
                 </div>
@@ -147,12 +142,14 @@
                 }
 
                 <div class="@($"form-actions{(this.FormModel.HasChanges ? "" : " hidden")}")">
-                    <FluentButton Appearance="Appearance.Accent" @onclick="@this.Save" Disabled="@this.IsSaving">
+                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@this.IsSaving"
+                               @onclick="@this.Save">
                         @this.Loc[this.IsSaving ? "Button.Save.Busy" : "Button.Save"]
-                    </FluentButton>
-                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Cancel" Disabled="@this.IsSaving">
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Surface" Disabled="@this.IsSaving"
+                               @onclick="@this.Cancel">
                         @this.Loc["Button.Cancel"]
-                    </FluentButton>
+                    </MudButton>
                 </div>
             </div>
         }

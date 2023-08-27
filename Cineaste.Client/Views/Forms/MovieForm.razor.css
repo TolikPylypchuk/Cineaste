@@ -51,10 +51,6 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--s2);
-  --wrap-width: 128px;
-  /* Needed to not cut selectors' shadows inside sidebar forms */
-  margin-inline-start: calc(var(--s16) * -1);
-  padding-inline-start: calc(var(--s16) + var(--s2));
 }
 
 .form-actions {
@@ -91,7 +87,7 @@
 
 .form-year-kind {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   justify-content: stretch;
   gap: var(--s2);
 }
@@ -101,8 +97,9 @@
 }
 
 .add-titles {
+  margin-block-start: var(--s2);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: var(--s2);
 }
 
