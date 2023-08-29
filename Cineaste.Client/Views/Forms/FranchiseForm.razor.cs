@@ -4,8 +4,6 @@ using Cineaste.Client.Store.Forms.FranchiseForm;
 
 public partial class FranchiseForm
 {
-    private ConfirmationDialog? deleteConfirmationDialog;
-
     [Parameter]
     public Guid ListId { get; set; }
 
@@ -14,6 +12,9 @@ public partial class FranchiseForm
 
     [Parameter]
     public EventCallback Close { get; set; }
+
+    [Inject]
+    public required IDialogService DialogService { get; init; }
 
     private string FormTitle { get; set; } = String.Empty;
 
@@ -81,12 +82,11 @@ public partial class FranchiseForm
 
     private async Task Delete()
     {
-        if (this.deleteConfirmationDialog is null)
-        {
-            return;
-        }
-
-        bool? delete = await this.deleteConfirmationDialog.RequestConfirmation();
+        bool? delete = await this.DialogService.ShowMessageBox(
+            title: this.Loc["FranchiseForm.DeleteDialog.Title"],
+            markupMessage: new MarkupString(this.Loc["FranchiseForm.DeleteDialog.Body"]),
+            yesText: this.Loc["Confirmation.Confirm"],
+            noText: this.Loc["Confirmation.Cancel"]);
 
         if (delete == true && this.ListItem is { Id: var id })
         {

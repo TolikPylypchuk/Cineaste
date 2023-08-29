@@ -213,8 +213,8 @@
   <data name="FranchiseForm.NewFranchise" xml:space="preserve">
     <value>New Franchise</value>
   </data>
-  <data name="FranchiseForm.OriginalTitles" xml:space="preserve">
-    <value>Original titles</value>
+  <data name="FranchiseForm.OriginalTitle" xml:space="preserve">
+    <value>Original title</value>
   </data>
   <data name="FranchiseForm.Problem.CreatingFailed" xml:space="preserve">
     <value>Creating the franchise has failed</value>
@@ -231,8 +231,8 @@
   <data name="FranchiseForm.ShowTitles" xml:space="preserve">
     <value>Show titles</value>
   </data>
-  <data name="FranchiseForm.Titles" xml:space="preserve">
-    <value>Titles</value>
+  <data name="FranchiseForm.Title" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="HomePage.CreateList" xml:space="preserve">
     <value>Create a list</value>

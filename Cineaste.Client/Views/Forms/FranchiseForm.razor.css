@@ -32,7 +32,6 @@
   font: var(--font-header-medium);
   line-height: 1;
   padding-inline: var(--s2);
-  padding-block-end: var(--s1);
 }
 
 .form-container {
@@ -51,10 +50,6 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--s2);
-  --wrap-width: 128px;
-  /* Needed to not cut selectors' shadows inside sidebar forms */
-  margin-inline-start: calc(var(--s16) * -1);
-  padding-inline-start: calc(var(--s16) + var(--s2));
 }
 
 .form-actions {
@@ -83,7 +78,7 @@
 
 .add-titles {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: var(--s2);
 }
 
