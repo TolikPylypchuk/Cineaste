@@ -2,7 +2,7 @@ namespace Cineaste.Server.Services;
 
 using System.Globalization;
 
-public sealed class CultureExtractor
+public sealed class CultureProvider
 {
     public List<SimpleCultureModel> GetAllCultures() =>
         CultureInfo.GetCultures(CultureTypes.AllCultures)

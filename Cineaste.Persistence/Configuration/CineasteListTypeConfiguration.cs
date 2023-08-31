@@ -6,12 +6,6 @@ internal sealed class CineasteListTypeConfiguration : IEntityTypeConfiguration<C
     {
         list.HasStronglyTypedId();
 
-        list.HasIndex(l => l.Handle)
-            .IsUnique();
-
-        list.ToTable(t => t.HasCheckConstraint($"CH_Lists_NameNotEmpty", "Name <> ''"));
-        list.ToTable(t => t.HasCheckConstraint($"CH_Lists_HandleNotEmpty", "Handle <> ''"));
-
         list.HasOne(l => l.Configuration)
             .WithOne()
             .HasForeignKey<ListConfiguration>(Extensions.ListId);

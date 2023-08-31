@@ -280,7 +280,7 @@ public class SeriesServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var otherList = this.CreateList("Other List for Series Kind", "other-list-for-series-kind");
+        var otherList = this.CreateList();
         var otherKind = this.CreateSeriesKind(otherList);
 
         dbContext.SeriesKinds.Add(otherKind);
@@ -479,7 +479,7 @@ public class SeriesServiceTests : ServiceTestsBase
 
         dbContext.Series.Add(series);
 
-        var otherList = this.CreateList("Other List for Series", "other-list-for-series");
+        var otherList = this.CreateList();
         dbContext.Lists.Add(otherList);
 
         await dbContext.SaveChangesAsync();

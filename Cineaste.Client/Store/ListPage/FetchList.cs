@@ -1,6 +1,6 @@
 namespace Cineaste.Client.Store.ListPage;
 
-public sealed record FetchListAction(string Handle);
+public sealed record FetchListAction;
 
 public sealed record FetchListResultAction(ApiResult<ListModel> Result) : ResultAction<ListModel>(Result);
 
@@ -19,7 +19,6 @@ public static class FetchListReducers
                     IsLoading = false,
                     IsLoaded = true,
                     Id = list.Id,
-                    Name = list.Name,
                     Container = ListItemContainer.Create(list),
                     AvailableMovieKinds = list.MovieKinds,
                     AvailableSeriesKinds = list.SeriesKinds,
@@ -33,10 +32,10 @@ public sealed partial class FetchListEffect
 {
     private readonly IListApi api;
 
-    [EffectMethod]
-    public async Task HandleFetchListAction(FetchListAction action, IDispatcher dispatcher)
+    [EffectMethod(typeof(FetchListAction))]
+    public async Task HandleFetchListAction(IDispatcher dispatcher)
     {
-        var result = await this.api.GetList(action.Handle).ToApiResultAsync();
+        var result = await this.api.GetList().ToApiResultAsync();
         dispatcher.Dispatch(new FetchListResultAction(result));
     }
 }

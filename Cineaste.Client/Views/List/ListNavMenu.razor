@@ -2,11 +2,11 @@
 @using MudBlazor
 
 <MudNavMenu Bordered="true">
-    <MudNavLink Href="@this.PageNavigator.ListPage(this.Handle)" Match="NavLinkMatch.All"
+    <MudNavLink Href="@this.PageNavigator.ListPage()" Match="NavLinkMatch.All"
                 Icon="@Icons.Material.Filled.List">
         @this.Loc["ListPage.Menu.List"]
     </MudNavLink>
-    <MudNavLink Href="@this.PageNavigator.ListSettingsPage(this.Handle)" Match="NavLinkMatch.All" Disabled="true"
+    <MudNavLink Href="@this.PageNavigator.ListSettingsPage()" Match="NavLinkMatch.All" Disabled="true"
                 Icon="@Icons.Material.Filled.Settings">
         @this.Loc["ListPage.Menu.Settings"]
     </MudNavLink>
@@ -17,9 +17,6 @@
 </MudNavMenu>
 
 @code {
-    [Parameter]
-    public string Handle { get; set; } = String.Empty;
-
     [Parameter]
     public bool IsListLoaded { get; set; }
 }

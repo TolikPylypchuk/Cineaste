@@ -1,42 +1,40 @@
 @inherits CineasteComponent
 @using MudBlazor
 
-<div>
-    <MudAlert Severity="Severity.Error" NoIcon="true">
-        <div class="summary-container">
-            <p class="main-text">@this.Loc[this.Text]</p>
+<MudAlert Severity="Severity.Error" NoIcon="true" Class="@this.Class">
+    <div class="summary-container">
+        <p class="main-text">@this.Loc[this.Text]</p>
 
-            <div class="button-panel">
-                @if (this.Problem is not null && this.Problem.Detail is not null)
-                {
-                    <MudButton Variant="Variant.Text" Size="Size.Small" Color="MudBlazor.Color.Error"
-                               @onclick="this.ToggleOpened">
-                        @this.Loc[this.IsOpened ? "ApiProblemAlert.HideDetails" : "ApiProblemAlert.ShowDetails"]
-                    </MudButton>
-                }
+        <div class="button-panel">
+            @if (this.Problem is not null && this.Problem.Detail is not null)
+            {
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="MudBlazor.Color.Error"
+                            @onclick="this.ToggleOpened">
+                    @this.Loc[this.IsOpened ? "ApiProblemAlert.HideDetails" : "ApiProblemAlert.ShowDetails"]
+                </MudButton>
+            }
 
-                @if (this.ShowButton)
-                {
-                    <MudButton @onclick="this.TryAgain" Variant="Variant.Text" Size="Size.Small"
-                               Color="MudBlazor.Color.Error">
-                        @this.Loc[this.ButtonText]
-                    </MudButton>
-                }
-            </div>
+            @if (this.ShowButton)
+            {
+                <MudButton @onclick="this.TryAgain" Variant="Variant.Text" Size="Size.Small"
+                            Color="MudBlazor.Color.Error">
+                    @this.Loc[this.ButtonText]
+                </MudButton>
+            }
         </div>
+    </div>
 
-        @if (this.Problem is not null && this.Problem.Detail is not null && this.IsOpened)
-        {
-            <MudDivider Class="details-divider" DividerType="DividerType.FullWidth"></MudDivider>
-            <p class="details-container">
-                <span class="details">@this.Loc[this.Problem.Detail]</span>
-                <MudLink Class="details-link" Href="@this.Problem.Type" Target="_blank">
-                    @this.Problem.Status @this.Problem.Title
-                </MudLink>
-            </p>
-        }
-    </MudAlert>
-</div>
+    @if (this.Problem is not null && this.Problem.Detail is not null && this.IsOpened)
+    {
+        <MudDivider Class="details-divider" DividerType="DividerType.FullWidth"></MudDivider>
+        <p class="details-container">
+            <span class="details">@this.Loc[this.Problem.Detail]</span>
+            <MudLink Class="details-link" Href="@this.Problem.Type" Target="_blank">
+                @this.Problem.Status @this.Problem.Title
+            </MudLink>
+        </p>
+    }
+</MudAlert>
 
 @code {
     [Parameter]

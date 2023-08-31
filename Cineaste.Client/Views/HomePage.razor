@@ -1,53 +1,12 @@
 @page "/"
-@inherits StatefulComponent<HomePageState>
+@inherits CineasteComponent
 @using MudBlazor
 
 <div class="container">
-    <header>
-        <h1 class="title">@this.Loc["Cineaste"]</h1>
-        <h2 class="subtitle">@this.Loc["HomePage.MyLists"]</h2>
+    <h1 class="title">@this.Loc["Cineaste"]</h1>
 
-        <MudButton Class="create-list" Color="MudBlazor.Color.Primary" Variant="Variant.Filled" Size="Size.Large"
-                   @onclick="this.NavigateToCreateList">
-            @this.Loc["HomePage.CreateList"]
-        </MudButton>
-    </header>
-
-    @if (this.State.Value.IsLoading)
-    {
-        <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" Size="Size.Large"
-                             Class="loading-circle" />
-    } else if (this.State.Value.Problem is not null)
-    {
-        <ApiProblemAlert Problem="this.State.Value.Problem" Text="HomePage.Problem.LoadingListsFailed"
-                         TryAgain="this.FetchLists" Class="problem-alert" />
-    } else
-    {
-        <div class="lists">
-            @foreach (var list in this.State.Value.Lists)
-            {
-                <div role="button" class="list-container" @onclick="@(() => this.NavigateToList(list))">
-                    <p class="list">@list.Name</p>
-                    <MudDivider DividerType="DividerType.FullWidth"></MudDivider>
-                </div>
-            }
-        </div>
-    }
+    <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" Size="Size.Large"
+               @onclick="@(() => this.PageNavigator.GoToListPage())">
+        @this.Loc["HomePage.GoToList"]
+    </MudButton>
 </div>
-
-@code {
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-        this.FetchLists();
-    }
-
-    private void NavigateToCreateList() =>
-        this.PageNavigator.GoToCreateListPage();
-
-    private void NavigateToList(SimpleListModel list) =>
-        this.PageNavigator.GoToListPage(list.Handle);
-
-    private void FetchLists() =>
-        this.Dispatcher.Dispatch(new FetchListsAction());
-}

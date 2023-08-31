@@ -23,7 +23,7 @@ builder.Services.Configure<JsonOptions>(options =>
 
 builder.Services.AddProblemDetails();
 
-builder.Services.AddScoped<CultureExtractor>();
+builder.Services.AddScoped<CultureProvider>();
 builder.Services.AddScoped<ListService>();
 builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<SeriesService>();

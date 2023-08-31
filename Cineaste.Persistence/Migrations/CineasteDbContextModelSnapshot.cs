@@ -17,7 +17,7 @@ namespace Cineaste.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -27,25 +27,9 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Handle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Handle")
-                        .IsUnique();
-
-                    b.ToTable("Lists", t =>
-                        {
-                            t.HasCheckConstraint("CH_Lists_HandleNotEmpty", "Handle <> ''");
-
-                            t.HasCheckConstraint("CH_Lists_NameNotEmpty", "Name <> ''");
-                        });
+                    b.ToTable("Lists");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Franchise", b =>

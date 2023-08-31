@@ -376,7 +376,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
         dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync();
 
-        var otherList = this.CreateList("Other List for Franchises", "other-list-for-franchises");
+        var otherList = this.CreateList();
         dbContext.Lists.Add(otherList);
 
         await dbContext.SaveChangesAsync();

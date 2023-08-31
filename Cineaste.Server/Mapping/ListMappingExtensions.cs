@@ -5,8 +5,6 @@ public static class ListMappingExtensions
     public static ListModel ToListModel(this CineasteList list) =>
         new(
             list.Id.Value,
-            list.Name,
-            list.Handle,
             list.Configuration.ToConfigurationModel(),
             list.Movies.Select(ToListItemModel).ToImmutableList(),
             list.Series.Select(ToListItemModel).ToImmutableList(),
@@ -67,7 +65,7 @@ public static class ListMappingExtensions
             franchise.GetActiveColor()?.HexValue ?? String.Empty,
             franchise.FranchiseItem.ToFranchiseItemModel());
 
-    [return: NotNullIfNotNull("item")]
+    [return: NotNullIfNotNull(nameof(item))]
     private static ListFranchiseItemModel? ToFranchiseItemModel(this FranchiseItem? item) =>
         item is not null ? new(item.ParentFranchise.Id.Value, item.SequenceNumber) : null;
 }

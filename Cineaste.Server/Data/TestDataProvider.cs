@@ -12,24 +12,16 @@ internal sealed class TestDataProvider
 
     public async Task CreateTestDataIfNeeded()
     {
-        int listsCount = await this.dbContext.Lists.CountAsync();
+        bool listsPresentInDb = await this.dbContext.Lists.AnyAsync();
 
-        if (listsCount != 0)
+        if (!listsPresentInDb)
         {
-            return;
+            this.dbContext.Lists.Add(this.CreateList());
+            await this.dbContext.SaveChangesAsync();
         }
-
-        this.dbContext.Lists.AddRange(
-            this.CreateList("Test List 1", "test-list-1"),
-            this.CreateList("Test List 2", "test-list-2"),
-            this.CreateList("Test List 3", "test-list-3"),
-            this.CreateList("Test List 4", "test-list-4"),
-            this.CreateList("Test List 5", "test-list-5"));
-
-        await this.dbContext.SaveChangesAsync();
     }
 
-    private CineasteList CreateList(string name, string handle)
+    private CineasteList CreateList()
     {
         var config = new ListConfiguration(
             Id.Create<ListConfiguration>(),
@@ -38,7 +30,7 @@ internal sealed class TestDataProvider
             "Season #",
             new(ListSortOrder.ByTitle, ListSortDirection.Ascending, ListSortOrder.ByYear, ListSortDirection.Ascending));
 
-        var list = new CineasteList(Id.Create<CineasteList>(), name, handle, config);
+        var list = new CineasteList(Id.Create<CineasteList>(), config);
 
         var black = new Color("#000000");
         var blue = new Color("#0000FF");

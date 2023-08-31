@@ -234,14 +234,8 @@
   <data name="FranchiseForm.Title" xml:space="preserve">
     <value>Title</value>
   </data>
-  <data name="HomePage.CreateList" xml:space="preserve">
-    <value>Create a list</value>
-  </data>
-  <data name="HomePage.MyLists" xml:space="preserve">
-    <value>My Lists</value>
-  </data>
-  <data name="HomePage.Problem.LoadingListsFailed" xml:space="preserve">
-    <value>Loading lists has failed</value>
+  <data name="HomePage.GoToList" xml:space="preserve">
+    <value>Go to list</value>
   </data>
   <data name="Link.Imdb" xml:space="preserve">
     <value>IMDb</value>

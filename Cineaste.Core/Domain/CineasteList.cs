@@ -2,9 +2,6 @@ namespace Cineaste.Core.Domain;
 
 public sealed class CineasteList : Entity<CineasteList>
 {
-    private string name;
-    private string handle;
-
     private readonly List<Movie> movies;
     private readonly List<Series> series;
     private readonly List<Franchise> franchises;
@@ -12,22 +9,6 @@ public sealed class CineasteList : Entity<CineasteList>
     private readonly List<MovieKind> movieKinds;
     private readonly List<SeriesKind> seriesKinds;
     private readonly List<Tag> tags;
-
-    public string Name
-    {
-        get => this.name;
-
-        [MemberNotNull(nameof(name))]
-        set => this.name = Require.NotBlank(value);
-    }
-
-    public string Handle
-    {
-        get => this.handle;
-
-        [MemberNotNull(nameof(handle))]
-        set => this.handle = Require.NotBlank(value);
-    }
 
     public ListConfiguration Configuration { get; private set; }
 
@@ -49,11 +30,9 @@ public sealed class CineasteList : Entity<CineasteList>
     public IReadOnlyCollection<Tag> Tags =>
         this.tags.AsReadOnly();
 
-    public CineasteList(Id<CineasteList> id, string name, string handle, ListConfiguration configuration)
+    public CineasteList(Id<CineasteList> id, ListConfiguration configuration)
         : base(id)
     {
-        this.Name = name;
-        this.Handle = handle;
         this.Configuration = Require.NotNull(configuration);
 
         this.movies = new();
@@ -69,8 +48,6 @@ public sealed class CineasteList : Entity<CineasteList>
     private CineasteList(Id<CineasteList> id)
         : base(id)
     {
-        this.name = null!;
-        this.handle = null!;
         this.Configuration = null!;
 
         this.movies = new();

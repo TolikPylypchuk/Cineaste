@@ -412,29 +412,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a list.
+        ///   Looks up a localized string similar to Go to list.
         /// </summary>
-        public static string HomePage_CreateList {
+        public static string HomePage_GoToList {
             get {
-                return ResourceManager.GetString("HomePage.CreateList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to My Lists.
-        /// </summary>
-        public static string HomePage_MyLists {
-            get {
-                return ResourceManager.GetString("HomePage.MyLists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Loading lists has failed.
-        /// </summary>
-        public static string HomePage_Problem_LoadingListsFailed {
-            get {
-                return ResourceManager.GetString("HomePage.Problem.LoadingListsFailed", resourceCulture);
+                return ResourceManager.GetString("HomePage.GoToList", resourceCulture);
             }
         }
         

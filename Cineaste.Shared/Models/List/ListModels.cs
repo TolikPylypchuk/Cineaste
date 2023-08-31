@@ -2,12 +2,8 @@ namespace Cineaste.Shared.Models.List;
 
 using System.ComponentModel;
 
-public sealed record SimpleListModel(Guid Id, string Name, string Handle);
-
 public sealed record ListModel(
     Guid Id,
-    string Name,
-    string Handle,
     ListConfigurationModel Config,
     ImmutableList<ListItemModel> Movies,
     ImmutableList<ListItemModel> Series,

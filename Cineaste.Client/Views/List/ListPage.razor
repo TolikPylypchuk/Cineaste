@@ -1,10 +1,9 @@
-@page "/list/{handle}"
+@page "/list"
 @inherits StatefulComponent<ListPageState>
 
 <div class="container">
     <div class="nav-menu-container">
-        <ListNavMenu Handle="@this.Handle"
-                     IsListLoaded="this.State.Value.IsLoaded && this.State.Value.Problem is null" />
+        <ListNavMenu IsListLoaded="this.State.Value.IsLoaded && this.State.Value.Problem is null" />
     </div>
 
     <div class="list-container">
@@ -37,14 +36,9 @@
 </div>
 
 @code {
-    [Parameter]
-    public string Handle { get; set; } = String.Empty;
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-
-        this.PageNavigator.PageChanged += this.OnPageChanged;
 
         if (!this.State.Value.IsLoaded)
         {
@@ -52,11 +46,8 @@
         }
     }
 
-    protected override void Dispose(bool disposing) =>
-        this.PageNavigator.PageChanged -= this.OnPageChanged;
-
     private void FetchList() =>
-        this.Dispatcher.Dispatch(new FetchListAction(this.Handle));
+        this.Dispatcher.Dispatch(new FetchListAction());
 
     private void SelectItem(ListItemModel item)
     {
@@ -80,12 +71,4 @@
 
     private void OnItemClosed() =>
         this.Dispatcher.Dispatch(new CloseItemAction());
-
-    private void OnPageChanged(object? sender, LocationChangedEventArgs e)
-    {
-        if (!e.Location.Contains($"/list/{this.Handle}"))
-        {
-            this.Dispatcher.Dispatch(new ResetListPageAction());
-        }
-    }
 }

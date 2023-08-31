@@ -9,7 +9,6 @@ public sealed record ListPageState
     public bool IsLoaded { get; init; }
 
     public Guid Id { get; init; }
-    public string Name { get; init; } = String.Empty;
 
     public ListItemContainer Container { get; init; } = ListItemContainer.Empty;
 

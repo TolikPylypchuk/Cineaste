@@ -15,15 +15,11 @@ namespace Cineaste.Persistence.Migrations
                 name: "Lists",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Handle = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lists", x => x.Id);
-                    table.CheckConstraint("CH_Lists_HandleNotEmpty", "Handle <> ''");
-                    table.CheckConstraint("CH_Lists_NameNotEmpty", "Name <> ''");
                 });
 
             migrationBuilder.CreateTable(
@@ -169,8 +165,8 @@ namespace Cineaste.Persistence.Migrations
                     IsLooselyConnected = table.Column<bool>(type: "bit", nullable: false),
                     ContinueNumbering = table.Column<bool>(type: "bit", nullable: false),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -200,8 +196,8 @@ namespace Cineaste.Persistence.Migrations
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -237,8 +233,8 @@ namespace Cineaste.Persistence.Migrations
                     ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -541,12 +537,6 @@ namespace Cineaste.Persistence.Migrations
                 name: "IX_ListConfigurations_ListId",
                 table: "ListConfigurations",
                 column: "ListId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lists_Handle",
-                table: "Lists",
-                column: "Handle",
                 unique: true);
 
             migrationBuilder.CreateIndex(

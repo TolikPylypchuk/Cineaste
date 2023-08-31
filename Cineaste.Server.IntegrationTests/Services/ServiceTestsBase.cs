@@ -20,7 +20,7 @@ public abstract class ServiceTestsBase : IAsyncLifetime
 
     protected ServiceTestsBase()
     {
-        this.List = this.CreateList($"List.{this.GetType().Name}", $"list.{this.GetType().Name.ToLower()}");
+        this.List = this.CreateList();
         this.MovieKind = this.CreateMovieKind(this.List);
         this.SeriesKind = this.CreateSeriesKind(this.List);
     }
@@ -31,11 +31,9 @@ public abstract class ServiceTestsBase : IAsyncLifetime
     public Task DisposeAsync() =>
         this.container.DisposeAsync().AsTask();
 
-    protected CineasteList CreateList(string name, string handle) =>
+    protected CineasteList CreateList() =>
         new(
             Id.Create<CineasteList>(),
-            name,
-            handle,
             new ListConfiguration(
                 Id.Create<ListConfiguration>(),
                 CultureInfo.InvariantCulture,

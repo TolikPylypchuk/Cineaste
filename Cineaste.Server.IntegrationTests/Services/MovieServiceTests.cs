@@ -170,7 +170,7 @@ public class MovieServiceTests : ServiceTestsBase
         var dbContext = await this.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var otherList = this.CreateList("Other List for Movie Kind", "other-list-for-movie-kind");
+        var otherList = this.CreateList();
         var otherKind = this.CreateMovieKind(otherList);
 
         dbContext.MovieKinds.Add(otherKind);
@@ -292,7 +292,7 @@ public class MovieServiceTests : ServiceTestsBase
 
         dbContext.Movies.Add(movie);
 
-        var otherList = this.CreateList("Other List for Movies", "other-list-for-movies");
+        var otherList = this.CreateList();
         dbContext.Lists.Add(otherList);
 
         await dbContext.SaveChangesAsync();
