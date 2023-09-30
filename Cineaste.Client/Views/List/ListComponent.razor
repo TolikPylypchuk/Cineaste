@@ -18,7 +18,7 @@
                      SelectedItemChanged="@((ListItemModel item) => this.SelectItem(item))" SortMode="SortMode.None"
                      RowClassFunc="@((item, index) => "list-row" + (item == selectedItem ? " selected-row" : ""))"
                      RowStyleFunc="@((item, index) => $"--cell-color: {item.Color}")" FixedHeader="true" Height="100%"
-                     ItemSize="64" Dense="true">
+                     ItemSize="64" Dense="true" @ref="this.DataGridRef">
             <Columns>
                 <MudBlazor.PropertyColumn Title="@this.Loc["ListComponent.List.Number"]"
                                           Property="@(item => item.DisplayNumber)" CellClass="cell-content number" />
@@ -36,7 +36,6 @@
                             @context.Item.StartYear
                             <br />
                             @context.Item.EndYear
-                            @* @($"{context.Item.StartYear} - {context.Item.EndYear}") *@
                         }
                     </CellTemplate>
                 </MudBlazor.TemplateColumn>
@@ -52,7 +51,18 @@
     [Parameter]
     public required Action FetchList { get; set; }
 
-    public async Task SelectItem(ListItemModel item)
+    public required MudDataGrid<ListItemModel> DataGridRef { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.SubscribeToAction<CloseItemAction>(async _ =>
+        {
+            await this.DataGridRef.SetSelectedItemAsync(null!);
+            this.StateHasChanged();
+        });
+    }
+
+    private async Task SelectItem(ListItemModel item)
     {
         if (item != this.State.Value.SelectedItem)
         {

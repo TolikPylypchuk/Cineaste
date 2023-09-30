@@ -88,6 +88,33 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string AriaLabel_Add {
+            get {
+                return ResourceManager.GetString("AriaLabel.Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string AriaLabel_Close {
+            get {
+                return ResourceManager.GetString("AriaLabel.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string AriaLabel_Remove {
+            get {
+                return ResourceManager.GetString("AriaLabel.Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Button_Cancel {
@@ -660,24 +687,6 @@ namespace Cineaste.Client.Localization {
         public static string Month_9 {
             get {
                 return ResourceManager.GetString("Month.9", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add original title.
-        /// </summary>
-        public static string MovieForm_AddOriginalTitle {
-            get {
-                return ResourceManager.GetString("MovieForm.AddOriginalTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add title.
-        /// </summary>
-        public static string MovieForm_AddTitle {
-            get {
-                return ResourceManager.GetString("MovieForm.AddTitle", resourceCulture);
             }
         }
         

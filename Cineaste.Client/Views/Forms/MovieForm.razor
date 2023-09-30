@@ -6,8 +6,8 @@
         <div class="form-header">
             <div></div>
             <div></div>
-            <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" aria-label="close"
-                           @onclick="this.Close" />
+            <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" @onclick="this.Close"
+                           aria-label="@this.Loc["AriaLabel.Close"]" />
         </div>
 
         @if (this.State.Value.Fetch.IsInProgress)
@@ -99,17 +99,6 @@
                                       Label="@this.Loc["MovieForm.RottenTomatoesId"]" />
                         <ErrorPresenter ErrorCode="Movie.RottenTomatoesId.*"
                                         Trigger="@this.FormModel.RottenTomatoesId" />
-                    </div>
-
-                    <div class="add-titles">
-                        <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Surface" Size="Size.Small"
-                                   @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
-                            @this.Loc["MovieForm.AddTitle"]
-                        </MudButton>
-                        <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Surface" Size="Size.Small"
-                                   @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
-                            @this.Loc["MovieForm.AddOriginalTitle"]
-                        </MudButton>
                     </div>
 
                     @if (this.ListItem is not null)

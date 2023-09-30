@@ -11,10 +11,16 @@
                 <MudTextField Value="@title" ValueChanged="@((string value) => this.UpdateTitle(value, index))"
                               Label="@this.Loc[this.Label]" Class="title form-field" />
 
-                @if (this.Titles.Count > 1)
+                @if (index == 0)
                 {
-                    <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" aria-label="remove"
-                                   @onclick="@(() => this.RemoveTitle(index))" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Add" Size="Size.Small"
+                                   @onclick="@(() => this.AddTitle())"
+                                   aria-label="@this.Loc["AriaLabel.Add"]" />
+                } else
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small"
+                                   @onclick="@(() => this.RemoveTitle(index))"
+                                   aria-label="@this.Loc["AriaLabel.Remove"]" />
                 }
             </div>
         }
@@ -42,6 +48,9 @@
         this.Titles[index] = title;
         await this.UpdateValidation();
     }
+
+    private void AddTitle() =>
+        this.Titles.Add(String.Empty);
 
     private async Task RemoveTitle(int index)
     {

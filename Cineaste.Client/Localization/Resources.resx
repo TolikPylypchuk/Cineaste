@@ -126,6 +126,15 @@
   <data name="ApiProblemAlert.TryAgain" xml:space="preserve">
     <value>Try again</value>
   </data>
+  <data name="AriaLabel.Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AriaLabel.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="AriaLabel.Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
   <data name="Button.Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -317,12 +326,6 @@
   </data>
   <data name="Month.9" xml:space="preserve">
     <value>September</value>
-  </data>
-  <data name="MovieForm.AddOriginalTitle" xml:space="preserve">
-    <value>Add original title</value>
-  </data>
-  <data name="MovieForm.AddTitle" xml:space="preserve">
-    <value>Add title</value>
   </data>
   <data name="MovieForm.DeleteDialog.Body" xml:space="preserve">
     <value>Are you sure you want to delete this movie?</value>
