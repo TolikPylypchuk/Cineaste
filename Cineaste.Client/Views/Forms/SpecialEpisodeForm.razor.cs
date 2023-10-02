@@ -45,9 +45,6 @@ public partial class SpecialEpisodeForm
         this.OnMonthYearChanged();
     }
 
-    private void AddTitle(ICollection<string> titles) =>
-        titles.Add(String.Empty);
-
     private void UpdateFormTitle()
     {
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
@@ -81,17 +78,19 @@ public partial class SpecialEpisodeForm
         }
     }
 
-    private void OnIsWatchedChanged()
+    private void OnIsWatchedChanged(bool isWatched)
     {
-        if (this.FormModel.IsWatched)
+        this.FormModel.IsWatched = isWatched;
+        if (isWatched)
         {
             this.FormModel.IsReleased = true;
         }
     }
 
-    private void OnIsReleasedChanged()
+    private void OnIsReleasedChanged(bool isReleased)
     {
-        if (!this.FormModel.IsReleased)
+        this.FormModel.IsReleased = isReleased;
+        if (!isReleased)
         {
             this.FormModel.IsWatched = false;
         }

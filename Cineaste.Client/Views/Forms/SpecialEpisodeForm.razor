@@ -1,29 +1,42 @@
 @inherits CineasteForm<SpecialEpisodeFormModel, SpecialEpisodeRequest, SpecialEpisodeModel, SeriesFormState>
+@using MudBlazor
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
         <div class="form-header">
-            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.GoToSeries">
-                <FluentIcon Name="@FluentIcons.ChevronUp" Color="Color.Neutral" />
-            </FluentButton>
+            <MudIconButton
+                Icon="@Icons.Material.Filled.KeyboardArrowUp"
+                Size="Size.Small"
+                @onclick="this.GoToSeries"
+                aria-label="@this.Loc["AriaLabel.Up"]"
+            />
 
             <div class="go-to-other-components-container">
-                <FluentButton Appearance="Appearance.Lightweight" @onclick="this.OnGoToPreviousComponent"
-                              Class="@(this.FormModel.IsFirst ? "invisible" : null)"
-                              aria-hidden="@this.FormModel.IsFirst">
-                    <FluentIcon Name="@FluentIcons.ChevronLeft" Color="Color.Neutral" />
-                </FluentButton>
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.KeyboardArrowLeft"
+                    Size="Size.Small"
+                    Class="@(this.FormModel.IsFirst ? "invisible" : null)"
+                    @onclick="this.OnGoToPreviousComponent"
+                    aria-hidden="@this.FormModel.IsFirst"
+                    aria-label="@this.Loc["AriaLabel.Previous"]"
+                />
 
-                <FluentButton Appearance="Appearance.Lightweight" @onclick="this.OnGoToNextComponent"
-                              Class="@(this.FormModel.IsLast ? "invisible" : null)"
-                              aria-hidden="@this.FormModel.IsLast">
-                    <FluentIcon Name="@FluentIcons.ChevronRight" Color="Color.Neutral" />
-                </FluentButton>
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.KeyboardArrowRight"
+                    Size="Size.Small"
+                    Class="@(this.FormModel.IsFirst ? "invisible" : null)"
+                    @onclick="this.OnGoToNextComponent"
+                    aria-hidden="@this.FormModel.IsLast"
+                    aria-label="@this.Loc["AriaLabel.Next"]"
+                />
             </div>
-
-            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.Close">
-                <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
-            </FluentButton>
+            
+            <MudIconButton
+                Icon="@Icons.Material.Filled.Close"
+                Size="Size.Small"
+                @onclick="this.Close"
+                aria-label="@this.Loc["AriaLabel.Close"]"
+            />
         </div>
 
         <div class="form-container list-sidebar">
@@ -41,81 +54,118 @@
                             this.Loc["Link.RottenTomatoesUrlFormat"],
                             this.FormModel.RottenTomatoesId);
 
-                        <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
+                        <MudLink Href="@href" Target="_blank">
                             @this.Loc["Link.RottenTomatoes"]
-                        </FluentAnchor>
+                        </MudLink>
                     }
                 </div>
-
+                
                 <div class="form-checkboxes">
-                    <FluentCheckbox Value="@this.FormModel.IsWatched"
-                                    ValueExpression="@(() => this.FormModel.IsWatched)"
-                                    ValueChanged="@this.OnIsWatchedChanged"
-                                    Disabled="@(!this.CanChangeIsWatched)">
+                    <MudCheckBox
+                        Checked="@this.FormModel.IsWatched"
+                        CheckedChanged="@((bool value) => this.OnIsWatchedChanged(value))"
+                        Color="MudBlazor.Color.Primary"
+                        Disabled="@(!this.CanChangeIsWatched)"
+                        Size="Size.Small"
+                        Dense="true"
+                    >
                         @this.Loc["SpecialEpisodeForm.IsWatched"]
-                    </FluentCheckbox>
-                    <FluentCheckbox Value="@this.FormModel.IsReleased"
-                                    ValueExpression="@(() => this.FormModel.IsReleased)"
-                                    ValueChanged="@this.OnIsReleasedChanged"
-                                    Disabled="@(!this.CanChangeIsReleased)">
+                    </MudCheckBox>
+
+                    <MudCheckBox
+                        Checked="@this.FormModel.IsReleased"
+                        CheckedChanged="@((bool value) => this.OnIsReleasedChanged(value))"
+                        Color="MudBlazor.Color.Primary"
+                        Disabled="@(!this.CanChangeIsReleased)"
+                        Size="Size.Small"
+                        Dense="true"
+                    >
                         @this.Loc["SpecialEpisodeForm.IsReleased"]
-                    </FluentCheckbox>
+                    </MudCheckBox>
                 </div>
 
-                <TitlesForm Titles="@this.FormModel.Titles" Label="SpecialEpisodeForm.Titles"
-                            PropertyName="@nameof(this.FormModel.Titles)" />
+                <TitlesForm
+                    Titles="@this.FormModel.Titles"
+                    Label="SpecialEpisodeForm.Title"
+                    PropertyName="@nameof(this.FormModel.Titles)"
+                />
 
-                <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="SpecialEpisodeForm.OriginalTitles"
-                            PropertyName="@nameof(this.FormModel.OriginalTitles)" />
+                <TitlesForm
+                    Titles="@this.FormModel.OriginalTitles"
+                    Label="SpecialEpisodeForm.OriginalTitle"
+                    PropertyName="@nameof(this.FormModel.OriginalTitles)"
+                />
+                
+                <div>
+                    <MudTextField
+                        @bind-Value="@this.FormModel.Channel"
+                        Label="@this.Loc["SpecialEpisodeForm.Channel"]"
+                        Class="form-field"
+                    />
+
+                    <ErrorPresenter
+                        ErrorCode="SpecialEpisode.Channel.*"
+                        Trigger="@this.FormModel.Channel"
+                    />
+                </div>
 
                 <div>
-                    <FluentTextField @bind-Value="@this.FormModel.Channel" Class="form-field">
-                        @this.Loc["SpecialEpisodeForm.Channel"]
-                    </FluentTextField>
-                    <ErrorPresenter ErrorCode="SpecialEpisode.Channel.*"
-                                    Trigger="@this.FormModel.Channel" />
+                    <MudDatePicker
+                        @bind-Date="this.FormModel.Date"
+                        Label="@this.Loc["SpecialEpisodeForm.ReleaseMonthYear"]"
+                        DateFormat="@this.Loc["SpecialEpisodeForm.ReleaseMonthYearFormat"]"
+                        MinDate="@(new DateTime(Constants.MinYear, 1, 1))"
+                        DisableToolbar="true"
+                        OpenTo="OpenTo.Month"
+                        FixDay="1"
+                        Adornment="Adornment.None"
+                        Class="form-field"
+                    />
                 </div>
-
-                <MonthYearPicker Id="month-year" @bind-Month="this.FormModel.Month" @bind-Year="this.FormModel.Year"
-                                 MonthText="SpecialEpisodeForm.ReleaseMonth" Changed="@this.OnMonthYearChanged"
-                                 YearText="SpecialEpisodeForm.ReleaseYear" YearErrorCode="SpecialEpisode.Year.*" />
 
                 <div>
-                    <FluentTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field">
-                        @this.Loc["SpecialEpisodeForm.RottenTomatoesId"]
-                    </FluentTextField>
-                    <ErrorPresenter ErrorCode="SpecialEpisode.RottenTomatoesId.*"
-                                    Trigger="@this.FormModel.RottenTomatoesId" />
-                </div>
+                    <MudTextField
+                        @bind-Value="@this.FormModel.RottenTomatoesId"
+                        Label="@this.Loc["SpecialEpisodeForm.RottenTomatoesId"]"
+                        Class="form-field"
+                    />
 
-                <div class="add-titles">
-                    <FluentButton Appearance="Appearance.Neutral"
-                                  @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
-                        @this.Loc["SpecialEpisodeForm.AddTitle"]
-                    </FluentButton>
-                    <FluentButton Appearance="Appearance.Neutral"
-                                  @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
-                        @this.Loc["SpecialEpisodeForm.AddOriginalTitle"]
-                    </FluentButton>
+                    <ErrorPresenter
+                        ErrorCode="SpecialEpisode.RottenTomatoesId.*"
+                        Trigger="@this.FormModel.RottenTomatoesId"
+                    />
                 </div>
 
                 <div class="delete-container">
-                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Delete">
-                        @this.Loc["Button.Delete"]
-                    </FluentButton>
+                    <MudButton
+                        Variant="Variant.Filled"
+                        Color="MudBlazor.Color.Secondary"
+                        Disabled="@this.State.Value.Delete.IsInProgress"
+                        @onclick="@this.Delete"
+                    >
+                        @this.Loc[this.State.Value.Delete.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
+                    </MudButton>
                 </div>
             </div>
 
             <div class="form-actions">
-                <FluentButton Appearance="Appearance.Accent" @onclick="@this.GoToSeries">
+                <MudButton
+                    Color="MudBlazor.Color.Primary"
+                    Variant="Variant.Filled"
+                    @onclick="@this.GoToSeries"
+                >
                     @this.Loc["SpecialEpisodeForm.GoToSeries"]
-                </FluentButton>
+                </MudButton>
 
                 @if (this.FormModel.HasChanges)
                 {
-                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Cancel">
+                    <MudButton
+                        Color="MudBlazor.Color.Surface"
+                        Variant="Variant.Filled"
+                        @onclick="@this.Cancel"
+                    >
                         @this.Loc["Button.Cancel"]
-                    </FluentButton>
+                    </MudButton>
                 }
             </div>
         </div>

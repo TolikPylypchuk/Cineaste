@@ -135,8 +135,17 @@
   <data name="AriaLabel.More" xml:space="preserve">
     <value>More</value>
   </data>
+  <data name="AriaLabel.Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="AriaLabel.Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
   <data name="AriaLabel.Remove" xml:space="preserve">
     <value>Remove</value>
+  </data>
+  <data name="AriaLabel.Up" xml:space="preserve">
+    <value>Up</value>
   </data>
   <data name="Button.Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -585,12 +594,6 @@
   <data name="SeriesForm.WatchStatus.Watching" xml:space="preserve">
     <value>Watching</value>
   </data>
-  <data name="SpecialEpisodeForm.AddOriginalTitle" xml:space="preserve">
-    <value>Add original title</value>
-  </data>
-  <data name="SpecialEpisodeForm.AddTitle" xml:space="preserve">
-    <value>Add title</value>
-  </data>
   <data name="SpecialEpisodeForm.Channel" xml:space="preserve">
     <value>Chanel</value>
   </data>
@@ -606,20 +609,20 @@
   <data name="SpecialEpisodeForm.NewSpecialEpisode" xml:space="preserve">
     <value>New Special Episode</value>
   </data>
-  <data name="SpecialEpisodeForm.OriginalTitles" xml:space="preserve">
-    <value>Original titles</value>
+  <data name="SpecialEpisodeForm.OriginalTitle" xml:space="preserve">
+    <value>Original title</value>
   </data>
-  <data name="SpecialEpisodeForm.ReleaseMonth" xml:space="preserve">
-    <value>Release month</value>
+  <data name="SpecialEpisodeForm.ReleaseMonthYear" xml:space="preserve">
+    <value>Release month and year</value>
   </data>
-  <data name="SpecialEpisodeForm.ReleaseYear" xml:space="preserve">
-    <value>Release year</value>
+  <data name="SpecialEpisodeForm.ReleaseMonthYearFormat" xml:space="preserve">
+    <value>MMMM yyyy</value>
   </data>
   <data name="SpecialEpisodeForm.RottenTomatoesId" xml:space="preserve">
     <value>Rotten Tomatoes ID</value>
   </data>
-  <data name="SpecialEpisodeForm.Titles" xml:space="preserve">
-    <value>Titles</value>
+  <data name="SpecialEpisodeForm.Title" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="Validation.CreateList.Culture.Invalid" xml:space="preserve">
     <value>The language is invalid</value>

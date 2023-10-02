@@ -47,10 +47,6 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--s2);
-  --wrap-width: 128px;
-  /* Needed to not cut selectors' shadows inside sidebar forms */
-  margin-inline-start: calc(var(--s16) * -1);
-  padding-inline-start: calc(var(--s16) + var(--s2));
 }
 
 .form-actions {
@@ -68,11 +64,6 @@
   flex-wrap: wrap;
 }
 
-::deep .form-field {
-  width: 100%;
-  display: block;
-}
-
 .form-checkboxes {
   display: flex;
   flex-direction: row;
@@ -81,10 +72,9 @@
   flex-wrap: wrap;
 }
 
-.add-titles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
-  gap: var(--s2);
+::deep .form-field {
+  width: 100%;
+  display: block;
 }
 
 .delete-container {

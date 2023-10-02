@@ -2,19 +2,24 @@ namespace Cineaste.Client.FormModels;
 
 public sealed class SpecialEpisodeFormModel : SeriesComponentFormModelBase<SpecialEpisodeRequest, SpecialEpisodeModel>
 {
-    private readonly DateOnly defaultDate;
+    private readonly DateTime defaultDate;
     private readonly string defaultChannel;
 
     public bool IsWatched { get; set; }
     public bool IsReleased { get; set; }
 
-    public int Month { get; set; }
-    public int Year { get; set; }
+    public DateTime? Date { get; set; }
 
     public string RottenTomatoesId { get; set; } = String.Empty;
 
+    public int Month =>
+        (this.Date ?? this.defaultDate).Month;
+
+    public int Year =>
+        (this.Date ?? this.defaultDate).Year;
+
     public override string Years =>
-        this.Year.ToString();
+        this.Date?.Year.ToString() ?? String.Empty;
 
     public SpecialEpisodeFormModel(
         string channel,
@@ -30,9 +35,9 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModelBase<Speci
         Func<int> lastSequenceNumber)
         : base(getSequenceNumber, lastSequenceNumber)
     {
-        this.defaultDate = date;
-        this.Month = date.Month;
-        this.Year = date.Year;
+        this.defaultDate = date.ToDateTime(TimeOnly.MinValue);
+
+        this.Date = this.defaultDate;
         this.Channel = this.defaultChannel = channel;
         this.SequenceNumber = this.GetSequenceNumber();
 
@@ -63,8 +68,9 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModelBase<Speci
 
         this.Channel = episode?.Channel ?? this.defaultChannel;
 
-        this.Month = episode?.Month ?? this.defaultDate.Month;
-        this.Year = episode?.Year ?? this.defaultDate.Year;
+        this.Date = episode?.Month is not null && episode?.Year is not null
+            ? new DateTime(episode.Year, episode.Month, 1)
+            : this.defaultDate;
 
         this.RottenTomatoesId = episode?.RottenTomatoesId ?? String.Empty;
         this.SequenceNumber = episode?.SequenceNumber ?? this.GetSequenceNumber();
