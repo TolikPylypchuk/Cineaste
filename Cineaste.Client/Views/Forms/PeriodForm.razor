@@ -1,25 +1,39 @@
 @inherits CineasteForm<PeriodFormModel, PeriodRequest, PeriodModel, SeriesFormState>
+@using MudBlazor
 
 <FormParamsProvider For="this">
-    <MonthYearPicker
-        @bind-Month="this.FormModel.StartMonth"
-        @bind-Year="this.FormModel.StartYear"
-        MonthText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonth" : "ReleaseMonth")}")"
-        YearText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartYear" : "ReleaseYear")}")"
-        Changed="@this.OnPeriodChanged"
-        YearErrorCode="Period.StartYear.*"
-    />
+    <div>
+        <MudDatePicker
+            Date="this.FormModel.StartDate"
+            DateChanged="@(date => this.OnStartDateChanged(date))"
+            Label="@(this.Loc[
+                $"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonthYear" : "ReleaseMonthYear")}"])"
+            DateFormat="@this.Loc["PeriodForm.MonthYearFormat"]"
+            MinDate="@(new DateTime(Constants.MinYear, 1, 1))"
+            DisableToolbar="true"
+            OpenTo="OpenTo.Month"
+            FixDay="1"
+            Adornment="Adornment.None"
+            Class="form-field"
+        />
+    </div>
 
     @if (!this.FormModel.IsSingleDayRelease)
     {
-        <MonthYearPicker
-            @bind-Month="this.FormModel.EndMonth"
-            @bind-Year="this.FormModel.EndYear"
-            MonthText="PeriodForm.EndMonth"
-            YearText="PeriodForm.EndYear"
-            Changed="@this.OnPeriodChanged"
-            YearErrorCode="Period.EndYear.*"
-        />
+        <div>
+            <MudDatePicker
+                Date="this.FormModel.EndDate"
+                DateChanged="@(date => this.OnEndDateChanged(date))"
+                Label="@this.Loc["PeriodForm.EndMonthYear"]"
+                DateFormat="@this.Loc["PeriodForm.MonthYearFormat"]"
+                MinDate="@(new DateTime(Constants.MinYear, 1, 1))"
+                DisableToolbar="true"
+                OpenTo="OpenTo.Month"
+                FixDay="1"
+                Adornment="Adornment.None"
+                Class="form-field"
+            />
+        </div>
     }
 
     <div>
@@ -28,19 +42,26 @@
 
     <div class="episode-count-container">
         <div>
-            <FluentNumberField @bind-Value="this.FormModel.EpisodeCount" Class="form-field">
-                @this.Loc["PeriodForm.EpisodeCount"]
-            </FluentNumberField>
+            <MudNumericField
+                @bind-Value="this.FormModel.EpisodeCount"
+                Label="@this.Loc["PeriodForm.EpisodeCount"]"
+                Class="form-field"
+            />
+
             <ErrorPresenter ErrorCode="Period.EpisodeCount.*" Trigger="@this.FormModel.EpisodeCount" />
         </div>
+
         <div>
             <div>
-                <FluentCheckbox
-                    @bind-Value="@this.FormModel.IsSingleDayRelease"
+                <MudCheckBox
+                    @bind-Checked="@this.FormModel.IsSingleDayRelease"
+                    Color="MudBlazor.Color.Primary"
                     Disabled="@(!this.CanChangeIsSingleDayRelease)"
+                    Size="Size.Small"
+                    Dense="true"
                 >
                     @this.Loc["PeriodForm.IsSingleDayRelease"]
-                </FluentCheckbox>
+                </MudCheckBox>
 
                 <ErrorPresenter
                     ErrorCode="Period.IsSingleDayRelease.*"
@@ -52,18 +73,26 @@
 
     <div class="rotten-tomatoes-container">
         <div class="rotten-tomatoes">
-            <FluentTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field">
-                @this.Loc["PeriodForm.RottenTomatoesId"]
-            </FluentTextField>
+            <MudTextField
+                @bind-Value="@this.FormModel.RottenTomatoesId"
+                Label="@this.Loc["PeriodForm.RottenTomatoesId"]"
+                Class="form-field"
+            />
 
-            <ErrorPresenter ErrorCode="Period.RottenTomatoesId.*" Trigger="@this.FormModel.RottenTomatoesId" />
+            <ErrorPresenter
+                ErrorCode="Period.RottenTomatoesId.*"
+                Trigger="@this.FormModel.RottenTomatoesId"
+            />
         </div>
 
         @if (this.CanRemove)
         {
-            <FluentButton Appearance="Appearance.Stealth" @onclick="@this.Removed">
-                <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
-            </FluentButton>
+            <MudIconButton
+                Icon="@Icons.Material.Filled.Close"
+                Size="Size.Small"
+                @onclick="this.Removed"
+                aria-label="@this.Loc["AriaLabel.Remove"]"
+            />
         }
     </div>
 </FormParamsProvider>
@@ -96,6 +125,18 @@
     {
         base.OnParametersSet();
         this.SetCanChangeIsSingleDayRelease();
+    }
+
+    private async Task OnStartDateChanged(DateTime? date)
+    {
+        this.FormModel.StartDate = date;
+        await this.OnPeriodChanged();
+    }
+
+    private async Task OnEndDateChanged(DateTime? date)
+    {
+        this.FormModel.EndDate = date;
+        await this.OnPeriodChanged();
     }
 
     private async Task OnPeriodChanged()

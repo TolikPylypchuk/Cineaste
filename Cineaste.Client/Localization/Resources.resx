@@ -390,32 +390,26 @@
   <data name="MovieForm.Year" xml:space="preserve">
     <value>Year</value>
   </data>
-  <data name="PeriodForm.EndMonth" xml:space="preserve">
-    <value>End month</value>
-  </data>
-  <data name="PeriodForm.EndYear" xml:space="preserve">
-    <value>End year</value>
+  <data name="PeriodForm.EndMonthYear" xml:space="preserve">
+    <value>End month and year</value>
   </data>
   <data name="PeriodForm.EpisodeCount" xml:space="preserve">
-    <value>Number of episodes</value>
+    <value># of episodes</value>
   </data>
   <data name="PeriodForm.IsSingleDayRelease" xml:space="preserve">
     <value>Single-day release</value>
   </data>
-  <data name="PeriodForm.ReleaseMonth" xml:space="preserve">
-    <value>Release month</value>
+  <data name="PeriodForm.MonthYearFormat" xml:space="preserve">
+    <value>MMMM yyyy</value>
   </data>
-  <data name="PeriodForm.ReleaseYear" xml:space="preserve">
-    <value>Release year</value>
+  <data name="PeriodForm.ReleaseMonthYear" xml:space="preserve">
+    <value>Release month and year</value>
   </data>
   <data name="PeriodForm.RottenTomatoesId" xml:space="preserve">
     <value>Rotten Tomatoes ID</value>
   </data>
-  <data name="PeriodForm.StartMonth" xml:space="preserve">
-    <value>Start month</value>
-  </data>
-  <data name="PeriodForm.StartYear" xml:space="preserve">
-    <value>Start year</value>
+  <data name="PeriodForm.StartMonthYear" xml:space="preserve">
+    <value>Start month and year</value>
   </data>
   <data name="Problem.Conflict.List" xml:space="preserve">
     <value>A list with this handle already exists</value>
@@ -450,14 +444,8 @@
   <data name="Problem.ValidationFailed.CreateList" xml:space="preserve">
     <value>The list to create is invalid</value>
   </data>
-  <data name="SeasonForm.AddOriginalTitle" xml:space="preserve">
-    <value>Add original title</value>
-  </data>
   <data name="SeasonForm.AddPeriod" xml:space="preserve">
     <value>Add period</value>
-  </data>
-  <data name="SeasonForm.AddTitle" xml:space="preserve">
-    <value>Add title</value>
   </data>
   <data name="SeasonForm.Channel" xml:space="preserve">
     <value>Channel</value>
@@ -465,8 +453,8 @@
   <data name="SeasonForm.GoToSeries" xml:space="preserve">
     <value>Go to series</value>
   </data>
-  <data name="SeasonForm.OriginalTitles" xml:space="preserve">
-    <value>Original titles</value>
+  <data name="SeasonForm.OriginalTitle" xml:space="preserve">
+    <value>Original title</value>
   </data>
   <data name="SeasonForm.ReleaseStatus" xml:space="preserve">
     <value>Release status</value>
@@ -486,8 +474,8 @@
   <data name="SeasonForm.ReleaseStatus.Unknown" xml:space="preserve">
     <value>Don't care</value>
   </data>
-  <data name="SeasonForm.Titles" xml:space="preserve">
-    <value>Titles</value>
+  <data name="SeasonForm.Title" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="SeasonForm.WatchStatus" xml:space="preserve">
     <value>Watch status</value>
@@ -606,6 +594,9 @@
   <data name="SpecialEpisodeForm.IsWatched" xml:space="preserve">
     <value>Is watched</value>
   </data>
+  <data name="SpecialEpisodeForm.MonthYearFormat" xml:space="preserve">
+    <value>MMMM yyyy</value>
+  </data>
   <data name="SpecialEpisodeForm.NewSpecialEpisode" xml:space="preserve">
     <value>New Special Episode</value>
   </data>
@@ -614,9 +605,6 @@
   </data>
   <data name="SpecialEpisodeForm.ReleaseMonthYear" xml:space="preserve">
     <value>Release month and year</value>
-  </data>
-  <data name="SpecialEpisodeForm.ReleaseMonthYearFormat" xml:space="preserve">
-    <value>MMMM yyyy</value>
   </data>
   <data name="SpecialEpisodeForm.RottenTomatoesId" xml:space="preserve">
     <value>Rotten Tomatoes ID</value>

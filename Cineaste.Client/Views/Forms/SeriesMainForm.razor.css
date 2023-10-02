@@ -84,10 +84,6 @@
   gap: var(--s2);
 }
 
-::deep .select {
-  min-width: 0;
-}
-
 ::deep .components-grid {
   margin-block-start: var(--s4);
 }

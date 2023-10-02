@@ -56,9 +56,6 @@ public partial class SeasonForm
             ? String.Format(this.Loc["Link.RottenTomatoesWithPartFormat"], part)
             : this.Loc["Link.RottenTomatoes"];
 
-    private void AddTitle(ICollection<string> titles) =>
-        titles.Add(String.Empty);
-
     private void AddPeriod() =>
         this.FormModel.AddNewPeriod();
 

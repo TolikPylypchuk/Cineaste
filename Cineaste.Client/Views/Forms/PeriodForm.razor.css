@@ -1,7 +1,7 @@
 .episode-count-container {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   justify-items: stretch;
   align-items: center;
   gap: var(--s2);

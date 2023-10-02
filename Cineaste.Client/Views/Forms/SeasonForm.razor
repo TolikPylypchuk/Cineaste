@@ -1,29 +1,42 @@
 @inherits CineasteForm<SeasonFormModel, SeasonRequest, SeasonModel, SeriesFormState>
+@using MudBlazor
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
         <div class="form-header">
-            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.GoToSeries">
-                <FluentIcon Name="@FluentIcons.ChevronUp" Color="Color.Neutral" />
-            </FluentButton>
+            <MudIconButton
+                Icon="@Icons.Material.Filled.KeyboardArrowUp"
+                Size="Size.Small"
+                @onclick="this.GoToSeries"
+                aria-label="@this.Loc["AriaLabel.Up"]"
+            />
 
             <div class="go-to-other-components-container">
-                <FluentButton Appearance="Appearance.Lightweight" @onclick="this.OnGoToPreviousComponent"
-                              Class="@(this.FormModel.IsFirst ? "invisible" : null)"
-                              aria-hidden="@this.FormModel.IsFirst">
-                    <FluentIcon Name="@FluentIcons.ChevronLeft" Color="Color.Neutral" />
-                </FluentButton>
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.KeyboardArrowLeft"
+                    Size="Size.Small"
+                    Class="@(this.FormModel.IsFirst ? "invisible" : null)"
+                    @onclick="this.OnGoToPreviousComponent"
+                    aria-hidden="@this.FormModel.IsFirst"
+                    aria-label="@this.Loc["AriaLabel.Previous"]"
+                />
 
-                <FluentButton Appearance="Appearance.Lightweight" @onclick="this.OnGoToNextComponent"
-                              Class="@(this.FormModel.IsLast ? "invisible" : null)"
-                              aria-hidden="@this.FormModel.IsLast">
-                    <FluentIcon Name="@FluentIcons.ChevronRight" Color="Color.Neutral" />
-                </FluentButton>
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.KeyboardArrowRight"
+                    Size="Size.Small"
+                    Class="@(this.FormModel.IsFirst ? "invisible" : null)"
+                    @onclick="this.OnGoToNextComponent"
+                    aria-hidden="@this.FormModel.IsLast"
+                    aria-label="@this.Loc["AriaLabel.Next"]"
+                />
             </div>
-
-            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.Close">
-                <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
-            </FluentButton>
+            
+            <MudIconButton
+                Icon="@Icons.Material.Filled.Close"
+                Size="Size.Small"
+                @onclick="this.Close"
+                aria-label="@this.Loc["AriaLabel.Close"]"
+            />
         </div>
 
         <div class="form-container list-sidebar">
@@ -47,89 +60,121 @@
                     {
                         string href = String.Format(this.Loc["Link.RottenTomatoesUrlFormat"], period.RottenTomatoesId);
 
-                        <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
+                        <MudLink Href="@href" Target="_blank">
                             @this.RottenTomatoesLinkText(part, multiple)
-                        </FluentAnchor>
+                        </MudLink>
 
                         part++;
                     }
                 </div>
 
-                <TitlesForm Titles="@this.FormModel.Titles" Label="SeasonForm.Titles"
-                            PropertyName="@nameof(this.FormModel.Titles)" />
+                <TitlesForm
+                    Titles="@this.FormModel.Titles"
+                    Label="SeasonForm.Title"
+                    PropertyName="@nameof(this.FormModel.Titles)"
+                />
 
-                <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="SeasonForm.OriginalTitles"
-                            PropertyName="@nameof(this.FormModel.OriginalTitles)" />
-
+                <TitlesForm
+                    Titles="@this.FormModel.OriginalTitles"
+                    Label="SeasonForm.OriginalTitle"
+                    PropertyName="@nameof(this.FormModel.OriginalTitles)"
+                />
+                
                 <div class="form-statuses">
                     <div>
-                        <label class="label" for="watch-status">@this.Loc["SeasonForm.WatchStatus"]</label>
-                        <FluentSelect Id="watch-status" Items="@this.AllWatchStatuses" Class="select form-field"
-                                      @bind-SelectedOption="this.FormModel.WatchStatus"
-                                      OptionText="@(s => this.Loc[$"SeasonForm.WatchStatus.{s}"])"
-                                      Position="SelectPosition.Below" />
+                        <MudSelect
+                            @bind-Value="this.FormModel.WatchStatus"
+                            Label="@this.Loc["SeasonForm.WatchStatus"]"
+                            Class="select form-field"
+                        >
+                            @foreach (var status in this.AllWatchStatuses)
+                            {
+                                <MudSelectItem Value="status">
+                                    @this.Loc[$"SeasonForm.WatchStatus.{status}"]
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+
                         <ErrorPresenter ErrorCode="Season.WatchStatus.*" Trigger="@this.StatusErrorTrigger" />
                     </div>
+
                     <div>
-                        <label class="label" for="release-status">@this.Loc["SeasonForm.ReleaseStatus"]</label>
-                        <FluentSelect Id="release-status" Items="this.AllReleaseStatuses" Class="select form-field"
-                                      @bind-SelectedOption="this.FormModel.ReleaseStatus"
-                                      OptionText="@(s => this.Loc[$"SeasonForm.ReleaseStatus.{s}"])"
-                                      Position="SelectPosition.Below" />
+                        <MudSelect
+                            @bind-Value="this.FormModel.ReleaseStatus"
+                                   Label="@this.Loc["SeasonForm.ReleaseStatus"]"
+                            Class="select form-field"
+                        >
+                            @foreach (var status in this.AllReleaseStatuses)
+                            {
+                                <MudSelectItem Value="status">
+                                    @this.Loc[$"SeasonForm.ReleaseStatus.{status}"]
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+
+                        <ErrorPresenter ErrorCode="Season.ReleaseStatus.*" Trigger="@this.StatusErrorTrigger" />
                     </div>
                 </div>
-
+                
                 <div>
-                    <FluentTextField @bind-Value="@this.FormModel.Channel" Class="form-field">
-                        @this.Loc["SeasonForm.Channel"]
-                    </FluentTextField>
+                    <MudTextField
+                        @bind-Value="@this.FormModel.Channel"
+                        Label="@this.Loc["SeasonForm.Channel"]"
+                        Class="form-field"
+                    />
+
                     <ErrorPresenter ErrorCode="Season.Channel.*" Trigger="@this.FormModel.Channel" />
                 </div>
 
                 @foreach (var period in this.FormModel.Periods)
                 {
-                    <PeriodForm FormModel="@period" CanRemove="@(this.FormModel.Periods.Count > 1)"
-                                Removed="@(() => this.OnPeriodRemoved(period))" Changed="@this.OnPeriodChanged" />
+                    <PeriodForm
+                        FormModel="@period"
+                        Changed="@this.OnPeriodChanged"
+                        CanRemove="@(this.FormModel.Periods.Count > 1)"
+                        Removed="@(() => this.OnPeriodRemoved(period))"
+                    />
                 }
 
                 <div>
                     <ErrorPresenter ErrorCode="Season.Periods.*" Trigger="@this.PeriodValidationTrigger" />
                 </div>
 
-                <div class="add-titles">
-                    <FluentButton Appearance="Appearance.Neutral"
-                                  @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
-                        @this.Loc["SeasonForm.AddTitle"]
-                    </FluentButton>
-                    <FluentButton Appearance="Appearance.Neutral"
-                                  @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
-                        @this.Loc["SeasonForm.AddOriginalTitle"]
-                    </FluentButton>
-                </div>
-
                 <div class="button-container">
-                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.AddPeriod">
+                    <MudButton
+                        Color="MudBlazor.Color.Surface"
+                        Variant="Variant.Filled"
+                        @onclick="@this.AddPeriod"
+                    >
                         @this.Loc["SeasonForm.AddPeriod"]
-                    </FluentButton>
+                    </MudButton>
                 </div>
 
                 <div class="button-container">
-                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Delete">
+                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Secondary" @onclick="@this.Delete">
                         @this.Loc["Button.Delete"]
-                    </FluentButton>
+                    </MudButton>
                 </div>
             </div>
-
+            
             <div class="form-actions">
-                <FluentButton Appearance="Appearance.Accent" @onclick="@this.GoToSeries">
+                <MudButton
+                    Color="MudBlazor.Color.Primary"
+                    Variant="Variant.Filled"
+                    @onclick="@this.GoToSeries"
+                >
                     @this.Loc["SeasonForm.GoToSeries"]
-                </FluentButton>
+                </MudButton>
 
                 @if (this.FormModel.HasChanges)
                 {
-                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Cancel">
+                    <MudButton
+                        Color="MudBlazor.Color.Surface"
+                        Variant="Variant.Filled"
+                        @onclick="@this.Cancel"
+                    >
                         @this.Loc["Button.Cancel"]
-                    </FluentButton>
+                    </MudButton>
                 }
             </div>
         </div>

@@ -92,10 +92,6 @@
   gap: var(--s2);
 }
 
-::deep .kind-select {
-  min-width: 0;
-}
-
 .delete-container {
   display: flex;
   justify-content: center;

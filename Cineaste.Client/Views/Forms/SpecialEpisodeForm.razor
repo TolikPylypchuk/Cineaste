@@ -111,9 +111,10 @@
 
                 <div>
                     <MudDatePicker
-                        @bind-Date="this.FormModel.Date"
+                        Date="this.FormModel.Date"
+                        DateChanged="@(date => this.OnMonthYearChanged(date))"
                         Label="@this.Loc["SpecialEpisodeForm.ReleaseMonthYear"]"
-                        DateFormat="@this.Loc["SpecialEpisodeForm.ReleaseMonthYearFormat"]"
+                        DateFormat="@this.Loc["SpecialEpisodeForm.MonthYearFormat"]"
                         MinDate="@(new DateTime(Constants.MinYear, 1, 1))"
                         DisableToolbar="true"
                         OpenTo="OpenTo.Month"
@@ -137,13 +138,8 @@
                 </div>
 
                 <div class="delete-container">
-                    <MudButton
-                        Variant="Variant.Filled"
-                        Color="MudBlazor.Color.Secondary"
-                        Disabled="@this.State.Value.Delete.IsInProgress"
-                        @onclick="@this.Delete"
-                    >
-                        @this.Loc[this.State.Value.Delete.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
+                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Secondary" @onclick="@this.Delete">
+                        @this.Loc["Button.Delete"]
                     </MudButton>
                 </div>
             </div>

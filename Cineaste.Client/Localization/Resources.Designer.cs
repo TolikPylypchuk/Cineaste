@@ -880,25 +880,16 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End month.
+        ///   Looks up a localized string similar to End month and year.
         /// </summary>
-        public static string PeriodForm_EndMonth {
+        public static string PeriodForm_EndMonthYear {
             get {
-                return ResourceManager.GetString("PeriodForm.EndMonth", resourceCulture);
+                return ResourceManager.GetString("PeriodForm.EndMonthYear", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End year.
-        /// </summary>
-        public static string PeriodForm_EndYear {
-            get {
-                return ResourceManager.GetString("PeriodForm.EndYear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Number of episodes.
+        ///   Looks up a localized string similar to # of episodes.
         /// </summary>
         public static string PeriodForm_EpisodeCount {
             get {
@@ -916,20 +907,20 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Release month.
+        ///   Looks up a localized string similar to MMMM yyyy.
         /// </summary>
-        public static string PeriodForm_ReleaseMonth {
+        public static string PeriodForm_MonthYearFormat {
             get {
-                return ResourceManager.GetString("PeriodForm.ReleaseMonth", resourceCulture);
+                return ResourceManager.GetString("PeriodForm.MonthYearFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Release year.
+        ///   Looks up a localized string similar to Release month and year.
         /// </summary>
-        public static string PeriodForm_ReleaseYear {
+        public static string PeriodForm_ReleaseMonthYear {
             get {
-                return ResourceManager.GetString("PeriodForm.ReleaseYear", resourceCulture);
+                return ResourceManager.GetString("PeriodForm.ReleaseMonthYear", resourceCulture);
             }
         }
         
@@ -943,20 +934,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start month.
+        ///   Looks up a localized string similar to Start month and year.
         /// </summary>
-        public static string PeriodForm_StartMonth {
+        public static string PeriodForm_StartMonthYear {
             get {
-                return ResourceManager.GetString("PeriodForm.StartMonth", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Start year.
-        /// </summary>
-        public static string PeriodForm_StartYear {
-            get {
-                return ResourceManager.GetString("PeriodForm.StartYear", resourceCulture);
+                return ResourceManager.GetString("PeriodForm.StartMonthYear", resourceCulture);
             }
         }
         
@@ -1060,29 +1042,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add original title.
-        /// </summary>
-        public static string SeasonForm_AddOriginalTitle {
-            get {
-                return ResourceManager.GetString("SeasonForm.AddOriginalTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add period.
         /// </summary>
         public static string SeasonForm_AddPeriod {
             get {
                 return ResourceManager.GetString("SeasonForm.AddPeriod", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add title.
-        /// </summary>
-        public static string SeasonForm_AddTitle {
-            get {
-                return ResourceManager.GetString("SeasonForm.AddTitle", resourceCulture);
             }
         }
         
@@ -1105,11 +1069,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original titles.
+        ///   Looks up a localized string similar to Original title.
         /// </summary>
-        public static string SeasonForm_OriginalTitles {
+        public static string SeasonForm_OriginalTitle {
             get {
-                return ResourceManager.GetString("SeasonForm.OriginalTitles", resourceCulture);
+                return ResourceManager.GetString("SeasonForm.OriginalTitle", resourceCulture);
             }
         }
         
@@ -1168,11 +1132,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Titles.
+        ///   Looks up a localized string similar to Title.
         /// </summary>
-        public static string SeasonForm_Titles {
+        public static string SeasonForm_Title {
             get {
-                return ResourceManager.GetString("SeasonForm.Titles", resourceCulture);
+                return ResourceManager.GetString("SeasonForm.Title", resourceCulture);
             }
         }
         
@@ -1528,6 +1492,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MMMM yyyy.
+        /// </summary>
+        public static string SpecialEpisodeForm_MonthYearFormat {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.MonthYearFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Special Episode.
         /// </summary>
         public static string SpecialEpisodeForm_NewSpecialEpisode {
@@ -1551,15 +1524,6 @@ namespace Cineaste.Client.Localization {
         public static string SpecialEpisodeForm_ReleaseMonthYear {
             get {
                 return ResourceManager.GetString("SpecialEpisodeForm.ReleaseMonthYear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MMMM yyyy.
-        /// </summary>
-        public static string SpecialEpisodeForm_ReleaseMonthYearFormat {
-            get {
-                return ResourceManager.GetString("SpecialEpisodeForm.ReleaseMonthYearFormat", resourceCulture);
             }
         }
         

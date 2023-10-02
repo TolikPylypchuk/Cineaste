@@ -47,10 +47,6 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--s2);
-  --wrap-width: 128px;
-  /* Needed to not cut selectors' shadows inside sidebar forms */
-  margin-inline-start: calc(var(--s16) * -1);
-  padding-inline-start: calc(var(--s16) + var(--s2));
 }
 
 .form-actions {
@@ -62,9 +58,10 @@
 
 .form-links {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  justify-content: center;
   gap: var(--s2);
+  flex-wrap: wrap;
 }
 
 ::deep .form-field {
@@ -74,23 +71,8 @@
 
 .form-statuses {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   justify-content: stretch;
-  gap: var(--s2);
-}
-
-::deep .select {
-  min-width: 0;
-}
-
-::deep .form-statuses .select::part(listbox) {
-  width: fit-content;
-  min-width: 100%;
-}
-
-.add-titles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width), 1fr));
   gap: var(--s2);
 }
 
