@@ -132,6 +132,9 @@
   <data name="AriaLabel.Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="AriaLabel.More" xml:space="preserve">
+    <value>More</value>
+  </data>
   <data name="AriaLabel.Remove" xml:space="preserve">
     <value>Remove</value>
   </data>
@@ -495,17 +498,11 @@
   <data name="SeasonForm.WatchStatus.Watching" xml:space="preserve">
     <value>Watching</value>
   </data>
-  <data name="SeriesForm.AddOriginalTitle" xml:space="preserve">
-    <value>Add original title</value>
-  </data>
   <data name="SeriesForm.AddSeason" xml:space="preserve">
     <value>Add season</value>
   </data>
   <data name="SeriesForm.AddSpecialEpisode" xml:space="preserve">
     <value>Add special episode</value>
-  </data>
-  <data name="SeriesForm.AddTitle" xml:space="preserve">
-    <value>Add title</value>
   </data>
   <data name="SeriesForm.Component.Down" xml:space="preserve">
     <value>Move down</value>
@@ -528,8 +525,8 @@
   <data name="SeriesForm.NewSeries" xml:space="preserve">
     <value>New Series</value>
   </data>
-  <data name="SeriesForm.OriginalTitles" xml:space="preserve">
-    <value>Original titles</value>
+  <data name="SeriesForm.OriginalTitle" xml:space="preserve">
+    <value>Original title</value>
   </data>
   <data name="SeriesForm.Problem.CreatingFailed" xml:space="preserve">
     <value>Creating the series has failed</value>
@@ -567,8 +564,8 @@
   <data name="SeriesForm.RottenTomatoesId" xml:space="preserve">
     <value>Rotten Tomatoes ID</value>
   </data>
-  <data name="SeriesForm.Titles" xml:space="preserve">
-    <value>Titles</value>
+  <data name="SeriesForm.Title" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="SeriesForm.WatchStatus" xml:space="preserve">
     <value>Watch status</value>

@@ -3,18 +3,35 @@
 @switch (this.State.Value.SelectedSeriesComponent)
 {
     case SpecialEpisodeFormModel model:
-        <SpecialEpisodeForm Episode="@model.BackingModel" FormModel="@model" Close="@this.Close"
-                            Delete="@(() => this.RemoveComponent(model))" GoToNextComponent="@this.GoToNextComponent"
-                            GoToPreviousComponent="@this.GoToPreviousComponent" />
+        <SpecialEpisodeForm
+            Episode="@model.BackingModel"
+            FormModel="@model"
+            Close="@this.Close"
+            Delete="@(() => this.RemoveComponent(model))"
+            GoToNextComponent="@this.GoToNextComponent"
+            GoToPreviousComponent="@this.GoToPreviousComponent"
+        />
         break;
     case SeasonFormModel model:
-        <SeasonForm Season="@model.BackingModel" FormModel="@model" Close="@this.Close"
-                    Delete="@(() => this.RemoveComponent(model))" GoToNextComponent="@this.GoToNextComponent"
-                    GoToPreviousComponent="@this.GoToPreviousComponent" />
+        <SeasonForm
+            Season="@model.BackingModel"
+            FormModel="@model"
+            Close="@this.Close"
+            Delete="@(() => this.RemoveComponent(model))"
+            GoToNextComponent="@this.GoToNextComponent"
+            GoToPreviousComponent="@this.GoToPreviousComponent"
+        />
         break;
     default:
-        <SeriesMainForm FormTitle="@this.FormTitle" FormTitleUpdated="@this.UpdateFormTitle" FormModel="@this.FormModel"
-                        ListId="@this.ListId" ListItem="@this.ListItem" Save="@this.Save" Cancel="@this.Cancel"
-                        Close="@this.Close" />
+        <SeriesMainForm
+            ListId="@this.ListId"
+            ListItem="@this.ListItem"
+            FormTitle="@this.FormTitle"
+            FormTitleUpdated="@this.UpdateFormTitle"
+            FormModel="@this.FormModel"
+            Save="@this.Save"
+            Cancel="@this.Cancel"
+            Close="@this.Close"
+        />
         break;
 }

@@ -59,9 +59,6 @@ public partial class FranchiseForm
         this.UpdateFormTitle();
     }
 
-    private void AddTitle(ICollection<string> titles) =>
-        titles.Add(String.Empty);
-
     private void UpdateFormTitle()
     {
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;

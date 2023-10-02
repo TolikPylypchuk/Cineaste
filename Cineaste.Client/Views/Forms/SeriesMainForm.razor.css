@@ -51,11 +51,6 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--s2);
-  --wrap-width-small: 128px;
-  --wrap-width-large: 148px;
-  /* Needed to not cut selectors' shadows inside sidebar forms */
-  margin-inline-start: calc(var(--s16) * -1);
-  padding-inline-start: calc(var(--s16) + var(--s2));
 }
 
 .form-actions {
@@ -84,7 +79,7 @@
 
 .form-statuses {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width-small), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   justify-content: stretch;
   gap: var(--s2);
 }
@@ -93,65 +88,21 @@
   min-width: 0;
 }
 
-::deep .form-statuses .select::part(listbox) {
-  width: fit-content;
-  min-width: 100%;
+::deep .components-grid {
+  margin-block-start: var(--s4);
 }
 
-.components-container {
-  align-self: stretch;
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  place-content: stretch;
-  font-size: 0.875rem;
+::deep .no-header {
+  display: none !important;
 }
 
-.component {
+::deep .component-row {
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-}
-
-.component-text {
-  flex: 1;
-  padding: var(--s1);
-  display: grid;
-  place-content: center;
-  text-align: center;
-}
-
-::deep .menu-button {
-  padding: var(--s1);
-}
-
-::deep .menu {
-  position: absolute;
-  right: var(--s2);
-  isolation: isolate;
-  z-index: 10;
-}
-
-.menu-backdrop {
-  cursor: revert;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 9;
 }
 
 .add-components {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width-large), 1fr));
-  gap: var(--s2);
-}
-
-.add-titles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--wrap-width-small), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   gap: var(--s2);
 }
 

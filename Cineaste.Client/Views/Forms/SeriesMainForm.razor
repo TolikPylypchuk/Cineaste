@@ -1,22 +1,30 @@
 @inherits CineasteForm<SeriesFormModel, SeriesRequest, SeriesModel, SeriesFormState>
+@using MudBlazor
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
         <div class="form-header">
             <div></div>
             <div></div>
-            <FluentButton Appearance="Appearance.Lightweight" @onclick="this.Close">
-                <FluentIcon Name="@FluentIcons.Dismiss" Color="Color.Neutral" />
-            </FluentButton>
+            <MudIconButton
+                Icon="@Icons.Material.Filled.Close"
+                Size="Size.Small"
+                @onclick="this.Close"
+                aria-label="@this.Loc["AriaLabel.Close"]"
+            />
         </div>
 
         @if (this.State.Value.Fetch.IsInProgress)
         {
-            <FluentProgressRing Class="loading-circle" />
+            <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" Class="loading-circle" />
         } else if (this.State.Value.Fetch.Problem is not null)
         {
-            <ApiProblemAlert Text="SeriesForm.Problem.LoadingFailed" TryAgain="@this.FetchSeries"
-                             Problem="@this.State.Value.Fetch.Problem" Class="problem-alert main" />
+            <ApiProblemAlert
+                Problem="@this.State.Value.Fetch.Problem"
+                Text="SeriesForm.Problem.LoadingFailed"
+                TryAgain="@this.FetchSeries"
+                Class="problem-alert main"
+            />
         } else
         {
             <div class="form-container list-sidebar">
@@ -32,9 +40,9 @@
                         {
                             string href = String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId);
 
-                            <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
+                            <MudLink Href="@href" Target="_blank">
                                 @this.Loc["Link.Imdb"]
-                            </FluentAnchor>
+                            </MudLink>
                         }
 
                         @if (this.HasRottenTomatoesId())
@@ -43,183 +51,236 @@
                                 this.Loc["Link.RottenTomatoesUrlFormat"],
                                 this.FormModel.RottenTomatoesId);
 
-                            <FluentAnchor Href="@href" Target="_blank" Appearance="Appearance.Hypertext">
+                            <MudLink Href="@href" Target="_blank">
                                 @this.Loc["Link.RottenTomatoes"]
-                            </FluentAnchor>
+                            </MudLink>
                         }
                     </div>
 
-                    <TitlesForm Titles="@this.FormModel.Titles" Label="SeriesForm.Titles"
-                                PropertyName="@nameof(this.FormModel.Titles)" />
+                    <TitlesForm
+                        Titles="@this.FormModel.Titles"
+                        Label="SeriesForm.Title"
+                        PropertyName="@nameof(this.FormModel.Titles)"
+                    />
 
-                    <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="SeriesForm.OriginalTitles"
-                                PropertyName="@nameof(this.FormModel.OriginalTitles)" />
+                    <TitlesForm
+                        Titles="@this.FormModel.OriginalTitles"
+                        Label="SeriesForm.OriginalTitle"
+                        PropertyName="@nameof(this.FormModel.OriginalTitles)"
+                    />
 
                     <div class="form-statuses">
                         <div>
-                            <label class="label" for="watch-status">@this.Loc["SeriesForm.WatchStatus"]</label>
-                            <FluentSelect Id="watch-status" Items="@this.AllWatchStatuses" Class="select form-field"
-                                          @bind-SelectedOption="this.FormModel.WatchStatus"
-                                          OptionText="@(s => this.Loc[$"SeriesForm.WatchStatus.{s}"])"
-                                          Position="SelectPosition.Below" />
+                            <MudSelect
+                                @bind-Value="this.FormModel.WatchStatus"
+                                Label="@this.Loc["SeriesForm.WatchStatus"]"
+                                Class="select form-field"
+                            >
+                                @foreach (var status in this.AllWatchStatuses)
+                                {
+                                    <MudSelectItem Value="status">
+                                        @this.Loc[$"SeriesForm.WatchStatus.{status}"]
+                                    </MudSelectItem>
+                                }
+                            </MudSelect>
+
                             <ErrorPresenter ErrorCode="Series.WatchStatus.*" Trigger="@this.StatusErrorTrigger" />
                         </div>
+
                         <div>
-                            <label class="label" for="release-status">@this.Loc["SeriesForm.ReleaseStatus"]</label>
-                            <FluentSelect Id="release-status" Items="this.AllReleaseStatuses" Class="select form-field"
-                                          @bind-SelectedOption="this.FormModel.ReleaseStatus"
-                                          OptionText="@(s => this.Loc[$"SeriesForm.ReleaseStatus.{s}"])"
-                                          Position="SelectPosition.Below" />
+                            <MudSelect
+                                @bind-Value="this.FormModel.ReleaseStatus"
+                                Label="@this.Loc["SeriesForm.ReleaseStatus"]"
+                                Class="select form-field"
+                            >
+                                @foreach (var status in this.AllReleaseStatuses)
+                                {
+                                    <MudSelectItem Value="status">
+                                        @this.Loc[$"SeriesForm.ReleaseStatus.{status}"]
+                                    </MudSelectItem>
+                                }
+                            </MudSelect>
+
+                            <ErrorPresenter ErrorCode="Series.ReleaseStatus.*" Trigger="@this.StatusErrorTrigger" />
                         </div>
                     </div>
 
                     <div>
-                        <label class="label" for="kind">@this.Loc["SeriesForm.Kind"]</label>
-                        <FluentSelect Id="kind" Items="this.State.Value.AvailableKinds"
-                                      @bind-SelectedOption="this.FormModel.Kind" Position="SelectPosition.Below"
-                                      OptionText="@(o => o.Name)" Class="select form-field" />
+                        <MudSelect
+                            @bind-Value="this.FormModel.Kind"
+                            Label="@this.Loc["SeriesForm.Kind"]"
+                            Class="kind-select form-field"
+                        >
+                            @foreach (var kind in this.State.Value.AvailableKinds)
+                            {
+                                <MudSelectItem Value="kind">
+                                    @kind.Name
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
                     </div>
 
-                    <div class="components-container">
-                        @foreach (var component in this.FormModel.Components)
-                        {
-                            <div role="button" class="component"
-                                 @onclick="() => this.OpenSeriesComponentForm(component)">
-                                <div class="component-text">@component.Title</div>
-                                <FluentDivider Role="DividerRole.Separator" />
-                            </div>
-                            <div role="button" class="component"
-                                 @onclick="() => this.OpenSeriesComponentForm(component)">
-                                <div class="component-text">@component.Years</div>
-                                <FluentDivider Role="DividerRole.Separator" />
-                            </div>
-                            <div role="button" class="component"
-                                 @onclick="() => this.OpenSeriesComponentForm(component)">
-                                @if (this.FormModel.Components.Count > 1)
-                                {
-                                    <div class="component-text">
-                                        <div @onclick:stopPropagation="true" @onclick:preventDefault="true">
-                                            <FluentButton Appearance="Appearance.Stealth" Class="menu-button"
-                                                          @onclick="@(() => this.ShowMenu(component))"
-                                                          aria-expanded="@this.ShouldShowMenu(component)"
-                                                          aria-haspopup="true">
-                                                <FluentIcon Name="@FluentIcons.MoreVertical" Size="IconSize.Size16" />
-                                            </FluentButton>
-                                        </div>
+                    <MudDataGrid
+                        @ref="this.ComponentGrid"
+                        Items="this.FormModel.Components"
+                        SelectedItemChanged="@((ISeriesComponentFormModel component) =>
+                            this.OpenSeriesComponentForm(component))"
+                        HeaderClass="no-header"
+                        SortMode="@SortMode.None"
+                        RowClass="component-row"
+                        Filterable="false"
+                        Groupable="false"
+                        Dense="true"
+                        Hover="true"
+                        Class="components-grid"
+                    >
+                        <Columns>
+                            <MudBlazor.PropertyColumn Property="@(c => c.Title)" />
+                            <MudBlazor.PropertyColumn Property="@(c => c.Years)" />
+                            <MudBlazor.TemplateColumn>
+                                <CellTemplate>
+                                    @if (this.FormModel.Components.Count > 1)
+                                    {
+                                        <MudMenu
+                                            Icon="@Icons.Material.Filled.MoreVert"
+                                            Size="Size.Small"
+                                            aria-label="@this.Loc["AriaLabel.More"]"
+                                        >
+                                            @if (this.CanMoveUp(context.Item))
+                                            {
+                                                <MudMenuItem
+                                                    Icon="@Icons.Material.Filled.KeyboardArrowUp"
+                                                    @onclick="@(() => this.MoveUp(context.Item))"
+                                                >
+                                                    @this.Loc["SeriesForm.Component.Up"]
+                                                </MudMenuItem>
+                                            }
 
-                                        @if (this.ShouldShowMenu(component))
-                                        {
-                                            <FluentMenu Class="menu" @onclick:stopPropagation="true">
-                                                @if (this.CanMoveUp(component))
-                                                {
-                                                    <FluentMenuItem @onclick="@(() => this.MoveUp(component))">
-                                                        <span slot="start">
-                                                            <FluentIcon Name="@FluentIcons.ArrowUp"
-                                                                        Color="Color.Neutral" Size="IconSize.Size16" />
-                                                        </span>
-                                                        @this.Loc["SeriesForm.Component.Up"]
-                                                    </FluentMenuItem>
-                                                }
-
-                                                @if (this.CanMoveDown(component))
-                                                {
-                                                    <FluentMenuItem @onclick="@(() => this.MoveDown(component))">
-                                                        <span slot="start">
-                                                            <FluentIcon Name="@FluentIcons.ArrowDown"
-                                                                        Color="Color.Neutral" Size="IconSize.Size16" />
-                                                        </span>
-                                                        @this.Loc["SeriesForm.Component.Down"]
-                                                    </FluentMenuItem>
-                                                }
-                                            </FluentMenu>
-                                        }
-                                    </div>
-                                }
-
-                                <FluentDivider Role="DividerRole.Separator" />
-                            </div>
-                        }
-                    </div>
+                                            @if (this.CanMoveDown(context.Item))
+                                            {
+                                                <MudMenuItem
+                                                    Icon="@Icons.Material.Filled.KeyboardArrowDown"
+                                                @onclick="@(() => this.MoveDown(context.Item))">
+                                                    @this.Loc["SeriesForm.Component.Down"]
+                                                </MudMenuItem>
+                                            }
+                                        </MudMenu>
+                                    }
+                                </CellTemplate>
+                            </MudBlazor.TemplateColumn>
+                        </Columns>
+                    </MudDataGrid>
 
                     <div class="add-components">
-                        <FluentButton Appearance="Appearance.Neutral" @onclick="@this.AddSeason">
+                        <MudButton
+                            Color="MudBlazor.Color.Default"
+                            Variant="Variant.Text"
+                            Size="Size.Small"
+                            @onclick="@this.AddSeason"
+                        >
                             @this.Loc["SeriesForm.AddSeason"]
-                        </FluentButton>
-                        <FluentButton Appearance="Appearance.Neutral" @onclick="@this.AddSpecialEpisode">
+                        </MudButton>
+
+                        <MudButton
+                            Color="MudBlazor.Color.Default"
+                            Variant="Variant.Text"
+                            Size="Size.Small"
+                            @onclick="@this.AddSpecialEpisode"
+                        >
                             @this.Loc["SeriesForm.AddSpecialEpisode"]
-                        </FluentButton>
+                        </MudButton>
                     </div>
 
                     <div>
                         <ErrorPresenter ErrorCode="Series.Seasons.*" />
                     </div>
-
+                    
                     <div>
-                        <FluentTextField @bind-Value="@this.FormModel.ImdbId" Class="form-field">
-                            @this.Loc["SeriesForm.ImdbId"]
-                        </FluentTextField>
+                        <MudTextField
+                            @bind-Value="@this.FormModel.ImdbId"
+                            Label="@this.Loc["SeriesForm.ImdbId"]"
+                            Class="form-field"
+                        />
+
                         <ErrorPresenter ErrorCode="Series.ImdbId.*" Trigger="@this.FormModel.ImdbId" />
                     </div>
 
                     <div>
-                        <FluentTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field">
-                            @this.Loc["SeriesForm.RottenTomatoesId"]
-                        </FluentTextField>
-                        <ErrorPresenter ErrorCode="Series.RottenTomatoesId.*"
-                                        Trigger="@this.FormModel.RottenTomatoesId" />
-                    </div>
+                        <MudTextField
+                            @bind-Value="@this.FormModel.RottenTomatoesId"
+                            Label="@this.Loc["SeriesForm.RottenTomatoesId"]"
+                            Class="form-field"
+                        />
 
-                    <div class="add-titles">
-                        <FluentButton Appearance="Appearance.Neutral"
-                                      @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
-                            @this.Loc["SeriesForm.AddTitle"]
-                        </FluentButton>
-                        <FluentButton Appearance="Appearance.Neutral"
-                                      @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
-                            @this.Loc["SeriesForm.AddOriginalTitle"]
-                        </FluentButton>
+                        <ErrorPresenter
+                            ErrorCode="Series.RottenTomatoesId.*"
+                            Trigger="@this.FormModel.RottenTomatoesId"
+                        />
                     </div>
 
                     @if (this.ListItem is not null)
                     {
                         <div class="delete-container">
-                            <FluentButton Appearance="Appearance.Neutral" @onclick="@this.Delete"
-                                          Disabled="@this.State.Value.Delete.IsInProgress">
+                            <MudButton
+                                Variant="Variant.Filled"
+                                Color="MudBlazor.Color.Secondary"
+                                Disabled="@this.State.Value.Delete.IsInProgress"
+                                @onclick="@this.Delete"
+                            >
                                 @this.Loc[this.State.Value.Delete.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
-                            </FluentButton>
-
-                            <ConfirmationDialog @ref="this.deleteConfirmationDialog"
-                                                Title="SeriesForm.DeleteDialog.Title"
-                                                Body="SeriesForm.DeleteDialog.Body" />
+                            </MudButton>
                         </div>
                     }
                 </div>
 
                 @if (this.State.Value.Create.Problem is not null)
                 {
-                    <ApiProblemAlert Text="SeriesForm.Problem.CreatingFailed" TryAgain="@this.OnSave"
-                                     Problem="@this.State.Value.Create.Problem" Class="problem-alert" />
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Create.Problem"
+                        Text="SeriesForm.Problem.CreatingFailed"
+                        TryAgain="@this.OnSave"
+                        Class="problem-alert"
+                    />
                 }
 
                 @if (this.State.Value.Update.Problem is not null)
                 {
-                    <ApiProblemAlert Text="SeriesForm.Problem.UpdatingFailed" TryAgain="@this.OnSave"
-                                     Problem="@this.State.Value.Update.Problem" Class="problem-alert" />
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Update.Problem"
+                        Text="SeriesForm.Problem.UpdatingFailed"
+                        TryAgain="@this.OnSave"
+                        Class="problem-alert"
+                    />
                 }
 
                 @if (this.State.Value.Delete.Problem is not null)
                 {
-                    <ApiProblemAlert Text="SeriesForm.Problem.DeletingFailed" TryAgain="this.Delete"
-                                     Problem="@this.State.Value.Delete.Problem" Class="problem-alert" />
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Delete.Problem"
+                        Text="SeriesForm.Problem.DeletingFailed"
+                        TryAgain="this.Delete"
+                        Class="problem-alert"
+                    />
                 }
 
                 <div class="@($"form-actions{(this.FormModel.HasChanges ? "" : " hidden")}")">
-                    <FluentButton Appearance="Appearance.Accent" @onclick="@this.OnSave" Disabled="@this.IsSaving">
+                    <MudButton
+                        Color="MudBlazor.Color.Primary"
+                        Variant="Variant.Filled"
+                        Disabled="@this.IsSaving"
+                        @onclick="@this.OnSave"
+                    >
                         @this.Loc[this.IsSaving ? "Button.Save.Busy" : "Button.Save"]
-                    </FluentButton>
-                    <FluentButton Appearance="Appearance.Neutral" @onclick="@this.OnCancel" Disabled="@this.IsSaving">
+                    </MudButton>
+
+                    <MudButton
+                        Color="MudBlazor.Color.Surface"
+                        Variant="Variant.Filled"
+                        Disabled="@this.IsSaving"
+                        @onclick="@this.OnCancel"
+                    >
                         @this.Loc["Button.Cancel"]
-                    </FluentButton>
+                    </MudButton>
                 </div>
             </div>
         }

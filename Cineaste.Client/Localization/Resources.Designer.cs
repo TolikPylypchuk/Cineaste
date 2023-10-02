@@ -106,6 +106,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More.
+        /// </summary>
+        public static string AriaLabel_More {
+            get {
+                return ResourceManager.GetString("AriaLabel.More", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string AriaLabel_Remove {
@@ -1195,15 +1204,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add original title.
-        /// </summary>
-        public static string SeriesForm_AddOriginalTitle {
-            get {
-                return ResourceManager.GetString("SeriesForm.AddOriginalTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add season.
         /// </summary>
         public static string SeriesForm_AddSeason {
@@ -1218,15 +1218,6 @@ namespace Cineaste.Client.Localization {
         public static string SeriesForm_AddSpecialEpisode {
             get {
                 return ResourceManager.GetString("SeriesForm.AddSpecialEpisode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add title.
-        /// </summary>
-        public static string SeriesForm_AddTitle {
-            get {
-                return ResourceManager.GetString("SeriesForm.AddTitle", resourceCulture);
             }
         }
         
@@ -1294,11 +1285,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original titles.
+        ///   Looks up a localized string similar to Original title.
         /// </summary>
-        public static string SeriesForm_OriginalTitles {
+        public static string SeriesForm_OriginalTitle {
             get {
-                return ResourceManager.GetString("SeriesForm.OriginalTitles", resourceCulture);
+                return ResourceManager.GetString("SeriesForm.OriginalTitle", resourceCulture);
             }
         }
         
@@ -1411,11 +1402,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Titles.
+        ///   Looks up a localized string similar to Title.
         /// </summary>
-        public static string SeriesForm_Titles {
+        public static string SeriesForm_Title {
             get {
-                return ResourceManager.GetString("SeriesForm.Titles", resourceCulture);
+                return ResourceManager.GetString("SeriesForm.Title", resourceCulture);
             }
         }
         

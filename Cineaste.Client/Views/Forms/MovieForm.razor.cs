@@ -65,9 +65,6 @@ public partial class MovieForm
         this.OnYearChanged(this.State.Value.Model?.Year ?? DateTime.Now.Year);
     }
 
-    private void AddTitle(ICollection<string> titles) =>
-        titles.Add(String.Empty);
-
     private void UpdateFormTitle()
     {
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;

@@ -104,9 +104,9 @@
 
                             <ErrorPresenter ErrorCode="Movie.Year.*" Trigger="@this.FormModel.Year" />
                         </div>
+
                         <div>
                             <MudSelect
-                                T="ListKindModel"
                                 @bind-Value="this.FormModel.Kind"
                                 Label="@this.Loc["MovieForm.Kind"]"
                                 Class="kind-select form-field"
@@ -191,8 +191,8 @@
 
                 <div class="@($"form-actions{(this.FormModel.HasChanges ? "" : " hidden")}")">
                     <MudButton
-                        Variant="Variant.Filled"
                         Color="MudBlazor.Color.Primary"
+                        Variant="Variant.Filled"
                         Disabled="@this.IsSaving"
                         @onclick="@this.Save"
                     >
@@ -200,8 +200,8 @@
                     </MudButton>
 
                     <MudButton
-                        Variant="Variant.Filled"
                         Color="MudBlazor.Color.Surface"
+                        Variant="Variant.Filled"
                         Disabled="@this.IsSaving"
                         @onclick="@this.Cancel"
                     >

@@ -4,8 +4,6 @@ using Cineaste.Client.Store.Forms.SeriesForm;
 
 public partial class SeriesMainForm
 {
-    private ConfirmationDialog? deleteConfirmationDialog;
-
     [Parameter]
     public Guid ListId { get; set; }
 
@@ -30,6 +28,11 @@ public partial class SeriesMainForm
     [Parameter]
     public EventCallback Cancel { get; set; }
 
+    [Inject]
+    public required IDialogService DialogService { get; init; }
+
+    public required MudDataGrid<ISeriesComponentFormModel> ComponentGrid { get; set; }
+
     private ImmutableArray<SeriesWatchStatus> AllWatchStatuses { get; } =
         Enum.GetValues<SeriesWatchStatus>().ToImmutableArray();
 
@@ -42,7 +45,16 @@ public partial class SeriesMainForm
     private object StatusErrorTrigger =>
         new { this.FormModel.WatchStatus, this.FormModel.ReleaseStatus };
 
-    private ISeriesComponentFormModel? ComponentWithMenu { get; set; }
+    protected override void OnInitialized()
+    {
+        this.SubscribeToAction<GoToSeriesAction>(async _ =>
+        {
+            await this.ComponentGrid.SetSelectedItemAsync(null!);
+            this.StateHasChanged();
+        });
+
+        base.OnInitialized();
+    }
 
     private void FetchSeries()
     {
@@ -52,9 +64,6 @@ public partial class SeriesMainForm
                 this.ListItem.Id, this.State.Value.AvailableKinds, this.State.Value.ListConfiguration));
         }
     }
-
-    private void AddTitle(ICollection<string> titles) =>
-        titles.Add(String.Empty);
 
     private void AddSeason()
     {
@@ -68,35 +77,17 @@ public partial class SeriesMainForm
         this.OpenSeriesComponentForm(episode);
     }
 
-    private void ShowMenu(ISeriesComponentFormModel component) =>
-        this.ComponentWithMenu = component;
-
-    private void HideMenu() =>
-        this.ComponentWithMenu = null;
-
-    private bool ShouldShowMenu(ISeriesComponentFormModel component) =>
-        this.ComponentWithMenu == component;
-
-    private bool ShouldShowAnyMenu() =>
-        this.ComponentWithMenu is not null;
-
     private bool CanMoveUp(ISeriesComponentFormModel component) =>
         component.SequenceNumber != 1;
 
-    private void MoveUp(ISeriesComponentFormModel component)
-    {
-        this.HideMenu();
+    private void MoveUp(ISeriesComponentFormModel component) =>
         this.FormModel.MoveComponentUp(component);
-    }
 
     private bool CanMoveDown(ISeriesComponentFormModel component) =>
         component.SequenceNumber != this.FormModel.Components.Count;
 
-    private void MoveDown(ISeriesComponentFormModel component)
-    {
-        this.HideMenu();
+    private void MoveDown(ISeriesComponentFormModel component) =>
         this.FormModel.MoveComponentDown(component);
-    }
 
     private void OpenSeriesComponentForm(ISeriesComponentFormModel component) =>
         this.Dispatcher.Dispatch(new OpenSeriesComponentFormAction(component));
@@ -118,12 +109,11 @@ public partial class SeriesMainForm
 
     private async Task Delete()
     {
-        if (this.deleteConfirmationDialog is null)
-        {
-            return;
-        }
-
-        bool? delete = await this.deleteConfirmationDialog.RequestConfirmation();
+        bool? delete = await this.DialogService.ShowMessageBox(
+            title: this.Loc["SeriesForm.DeleteDialog.Title"],
+            markupMessage: new MarkupString(this.Loc["SeriesForm.DeleteDialog.Body"]),
+            yesText: this.Loc["Confirmation.Confirm"],
+            noText: this.Loc["Confirmation.Cancel"]);
 
         if (delete == true && this.ListItem is { Id: var id })
         {

@@ -96,13 +96,6 @@
   min-width: 0;
 }
 
-.add-titles {
-  margin-block-start: var(--s2);
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--s2);
-}
-
 .delete-container {
   display: flex;
   justify-content: center;
