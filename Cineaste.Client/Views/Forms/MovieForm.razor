@@ -6,8 +6,12 @@
         <div class="form-header">
             <div></div>
             <div></div>
-            <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" @onclick="this.Close"
-                           aria-label="@this.Loc["AriaLabel.Close"]" />
+            <MudIconButton
+                Icon="@Icons.Material.Filled.Close"
+                Size="Size.Small"
+                @onclick="this.Close"
+                aria-label="@this.Loc["AriaLabel.Close"]"
+            />
         </div>
 
         @if (this.State.Value.Fetch.IsInProgress)
@@ -15,8 +19,12 @@
             <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" Class="loading-circle" />
         } else if (this.State.Value.Fetch.Problem is not null)
         {
-            <ApiProblemAlert Text="MovieForm.Problem.LoadingFailed" Problem="@this.State.Value.Fetch.Problem"
-                             TryAgain="@this.FetchMovie" Class="problem-alert main" />
+            <ApiProblemAlert
+                Problem="@this.State.Value.Fetch.Problem"
+                Text="MovieForm.Problem.LoadingFailed"
+                TryAgain="@this.FetchMovie"
+                Class="problem-alert main"
+            />
         } else
         {
             <div class="form-container list-sidebar">
@@ -50,34 +58,59 @@
                     </div>
 
                     <div class="form-checkboxes">
-                        <MudCheckBox Checked="@this.FormModel.IsWatched" Color="MudBlazor.Color.Primary"
-                                     CheckedChanged="@((bool value) => this.OnIsWatchedChanged(value))"
-                                     Disabled="@(!this.CanChangeIsWatched)" Size="Size.Small">
+                        <MudCheckBox
+                            Checked="@this.FormModel.IsWatched"
+                            CheckedChanged="@((bool value) => this.OnIsWatchedChanged(value))"
+                            Color="MudBlazor.Color.Primary"
+                            Disabled="@(!this.CanChangeIsWatched)"
+                            Size="Size.Small"
+                            Dense="true"
+                        >
                             @this.Loc["MovieForm.IsWatched"]
                         </MudCheckBox>
-                        <MudCheckBox Checked="@this.FormModel.IsReleased" Color="MudBlazor.Color.Primary"
-                                     CheckedChanged="@((bool value) => this.OnIsReleasedChanged(value))"
-                                     Disabled="@(!this.CanChangeIsReleased)" Size="Size.Small">
+
+                        <MudCheckBox
+                            Checked="@this.FormModel.IsReleased"
+                            CheckedChanged="@((bool value) => this.OnIsReleasedChanged(value))"
+                            Color="MudBlazor.Color.Primary"
+                            Disabled="@(!this.CanChangeIsReleased)"
+                            Size="Size.Small"
+                            Dense="true"
+                        >
                             @this.Loc["MovieForm.IsReleased"]
                         </MudCheckBox>
                     </div>
 
-                    <TitlesForm Titles="@this.FormModel.Titles" Label="MovieForm.Title"
-                                PropertyName="@nameof(this.FormModel.Titles)" />
+                    <TitlesForm
+                        Titles="@this.FormModel.Titles"
+                        Label="MovieForm.Title"
+                        PropertyName="@nameof(this.FormModel.Titles)"
+                    />
 
-                    <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="MovieForm.OriginalTitle"
-                                PropertyName="@nameof(this.FormModel.OriginalTitles)" />
+                    <TitlesForm
+                        Titles="@this.FormModel.OriginalTitles"
+                        Label="MovieForm.OriginalTitle"
+                        PropertyName="@nameof(this.FormModel.OriginalTitles)"
+                    />
 
                     <div class="form-year-kind">
                         <div>
-                            <MudNumericField Label="@this.Loc["MovieForm.Year"]" Value="@this.FormModel.Year"
-                                             ValueChanged="@((int year) => this.OnYearChanged(year))"
-                                             Class="form-field" />
+                            <MudNumericField
+                                Value="@this.FormModel.Year"
+                                ValueChanged="@((int year) => this.OnYearChanged(year))"
+                                Label="@this.Loc["MovieForm.Year"]"
+                                Class="form-field"
+                            />
+
                             <ErrorPresenter ErrorCode="Movie.Year.*" Trigger="@this.FormModel.Year" />
                         </div>
                         <div>
-                            <MudSelect T="ListKindModel" @bind-Value="this.FormModel.Kind"
-                                       Label="@this.Loc["MovieForm.Kind"]" Class="kind-select form-field">
+                            <MudSelect
+                                T="ListKindModel"
+                                @bind-Value="this.FormModel.Kind"
+                                Label="@this.Loc["MovieForm.Kind"]"
+                                Class="kind-select form-field"
+                            >
                                 @foreach (var kind in this.State.Value.AvailableKinds)
                                 {
                                     <MudSelectItem Value="kind">
@@ -89,23 +122,37 @@
                     </div>
 
                     <div>
-                        <MudTextField @bind-Value="@this.FormModel.ImdbId" Class="form-field"
-                                      Label="@this.Loc["MovieForm.ImdbId"]" />
+                        <MudTextField
+                            @bind-Value="@this.FormModel.ImdbId"
+                            Label="@this.Loc["MovieForm.ImdbId"]"
+                            Class="form-field"
+                        />
+
                         <ErrorPresenter ErrorCode="Movie.ImdbId.*" Trigger="@this.FormModel.ImdbId" />
                     </div>
 
                     <div>
-                        <MudTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field"
-                                      Label="@this.Loc["MovieForm.RottenTomatoesId"]" />
-                        <ErrorPresenter ErrorCode="Movie.RottenTomatoesId.*"
-                                        Trigger="@this.FormModel.RottenTomatoesId" />
+                        <MudTextField
+                            @bind-Value="@this.FormModel.RottenTomatoesId"
+                            Label="@this.Loc["MovieForm.RottenTomatoesId"]"
+                            Class="form-field"
+                        />
+
+                        <ErrorPresenter
+                            ErrorCode="Movie.RottenTomatoesId.*"
+                            Trigger="@this.FormModel.RottenTomatoesId"
+                        />
                     </div>
 
                     @if (this.ListItem is not null)
                     {
                         <div class="delete-container">
-                            <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Secondary"
-                                       Disabled="@this.State.Value.Delete.IsInProgress" @onclick="@this.Delete">
+                            <MudButton
+                                Variant="Variant.Filled"
+                                Color="MudBlazor.Color.Secondary"
+                                Disabled="@this.State.Value.Delete.IsInProgress"
+                                @onclick="@this.Delete"
+                            >
                                 @this.Loc[this.State.Value.Delete.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
                             </MudButton>
                         </div>
@@ -114,29 +161,50 @@
 
                 @if (this.State.Value.Create.Problem is not null)
                 {
-                    <ApiProblemAlert Text="MovieForm.Problem.CreatingFailed" TryAgain="@this.Save"
-                                     Problem="@this.State.Value.Create.Problem" Class="problem-alert" />
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Create.Problem"
+                        Text="MovieForm.Problem.CreatingFailed"
+                        TryAgain="@this.Save"
+                        Class="problem-alert"
+                    />
                 }
 
                 @if (this.State.Value.Update.Problem is not null)
                 {
-                    <ApiProblemAlert Text="MovieForm.Problem.UpdatingFailed" TryAgain="@this.Save"
-                                     Problem="@this.State.Value.Update.Problem" Class="problem-alert" />
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Update.Problem"
+                        Text="MovieForm.Problem.UpdatingFailed"
+                        TryAgain="@this.Save"
+                        Class="problem-alert"
+                    />
                 }
 
                 @if (this.State.Value.Delete.Problem is not null)
                 {
-                    <ApiProblemAlert Text="MovieForm.Problem.DeletingFailed" TryAgain="@this.Delete"
-                                     Problem="@this.State.Value.Delete.Problem" Class="problem-alert" />
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Delete.Problem"
+                        Text="MovieForm.Problem.DeletingFailed"
+                        TryAgain="@this.Delete"
+                        Class="problem-alert"
+                    />
                 }
 
                 <div class="@($"form-actions{(this.FormModel.HasChanges ? "" : " hidden")}")">
-                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@this.IsSaving"
-                               @onclick="@this.Save">
+                    <MudButton
+                        Variant="Variant.Filled"
+                        Color="MudBlazor.Color.Primary"
+                        Disabled="@this.IsSaving"
+                        @onclick="@this.Save"
+                    >
                         @this.Loc[this.IsSaving ? "Button.Save.Busy" : "Button.Save"]
                     </MudButton>
-                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Surface" Disabled="@this.IsSaving"
-                               @onclick="@this.Cancel">
+
+                    <MudButton
+                        Variant="Variant.Filled"
+                        Color="MudBlazor.Color.Surface"
+                        Disabled="@this.IsSaving"
+                        @onclick="@this.Cancel"
+                    >
                         @this.Loc["Button.Cancel"]
                     </MudButton>
                 </div>

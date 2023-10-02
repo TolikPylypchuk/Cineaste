@@ -2,21 +2,28 @@
 @using MudBlazor
 
 <MudNavMenu Bordered="true">
-    <MudNavLink Href="@this.PageNavigator.ListPage()" Match="NavLinkMatch.All"
-                Icon="@Icons.Material.Filled.List">
+    <MudNavLink
+        Href="@this.PageNavigator.ListPage()"
+        Match="NavLinkMatch.All"
+        Icon="@Icons.Material.Filled.List"
+    >
         @this.Loc["ListPage.Menu.List"]
     </MudNavLink>
-    <MudNavLink Href="@this.PageNavigator.ListSettingsPage()" Match="NavLinkMatch.All" Disabled="true"
-                Icon="@Icons.Material.Filled.Settings">
+
+    <MudNavLink
+        Href="@this.PageNavigator.ListSettingsPage()"
+        Match="NavLinkMatch.All"
+        Icon="@Icons.Material.Filled.Settings"
+        Disabled="true"
+    >
         @this.Loc["ListPage.Menu.Settings"]
     </MudNavLink>
-    <MudNavLink Href="@this.PageNavigator.HomePage()" Match="NavLinkMatch.All"
-                Icon="@Icons.Material.Filled.Home">
+
+    <MudNavLink
+        Href="@this.PageNavigator.HomePage()"
+        Match="NavLinkMatch.All"
+        Icon="@Icons.Material.Filled.Home"
+    >
         @this.Loc["ListPage.Menu.Back"]
     </MudNavLink>
 </MudNavMenu>
-
-@code {
-    [Parameter]
-    public bool IsListLoaded { get; set; }
-}

@@ -7,17 +7,27 @@
             <label class="label" for="@($"{this.Id}-month")">@this.Loc[this.MonthText]</label>
         }
 
-        <FluentSelect Id="@($"{this.Id}-month")" Items="@this.Months" SelectedOption="@this.Month"
-                      SelectedOptionChanged="@((int month) => this.OnMonthChanged(month))"
-                      OptionText="@(m => this.Loc[$"Month.{m}"])" Position="SelectPosition.Below"
-                      Class="select form-field" />
+        <FluentSelect
+            Id="@($"{this.Id}-month")"
+            Items="@this.Months"
+            SelectedOption="@this.Month"
+            SelectedOptionChanged="@((int month) => this.OnMonthChanged(month))"
+            OptionText="@(m => this.Loc[$"Month.{m}"])"
+            Position="SelectPosition.Below"
+            Class="select form-field"
+        />
     </div>
 
     <div>
-        <FluentNumberField Value="@this.Year" ValueExpression="@(() => this.Year)" Class="form-field"
-                           ValueChanged="@((int year) => this.OnYearChanged(year))">
+        <FluentNumberField
+            Value="@this.Year"
+            ValueExpression="@(() => this.Year)"
+            Class="form-field"
+            ValueChanged="@((int year) => this.OnYearChanged(year))"
+        >
             @this.Loc[this.YearText]
         </FluentNumberField>
+
         <ErrorPresenter ErrorCode="@this.YearErrorCode" Trigger="@this.Year" />
     </div>
 </div>

@@ -6,8 +6,12 @@
         <div class="form-header">
             <div></div>
             <div></div>
-            <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" aria-label="close"
-                           @onclick="this.Close" />
+            <MudIconButton
+                Icon="@Icons.Material.Filled.Close"
+                Size="Size.Small"
+                @onclick="this.Close"
+                aria-label="@this.Loc["AriaLabel.Close"]"
+            />
         </div>
 
         @if (this.State.Value.Fetch.IsInProgress)
@@ -15,8 +19,12 @@
             <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" Class="loading-circle" />
         } else if (this.State.Value.Fetch.Problem is not null)
         {
-            <ApiProblemAlert Text="FranchiseForm.Problem.LoadingFailed" Problem="@this.State.Value.Fetch.Problem"
-                             TryAgain="@this.FetchFranchise" Class="problem-alert main" />
+            <ApiProblemAlert
+                Problem="@this.State.Value.Fetch.Problem"
+                Text="FranchiseForm.Problem.LoadingFailed"
+                TryAgain="@this.FetchFranchise"
+                Class="problem-alert main"
+            />
         } else
         {
             <div class="form-container list-sidebar">
@@ -28,49 +36,56 @@
 
                 <div class="form">
                     <div class="form-checkboxes">
-                        <MudCheckBox @bind-Checked="this.FormModel.ShowTitles" Color="MudBlazor.Color.Primary"
-                                     Size="Size.Small">
+                        <MudCheckBox
+                            @bind-Checked="this.FormModel.ShowTitles"
+                            Color="MudBlazor.Color.Primary"
+                            Size="Size.Small"
+                            Dense="true"
+                        >
                             @this.Loc["FranchiseForm.ShowTitles"]
                         </MudCheckBox>
-                        <MudCheckBox @bind-Checked="this.FormModel.IsLooselyConnected" Color="MudBlazor.Color.Primary"
-                                     Size="Size.Small">
+                        <MudCheckBox
+                            @bind-Checked="this.FormModel.IsLooselyConnected"
+                            Color="MudBlazor.Color.Primary"
+                            Size="Size.Small"
+                            Dense="true"
+                        >
                             @this.Loc["FranchiseForm.LooselyConnected"]
                         </MudCheckBox>
-                        <MudCheckBox @bind-Checked="this.FormModel.ContinueNumbering" Color="MudBlazor.Color.Primary"
-                                     Size="Size.Small">
+                        <MudCheckBox
+                            @bind-Checked="this.FormModel.ContinueNumbering"
+                            Color="MudBlazor.Color.Primary"
+                            Size="Size.Small"
+                            Dense="true"
+                        >
                             @this.Loc["FranchiseForm.ContinueNumbering"]
                         </MudCheckBox>
                     </div>
 
                     @if (this.FormModel.ShowTitles)
                     {
-                        <TitlesForm Titles="@this.FormModel.Titles" Label="FranchiseForm.Title"
-                                    PropertyName="@nameof(this.FormModel.Titles)" />
+                        <TitlesForm
+                            Titles="@this.FormModel.Titles"
+                            Label="FranchiseForm.Title"
+                            PropertyName="@nameof(this.FormModel.Titles)"
+                        />
 
-                        <TitlesForm Titles="@this.FormModel.OriginalTitles" Label="FranchiseForm.OriginalTitle"
-                                    PropertyName="@nameof(this.FormModel.OriginalTitles)" />
-                    }
-
-                    @if (this.FormModel.ShowTitles)
-                    {
-                        <div class="add-titles">
-                            <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Surface" Size="Size.Small"
-                                       @onclick="@(() => this.AddTitle(this.FormModel.Titles))">
-                                @this.Loc["FranchiseForm.AddTitle"]
-                            </MudButton>
-                            <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Surface" Size="Size.Small"
-                                       @onclick="@(() => this.AddTitle(this.FormModel.OriginalTitles))">
-                                @this.Loc["FranchiseForm.AddOriginalTitle"]
-                            </MudButton>
-                        </div>
-
+                        <TitlesForm
+                            Titles="@this.FormModel.OriginalTitles"
+                            Label="FranchiseForm.OriginalTitle"
+                            PropertyName="@nameof(this.FormModel.OriginalTitles)"
+                        />
                     }
 
                     @if (this.ListItem is not null)
                     {
                         <div class="delete-container">
-                            <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Secondary"
-                                       Disabled="@this.State.Value.Delete.IsInProgress" @onclick="@this.Delete">
+                            <MudButton
+                                Variant="Variant.Filled"
+                                Color="MudBlazor.Color.Secondary"
+                                Disabled="@this.State.Value.Delete.IsInProgress"
+                                @onclick="@this.Delete"
+                            >
                                 @this.Loc[this.State.Value.Delete.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
                             </MudButton>
                         </div>
@@ -79,29 +94,50 @@
 
                 @if (this.State.Value.Create.Problem is not null)
                 {
-                    <ApiProblemAlert Text="FranchiseForm.Problem.CreatingFailed" TryAgain="@this.Save"
-                                     Problem="@this.State.Value.Create.Problem" Class="problem-alert" />
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Create.Problem"
+                        Text="FranchiseForm.Problem.CreatingFailed"
+                        TryAgain="@this.Save"
+                        Class="problem-alert"
+                    />
                 }
 
                 @if (this.State.Value.Update.Problem is not null)
                 {
-                    <ApiProblemAlert Text="FranchiseForm.Problem.UpdatingFailed" TryAgain="@this.Save"
-                                     Problem="@this.State.Value.Update.Problem" Class="problem-alert" />
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Update.Problem"
+                        Text="FranchiseForm.Problem.UpdatingFailed"
+                        TryAgain="@this.Save"
+                        Class="problem-alert"
+                    />
                 }
 
                 @if (this.State.Value.Delete.Problem is not null)
                 {
-                    <ApiProblemAlert Text="FranchiseForm.Problem.DeletingFailed" TryAgain="@this.Delete"
-                                     Problem="@this.State.Value.Delete.Problem" Class="problem-alert" />
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Delete.Problem"
+                        Text="FranchiseForm.Problem.DeletingFailed"
+                        TryAgain="@this.Delete"
+                        Class="problem-alert"
+                    />
                 }
 
                 <div class="@($"form-actions{(this.FormModel.HasChanges ? "" : " hidden")}")">
-                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Disabled="@this.IsSaving"
-                               @onclick="@this.Save">
+                    <MudButton
+                        Variant="Variant.Filled"
+                        Color="MudBlazor.Color.Primary"
+                        Disabled="@this.IsSaving"
+                        @onclick="@this.Save"
+                    >
                         @this.Loc[this.IsSaving ? "Button.Save.Busy" : "Button.Save"]
                     </MudButton>
-                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Surface" Disabled="@this.IsSaving"
-                               @onclick="@this.Cancel">
+
+                    <MudButton
+                        Variant="Variant.Filled"
+                        Color="MudBlazor.Color.Surface"
+                        Disabled="@this.IsSaving"
+                        @onclick="@this.Cancel"
+                    >
                         @this.Loc["Button.Cancel"]
                     </MudButton>
                 </div>

@@ -5,8 +5,12 @@
 <div class="container">
     <h1 class="title">@this.Loc["Cineaste"]</h1>
 
-    <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" Size="Size.Large"
-               @onclick="@(() => this.PageNavigator.GoToListPage())">
+    <MudButton
+        Color="MudBlazor.Color.Primary"
+        Variant="Variant.Filled"
+        Size="Size.Large"
+        @onclick="@(() => this.PageNavigator.GoToListPage())"
+    >
         @this.Loc["HomePage.GoToList"]
     </MudButton>
 </div>

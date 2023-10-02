@@ -8,19 +8,29 @@
             int index = i;
             string title = this.Titles[index];
             <div class="title-container">
-                <MudTextField Value="@title" ValueChanged="@((string value) => this.UpdateTitle(value, index))"
-                              Label="@this.Loc[this.Label]" Class="title form-field" />
+                <MudTextField
+                    Value="@title"
+                    ValueChanged="@((string value) => this.UpdateTitle(value, index))"
+                    Label="@this.Loc[this.Label]"
+                    Class="title form-field"
+                />
 
                 @if (index == 0)
                 {
-                    <MudIconButton Icon="@Icons.Material.Filled.Add" Size="Size.Small"
-                                   @onclick="@(() => this.AddTitle())"
-                                   aria-label="@this.Loc["AriaLabel.Add"]" />
+                    <MudIconButton
+                        Icon="@Icons.Material.Filled.Add"
+                        Size="Size.Small"
+                        @onclick="@(() => this.AddTitle())"
+                        aria-label="@this.Loc["AriaLabel.Add"]"
+                    />
                 } else
                 {
-                    <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small"
-                                   @onclick="@(() => this.RemoveTitle(index))"
-                                   aria-label="@this.Loc["AriaLabel.Remove"]" />
+                    <MudIconButton
+                        Icon="@Icons.Material.Filled.Close"
+                        Size="Size.Small"
+                        @onclick="@(() => this.RemoveTitle(index))"
+                        aria-label="@this.Loc["AriaLabel.Remove"]"
+                    />
                 }
             </div>
         }

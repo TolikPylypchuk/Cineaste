@@ -1,20 +1,25 @@
 @inherits CineasteForm<PeriodFormModel, PeriodRequest, PeriodModel, SeriesFormState>
 
 <FormParamsProvider For="this">
-    @{
-        string startMonthText = $"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonth" : "ReleaseMonth")}";
-        string startYearText = $"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartYear" : "ReleaseYear")}";
-    }
-
-    <MonthYearPicker @bind-Month="this.FormModel.StartMonth" @bind-Year="this.FormModel.StartYear" 
-                     MonthText="@startMonthText" YearText="@startYearText" Changed="@this.OnPeriodChanged"
-                     YearErrorCode="Period.StartYear.*" />
+    <MonthYearPicker
+        @bind-Month="this.FormModel.StartMonth"
+        @bind-Year="this.FormModel.StartYear"
+        MonthText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonth" : "ReleaseMonth")}")"
+        YearText="@($"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartYear" : "ReleaseYear")}")"
+        Changed="@this.OnPeriodChanged"
+        YearErrorCode="Period.StartYear.*"
+    />
 
     @if (!this.FormModel.IsSingleDayRelease)
     {
-        <MonthYearPicker @bind-Month="this.FormModel.EndMonth" @bind-Year="this.FormModel.EndYear"
-                         MonthText="PeriodForm.EndMonth" YearText="PeriodForm.EndYear"
-                         Changed="@this.OnPeriodChanged" YearErrorCode="Period.EndYear.*" />
+        <MonthYearPicker
+            @bind-Month="this.FormModel.EndMonth"
+            @bind-Year="this.FormModel.EndYear"
+            MonthText="PeriodForm.EndMonth"
+            YearText="PeriodForm.EndYear"
+            Changed="@this.OnPeriodChanged"
+            YearErrorCode="Period.EndYear.*"
+        />
     }
 
     <div>
@@ -30,12 +35,17 @@
         </div>
         <div>
             <div>
-                <FluentCheckbox @bind-Value="@this.FormModel.IsSingleDayRelease"
-                                Disabled="@(!this.CanChangeIsSingleDayRelease)">
+                <FluentCheckbox
+                    @bind-Value="@this.FormModel.IsSingleDayRelease"
+                    Disabled="@(!this.CanChangeIsSingleDayRelease)"
+                >
                     @this.Loc["PeriodForm.IsSingleDayRelease"]
                 </FluentCheckbox>
-                <ErrorPresenter ErrorCode="Period.IsSingleDayRelease.*"
-                                Trigger="@(new { this.FormModel.IsSingleDayRelease, this.FormModel.EpisodeCount })" />
+
+                <ErrorPresenter
+                    ErrorCode="Period.IsSingleDayRelease.*"
+                    Trigger="@(new { this.FormModel.IsSingleDayRelease, this.FormModel.EpisodeCount })"
+                />
             </div>
         </div>
     </div>
@@ -45,6 +55,7 @@
             <FluentTextField @bind-Value="@this.FormModel.RottenTomatoesId" Class="form-field">
                 @this.Loc["PeriodForm.RottenTomatoesId"]
             </FluentTextField>
+
             <ErrorPresenter ErrorCode="Period.RottenTomatoesId.*" Trigger="@this.FormModel.RottenTomatoesId" />
         </div>
 

@@ -8,16 +8,24 @@
         <div class="button-panel">
             @if (this.Problem is not null && this.Problem.Detail is not null)
             {
-                <MudButton Variant="Variant.Text" Size="Size.Small" Color="MudBlazor.Color.Error"
-                            @onclick="this.ToggleOpened">
-                    @this.Loc[this.IsOpened ? "ApiProblemAlert.HideDetails" : "ApiProblemAlert.ShowDetails"]
+                <MudButton
+                    Variant="Variant.Text"
+                    Size="Size.Small"
+                    Color="MudBlazor.Color.Error"
+                    @onclick="this.ToggleOpened"
+                >
+                    @this.Loc[$"ApiProblemAlert.{(this.IsOpened ? "HideDetails" : "ShowDetails")}"]
                 </MudButton>
             }
 
             @if (this.ShowButton)
             {
-                <MudButton @onclick="this.TryAgain" Variant="Variant.Text" Size="Size.Small"
-                            Color="MudBlazor.Color.Error">
+                <MudButton
+                    Variant="Variant.Text"
+                    Size="Size.Small"
+                    Color="MudBlazor.Color.Error"
+                    @onclick="this.TryAgain"
+                >
                     @this.Loc[this.ButtonText]
                 </MudButton>
             }

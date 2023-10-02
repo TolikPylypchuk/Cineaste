@@ -2,13 +2,23 @@
 @using MudBlazor
 
 <div class="container">
-    <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" Size="Size.Large" Class="add"
-               @onclick="@this.CreateMovie">
+    <MudButton
+        Color="MudBlazor.Color.Primary"
+        Variant="Variant.Filled"
+        Size="Size.Large"
+        Class="add"
+        @onclick="@this.CreateMovie"
+    >
         @this.Loc["ListActionsPanel.AddMovie"]
     </MudButton>
 
-    <MudButton Color="MudBlazor.Color.Primary" Variant="Variant.Filled" Size="Size.Large" Class="add"
-               @onclick="@this.CreateSeries">
+    <MudButton
+        Color="MudBlazor.Color.Primary"
+        Variant="Variant.Filled"
+        Size="Size.Large"
+        Class="add"
+        @onclick="@this.CreateSeries"
+    >
         @this.Loc["ListActionsPanel.AddSeries"]
     </MudButton>
 </div>

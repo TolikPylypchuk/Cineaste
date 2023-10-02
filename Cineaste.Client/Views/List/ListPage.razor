@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="nav-menu-container">
-        <ListNavMenu IsListLoaded="this.State.Value.IsLoaded && this.State.Value.Problem is null" />
+        <ListNavMenu />
     </div>
 
     <div class="list-container">
@@ -19,16 +19,25 @@
                     <ListActionsPanel CreateMovie="@this.CreateMovie" CreateSeries="@this.CreateSeries" />
                     break;
                 case ListPageSelectionMode.Movie:
-                    <MovieForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
-                               Close="@this.OnItemClosed" />
+                    <MovieForm
+                        ListId="@this.State.Value.Id"
+                        ListItem="@this.State.Value.SelectedItem"
+                        Close="@this.OnItemClosed"
+                    />
                     break;
                 case ListPageSelectionMode.Series:
-                    <SeriesForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
-                                Close="@this.OnItemClosed" />
+                    <SeriesForm
+                        ListId="@this.State.Value.Id"
+                        ListItem="@this.State.Value.SelectedItem"
+                        Close="@this.OnItemClosed"
+                    />
                     break;
                 case ListPageSelectionMode.Franchise:
-                    <FranchiseForm ListId="@this.State.Value.Id" ListItem="@this.State.Value.SelectedItem"
-                                   Close="@this.OnItemClosed" />
+                    <FranchiseForm
+                        ListId="@this.State.Value.Id"
+                        ListItem="@this.State.Value.SelectedItem"
+                        Close="@this.OnItemClosed"
+                    />
                     break;
             }
         }

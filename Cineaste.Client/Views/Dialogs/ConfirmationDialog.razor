@@ -1,8 +1,14 @@
 @inherits CineasteComponent
 
 <div>
-    <FluentDialog @ref="this.dialog" Modal="true" TrapFocus="true" Class="confirmation-dialog"
-                  @ondialogdismiss="@this.OnDialogDismiss" aria-label="@this.Loc[this.Title]">
+    <FluentDialog
+        @ref="this.dialog"
+        Modal="true"
+        TrapFocus="true"
+        Class="confirmation-dialog"
+        @ondialogdismiss="@this.OnDialogDismiss"
+        aria-label="@this.Loc[this.Title]"
+    >
         <h2 class="title">@this.Loc[this.Title]</h2>
         <FluentDivider />
 
