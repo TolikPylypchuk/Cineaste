@@ -90,6 +90,8 @@
             await this.DataGridRef.SetSelectedItemAsync(null!);
             this.StateHasChanged();
         });
+
+        base.OnInitialized();
     }
 
     private async Task SelectItem(ListItemModel item)
