@@ -385,7 +385,7 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
+        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
             franchiseService.UpdateFranchise(franchise.Id, request.Validated()));
 
         Assert.Equal("BadRequest.Franchise.WrongList", exception.MessageCode);

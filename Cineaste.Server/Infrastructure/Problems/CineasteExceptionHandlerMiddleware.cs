@@ -65,7 +65,7 @@ internal sealed class CineasteExceptionHandlerMiddleware
                         .ToDictionary(errors => errors.Key, errors => errors.ToList())
                 }
             },
-            BadRequestException ex => new ProblemDetails
+            InvalidInputException ex => new ProblemDetails
             {
                 Type = FormatProblemType(Status400BadRequest),
                 Title = ReasonPhrases.GetReasonPhrase(Status400BadRequest),

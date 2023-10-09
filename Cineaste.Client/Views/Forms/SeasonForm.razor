@@ -1,5 +1,4 @@
 @inherits CineasteForm<SeasonFormModel, SeasonRequest, SeasonModel, SeriesFormState>
-@using MudBlazor
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
@@ -142,7 +141,7 @@
 
                 <div class="button-container">
                     <MudButton
-                        Color="MudBlazor.Color.Surface"
+                        Color="Color.Surface"
                         Variant="Variant.Filled"
                         @onclick="@this.AddPeriod"
                     >
@@ -151,7 +150,7 @@
                 </div>
 
                 <div class="button-container">
-                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Secondary" @onclick="@this.Delete">
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="@this.Delete">
                         @this.Loc["Button.Delete"]
                     </MudButton>
                 </div>
@@ -159,7 +158,7 @@
             
             <div class="form-actions">
                 <MudButton
-                    Color="MudBlazor.Color.Primary"
+                    Color="Color.Primary"
                     Variant="Variant.Filled"
                     @onclick="@this.GoToSeries"
                 >
@@ -169,7 +168,7 @@
                 @if (this.FormModel.HasChanges)
                 {
                     <MudButton
-                        Color="MudBlazor.Color.Surface"
+                        Color="Color.Surface"
                         Variant="Variant.Filled"
                         @onclick="@this.Cancel"
                     >

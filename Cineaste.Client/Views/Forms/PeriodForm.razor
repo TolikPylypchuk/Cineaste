@@ -1,5 +1,4 @@
 @inherits CineasteForm<PeriodFormModel, PeriodRequest, PeriodModel, SeriesFormState>
-@using MudBlazor
 
 <FormParamsProvider For="this">
     <div>
@@ -55,7 +54,7 @@
             <div>
                 <MudCheckBox
                     @bind-Checked="@this.FormModel.IsSingleDayRelease"
-                    Color="MudBlazor.Color.Primary"
+                    Color="Color.Primary"
                     Disabled="@(!this.CanChangeIsSingleDayRelease)"
                     Size="Size.Small"
                     Dense="true"

@@ -1,12 +1,11 @@
 @inherits StatefulComponent<ListPageState>
-@using MudBlazor
 
 <div class="container">
     @if (this.State.Value.IsLoading)
     {
         <MudProgressCircular
             Indeterminate="true"
-            Color="MudBlazor.Color.Primary"
+            Color="Color.Primary"
             Size="Size.Large"
             Class="loading-circle"
         />

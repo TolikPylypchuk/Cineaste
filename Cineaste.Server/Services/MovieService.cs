@@ -123,14 +123,14 @@ public sealed partial class MovieService
             .WithProperty(id);
 
     private Exception MovieDoesNotBelongToList(Id<Movie> movieId, Id<CineasteList> listId) =>
-        new BadRequestException(
+        new InvalidInputException(
             $"{Resources.Movie}.WrongList",
             $"Movie with ID {movieId.Value} does not belong to list with ID {listId}")
             .WithProperty(movieId)
             .WithProperty(listId);
 
     private Exception KindDoesNotBelongToList(Id<MovieKind> kindId, Id<CineasteList> listId) =>
-        new BadRequestException(
+        new InvalidInputException(
             $"{Resources.MovieKind}.WrongList",
             $"Movie kind with ID {kindId.Value} does not belong to list with ID {listId}")
             .WithProperty(kindId)

@@ -1,8 +1,8 @@
 namespace Cineaste.Server.Exceptions;
 
-public sealed class BadRequestException : CineasteException
+public sealed class InvalidInputException : CineasteException
 {
-    public BadRequestException(
+    public InvalidInputException(
         string messageCode,
         string? message = null,
         Exception? innerException = null)

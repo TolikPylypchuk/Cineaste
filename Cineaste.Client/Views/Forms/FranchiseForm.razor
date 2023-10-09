@@ -1,5 +1,4 @@
 @inherits CineasteForm<FranchiseFormModel, FranchiseRequest, FranchiseModel, FranchiseFormState>
-@using MudBlazor
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
@@ -16,7 +15,7 @@
 
         @if (this.State.Value.Fetch.IsInProgress)
         {
-            <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" Class="loading-circle" />
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary" Class="loading-circle" />
         } else if (this.State.Value.Fetch.Problem is not null)
         {
             <ApiProblemAlert
@@ -38,7 +37,7 @@
                     <div class="form-checkboxes">
                         <MudCheckBox
                             @bind-Checked="this.FormModel.ShowTitles"
-                            Color="MudBlazor.Color.Primary"
+                            Color="Color.Primary"
                             Size="Size.Small"
                             Dense="true"
                         >
@@ -46,7 +45,7 @@
                         </MudCheckBox>
                         <MudCheckBox
                             @bind-Checked="this.FormModel.IsLooselyConnected"
-                            Color="MudBlazor.Color.Primary"
+                            Color="Color.Primary"
                             Size="Size.Small"
                             Dense="true"
                         >
@@ -54,7 +53,7 @@
                         </MudCheckBox>
                         <MudCheckBox
                             @bind-Checked="this.FormModel.ContinueNumbering"
-                            Color="MudBlazor.Color.Primary"
+                            Color="Color.Primary"
                             Size="Size.Small"
                             Dense="true"
                         >
@@ -82,7 +81,7 @@
                         <div class="delete-container">
                             <MudButton
                                 Variant="Variant.Filled"
-                                Color="MudBlazor.Color.Secondary"
+                                Color="Color.Secondary"
                                 Disabled="@this.State.Value.Delete.IsInProgress"
                                 @onclick="@this.Delete"
                             >
@@ -125,7 +124,7 @@
                 <div class="@($"form-actions{(this.FormModel.HasChanges ? "" : " hidden")}")">
                     <MudButton
                         Variant="Variant.Filled"
-                        Color="MudBlazor.Color.Primary"
+                        Color="Color.Primary"
                         Disabled="@this.IsSaving"
                         @onclick="@this.Save"
                     >
@@ -134,7 +133,7 @@
 
                     <MudButton
                         Variant="Variant.Filled"
-                        Color="MudBlazor.Color.Surface"
+                        Color="Color.Surface"
                         Disabled="@this.IsSaving"
                         @onclick="@this.Cancel"
                     >

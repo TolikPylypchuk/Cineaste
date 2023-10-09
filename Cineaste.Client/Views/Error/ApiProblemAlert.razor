@@ -1,5 +1,4 @@
 @inherits CineasteComponent
-@using MudBlazor
 
 <MudAlert Severity="Severity.Error" NoIcon="true" Class="@this.Class">
     <div class="summary-container">
@@ -11,7 +10,7 @@
                 <MudButton
                     Variant="Variant.Text"
                     Size="Size.Small"
-                    Color="MudBlazor.Color.Error"
+                    Color="Color.Error"
                     @onclick="this.ToggleOpened"
                 >
                     @this.Loc[$"ApiProblemAlert.{(this.IsOpened ? "HideDetails" : "ShowDetails")}"]
@@ -23,7 +22,7 @@
                 <MudButton
                     Variant="Variant.Text"
                     Size="Size.Small"
-                    Color="MudBlazor.Color.Error"
+                    Color="Color.Error"
                     @onclick="this.TryAgain"
                 >
                     @this.Loc[this.ButtonText]

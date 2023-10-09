@@ -1,5 +1,4 @@
 @inherits CineasteForm<SpecialEpisodeFormModel, SpecialEpisodeRequest, SpecialEpisodeModel, SeriesFormState>
-@using MudBlazor
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
@@ -64,7 +63,7 @@
                     <MudCheckBox
                         Checked="@this.FormModel.IsWatched"
                         CheckedChanged="@((bool value) => this.OnIsWatchedChanged(value))"
-                        Color="MudBlazor.Color.Primary"
+                        Color="Color.Primary"
                         Disabled="@(!this.CanChangeIsWatched)"
                         Size="Size.Small"
                         Dense="true"
@@ -75,7 +74,7 @@
                     <MudCheckBox
                         Checked="@this.FormModel.IsReleased"
                         CheckedChanged="@((bool value) => this.OnIsReleasedChanged(value))"
-                        Color="MudBlazor.Color.Primary"
+                        Color="Color.Primary"
                         Disabled="@(!this.CanChangeIsReleased)"
                         Size="Size.Small"
                         Dense="true"
@@ -138,7 +137,7 @@
                 </div>
 
                 <div class="delete-container">
-                    <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Secondary" @onclick="@this.Delete">
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="@this.Delete">
                         @this.Loc["Button.Delete"]
                     </MudButton>
                 </div>
@@ -146,7 +145,7 @@
 
             <div class="form-actions">
                 <MudButton
-                    Color="MudBlazor.Color.Primary"
+                    Color="Color.Primary"
                     Variant="Variant.Filled"
                     @onclick="@this.GoToSeries"
                 >
@@ -156,7 +155,7 @@
                 @if (this.FormModel.HasChanges)
                 {
                     <MudButton
-                        Color="MudBlazor.Color.Surface"
+                        Color="Color.Surface"
                         Variant="Variant.Filled"
                         @onclick="@this.Cancel"
                     >

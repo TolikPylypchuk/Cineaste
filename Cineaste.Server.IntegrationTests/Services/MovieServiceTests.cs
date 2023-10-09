@@ -181,7 +181,7 @@ public class MovieServiceTests : ServiceTestsBase
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
+        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
             movieService.CreateMovie(request.Validated()));
 
         Assert.Equal("BadRequest.MovieKind.WrongList", exception.MessageCode);
@@ -301,7 +301,7 @@ public class MovieServiceTests : ServiceTestsBase
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
+        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
             movieService.UpdateMovie(movie.Id, request.Validated()));
 
         Assert.Equal("BadRequest.Movie.WrongList", exception.MessageCode);

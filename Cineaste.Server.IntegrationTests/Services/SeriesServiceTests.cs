@@ -291,7 +291,7 @@ public class SeriesServiceTests : ServiceTestsBase
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
+        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
             seriesService.CreateSeries(request.Validated()));
 
         Assert.Equal("BadRequest.SeriesKind.WrongList", exception.MessageCode);
@@ -488,7 +488,7 @@ public class SeriesServiceTests : ServiceTestsBase
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
+        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
             seriesService.UpdateSeries(series.Id, request.Validated()));
 
         Assert.Equal("BadRequest.Series.WrongList", exception.MessageCode);

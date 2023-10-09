@@ -165,7 +165,7 @@ public sealed partial class FranchiseService
             .WithProperty(franchiseIds);
 
     private Exception FranchiseDoesNotBelongToList(Id<Franchise> franchiseId, Id<CineasteList> listId) =>
-        new BadRequestException(
+        new InvalidInputException(
             $"{Resources.Franchise}.WrongList",
             $"Franchise with ID {franchiseId.Value} does not belong to list with ID {listId}")
             .WithProperty(franchiseId)

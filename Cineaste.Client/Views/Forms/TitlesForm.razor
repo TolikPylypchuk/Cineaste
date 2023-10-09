@@ -1,5 +1,4 @@
 @inherits CineasteComponent
-@using MudBlazor
 
 <div>
     <div class="titles-container">
@@ -7,6 +6,7 @@
         {
             int index = i;
             string title = this.Titles[index];
+
             <div class="title-container">
                 <MudTextField
                     Value="@title"

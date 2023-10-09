@@ -1,5 +1,4 @@
 @inherits CineasteForm<SeriesFormModel, SeriesRequest, SeriesModel, SeriesFormState>
-@using MudBlazor
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
@@ -16,7 +15,7 @@
 
         @if (this.State.Value.Fetch.IsInProgress)
         {
-            <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" Class="loading-circle" />
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary" Class="loading-circle" />
         } else if (this.State.Value.Fetch.Problem is not null)
         {
             <ApiProblemAlert
@@ -173,7 +172,7 @@
 
                     <div class="add-components">
                         <MudButton
-                            Color="MudBlazor.Color.Default"
+                            Color="Color.Default"
                             Variant="Variant.Text"
                             Size="Size.Small"
                             @onclick="@this.AddSeason"
@@ -182,7 +181,7 @@
                         </MudButton>
 
                         <MudButton
-                            Color="MudBlazor.Color.Default"
+                            Color="Color.Default"
                             Variant="Variant.Text"
                             Size="Size.Small"
                             @onclick="@this.AddSpecialEpisode"
@@ -223,7 +222,7 @@
                         <div class="delete-container">
                             <MudButton
                                 Variant="Variant.Filled"
-                                Color="MudBlazor.Color.Secondary"
+                                Color="Color.Secondary"
                                 Disabled="@this.State.Value.Delete.IsInProgress"
                                 @onclick="@this.Delete"
                             >
@@ -265,7 +264,7 @@
 
                 <div class="@($"form-actions{(this.FormModel.HasChanges ? "" : " hidden")}")">
                     <MudButton
-                        Color="MudBlazor.Color.Primary"
+                        Color="Color.Primary"
                         Variant="Variant.Filled"
                         Disabled="@this.IsSaving"
                         @onclick="@this.OnSave"
@@ -274,7 +273,7 @@
                     </MudButton>
 
                     <MudButton
-                        Color="MudBlazor.Color.Surface"
+                        Color="Color.Surface"
                         Variant="Variant.Filled"
                         Disabled="@this.IsSaving"
                         @onclick="@this.OnCancel"
