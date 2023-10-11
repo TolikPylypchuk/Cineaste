@@ -131,7 +131,7 @@ public class SpecialEpisodeRequestValidatorTests
     public void ValidatorShouldValidateCorrelationOfMonthYearAndReleased(byte month, int year, bool isReleased)
     {
         int thisYear = DateTime.Now.Year;
-        int thisMonth = DateTime.Now.Year;
+        int thisMonth = DateTime.Now.Month;
 
         var result = validator.TestValidate(this.Request(month: month, year: year, isReleased: isReleased));
 
