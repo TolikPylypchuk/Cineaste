@@ -1,6 +1,6 @@
 :root {
   /* Spacing */
-  --s1: calc(var(--design-unit) * 1px);
+  --s1: calc(4px);
   --s2: calc(var(--s1) * 2);
   --s3: calc(var(--s1) * 3);
   --s4: calc(var(--s1) * 4);
@@ -9,7 +9,7 @@
   --s16: calc(var(--s1) * 16);
   /* Fonts */
   --default-line-height: 1.5;
-  --body-font: 'Raleway', sans-serif !important; /* !improtant overrides --body-font from Fluent UI */
+  --body-font: 'Raleway', sans-serif;
   --font-app-title: 300 5rem / var(--default-line-height) var(--body-font);
   --font-header-large: 200 2.5rem / var(--default-line-height) var(--body-font);
   --font-header-medium: 200 2rem / var(--default-line-height) var(--body-font);
