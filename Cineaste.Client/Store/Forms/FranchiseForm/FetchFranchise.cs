@@ -20,15 +20,12 @@ public static class FetchFranchiseReducers
             onFailure: problem => state with { Fetch = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class FetchFranchiseEffect
+public sealed class FetchFranchiseEffect(IFranchiseApi api)
 {
-    private readonly IFranchiseApi api;
-
     [EffectMethod]
     public async Task HandleFetchFranchise(FetchFranchiseAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.GetFranchise(action.Id).ToApiResultAsync();
+        var result = await api.GetFranchise(action.Id).ToApiResultAsync();
         dispatcher.Dispatch(new FetchFranchiseResultAction(result));
     }
 }

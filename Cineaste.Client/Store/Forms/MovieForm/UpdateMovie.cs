@@ -17,15 +17,12 @@ public static class UpdateMovieReducers
             onFailure: problem => state with { Update = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class UpdateMovieEffect
+public sealed class UpdateMovieEffect(IMovieApi api)
 {
-    private readonly IMovieApi api;
-
     [EffectMethod]
     public async Task HandleUpdateMovie(UpdateMovieAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.UpdateMovie(action.Id, action.Request).ToApiResultAsync();
+        var result = await api.UpdateMovie(action.Id, action.Request).ToApiResultAsync();
         dispatcher.Dispatch(new UpdateMovieResultAction(result));
     }
 }

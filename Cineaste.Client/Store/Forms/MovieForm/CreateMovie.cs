@@ -17,15 +17,12 @@ public static class CreateMovieReducers
             onFailure: problem => state with { Create = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class CreateMovieEffect
+public sealed class CreateMovieEffect(IMovieApi api)
 {
-    private readonly IMovieApi api;
-
     [EffectMethod]
     public async Task HandleCreateMovie(CreateMovieAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.CreateMovie(action.Request).ToApiResultAsync();
+        var result = await api.CreateMovie(action.Request).ToApiResultAsync();
         dispatcher.Dispatch(new CreateMovieResultAction(result));
     }
 }

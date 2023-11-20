@@ -51,13 +51,13 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         this.IsLooselyConnected = isLooselyConnected;
         this.ContinueNumbering = continueNumbering;
 
-        this.children = new();
+        this.children = [];
     }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
     private Franchise(Id<Franchise> id)
         : base(id) =>
-        this.children = new();
+        this.children = [];
 
     public FranchiseItem? FindMovie(Movie movie) =>
         this.Children.FirstOrDefault(item => item.Movie == movie);

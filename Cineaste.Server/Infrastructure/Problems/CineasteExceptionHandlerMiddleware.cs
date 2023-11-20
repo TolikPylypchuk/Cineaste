@@ -6,16 +6,13 @@ using Microsoft.AspNetCore.WebUtilities;
 
 using static StatusCodes;
 
-internal sealed class CineasteExceptionHandlerMiddleware
+internal sealed class CineasteExceptionHandlerMiddleware(RequestDelegate next)
 {
     private const string Problem = nameof(Problem);
 
     private const string Errors = "errors";
     private const string Properties = "properties";
     private const string Resource = "resource";
-
-    public CineasteExceptionHandlerMiddleware(RequestDelegate _)
-    { }
 
     public async Task InvokeAsync(
         HttpContext context,
@@ -44,6 +41,9 @@ internal sealed class CineasteExceptionHandlerMiddleware
                 HttpContext = context,
                 ProblemDetails = problemDetails
             });
+        } else
+        {
+            await next(context);
         }
     }
 

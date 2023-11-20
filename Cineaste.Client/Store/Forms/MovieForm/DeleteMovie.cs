@@ -17,15 +17,12 @@ public static class DeleteMovieReducers
             onFailure: problem => state with { Delete = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class DeleteMovieEffect
+public sealed class DeleteMovieEffect(IMovieApi api)
 {
-    private readonly IMovieApi api;
-
     [EffectMethod]
     public async Task HandleDeleteMovieAction(DeleteMovieAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.DeleteMovie(action.Id).ToApiResultAsync();
+        var result = await api.DeleteMovie(action.Id).ToApiResultAsync();
         dispatcher.Dispatch(new DeleteMovieResultAction(action.Id, result));
     }
 }

@@ -19,15 +19,12 @@ public static class DeleteSeriesReducers
             onFailure: problem => state with { Delete = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class DeleteSeriesEffect
+public sealed class DeleteSeriesEffect(ISeriesApi api)
 {
-    private readonly ISeriesApi api;
-
     [EffectMethod]
     public async Task HandleDeleteSeriesAction(DeleteSeriesAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.DeleteSeries(action.Id).ToApiResultAsync();
+        var result = await api.DeleteSeries(action.Id).ToApiResultAsync();
         dispatcher.Dispatch(new DeleteSeriesResultAction(action.Id, result));
     }
 }

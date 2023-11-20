@@ -19,15 +19,12 @@ public static class DeleteFranchiseReducers
             onFailure: problem => state with { Delete = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class DeleteFranchiseEffect
+public sealed class DeleteFranchiseEffect(IFranchiseApi api)
 {
-    private readonly IFranchiseApi api;
-
     [EffectMethod]
     public async Task HandleDeleteFranchiseAction(DeleteFranchiseAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.DeleteFranchise(action.Id).ToApiResultAsync();
+        var result = await api.DeleteFranchise(action.Id).ToApiResultAsync();
         dispatcher.Dispatch(new DeleteFranchiseResultAction(action.Id, result));
     }
 }

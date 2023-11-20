@@ -9,6 +9,8 @@ using static Cineaste.Shared.Validation.TestData.TitleUtils;
 
 public class SpecialEpisodeRequestValidatorTests
 {
+    private static readonly string[] SingleEmptyString = [""];
+
     private readonly SpecialEpisodeRequestValidator validator = new();
 
     public static Arbitrary<int> ValidYear =>
@@ -76,7 +78,7 @@ public class SpecialEpisodeRequestValidatorTests
     [Fact(DisplayName = "Validator should validate titles")]
     public void ValidatorShouldValidateTitles()
     {
-        var result = validator.TestValidate(this.Request(titles: new[] { "" }));
+        var result = validator.TestValidate(this.Request(titles: SingleEmptyString));
 
         result.ShouldHaveAnyValidationError()
             .WithErrorCode("Titles.Name.Empty");
@@ -85,7 +87,7 @@ public class SpecialEpisodeRequestValidatorTests
     [Fact(DisplayName = "Validator should validate original titles")]
     public void ValidatorShouldValidateOriginalTitles()
     {
-        var result = validator.TestValidate(this.Request(originalTitles: new[] { "" }));
+        var result = validator.TestValidate(this.Request(originalTitles: SingleEmptyString));
 
         result.ShouldHaveAnyValidationError()
             .WithErrorCode("OriginalTitles.Name.Empty");

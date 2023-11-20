@@ -2,12 +2,9 @@ namespace Cineaste.Server.Services;
 
 using Microsoft.Extensions.Logging;
 
-public class ListServiceTests : ServiceTestsBase
+public class ListServiceTests(ITestOutputHelper output) : ServiceTestsBase
 {
-    private readonly ILogger<ListService> logger;
-
-    public ListServiceTests(ITestOutputHelper output) =>
-        this.logger = XUnitLogger.Create<ListService>(output);
+    private readonly ILogger<ListService> logger = XUnitLogger.Create<ListService>(output);
 
     [Fact(DisplayName = "GetList should return a correct list")]
     public async Task GetListShouldReturnCorrectList()

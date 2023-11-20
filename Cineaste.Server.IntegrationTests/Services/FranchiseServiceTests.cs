@@ -10,12 +10,9 @@ using Cineaste.Shared.Validation;
 
 using Microsoft.Extensions.Logging;
 
-public sealed class FranchiseServiceTests : ServiceTestsBase
+public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTestsBase
 {
-    private readonly ILogger<FranchiseService> logger;
-
-    public FranchiseServiceTests(ITestOutputHelper output) =>
-        this.logger = XUnitLogger.Create<FranchiseService>(output);
+    private readonly ILogger<FranchiseService> logger = XUnitLogger.Create<FranchiseService>(output);
 
     [Fact(DisplayName = "GetFranchise should return the correct franchise")]
     public async Task GetFranchiseShouldReturnCorrectFranchise()
@@ -229,11 +226,11 @@ public sealed class FranchiseServiceTests : ServiceTestsBase
 
         var request = this.CreateFranchiseRequest(
             showTitles: true,
-            items: new[]
-            {
+            items:
+            [
                 new FranchiseItemRequest(movie1.Id.Value, FranchiseItemType.Movie, 1, true),
                 new FranchiseItemRequest(movie3.Id.Value, FranchiseItemType.Movie, 2, true)
-            });
+            ]);
 
         // Act
 

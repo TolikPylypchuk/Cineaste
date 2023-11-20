@@ -1,11 +1,7 @@
 namespace Cineaste.Persistence;
 
-public class CineasteDbContext : DbContext
+public class CineasteDbContext(DbContextOptions<CineasteDbContext> options) : DbContext(options)
 {
-    public CineasteDbContext(DbContextOptions<CineasteDbContext> options)
-        : base(options)
-    { }
-
     public DbSet<Franchise> Franchises =>
         this.Set<Franchise>();
 

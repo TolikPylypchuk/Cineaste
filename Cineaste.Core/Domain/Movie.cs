@@ -74,7 +74,7 @@ public sealed class Movie : FranchiseItemEntity<Movie>
         : base(id)
     {
         this.kind = null!;
-        this.tags = new();
+        this.tags = [];
     }
 
     public void AddTag(Tag tag) =>

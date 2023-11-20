@@ -17,15 +17,12 @@ public static class FetchMovieReducers
             onFailure: problem => state with { Fetch = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class FetchMovieEffect
+public sealed class FetchMovieEffect(IMovieApi api)
 {
-    private readonly IMovieApi api;
-
     [EffectMethod]
     public async Task HandleFetchMovie(FetchMovieAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.GetMovie(action.Id).ToApiResultAsync();
+        var result = await api.GetMovie(action.Id).ToApiResultAsync();
         dispatcher.Dispatch(new FetchMovieResultAction(result));
     }
 }

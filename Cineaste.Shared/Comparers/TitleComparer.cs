@@ -5,12 +5,12 @@ using System.Text.RegularExpressions;
 
 using Nito.Comparers;
 
-public sealed class TitleComparer : NullableComparerBase<string>
+public sealed partial class TitleComparer : NullableComparerBase<string>
 {
     private const string Space = " ";
 
-    private static readonly Regex NumberRegex = new("([0-9]+)", RegexOptions.Compiled);
-    private static readonly Regex SpacesRegex = new("\\s+", RegexOptions.Compiled);
+    private static readonly Regex NumberRegex = CreateNumberRegex();
+    private static readonly Regex SpacesRegex = CreateSpacesRegex();
 
     private readonly CultureInfo culture;
     private readonly StringComparer stringComparer;
@@ -57,4 +57,10 @@ public sealed class TitleComparer : NullableComparerBase<string>
 
     private object Convert(string title) =>
         Int32.TryParse(title, out int result) ? result : title;
+
+    [GeneratedRegex("([0-9]+)", RegexOptions.Compiled)]
+    private static partial Regex CreateNumberRegex();
+
+    [GeneratedRegex("\\s+", RegexOptions.Compiled)]
+    private static partial Regex CreateSpacesRegex();
 }

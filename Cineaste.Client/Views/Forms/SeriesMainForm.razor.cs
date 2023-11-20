@@ -34,10 +34,10 @@ public partial class SeriesMainForm
     public required MudDataGrid<ISeriesComponentFormModel> ComponentGrid { get; set; }
 
     private ImmutableArray<SeriesWatchStatus> AllWatchStatuses { get; } =
-        Enum.GetValues<SeriesWatchStatus>().ToImmutableArray();
+        [.. Enum.GetValues<SeriesWatchStatus>()];
 
     private ImmutableArray<SeriesReleaseStatus> AllReleaseStatuses { get; } =
-        Enum.GetValues<SeriesReleaseStatus>().ToImmutableArray();
+        [.. Enum.GetValues<SeriesReleaseStatus>()];
 
     private bool IsSaving =>
         this.State.Value.Create.IsInProgress || this.State.Value.Update.IsInProgress;

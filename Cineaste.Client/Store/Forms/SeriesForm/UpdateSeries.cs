@@ -19,15 +19,12 @@ public static class UpdateSeriesReducers
             onFailure: problem => state with { Update = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class UpdateSeriesEffect
+public sealed partial class UpdateSeriesEffect(ISeriesApi api)
 {
-    private readonly ISeriesApi api;
-
     [EffectMethod]
     public async Task HandleUpdateSeries(UpdateSeriesAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.UpdateSeries(action.Id, action.Request).ToApiResultAsync();
+        var result = await api.UpdateSeries(action.Id, action.Request).ToApiResultAsync();
         dispatcher.Dispatch(new UpdateSeriesResultAction(result));
     }
 }

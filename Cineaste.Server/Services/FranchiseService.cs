@@ -1,16 +1,9 @@
-using System.Linq.Expressions;
-
-using Azure.Core;
-
-using Cineaste.Core.Domain;
-
 namespace Cineaste.Server.Services;
 
-[AutoConstructor]
-public sealed partial class FranchiseService
+public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<FranchiseService> logger)
 {
-    private readonly CineasteDbContext dbContext;
-    private readonly ILogger<FranchiseService> logger;
+    private readonly CineasteDbContext dbContext = dbContext;
+    private readonly ILogger<FranchiseService> logger = logger;
 
     public async Task<FranchiseModel> GetFranchise(Id<Franchise> id)
     {
@@ -136,7 +129,7 @@ public sealed partial class FranchiseService
             .ToImmutableHashSet();
 
         var items = ids.IsEmpty()
-            ? new List<T>()
+            ? []
             : await this.dbContext.Set<T>()
                 .Where(item => ids.Contains(item.Id))
                 .Include(item => item.FranchiseItem)
@@ -147,15 +140,15 @@ public sealed partial class FranchiseService
         return (items, missingIds);
     }
 
-    private Exception NotFound(Id<Franchise> id) =>
+    private CineasteException NotFound(Id<Franchise> id) =>
         new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id.Value}")
             .WithProperty(id);
 
-    private Exception NotFound(Id<CineasteList> id) =>
+    private CineasteException NotFound(Id<CineasteList> id) =>
         new NotFoundException(Resources.List, $"Could not find a list with ID {id.Value}")
             .WithProperty(id);
 
-    private Exception NotFound(
+    private CineasteException NotFound(
         IEnumerable<Id<Movie>> movieIds,
         IEnumerable<Id<Series>> seriesIds,
         IEnumerable<Id<Franchise>> franchiseIds) =>
@@ -164,7 +157,7 @@ public sealed partial class FranchiseService
             .WithProperty(seriesIds)
             .WithProperty(franchiseIds);
 
-    private Exception FranchiseDoesNotBelongToList(Id<Franchise> franchiseId, Id<CineasteList> listId) =>
+    private CineasteException FranchiseDoesNotBelongToList(Id<Franchise> franchiseId, Id<CineasteList> listId) =>
         new InvalidInputException(
             $"{Resources.Franchise}.WrongList",
             $"Franchise with ID {franchiseId.Value} does not belong to list with ID {listId}")

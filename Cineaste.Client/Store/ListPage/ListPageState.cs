@@ -12,8 +12,8 @@ public sealed record ListPageState
 
     public ListItemContainer Container { get; init; } = ListItemContainer.Empty;
 
-    public ImmutableList<ListKindModel> AvailableMovieKinds { get; init; } = ImmutableList.Create<ListKindModel>();
-    public ImmutableList<ListKindModel> AvailableSeriesKinds { get; init; } = ImmutableList.Create<ListKindModel>();
+    public ImmutableList<ListKindModel> AvailableMovieKinds { get; init; } = [];
+    public ImmutableList<ListKindModel> AvailableSeriesKinds { get; init; } = [];
 
     public ListConfigurationModel ListConfiguration { get; init; } = null!;
 

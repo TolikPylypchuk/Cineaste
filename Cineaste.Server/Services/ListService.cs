@@ -1,10 +1,9 @@
 namespace Cineaste.Server.Services;
 
-[AutoConstructor]
-public sealed partial class ListService
+public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService> logger)
 {
-    private readonly CineasteDbContext dbContext;
-    private readonly ILogger<ListService> logger;
+    private readonly CineasteDbContext dbContext = dbContext;
+    private readonly ILogger<ListService> logger = logger;
 
     public async Task<ListModel> GetList()
     {
@@ -45,6 +44,6 @@ public sealed partial class ListService
             : throw this.NotFound();
     }
 
-    private Exception NotFound() =>
+    private CineasteException NotFound() =>
         new NotFoundException(Resources.List, $"Could not find the list");
 }

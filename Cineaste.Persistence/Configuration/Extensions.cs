@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 internal static class Extensions
 {
-    internal const string ListId = "ListId";
+    internal const string ListId = nameof(ListId);
 
     public static void HasStronglyTypedId<T>(this EntityTypeBuilder<T> builder)
         where T : Entity<T>

@@ -2,28 +2,22 @@ namespace Cineaste.Server.Infrastructure.Problems;
 
 using System.Text.Json.Serialization;
 
-internal sealed class ExceptionDetails
+internal sealed class ExceptionDetails(Exception ex)
 {
-    public string Type { get; }
-    public string Message { get; }
-    public string? Source { get; }
-    public IEnumerable<string> StackTrace { get; }
+    public string Type { get; } = ex.GetType().FullName ?? ex.GetType().Name;
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public ExceptionDetails? InnerException { get; }
+    public string Message { get; } = ex.Message;
 
-    public ExceptionDetails(Exception ex)
-    {
-        this.Type = ex.GetType().FullName ?? ex.GetType().Name;
-        this.Message = ex.Message;
-        this.Source = ex.Source;
+    public string? Source { get; } = ex.Source;
 
-        this.StackTrace = ex.StackTrace?.Split('\n')
+    public IEnumerable<string> StackTrace { get; } =
+        ex.StackTrace?.Split('\n')
             .Select(stackFrame => stackFrame.Trim())
             .ToList()
             .AsReadOnly()
             ?? Enumerable.Empty<string>();
 
-        this.InnerException = ex.InnerException is not null ? new ExceptionDetails(ex.InnerException) : null;
-    }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ExceptionDetails? InnerException { get; } =
+        ex.InnerException is not null ? new ExceptionDetails(ex.InnerException) : null;
 }

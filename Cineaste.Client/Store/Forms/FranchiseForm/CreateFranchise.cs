@@ -20,15 +20,12 @@ public static class CreateFranchiseReducers
             onFailure: problem => state with { Create = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class CreateFranchiseEffect
+public sealed class CreateFranchiseEffect(IFranchiseApi api)
 {
-    private readonly IFranchiseApi api;
-
     [EffectMethod]
     public async Task HandleCreateFranchise(CreateFranchiseAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.CreateFranchise(action.Request).ToApiResultAsync();
+        var result = await api.CreateFranchise(action.Request).ToApiResultAsync();
         dispatcher.Dispatch(new CreateFranchiseResultAction(result));
     }
 }

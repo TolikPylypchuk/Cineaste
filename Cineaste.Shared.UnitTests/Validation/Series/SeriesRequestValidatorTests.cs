@@ -10,6 +10,8 @@ using static Cineaste.Shared.Validation.TestData.TitleUtils;
 
 public class SeriesRequestValidatorTests
 {
+    private static readonly string[] SingleEmptyString = [""];
+
     public readonly SeriesRequestValidator validator = new();
 
     [Fact(DisplayName = "Validator should validate that titles aren't empty")]
@@ -71,7 +73,7 @@ public class SeriesRequestValidatorTests
     [Fact(DisplayName = "Validator should validate titles")]
     public void ValidatorShouldValidateTitles()
     {
-        var result = validator.TestValidate(this.Request(titles: new[] { "" }));
+        var result = validator.TestValidate(this.Request(titles: SingleEmptyString));
 
         result.ShouldHaveAnyValidationError()
             .WithErrorCode("Titles.Name.Empty");
@@ -80,7 +82,7 @@ public class SeriesRequestValidatorTests
     [Fact(DisplayName = "Validator should validate original titles")]
     public void ValidatorShouldValidateOriginalTitles()
     {
-        var result = validator.TestValidate(this.Request(originalTitles: new[] { "" }));
+        var result = validator.TestValidate(this.Request(originalTitles: SingleEmptyString));
 
         result.ShouldHaveAnyValidationError()
             .WithErrorCode("OriginalTitles.Name.Empty");

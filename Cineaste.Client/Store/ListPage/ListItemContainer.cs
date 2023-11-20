@@ -2,21 +2,21 @@ namespace Cineaste.Client.Store.ListPage;
 
 using Nito.Comparers;
 
-[AutoConstructor]
-public sealed partial class ListItemContainer
+public sealed class ListItemContainer(
+    ImmutableSortedSet<ListItemModel> items,
+    ImmutableDictionary<Guid, ListItemModel> itemsById,
+    CultureInfo culture)
 {
     public static readonly ListItemContainer Empty = new(
-        ImmutableSortedSet.Create<ListItemModel>(),
-        ImmutableDictionary.Create<Guid, ListItemModel>(),
-        CultureInfo.InvariantCulture);
+        [], ImmutableDictionary.Create<Guid, ListItemModel>(), CultureInfo.InvariantCulture);
 
     private static readonly IComparer<ListItemModel> ComparerByYear = ComparerBuilder.For<ListItemModel>()
         .OrderBy(item => item.StartYear, descending: false)
         .ThenBy(item => item.EndYear, descending: false);
 
-    private readonly ImmutableSortedSet<ListItemModel> items;
-    private readonly ImmutableDictionary<Guid, ListItemModel> itemsById;
-    private readonly CultureInfo culture;
+    private readonly ImmutableSortedSet<ListItemModel> items = items;
+    private readonly ImmutableDictionary<Guid, ListItemModel> itemsById = itemsById;
+    private readonly CultureInfo culture = culture;
 
     public IReadOnlyCollection<ListItemModel> Items =>
         this.items;

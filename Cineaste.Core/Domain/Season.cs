@@ -63,7 +63,7 @@ public sealed class Season : TitledEntity<Season>
         : base(id)
     {
         this.channel = null!;
-        this.periods = new();
+        this.periods = [];
     }
 
     public void AddPeriod(Period period) =>

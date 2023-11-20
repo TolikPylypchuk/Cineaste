@@ -1,10 +1,9 @@
 namespace Cineaste.Server.Services;
 
-[AutoConstructor]
-public sealed partial class SeriesService
+public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesService> logger)
 {
-    private readonly CineasteDbContext dbContext;
-    private readonly ILogger<SeriesService> logger;
+    private readonly CineasteDbContext dbContext = dbContext;
+    private readonly ILogger<SeriesService> logger = logger;
 
     public async Task<SeriesModel> GetSeries(Id<Series> id)
     {
@@ -125,26 +124,26 @@ public sealed partial class SeriesService
         return kind;
     }
 
-    private Exception NotFound(Id<Series> id) =>
+    private CineasteException NotFound(Id<Series> id) =>
         new NotFoundException(Resources.Series, $"Could not find a series with ID {id.Value}")
             .WithProperty(id);
 
-    private Exception NotFound(Id<CineasteList> id) =>
+    private CineasteException NotFound(Id<CineasteList> id) =>
         new NotFoundException(Resources.List, $"Could not find a list with ID {id.Value}")
             .WithProperty(id);
 
-    private Exception NotFound(Id<SeriesKind> id) =>
+    private CineasteException NotFound(Id<SeriesKind> id) =>
         new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with ID {id.Value}")
             .WithProperty(id);
 
-    private Exception SeriesDoesNotBelongToList(Id<Series> seriesId, Id<CineasteList> listId) =>
+    private CineasteException SeriesDoesNotBelongToList(Id<Series> seriesId, Id<CineasteList> listId) =>
         new InvalidInputException(
             $"{Resources.Series}.WrongList",
             $"Series with ID {seriesId.Value} does not belong to list with ID {listId}")
             .WithProperty(seriesId)
             .WithProperty(listId);
 
-    private Exception KindDoesNotBelongToList(Id<SeriesKind> kindId, Id<CineasteList> listId) =>
+    private CineasteException KindDoesNotBelongToList(Id<SeriesKind> kindId, Id<CineasteList> listId) =>
         new InvalidInputException(
             $"{Resources.SeriesKind}.WrongList",
             $"Movie kind with ID {kindId.Value} does not belong to list with ID {listId}")

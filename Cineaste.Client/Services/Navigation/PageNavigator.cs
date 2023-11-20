@@ -2,12 +2,9 @@ namespace Cineaste.Client.Services.Navigation;
 
 using Microsoft.AspNetCore.Components;
 
-public sealed class PageNavigator : IPageNavigator
+public sealed class PageNavigator(NavigationManager navigationManager) : IPageNavigator
 {
-    private readonly NavigationManager navigationManager;
-
-    public PageNavigator(NavigationManager navigationManager) =>
-        this.navigationManager = navigationManager;
+    private readonly NavigationManager navigationManager = navigationManager;
 
     public string HomePage() =>
         "/";

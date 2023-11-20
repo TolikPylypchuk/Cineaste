@@ -30,7 +30,7 @@ public sealed partial class ErrorPresenter : ComponentBase
     public string Style { get; set; } = String.Empty;
 
     [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string, object> Attributes { get; set; } = new();
+    public Dictionary<string, object> Attributes { get; set; } = [];
 
     [Inject]
     public required IStringLocalizer<Resources> Loc { get; init; }

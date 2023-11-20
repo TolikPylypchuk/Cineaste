@@ -70,8 +70,8 @@ public sealed class Tag : Entity<Tag>
         this.Color = color;
         this.IsApplicableToMovies = isApplicableToMovies;
         this.IsApplicableToSeries = isApplicableToSeries;
-        this.impliedTags = new();
-        this.implyingTags = new();
+        this.impliedTags = [];
+        this.implyingTags = [];
     }
 
     public void AddImplication(Tag impliedTag)

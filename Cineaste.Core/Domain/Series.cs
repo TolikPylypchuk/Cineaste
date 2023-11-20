@@ -88,7 +88,7 @@ public sealed class Series : FranchiseItemEntity<Series>
 
         this.seasons = seasons.ToList();
         this.specialEpisodes = specialEpisodes.ToList();
-        this.tags = new();
+        this.tags = [];
     }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
@@ -96,9 +96,9 @@ public sealed class Series : FranchiseItemEntity<Series>
         : base(id)
     {
         this.kind = null!;
-        this.seasons = new();
-        this.specialEpisodes = new();
-        this.tags = new();
+        this.seasons = [];
+        this.specialEpisodes = [];
+        this.tags = [];
     }
 
     public void AddTag(Tag tag) =>

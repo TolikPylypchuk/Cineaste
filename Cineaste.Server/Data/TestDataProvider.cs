@@ -3,21 +3,16 @@ namespace Cineaste.Server.Data;
 using System.ComponentModel;
 using System.Globalization;
 
-internal sealed class TestDataProvider
+internal sealed class TestDataProvider(CineasteDbContext dbContext)
 {
-    private readonly CineasteDbContext dbContext;
-
-    public TestDataProvider(CineasteDbContext dbContext) =>
-        this.dbContext = dbContext;
-
     public async Task CreateTestDataIfNeeded()
     {
-        bool listsPresentInDb = await this.dbContext.Lists.AnyAsync();
+        bool listsPresentInDb = await dbContext.Lists.AnyAsync();
 
         if (!listsPresentInDb)
         {
-            this.dbContext.Lists.Add(this.CreateList());
-            await this.dbContext.SaveChangesAsync();
+            dbContext.Lists.Add(this.CreateList());
+            await dbContext.SaveChangesAsync();
         }
     }
 
@@ -129,7 +124,7 @@ internal sealed class TestDataProvider
     private Franchise CreateFranchise(string? title = null) =>
         new(
             Id.Create<Franchise>(),
-            title is not null ? new List<Title> { new(title, 1, false), new(title, 1, true) } : new List<Title>(),
+            title is not null ? [new(title, 1, false), new(title, 1, true)] : new List<Title>(),
             showTitles: title is not null,
             isLooselyConnected: false,
             continueNumbering: false);

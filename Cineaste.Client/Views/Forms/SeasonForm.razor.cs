@@ -30,10 +30,10 @@ public partial class SeasonForm
     private object PeriodValidationTrigger { get; set; } = new();
 
     private ImmutableArray<SeasonWatchStatus> AllWatchStatuses { get; } =
-        Enum.GetValues<SeasonWatchStatus>().ToImmutableArray();
+        [.. Enum.GetValues<SeasonWatchStatus>()];
 
     private ImmutableArray<SeasonReleaseStatus> AllReleaseStatuses { get; } =
-        Enum.GetValues<SeasonReleaseStatus>().ToImmutableArray();
+        [.. Enum.GetValues<SeasonReleaseStatus>()];
 
     protected override void OnParametersSet()
     {

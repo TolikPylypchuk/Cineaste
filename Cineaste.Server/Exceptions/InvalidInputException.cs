@@ -1,11 +1,9 @@
 namespace Cineaste.Server.Exceptions;
 
-public sealed class InvalidInputException : CineasteException
+public sealed class InvalidInputException(
+    string messageCode,
+    string? message = null,
+    Exception? innerException = null)
+    : CineasteException($"BadRequest.{messageCode}", message, innerException)
 {
-    public InvalidInputException(
-        string messageCode,
-        string? message = null,
-        Exception? innerException = null)
-        : base($"BadRequest.{messageCode}", message, innerException)
-    { }
 }

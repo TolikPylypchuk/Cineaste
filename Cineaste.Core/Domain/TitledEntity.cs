@@ -22,7 +22,7 @@ public abstract class TitledEntity<TEntity> : Entity<TEntity>
 
     protected TitledEntity(Id<TEntity> id)
         : base(id) =>
-        this.titles = new();
+        this.titles = [];
 
     protected TitledEntity(Id<TEntity> id, IEnumerable<Title> titles)
         : base(id) =>

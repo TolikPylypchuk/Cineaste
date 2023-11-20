@@ -35,13 +35,13 @@ public sealed class CineasteList : Entity<CineasteList>
     {
         this.Configuration = Require.NotNull(configuration);
 
-        this.movies = new();
-        this.series = new();
-        this.franchises = new();
+        this.movies = [];
+        this.series = [];
+        this.franchises = [];
 
-        this.movieKinds = new();
-        this.seriesKinds = new();
-        this.tags = new();
+        this.movieKinds = [];
+        this.seriesKinds = [];
+        this.tags = [];
     }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
@@ -50,13 +50,13 @@ public sealed class CineasteList : Entity<CineasteList>
     {
         this.Configuration = null!;
 
-        this.movies = new();
-        this.series = new();
-        this.franchises = new();
+        this.movies = [];
+        this.series = [];
+        this.franchises = [];
 
-        this.movieKinds = new();
-        this.seriesKinds = new();
-        this.tags = new();
+        this.movieKinds = [];
+        this.seriesKinds = [];
+        this.tags = [];
     }
 
     public void AddMovie(Movie movie) =>

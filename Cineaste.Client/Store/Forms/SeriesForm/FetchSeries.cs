@@ -28,15 +28,12 @@ public static class FetchSeriesReducers
             onFailure: problem => state with { Fetch = ApiCall.Failure(problem), SelectedSeriesComponent = null });
 }
 
-[AutoConstructor]
-public sealed partial class FetchSeriesEffect
+public sealed partial class FetchSeriesEffect(ISeriesApi api)
 {
-    private readonly ISeriesApi api;
-
     [EffectMethod]
     public async Task HandleFetchSeries(FetchSeriesAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.GetSeries(action.Id).ToApiResultAsync();
+        var result = await api.GetSeries(action.Id).ToApiResultAsync();
         dispatcher.Dispatch(new FetchSeriesResultAction(result));
     }
 }

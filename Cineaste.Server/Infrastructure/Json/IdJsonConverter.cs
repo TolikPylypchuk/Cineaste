@@ -2,12 +2,9 @@ namespace Cineaste.Server.Infrastructure.Json;
 
 using System.Text.Json.Serialization;
 
-internal sealed class IdJsonConverter<T> : JsonConverter<Id<T>>
+internal sealed class IdJsonConverter<T>(JsonSerializerOptions options) : JsonConverter<Id<T>>
 {
-    private readonly JsonConverter<Guid> valueConverter;
-
-    public IdJsonConverter(JsonSerializerOptions options) =>
-        this.valueConverter = (JsonConverter<Guid>)options.GetConverter(typeof(Guid));
+    private readonly JsonConverter<Guid> valueConverter = (JsonConverter<Guid>)options.GetConverter(typeof(Guid));
 
     public override Id<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
         typeToConvert.IsGenericType && this.CreateInstance(ref reader, typeToConvert, options) is Id<T> id

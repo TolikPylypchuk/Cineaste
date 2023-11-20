@@ -27,15 +27,12 @@ public static class FetchListReducers
             onFailure: problem => new() { IsLoaded = true, Problem = problem });
 }
 
-[AutoConstructor]
-public sealed partial class FetchListEffect
+public sealed class FetchListEffect(IListApi api)
 {
-    private readonly IListApi api;
-
     [EffectMethod(typeof(FetchListAction))]
     public async Task HandleFetchListAction(IDispatcher dispatcher)
     {
-        var result = await this.api.GetList().ToApiResultAsync();
+        var result = await api.GetList().ToApiResultAsync();
         dispatcher.Dispatch(new FetchListResultAction(result));
     }
 }

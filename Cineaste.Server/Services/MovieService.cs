@@ -1,10 +1,9 @@
 namespace Cineaste.Server.Services;
 
-[AutoConstructor]
-public sealed partial class MovieService
+public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieService> logger)
 {
-    private readonly CineasteDbContext dbContext;
-    private readonly ILogger<MovieService> logger;
+    private readonly CineasteDbContext dbContext = dbContext;
+    private readonly ILogger<MovieService> logger = logger;
 
     public async Task<MovieModel> GetMovie(Id<Movie> id)
     {
@@ -110,26 +109,26 @@ public sealed partial class MovieService
         return kind;
     }
 
-    private Exception NotFound(Id<Movie> id) =>
+    private CineasteException NotFound(Id<Movie> id) =>
         new NotFoundException(Resources.Movie, $"Could not find a movie with ID {id.Value}")
             .WithProperty(id);
 
-    private Exception NotFound(Id<CineasteList> id) =>
+    private CineasteException NotFound(Id<CineasteList> id) =>
         new NotFoundException(Resources.List, $"Could not find a list with ID {id.Value}")
             .WithProperty(id);
 
-    private Exception NotFound(Id<MovieKind> id) =>
+    private CineasteException NotFound(Id<MovieKind> id) =>
         new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with ID {id.Value}")
             .WithProperty(id);
 
-    private Exception MovieDoesNotBelongToList(Id<Movie> movieId, Id<CineasteList> listId) =>
+    private CineasteException MovieDoesNotBelongToList(Id<Movie> movieId, Id<CineasteList> listId) =>
         new InvalidInputException(
             $"{Resources.Movie}.WrongList",
             $"Movie with ID {movieId.Value} does not belong to list with ID {listId}")
             .WithProperty(movieId)
             .WithProperty(listId);
 
-    private Exception KindDoesNotBelongToList(Id<MovieKind> kindId, Id<CineasteList> listId) =>
+    private CineasteException KindDoesNotBelongToList(Id<MovieKind> kindId, Id<CineasteList> listId) =>
         new InvalidInputException(
             $"{Resources.MovieKind}.WrongList",
             $"Movie kind with ID {kindId.Value} does not belong to list with ID {listId}")

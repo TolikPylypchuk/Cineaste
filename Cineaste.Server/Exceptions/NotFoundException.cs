@@ -1,13 +1,10 @@
 namespace Cineaste.Server.Exceptions;
 
-public sealed class NotFoundException : CineasteException
+public sealed class NotFoundException(
+    string resource,
+    string? message = null,
+    Exception? innerException = null)
+    : CineasteException($"NotFound.{resource}", message, innerException)
 {
-    public string? Resource { get; }
-
-    public NotFoundException(
-        string resource,
-        string? message = null,
-        Exception? innerException = null)
-        : base($"NotFound.{resource}", message, innerException) =>
-        this.Resource = $"Resource.{resource}";
+    public string? Resource { get; } = $"Resource.{resource}";
 }

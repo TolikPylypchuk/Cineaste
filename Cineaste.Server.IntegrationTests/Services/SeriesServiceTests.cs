@@ -9,12 +9,9 @@ using Cineaste.Shared.Validation;
 
 using Microsoft.Extensions.Logging;
 
-public class SeriesServiceTests : ServiceTestsBase
+public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
 {
-    private readonly ILogger<SeriesService> logger;
-
-    public SeriesServiceTests(ITestOutputHelper output) =>
-        this.logger = XUnitLogger.Create<SeriesService>(output);
+    private readonly ILogger<SeriesService> logger = XUnitLogger.Create<SeriesService>(output);
 
     [Fact(DisplayName = "GetSeries should return the correct series")]
     public async Task GetSeriesShouldReturnCorrectSeries()

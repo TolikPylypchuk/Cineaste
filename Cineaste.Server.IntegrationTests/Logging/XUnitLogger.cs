@@ -4,11 +4,15 @@ using System.Text;
 
 using Microsoft.Extensions.Logging;
 
-public class XUnitLogger : ILogger
+public class XUnitLogger(
+    ITestOutputHelper testOutputHelper,
+    LoggerExternalScopeProvider scopeProvider,
+    string categoryName)
+    : ILogger
 {
-    private readonly ITestOutputHelper testOutputHelper;
-    private readonly LoggerExternalScopeProvider scopeProvider;
-    private readonly string categoryName;
+    private readonly ITestOutputHelper testOutputHelper = testOutputHelper;
+    private readonly LoggerExternalScopeProvider scopeProvider = scopeProvider;
+    private readonly string categoryName = categoryName;
 
     public static ILogger Create(Type type, ITestOutputHelper testOutputHelper) =>
         new XUnitLogger(testOutputHelper, new LoggerExternalScopeProvider(), type.FullName ?? String.Empty);
@@ -18,16 +22,6 @@ public class XUnitLogger : ILogger
 
     public static ILogger<T> Create<T>(ITestOutputHelper testOutputHelper) =>
         new XUnitLogger<T>(testOutputHelper, new LoggerExternalScopeProvider());
-
-    public XUnitLogger(
-        ITestOutputHelper testOutputHelper,
-        LoggerExternalScopeProvider scopeProvider,
-        string categoryName)
-    {
-        this.testOutputHelper = testOutputHelper;
-        this.scopeProvider = scopeProvider;
-        this.categoryName = categoryName;
-    }
 
     public bool IsEnabled(LogLevel logLevel) =>
         logLevel != LogLevel.None;
@@ -80,9 +74,7 @@ public class XUnitLogger : ILogger
         };
 }
 
-public sealed class XUnitLogger<T> : XUnitLogger, ILogger<T>
+public sealed class XUnitLogger<T>(ITestOutputHelper testOutputHelper, LoggerExternalScopeProvider scopeProvider)
+    : XUnitLogger(testOutputHelper, scopeProvider, typeof(T).FullName ?? String.Empty), ILogger<T>
 {
-    public XUnitLogger(ITestOutputHelper testOutputHelper, LoggerExternalScopeProvider scopeProvider)
-        : base(testOutputHelper, scopeProvider, typeof(T).FullName ?? String.Empty)
-    { }
 }

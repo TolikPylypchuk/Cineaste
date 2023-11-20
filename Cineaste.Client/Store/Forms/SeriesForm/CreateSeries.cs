@@ -19,15 +19,12 @@ public static class CreateSeriesReducers
             onFailure: problem => state with { Create = ApiCall.Failure(problem) });
 }
 
-[AutoConstructor]
-public sealed partial class CreateSeriesEffect
+public sealed class CreateSeriesEffect(ISeriesApi api)
 {
-    private readonly ISeriesApi api;
-
     [EffectMethod]
     public async Task HandleCreateSeries(CreateSeriesAction action, IDispatcher dispatcher)
     {
-        var result = await this.api.CreateSeries(action.Request).ToApiResultAsync();
+        var result = await api.CreateSeries(action.Request).ToApiResultAsync();
         dispatcher.Dispatch(new CreateSeriesResultAction(result));
     }
 }

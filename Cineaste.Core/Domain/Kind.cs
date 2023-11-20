@@ -50,16 +50,22 @@ public abstract class Kind<TKind> : Entity<TKind>
     }
 }
 
-public sealed class MovieKind : Kind<MovieKind>
+public sealed class MovieKind(
+    Id<MovieKind> id,
+    string name,
+    Color watchedColor,
+    Color notWatchedColor,
+    Color notReleasedColor)
+    : Kind<MovieKind>(id, name, watchedColor, notWatchedColor, notReleasedColor)
 {
-    public MovieKind(Id<MovieKind> id, string name, Color watchedColor, Color notWatchedColor, Color notReleasedColor)
-        : base(id, name, watchedColor, notWatchedColor, notReleasedColor)
-    { }
 }
 
-public sealed class SeriesKind : Kind<SeriesKind>
+public sealed class SeriesKind(
+    Id<SeriesKind> id,
+    string name,
+    Color watchedColor,
+    Color notWatchedColor,
+    Color notReleasedColor)
+    : Kind<SeriesKind>(id, name, watchedColor, notWatchedColor, notReleasedColor)
 {
-    public SeriesKind(Id<SeriesKind> id, string name, Color watchedColor, Color notWatchedColor, Color notReleasedColor)
-        : base(id, name, watchedColor, notWatchedColor, notReleasedColor)
-    { }
 }
