@@ -36,14 +36,14 @@ public abstract class CineasteForm<TFormModel, TRequest, TModel, TState>
         this.ValidationResumed?.Invoke(this, EventArgs.Empty);
     }
 
-    protected override void Dispose(bool disposing)
+    protected override ValueTask DisposeAsyncCore(bool disposing)
     {
-        base.Dispose(disposing);
-
         if (disposing)
         {
             this.DetachValidation();
         }
+
+        return base.DisposeAsyncCore(disposing);
     }
 
     protected void RunValidation()

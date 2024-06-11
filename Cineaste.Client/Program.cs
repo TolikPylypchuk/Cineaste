@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
+using Fluxor.Blazor.Web.ReduxDevTools;
+
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
