@@ -29,7 +29,7 @@
                     aria-label="@this.Loc["AriaLabel.Next"]"
                 />
             </div>
-            
+
             <MudIconButton
                 Icon="@Icons.Material.Filled.Close"
                 Size="Size.Small"
@@ -58,11 +58,11 @@
                         </MudLink>
                     }
                 </div>
-                
+
                 <div class="form-checkboxes">
                     <MudCheckBox
-                        Checked="@this.FormModel.IsWatched"
-                        CheckedChanged="@((bool value) => this.OnIsWatchedChanged(value))"
+                        Value="@this.FormModel.IsWatched"
+                        ValueChanged="@((bool value) => this.OnIsWatchedChanged(value))"
                         Color="Color.Primary"
                         Disabled="@(!this.CanChangeIsWatched)"
                         Size="Size.Small"
@@ -72,8 +72,8 @@
                     </MudCheckBox>
 
                     <MudCheckBox
-                        Checked="@this.FormModel.IsReleased"
-                        CheckedChanged="@((bool value) => this.OnIsReleasedChanged(value))"
+                        Value="@this.FormModel.IsReleased"
+                        ValueChanged="@((bool value) => this.OnIsReleasedChanged(value))"
                         Color="Color.Primary"
                         Disabled="@(!this.CanChangeIsReleased)"
                         Size="Size.Small"
@@ -94,7 +94,7 @@
                     Label="SpecialEpisodeForm.OriginalTitle"
                     PropertyName="@nameof(this.FormModel.OriginalTitles)"
                 />
-                
+
                 <div>
                     <MudTextField
                         @bind-Value="@this.FormModel.Channel"
@@ -115,7 +115,7 @@
                         Label="@this.Loc["SpecialEpisodeForm.ReleaseMonthYear"]"
                         DateFormat="@this.Loc["SpecialEpisodeForm.MonthYearFormat"]"
                         MinDate="@(new DateTime(Constants.MinYear, 1, 1))"
-                        DisableToolbar="true"
+                        ShowToolbar="false"
                         OpenTo="OpenTo.Month"
                         FixDay="1"
                         Adornment="Adornment.None"

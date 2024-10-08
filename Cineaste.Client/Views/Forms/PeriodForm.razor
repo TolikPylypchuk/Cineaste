@@ -9,7 +9,7 @@
                 $"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonthYear" : "ReleaseMonthYear")}"])"
             DateFormat="@this.Loc["PeriodForm.MonthYearFormat"]"
             MinDate="@(new DateTime(Constants.MinYear, 1, 1))"
-            DisableToolbar="true"
+            ShowToolbar="false"
             OpenTo="OpenTo.Month"
             FixDay="1"
             Adornment="Adornment.None"
@@ -26,7 +26,7 @@
                 Label="@this.Loc["PeriodForm.EndMonthYear"]"
                 DateFormat="@this.Loc["PeriodForm.MonthYearFormat"]"
                 MinDate="@(new DateTime(Constants.MinYear, 1, 1))"
-                DisableToolbar="true"
+                ShowToolbar="false"
                 OpenTo="OpenTo.Month"
                 FixDay="1"
                 Adornment="Adornment.None"
@@ -53,7 +53,7 @@
         <div>
             <div>
                 <MudCheckBox
-                    @bind-Checked="@this.FormModel.IsSingleDayRelease"
+                    @bind-Value="@this.FormModel.IsSingleDayRelease"
                     Color="Color.Primary"
                     Disabled="@(!this.CanChangeIsSingleDayRelease)"
                     Size="Size.Small"

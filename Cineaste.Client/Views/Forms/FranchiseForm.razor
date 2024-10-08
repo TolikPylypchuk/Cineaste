@@ -36,7 +36,7 @@
                 <div class="form">
                     <div class="form-checkboxes">
                         <MudCheckBox
-                            @bind-Checked="this.FormModel.ShowTitles"
+                            @bind-Value="this.FormModel.ShowTitles"
                             Color="Color.Primary"
                             Size="Size.Small"
                             Dense="true"
@@ -44,7 +44,7 @@
                             @this.Loc["FranchiseForm.ShowTitles"]
                         </MudCheckBox>
                         <MudCheckBox
-                            @bind-Checked="this.FormModel.IsLooselyConnected"
+                            @bind-Value="this.FormModel.IsLooselyConnected"
                             Color="Color.Primary"
                             Size="Size.Small"
                             Dense="true"
@@ -52,7 +52,7 @@
                             @this.Loc["FranchiseForm.LooselyConnected"]
                         </MudCheckBox>
                         <MudCheckBox
-                            @bind-Checked="this.FormModel.ContinueNumbering"
+                            @bind-Value="this.FormModel.ContinueNumbering"
                             Color="Color.Primary"
                             Size="Size.Small"
                             Dense="true"

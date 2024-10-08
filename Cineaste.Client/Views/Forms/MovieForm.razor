@@ -58,8 +58,8 @@
 
                     <div class="form-checkboxes">
                         <MudCheckBox
-                            Checked="@this.FormModel.IsWatched"
-                            CheckedChanged="@((bool value) => this.OnIsWatchedChanged(value))"
+                            Value="@this.FormModel.IsWatched"
+                            ValueChanged="@((bool value) => this.OnIsWatchedChanged(value))"
                             Color="Color.Primary"
                             Disabled="@(!this.CanChangeIsWatched)"
                             Size="Size.Small"
@@ -69,8 +69,8 @@
                         </MudCheckBox>
 
                         <MudCheckBox
-                            Checked="@this.FormModel.IsReleased"
-                            CheckedChanged="@((bool value) => this.OnIsReleasedChanged(value))"
+                            Value="@this.FormModel.IsReleased"
+                            ValueChanged="@((bool value) => this.OnIsReleasedChanged(value))"
                             Color="Color.Primary"
                             Disabled="@(!this.CanChangeIsReleased)"
                             Size="Size.Small"
