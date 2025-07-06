@@ -1,6 +1,7 @@
 namespace Cineaste.Shared.Validation.TestData;
 
 using FsCheck;
+using FsCheck.Fluent;
 
 public class ArbitraryValidMonth : Arbitrary<byte>
 {

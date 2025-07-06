@@ -17,7 +17,7 @@ public class FranchiseRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(titles: Enumerable.Empty<string>(), showTitles: true));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("Franchise.ShowTitles.Invalid");
     }
 
@@ -45,7 +45,7 @@ public class FranchiseRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(originalTitles: Enumerable.Empty<string>(), showTitles: true));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("Franchise.ShowTitles.Invalid");
     }
 
@@ -73,7 +73,7 @@ public class FranchiseRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(titles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("Titles.Name.Empty");
     }
 
@@ -82,7 +82,7 @@ public class FranchiseRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(originalTitles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("OriginalTitles.Name.Empty");
     }
 
@@ -99,7 +99,7 @@ public class FranchiseRequestValidatorTests
             result.ShouldNotHaveAnyValidationErrors();
         } else
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("Franchise.Items.Type.Invalid");
         }
     }

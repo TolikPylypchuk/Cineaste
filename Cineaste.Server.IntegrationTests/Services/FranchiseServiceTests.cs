@@ -27,7 +27,7 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         franchise.AddSeries(this.CreateSeries(this.List));
 
         dbContext.Franchises.Add(franchise);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
 
@@ -222,7 +222,7 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         franchise.AddMovie(movie2);
 
         dbContext.Franchises.Add(franchise);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateFranchiseRequest(
             showTitles: true,
@@ -276,7 +276,7 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateFranchiseRequest(movie.Id, showTitles: false);
 
@@ -305,7 +305,7 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateFranchiseRequest(movie.Id, showTitles: true);
 
@@ -344,7 +344,7 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateFranchiseRequest(movie.Id, showTitles: true);
         var dummyId = Id.Create<Franchise>();
@@ -371,12 +371,12 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var otherList = this.CreateList();
         dbContext.Lists.Add(otherList);
 
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateFranchiseRequest(movie.Id) with { ListId = otherList.Id.Value };
 
@@ -403,7 +403,7 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
 

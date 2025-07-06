@@ -3,6 +3,7 @@ namespace Cineaste.Shared.Validation.TestData;
 using Cineaste.Shared.Models.Series;
 
 using FsCheck;
+using FsCheck.Fluent;
 
 public class ArbitraryValidPeriodRequest : Arbitrary<PeriodRequest>
 {

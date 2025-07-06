@@ -90,7 +90,7 @@ public class PeriodRequestValidatorTests
             result.ShouldNotHaveAnyValidationErrors();
         } else
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("Period.Invalid");
         }
     }
@@ -120,7 +120,7 @@ public class PeriodRequestValidatorTests
 
         if (isSingleDayRelease && (startYear != endYear || startMonth != endMonth))
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("Period.IsSingleDayRelease.Invalid");
         } else
         {
@@ -153,7 +153,7 @@ public class PeriodRequestValidatorTests
             result.ShouldNotHaveAnyValidationErrors();
         } else
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("Period.IsSingleDayRelease.MustBeTrue");
         }
     }

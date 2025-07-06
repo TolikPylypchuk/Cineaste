@@ -23,7 +23,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var movie = this.CreateMovie(this.List);
 
         dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
 
@@ -172,7 +172,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
 
         dbContext.MovieKinds.Add(otherKind);
         dbContext.Lists.Add(otherList);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateMovieRequest() with { KindId = otherKind.Id.Value };
 
@@ -197,7 +197,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var movie = this.CreateMovie(this.List);
 
         dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateMovieRequest();
 
@@ -232,7 +232,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var movie = this.CreateMovie(this.List);
 
         dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateMovieRequest();
 
@@ -263,7 +263,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var movie = this.CreateMovie(this.List);
 
         dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateMovieRequest();
         var dummyId = Id.Create<Movie>();
@@ -292,7 +292,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var otherList = this.CreateList();
         dbContext.Lists.Add(otherList);
 
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateMovieRequest() with { ListId = otherList.Id.Value };
 
@@ -317,7 +317,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var movie = this.CreateMovie(this.List);
 
         dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
 

@@ -75,7 +75,7 @@ public class SeriesRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(titles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("Titles.Name.Empty");
     }
 
@@ -84,7 +84,7 @@ public class SeriesRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(originalTitles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("OriginalTitles.Name.Empty");
     }
 
@@ -132,7 +132,7 @@ public class SeriesRequestValidatorTests
             result.ShouldNotHaveAnyValidationErrors();
         } else
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("Series.WatchStatus.Invalid");
         }
     }
@@ -161,7 +161,7 @@ public class SeriesRequestValidatorTests
         var result2 = validator.TestValidate(this.Request(seasons: seasons.Take(2), specialEpisodes: episodes));
 
         result1.ShouldNotHaveAnyValidationErrors();
-        result2.ShouldHaveAnyValidationError()
+        result2.ShouldHaveValidationErrors()
             .WithErrorCode("Series.Sequence.Invalid");
     }
 
@@ -181,7 +181,7 @@ public class SeriesRequestValidatorTests
                 ImmutableList.Create(new PeriodRequest(null, 1, 2000, 2, 2000, 5, false, null)).AsValue())
         }));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("Season.Channel.Empty");
     }
 
@@ -203,7 +203,7 @@ public class SeriesRequestValidatorTests
                 null)
         }));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("SpecialEpisode.Channel.Empty");
     }
 

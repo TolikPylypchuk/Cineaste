@@ -78,7 +78,7 @@ public class SeasonRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(titles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("Titles.Name.Empty");
     }
 
@@ -87,7 +87,7 @@ public class SeasonRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(originalTitles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("OriginalTitles.Name.Empty");
     }
 
@@ -135,7 +135,7 @@ public class SeasonRequestValidatorTests
             result.ShouldNotHaveAnyValidationErrors();
         } else
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("Season.WatchStatus.Invalid");
         }
     }
@@ -194,7 +194,7 @@ public class SeasonRequestValidatorTests
         var result = validator.TestValidate(this.Request(
             periods: new[] { new PeriodRequest(null, 1, 2000, 2, 1999, 5, false, null) }));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("Period.Invalid");
     }
 

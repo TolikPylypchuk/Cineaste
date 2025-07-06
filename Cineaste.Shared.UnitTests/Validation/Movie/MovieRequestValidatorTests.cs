@@ -77,7 +77,7 @@ public sealed class MovieRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(titles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("Titles.Name.Empty");
     }
 
@@ -86,7 +86,7 @@ public sealed class MovieRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(originalTitles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("OriginalTitles.Name.Empty");
     }
 
@@ -97,7 +97,7 @@ public sealed class MovieRequestValidatorTests
 
         if (isWatched && !isReleased)
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("Movie.IsWatched.Invalid");
         } else
         {
@@ -116,7 +116,7 @@ public sealed class MovieRequestValidatorTests
 
         if (year < thisYear && !isReleased || thisYear < year && isReleased)
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("Movie.IsReleased.Invalid");
         } else
         {

@@ -25,11 +25,11 @@ public abstract class ServiceTestsBase : IAsyncLifetime
         this.SeriesKind = this.CreateSeriesKind(this.List);
     }
 
-    public Task InitializeAsync() =>
-        this.container.StartAsync();
+    public async ValueTask InitializeAsync() =>
+        await this.container.StartAsync();
 
-    public Task DisposeAsync() =>
-        this.container.DisposeAsync().AsTask();
+    public ValueTask DisposeAsync() =>
+        this.container.DisposeAsync();
 
     protected CineasteList CreateList() =>
         new(

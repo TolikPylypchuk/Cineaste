@@ -24,7 +24,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var series = this.CreateSeries(this.List);
 
         dbContext.Series.Add(series);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
 
@@ -282,7 +282,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
 
         dbContext.SeriesKinds.Add(otherKind);
         dbContext.Lists.Add(otherList);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateSeriesRequest() with { KindId = otherKind.Id.Value };
 
@@ -307,7 +307,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var dbSeries = this.CreateSeries(this.List);
 
         dbContext.Series.Add(dbSeries);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateSeriesRequest();
 
@@ -380,7 +380,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var dbSeries = this.CreateSeries(this.List);
 
         dbContext.Series.Add(dbSeries);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateSeriesRequest();
 
@@ -449,7 +449,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var series = this.CreateSeries(this.List);
 
         dbContext.Series.Add(series);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateSeriesRequest();
         var dummyId = Id.Create<Series>();
@@ -479,7 +479,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var otherList = this.CreateList();
         dbContext.Lists.Add(otherList);
 
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateSeriesRequest() with { ListId = otherList.Id.Value };
 
@@ -504,7 +504,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
         var series = this.CreateSeries(this.List);
 
         dbContext.Series.Add(series);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
 

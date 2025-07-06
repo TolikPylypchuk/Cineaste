@@ -80,7 +80,7 @@ public class SpecialEpisodeRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(titles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("Titles.Name.Empty");
     }
 
@@ -89,7 +89,7 @@ public class SpecialEpisodeRequestValidatorTests
     {
         var result = validator.TestValidate(this.Request(originalTitles: SingleEmptyString));
 
-        result.ShouldHaveAnyValidationError()
+        result.ShouldHaveValidationErrors()
             .WithErrorCode("OriginalTitles.Name.Empty");
     }
 
@@ -100,7 +100,7 @@ public class SpecialEpisodeRequestValidatorTests
 
         if (isWatched && !isReleased)
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("SpecialEpisode.IsWatched.Invalid");
         } else
         {
@@ -142,7 +142,7 @@ public class SpecialEpisodeRequestValidatorTests
             thisYear < year && isReleased ||
             year == thisYear && month > thisMonth && isReleased)
         {
-            result.ShouldHaveAnyValidationError()
+            result.ShouldHaveValidationErrors()
                 .WithErrorCode("SpecialEpisode.IsReleased.Invalid");
         } else
         {
