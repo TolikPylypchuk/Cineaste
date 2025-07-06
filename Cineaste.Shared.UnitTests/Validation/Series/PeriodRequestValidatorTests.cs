@@ -1,11 +1,7 @@
-namespace Cineaste.Shared.Validation.Series;
-
 using Cineaste.Shared.Models.Series;
 using Cineaste.Shared.Validation.TestData;
 
-using FluentValidation.TestHelper;
-
-using FsCheck;
+namespace Cineaste.Shared.Validation.Series;
 
 public class PeriodRequestValidatorTests
 {

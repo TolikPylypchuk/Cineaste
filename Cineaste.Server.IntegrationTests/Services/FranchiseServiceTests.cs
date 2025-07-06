@@ -1,14 +1,7 @@
-namespace Cineaste.Server.Services;
-
-using Cineaste.Core;
-using Cineaste.Core.Domain;
 using Cineaste.Persistence;
-using Cineaste.Server.Exceptions;
 using Cineaste.Shared.Models.Franchise;
-using Cineaste.Shared.Models.Shared;
-using Cineaste.Shared.Validation;
 
-using Microsoft.Extensions.Logging;
+namespace Cineaste.Server.Services;
 
 public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTestsBase
 {

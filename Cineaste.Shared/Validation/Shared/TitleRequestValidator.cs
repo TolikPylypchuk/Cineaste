@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Validation.Shared;
-
 using static Cineaste.Basic.Constants;
+
+namespace Cineaste.Shared.Validation.Shared;
 
 public class TitleRequestValidator : CineasteValidator<TitleRequest>
 {

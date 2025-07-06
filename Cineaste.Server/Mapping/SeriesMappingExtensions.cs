@@ -10,8 +10,8 @@ public static class SeriesMappingExtensions
             series.WatchStatus,
             series.ReleaseStatus,
             series.Kind.ToListKindModel(),
-            series.Seasons.Select(season => season.ToSeasonModel()).ToImmutableList(),
-            series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel()).ToImmutableList(),
+            [.. series.Seasons.Select(season => season.ToSeasonModel())],
+            [.. series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel())],
             series.ImdbId,
             series.RottenTomatoesId,
             series.FranchiseItem.GetDisplayNumber());
@@ -59,13 +59,12 @@ public static class SeriesMappingExtensions
             season.WatchStatus,
             season.ReleaseStatus,
             season.Channel,
-            season.Periods
+            [.. season.Periods
                 .Select(period => period.ToPeriodModel())
                 .OrderBy(period => period.StartYear)
                 .ThenBy(period => period.StartMonth)
                 .ThenBy(period => period.EndYear)
-                .ThenBy(period => period.EndMonth)
-                .ToImmutableList());
+                .ThenBy(period => period.EndMonth)]);
 
     private static PeriodModel ToPeriodModel(this Period period) =>
         new(

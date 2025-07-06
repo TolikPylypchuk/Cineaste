@@ -1,6 +1,6 @@
-namespace Cineaste.Client.Store.Forms.SeriesForm;
-
 using Cineaste.Client.Store.ListPage;
+
+namespace Cineaste.Client.Store.Forms.SeriesForm;
 
 public static class OpenSeriesFormReducers
 {

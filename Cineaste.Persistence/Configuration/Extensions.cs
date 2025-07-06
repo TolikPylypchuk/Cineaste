@@ -1,8 +1,6 @@
-namespace Cineaste.Persistence.Configuration;
-
 using System.Linq.Expressions;
 
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+namespace Cineaste.Persistence.Configuration;
 
 internal static class Extensions
 {

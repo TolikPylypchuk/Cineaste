@@ -1,9 +1,5 @@
 namespace Cineaste.Server.Services;
 
-using Cineaste.Core.Domain;
-using Cineaste.Shared.Models;
-using Cineaste.Shared.Models.Shared;
-
 public static class AssertUtils
 {
     public static void AssertTitles<TEntity>(TitledEntity<TEntity> entity, ITitledModel model)

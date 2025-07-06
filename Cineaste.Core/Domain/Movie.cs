@@ -58,7 +58,7 @@ public sealed class Movie : FranchiseItemEntity<Movie>
         this.IsReleased = isReleased;
         this.Kind = kind;
 
-        this.tags = new();
+        this.tags = [];
 
         if (tags != null)
         {

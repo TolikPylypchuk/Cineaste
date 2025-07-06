@@ -1,16 +1,12 @@
 // Based on this GitHub Gist: https://gist.github.com/jhgbrt/4bf2cf7e5c077f7326c8b82160a9c59a
 
+using System.Collections;
+
 namespace Cineaste.Shared.Collections;
 
-using System.Collections;
-using System.Collections.Immutable;
-
-public sealed class ImmutableValueList<T> : IImmutableList<T>, IEquatable<IImmutableList<T>>
+public sealed class ImmutableValueList<T>(IImmutableList<T> list) : IImmutableList<T>, IEquatable<IImmutableList<T>>
 {
-    private readonly IImmutableList<T> list;
-
-    public ImmutableValueList(IImmutableList<T> list) =>
-        this.list = list;
+    private readonly IImmutableList<T> list = list;
 
     public T this[int index] => list[index];
 

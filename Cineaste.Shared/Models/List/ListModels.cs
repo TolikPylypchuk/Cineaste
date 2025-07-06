@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Models.List;
-
 using System.ComponentModel;
+
+namespace Cineaste.Shared.Models.List;
 
 public sealed record ListModel(
     Guid Id,

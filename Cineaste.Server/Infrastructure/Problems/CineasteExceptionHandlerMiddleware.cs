@@ -1,10 +1,10 @@
-namespace Cineaste.Server.Infrastructure.Problems;
-
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 
-using static StatusCodes;
+using static Microsoft.AspNetCore.Http.StatusCodes;
+
+namespace Cineaste.Server.Infrastructure.Problems;
 
 internal sealed class CineasteExceptionHandlerMiddleware(RequestDelegate next)
 {

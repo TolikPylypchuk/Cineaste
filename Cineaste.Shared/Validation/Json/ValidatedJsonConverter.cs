@@ -1,15 +1,12 @@
-namespace Cineaste.Shared.Validation.Json;
-
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-public sealed class ValidatedJsonConverter<T> : JsonConverter<Validated<T>>
+namespace Cineaste.Shared.Validation.Json;
+
+public sealed class ValidatedJsonConverter<T>(JsonSerializerOptions options) : JsonConverter<Validated<T>>
     where T : IValidatable<T>
 {
-    private readonly JsonConverter<T> valueConverter;
-
-    public ValidatedJsonConverter(JsonSerializerOptions options) =>
-        this.valueConverter = (JsonConverter<T>)options.GetConverter(typeof(T));
+    private readonly JsonConverter<T> valueConverter = (JsonConverter<T>)options.GetConverter(typeof(T));
 
     public override Validated<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
         typeToConvert.IsGenericType

@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Models.Series;
-
 using System.Text.Json.Serialization;
+
+namespace Cineaste.Shared.Models.Series;
 
 public sealed record SeriesModel(
     Guid Id,

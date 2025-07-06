@@ -1,6 +1,6 @@
-namespace Cineaste.Core.Domain;
-
 using System.Text.RegularExpressions;
+
+namespace Cineaste.Core.Domain;
 
 public sealed partial record Color
 {

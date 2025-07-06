@@ -1,12 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PublishFluentIconAssets>true</PublishFluentIconAssets>
-    <PublishFluentEmojiAssets>true</PublishFluentEmojiAssets>
   </PropertyGroup>
 
   <ItemGroup>

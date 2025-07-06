@@ -20,7 +20,7 @@ public abstract class TitledFormModelBase<TRequest, TModel> : FormModelBase<TReq
     {
         this.Titles.Clear();
 
-        foreach (var title in model?.Titles.OrderBy(t => t.Priority).Select(t => t.Name) ?? new[] { defaultTitle })
+        foreach (var title in model?.Titles.OrderBy(t => t.Priority).Select(t => t.Name) ?? [defaultTitle])
         {
             this.Titles.Add(title);
         }
@@ -28,7 +28,7 @@ public abstract class TitledFormModelBase<TRequest, TModel> : FormModelBase<TReq
         this.OriginalTitles.Clear();
 
         foreach (var title in model?.OriginalTitles.OrderBy(t => t.Priority).Select(t => t.Name)
-            ?? new[] { defaultOriginalTitle })
+            ?? [defaultOriginalTitle])
         {
             this.OriginalTitles.Add(title);
         }

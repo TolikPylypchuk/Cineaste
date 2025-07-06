@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Validation.Movie;
-
 using static Cineaste.Basic.Constants;
+
+namespace Cineaste.Shared.Validation.Movie;
 
 public sealed class MovieRequestValidator : TitledRequestValidator<MovieRequest>
 {

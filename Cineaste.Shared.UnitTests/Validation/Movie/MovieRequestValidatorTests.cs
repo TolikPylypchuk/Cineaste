@@ -1,11 +1,9 @@
-namespace Cineaste.Shared.Validation.Movie;
-
 using Cineaste.Shared.Models.Movie;
 using Cineaste.Shared.Validation.TestData;
 
-using FsCheck;
-
 using static Cineaste.Shared.Validation.TestData.TitleUtils;
+
+namespace Cineaste.Shared.Validation.Movie;
 
 public sealed class MovieRequestValidatorTests
 {
@@ -19,7 +17,7 @@ public sealed class MovieRequestValidatorTests
     [Fact(DisplayName = "Validator should validate that titles aren't empty")]
     public void ValidatorShouldValidateTitlesNotEmpty()
     {
-        var result = validator.TestValidate(this.Request(titles: Enumerable.Empty<string>()));
+        var result = validator.TestValidate(this.Request(titles: []));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
             .WithErrorCode("Movie.Titles.Empty");
@@ -28,7 +26,7 @@ public sealed class MovieRequestValidatorTests
     [Property(DisplayName = "Validator should validate that titles have distinct names")]
     public void ValidatorShouldValidateTitlesDistinctNames(NonEmptyString title)
     {
-        var result = validator.TestValidate(this.Request(titles: new[] { title.Get, title.Get }));
+        var result = validator.TestValidate(this.Request(titles: [title.Get, title.Get]));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
             .WithErrorCode("Movie.Titles.Distinct.Names");
@@ -38,7 +36,7 @@ public sealed class MovieRequestValidatorTests
     public void ValidatorShouldValidateTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            titles: new[] { title1.Get, title2.Get }, differentTitlePriorities: false));
+            titles: [title1.Get, title2.Get], differentTitlePriorities: false));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
             .WithErrorCode("Movie.Titles.Distinct.Priorities");
@@ -47,7 +45,7 @@ public sealed class MovieRequestValidatorTests
     [Fact(DisplayName = "Validator should validate that original titles aren't empty")]
     public void ValidatorShouldValidateOriginalTitlesNotEmpty()
     {
-        var result = validator.TestValidate(this.Request(originalTitles: Enumerable.Empty<string>()));
+        var result = validator.TestValidate(this.Request(originalTitles: []));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
             .WithErrorCode("Movie.OriginalTitles.Empty");
@@ -56,7 +54,7 @@ public sealed class MovieRequestValidatorTests
     [Property(DisplayName = "Validator should validate that original titles have distinct names")]
     public void ValidatorShouldValidateOriginalTitlesDistinctNames(NonEmptyString title)
     {
-        var result = validator.TestValidate(this.Request(originalTitles: new[] { title.Get, title.Get }));
+        var result = validator.TestValidate(this.Request(originalTitles: [title.Get, title.Get]));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
             .WithErrorCode("Movie.OriginalTitles.Distinct.Names");
@@ -66,7 +64,7 @@ public sealed class MovieRequestValidatorTests
     public void ValidatorShouldValidateOriginalTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            originalTitles: new[] { title1.Get, title2.Get }, differentOriginalTitlePriorities: false));
+            originalTitles: [title1.Get, title2.Get], differentOriginalTitlePriorities: false));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
             .WithErrorCode("Movie.OriginalTitles.Distinct.Priorities");

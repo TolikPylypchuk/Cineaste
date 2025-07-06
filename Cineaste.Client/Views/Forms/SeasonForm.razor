@@ -29,7 +29,7 @@
                     aria-label="@this.Loc["AriaLabel.Next"]"
                 />
             </div>
-            
+
             <MudIconButton
                 Icon="@Icons.Material.Filled.Close"
                 Size="Size.Small"
@@ -78,7 +78,7 @@
                     Label="SeasonForm.OriginalTitle"
                     PropertyName="@nameof(this.FormModel.OriginalTitles)"
                 />
-                
+
                 <div class="form-statuses">
                     <div>
                         <MudSelect
@@ -114,7 +114,7 @@
                         <ErrorPresenter ErrorCode="Season.ReleaseStatus.*" Trigger="@this.StatusErrorTrigger" />
                     </div>
                 </div>
-                
+
                 <div>
                     <MudTextField
                         @bind-Value="@this.FormModel.Channel"
@@ -155,7 +155,7 @@
                     </MudButton>
                 </div>
             </div>
-            
+
             <div class="form-actions">
                 <MudButton
                     Color="Color.Primary"

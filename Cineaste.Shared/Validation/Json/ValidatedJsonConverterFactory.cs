@@ -1,7 +1,7 @@
-namespace Cineaste.Shared.Validation.Json;
-
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
+namespace Cineaste.Shared.Validation.Json;
 
 public sealed class ValidatedJsonConverterFactory : JsonConverterFactory
 {

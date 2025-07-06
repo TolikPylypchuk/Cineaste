@@ -1,10 +1,10 @@
-namespace Cineaste.Client.FormModels;
-
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 using PropertyChanged;
+
+namespace Cineaste.Client.FormModels;
 
 public abstract partial class FormModelBase<TRequest, TModel> : INotifyPropertyChanged
     where TRequest : IValidatable<TRequest>

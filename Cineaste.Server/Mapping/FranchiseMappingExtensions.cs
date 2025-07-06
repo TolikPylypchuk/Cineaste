@@ -1,5 +1,3 @@
-using Cineaste.Core.Domain;
-
 namespace Cineaste.Server.Mapping;
 
 public static class FranchiseMappingExtensions
@@ -48,7 +46,7 @@ public static class FranchiseMappingExtensions
     }
 
     private static ImmutableList<FranchiseItemModel> ToItemModels(this IEnumerable<FranchiseItem> items) =>
-        items
+        [.. items
             .OrderBy(item => item.SequenceNumber)
             .Select(item => item.Select(
                 movie => new FranchiseItemModel(
@@ -74,8 +72,7 @@ public static class FranchiseMappingExtensions
                     franchise.ActualTitle?.Name ?? String.Empty,
                     franchise.StartYear ?? 0,
                     franchise.EndYear ?? 0,
-                    FranchiseItemType.Franchise)))
-            .ToImmutableList();
+                    FranchiseItemType.Franchise)))];
 
     public static FranchiseUpdateResult Update(
         this Franchise franchise,
@@ -101,9 +98,9 @@ public static class FranchiseMappingExtensions
         return new FranchiseUpdateResult(removedItems);
     }
 
-    private static IReadOnlyList<FranchiseItem> RemoveMissingItems(
+    private static ImmutableList<FranchiseItem> RemoveMissingItems(
         this Franchise franchise,
-        IDictionary<(Guid, FranchiseItemType), FranchiseItemRequest> itemsById)
+        Dictionary<(Guid, FranchiseItemType), FranchiseItemRequest> itemsById)
     {
         var items = franchise.Children
             .Where(item =>
@@ -131,7 +128,7 @@ public static class FranchiseMappingExtensions
         IEnumerable<T> items,
         Func<T, FranchiseItem?> find,
         Func<T, FranchiseItem> add,
-        IDictionary<(Guid, FranchiseItemType), FranchiseItemRequest> requestItems,
+        Dictionary<(Guid, FranchiseItemType), FranchiseItemRequest> requestItems,
         FranchiseItemType itemType)
         where T : Entity<T>
     {
@@ -158,8 +155,8 @@ public static class FranchiseMappingExtensions
                 isOriginal: true);
         } else
         {
-            franchise.ReplaceTitles(Enumerable.Empty<string>(), isOriginal: false);
-            franchise.ReplaceTitles(Enumerable.Empty<string>(), isOriginal: true);
+            franchise.ReplaceTitles([], isOriginal: false);
+            franchise.ReplaceTitles([], isOriginal: true);
         }
     }
 }

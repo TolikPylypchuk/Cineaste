@@ -1,8 +1,6 @@
-namespace Cineaste.Client.Views.Forms;
-
 using Cineaste.Client.Store.Forms.MovieForm;
 
-using Microsoft.AspNetCore.Components;
+namespace Cineaste.Client.Views.Forms;
 
 public partial class MovieForm
 {

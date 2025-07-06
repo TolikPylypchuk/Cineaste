@@ -86,8 +86,8 @@ public sealed class Series : FranchiseItemEntity<Series>
         this.ReleaseStatus = releaseStatus;
         this.Kind = kind;
 
-        this.seasons = seasons.ToList();
-        this.specialEpisodes = specialEpisodes.ToList();
+        this.seasons = [.. seasons];
+        this.specialEpisodes = [.. specialEpisodes];
         this.tags = [];
     }
 

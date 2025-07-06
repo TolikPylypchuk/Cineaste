@@ -1,6 +1,6 @@
-namespace Cineaste.Client.Services.Navigation;
-
 using Microsoft.AspNetCore.Components;
+
+namespace Cineaste.Client.Services.Navigation;
 
 public sealed class PageNavigator(NavigationManager navigationManager) : IPageNavigator
 {

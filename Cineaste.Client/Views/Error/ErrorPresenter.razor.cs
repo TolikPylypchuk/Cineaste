@@ -1,8 +1,8 @@
-namespace Cineaste.Client.Views.Error;
-
 using System.Text.RegularExpressions;
 
 using Microsoft.Extensions.Localization;
+
+namespace Cineaste.Client.Views.Error;
 
 public sealed partial class ErrorPresenter : ComponentBase
 {
@@ -15,7 +15,7 @@ public sealed partial class ErrorPresenter : ComponentBase
     public object? Trigger { get; set; }
 
     [CascadingParameter(Name = CascadingParameters.ErrorCodes)]
-    public IReadOnlyCollection<string> AllErrorCodes { get; set; } = Array.Empty<string>();
+    public IReadOnlyCollection<string> AllErrorCodes { get; set; } = [];
 
     [CascadingParameter(Name = CascadingParameters.ValidationExecutor)]
     public IValidationExecutor? ValidationExecutor { get; set; }
@@ -35,7 +35,7 @@ public sealed partial class ErrorPresenter : ComponentBase
     [Inject]
     public required IStringLocalizer<Resources> Loc { get; init; }
 
-    private IEnumerable<string> CurrentErrors { get; set; } = Array.Empty<string>();
+    private IEnumerable<string> CurrentErrors { get; set; } = [];
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -63,7 +63,7 @@ public sealed partial class ErrorPresenter : ComponentBase
         if (!this.isInitialized && this.ValidationExecutor is not null)
         {
             this.ValidationExecutor.ValidationExecuted += (s, e) => this.UpdateCurrentErrors();
-            this.ValidationExecutor.ValidationCleared += (s, e) => this.CurrentErrors = Array.Empty<string>();
+            this.ValidationExecutor.ValidationCleared += (s, e) => this.CurrentErrors = [];
             this.ValidationExecutor.ValidationSuspended += (s, e) => this.isSuspended = true;
             this.ValidationExecutor.ValidationResumed += (s, e) => this.isSuspended = false;
         }
@@ -81,10 +81,8 @@ public sealed partial class ErrorPresenter : ComponentBase
     {
         if (this.isInitialized && !this.isSuspended && this.errorCodeRegex is not null)
         {
-            this.CurrentErrors = this.AllErrorCodes
-                .Distinct()
-                .Where(errorCode => this.errorCodeRegex.IsMatch(errorCode))
-                .ToList();
+            this.CurrentErrors =
+                [.. this.AllErrorCodes.Distinct().Where(errorCode => this.errorCodeRegex.IsMatch(errorCode))];
         }
     }
 }

@@ -1,12 +1,9 @@
 namespace Cineaste.Core.Domain;
 
-public abstract class Entity<TEntity> : IEquatable<TEntity>
+public abstract class Entity<TEntity>(Id<TEntity> id) : IEquatable<TEntity>
     where TEntity : Entity<TEntity>
 {
-    public Id<TEntity> Id { get; }
-
-    public Entity(Id<TEntity> id) =>
-        this.Id = id;
+    public Id<TEntity> Id { get; } = id;
 
     public override bool Equals(object? obj) =>
         obj is TEntity other && this.Equals(other);

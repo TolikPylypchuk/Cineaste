@@ -55,7 +55,7 @@ public sealed class Season : TitledEntity<Season>
         this.Channel = channel;
         this.SequenceNumber = sequenceNumber;
 
-        this.periods = periods.ToList();
+        this.periods = [.. periods];
     }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]

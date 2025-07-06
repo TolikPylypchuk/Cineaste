@@ -1,14 +1,12 @@
-namespace Cineaste.Server.Services;
-
 using System.Globalization;
 
-using Cineaste.Basic;
-using Cineaste.Core.Domain;
 using Cineaste.Persistence;
 
 using Microsoft.EntityFrameworkCore;
 
 using Testcontainers.MsSql;
+
+namespace Cineaste.Server.Services;
 
 public abstract class ServiceTestsBase : IAsyncLifetime
 {
@@ -28,8 +26,11 @@ public abstract class ServiceTestsBase : IAsyncLifetime
     public async ValueTask InitializeAsync() =>
         await this.container.StartAsync();
 
-    public ValueTask DisposeAsync() =>
-        this.container.DisposeAsync();
+    public async ValueTask DisposeAsync()
+    {
+        await this.container.DisposeAsync();
+        GC.SuppressFinalize(this);
+    }
 
     protected CineasteList CreateList() =>
         new(
@@ -54,8 +55,8 @@ public abstract class ServiceTestsBase : IAsyncLifetime
         var series = new Series(
             Id.Create<Series>(),
             this.CreateTitles(),
-            new List<Season> { this.CreateSeason(1), this.CreateSeason(2) },
-            new List<SpecialEpisode> { this.CreateSpecialEpisode(3) },
+            [this.CreateSeason(1), this.CreateSeason(2)],
+            [this.CreateSpecialEpisode(3)],
             SeriesWatchStatus.NotWatched,
             SeriesReleaseStatus.Finished,
             this.SeriesKind);
@@ -68,15 +69,12 @@ public abstract class ServiceTestsBase : IAsyncLifetime
     protected Season CreateSeason(int num) =>
         new(
             Id.Create<Season>(),
-            new List<Title> { new($"Season {num}", 1, false), new($"Season {num}", 1, true) },
+            [new($"Season {num}", 1, false), new($"Season {num}", 1, true)],
             SeasonWatchStatus.NotWatched,
             SeasonReleaseStatus.Finished,
             "Test",
             num,
-            new List<Period>
-            {
-                new(Id.Create<Period>(), 1, 2000 + num, 2, 2000 + num, false, 10)
-            });
+            [new(Id.Create<Period>(), 1, 2000 + num, 2, 2000 + num, false, 10)]);
 
     protected SpecialEpisode CreateSpecialEpisode(int num) =>
         new(Id.Create<SpecialEpisode>(), this.CreateTitles(), 1, 2000 + num, false, true, "Test", num);
@@ -96,7 +94,7 @@ public abstract class ServiceTestsBase : IAsyncLifetime
     }
 
     protected IEnumerable<Title> CreateTitles() =>
-        new List<Title> { new("Test", 1, false), new("Original Test", 1, true) };
+        [new("Test", 1, false), new("Original Test", 1, true)];
 
     protected MovieKind CreateMovieKind(CineasteList list)
     {

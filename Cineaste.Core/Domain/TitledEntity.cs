@@ -26,7 +26,7 @@ public abstract class TitledEntity<TEntity> : Entity<TEntity>
 
     protected TitledEntity(Id<TEntity> id, IEnumerable<Title> titles)
         : base(id) =>
-        this.titles = titles.ToList();
+        this.titles = [.. titles];
 
     public Title AddTitle(string name, bool isOriginal)
     {

@@ -1,11 +1,9 @@
-namespace Cineaste.Shared.Validation;
-
 using System.Linq.Expressions;
 
 using Cineaste.Shared.Models;
 using Cineaste.Shared.Validation.Shared;
 
-using FluentValidation;
+namespace Cineaste.Shared.Validation;
 
 public abstract class TitledRequestValidator<T> : CineasteValidator<T>
     where T : IValidatable<T>, ITitledRequest

@@ -1,7 +1,7 @@
-namespace Cineaste.Client.Store.ListPage;
-
 using Cineaste.Client.Store.Forms.MovieForm;
 using Cineaste.Client.Store.Forms.SeriesForm;
+
+namespace Cineaste.Client.Store.ListPage;
 
 public static class ItemDeletedReducers
 {

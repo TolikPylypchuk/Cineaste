@@ -1,6 +1,6 @@
-namespace Cineaste.Client.Store.Forms.MovieForm;
-
 using Cineaste.Client.Store.ListPage;
+
+namespace Cineaste.Client.Store.Forms.MovieForm;
 
 public static class OpenMovieFormReducers
 {

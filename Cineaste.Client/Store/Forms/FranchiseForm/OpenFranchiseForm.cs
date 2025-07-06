@@ -1,6 +1,6 @@
-namespace Cineaste.Client.Store.Forms.FranchiseForm;
-
 using Cineaste.Client.Store.ListPage;
+
+namespace Cineaste.Client.Store.Forms.FranchiseForm;
 
 public static class OpenFranchiseFormReducers
 {

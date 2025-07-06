@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Validation.Series;
-
 using static Cineaste.Basic.Constants;
+
+namespace Cineaste.Shared.Validation.Series;
 
 public sealed class PeriodRequestValidator : CineasteValidator<PeriodRequest>
 {

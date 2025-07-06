@@ -1,6 +1,6 @@
-namespace Cineaste.Server.Infrastructure.Json;
-
 using System.Text.Json.Serialization;
+
+namespace Cineaste.Server.Infrastructure.Json;
 
 internal sealed class IdJsonConverter<T>(JsonSerializerOptions options) : JsonConverter<Id<T>>
 {

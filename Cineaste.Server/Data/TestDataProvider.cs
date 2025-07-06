@@ -1,7 +1,7 @@
-namespace Cineaste.Server.Data;
-
 using System.ComponentModel;
 using System.Globalization;
+
+namespace Cineaste.Server.Data;
 
 internal sealed class TestDataProvider(CineasteDbContext dbContext)
 {
@@ -69,7 +69,7 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
     private Movie CreateMovie(string title, MovieKind kind) =>
         new(
             Id.Create<Movie>(),
-            new List<Title> { new(title, 1, false), new(title, 1, true) },
+            [new(title, 1, false), new(title, 1, true)],
             DateTime.Now.Year,
             isWatched: true,
             isReleased: true,
@@ -83,16 +83,16 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
 
         var season1 = new Season(
             Id.Create<Season>(),
-            new List<Title> { new("Season 1", 1, false), new("Season 1", 1, true) },
+            [new("Season 1", 1, false), new("Season 1", 1, true)],
             SeasonWatchStatus.Watched,
             SeasonReleaseStatus.Finished,
             channel,
             sequenceNumber: 1,
-            new List<Period> { period1 });
+            [period1]);
 
         var episode = new SpecialEpisode(
             Id.Create<SpecialEpisode>(),
-            new List<Title> { new("Special Episode", 1, false), new("Special Episode", 1, true) },
+            [new("Special Episode", 1, false), new("Special Episode", 1, true)],
             month: 5,
             year: 2001,
             isWatched: true,
@@ -104,18 +104,18 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
 
         var season2 = new Season(
             Id.Create<Season>(),
-            new List<Title> { new("Season 2", 1, false), new("Season 2", 1, true) },
+            [new("Season 2", 1, false), new("Season 2", 1, true)],
             SeasonWatchStatus.Watched,
             SeasonReleaseStatus.Finished,
             channel,
             sequenceNumber: 3,
-            new List<Period> { period2 });
+            [period2]);
 
         return new(
             Id.Create<Series>(),
-            new List<Title> { new(title, 1, false), new(title, 1, true) },
-            new List<Season> { season1, season2 },
-            new List<SpecialEpisode> { episode },
+            [new(title, 1, false), new(title, 1, true)],
+            [season1, season2],
+            [episode],
             SeriesWatchStatus.Watched,
             SeriesReleaseStatus.Finished,
             kind);

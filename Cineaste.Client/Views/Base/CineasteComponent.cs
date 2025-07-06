@@ -1,11 +1,8 @@
-namespace Cineaste.Client.Views.Base;
-
-using Cineaste.Client.Localization;
-
 using Fluxor.Blazor.Web.Components;
 
-using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+
+namespace Cineaste.Client.Views.Base;
 
 public abstract class CineasteComponent : FluxorComponent
 {

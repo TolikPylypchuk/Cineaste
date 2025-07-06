@@ -1,7 +1,6 @@
-namespace Cineaste.Shared.Validation;
-
-using FluentValidation;
 using FluentValidation.Results;
+
+namespace Cineaste.Shared.Validation;
 
 public sealed class ValidatedTests
 {
@@ -39,7 +38,7 @@ public sealed class ValidatedTests
                 var mock = new Mock<IValidator<TestFailingValidatable>>();
 
                 mock.Setup(m => m.Validate(It.IsAny<ValidationContext<TestFailingValidatable>>()))
-                    .Throws(new ValidationException(new[] { new ValidationFailure("Test", "Test") }));
+                    .Throws(new ValidationException([new ValidationFailure("Test", "Test")]));
 
                 return mock.Object;
             }

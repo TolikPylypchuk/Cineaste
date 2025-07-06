@@ -1,6 +1,6 @@
-namespace Cineaste.Client.Store.ListPage;
-
 using Nito.Comparers;
+
+namespace Cineaste.Client.Store.ListPage;
 
 public sealed class ListItemContainer(
     ImmutableSortedSet<ListItemModel> items,

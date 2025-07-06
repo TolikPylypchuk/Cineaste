@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Validation.Shared;
-
 using Cineaste.Shared.Models.Shared;
+
+namespace Cineaste.Shared.Validation.Shared;
 
 public sealed class TitleRequestValidatorTests
 {

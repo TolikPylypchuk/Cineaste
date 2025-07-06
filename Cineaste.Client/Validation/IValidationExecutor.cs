@@ -1,8 +1,6 @@
-namespace Cineaste.Client.Validation;
-
-using Cineaste.Client.Localization;
-
 using Microsoft.Extensions.Localization;
+
+namespace Cineaste.Client.Validation;
 
 public interface IValidationExecutor
 {

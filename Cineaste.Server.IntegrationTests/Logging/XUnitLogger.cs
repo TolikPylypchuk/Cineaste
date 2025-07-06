@@ -1,8 +1,6 @@
-namespace Cineaste.Server.Logging;
-
 using System.Text;
 
-using Microsoft.Extensions.Logging;
+namespace Cineaste.Server.Logging;
 
 public class XUnitLogger(
     ITestOutputHelper testOutputHelper,
@@ -75,6 +73,4 @@ public class XUnitLogger(
 }
 
 public sealed class XUnitLogger<T>(ITestOutputHelper testOutputHelper, LoggerExternalScopeProvider scopeProvider)
-    : XUnitLogger(testOutputHelper, scopeProvider, typeof(T).FullName ?? String.Empty), ILogger<T>
-{
-}
+    : XUnitLogger(testOutputHelper, scopeProvider, typeof(T).FullName ?? String.Empty), ILogger<T>;

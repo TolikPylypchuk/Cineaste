@@ -1,7 +1,5 @@
 namespace Cineaste.Server.Services;
 
-using Microsoft.Extensions.Logging;
-
 public class ListServiceTests(ITestOutputHelper output) : ServiceTestsBase
 {
     private readonly ILogger<ListService> logger = XUnitLogger.Create<ListService>(output);

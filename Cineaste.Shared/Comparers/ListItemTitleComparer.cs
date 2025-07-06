@@ -1,8 +1,8 @@
-namespace Cineaste.Shared.Comparers;
-
 using System.Globalization;
 
 using Nito.Comparers;
+
+namespace Cineaste.Shared.Comparers;
 
 public sealed class ListItemTitleComparer : NullableComparerBase<ListItemModel>
 {

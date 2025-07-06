@@ -1,6 +1,6 @@
-namespace Cineaste.Persistence.Configuration;
-
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
+namespace Cineaste.Persistence.Configuration;
 
 internal sealed class ColorConverter : ValueConverter<Color, string>
 {

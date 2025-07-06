@@ -1,7 +1,7 @@
-namespace Cineaste.Shared.Collections.Json;
-
 using System.Text.Json.Serialization;
 using System.Text.Json;
+
+namespace Cineaste.Shared.Collections.Json;
 
 public sealed class ImmutableValueListConverter<T> : JsonConverter<ImmutableValueList<T>>
 {

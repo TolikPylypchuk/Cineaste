@@ -1,6 +1,6 @@
-namespace Cineaste.Client.Views.Forms;
-
 using Cineaste.Client.Store.Forms.SeriesForm;
+
+namespace Cineaste.Client.Views.Forms;
 
 public partial class SeasonForm
 {

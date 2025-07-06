@@ -9,11 +9,10 @@ public static class TitleMappingExtensions
         new(title.Name, title.Priority, isOriginal);
 
     public static ImmutableList<TitleModel> ToTitleModels(this IEnumerable<Title> titles, bool isOriginal) =>
-        titles
+        [.. titles
             .Where(title => title.IsOriginal == isOriginal)
             .Select(title => title.ToTitleModel())
-            .OrderBy(title => title.Priority)
-            .ToImmutableList();
+            .OrderBy(title => title.Priority)];
 
     public static IEnumerable<Title> ToTitles(this ITitledRequest request) =>
         Enumerable.Concat(

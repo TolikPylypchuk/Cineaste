@@ -1,6 +1,6 @@
-namespace Cineaste.Persistence.Configuration;
-
 using System.Globalization;
+
+namespace Cineaste.Persistence.Configuration;
 
 internal sealed class ListConfigurationTypeConfiguration : IEntityTypeConfiguration<ListConfiguration>
 {

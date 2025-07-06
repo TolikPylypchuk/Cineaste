@@ -1,7 +1,5 @@
 namespace Cineaste.Shared.Validation.Franchise;
 
-using Cineaste.Shared.Models.Franchise;
-
 public sealed class FranchiseRequestValidator : TitledRequestValidator<FranchiseRequest>
 {
     public FranchiseRequestValidator()

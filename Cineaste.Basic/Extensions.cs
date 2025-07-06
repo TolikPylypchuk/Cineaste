@@ -1,7 +1,7 @@
-namespace Cineaste.Basic;
-
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
+
+namespace Cineaste.Basic;
 
 public static class Extensions
 {

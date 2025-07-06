@@ -1,6 +1,6 @@
-namespace Cineaste.Client.FormModels;
-
 using System.ComponentModel;
+
+namespace Cineaste.Client.FormModels;
 
 public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest, SeasonModel>
 {
@@ -53,7 +53,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
         var period = new PeriodFormModel(date);
         period.PropertyChanged += this.OnPeriodUpdated;
 
-        this.periods = new() { period };
+        this.periods = [period];
         this.Periods = new(this.periods);
 
         this.defaultTitle = title;

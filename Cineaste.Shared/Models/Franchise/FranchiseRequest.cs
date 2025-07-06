@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Models.Franchise;
-
 using Cineaste.Shared.Validation.Franchise;
+
+namespace Cineaste.Shared.Models.Franchise;
 
 public record FranchiseRequest(
     Guid ListId,

@@ -1,16 +1,21 @@
+using System.Collections;
+
 namespace Cineaste.Shared.Validation.TestData;
 
-internal class ImdbIdTestData : TestDataBase
+internal class ImdbIdTestData : IEnumerable<TheoryDataRow<string?, bool>>
 {
-    public ImdbIdTestData()
+    // string? imdbId, bool isValid
+    public IEnumerator<TheoryDataRow<string?, bool>> GetEnumerator()
     {
-        // string? imdbId, bool isValid
-        this.Add(null, true);
-        this.Add(String.Empty, true);
-        this.Add("tt1", true);
-        this.Add("tt12345678", true);
-        this.Add("abcd", false);
-        this.Add("nm12345678", false);
-        this.Add("https://www.imdb.com/tt12345678", false);
+        yield return new(null, true);
+        yield return new(String.Empty, true);
+        yield return new("tt1", true);
+        yield return new("tt12345678", true);
+        yield return new("abcd", false);
+        yield return new("nm12345678", false);
+        yield return new("https://www.imdb.com/tt12345678", false);
     }
+
+    IEnumerator IEnumerable.GetEnumerator() =>
+        this.GetEnumerator();
 }

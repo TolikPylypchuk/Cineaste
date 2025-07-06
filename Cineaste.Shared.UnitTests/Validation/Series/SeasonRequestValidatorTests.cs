@@ -1,12 +1,9 @@
-namespace Cineaste.Shared.Validation.Series;
-
-using Cineaste.Basic;
 using Cineaste.Shared.Models.Series;
 using Cineaste.Shared.Validation.TestData;
 
-using FsCheck;
-
 using static Cineaste.Shared.Validation.TestData.TitleUtils;
+
+namespace Cineaste.Shared.Validation.Series;
 
 public class SeasonRequestValidatorTests
 {
@@ -20,7 +17,7 @@ public class SeasonRequestValidatorTests
     [Fact(DisplayName = "Validator should validate that titles aren't empty")]
     public void ValidatorShouldValidateTitlesNotEmpty()
     {
-        var result = validator.TestValidate(this.Request(titles: Enumerable.Empty<string>()));
+        var result = validator.TestValidate(this.Request(titles: []));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
             .WithErrorCode("Season.Titles.Empty");
@@ -29,7 +26,7 @@ public class SeasonRequestValidatorTests
     [Property(DisplayName = "Validator should validate that titles have distinct names")]
     public void ValidatorShouldValidateTitlesDistinctNames(NonEmptyString title)
     {
-        var result = validator.TestValidate(this.Request(titles: new[] { title.Get, title.Get }));
+        var result = validator.TestValidate(this.Request(titles: [title.Get, title.Get]));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
             .WithErrorCode("Season.Titles.Distinct.Names");
@@ -39,7 +36,7 @@ public class SeasonRequestValidatorTests
     public void ValidatorShouldValidateTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            titles: new[] { title1.Get, title2.Get }, differentTitlePriorities: false));
+            titles: [title1.Get, title2.Get], differentTitlePriorities: false));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
             .WithErrorCode("Season.Titles.Distinct.Priorities");
@@ -48,7 +45,7 @@ public class SeasonRequestValidatorTests
     [Fact(DisplayName = "Validator should validate that original titles aren't empty")]
     public void ValidatorShouldValidateOriginalTitlesNotEmpty()
     {
-        var result = validator.TestValidate(this.Request(originalTitles: Enumerable.Empty<string>()));
+        var result = validator.TestValidate(this.Request(originalTitles: []));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
             .WithErrorCode("Season.OriginalTitles.Empty");
@@ -57,7 +54,7 @@ public class SeasonRequestValidatorTests
     [Property(DisplayName = "Validator should validate that original titles have distinct names")]
     public void ValidatorShouldValidateOriginalTitlesDistinctNames(NonEmptyString title)
     {
-        var result = validator.TestValidate(this.Request(originalTitles: new[] { title.Get, title.Get }));
+        var result = validator.TestValidate(this.Request(originalTitles: [title.Get, title.Get]));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
             .WithErrorCode("Season.OriginalTitles.Distinct.Names");
@@ -67,7 +64,7 @@ public class SeasonRequestValidatorTests
     public void ValidatorShouldValidateOriginalTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            originalTitles: new[] { title1.Get, title2.Get }, differentOriginalTitlePriorities: false));
+            originalTitles: [title1.Get, title2.Get], differentOriginalTitlePriorities: false));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
             .WithErrorCode("Season.OriginalTitles.Distinct.Priorities");
@@ -162,7 +159,7 @@ public class SeasonRequestValidatorTests
     [Fact(DisplayName = "Validator should validate that periods aren't empty")]
     public void ValidatorShouldValidatePeriodssNotEmpty()
     {
-        var result = validator.TestValidate(this.Request(periods: Enumerable.Empty<PeriodRequest>()));
+        var result = validator.TestValidate(this.Request(periods: []));
 
         result.ShouldHaveValidationErrorFor(req => req.Periods)
             .WithErrorCode("Season.Periods.Empty");
@@ -173,7 +170,7 @@ public class SeasonRequestValidatorTests
         Arbitrary = new[] { typeof(SeasonRequestValidatorTests) })]
     public void ValidatorShouldValidateThatPeriodsDoNotOverlap(PeriodRequest period1, PeriodRequest period2)
     {
-        var result = validator.TestValidate(this.Request(periods: new[] { period1, period2 }));
+        var result = validator.TestValidate(this.Request(periods: [period1, period2]));
 
         if (period1.EndYear < period2.StartYear ||
             period1.EndYear == period2.StartYear && period1.EndMonth <= period2.StartMonth ||
@@ -192,7 +189,7 @@ public class SeasonRequestValidatorTests
     public void ValidatorShouldValidatePeriods()
     {
         var result = validator.TestValidate(this.Request(
-            periods: new[] { new PeriodRequest(null, 1, 2000, 2, 1999, 5, false, null) }));
+            periods: [new PeriodRequest(null, 1, 2000, 2, 1999, 5, false, null)]));
 
         result.ShouldHaveValidationErrors()
             .WithErrorCode("Period.Invalid");

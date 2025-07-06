@@ -1,6 +1,6 @@
-namespace Cineaste.Core.Domain;
-
 using System.Globalization;
+
+namespace Cineaste.Core.Domain;
 
 public sealed class ListConfiguration : Entity<ListConfiguration>
 {

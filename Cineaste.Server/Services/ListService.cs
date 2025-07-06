@@ -44,6 +44,6 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             : throw this.NotFound();
     }
 
-    private CineasteException NotFound() =>
-        new NotFoundException(Resources.List, $"Could not find the list");
+    private NotFoundException NotFound() =>
+        new(Resources.List, $"Could not find the list");
 }

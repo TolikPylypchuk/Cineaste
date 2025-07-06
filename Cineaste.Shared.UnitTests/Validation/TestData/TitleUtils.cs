@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Validation.TestData;
-
 using Cineaste.Shared.Models.Shared;
+
+namespace Cineaste.Shared.Validation.TestData;
 
 internal class TitleUtils
 {

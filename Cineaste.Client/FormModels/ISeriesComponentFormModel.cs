@@ -1,6 +1,6 @@
-namespace Cineaste.Client.FormModels;
-
 using System.ComponentModel;
+
+namespace Cineaste.Client.FormModels;
 
 public interface ISeriesComponentFormModel : INotifyPropertyChanged
 {

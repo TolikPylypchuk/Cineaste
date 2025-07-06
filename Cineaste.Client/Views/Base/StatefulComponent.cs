@@ -1,8 +1,6 @@
-namespace Cineaste.Client.Views.Base;
-
 using Cineaste.Client.Store;
 
-using Microsoft.AspNetCore.Components;
+namespace Cineaste.Client.Views.Base;
 
 public abstract class StatefulComponent<TState> : CineasteComponent
 {

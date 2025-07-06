@@ -1,9 +1,9 @@
-namespace Cineaste.Shared.Comparers;
-
 using System.Globalization;
 using System.Text.RegularExpressions;
 
 using Nito.Comparers;
+
+namespace Cineaste.Shared.Comparers;
 
 public sealed partial class TitleComparer : NullableComparerBase<string>
 {

@@ -1,14 +1,14 @@
-namespace Cineaste.Client.FormModels;
-
 using System.ComponentModel;
 
 using static Cineaste.Basic.Constants;
+
+namespace Cineaste.Client.FormModels;
 
 public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesModel>
 {
     private readonly Guid listId;
     private readonly ListKindModel defaultKind;
-    private readonly ObservableCollection<ISeriesComponentFormModel> components = new();
+    private readonly ObservableCollection<ISeriesComponentFormModel> components = [];
 
     private readonly string defaultSeasonTitle;
     private readonly string defaultSeasonOriginalTitle;
@@ -225,7 +225,7 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
         return this.components
             .Max(component => component switch
             {
-                SeasonFormModel season => season.Periods.Max(period => period.EndYear),
+                SeasonFormModel season => season.Periods.Max<PeriodFormModel, int>(period => period.EndYear),
                 SpecialEpisodeFormModel episode => episode.Year,
                 _ => Match.ImpossibleType<int>(component)
             });

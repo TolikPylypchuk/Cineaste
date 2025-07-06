@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Models.Series;
-
 using Cineaste.Shared.Validation.Series;
+
+namespace Cineaste.Shared.Models.Series;
 
 public sealed record SeriesRequest(
     Guid ListId,

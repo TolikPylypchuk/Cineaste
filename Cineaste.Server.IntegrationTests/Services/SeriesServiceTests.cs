@@ -1,13 +1,6 @@
-namespace Cineaste.Server.Services;
-
-using Cineaste.Basic;
-using Cineaste.Core.Domain;
-using Cineaste.Server.Exceptions;
 using Cineaste.Shared.Models.Series;
-using Cineaste.Shared.Models.Shared;
-using Cineaste.Shared.Validation;
 
-using Microsoft.Extensions.Logging;
+namespace Cineaste.Server.Services;
 
 public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
 {

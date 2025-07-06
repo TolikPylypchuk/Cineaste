@@ -1,6 +1,6 @@
-namespace Cineaste.Basic;
-
 using System.Diagnostics.CodeAnalysis;
+
+namespace Cineaste.Basic;
 
 public static class Match
 {

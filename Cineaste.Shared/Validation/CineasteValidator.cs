@@ -1,6 +1,6 @@
-namespace Cineaste.Shared.Validation;
-
 using System.Linq.Expressions;
+
+namespace Cineaste.Shared.Validation;
 
 public abstract class CineasteValidator<T> : AbstractValidator<T>
     where T : IValidatable<T>

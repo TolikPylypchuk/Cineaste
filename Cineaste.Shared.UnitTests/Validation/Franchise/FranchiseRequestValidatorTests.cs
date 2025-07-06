@@ -1,10 +1,8 @@
-namespace Cineaste.Shared.Validation.Franchise;
-
 using Cineaste.Shared.Models.Franchise;
 
-using FsCheck;
-
 using static Cineaste.Shared.Validation.TestData.TitleUtils;
+
+namespace Cineaste.Shared.Validation.Franchise;
 
 public class FranchiseRequestValidatorTests
 {
@@ -15,7 +13,7 @@ public class FranchiseRequestValidatorTests
     [Fact(DisplayName = "Validator should validate that titles aren't empty when they are shown")]
     public void ValidatorShouldValidateTitlesNotEmpty()
     {
-        var result = validator.TestValidate(this.Request(titles: Enumerable.Empty<string>(), showTitles: true));
+        var result = validator.TestValidate(this.Request(titles: [], showTitles: true));
 
         result.ShouldHaveValidationErrors()
             .WithErrorCode("Franchise.ShowTitles.Invalid");
@@ -24,7 +22,7 @@ public class FranchiseRequestValidatorTests
     [Property(DisplayName = "Validator should validate that titles have distinct names")]
     public void ValidatorShouldValidateTitlesDistinctNames(NonEmptyString title)
     {
-        var result = validator.TestValidate(this.Request(titles: new[] { title.Get, title.Get }));
+        var result = validator.TestValidate(this.Request(titles: [title.Get, title.Get]));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
             .WithErrorCode("Franchise.Titles.Distinct.Names");
@@ -34,7 +32,7 @@ public class FranchiseRequestValidatorTests
     public void ValidatorShouldValidateTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            titles: new[] { title1.Get, title2.Get }, differentTitlePriorities: false));
+            titles: [title1.Get, title2.Get], differentTitlePriorities: false));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
             .WithErrorCode("Franchise.Titles.Distinct.Priorities");
@@ -43,7 +41,7 @@ public class FranchiseRequestValidatorTests
     [Fact(DisplayName = "Validator should validate that original titles aren't empty when they are shown")]
     public void ValidatorShouldValidateOriginalTitlesNotEmpty()
     {
-        var result = validator.TestValidate(this.Request(originalTitles: Enumerable.Empty<string>(), showTitles: true));
+        var result = validator.TestValidate(this.Request(originalTitles: [], showTitles: true));
 
         result.ShouldHaveValidationErrors()
             .WithErrorCode("Franchise.ShowTitles.Invalid");
@@ -52,7 +50,7 @@ public class FranchiseRequestValidatorTests
     [Property(DisplayName = "Validator should validate that original titles have distinct names")]
     public void ValidatorShouldValidateOriginalTitlesDistinctNames(NonEmptyString title)
     {
-        var result = validator.TestValidate(this.Request(originalTitles: new[] { title.Get, title.Get }));
+        var result = validator.TestValidate(this.Request(originalTitles: [title.Get, title.Get]));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
             .WithErrorCode("Franchise.OriginalTitles.Distinct.Names");
@@ -62,7 +60,7 @@ public class FranchiseRequestValidatorTests
     public void ValidatorShouldValidateOriginalTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            originalTitles: new[] { title1.Get, title2.Get }, differentOriginalTitlePriorities: false));
+            originalTitles: [title1.Get, title2.Get], differentOriginalTitlePriorities: false));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
             .WithErrorCode("Franchise.OriginalTitles.Distinct.Priorities");
@@ -92,7 +90,7 @@ public class FranchiseRequestValidatorTests
         var type = (FranchiseItemType)typeInt;
 
         var result = validator.TestValidate(this.Request(
-            items: new[] { new FranchiseItemRequest(Guid.NewGuid(), type, 1, true) }));
+            items: [new FranchiseItemRequest(Guid.NewGuid(), type, 1, true)]));
 
         if (Enum.IsDefined(type))
         {

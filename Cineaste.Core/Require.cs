@@ -1,8 +1,8 @@
-namespace Cineaste.Core;
-
 using System.Runtime.CompilerServices;
 
 using static Cineaste.Basic.Constants;
+
+namespace Cineaste.Core;
 
 public static class Require
 {

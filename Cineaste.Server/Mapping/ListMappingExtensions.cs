@@ -6,11 +6,11 @@ public static class ListMappingExtensions
         new(
             list.Id.Value,
             list.Configuration.ToConfigurationModel(),
-            list.Movies.Select(ToListItemModel).ToImmutableList(),
-            list.Series.Select(ToListItemModel).ToImmutableList(),
-            list.Franchises.Select(ToListItemModel).ToImmutableList(),
-            list.MovieKinds.Select(kind => kind.ToListKindModel()).ToImmutableList(),
-            list.SeriesKinds.Select(kind => kind.ToListKindModel()).ToImmutableList());
+            [.. list.Movies.Select(ToListItemModel)],
+            [.. list.Series.Select(ToListItemModel)],
+            [.. list.Franchises.Select(ToListItemModel)],
+            [.. list.MovieKinds.Select(kind => kind.ToListKindModel())],
+            [.. list.SeriesKinds.Select(kind => kind.ToListKindModel())]);
 
     public static ListConfigurationModel ToConfigurationModel(this ListConfiguration config) =>
         new(

@@ -1,9 +1,6 @@
-namespace Cineaste.Shared.Validation.TestData;
-
 using Cineaste.Shared.Models.Series;
 
-using FsCheck;
-using FsCheck.Fluent;
+namespace Cineaste.Shared.Validation.TestData;
 
 public class ArbitraryValidPeriodRequest : Arbitrary<PeriodRequest>
 {

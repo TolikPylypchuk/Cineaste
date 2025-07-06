@@ -2,13 +2,10 @@ using System.Collections;
 
 namespace Cineaste.Client.FormModels;
 
-public class TitleList : IList<string>
+public class TitleList(Action changeCallback) : IList<string>
 {
-    private readonly List<string> titles = new() { String.Empty };
-    private readonly Action changeCallback;
-
-    public TitleList(Action changeCallback) =>
-        this.changeCallback = changeCallback;
+    private readonly List<string> titles = [String.Empty];
+    private readonly Action changeCallback = changeCallback;
 
     public int Count =>
         this.titles.Count;

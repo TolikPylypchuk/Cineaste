@@ -1,8 +1,8 @@
-namespace Cineaste.Shared.Collections.Json;
-
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
+namespace Cineaste.Shared.Collections.Json;
 
 public class ImmutableValueListConverterFactory : JsonConverterFactory
 {
