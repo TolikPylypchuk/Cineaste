@@ -1,9 +1,12 @@
 using System.Text.Json.Serialization;
 
 using Cineaste.Server.Infrastructure.Json;
+using Cineaste.Server.Infrastructure.OpenApi;
 using Cineaste.Server.Infrastructure.Problems;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
+
+using Scalar.AspNetCore;
 
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
@@ -21,7 +24,16 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.Converters.Add(new ValidatedJsonConverterFactory());
 });
 
+builder.Services.Configure<CineasteOpenApiOptions>(builder.Configuration.GetSection("OpenApi"));
+
 builder.Services.AddProblemDetails();
+builder.Services.AddCineasteOpenApi();
+builder.Services.AddCors();
+
+builder.Services.AddOutputCache(options =>
+{
+    options.AddBasePolicy(policy => policy.Expire(TimeSpan.FromHours(1)));
+});
 
 builder.Services.AddScoped<CultureProvider>();
 builder.Services.AddScoped<ListService>();
@@ -36,9 +48,19 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
+app.UseOutputCache();
+
 if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi().CacheOutput();
+    app.MapScalarApiReference(options =>
+    {
+        options.OperationSorter = OperationSorter.Alpha;
+    });
+
     app.UseWebAssemblyDebugging();
+
+    app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 }
 
 app.UseCineasteExceptionHandling();
