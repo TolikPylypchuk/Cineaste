@@ -16,14 +16,15 @@ builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer
     builder.Configuration.GetConnectionString("Default"),
     sql => sql.MigrationsHistoryTable("Migrations")));
 
-builder.Services.Configure<JsonOptions>(options =>
+static void AddConverters(JsonSerializerOptions options)
 {
-    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    options.SerializerOptions.Converters.Add(new ImmutableValueListConverterFactory());
-    options.SerializerOptions.Converters.Add(new IdJsonConverterFactory());
-    options.SerializerOptions.Converters.Add(new ValidatedJsonConverterFactory());
-});
+    options.Converters.Add(new JsonStringEnumConverter());
+    options.Converters.Add(new ImmutableValueListConverterFactory());
+    options.Converters.Add(new IdJsonConverterFactory());
+    options.Converters.Add(new ValidatedJsonConverterFactory());
+}
 
+builder.Services.Configure<JsonOptions>(options => AddConverters(options.SerializerOptions));
 builder.Services.Configure<CineasteOpenApiOptions>(builder.Configuration.GetSection("OpenApi"));
 
 builder.Services.AddProblemDetails();
@@ -41,6 +42,9 @@ builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<SeriesService>();
 builder.Services.AddScoped<FranchiseService>();
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddScoped<TestDataProvider>();
@@ -52,14 +56,7 @@ app.UseOutputCache();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi().CacheOutput();
-    app.MapScalarApiReference(options =>
-    {
-        options.OperationSorter = OperationSorter.Alpha;
-    });
-
     app.UseWebAssemblyDebugging();
-
     app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 }
 
@@ -70,13 +67,23 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.MapCultureRoutes();
-app.MapListRoutes();
-app.MapMovieRoutes();
-app.MapSeriesRoutes();
-app.MapFranchiseRoutes();
+app.MapControllers();
 
-app.MapFallbackRoutes();
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi().CacheOutput();
+    app.MapScalarApiReference(options =>
+    {
+        options.OperationSorter = OperationSorter.Alpha;
+    });
+}
+
+app.MapFallback("/api/{**path}", () =>
+{
+    throw new NotFoundException(Cineaste.Server.Resources.Any, "The requested resource was not found");
+});
+
+app.MapFallbackToFile("index.html");
 
 if (builder.Environment.IsDevelopment())
 {
