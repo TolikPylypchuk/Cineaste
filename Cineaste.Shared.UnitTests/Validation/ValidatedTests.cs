@@ -1,5 +1,8 @@
 using FluentValidation.Results;
 
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+
 namespace Cineaste.Shared.Validation;
 
 public sealed class ValidatedTests
@@ -26,7 +29,7 @@ public sealed class ValidatedTests
     public class TestSuccessfulValidatable : IValidatable<TestSuccessfulValidatable>
     {
         public static IValidator<TestSuccessfulValidatable> Validator =>
-            new Mock<IValidator<TestSuccessfulValidatable>>().Object;
+            Substitute.For<IValidator<TestSuccessfulValidatable>>();
     }
 
     public class TestFailingValidatable : IValidatable<TestFailingValidatable>
@@ -35,12 +38,12 @@ public sealed class ValidatedTests
         {
             get
             {
-                var mock = new Mock<IValidator<TestFailingValidatable>>();
+                var validator = Substitute.For<IValidator<TestFailingValidatable>>();
 
-                mock.Setup(m => m.Validate(It.IsAny<ValidationContext<TestFailingValidatable>>()))
+                validator.Validate(Arg.Any<ValidationContext<TestFailingValidatable>>())
                     .Throws(new ValidationException([new ValidationFailure("Test", "Test")]));
 
-                return mock.Object;
+                return validator;
             }
         }
     }
