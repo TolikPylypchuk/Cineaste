@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="FsCheck" Version="3.3.0" />
     <PackageReference Include="FsCheck.Xunit.v3" Version="3.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.7" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="Testcontainers" Version="4.6.0" />
     <PackageReference Include="Testcontainers.MsSql" Version="4.6.0" />
