@@ -2,7 +2,7 @@ using Cineaste.Shared.Models.Movie;
 
 namespace Cineaste.Server.Services;
 
-public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
+public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 {
     private readonly ILogger<MovieService> logger = XUnitLogger.Create<MovieService>(output);
 
@@ -11,13 +11,10 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var movie = this.CreateMovie(this.List);
-
-        dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var movie = await data.CreateMovie(dbContext);
 
         // Act
 
@@ -41,7 +38,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var dummyId = Id.Create<Movie>();
@@ -60,7 +57,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var request = this.CreateMovieRequest();
@@ -90,7 +87,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var request = this.CreateMovieRequest();
@@ -116,7 +113,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var dummyListId = Id.Create<CineasteList>();
@@ -137,7 +134,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var dummyKindId = Id.Create<MovieKind>();
@@ -158,11 +155,11 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var otherList = this.CreateList();
-        var otherKind = this.CreateMovieKind(otherList);
+        var otherList = data.CreateList();
+        var otherKind = data.CreateMovieKind(otherList);
 
         dbContext.MovieKinds.Add(otherKind);
         dbContext.Lists.Add(otherList);
@@ -176,8 +173,13 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
             movieService.CreateMovie(request.Validated()));
 
         Assert.Equal("BadRequest.MovieKind.WrongList", exception.MessageCode);
-        Assert.Equal(this.List.Id, exception.Properties["listId"]);
+        Assert.Equal(data.ListId, exception.Properties["listId"]);
         Assert.Equal(otherKind.Id, exception.Properties["kindId"]);
+
+        // Clean up
+
+        dbContext.Lists.Remove(otherList);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "UpdateMovie should update it in the database")]
@@ -185,13 +187,10 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var movie = this.CreateMovie(this.List);
-
-        dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var movie = await data.CreateMovie(dbContext);
 
         var request = this.CreateMovieRequest();
 
@@ -220,13 +219,10 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var movie = this.CreateMovie(this.List);
-
-        dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var movie = await data.CreateMovie(dbContext);
 
         var request = this.CreateMovieRequest();
 
@@ -251,13 +247,10 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var movie = this.CreateMovie(this.List);
-
-        dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var movie = await data.CreateMovie(dbContext);
 
         var request = this.CreateMovieRequest();
         var dummyId = Id.Create<Movie>();
@@ -276,14 +269,12 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var movie = this.CreateMovie(this.List);
+        var movie = await data.CreateMovie(dbContext);
 
-        dbContext.Movies.Add(movie);
-
-        var otherList = this.CreateList();
+        var otherList = data.CreateList();
         dbContext.Lists.Add(otherList);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -298,6 +289,11 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
         Assert.Equal("BadRequest.Movie.WrongList", exception.MessageCode);
         Assert.Equal(movie.Id, exception.Properties["movieId"]);
         Assert.Equal(otherList.Id, exception.Properties["listId"]);
+
+        // Clean up
+
+        dbContext.Lists.Remove(otherList);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "DeleteMovie should remote it from the database")]
@@ -305,13 +301,10 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
-        var movie = this.CreateMovie(this.List);
-
-        dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var movie = await data.CreateMovie(dbContext);
 
         // Act
 
@@ -327,7 +320,7 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var movieService = new MovieService(dbContext, this.logger);
 
         var dummyId = Id.Create<Movie>();
@@ -343,13 +336,13 @@ public class MovieServiceTests(ITestOutputHelper output) : ServiceTestsBase
 
     private MovieRequest CreateMovieRequest() =>
         new(
-            this.List.Id.Value,
+            data.ListId.Value,
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(new TitleRequest("Original Test", 1)).AsValue(),
             1999,
             false,
             true,
-            this.MovieKind.Id.Value,
+            data.MovieKindId.Value,
             "tt12345678",
             null);
 }

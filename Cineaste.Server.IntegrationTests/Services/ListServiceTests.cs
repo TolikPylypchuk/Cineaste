@@ -1,6 +1,6 @@
 namespace Cineaste.Server.Services;
 
-public class ListServiceTests(ITestOutputHelper output) : ServiceTestsBase
+public class ListServiceTests(DataFixture data, ITestOutputHelper output)
 {
     private readonly ILogger<ListService> logger = XUnitLogger.Create<ListService>(output);
 
@@ -9,8 +9,10 @@ public class ListServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var listService = new ListService(dbContext, this.logger);
+
+        var list = await data.GetList(dbContext);
 
         // Act
 
@@ -18,9 +20,9 @@ public class ListServiceTests(ITestOutputHelper output) : ServiceTestsBase
 
         // Assert
 
-        Assert.Equal(this.List.Id.Value, model.Id);
-        Assert.Equal(this.List.Configuration.Culture.ToString(), model.Config.Culture);
-        Assert.Equal(this.List.Configuration.DefaultSeasonTitle, model.Config.DefaultSeasonTitle);
-        Assert.Equal(this.List.Configuration.DefaultSeasonOriginalTitle, model.Config.DefaultSeasonOriginalTitle);
+        Assert.Equal(list.Id.Value, model.Id);
+        Assert.Equal(list.Configuration.Culture.ToString(), model.Config.Culture);
+        Assert.Equal(list.Configuration.DefaultSeasonTitle, model.Config.DefaultSeasonTitle);
+        Assert.Equal(list.Configuration.DefaultSeasonOriginalTitle, model.Config.DefaultSeasonOriginalTitle);
     }
 }

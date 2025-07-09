@@ -2,7 +2,7 @@ using Cineaste.Shared.Models.Series;
 
 namespace Cineaste.Server.Services;
 
-public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
+public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 {
     private readonly ILogger<SeriesService> logger = XUnitLogger.Create<SeriesService>(output);
 
@@ -11,13 +11,10 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var series = this.CreateSeries(this.List);
-
-        dbContext.Series.Add(series);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var series = await data.CreateSeries(dbContext);
 
         // Act
 
@@ -77,7 +74,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyId = Id.Create<Series>();
@@ -95,7 +92,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var request = this.CreateSeriesRequest();
@@ -163,7 +160,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var request = this.CreateSeriesRequest();
@@ -227,7 +224,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyListId = Id.Create<CineasteList>();
@@ -247,7 +244,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyKindId = Id.Create<SeriesKind>();
@@ -267,11 +264,11 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var otherList = this.CreateList();
-        var otherKind = this.CreateSeriesKind(otherList);
+        var otherList = data.CreateList();
+        var otherKind = data.CreateSeriesKind(otherList);
 
         dbContext.SeriesKinds.Add(otherKind);
         dbContext.Lists.Add(otherList);
@@ -285,8 +282,13 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
             seriesService.CreateSeries(request.Validated()));
 
         Assert.Equal("BadRequest.SeriesKind.WrongList", exception.MessageCode);
-        Assert.Equal(this.List.Id, exception.Properties["listId"]);
+        Assert.Equal(data.ListId, exception.Properties["listId"]);
         Assert.Equal(otherKind.Id, exception.Properties["kindId"]);
+
+        // Clean up
+
+        dbContext.Lists.Remove(otherList);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "UpdateSeries should update it in the database")]
@@ -294,13 +296,10 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var dbSeries = this.CreateSeries(this.List);
-
-        dbContext.Series.Add(dbSeries);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var dbSeries = await data.CreateSeries(dbContext);
 
         var request = this.CreateSeriesRequest();
 
@@ -367,13 +366,10 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var dbSeries = this.CreateSeries(this.List);
-
-        dbContext.Series.Add(dbSeries);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var dbSeries = await data.CreateSeries(dbContext);
 
         var request = this.CreateSeriesRequest();
 
@@ -436,13 +432,10 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var series = this.CreateSeries(this.List);
-
-        dbContext.Series.Add(series);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var dbSeries = await data.CreateSeries(dbContext);
 
         var request = this.CreateSeriesRequest();
         var dummyId = Id.Create<Series>();
@@ -462,14 +455,12 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var series = this.CreateSeries(this.List);
+        var series = await data.CreateSeries(dbContext);
 
-        dbContext.Series.Add(series);
-
-        var otherList = this.CreateList();
+        var otherList = data.CreateList();
         dbContext.Lists.Add(otherList);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -484,6 +475,11 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
         Assert.Equal("BadRequest.Series.WrongList", exception.MessageCode);
         Assert.Equal(series.Id, exception.Properties["seriesId"]);
         Assert.Equal(otherList.Id, exception.Properties["listId"]);
+
+        // Clean up
+
+        dbContext.Lists.Remove(otherList);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "DeleteSeries should remote it from the database")]
@@ -491,13 +487,10 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
-        var series = this.CreateSeries(this.List);
-
-        dbContext.Series.Add(series);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var series = await data.CreateSeries(dbContext);
 
         // Act
 
@@ -513,7 +506,7 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var seriesService = new SeriesService(dbContext, this.logger);
 
         var dummyId = Id.Create<Series>();
@@ -529,12 +522,12 @@ public class SeriesServiceTests(ITestOutputHelper output) : ServiceTestsBase
 
     private SeriesRequest CreateSeriesRequest() =>
         new(
-            this.List.Id.Value,
+            data.ListId.Value,
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(new TitleRequest("Original Test", 1)).AsValue(),
             SeriesWatchStatus.NotWatched,
             SeriesReleaseStatus.Finished,
-            this.SeriesKind.Id.Value,
+            data.SeriesKindId.Value,
             ImmutableList.Create(this.CreateSeasonRequest(1), this.CreateSeasonRequest(2)).AsValue(),
             ImmutableList.Create(this.CreateSpecialEpisodeRequest(3)).AsValue(),
             "tt12345678",

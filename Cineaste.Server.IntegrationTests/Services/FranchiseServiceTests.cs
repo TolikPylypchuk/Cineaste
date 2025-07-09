@@ -1,9 +1,8 @@
-using Cineaste.Persistence;
 using Cineaste.Shared.Models.Franchise;
 
 namespace Cineaste.Server.Services;
 
-public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTestsBase
+public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper output)
 {
     private readonly ILogger<FranchiseService> logger = XUnitLogger.Create<FranchiseService>(output);
 
@@ -12,14 +11,17 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var franchise = this.CreateFranchise(this.List);
-        franchise.AddMovie(this.CreateMovie(this.List));
-        franchise.AddSeries(this.CreateSeries(this.List));
+        var list = await data.GetList(dbContext);
 
+        var franchise = data.CreateFranchise(list);
         dbContext.Franchises.Add(franchise);
+
+        franchise.AddMovie(await data.CreateMovie(dbContext));
+        franchise.AddSeries(await data.CreateSeries(dbContext));
+
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
@@ -64,7 +66,7 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var dummyId = Id.Create<Franchise>();
@@ -83,10 +85,10 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie = await this.CreateAndSaveMovie(dbContext);
+        var movie = await data.CreateMovie(dbContext);
         var request = this.CreateFranchiseRequest(movie.Id);
 
         // Act
@@ -123,10 +125,10 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie = await this.CreateAndSaveMovie(dbContext);
+        var movie = await data.CreateMovie(dbContext);
         var request = this.CreateFranchiseRequest(movie.Id);
 
         // Act
@@ -155,10 +157,10 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie = await this.CreateAndSaveMovie(dbContext);
+        var movie = await data.CreateMovie(dbContext);
         var dummyListId = Id.Create<CineasteList>();
         var request = this.CreateFranchiseRequest(movie.Id) with { ListId = dummyListId.Value };
 
@@ -177,10 +179,10 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie = await this.CreateAndSaveMovie(dbContext);
+        var movie = await data.CreateMovie(dbContext);
         var dummyItemId = Guid.NewGuid();
         var request = this.CreateFranchiseRequest(movie.Id) with { Items =
             ImmutableList.Create(new FranchiseItemRequest(dummyItemId, FranchiseItemType.Movie, 1, true)).AsValue()
@@ -203,14 +205,16 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie1 = await this.CreateAndSaveMovie(dbContext);
-        var movie2 = await this.CreateAndSaveMovie(dbContext);
-        var movie3 = await this.CreateAndSaveMovie(dbContext);
+        var movie1 = await data.CreateMovie(dbContext);
+        var movie2 = await data.CreateMovie(dbContext);
+        var movie3 = await data.CreateMovie(dbContext);
 
-        var franchise = this.CreateFranchise(this.List);
+        var list = await data.GetList(dbContext);
+
+        var franchise = data.CreateFranchise(list);
         franchise.AddMovie(movie1);
         franchise.AddMovie(movie2);
 
@@ -261,11 +265,13 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie = await this.CreateAndSaveMovie(dbContext);
-        var franchise = this.CreateFranchise(this.List);
+        var list = await data.GetList(dbContext);
+
+        var movie = await data.CreateMovie(dbContext);
+        var franchise = data.CreateFranchise(list);
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
@@ -290,11 +296,13 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie = await this.CreateAndSaveMovie(dbContext);
-        var franchise = this.CreateFranchise(this.List);
+        var list = await data.GetList(dbContext);
+
+        var movie = await data.CreateMovie(dbContext);
+        var franchise = data.CreateFranchise(list);
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
@@ -329,11 +337,13 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie = await this.CreateAndSaveMovie(dbContext);
-        var franchise = this.CreateFranchise(this.List);
+        var list = await data.GetList(dbContext);
+
+        var movie = await data.CreateMovie(dbContext);
+        var franchise = data.CreateFranchise(list);
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
@@ -356,17 +366,19 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie = await this.CreateAndSaveMovie(dbContext);
-        var franchise = this.CreateFranchise(this.List);
+        var list = await data.GetList(dbContext);
+
+        var movie = await data.CreateMovie(dbContext);
+        var franchise = data.CreateFranchise(list);
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        var otherList = this.CreateList();
+        var otherList = data.CreateList();
         dbContext.Lists.Add(otherList);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -381,6 +393,11 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         Assert.Equal("BadRequest.Franchise.WrongList", exception.MessageCode);
         Assert.Equal(franchise.Id, exception.Properties["franchiseId"]);
         Assert.Equal(otherList.Id, exception.Properties["listId"]);
+
+        // Clean up
+
+        dbContext.Lists.Remove(otherList);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "DeleteFranchise should remote it from the database")]
@@ -388,11 +405,13 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
-        var movie = await this.CreateAndSaveMovie(dbContext);
-        var franchise = this.CreateFranchise(this.List);
+        var list = await data.GetList(dbContext);
+
+        var movie = await data.CreateMovie(dbContext);
+        var franchise = data.CreateFranchise(list);
         franchise.AddMovie(movie);
 
         dbContext.Franchises.Add(franchise);
@@ -412,7 +431,7 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
     {
         // Arrange
 
-        var dbContext = await this.CreateDbContext();
+        var dbContext = data.CreateDbContext();
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var dummyId = Id.Create<Franchise>();
@@ -424,15 +443,6 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         Assert.Equal("NotFound.Franchise", exception.MessageCode);
         Assert.Equal("Resource.Franchise", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
-    }
-
-    private async Task<Movie> CreateAndSaveMovie(CineasteDbContext dbContext)
-    {
-        var movie = this.CreateMovie(this.List);
-        dbContext.Movies.Add(movie);
-        await dbContext.SaveChangesAsync();
-
-        return movie;
     }
 
     private FranchiseRequest CreateFranchiseRequest(
@@ -452,7 +462,7 @@ public sealed class FranchiseServiceTests(ITestOutputHelper output) : ServiceTes
         bool continueNumbering = false,
         params FranchiseItemRequest[] items) =>
         new(
-            this.List.Id.Value,
+            data.ListId.Value,
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(items).AsValue(),
