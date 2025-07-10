@@ -17,7 +17,7 @@ semi-prove those properties.
 
 I've decided to use [xUnit](https://xunit.net) as the testing framework and the engine for unit-tests on the back-end
 and [FsCheck](https://fscheck.github.io/FsCheck) to enable property-based testing. As for mocking,
-[NSubstitute](https://nsubstitute.github.io/) will be used if it's required. 
+[NSubstitute](https://nsubstitute.github.io/) will be used if it's required.
 
 ## Consequences
 

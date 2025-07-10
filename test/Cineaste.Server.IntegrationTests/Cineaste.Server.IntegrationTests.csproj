@@ -2,19 +2,17 @@
 
   <PropertyGroup>
     <OutputType>exe</OutputType>
-    <RootNamespace>Cineaste.Shared</RootNamespace>
+    <RootNamespace>Cineaste.Server</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FsCheck" Version="3.3.0" />
     <PackageReference Include="FsCheck.Xunit.v3" Version="3.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.7" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="NSubstitute" Version="5.3.0" />
-    <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Testcontainers" Version="4.6.0" />
+    <PackageReference Include="Testcontainers.MsSql" Version="4.6.0" />
     <PackageReference Include="xunit.v3" Version="2.0.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -27,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cineaste.Shared\Cineaste.Shared.csproj" />
+    <ProjectReference Include="..\..\src\Cineaste.Server\Cineaste.Server.csproj" />
   </ItemGroup>
 
 </Project>

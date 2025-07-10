@@ -8,8 +8,9 @@
 
 Previously Cineaste was a desktop application. This is convenient as I use my laptop a lot, but it has a couple
 drawbacks:
-- I can access the list only on my laptop, not on my phone
-- Web applications are much better for career growth than desktop ones
+
+-   I can access the list only on my laptop, not on my phone
+-   Web applications are much better for career growth than desktop ones
 
 As such, I've decided to completely rewrite the application for it to be a web app. Thus I need to decide which
 technology will be used for the back-end and the front-end.

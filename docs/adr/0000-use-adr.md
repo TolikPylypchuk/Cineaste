@@ -22,15 +22,16 @@ Architecture decision records (ADR) will be used to keep track of decisions and 
 docs about decisions in such a way that is easy to maintain.
 
 The specific structure of ADRs may be amended later, but initially they will contain the following:
-- A short title formatted like a git commit message
-- Status (in progress, implemented, superseded by ADR-NNNN)
-- Date
-- Context which describes the issue
-- Decision on how to handle the issue
-- Consequences
-- Alternatives (optional)
 
-ADRs will reside in the 'ADR' folder under the project root. The file name structure is a four-digit number followed by
+-   A short title formatted like a git commit message
+-   Status (in progress, implemented, superseded by ADR-NNNN)
+-   Date
+-   Context which describes the issue
+-   Decision on how to handle the issue
+-   Consequences
+-   Alternatives (optional)
+
+ADRs will reside in the 'adr' folder under the 'docs' folder. The file name structure is a four-digit number followed by
 the simplified title of the ADR in lowercase with dashes instead of spaces.
 
 ## Consequences
