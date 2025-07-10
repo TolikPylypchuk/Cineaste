@@ -248,12 +248,12 @@ public class SeriesRequestValidatorTests
         string? imdbId = null,
         string? rottenTomatoesId = null) =>
         new(
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             TitleRequests(titles, differentTitlePriorities),
             TitleRequests(originalTitles, differentOriginalTitlePriorities),
             watchStatus,
             releaseStatus,
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             seasons?.ToImmutableList().AsValue() ?? this.DefaultSeasons(),
             specialEpisodes?.ToImmutableList().AsValue() ?? ImmutableList.Create<SpecialEpisodeRequest>().AsValue(),
             imdbId,

@@ -12,11 +12,11 @@ public readonly record struct Id<T>(Guid Value) : IComparable<Id<T>>, IComparabl
 public static class Id
 {
     public static Id<T> Create<T>() =>
-        new(Guid.NewGuid());
+        new(Guid.CreateVersion7());
 
     public static Id<T> For<T>(Guid id) =>
         new(id);
 
-    public static Id<T> CreateNullable<T>(Guid? id) =>
-        new(id is not null ? id.Value : Guid.NewGuid());
+    public static Id<T> ForNullable<T>(Guid? id) =>
+        new(id is not null ? id.Value : Guid.CreateVersion7());
 }

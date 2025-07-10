@@ -92,7 +92,7 @@ public static class SeriesMappingExtensions
 
     private static Season ToSeason(this SeasonRequest request) =>
         new(
-            Id.CreateNullable<Season>(request.Id),
+            Id.ForNullable<Season>(request.Id),
             request.ToTitles(),
             request.WatchStatus,
             request.ReleaseStatus,
@@ -102,7 +102,7 @@ public static class SeriesMappingExtensions
 
     private static Period ToPeriod(this PeriodRequest request) =>
         new(
-            Id.CreateNullable<Period>(request.Id),
+            Id.ForNullable<Period>(request.Id),
             request.StartMonth,
             request.StartYear,
             request.EndMonth,
@@ -115,7 +115,7 @@ public static class SeriesMappingExtensions
 
     private static SpecialEpisode ToSpecialEpisode(this SpecialEpisodeRequest request) =>
         new(
-            Id.CreateNullable<SpecialEpisode>(request.Id),
+            Id.ForNullable<SpecialEpisode>(request.Id),
             request.ToTitles(),
             request.Month,
             request.Year,

@@ -183,7 +183,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
-        var dummyItemId = Guid.NewGuid();
+        var dummyItemId = Guid.CreateVersion7();
         var request = this.CreateFranchiseRequest(movie.Id) with { Items =
             ImmutableList.Create(new FranchiseItemRequest(dummyItemId, FranchiseItemType.Movie, 1, true)).AsValue()
         };

@@ -90,7 +90,7 @@ public class FranchiseRequestValidatorTests
         var type = (FranchiseItemType)typeInt;
 
         var result = validator.TestValidate(this.Request(
-            items: [new FranchiseItemRequest(Guid.NewGuid(), type, 1, true)]));
+            items: [new FranchiseItemRequest(Guid.CreateVersion7(), type, 1, true)]));
 
         if (Enum.IsDefined(type))
         {
@@ -106,12 +106,12 @@ public class FranchiseRequestValidatorTests
     public void ValidatorShouldValidateCorrectSequence()
     {
         var items1 = Enumerable.Range(1, 9)
-            .Select(num => new FranchiseItemRequest(Guid.NewGuid(), FranchiseItemType.Movie, num, true))
+            .Select(num => new FranchiseItemRequest(Guid.CreateVersion7(), FranchiseItemType.Movie, num, true))
             .ToList();
 
         var items2 = Enumerable.Range(1, 9)
             .Where(num => num % 2 == 0)
-            .Select(num => new FranchiseItemRequest(Guid.NewGuid(), FranchiseItemType.Movie, num, true))
+            .Select(num => new FranchiseItemRequest(Guid.CreateVersion7(), FranchiseItemType.Movie, num, true))
             .ToList();
 
         var result1 = validator.TestValidate(this.Request(items: items1));
@@ -132,12 +132,12 @@ public class FranchiseRequestValidatorTests
         bool isLooselyConnected = true,
         bool continueNumbering = false) =>
         new(
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             TitleRequests(titles, differentTitlePriorities),
             TitleRequests(originalTitles, differentOriginalTitlePriorities),
             items?.ToImmutableList().AsValue()
                 ?? ImmutableList.Create(
-                    new FranchiseItemRequest(Guid.NewGuid(), FranchiseItemType.Movie, 1, true)).AsValue(),
+                    new FranchiseItemRequest(Guid.CreateVersion7(), FranchiseItemType.Movie, 1, true)).AsValue(),
             showTitles,
             isLooselyConnected,
             continueNumbering);
