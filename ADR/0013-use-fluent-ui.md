@@ -1,6 +1,6 @@
 # Use Fluent UI as the Front-End UI Framework
 
-**Status:** Implemented
+**Status:** Superseded by [ADR-0014](0014-use-mudblazor.md)
 
 **Date:** 2023-05-30
 

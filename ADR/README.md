@@ -22,3 +22,4 @@ Table of contents:
 - [ADR-0011](0011-unit-tests-be.md): Use xUnit and FsCheck for Back-End Unit Tests
 - [ADR-0012](0012-integration-tests.md): Use Testcontainers for Back-End Integration Tests
 - [ADR-0013](0013-use-fluent-ui.md): Use Fluent UI as the Front-End UI Framework
+- [ADR-0014](0014-use-mudblazor.md): Use MudBlazor as the Front-End UI Framework

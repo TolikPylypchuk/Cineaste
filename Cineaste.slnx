@@ -14,6 +14,7 @@
     <File Path="ADR/0011-unit-tests-be.md" />
     <File Path="ADR/0012-integration-tests.md" />
     <File Path="ADR/0013-use-fluent-ui.md" />
+    <File Path="ADR/0014-use-mudblazor.md" />
     <File Path="ADR/README.md" />
   </Folder>
   <Folder Name="/Solution Items/">
