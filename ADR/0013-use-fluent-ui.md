@@ -12,8 +12,8 @@ in terms of customization. Also, I've come to see that it's tailored more to lin
 
 ## Decision
 
-I've desided to use [FAST](https://www.fast.design) - a design framework developed by Microsoft, and its integration
-with Blazor - [Blazor Fluent UI](https://www.fluentui-blazor.net). It offers customizability which I think other UI
+I've desided to use [FAST](https://www.fast.design) – a design framework developed by Microsoft, and its integration
+with Blazor – [Blazor Fluent UI](https://www.fluentui-blazor.net). It offers customizability which I think other UI
 component frameworks do not.
 
 I've decided not to use FAST design tokens, at least for now, opting instead to customize the UI using pure CSS.
@@ -38,5 +38,5 @@ Another alternative would be to use another component library for Blazor, but af
 like any of them all that much.
 
 And lastly, I've thought about using FAST components directly, but that would be a lot more needless work. Blazor Fluent
-UI provides the integration out-of-the-box. My app doesn't need to look and feel unique or special - after all, I'm
+UI provides the integration out-of-the-box. My app doesn't need to look and feel unique or special – after all, I'm
 not planning to sell it and make it into a brand.

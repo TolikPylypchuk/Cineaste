@@ -17,10 +17,10 @@ As such, alternatives to ReactiveUI should be considered in greater detail while
 ## Decision
 
 When it comes to state management, I've decided to give the Redux pattern a try, and
-[Fluxor](https://github.com/mrpmorris/Fluxor) - its implementation for .NET.
+[Fluxor](https://github.com/mrpmorris/Fluxor) – its implementation for .NET.
 
 The advantages that each component's state is immutable, and data flows in a single direction. I really like this
-approach - this makes hydrating components with pre-existing state trivial. It also reminds me of MVU, albeit the UI is
+approach – this makes hydrating components with pre-existing state trivial. It also reminds me of MVU, albeit the UI is
 not immutable here.
 
 Also, I've decided not to use Fluxor to manage the entire state of components. If a component is a form, or has inputs,
@@ -40,4 +40,4 @@ stuff.
 
 I could've continued using ReactiveUI, but I see that it's unwieldy. Also, I don't want to use MVVM at all here.
 
-There are other state-managing libraries which implement the Redux pattern, but Fluxor seems the most mature one.
+There are other state-managing libraries which implement the Redux pattern, but Fluxor seems to be the most mature one.

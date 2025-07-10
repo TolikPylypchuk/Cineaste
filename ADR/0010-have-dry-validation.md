@@ -18,7 +18,7 @@ expressive. I've also decided that application services should accept already-va
 impossible not to run validation before calling these services.
 
 The domain will be minimally self-validating for the time being since the application services are guaranteed to accept
-validated requests. I don't like it very much, but for now it'll do. Maybe it will changed in the future.
+validated requests. I don't like it very much, but for now it'll do. Maybe it will be changed in the future.
 
 ## Consequences
 

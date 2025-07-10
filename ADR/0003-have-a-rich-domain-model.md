@@ -12,12 +12,12 @@ domain, rich domain, active records etc.
 Practicing domain-driven design (DDD) should be a nice experience, but obviously full DDD is impossible in a
 single-person project.
 
-The domain of Cineaste is quite simple - it's mostly just a CRUD app, but I think it will be extended to be more than
+The domain of Cineaste is quite simple – it's mostly just a CRUD app, but I think it will be extended to be more than
 that.
 
 ## Decision
 
-The domain model will be rich - the entities should be at least minimally self-validating, and contain behavior
+The domain model will be rich – the entities should be at least minimally self-validating, and contain behavior
 associated with them right inside. Also, they should be as oblivious to the persistence mechanism, as possible.
 
 The only reason I've chosen to have a rich domain model is to practice creating a rich domain model.

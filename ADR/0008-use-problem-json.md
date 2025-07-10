@@ -22,4 +22,4 @@ the ability to retry the request again.
 
 ## Consequences
 
-Using a well-defined standart of representing problems will make maintaining exception handling easier.
+Using a well-defined standard of representing problems will make maintaining exception handling easier.

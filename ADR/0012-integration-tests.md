@@ -19,7 +19,7 @@ spin up Docker containers with the MS SQL server so that the database is real.
 
 ## Consequences
 
-As with unit tests, writing integration is tedious - probably more so since they take longer to run. Still, writing them
+As with unit tests, writing integration is tedious – probably more so since they take longer to run. Still, writing them
 is better than not writing them.
 
 ## Alternatives

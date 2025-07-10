@@ -6,14 +6,14 @@
 
 ## Context
 
-Architecture decisions (AD) should be documented so that people reading code understand _why_ they were made - they can
+Architecture decisions (AD) should be documented so that people reading code understand _why_ they were made – they can
 already see _what_ they are (ideally) just by looking at the code. Maintaining documentation is tedious and error-prone.
 Moreover, if documentation is not supported, it turns basically useless, or worse, harms understanding of the decisions.
 
 This is obviously not needed in a simple single-person project such as Cineaste, but I want to experiment what it would
 look like in a real project.
 
-One of the possible solutions of the problem is to make docs more or less immutable - these docs should describe ADs,
+One of the possible solutions of the problem is to make docs more or less immutable – these docs should describe ADs,
 their context and consequences, and only be updated to amend information, not change it.
 
 ## Decision

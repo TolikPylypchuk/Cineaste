@@ -19,9 +19,9 @@ technology will be used for the back-end and the front-end.
 Using [ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet) for the back-end is a no-brainer. It's the most
 popular web framework for .NET, it's extensive and well supported.
 
-For the front-end there are multiple choices. I've decided to use
+For the front-end, there are multiple choices. I've decided to use
 [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) since it also runs on .NET so will need minimal
-JavaScript, if at all. Also, it's a nice opportunity to learn. There are two variants of Blazor - I've chosen Blazor
+JavaScript, if at all. Also, it's a nice opportunity to learn. There are two variants of Blazor – I've chosen Blazor
 WebAssembly since I think it's a better workflow, and will allow the app to be semi-offline in the future.
 
 ## Consequences
@@ -34,7 +34,7 @@ learning it will not bring much to career growth.
 
 ## Alternatives
 
-For the back-end there are no real alternatives for me - ASP.NET Core is just really good. For the front-end I could've
+For the back-end there are no real alternatives for me – ASP.NET Core is just really good. For the front-end, I could've
 used Angular as I have experience with it, but I haven't worked with it in a long time, so I would've needed to learn it
 almost from scratch. Also, Blazor Server could have been used, but I don't think it's a good idea for public-facing apps
 which are not backed by powerful hardware.

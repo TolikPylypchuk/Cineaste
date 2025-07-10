@@ -4,7 +4,7 @@ Architecture Decision Records (ADR) are short semi-immutable documents which des
 architecture of the application. [ADR-0000](0000-use-adr.md) is a meta-ADR which describes what ADRs are and how they
 are structured.
 
-Cineaste is a very simple project and as such, it doesn't really need ADRs - I simply want to practice.
+Cineaste is a very simple project and as such, it doesn't really need ADRs – I simply want to practice.
 
 Table of contents:
 

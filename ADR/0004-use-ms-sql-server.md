@@ -27,5 +27,5 @@ Another alternative is not to use the relational model at all, and use a NoSQL d
 sourcing with a NoSQL DB, but ultimately decided against it for now since it will needlessly complicate things in the
 beginning of the project.
 
-I've also looked at EdgeDB - a 'next-generation' graph-relational database. It's still too bleeding-edge to use, and its
+I've also looked at EdgeDB – a 'next-generation' graph-relational database. It's still too bleeding-edge to use, and its
 support for .NET is almost non-existent.
