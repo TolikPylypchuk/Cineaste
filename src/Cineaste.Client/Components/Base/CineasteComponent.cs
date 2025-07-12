@@ -2,7 +2,7 @@ using Fluxor.Blazor.Web.Components;
 
 using Microsoft.Extensions.Localization;
 
-namespace Cineaste.Client.Views.Base;
+namespace Cineaste.Client.Components.Base;
 
 public abstract class CineasteComponent : FluxorComponent
 {

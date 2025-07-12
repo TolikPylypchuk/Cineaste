@@ -1,4 +1,4 @@
-namespace Cineaste.Client.Views.Base;
+namespace Cineaste.Client.Components.Base;
 
 public abstract class CineasteForm<TFormModel, TRequest, TModel, TState>
     : StatefulComponent<TState>, IValidationExecutor

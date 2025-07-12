@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 
+using Cineaste.Server.Components;
 using Cineaste.Server.Infrastructure.Json;
 using Cineaste.Server.Infrastructure.OpenApi;
 using Cineaste.Server.Infrastructure.Problems;
@@ -45,6 +46,9 @@ builder.Services.AddScoped<FranchiseService>();
 builder.Services.AddControllers()
     .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));
 
+builder.Services.AddRazorComponents()
+    .AddInteractiveWebAssemblyComponents();
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddScoped<TestDataProvider>();
@@ -62,12 +66,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseCineasteExceptionHandling();
 
-app.UseBlazorFrameworkFiles();
-app.UseStaticFiles();
-
 app.UseRouting();
+app.UseAntiforgery();
 
 app.MapControllers();
+app.MapStaticAssets();
 
 if (app.Environment.IsDevelopment())
 {
@@ -78,12 +81,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.MapRazorComponents<App>()
+    .AddInteractiveWebAssemblyRenderMode()
+    .AddAdditionalAssemblies(typeof(Cineaste.Client._Imports).Assembly);
+
 app.MapFallback("/api/{**path}", () =>
 {
     throw new NotFoundException(Cineaste.Server.Resources.Any, "The requested resource was not found");
 });
-
-app.MapFallbackToFile("index.html");
 
 if (builder.Environment.IsDevelopment())
 {

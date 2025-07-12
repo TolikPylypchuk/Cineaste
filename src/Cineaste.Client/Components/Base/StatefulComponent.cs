@@ -1,6 +1,6 @@
 using Cineaste.Client.Store;
 
-namespace Cineaste.Client.Views.Base;
+namespace Cineaste.Client.Components.Base;
 
 public abstract class StatefulComponent<TState> : CineasteComponent
 {

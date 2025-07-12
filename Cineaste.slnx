@@ -1,4 +1,5 @@
 <Solution>
+  <Folder Name="/docs/" />
   <Folder Name="/docs/adr/">
     <File Path="ADR/0000-use-adr.md" />
     <File Path="ADR/0001-use-dotnet.md" />

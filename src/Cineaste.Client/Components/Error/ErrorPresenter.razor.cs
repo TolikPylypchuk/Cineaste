@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 using Microsoft.Extensions.Localization;
 
-namespace Cineaste.Client.Views.Error;
+namespace Cineaste.Client.Components.Error;
 
 public sealed partial class ErrorPresenter : ComponentBase
 {

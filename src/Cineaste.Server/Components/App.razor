@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Cineaste</title>
 
     <base href="/" />
 
-    <link rel="stylesheet" href="_content/MudBlazor/MudBlazor.min.css" />
+    <link rel="stylesheet" href=@this.Assets["_content/MudBlazor/MudBlazor.min.css"] />
 
     <link rel="stylesheet" href="css/variables.css" />
     <link rel="stylesheet" href="css/reboot.css" />
@@ -19,10 +18,18 @@
     <link rel="stylesheet" href="css/styles.css" />
 
     <link rel="stylesheet" href="Cineaste.Client.styles.css" />
+
+    <ImportMap />
+
+    <link rel="icon" type="image/ico" href="favicon.ico" />
+
+    <HeadOutlet @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
 </head>
 
 <body>
-    <div id="app">
+    <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
+
+    <div id="loader"> <!-- This loader is hidden in the main layout in the client project -->
         <div class="loading-progress-container">
             <svg class="loading-progress">
                 <circle r="40%" cx="50%" cy="50%" />
@@ -32,18 +39,8 @@
         </div>
     </div>
 
-    <div id="blazor-error-ui">
-        <div class="erorr-ui-container">
-            <div>
-                <span>An unhandled error has occurred.</span>
-                <a href="" class="reload">Reload</a>
-            </div>
-            <a class="dismiss">🗙</a>
-        </div>
-    </div>
-
-    <script src="_framework/blazor.webassembly.js"></script>
-    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <script src="_framework/blazor.web.js"></script>
+    <script src=@this.Assets["_content/MudBlazor/MudBlazor.min.js"]></script>
 </body>
 
 </html>

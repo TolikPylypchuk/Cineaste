@@ -1,6 +1,6 @@
 using Cineaste.Client.Store.Forms.FranchiseForm;
 
-namespace Cineaste.Client.Views.Forms;
+namespace Cineaste.Client.Components.Forms;
 
 public partial class FranchiseForm
 {

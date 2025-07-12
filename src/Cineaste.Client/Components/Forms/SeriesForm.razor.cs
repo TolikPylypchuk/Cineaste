@@ -1,6 +1,6 @@
 using Cineaste.Client.Store.Forms.SeriesForm;
 
-namespace Cineaste.Client.Views.Forms;
+namespace Cineaste.Client.Components.Forms;
 
 public partial class SeriesForm
 {
