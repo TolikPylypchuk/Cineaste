@@ -30,15 +30,15 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/Cineaste/Cineaste.csproj" />
     <Project Path="src/Cineaste.Basic/Cineaste.Basic.csproj" />
     <Project Path="src/Cineaste.Client/Cineaste.Client.csproj" />
     <Project Path="src/Cineaste.Core/Cineaste.Core.csproj" />
     <Project Path="src/Cineaste.Persistence/Cineaste.Persistence.csproj" />
-    <Project Path="src/Cineaste.Server/Cineaste.Server.csproj" />
     <Project Path="src/Cineaste.Shared/Cineaste.Shared.csproj" />
   </Folder>
   <Folder Name="/test/">
-    <Project Path="test/Cineaste.Server.IntegrationTests/Cineaste.Server.IntegrationTests.csproj" />
+    <Project Path="test/Cineaste.IntegrationTests/Cineaste.IntegrationTests.csproj" />
     <Project Path="test/Cineaste.Shared.UnitTests/Cineaste.Shared.UnitTests.csproj" />
   </Folder>
 </Solution>
