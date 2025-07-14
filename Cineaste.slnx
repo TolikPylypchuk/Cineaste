@@ -16,6 +16,7 @@
     <File Path="docs/adr/0012-integration-tests.md" />
     <File Path="docs/adr/0013-use-fluent-ui.md" />
     <File Path="docs/adr/0014-use-mudblazor.md" />
+    <File Path="docs/adr/0015-add-openapi-and-scalar.md" />
     <File Path="docs/adr/README.md" />
   </Folder>
   <Folder Name="/Solution Items/">
@@ -30,12 +31,12 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/Cineaste/Cineaste.csproj" />
     <Project Path="src/Cineaste.Basic/Cineaste.Basic.csproj" />
     <Project Path="src/Cineaste.Client/Cineaste.Client.csproj" />
     <Project Path="src/Cineaste.Core/Cineaste.Core.csproj" />
     <Project Path="src/Cineaste.Persistence/Cineaste.Persistence.csproj" />
     <Project Path="src/Cineaste.Shared/Cineaste.Shared.csproj" />
+    <Project Path="src/Cineaste/Cineaste.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Cineaste.IntegrationTests/Cineaste.IntegrationTests.csproj" />

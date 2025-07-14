@@ -14,12 +14,13 @@ Table of contents:
 -   [ADR-0003](0003-have-a-rich-domain-model.md): Have a Rich Domain Model
 -   [ADR-0004](0004-use-ms-sql-server.md): Use Microsoft SQL Server as the Database
 -   [ADR-0005](0005-use-ef.md): Use Entity Framework as the Persistence Engine
--   [ADR-0006](0006-use-radzen.md): Use Radzen Blazor as the Library for UI Components **(deprecated)**
--   [ADR-0007](0007-use-reactiveui.md): Use MVVM and ReactiveUI for the Front-End **(deprecated)**
+-   [ADR-0006](0006-use-radzen.md): ~~Use Radzen Blazor as the Library for UI Components~~ **(deprecated)**
+-   [ADR-0007](0007-use-reactiveui.md): ~~Use MVVM and ReactiveUI for the Front-End~~ **(deprecated)**
 -   [ADR-0008](0008-use-problem-json.md): Use application/problem+json to Describe Problems in the API
 -   [ADR-0009](0009-use-fluxor.md): Use Fluxor and the Redux Pattern for the Front-End
 -   [ADR-0010](0010-have-dry-validation.md): Have Hand-Rolled DRY Validation Infrastructure
 -   [ADR-0011](0011-unit-tests-be.md): Use xUnit and FsCheck for Back-End Unit Tests
 -   [ADR-0012](0012-integration-tests.md): Use Testcontainers for Back-End Integration Tests
--   [ADR-0013](0013-use-fluent-ui.md): Use Fluent UI as the Front-End UI Framework **(deprecated)**
+-   [ADR-0013](0013-use-fluent-ui.md): ~~Use Fluent UI as the Front-End UI Framework~~ **(deprecated)**
 -   [ADR-0014](0014-use-mudblazor.md): Use MudBlazor as the Front-End UI Framework
+-   [ADR-0015](0015-add-openapi-and-scalar.md): Add OpenAPI and Scalar for Documenting and Testing the API
