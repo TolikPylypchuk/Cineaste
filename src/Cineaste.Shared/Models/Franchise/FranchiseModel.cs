@@ -7,7 +7,12 @@ public record FranchiseModel(
     ImmutableList<FranchiseItemModel> Items,
     bool ShowTitles,
     bool IsLooselyConnected,
-    bool ContinueNumbering) : ITitledModel;
+    bool ContinueNumbering,
+    Guid? ParentFranchiseId,
+    int? SequenceNumber,
+    string DisplayNumber,
+    bool IsFirstInFranchise,
+    bool IsLastInFranchise) : ITitledModel;
 
 public record FranchiseItemModel(
     Guid Id,

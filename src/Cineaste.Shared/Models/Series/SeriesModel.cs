@@ -13,7 +13,11 @@ public sealed record SeriesModel(
     ImmutableList<SpecialEpisodeModel> SpecialEpisodes,
     string? ImdbId,
     string? RottenTomatoesId,
-    string DisplayNumber) : ITitledModel
+    Guid? ParentFranchiseId,
+    int? SequenceNumber,
+    string DisplayNumber,
+    bool IsFirstInFranchise,
+    bool IsLastInFranchise) : ITitledModel
 {
     [JsonIgnore]
     public ImmutableList<ISeriesComponentModel> Components =>

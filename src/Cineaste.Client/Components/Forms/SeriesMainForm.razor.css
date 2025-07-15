@@ -28,6 +28,17 @@
   margin-inline: var(--s1);
 }
 
+.go-to-other-components-container {
+  display: flex;
+  flex-direction: row;
+  gap: var(--s2);
+}
+
+::deep .invisible {
+  pointer-events: none;
+  opacity: 0;
+}
+
 .form-title {
   font: var(--font-header-medium);
   line-height: 1;

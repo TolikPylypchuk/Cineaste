@@ -44,6 +44,12 @@ public static class DomainExtensions
         }
     }
 
+    public static bool IsFirst(this FranchiseItem? item) =>
+        item is not null && item.SequenceNumber == 1;
+
+    public static bool IsLast(this FranchiseItem? item) =>
+        item is not null && item.SequenceNumber == item.ParentFranchise.Children.Count;
+
     public static string GetDisplayNumber(this FranchiseItem? item)
     {
         if (item is null)

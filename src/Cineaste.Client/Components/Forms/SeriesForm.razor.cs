@@ -60,10 +60,10 @@ public partial class SeriesForm
     }
 
     private void GoToNextComponent() =>
-        this.Dispatcher.Dispatch(new GoToNextComponentAction(this.FormModel));
+        this.Dispatcher.Dispatch(new GoToNextSeriesComponentAction(this.FormModel));
 
     private void GoToPreviousComponent() =>
-        this.Dispatcher.Dispatch(new GoToPreviousComponentAction(this.FormModel));
+        this.Dispatcher.Dispatch(new GoToPreviousSeriesComponentAction(this.FormModel));
 
     private void Save(SeriesRequest request) =>
         this.Dispatcher.Dispatch(this.ListItem is not null

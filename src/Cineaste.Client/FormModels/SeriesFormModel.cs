@@ -23,6 +23,13 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
     public string ImdbId { get; set; } = String.Empty;
     public string RottenTomatoesId { get; set; } = String.Empty;
 
+    public Guid? ParentFranchiseId { get; private set; }
+
+    public int? SequenceNumber { get; private set; }
+
+    public bool IsFirst { get; private set; }
+    public bool IsLast { get; private set; }
+
     public SeriesFormModel(
         Guid listId,
         IReadOnlyCollection<ListKindModel> availableKinds,
@@ -205,6 +212,11 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
                     break;
             }
         }
+
+        this.ParentFranchiseId = series?.ParentFranchiseId;
+        this.SequenceNumber = series?.SequenceNumber;
+        this.IsFirst = series?.IsFirstInFranchise ?? false;
+        this.IsLast = series?.IsLastInFranchise ?? false;
     }
 
     private int GetSequenceNumberForComponent(ISeriesComponentFormModel component) =>

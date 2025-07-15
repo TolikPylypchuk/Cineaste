@@ -74,6 +74,9 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
                 .ThenInclude(item => item.Series!.SpecialEpisodes)
             .Include(franchise => franchise.Children)
                 .ThenInclude(item => item.Franchise!.Titles)
+            .Include(franchise => franchise.FranchiseItem)
+                .ThenInclude(item => item!.ParentFranchise)
+                    .ThenInclude(franchise => franchise.Children)
             .AsSplitQuery()
             .SingleOrDefaultAsync(franchise => franchise.Id == id);
 

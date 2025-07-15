@@ -23,7 +23,7 @@
                 <MudIconButton
                     Icon="@Icons.Material.Filled.KeyboardArrowRight"
                     Size="Size.Small"
-                    Class="@(this.FormModel.IsFirst ? "invisible" : null)"
+                    Class="@(this.FormModel.IsLast ? "invisible" : null)"
                     @onclick="this.OnGoToNextComponent"
                     aria-hidden="@this.FormModel.IsLast"
                     aria-label="@this.Loc["AriaLabel.Next"]"

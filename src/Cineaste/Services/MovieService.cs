@@ -67,6 +67,9 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
             .Include(movie => movie.Titles)
             .Include(movie => movie.Kind)
             .Include(movie => movie.Tags)
+            .Include(movie => movie.FranchiseItem)
+                .ThenInclude(item => item!.ParentFranchise)
+                    .ThenInclude(franchise => franchise.Children)
             .AsSplitQuery()
             .SingleOrDefaultAsync(movie => movie.Id == id);
 

@@ -10,7 +10,12 @@ public static class FranchiseMappingExtensions
             franchise.Children.ToItemModels(),
             franchise.ShowTitles,
             franchise.IsLooselyConnected,
-            franchise.ContinueNumbering);
+            franchise.ContinueNumbering,
+            franchise.FranchiseItem?.ParentFranchise.Id.Value,
+            franchise.FranchiseItem?.SequenceNumber,
+            franchise.FranchiseItem.GetDisplayNumber(),
+            franchise.FranchiseItem.IsFirst(),
+            franchise.FranchiseItem.IsLast());
 
     public static Franchise ToFranchise(
         this Validated<FranchiseRequest> request,

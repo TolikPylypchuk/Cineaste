@@ -1,4 +1,5 @@
 using Cineaste.Client.Store.Forms.SeriesForm;
+using Cineaste.Client.Store.ListPage;
 
 namespace Cineaste.Client.Components.Forms;
 
@@ -118,6 +119,30 @@ public partial class SeriesMainForm
         if (delete == true && this.ListItem is { Id: var id })
         {
             this.Dispatcher.Dispatch(new DeleteSeriesAction(id));
+        }
+    }
+
+    private void GoToParentFranchise()
+    {
+        if (this.FormModel.ParentFranchiseId is Guid franchiseId)
+        {
+            this.Dispatcher.Dispatch(new GoToFranchiseAction(franchiseId));
+        }
+    }
+
+    private void GoToNextComponent()
+    {
+        if (this.FormModel.ParentFranchiseId is Guid franchiseId && this.FormModel.SequenceNumber is int num)
+        {
+            this.Dispatcher.Dispatch(new GoToFranchiseComponentAction(franchiseId, num + 1));
+        }
+    }
+
+    private void GoToPreviousComponent()
+    {
+        if (this.FormModel.ParentFranchiseId is Guid franchiseId && this.FormModel.SequenceNumber is int num)
+        {
+            this.Dispatcher.Dispatch(new GoToFranchiseComponentAction(franchiseId, num - 1));
         }
     }
 }

@@ -1,15 +1,15 @@
 namespace Cineaste.Client.Store.Forms.SeriesForm;
 
-public sealed record GoToNextComponentAction(SeriesFormModel FormModel);
+public sealed record GoToNextSeriesComponentAction(SeriesFormModel FormModel);
 
-public sealed record GoToPreviousComponentAction(SeriesFormModel FormModel);
+public sealed record GoToPreviousSeriesComponentAction(SeriesFormModel FormModel);
 
-public static class GoToComponentReducers
+public static class GoToSeriesComponentReducers
 {
     [ReducerMethod]
-    public static SeriesFormState ReduceGoToNextComponentAction(
+    public static SeriesFormState ReduceGoToNextSeriesComponentAction(
         SeriesFormState state,
-        GoToNextComponentAction action) =>
+        GoToNextSeriesComponentAction action) =>
         state.SelectedSeriesComponent is null
             ? state
             : state with
@@ -19,9 +19,9 @@ public static class GoToComponentReducers
             };
 
     [ReducerMethod]
-    public static SeriesFormState ReduceGoToPreviousComponentAction(
+    public static SeriesFormState ReduceGoToPreviousSeriesComponentAction(
         SeriesFormState state,
-        GoToPreviousComponentAction action) =>
+        GoToPreviousSeriesComponentAction action) =>
         state.SelectedSeriesComponent is null
             ? state
             : state with

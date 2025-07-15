@@ -10,4 +10,8 @@ public sealed record MovieModel(
     ListKindModel Kind,
     string? ImdbId,
     string? RottenTomatoesId,
-    string DisplayNumber) : ITitledModel;
+    Guid? ParentFranchiseId,
+    int? SequenceNumber,
+    string DisplayNumber,
+    bool IsFirstInFranchise,
+    bool IsLastInFranchise) : ITitledModel;

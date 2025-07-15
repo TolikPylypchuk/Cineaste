@@ -13,7 +13,11 @@ public static class MovieMappingExtensions
             movie.Kind.ToListKindModel(),
             movie.ImdbId,
             movie.RottenTomatoesId,
-            movie.FranchiseItem.GetDisplayNumber());
+            movie.FranchiseItem?.ParentFranchise.Id.Value,
+            movie.FranchiseItem?.SequenceNumber,
+            movie.FranchiseItem.GetDisplayNumber(),
+            movie.FranchiseItem.IsFirst(),
+            movie.FranchiseItem.IsLast());
 
     public static Movie ToMovie(this Validated<MovieRequest> request, Id<Movie> id, MovieKind kind) =>
         new(

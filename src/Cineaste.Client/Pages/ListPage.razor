@@ -55,20 +55,26 @@
         }
     }
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            this.SubscribeToAction<GoToFranchiseAction>(action => this.OnGoToFranchise(action.FranchiseId));
+
+            this.SubscribeToAction<GoToFranchiseComponentAction>(action =>
+                this.OnGoToFranchiseComponent(action.FranchiseId, action.SequenceNumber));
+        }
+    }
+
     private void FetchList() =>
         this.Dispatcher.Dispatch(new FetchListAction());
 
     private void SelectItem(ListItemModel item)
     {
         this.Dispatcher.Dispatch(new SelectItemAction(
-            item,
-            item.Type switch
-            {
-                ListItemType.Movie => this.State.Value.AvailableMovieKinds,
-                ListItemType.Series => this.State.Value.AvailableSeriesKinds,
-                _ => ImmutableList.Create<ListKindModel>()
-            },
-            this.State.Value.ListConfiguration));
+            item, this.GetKindsForItemType(item.Type), this.State.Value.ListConfiguration));
     }
 
     private void CreateMovie() =>
@@ -80,4 +86,30 @@
 
     private void OnItemClosed() =>
         this.Dispatcher.Dispatch(new CloseItemAction());
+
+    private void OnGoToFranchise(Guid franchiseId)
+    {
+        if (this.State.Value.Container[franchiseId] is { Type: ListItemType.Franchise } item)
+        {
+            this.Dispatcher.Dispatch(new SelectItemAction(
+                item, this.GetKindsForItemType(item.Type), this.State.Value.ListConfiguration));
+        }
+    }
+
+    private void OnGoToFranchiseComponent(Guid franchiseId, int sequenceNumber)
+    {
+        if (this.State.Value.Container[franchiseId, sequenceNumber] is { } item)
+        {
+            this.Dispatcher.Dispatch(new SelectItemAction(
+                item, this.GetKindsForItemType(item.Type), this.State.Value.ListConfiguration));
+        }
+    }
+
+    private ImmutableList<ListKindModel> GetKindsForItemType(ListItemType type) =>
+        type switch
+        {
+            ListItemType.Movie => this.State.Value.AvailableMovieKinds,
+            ListItemType.Series => this.State.Value.AvailableSeriesKinds,
+            _ => this.State.Value.AvailableMovieKinds.AddRange(this.State.Value.AvailableSeriesKinds)
+        };
 }

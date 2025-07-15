@@ -15,6 +15,13 @@ public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieMode
     public string ImdbId { get; set; } = String.Empty;
     public string RottenTomatoesId { get; set; } = String.Empty;
 
+    public Guid? ParentFranchiseId { get; private set; }
+
+    public int? SequenceNumber { get; private set; }
+
+    public bool IsFirst { get; private set; }
+    public bool IsLast { get; private set; }
+
     public MovieFormModel(Guid listId, IReadOnlyCollection<ListKindModel> availableKinds)
     {
         ArgumentNullException.ThrowIfNull(availableKinds);
@@ -55,5 +62,10 @@ public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieMode
         this.Kind = movie?.Kind ?? this.defaultKind;
         this.ImdbId = movie?.ImdbId ?? String.Empty;
         this.RottenTomatoesId = movie?.RottenTomatoesId ?? String.Empty;
+
+        this.ParentFranchiseId = movie?.ParentFranchiseId;
+        this.SequenceNumber = movie?.SequenceNumber;
+        this.IsFirst = movie?.IsFirstInFranchise ?? false;
+        this.IsLast = movie?.IsLastInFranchise ?? false;
     }
 }

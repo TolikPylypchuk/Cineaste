@@ -3,8 +3,40 @@
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
         <div class="form-header">
-            <div></div>
-            <div></div>
+            @if (!this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is not null)
+            {
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.KeyboardArrowUp"
+                    Size="Size.Small"
+                    @onclick="this.GoToParentFranchise"
+                    aria-label="@this.Loc["AriaLabel.Up"]"
+                />
+
+                <div class="go-to-other-components-container">
+                    <MudIconButton
+                        Icon="@Icons.Material.Filled.KeyboardArrowLeft"
+                        Size="Size.Small"
+                        Class="@(this.FormModel.IsFirst ? "invisible" : null)"
+                        @onclick="this.GoToPreviousComponent"
+                        aria-hidden="@this.FormModel.IsFirst"
+                        aria-label="@this.Loc["AriaLabel.Previous"]"
+                    />
+
+                    <MudIconButton
+                        Icon="@Icons.Material.Filled.KeyboardArrowRight"
+                        Size="Size.Small"
+                        Class="@(this.FormModel.IsLast ? "invisible" : null)"
+                        @onclick="this.GoToNextComponent"
+                        aria-hidden="@this.FormModel.IsLast"
+                        aria-label="@this.Loc["AriaLabel.Next"]"
+                    />
+                </div>
+            } else
+            {
+                <div></div>
+                <div></div>
+            }
+
             <MudIconButton
                 Icon="@Icons.Material.Filled.Close"
                 Size="Size.Small"

@@ -14,7 +14,11 @@ public static class SeriesMappingExtensions
             [.. series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel())],
             series.ImdbId,
             series.RottenTomatoesId,
-            series.FranchiseItem.GetDisplayNumber());
+            series.FranchiseItem?.ParentFranchise.Id.Value,
+            series.FranchiseItem?.SequenceNumber,
+            series.FranchiseItem.GetDisplayNumber(),
+            series.FranchiseItem.IsFirst(),
+            series.FranchiseItem.IsLast());
 
     public static Series ToSeries(this Validated<SeriesRequest> request, Id<Series> id, SeriesKind kind) =>
         new(
