@@ -10,11 +10,11 @@ internal sealed class CineasteListTypeConfiguration : IEntityTypeConfiguration<C
             .WithOne()
             .HasForeignKey<ListConfiguration>(Extensions.ListId);
 
-        list.HasManyToOne(l => l.Movies);
-        list.HasManyToOne(l => l.Series);
-        list.HasManyToOne(l => l.Franchises);
         list.HasManyToOne(l => l.MovieKinds);
         list.HasManyToOne(l => l.SeriesKinds);
         list.HasManyToOne(l => l.Tags);
+
+        list.Navigation(l => l.Items)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

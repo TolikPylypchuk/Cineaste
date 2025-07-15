@@ -46,6 +46,7 @@ public class DataFixture : IAsyncLifetime
         dbContext.MovieKinds.RemoveRange(dbContext.MovieKinds);
         dbContext.SeriesKinds.RemoveRange(dbContext.SeriesKinds);
         dbContext.ListConfigurations.RemoveRange(dbContext.ListConfigurations);
+        dbContext.ListItems.RemoveRange(dbContext.ListItems);
         dbContext.Lists.RemoveRange(dbContext.Lists);
 
         dbContext.MovieKinds.Add(this.movieKind);
@@ -71,7 +72,7 @@ public class DataFixture : IAsyncLifetime
     }
 
     public Task<CineasteList> GetList(CineasteDbContext dbContext) =>
-        dbContext.Lists.Where(list => list.Id ==  this.list.Id).SingleAsync();
+        dbContext.Lists.Where(list => list.Id == this.list.Id).Include(list => list.Configuration).SingleAsync();
 
     public Task<MovieKind> GetMovieKind(CineasteDbContext dbContext) =>
         dbContext.MovieKinds.Where(kind => kind.Id == this.movieKind.Id).SingleAsync();
@@ -96,6 +97,7 @@ public class DataFixture : IAsyncLifetime
 
         var movie = new Movie(Id.Create<Movie>(), this.CreateTitles(), 2000, true, true, kind);
         list.AddMovie(movie);
+        list.SortItems();
 
         dbContext.Movies.Add(movie);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -118,6 +120,7 @@ public class DataFixture : IAsyncLifetime
             kind);
 
         list.AddSeries(series);
+        list.SortItems();
 
         dbContext.Series.Add(series);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -148,6 +151,7 @@ public class DataFixture : IAsyncLifetime
             continueNumbering: false);
 
         list.AddFranchise(franchise);
+        list.SortItems();
 
         return franchise;
     }

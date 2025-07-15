@@ -16,20 +16,16 @@ internal sealed class ListConfigurationTypeConfiguration : IEntityTypeConfigurat
             c => c.SortingConfiguration,
             sorting =>
             {
-                sorting.Property(s => s.DefaultFirstSortOrder)
-                    .HasColumnName(nameof(ListSortingConfiguration.DefaultFirstSortOrder))
+                sorting.Property(s => s.FirstSortOrder)
+                    .HasColumnName(nameof(ListSortingConfiguration.FirstSortOrder))
                     .HasConversion<string>();
 
-                sorting.Property(s => s.DefaultFirstSortDirection)
-                    .HasColumnName(nameof(ListSortingConfiguration.DefaultFirstSortDirection))
+                sorting.Property(s => s.SecondSortOrder)
+                    .HasColumnName(nameof(ListSortingConfiguration.SecondSortOrder))
                     .HasConversion<string>();
 
-                sorting.Property(s => s.DefaultSecondSortOrder)
-                    .HasColumnName(nameof(ListSortingConfiguration.DefaultSecondSortOrder))
-                    .HasConversion<string>();
-
-                sorting.Property(s => s.DefaultSecondSortDirection)
-                    .HasColumnName(nameof(ListSortingConfiguration.DefaultSecondSortDirection))
+                sorting.Property(s => s.SortDirection)
+                    .HasColumnName(nameof(ListSortingConfiguration.SortDirection))
                     .HasConversion<string>();
             });
     }

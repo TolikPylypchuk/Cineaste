@@ -5,7 +5,6 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
     public void Configure(EntityTypeBuilder<Movie> movie)
     {
         movie.HasStronglyTypedId();
-        movie.HasListId();
 
         movie.HasTitles(m => m.Titles, "MovieTitles");
         movie.HasPoster(m => m.Poster);

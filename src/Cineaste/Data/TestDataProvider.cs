@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Globalization;
 
 namespace Cineaste.Data;
@@ -11,7 +10,8 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
 
         if (!listsPresentInDb)
         {
-            dbContext.Lists.Add(this.CreateList());
+            var list = this.CreateList();
+            dbContext.Lists.Add(list);
             await dbContext.SaveChangesAsync();
         }
     }
@@ -23,7 +23,7 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
             CultureInfo.InvariantCulture,
             "Season #",
             "Season #",
-            new(ListSortOrder.ByTitle, ListSortDirection.Ascending, ListSortOrder.ByYear, ListSortDirection.Ascending));
+            ListSortingConfiguration.CreateDefault());
 
         var list = new CineasteList(Id.Create<CineasteList>(), config);
 
@@ -62,6 +62,8 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         list.AddSeries(h);
 
         list.AddFranchise(i);
+
+        list.SortItems();
 
         return list;
     }

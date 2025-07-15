@@ -6,9 +6,7 @@ public static class ListMappingExtensions
         new(
             list.Id.Value,
             list.Configuration.ToConfigurationModel(),
-            [.. list.Movies.Select(ToListItemModel)],
-            [.. list.Series.Select(ToListItemModel)],
-            [.. list.Franchises.Select(ToListItemModel)],
+            [.. list.Items.Select(ToListItemModel)],
             [.. list.MovieKinds.Select(kind => kind.ToListKindModel())],
             [.. list.SeriesKinds.Select(kind => kind.ToListKindModel())]);
 
@@ -17,10 +15,15 @@ public static class ListMappingExtensions
             config.Culture.ToString(),
             config.DefaultSeasonTitle,
             config.DefaultSeasonOriginalTitle,
-            config.SortingConfiguration.DefaultFirstSortOrder,
-            config.SortingConfiguration.DefaultFirstSortDirection,
-            config.SortingConfiguration.DefaultSecondSortOrder,
-            config.SortingConfiguration.DefaultSecondSortDirection);
+            config.SortingConfiguration.FirstSortOrder,
+            config.SortingConfiguration.SecondSortOrder,
+            config.SortingConfiguration.SortDirection);
+
+    public static ListItemModel ToListItemModel(this ListItem item) =>
+        item.Select(
+            movie => movie.ToListItemModel(),
+            series => series.ToListItemModel(),
+            franchise => franchise.ToListItemModel());
 
     public static ListItemModel ToListItemModel(this Movie movie) =>
         new(

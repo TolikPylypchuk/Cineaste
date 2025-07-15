@@ -25,6 +25,8 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         list.AddMovie(movie);
         dbContext.Movies.Add(movie);
 
+        list.SortItems();
+
         await dbContext.SaveChangesAsync();
 
         return movie.ToMovieModel();
@@ -37,7 +39,7 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         var movie = await this.FindMovie(id);
         var list = await this.FindList(request.Value.ListId);
 
-        if (!list.Movies.Contains(movie))
+        if (!list.ContainsMovie(movie))
         {
             throw this.MovieDoesNotBelongToList(id, list.Id);
         }
@@ -45,6 +47,9 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         var kind = await this.FindKind(request.Value.KindId, list);
 
         movie.Update(request, kind);
+        movie.ListItem?.SetProperties(movie);
+
+        list.SortItems();
 
         await dbContext.SaveChangesAsync();
 
@@ -55,7 +60,19 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
     {
         this.logger.LogDebug("Deleting the movie with ID: {Id}", id.Value);
 
-        var movie = await this.dbContext.Movies.FindAsync(id) ?? throw this.NotFound(id);
+        var movie = await this.dbContext.Movies
+            .Where(movie => movie.Id == id)
+            .Include(movie => movie.ListItem)
+            .SingleOrDefaultAsync()
+            ?? throw this.NotFound(id);
+
+        var listItem = movie.ListItem!;
+
+        var list = await this.FindList(listItem.List.Id.Value);
+        list.RemoveItem(listItem);
+        list.SortItems();
+
+        dbContext.ListItems.Remove(listItem);
 
         this.dbContext.Movies.Remove(movie);
         await this.dbContext.SaveChangesAsync();
@@ -81,12 +98,16 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         var listId = Id.For<CineasteList>(id);
 
         var list = await this.dbContext.Lists
-            .Include(list => list.Movies)
-                .ThenInclude(movie => movie.Titles)
-            .Include(list => list.Movies)
-                .ThenInclude(movie => movie.Kind)
-            .Include(list => list.Movies)
-                .ThenInclude(movie => movie.Tags)
+            .Include(list => list.Configuration)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Movie)
+                    .ThenInclude(movie => movie!.Titles)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Movie)
+                    .ThenInclude(movie => movie!.Kind)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Movie)
+                    .ThenInclude(movie => movie!.Tags)
             .Include(list => list.MovieKinds)
             .AsSplitQuery()
             .SingleOrDefaultAsync(list => list.Id == listId);

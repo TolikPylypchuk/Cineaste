@@ -1,3 +1,5 @@
+using Cineaste.Core.Domain;
+
 namespace Cineaste.Services;
 
 public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<FranchiseService> logger)
@@ -23,6 +25,8 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         list.AddFranchise(franchise);
         dbContext.Franchises.Add(franchise);
 
+        list.SortItems();
+
         await dbContext.SaveChangesAsync();
 
         return franchise.ToFranchiseModel();
@@ -35,7 +39,7 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         var franchise = await this.FindFranchise(id);
         var list = await this.FindList(request.Value.ListId);
 
-        if (!list.Franchises.Contains(franchise))
+        if (!list.ContainsFranchise(franchise))
         {
             throw this.FranchiseDoesNotBelongToList(id, list.Id);
         }
@@ -43,6 +47,9 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         var (movies, series, franchises) = await this.GetAllItems(request.Value);
 
         franchise.Update(request, movies, series, franchises);
+
+        list.SortItems();
+        franchise.ListItem?.SetProperties(franchise);
 
         await dbContext.SaveChangesAsync();
 
@@ -53,9 +60,21 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
     {
         this.logger.LogDebug("Deleting the franchise with ID: {Id}", id.Value);
 
-        var fracnhise = await this.dbContext.Franchises.FindAsync(id) ?? throw this.NotFound(id);
+        var franchise = await this.dbContext.Franchises
+            .Where(franchise => franchise.Id == id)
+            .Include(franchise => franchise.ListItem)
+            .SingleOrDefaultAsync()
+            ?? throw this.NotFound(id);
 
-        this.dbContext.Franchises.Remove(fracnhise);
+        var listItem = franchise.ListItem!;
+
+        var list = await this.FindList(listItem.List.Id.Value);
+        list.RemoveItem(listItem);
+        list.SortItems();
+
+        dbContext.ListItems.Remove(listItem);
+
+        this.dbContext.Franchises.Remove(franchise);
         await this.dbContext.SaveChangesAsync();
     }
 
@@ -88,8 +107,10 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         var listId = Id.For<CineasteList>(id);
 
         var list = await this.dbContext.Lists
-            .Include(list => list.Franchises)
-                .ThenInclude(franchise => franchise.Titles)
+            .Include(list => list.Configuration)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Franchise)
+                    .ThenInclude(franchise => franchise!.Titles)
             .AsSplitQuery()
             .SingleOrDefaultAsync(list => list.Id == listId);
 

@@ -11,7 +11,6 @@ global using Cineaste.Client.Localization;
 global using Cineaste.Client.Services.Navigation;
 global using Cineaste.Client.Validation;
 global using Cineaste.Shared.Collections;
-global using Cineaste.Shared.Comparers;
 global using Cineaste.Shared.Mapping;
 global using Cineaste.Shared.Models;
 global using Cineaste.Shared.Models.Franchise;

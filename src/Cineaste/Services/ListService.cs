@@ -13,35 +13,40 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
-            .Include(list => list.Movies)
-                .ThenInclude(movie => movie.Titles)
-            .Include(list => list.Movies)
-                .ThenInclude(movie => movie.FranchiseItem)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.Titles)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.Seasons)
-                    .ThenInclude(season => season.Titles)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.Seasons)
-                    .ThenInclude(season => season.Periods)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.SpecialEpisodes)
-                    .ThenInclude(episode => episode.Titles)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.FranchiseItem)
-            .Include(list => list.Franchises)
-                .ThenInclude(franchise => franchise.Titles)
-            .Include(list => list.Franchises)
-                .ThenInclude(franchise => franchise.Children)
-            .Include(list => list.Franchises)
-                .ThenInclude(franchise => franchise.FranchiseItem)
             .AsSplitQuery()
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync()
+            ?? throw this.NotFound();
 
-        return list is not null
-            ? list.ToListModel()
-            : throw this.NotFound();
+        await dbContext.ListItems
+            .Where(item => item.List.Id == list!.Id)
+            .Include(item => item.Movie)
+                .ThenInclude(movie => movie!.Titles)
+            .Include(item => item.Movie)
+                .ThenInclude(movie => movie!.FranchiseItem)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Titles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Seasons)
+                    .ThenInclude(season => season.Titles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Seasons)
+                    .ThenInclude(season => season.Periods)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.SpecialEpisodes)
+                    .ThenInclude(episode => episode.Titles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.FranchiseItem)
+            .Include(item => item.Franchise)
+                .ThenInclude(franchise => franchise!.Titles)
+            .Include(item => item.Franchise)
+                .ThenInclude(franchise => franchise!.Children)
+            .Include(item => item.Franchise)
+                .ThenInclude(franchise => franchise!.FranchiseItem)
+            .OrderBy(item => item.SequenceNumber)
+            .AsSplitQuery()
+            .ToListAsync();
+
+        return list.ToListModel();
     }
 
     private NotFoundException NotFound() =>

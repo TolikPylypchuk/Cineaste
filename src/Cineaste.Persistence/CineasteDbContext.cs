@@ -14,6 +14,9 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options) : Db
     public DbSet<ListConfiguration> ListConfigurations =>
         this.Set<ListConfiguration>();
 
+    public DbSet<ListItem> ListItems =>
+        this.Set<ListItem>();
+
     public DbSet<MovieKind> MovieKinds =>
         this.Set<MovieKind>();
 
@@ -56,5 +59,6 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options) : Db
 
         builder.ApplyConfiguration(new ListConfigurationTypeConfiguration());
         builder.ApplyConfiguration(new CineasteListTypeConfiguration());
+        builder.ApplyConfiguration(new ListItemTypeConfiguration());
     }
 }

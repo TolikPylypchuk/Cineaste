@@ -1,6 +1,6 @@
 namespace Cineaste.Core.Domain;
 
-public abstract class FranchiseItemEntity<TEntity> : TitledEntity<TEntity>
+public abstract class FranchiseItemEntity<TEntity> : ListItemEntity<TEntity>
     where TEntity : FranchiseItemEntity<TEntity>
 {
     public FranchiseItem? FranchiseItem { get; set; }

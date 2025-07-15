@@ -1,3 +1,7 @@
+using Azure.Core;
+
+using Cineaste.Core.Domain;
+
 namespace Cineaste.Services;
 
 public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesService> logger)
@@ -25,6 +29,8 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
         list.AddSeries(series);
         dbContext.Series.Add(series);
 
+        list.SortItems();
+
         await dbContext.SaveChangesAsync();
 
         return series.ToSeriesModel();
@@ -37,7 +43,7 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
         var series = await this.FindSeries(id);
         var list = await this.FindList(request.Value.ListId);
 
-        if (!list.Series.Contains(series))
+        if (!list.ContainsSeries(series))
         {
             throw this.SeriesDoesNotBelongToList(id, list.Id);
         }
@@ -45,6 +51,9 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
         var kind = await this.FindKind(request.Value.KindId, list);
 
         series.Update(request, kind);
+        series.ListItem?.SetProperties(series);
+
+        list.SortItems();
 
         await dbContext.SaveChangesAsync();
 
@@ -55,7 +64,19 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
     {
         this.logger.LogDebug("Deleting the series with ID: {Id}", id.Value);
 
-        var series = await this.dbContext.Series.FindAsync(id) ?? throw this.NotFound(id);
+        var series = await this.dbContext.Series
+            .Where(series => series.Id == id)
+            .Include(series => series.ListItem)
+            .SingleOrDefaultAsync()
+            ?? throw this.NotFound(id);
+
+        var listItem = series.ListItem!;
+
+        var list = await this.FindList(listItem.List.Id.Value);
+        list.RemoveSeries(series);
+        list.SortItems();
+
+        dbContext.ListItems.Remove(listItem);
 
         this.dbContext.Series.Remove(series);
         await this.dbContext.SaveChangesAsync();
@@ -87,21 +108,28 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
         var listId = Id.For<CineasteList>(id);
 
         var list = await this.dbContext.Lists
-            .Include(list => list.Series)
-                .ThenInclude(series => series.Titles)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.Kind)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.Seasons)
-                    .ThenInclude(season => season.Titles)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.Seasons)
-                    .ThenInclude(season => season.Periods)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.SpecialEpisodes)
-                    .ThenInclude(episode => episode.Titles)
-            .Include(list => list.Series)
-                .ThenInclude(series => series.Tags)
+            .Include(list => list.Configuration)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Series)
+                    .ThenInclude(series => series!.Titles)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Series)
+                    .ThenInclude(series => series!.Kind)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Series)
+                    .ThenInclude(series => series!.Seasons)
+                        .ThenInclude(season => season.Titles)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Series)
+                    .ThenInclude(series => series!.Seasons)
+                        .ThenInclude(season => season.Periods)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Series)
+                    .ThenInclude(series => series!.SpecialEpisodes)
+                        .ThenInclude(episode => episode.Titles)
+            .Include(list => list.Items)
+                .ThenInclude(item => item.Series)
+                    .ThenInclude(series => series!.Tags)
             .Include(list => list.SeriesKinds)
             .AsSplitQuery()
             .SingleOrDefaultAsync(list => list.Id == listId);

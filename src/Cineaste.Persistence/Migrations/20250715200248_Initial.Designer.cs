@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20231120224925_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250715200248_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "9.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -49,9 +49,6 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<bool>("IsLooselyConnected")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ListId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("ShowTitles")
                         .HasColumnType("bit");
 
@@ -60,8 +57,6 @@ namespace Cineaste.Persistence.Migrations
                     b.HasIndex("FranchiseItemId")
                         .IsUnique()
                         .HasFilter("[FranchiseItemId] IS NOT NULL");
-
-                    b.HasIndex("ListId");
 
                     b.ToTable("Franchises");
                 });
@@ -118,6 +113,72 @@ namespace Cineaste.Persistence.Migrations
                     b.ToTable("ListConfigurations");
                 });
 
+            modelBuilder.Entity("Cineaste.Core.Domain.ListItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("EndYear")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("FranchiseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ListId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MovieId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NormalizedOriginalTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedShortOriginalTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedShortTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("SeriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("StartYear")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FranchiseId")
+                        .IsUnique()
+                        .HasFilter("[FranchiseId] IS NOT NULL");
+
+                    b.HasIndex("ListId");
+
+                    b.HasIndex("MovieId")
+                        .IsUnique()
+                        .HasFilter("[MovieId] IS NOT NULL");
+
+                    b.HasIndex("SequenceNumber");
+
+                    b.HasIndex("SeriesId")
+                        .IsUnique()
+                        .HasFilter("[SeriesId] IS NOT NULL");
+
+                    b.ToTable("ListItems", t =>
+                        {
+                            t.HasCheckConstraint("CH_ListItems_SequenceNumberPositive", "SequenceNumber > 0");
+                        });
+                });
+
             modelBuilder.Entity("Cineaste.Core.Domain.Movie", b =>
                 {
                     b.Property<Guid>("Id")
@@ -138,9 +199,6 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("KindId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ListId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
@@ -154,8 +212,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasFilter("[FranchiseItemId] IS NOT NULL");
 
                     b.HasIndex("KindId");
-
-                    b.HasIndex("ListId");
 
                     b.ToTable("Movies", t =>
                         {
@@ -298,9 +354,6 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("KindId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ListId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ReleaseStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -319,8 +372,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasFilter("[FranchiseItemId] IS NOT NULL");
 
                     b.HasIndex("KindId");
-
-                    b.HasIndex("ListId");
 
                     b.ToTable("Series");
                 });
@@ -473,12 +524,6 @@ namespace Cineaste.Persistence.Migrations
                         .WithOne("Franchise")
                         .HasForeignKey("Cineaste.Core.Domain.Franchise", "FranchiseItemId");
 
-                    b.HasOne("Cineaste.Core.Domain.CineasteList", null)
-                        .WithMany("Franchises")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {
                             b1.Property<Guid>("FranchiseId")
@@ -562,25 +607,20 @@ namespace Cineaste.Persistence.Migrations
                             b1.Property<Guid>("ListConfigurationId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("DefaultFirstSortDirection")
+                            b1.Property<string>("FirstSortOrder")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("DefaultFirstSortDirection");
+                                .HasColumnName("FirstSortOrder");
 
-                            b1.Property<string>("DefaultFirstSortOrder")
+                            b1.Property<string>("SecondSortOrder")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("DefaultFirstSortOrder");
+                                .HasColumnName("SecondSortOrder");
 
-                            b1.Property<string>("DefaultSecondSortDirection")
+                            b1.Property<string>("SortDirection")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("DefaultSecondSortDirection");
-
-                            b1.Property<string>("DefaultSecondSortOrder")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("DefaultSecondSortOrder");
+                                .HasColumnName("SortDirection");
 
                             b1.HasKey("ListConfigurationId");
 
@@ -594,6 +634,35 @@ namespace Cineaste.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Cineaste.Core.Domain.ListItem", b =>
+                {
+                    b.HasOne("Cineaste.Core.Domain.Franchise", "Franchise")
+                        .WithOne("ListItem")
+                        .HasForeignKey("Cineaste.Core.Domain.ListItem", "FranchiseId");
+
+                    b.HasOne("Cineaste.Core.Domain.CineasteList", "List")
+                        .WithMany("Items")
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cineaste.Core.Domain.Movie", "Movie")
+                        .WithOne("ListItem")
+                        .HasForeignKey("Cineaste.Core.Domain.ListItem", "MovieId");
+
+                    b.HasOne("Cineaste.Core.Domain.Series", "Series")
+                        .WithOne("ListItem")
+                        .HasForeignKey("Cineaste.Core.Domain.ListItem", "SeriesId");
+
+                    b.Navigation("Franchise");
+
+                    b.Navigation("List");
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Series");
+                });
+
             modelBuilder.Entity("Cineaste.Core.Domain.Movie", b =>
                 {
                     b.HasOne("Cineaste.Core.Domain.FranchiseItem", "FranchiseItem")
@@ -604,12 +673,6 @@ namespace Cineaste.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("KindId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Cineaste.Core.Domain.CineasteList", null)
-                        .WithMany("Movies")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
@@ -798,12 +861,6 @@ namespace Cineaste.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("KindId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Cineaste.Core.Domain.CineasteList", null)
-                        .WithMany("Series")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
@@ -1001,13 +1058,9 @@ namespace Cineaste.Persistence.Migrations
                     b.Navigation("Configuration")
                         .IsRequired();
 
-                    b.Navigation("Franchises");
+                    b.Navigation("Items");
 
                     b.Navigation("MovieKinds");
-
-                    b.Navigation("Movies");
-
-                    b.Navigation("Series");
 
                     b.Navigation("SeriesKinds");
 
@@ -1017,6 +1070,8 @@ namespace Cineaste.Persistence.Migrations
             modelBuilder.Entity("Cineaste.Core.Domain.Franchise", b =>
                 {
                     b.Navigation("Children");
+
+                    b.Navigation("ListItem");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.FranchiseItem", b =>
@@ -1028,6 +1083,11 @@ namespace Cineaste.Persistence.Migrations
                     b.Navigation("Series");
                 });
 
+            modelBuilder.Entity("Cineaste.Core.Domain.Movie", b =>
+                {
+                    b.Navigation("ListItem");
+                });
+
             modelBuilder.Entity("Cineaste.Core.Domain.Season", b =>
                 {
                     b.Navigation("Periods");
@@ -1035,6 +1095,8 @@ namespace Cineaste.Persistence.Migrations
 
             modelBuilder.Entity("Cineaste.Core.Domain.Series", b =>
                 {
+                    b.Navigation("ListItem");
+
                     b.Navigation("Seasons");
 
                     b.Navigation("SpecialEpisodes");
