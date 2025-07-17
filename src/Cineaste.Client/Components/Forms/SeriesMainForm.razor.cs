@@ -41,7 +41,7 @@ public partial class SeriesMainForm
         [.. Enum.GetValues<SeriesReleaseStatus>()];
 
     private bool IsSaving =>
-        this.State.Value.Create.IsInProgress || this.State.Value.Update.IsInProgress;
+        this.State.Value.Add.IsInProgress || this.State.Value.Update.IsInProgress;
 
     private object StatusErrorTrigger =>
         new { this.FormModel.WatchStatus, this.FormModel.ReleaseStatus };
@@ -118,7 +118,7 @@ public partial class SeriesMainForm
 
         if (delete == true && this.ListItem is { Id: var id })
         {
-            this.Dispatcher.Dispatch(new DeleteSeriesAction(id));
+            this.Dispatcher.Dispatch(new RemoveSeriesAction(id));
         }
     }
 

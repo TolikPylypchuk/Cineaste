@@ -18,7 +18,7 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<FranchiseModel>> AddFranchise([FromBody] FranchiseRequest request)
     {
-        var franchise = await franchiseService.CreateFranchise(request.Validated());
+        var franchise = await franchiseService.AddFranchise(request.Validated());
         return this.Created($"/api/franchises/{franchise.Id}", franchise);
     }
 

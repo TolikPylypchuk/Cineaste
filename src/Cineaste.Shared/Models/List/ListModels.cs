@@ -5,7 +5,6 @@ namespace Cineaste.Shared.Models.List;
 public sealed record ListModel(
     Guid Id,
     ListConfigurationModel Config,
-    ImmutableList<ListItemModel> Items,
     ImmutableList<ListKindModel> MovieKinds,
     ImmutableList<ListKindModel> SeriesKinds);
 

@@ -93,7 +93,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act
 
-        var model = await franchiseService.CreateFranchise(request.Validated());
+        var model = await franchiseService.AddFranchise(request.Validated());
 
         // Assert
 
@@ -133,7 +133,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act
 
-        var model = await franchiseService.CreateFranchise(request.Validated());
+        var model = await franchiseService.AddFranchise(request.Validated());
 
         // Assert
 
@@ -167,7 +167,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.CreateFranchise(request.Validated()));
+            franchiseService.AddFranchise(request.Validated()));
 
         Assert.Equal("NotFound.List", exception.MessageCode);
         Assert.Equal("Resource.List", exception.Resource);
@@ -191,7 +191,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.CreateFranchise(request.Validated()));
+            franchiseService.AddFranchise(request.Validated()));
 
         Assert.Equal("NotFound.FranchiseItems", exception.MessageCode);
         Assert.Equal("Resource.FranchiseItems", exception.Resource);
@@ -419,7 +419,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act
 
-        await franchiseService.DeleteFranchise(franchise.Id);
+        await franchiseService.RemoveFranchise(franchise.Id);
 
         // Assert
 
@@ -438,7 +438,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => franchiseService.DeleteFranchise(dummyId));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => franchiseService.RemoveFranchise(dummyId));
 
         Assert.Equal("NotFound.Franchise", exception.MessageCode);
         Assert.Equal("Resource.Franchise", exception.Resource);

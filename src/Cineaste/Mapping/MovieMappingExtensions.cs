@@ -13,6 +13,7 @@ public static class MovieMappingExtensions
             movie.Kind.ToListKindModel(),
             movie.ImdbId,
             movie.RottenTomatoesId,
+            movie.GetActiveColor()?.HexValue ?? String.Empty,
             movie.FranchiseItem?.ParentFranchise.Id.Value,
             movie.FranchiseItem?.SequenceNumber,
             movie.FranchiseItem.GetDisplayNumber(),

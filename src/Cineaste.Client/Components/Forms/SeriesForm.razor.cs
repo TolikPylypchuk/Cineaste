@@ -36,7 +36,7 @@ public partial class SeriesForm
         if (firstRender)
         {
             this.SubsribeToSuccessfulResult<FetchSeriesResultAction>(this.SetPropertyValues);
-            this.SubsribeToSuccessfulResult<CreateSeriesResultAction>(this.OnSeriesCreated);
+            this.SubsribeToSuccessfulResult<AddSeriesResultAction>(this.OnSeriesCreated);
             this.SubsribeToSuccessfulResult<UpdateSeriesResultAction>(this.OnSeriesUpdated);
         }
     }
@@ -68,7 +68,7 @@ public partial class SeriesForm
     private void Save(SeriesRequest request) =>
         this.Dispatcher.Dispatch(this.ListItem is not null
             ? new UpdateSeriesAction(this.ListItem.Id, request)
-            : new CreateSeriesAction(request));
+            : new AddSeriesAction(request));
 
     private void Cancel() =>
         this.SetPropertyValues();

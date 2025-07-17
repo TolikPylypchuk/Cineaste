@@ -8,6 +8,7 @@ public record FranchiseModel(
     bool ShowTitles,
     bool IsLooselyConnected,
     bool ContinueNumbering,
+    string ListItemColor,
     Guid? ParentFranchiseId,
     int? SequenceNumber,
     string DisplayNumber,

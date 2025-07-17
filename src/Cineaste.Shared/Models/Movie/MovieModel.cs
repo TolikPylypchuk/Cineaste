@@ -10,6 +10,7 @@ public sealed record MovieModel(
     ListKindModel Kind,
     string? ImdbId,
     string? RottenTomatoesId,
+    string ListItemColor,
     Guid? ParentFranchiseId,
     int? SequenceNumber,
     string DisplayNumber,

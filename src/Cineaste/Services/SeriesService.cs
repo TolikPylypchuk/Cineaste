@@ -17,7 +17,7 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
         return series.ToSeriesModel();
     }
 
-    public async Task<SeriesModel> CreateSeries(Validated<SeriesRequest> request)
+    public async Task<SeriesModel> AddSeries(Validated<SeriesRequest> request)
     {
         this.logger.LogDebug("Creating a new series");
 
@@ -60,13 +60,14 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
         return series.ToSeriesModel();
     }
 
-    public async Task DeleteSeries(Id<Series> id)
+    public async Task RemoveSeries(Id<Series> id)
     {
         this.logger.LogDebug("Deleting the series with ID: {Id}", id.Value);
 
         var series = await this.dbContext.Series
             .Where(series => series.Id == id)
             .Include(series => series.ListItem)
+                .ThenInclude(item => item!.List)
             .SingleOrDefaultAsync()
             ?? throw this.NotFound(id);
 

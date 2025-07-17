@@ -23,7 +23,7 @@ public partial class MovieForm
     private bool CanChangeIsReleased { get; set; } = true;
 
     private bool IsSaving =>
-        this.State.Value.Create.IsInProgress || this.State.Value.Update.IsInProgress;
+        this.State.Value.Add.IsInProgress || this.State.Value.Update.IsInProgress;
 
     protected override void OnParametersSet()
     {
@@ -44,7 +44,7 @@ public partial class MovieForm
         if (firstRender)
         {
             this.SubsribeToSuccessfulResult<FetchMovieResultAction>(this.SetPropertyValues);
-            this.SubsribeToSuccessfulResult<CreateMovieResultAction>(this.OnMovieCreated);
+            this.SubsribeToSuccessfulResult<AddMovieResultAction>(this.OnMovieCreated);
             this.SubsribeToSuccessfulResult<UpdateMovieResultAction>(this.OnMovieUpdated);
         }
     }
@@ -121,7 +121,7 @@ public partial class MovieForm
         this.WithValidation(request =>
             this.Dispatcher.Dispatch(this.ListItem is not null
                 ? new UpdateMovieAction(this.ListItem.Id, request)
-                : new CreateMovieAction(request)));
+                : new AddMovieAction(request)));
 
     private void Cancel()
     {
@@ -139,7 +139,7 @@ public partial class MovieForm
 
         if (delete == true && this.ListItem is { Id: var id })
         {
-            this.Dispatcher.Dispatch(new DeleteMovieAction(id));
+            this.Dispatcher.Dispatch(new RemoveMovieAction(id));
         }
     }
 

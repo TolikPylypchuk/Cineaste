@@ -20,7 +20,7 @@ public partial class FranchiseForm
     private string FormTitle { get; set; } = String.Empty;
 
     private bool IsSaving =>
-        this.State.Value.Create.IsInProgress || this.State.Value.Update.IsInProgress;
+        this.State.Value.Add.IsInProgress || this.State.Value.Update.IsInProgress;
 
     protected override void OnParametersSet()
     {
@@ -41,7 +41,7 @@ public partial class FranchiseForm
         if (firstRender)
         {
             this.SubsribeToSuccessfulResult<FetchFranchiseResultAction>(this.SetPropertyValues);
-            this.SubsribeToSuccessfulResult<CreateFranchiseResultAction>(this.OnFranchiseCreated);
+            this.SubsribeToSuccessfulResult<AddFranchiseResultAction>(this.OnFranchiseCreated);
             this.SubsribeToSuccessfulResult<UpdateFranchiseResultAction>(this.OnFranchiseUpdated);
         }
     }
@@ -70,7 +70,7 @@ public partial class FranchiseForm
         this.WithValidation(request =>
             this.Dispatcher.Dispatch(this.ListItem is not null
                 ? new UpdateFranchiseAction(this.ListItem.Id, request)
-                : new CreateFranchiseAction(request)));
+                : new AddFranchiseAction(request)));
 
     private void Cancel()
     {
@@ -88,7 +88,7 @@ public partial class FranchiseForm
 
         if (delete == true && this.ListItem is { Id: var id })
         {
-            this.Dispatcher.Dispatch(new DeleteFranchiseAction(id));
+            this.Dispatcher.Dispatch(new RemoveFranchiseAction(id));
         }
     }
 

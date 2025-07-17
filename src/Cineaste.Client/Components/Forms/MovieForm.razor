@@ -181,19 +181,19 @@
                             <MudButton
                                 Variant="Variant.Filled"
                                 Color="Color.Secondary"
-                                Disabled="@this.State.Value.Delete.IsInProgress"
+                                Disabled="@this.State.Value.Remove.IsInProgress"
                                 @onclick="@this.Delete"
                             >
-                                @this.Loc[this.State.Value.Delete.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
+                                @this.Loc[this.State.Value.Remove.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
                             </MudButton>
                         </div>
                     }
                 </div>
 
-                @if (this.State.Value.Create.Problem is not null)
+                @if (this.State.Value.Add.Problem is not null)
                 {
                     <ApiProblemAlert
-                        Problem="@this.State.Value.Create.Problem"
+                        Problem="@this.State.Value.Add.Problem"
                         Text="MovieForm.Problem.CreatingFailed"
                         TryAgain="@this.Save"
                         Class="problem-alert"
@@ -210,10 +210,10 @@
                     />
                 }
 
-                @if (this.State.Value.Delete.Problem is not null)
+                @if (this.State.Value.Remove.Problem is not null)
                 {
                     <ApiProblemAlert
-                        Problem="@this.State.Value.Delete.Problem"
+                        Problem="@this.State.Value.Remove.Problem"
                         Text="MovieForm.Problem.DeletingFailed"
                         TryAgain="@this.Delete"
                         Class="problem-alert"

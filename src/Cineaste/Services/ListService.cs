@@ -14,10 +14,24 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
             .AsSplitQuery()
+            .AsNoTracking()
             .SingleOrDefaultAsync()
             ?? throw this.NotFound();
 
-        await dbContext.ListItems
+        return list.ToListModel();
+    }
+
+    public async Task<OffsettableData<ListItemModel>> GetListItems(int offset, int size)
+    {
+        logger.LogDebug("Getting list items");
+
+        var list = await dbContext.Lists
+            .Include(list => list.MovieKinds)
+            .Include(list => list.SeriesKinds)
+            .SingleOrDefaultAsync()
+            ?? throw this.NotFound();
+
+        var items = await dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
             .Include(item => item.Movie)
                 .ThenInclude(movie => movie!.Titles)
@@ -43,10 +57,18 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(item => item.Franchise)
                 .ThenInclude(franchise => franchise!.FranchiseItem)
             .OrderBy(item => item.SequenceNumber)
+            .Skip(offset)
+            .Take(size)
             .AsSplitQuery()
             .ToListAsync();
 
-        return list.ToListModel();
+        int totalItems = await dbContext.ListItems
+            .Where(item => item.List.Id == list!.Id)
+            .CountAsync();
+
+        return new(
+            [.. items.Select(item => item.ToListItemModel())],
+            new(offset, size, totalItems));
     }
 
     private NotFoundException NotFound() =>

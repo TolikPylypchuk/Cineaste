@@ -19,4 +19,20 @@ public abstract record EmptyResultAction
             EmptyApiFailure failure => onFailure(failure.Problem),
             _ => Match.ImpossibleType<TResult>(this.Result)
         };
+
+    public void Handle(
+        Action onSuccess,
+        Action<ProblemDetails> onFailure)
+    {
+        switch (this.Result)
+        {
+            case EmptyApiSuccess:
+                onSuccess();
+                break;
+            case EmptyApiFailure failure:
+                onFailure(failure.Problem);
+                break;
+        }
+        ;
+    }
 }

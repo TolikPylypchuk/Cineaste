@@ -15,7 +15,7 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         return franchise.ToFranchiseModel();
     }
 
-    public async Task<FranchiseModel> CreateFranchise(Validated<FranchiseRequest> request)
+    public async Task<FranchiseModel> AddFranchise(Validated<FranchiseRequest> request)
     {
         this.logger.LogDebug("Creating a new franchise");
 
@@ -56,7 +56,7 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         return franchise.ToFranchiseModel();
     }
 
-    public async Task DeleteFranchise(Id<Franchise> id)
+    public async Task RemoveFranchise(Id<Franchise> id)
     {
         this.logger.LogDebug("Deleting the franchise with ID: {Id}", id.Value);
 

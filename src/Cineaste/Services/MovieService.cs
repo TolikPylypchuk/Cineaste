@@ -13,7 +13,7 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         return movie.ToMovieModel();
     }
 
-    public async Task<MovieModel> CreateMovie(Validated<MovieRequest> request)
+    public async Task<MovieModel> AddMovie(Validated<MovieRequest> request)
     {
         this.logger.LogDebug("Creating a new movie");
 
@@ -56,13 +56,14 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         return movie.ToMovieModel();
     }
 
-    public async Task DeleteMovie(Id<Movie> id)
+    public async Task RemoveMovie(Id<Movie> id)
     {
         this.logger.LogDebug("Deleting the movie with ID: {Id}", id.Value);
 
         var movie = await this.dbContext.Movies
             .Where(movie => movie.Id == id)
             .Include(movie => movie.ListItem)
+                .ThenInclude(item => item!.List)
             .SingleOrDefaultAsync()
             ?? throw this.NotFound(id);
 

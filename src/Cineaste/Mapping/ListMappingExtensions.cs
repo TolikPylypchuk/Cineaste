@@ -6,7 +6,6 @@ public static class ListMappingExtensions
         new(
             list.Id.Value,
             list.Configuration.ToConfigurationModel(),
-            [.. list.Items.Select(ToListItemModel)],
             [.. list.MovieKinds.Select(kind => kind.ToListKindModel())],
             [.. list.SeriesKinds.Select(kind => kind.ToListKindModel())]);
 

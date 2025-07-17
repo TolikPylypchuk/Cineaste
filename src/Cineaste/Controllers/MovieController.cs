@@ -18,7 +18,7 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<MovieModel>> AddMovie([FromBody] MovieRequest request)
     {
-        var movie = await movieService.CreateMovie(request.Validated());
+        var movie = await movieService.AddMovie(request.Validated());
         return this.Created($"/api/movies/{movie.Id}", movie);
     }
 
@@ -41,7 +41,7 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveMovie([FromRoute] Guid id)
     {
-        await movieService.DeleteMovie(Id.For<Movie>(id));
+        await movieService.RemoveMovie(Id.For<Movie>(id));
         return this.NoContent();
     }
 }

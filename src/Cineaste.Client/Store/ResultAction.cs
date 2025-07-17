@@ -22,4 +22,19 @@ public abstract record ResultAction<T> : ResultAction
             ApiFailure<T> failure => onFailure(failure.Problem),
             _ => Match.ImpossibleType<TResult>(this.Result)
         };
+
+    public void Handle(
+        Action<T> onSuccess,
+        Action<ProblemDetails> onFailure)
+    {
+        switch (this.Result)
+        {
+            case ApiSuccess<T> success:
+                onSuccess(success.Value);
+                break;
+            case ApiFailure<T> failure:
+                onFailure(failure.Problem);
+                break;
+        };
+    }
 }

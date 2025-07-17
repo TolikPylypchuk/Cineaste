@@ -18,7 +18,7 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<SeriesModel>> AddSeries([FromBody] SeriesRequest request)
     {
-        var series = await seriesService.CreateSeries(request.Validated());
+        var series = await seriesService.AddSeries(request.Validated());
         return this.Created($"/api/series/{series.Id}", series);
     }
 
@@ -41,7 +41,7 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveSeries([FromRoute] Guid id)
     {
-        await seriesService.DeleteSeries(Id.For<Series>(id));
+        await seriesService.RemoveSeries(Id.For<Series>(id));
         return this.NoContent();
     }
 }

@@ -19,17 +19,22 @@ public static class ApiResultExtensions
 {
     public static ApiResult<T> ToApiResult<T>(this IApiResponse<T> response)
     {
-        if (response.IsSuccessStatusCode)
+        if (response.IsSuccessful)
         {
             return response.Content is not null
                 ? ApiResult.Success(response.Content)
-                : throw new InvalidOperationException("The response's content is empty");
-        } else if (response.Error is ValidationApiException exception && exception.Content is not null)
+                : throw new InvalidOperationException("The response content is empty");
+        } else if (response.Error is ValidationApiException validationException &&
+            validationException.Content is not null)
         {
-            return ApiResult.Failure<T>(exception.Content);
+            return ApiResult.Failure<T>(validationException.Content);
+        } else if (response.Error is { } exception &&
+            exception.InnerException is TaskCanceledException taskCanceledException)
+        {
+            throw taskCanceledException;
         } else
         {
-            throw new InvalidOperationException("The response's error must be of type application/problem+json");
+            throw new InvalidOperationException("The response error must be of type application/problem+json");
         }
     }
 

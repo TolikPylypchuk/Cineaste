@@ -34,7 +34,7 @@ builder.Services.AddCors();
 
 builder.Services.AddOutputCache(options =>
 {
-    options.AddBasePolicy(policy => policy.Expire(TimeSpan.FromHours(1)));
+    options.AddPolicy("OpenApi", policy => policy.Expire(TimeSpan.FromHours(1)));
 });
 
 builder.Services.AddScoped<CultureProvider>();
@@ -74,7 +74,7 @@ app.MapStaticAssets();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi().CacheOutput();
+    app.MapOpenApi().CacheOutput("OpenApi");
     app.MapScalarApiReference(options =>
     {
         options.OperationSorter = OperationSorter.Alpha;

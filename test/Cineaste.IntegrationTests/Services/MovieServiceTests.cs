@@ -64,7 +64,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await movieService.CreateMovie(request.Validated());
+        var model = await movieService.AddMovie(request.Validated());
 
         // Assert
 
@@ -94,7 +94,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await movieService.CreateMovie(request.Validated());
+        var model = await movieService.AddMovie(request.Validated());
 
         // Assert
 
@@ -122,7 +122,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.CreateMovie(request.Validated()));
+            movieService.AddMovie(request.Validated()));
 
         Assert.Equal("NotFound.List", exception.MessageCode);
         Assert.Equal("Resource.List", exception.Resource);
@@ -143,7 +143,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.CreateMovie(request.Validated()));
+            movieService.AddMovie(request.Validated()));
 
         Assert.Equal("NotFound.MovieKind", exception.MessageCode);
         Assert.Equal("Resource.MovieKind", exception.Resource);
@@ -170,7 +170,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
-            movieService.CreateMovie(request.Validated()));
+            movieService.AddMovie(request.Validated()));
 
         Assert.Equal("BadRequest.MovieKind.WrongList", exception.MessageCode);
         Assert.Equal(data.ListId, exception.Properties["listId"]);
@@ -308,7 +308,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        await movieService.DeleteMovie(movie.Id);
+        await movieService.RemoveMovie(movie.Id);
 
         // Assert
 
@@ -327,7 +327,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => movieService.DeleteMovie(dummyId));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => movieService.RemoveMovie(dummyId));
 
         Assert.Equal("NotFound.Movie", exception.MessageCode);
         Assert.Equal("Resource.Movie", exception.Resource);

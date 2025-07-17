@@ -13,6 +13,7 @@ public sealed record SeriesModel(
     ImmutableList<SpecialEpisodeModel> SpecialEpisodes,
     string? ImdbId,
     string? RottenTomatoesId,
+    string ListItemColor,
     Guid? ParentFranchiseId,
     int? SequenceNumber,
     string DisplayNumber,
@@ -21,10 +22,9 @@ public sealed record SeriesModel(
 {
     [JsonIgnore]
     public ImmutableList<ISeriesComponentModel> Components =>
-        this.Seasons.Cast<ISeriesComponentModel>()
+        [.. this.Seasons.Cast<ISeriesComponentModel>()
             .Concat(this.SpecialEpisodes.Cast<ISeriesComponentModel>())
-            .OrderBy(component => component.SequenceNumber)
-            .ToImmutableList();
+            .OrderBy(component => component.SequenceNumber)];
 
     [JsonIgnore]
     public int StartYear =>

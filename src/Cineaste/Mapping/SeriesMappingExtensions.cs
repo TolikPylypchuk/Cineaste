@@ -14,6 +14,7 @@ public static class SeriesMappingExtensions
             [.. series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel())],
             series.ImdbId,
             series.RottenTomatoesId,
+            series.GetActiveColor()?.HexValue ?? String.Empty,
             series.FranchiseItem?.ParentFranchise.Id.Value,
             series.FranchiseItem?.SequenceNumber,
             series.FranchiseItem.GetDisplayNumber(),

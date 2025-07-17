@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -767,5 +767,8 @@
   </data>
   <data name="Validation.Titles.Name.TooLong" xml:space="preserve">
     <value>The titles are too long</value>
+  </data>
+  <data name="ListComponent.List.Loading" xml:space="preserve">
+    <value>Loading...</value>
   </data>
 </root>

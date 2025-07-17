@@ -6,11 +6,11 @@ public interface IFranchiseApi
     public Task<IApiResponse<FranchiseModel>> GetFranchise(Guid id);
 
     [Post("/franchises")]
-    public Task<IApiResponse<FranchiseModel>> CreateFranchise([Body] FranchiseRequest request);
+    public Task<IApiResponse<FranchiseModel>> AddFranchise([Body] FranchiseRequest request);
 
     [Put("/franchises/{id}")]
     public Task<IApiResponse<FranchiseModel>> UpdateFranchise(Guid id, [Body] FranchiseRequest request);
 
     [Delete("/franchises/{id}")]
-    public Task<IApiResponse> DeleteFranchise(Guid id);
+    public Task<IApiResponse> RemoveFranchise(Guid id);
 }
