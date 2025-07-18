@@ -4,6 +4,7 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
 {
     private Franchise parentFranchise;
     private int sequenceNumber;
+    private int? displayNumber;
 
     public Franchise ParentFranchise
     {
@@ -19,7 +20,11 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
         set => this.sequenceNumber = Require.Positive(value);
     }
 
-    public bool ShouldDisplayNumber { get; set; }
+    public int? DisplayNumber
+    {
+        get => this.displayNumber;
+        set => this.displayNumber = Require.Positive(value);
+    }
 
     public Movie? Movie { get; private set; }
 
@@ -47,8 +52,8 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
         Movie movie,
         Franchise parentFranchise,
         int sequenceNumber,
-        bool shouldDisplayNumber)
-        : this(id, parentFranchise, sequenceNumber, shouldDisplayNumber) =>
+        int? displayNumber)
+        : this(id, parentFranchise, sequenceNumber, displayNumber) =>
         this.Movie = Require.NotNull(movie);
 
     public FranchiseItem(
@@ -56,8 +61,8 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
         Series series,
         Franchise parentFranchise,
         int sequenceNumber,
-        bool shouldDisplayNumber)
-        : this(id, parentFranchise, sequenceNumber, shouldDisplayNumber) =>
+        int? displayNumber)
+        : this(id, parentFranchise, sequenceNumber, displayNumber) =>
         this.Series = Require.NotNull(series);
 
     public FranchiseItem(
@@ -65,20 +70,20 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
         Franchise franchise,
         Franchise parentFranchise,
         int sequenceNumber,
-        bool shouldDisplayNumber)
-        : this(id, parentFranchise, sequenceNumber, shouldDisplayNumber) =>
+        int? displayNumber)
+        : this(id, parentFranchise, sequenceNumber, displayNumber) =>
         this.Franchise = Require.NotNull(franchise);
 
     private FranchiseItem(
         Id<FranchiseItem> id,
         Franchise parentFranchise,
         int sequenceNumber,
-        bool shouldDisplayNumber)
+        int? displayNumber)
         : base(id)
     {
         this.ParentFranchise = parentFranchise;
         this.SequenceNumber = sequenceNumber;
-        this.ShouldDisplayNumber = shouldDisplayNumber;
+        this.DisplayNumber = displayNumber;
     }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]

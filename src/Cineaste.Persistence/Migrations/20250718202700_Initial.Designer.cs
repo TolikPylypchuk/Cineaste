@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20250718155158_Initial")]
+    [Migration("20250718202700_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -66,14 +66,14 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int?>("DisplayNumber")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("ParentFranchiseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SequenceNumber")
                         .HasColumnType("int");
-
-                    b.Property<bool>("ShouldDisplayNumber")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

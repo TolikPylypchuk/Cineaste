@@ -213,10 +213,10 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
             }
         }
 
-        this.ParentFranchiseId = series?.ParentFranchiseId;
-        this.SequenceNumber = series?.SequenceNumber;
-        this.IsFirst = series?.IsFirstInFranchise ?? false;
-        this.IsLast = series?.IsLastInFranchise ?? false;
+        this.ParentFranchiseId = series?.FranchiseItem?.ParentFranchiseId;
+        this.SequenceNumber = series?.FranchiseItem?.SequenceNumber;
+        this.IsFirst = series?.FranchiseItem?.IsFirstInFranchise ?? false;
+        this.IsLast = series?.FranchiseItem?.IsLastInFranchise ?? false;
     }
 
     private int GetSequenceNumberForComponent(ISeriesComponentFormModel component) =>

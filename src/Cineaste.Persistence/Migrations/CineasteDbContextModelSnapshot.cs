@@ -63,14 +63,14 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int?>("DisplayNumber")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("ParentFranchiseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SequenceNumber")
                         .HasColumnType("int");
-
-                    b.Property<bool>("ShouldDisplayNumber")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

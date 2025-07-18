@@ -28,8 +28,6 @@ public static class ListMappingExtensions
         new(
             movie.Id.Value,
             ListItemType.Movie,
-            true,
-            movie.FranchiseItem.GetDisplayNumber(),
             movie.Title.Name,
             movie.OriginalTitle.Name,
             movie.Year,
@@ -41,8 +39,6 @@ public static class ListMappingExtensions
         new(
             series.Id.Value,
             ListItemType.Series,
-            true,
-            series.FranchiseItem.GetDisplayNumber(),
             series.Title.Name,
             series.OriginalTitle.Name,
             series.StartYear,
@@ -54,8 +50,6 @@ public static class ListMappingExtensions
         new(
             franchise.Id.Value,
             ListItemType.Franchise,
-            franchise.ShowTitles,
-            franchise.FranchiseItem.GetDisplayNumber(),
             franchise.ShowTitles && franchise.Title is not null
                 ? $"{franchise.Title.Name}:"
                 : String.Empty,
@@ -69,5 +63,11 @@ public static class ListMappingExtensions
 
     [return: NotNullIfNotNull(nameof(item))]
     private static ListFranchiseItemModel? ToFranchiseItemModel(this FranchiseItem? item) =>
-        item is not null ? new(item.ParentFranchise.Id.Value, item.SequenceNumber) : null;
+        item is not null
+            ? new(
+                item.ParentFranchise.Id.Value,
+                item.SequenceNumber,
+                item.DisplayNumber,
+                item.ParentFranchise.IsLooselyConnected)
+            : null;
 }

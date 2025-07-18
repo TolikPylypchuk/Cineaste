@@ -63,7 +63,7 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
             Assert.Equal(this.GetId(expectedItem), actualItem.Id);
             Assert.Equal(this.GetTitle(expectedItem), actualItem.Title);
             Assert.Equal(this.GetOriginalTitle(expectedItem), actualItem.OriginalTitle);
-            Assert.Equal(this.GetDisplayNumber(expectedItem), actualItem.DisplayNumber);
+            Assert.Equal(this.GetDisplayNumber(expectedItem), actualItem.FranchiseItem?.DisplayNumber);
         }
     }
 
@@ -89,9 +89,9 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
                 ? $"{franchise.OriginalTitle.Name}:"
                 : String.Empty);
 
-    private string GetDisplayNumber(ListItem item) =>
+    private int? GetDisplayNumber(ListItem item) =>
         item.Select(
-            movie => movie.FranchiseItem.GetDisplayNumber(),
-            series => series.FranchiseItem.GetDisplayNumber(),
-            franchise => franchise.FranchiseItem.GetDisplayNumber());
+            movie => movie.FranchiseItem?.DisplayNumber,
+            series => series.FranchiseItem?.DisplayNumber,
+            franchise => franchise.FranchiseItem?.DisplayNumber);
 }

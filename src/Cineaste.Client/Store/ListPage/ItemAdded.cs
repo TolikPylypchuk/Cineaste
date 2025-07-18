@@ -38,13 +38,10 @@ public static class ItemAddedReducers
     public static ListPageState ReduceAddFranchiseResultAction(ListPageState state, AddFranchiseResultAction action) =>
         action.Handle(
             onSuccess: franchise =>
-            {
-                var item = franchise.ToListItemModel();
-                return state with
+                state with
                 {
-                    SelectedItem = item.ShouldBeShown ? item : null,
-                    SelectionMode = item.ShouldBeShown ? ListPageSelectionMode.Franchise : ListPageSelectionMode.None
-                };
-            },
+                    SelectedItem = franchise.ShowTitles ? franchise.ToListItemModel() : null,
+                    SelectionMode = franchise.ShowTitles ? ListPageSelectionMode.Franchise : ListPageSelectionMode.None
+                },
             onFailure: _ => state);
 }

@@ -14,11 +14,7 @@ public sealed record SeriesModel(
     string? ImdbId,
     string? RottenTomatoesId,
     string ListItemColor,
-    Guid? ParentFranchiseId,
-    int? SequenceNumber,
-    string DisplayNumber,
-    bool IsFirstInFranchise,
-    bool IsLastInFranchise) : ITitledModel
+    FranchiseItemInfoModel? FranchiseItem) : ITitledModel
 {
     [JsonIgnore]
     public ImmutableList<ISeriesComponentModel> Components =>

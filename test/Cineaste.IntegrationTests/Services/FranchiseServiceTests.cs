@@ -19,8 +19,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         var franchise = data.CreateFranchise(list);
         dbContext.Franchises.Add(franchise);
 
-        franchise.AddMovie(await data.CreateMovie(dbContext));
-        franchise.AddSeries(await data.CreateSeries(dbContext));
+        franchise.AddMovie(await data.CreateMovie(dbContext), true);
+        franchise.AddSeries(await data.CreateSeries(dbContext), true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -111,7 +111,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             .Zip(franchise.Children.OrderBy(item => item.SequenceNumber)))
         {
             Assert.Equal(itemRequest.SequenceNumber, item.SequenceNumber);
-            Assert.Equal(itemRequest.ShouldDisplayNumber, item.ShouldDisplayNumber);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, item.DisplayNumber is null);
 
             item.Do(
                 movie => Assert.Equal(FranchiseItemType.Movie, itemRequest.Type),
@@ -147,7 +147,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             .Zip(model.Items.OrderBy(item => item.SequenceNumber)))
         {
             Assert.Equal(itemRequest.SequenceNumber, itemModel.SequenceNumber);
-            Assert.Equal(itemRequest.ShouldDisplayNumber, itemModel.ShouldDisplayNumber);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, itemModel.DisplayNumber is null);
             Assert.Equal(itemRequest.Type, itemModel.Type);
         }
     }
@@ -215,8 +215,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         var list = await data.GetList(dbContext);
 
         var franchise = data.CreateFranchise(list);
-        franchise.AddMovie(movie1);
-        franchise.AddMovie(movie2);
+        franchise.AddMovie(movie1, true);
+        franchise.AddMovie(movie2, true);
 
         dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -256,7 +256,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             Assert.Equal(itemRequest.Id, item.Select(m => m.Id.Value, s => s.Id.Value, f => f.Id.Value));
             Assert.Equal(itemRequest.Type, itemType);
             Assert.Equal(itemRequest.SequenceNumber, item.SequenceNumber);
-            Assert.Equal(itemRequest.ShouldDisplayNumber, item.ShouldDisplayNumber);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, item.DisplayNumber is null);
         }
     }
 
@@ -272,7 +272,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var franchise = data.CreateFranchise(list);
-        franchise.AddMovie(movie);
+        franchise.AddMovie(movie, true);
 
         dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -303,7 +303,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var franchise = data.CreateFranchise(list);
-        franchise.AddMovie(movie);
+        franchise.AddMovie(movie, true);
 
         dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -328,7 +328,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             Assert.Equal(itemRequest.Id, itemModel.Id);
             Assert.Equal(itemRequest.Type, itemModel.Type);
             Assert.Equal(itemRequest.SequenceNumber, itemModel.SequenceNumber);
-            Assert.Equal(itemRequest.ShouldDisplayNumber, itemModel.ShouldDisplayNumber);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, itemModel.DisplayNumber is null);
         }
     }
 
@@ -344,7 +344,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var franchise = data.CreateFranchise(list);
-        franchise.AddMovie(movie);
+        franchise.AddMovie(movie, true);
 
         dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -373,7 +373,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var franchise = data.CreateFranchise(list);
-        franchise.AddMovie(movie);
+        franchise.AddMovie(movie, true);
 
         dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -412,7 +412,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var franchise = data.CreateFranchise(list);
-        franchise.AddMovie(movie);
+        franchise.AddMovie(movie, true);
 
         dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);

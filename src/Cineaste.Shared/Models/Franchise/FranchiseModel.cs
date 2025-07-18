@@ -9,16 +9,12 @@ public record FranchiseModel(
     bool IsLooselyConnected,
     bool ContinueNumbering,
     string ListItemColor,
-    Guid? ParentFranchiseId,
-    int? SequenceNumber,
-    string DisplayNumber,
-    bool IsFirstInFranchise,
-    bool IsLastInFranchise) : ITitledModel;
+    FranchiseItemInfoModel? FranchiseItem) : ITitledModel;
 
 public record FranchiseItemModel(
     Guid Id,
     int SequenceNumber,
-    bool ShouldDisplayNumber,
+    int? DisplayNumber,
     string Title,
     int StartYear,
     int EndYear,

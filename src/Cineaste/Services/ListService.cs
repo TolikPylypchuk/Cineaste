@@ -26,6 +26,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
         logger.LogDebug("Getting the list items");
 
         var list = await dbContext.Lists
+            .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
             .SingleOrDefaultAsync()
@@ -39,8 +40,6 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
         {
             return new([], new(offset, size, totalItems));
         }
-
-        await Task.Delay(5000);
 
         var items = await dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)

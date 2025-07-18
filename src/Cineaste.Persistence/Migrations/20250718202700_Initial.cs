@@ -147,7 +147,7 @@ namespace Cineaste.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ParentFranchiseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SequenceNumber = table.Column<int>(type: "int", nullable: false),
-                    ShouldDisplayNumber = table.Column<bool>(type: "bit", nullable: false)
+                    DisplayNumber = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

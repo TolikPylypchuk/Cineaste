@@ -48,8 +48,8 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
 
         var i = this.CreateFranchise("i");
 
-        i.AddSeries(f);
-        i.AddMovie(c);
+        i.AddSeries(f, true);
+        i.AddMovie(c, true);
 
         list.AddMovie(a);
         list.AddMovie(b);

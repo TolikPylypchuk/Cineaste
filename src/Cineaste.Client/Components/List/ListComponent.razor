@@ -40,11 +40,29 @@
             Class="list"
         >
             <Columns>
-                <MudBlazor.PropertyColumn
+                <MudBlazor.TemplateColumn
                     Title="@this.Loc["ListComponent.List.Number"]"
-                    Property="@(item => item.DisplayNumber)"
                     CellClass="cell-content number"
-                />
+                >
+                    <CellTemplate>
+                        @if (context.Item.FranchiseItem is { } franchiseItem)
+                        {
+                            @if (franchiseItem.DisplayNumber is not null)
+                            {
+                                @if (franchiseItem.IsLooselyConnected)
+                                {
+                                    @($"({franchiseItem.DisplayNumber})")
+                                } else
+                                {
+                                    @franchiseItem.DisplayNumber
+                                }
+                            } else
+                            {
+                                @("-")
+                            }
+                        }
+                    </CellTemplate>
+                </MudBlazor.TemplateColumn>
 
                 <MudBlazor.PropertyColumn
                     Title="@this.Loc["ListComponent.List.Title"]"
@@ -127,6 +145,8 @@
     {
         var dataSource = new ListItemModelSource();
         this.dataSources.TryAdd(token, dataSource);
+
+        token.Register(() => this.TrySetResult(null, token));
 
         this.Dispatcher.Dispatch(new FetchListItemsAction(gridState.StartIndex, gridState.Count, token));
 

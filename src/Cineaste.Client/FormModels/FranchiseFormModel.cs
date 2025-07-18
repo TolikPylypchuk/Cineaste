@@ -55,13 +55,13 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
             foreach (var item in franchise.Items)
             {
                 this.components.Add(new FranchiseFormComponent(
-                    item.Id, item.Type, item.Title, item.SequenceNumber, item.ShouldDisplayNumber));
+                    item.Id, item.Type, item.Title, item.SequenceNumber, item.DisplayNumber is not null));
             }
         }
 
-        this.ParentFranchiseId = franchise?.ParentFranchiseId;
-        this.SequenceNumber = franchise?.SequenceNumber;
-        this.IsFirst = franchise?.IsFirstInFranchise ?? false;
-        this.IsLast = franchise?.IsLastInFranchise ?? false;
+        this.ParentFranchiseId = franchise?.FranchiseItem?.ParentFranchiseId;
+        this.SequenceNumber = franchise?.FranchiseItem?.SequenceNumber;
+        this.IsFirst = franchise?.FranchiseItem?.IsFirstInFranchise ?? false;
+        this.IsLast = franchise?.FranchiseItem?.IsLastInFranchise ?? false;
     }
 }

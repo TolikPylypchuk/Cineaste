@@ -12,11 +12,19 @@ public static class FranchiseMappingExtensions
             franchise.IsLooselyConnected,
             franchise.ContinueNumbering,
             franchise.GetActiveColor()?.HexValue ?? String.Empty,
-            franchise.FranchiseItem?.ParentFranchise.Id.Value,
-            franchise.FranchiseItem?.SequenceNumber,
-            franchise.FranchiseItem.GetDisplayNumber(),
-            franchise.FranchiseItem.IsFirst(),
-            franchise.FranchiseItem.IsLast());
+            franchise.FranchiseItem.ToFranchiseItemInfoModel());
+
+    [return: NotNullIfNotNull(nameof(item))]
+    public static FranchiseItemInfoModel? ToFranchiseItemInfoModel(this FranchiseItem? item) =>
+        item is not null
+            ? new(
+                item.ParentFranchise.Id.Value,
+                item.SequenceNumber,
+                item.DisplayNumber,
+                item.IsFirst(),
+                item.IsLast(),
+                item.ParentFranchise.IsLooselyConnected)
+            : null;
 
     public static Franchise ToFranchise(
         this Validated<FranchiseRequest> request,
@@ -37,13 +45,13 @@ public static class FranchiseMappingExtensions
             switch (item.Type)
             {
                 case FranchiseItemType.Movie:
-                    franchise.AddMovie(moviesById[Id.For<Movie>(item.Id)]);
+                    franchise.AddMovie(moviesById[Id.For<Movie>(item.Id)], item.ShouldDisplayNumber);
                     break;
                 case FranchiseItemType.Series:
-                    franchise.AddSeries(seriesById[Id.For<Series>(item.Id)]);
+                    franchise.AddSeries(seriesById[Id.For<Series>(item.Id)], item.ShouldDisplayNumber);
                     break;
                 case FranchiseItemType.Franchise:
-                    franchise.AddFranchise(franchisesById[Id.For<Franchise>(item.Id)]);
+                    franchise.AddFranchise(franchisesById[Id.For<Franchise>(item.Id)], item.ShouldDisplayNumber);
                     break;
             }
         }
@@ -58,7 +66,7 @@ public static class FranchiseMappingExtensions
                 movie => new FranchiseItemModel(
                     movie.Id.Value,
                     item.SequenceNumber,
-                    item.ShouldDisplayNumber,
+                    item.DisplayNumber,
                     movie.Title.Name,
                     movie.Year,
                     movie.Year,
@@ -66,7 +74,7 @@ public static class FranchiseMappingExtensions
                 series => new FranchiseItemModel(
                     series.Id.Value,
                     item.SequenceNumber,
-                    item.ShouldDisplayNumber,
+                    item.DisplayNumber,
                     series.Title.Name,
                     series.StartYear,
                     series.EndYear,
@@ -74,7 +82,7 @@ public static class FranchiseMappingExtensions
                 franchise => new FranchiseItemModel(
                     franchise.Id.Value,
                     item.SequenceNumber,
-                    item.ShouldDisplayNumber,
+                    item.DisplayNumber,
                     franchise.ActualTitle?.Name ?? String.Empty,
                     franchise.StartYear ?? 0,
                     franchise.EndYear ?? 0,
@@ -100,6 +108,8 @@ public static class FranchiseMappingExtensions
         UpdateItems(movies, franchise.FindMovie, franchise.AddMovie, items, FranchiseItemType.Movie);
         UpdateItems(series, franchise.FindSeries, franchise.AddSeries, items, FranchiseItemType.Series);
         UpdateItems(franchises, franchise.FindFranchise, franchise.AddFranchise, items, FranchiseItemType.Franchise);
+
+        franchise.SetDisplayNumbersForChildren();
 
         return new FranchiseUpdateResult(removedItems);
     }
@@ -133,18 +143,17 @@ public static class FranchiseMappingExtensions
     private static void UpdateItems<T>(
         IEnumerable<T> items,
         Func<T, FranchiseItem?> find,
-        Func<T, FranchiseItem> add,
+        Func<T, bool, FranchiseItem> add,
         Dictionary<(Guid, FranchiseItemType), FranchiseItemRequest> requestItems,
         FranchiseItemType itemType)
         where T : Entity<T>
     {
         foreach (var item in items)
         {
-            var franchiseItem = find(item) ?? add(item);
             var requestItem = requestItems[(item.Id.Value, itemType)];
+            var franchiseItem = find(item) ?? add(item, requestItem.ShouldDisplayNumber);
 
             franchiseItem.SequenceNumber = requestItem.SequenceNumber;
-            franchiseItem.ShouldDisplayNumber = requestItem.ShouldDisplayNumber;
         }
     }
 

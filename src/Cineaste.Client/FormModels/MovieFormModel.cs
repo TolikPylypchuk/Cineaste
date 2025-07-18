@@ -63,9 +63,9 @@ public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieMode
         this.ImdbId = movie?.ImdbId ?? String.Empty;
         this.RottenTomatoesId = movie?.RottenTomatoesId ?? String.Empty;
 
-        this.ParentFranchiseId = movie?.ParentFranchiseId;
-        this.SequenceNumber = movie?.SequenceNumber;
-        this.IsFirst = movie?.IsFirstInFranchise ?? false;
-        this.IsLast = movie?.IsLastInFranchise ?? false;
+        this.ParentFranchiseId = movie?.FranchiseItem?.ParentFranchiseId;
+        this.SequenceNumber = movie?.FranchiseItem?.SequenceNumber;
+        this.IsFirst = movie?.FranchiseItem?.IsFirstInFranchise ?? false;
+        this.IsLast = movie?.FranchiseItem?.IsLastInFranchise ?? false;
     }
 }

@@ -3,8 +3,6 @@ namespace Cineaste.Shared.Models.List;
 public sealed record ListItemModel(
     Guid Id,
     ListItemType Type,
-    bool ShouldBeShown,
-    string DisplayNumber,
     string Title,
     string OriginalTitle,
     int StartYear,
@@ -14,4 +12,8 @@ public sealed record ListItemModel(
 
 public enum ListItemType { Movie, Series, Franchise }
 
-public sealed record ListFranchiseItemModel(Guid FranchiseId, int SequenceNumber);
+public sealed record ListFranchiseItemModel(
+    Guid FranchiseId,
+    int SequenceNumber,
+    int? DisplayNumber,
+    bool IsLooselyConnected);

@@ -11,8 +11,5 @@ public sealed record MovieModel(
     string? ImdbId,
     string? RottenTomatoesId,
     string ListItemColor,
-    Guid? ParentFranchiseId,
-    int? SequenceNumber,
-    string DisplayNumber,
-    bool IsFirstInFranchise,
-    bool IsLastInFranchise) : ITitledModel;
+    FranchiseItemInfoModel? FranchiseItem
+) : ITitledModel;

@@ -16,20 +16,18 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     public IReadOnlyCollection<Title> ActualTitles =>
         this.Titles.Count != 0
             ? this.Titles
-            : this.Children.OrderBy(item => item.SequenceNumber).FirstOrDefault()?.Titles
+            : this.Children.MinBy(item => item.SequenceNumber)?.Titles
                 ?? new List<Title>().AsReadOnly();
 
     public Title? ActualTitle =>
         this.ActualTitles
             .Where(title => !title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .FirstOrDefault();
+            .MinBy(title => title.Priority);
 
     public Title? ActualOriginalTitle =>
         this.ActualTitles
             .Where(title => title.IsOriginal)
-            .OrderBy(title => title.Priority)
-            .FirstOrDefault();
+            .MinBy(title => title.Priority);
 
     public int? StartYear =>
         this.Children.Min(item => item.Select(
@@ -68,10 +66,14 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     public FranchiseItem? FindFranchise(Franchise franchise) =>
         this.Children.FirstOrDefault(item => item.Franchise == franchise);
 
-    public FranchiseItem AddMovie(Movie movie)
+    public FranchiseItem AddMovie(Movie movie, bool addDisplayNumber)
     {
         var item = new FranchiseItem(
-            Domain.Id.Create<FranchiseItem>(), movie, this, this.Children.Count + 1, true);
+            Domain.Id.Create<FranchiseItem>(),
+            movie,
+            this,
+            this.Children.Count + 1,
+            addDisplayNumber ? this.GetMaxDisplayNumber() + 1 : null);
 
         this.children.Add(item);
         movie.FranchiseItem = item;
@@ -79,10 +81,14 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         return item;
     }
 
-    public FranchiseItem AddSeries(Series series)
+    public FranchiseItem AddSeries(Series series, bool addDisplayNumber)
     {
         var item = new FranchiseItem(
-            Domain.Id.Create<FranchiseItem>(), series, this, this.Children.Count + 1, true);
+            Domain.Id.Create<FranchiseItem>(),
+            series,
+            this,
+            this.Children.Count + 1,
+            addDisplayNumber ? this.GetMaxDisplayNumber() + 1 : null);
 
         this.children.Add(item);
         series.FranchiseItem = item;
@@ -90,10 +96,14 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         return item;
     }
 
-    public FranchiseItem AddFranchise(Franchise franchise)
+    public FranchiseItem AddFranchise(Franchise franchise, bool addDisplayNumber)
     {
         var item = new FranchiseItem(
-            Domain.Id.Create<FranchiseItem>(), franchise, this, this.Children.Count + 1, true);
+            Domain.Id.Create<FranchiseItem>(),
+            franchise,
+            this,
+            this.Children.Count + 1,
+            addDisplayNumber ? this.GetMaxDisplayNumber() + 1 : null);
 
         this.children.Add(item);
         franchise.FranchiseItem = item;
@@ -107,6 +117,8 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         {
             this.children.Remove(movie.FranchiseItem);
             movie.FranchiseItem = null;
+
+            this.SetDisplayNumbersForChildren();
         }
     }
 
@@ -116,6 +128,8 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         {
             this.children.Remove(series.FranchiseItem);
             series.FranchiseItem = null;
+
+            this.SetDisplayNumbersForChildren();
         }
     }
 
@@ -125,6 +139,21 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         {
             this.children.Remove(franchise.FranchiseItem);
             franchise.FranchiseItem = null;
+
+            this.SetDisplayNumbersForChildren();
+        }
+    }
+
+    public void SetDisplayNumbersForChildren()
+    {
+        int number = 1;
+
+        foreach (var item in this.children.OrderBy(item => item.SequenceNumber))
+        {
+            if (item.DisplayNumber is not null)
+            {
+                item.DisplayNumber = number++;
+            }
         }
     }
 
@@ -135,4 +164,11 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
             throw new ArgumentOutOfRangeException(paramName, "The list of title names is empty");
         }
     }
+
+    private int GetMaxDisplayNumber() =>
+        this.Children
+            .Select(item => item.DisplayNumber)
+            .Where(num => num is not null)
+            .Max()
+            ?? 0;
 }

@@ -92,29 +92,6 @@ public static class DomainExtensions
     public static bool IsLast(this FranchiseItem? item) =>
         item is not null && item.SequenceNumber == item.ParentFranchise.Children.Count;
 
-    public static string GetDisplayNumber(this FranchiseItem? item)
-    {
-        if (item is null)
-        {
-            return String.Empty;
-        }
-
-        if (!item.ShouldDisplayNumber)
-        {
-            return "-";
-        }
-
-        int num = item.ParentFranchise
-            .Children
-            .OrderBy(child => child.SequenceNumber)
-            .Where(child => child.ShouldDisplayNumber)
-            .TakeWhile(child => child.SequenceNumber <= item.SequenceNumber)
-            .Select((child, index) => index)
-            .Last() + 1;
-
-        return item.ParentFranchise.IsLooselyConnected ? $"({num})" : num.ToString();
-    }
-
     public static Color GetActiveColor(this Movie movie) =>
         movie.IsWatched
             ? movie.Kind.WatchedColor
