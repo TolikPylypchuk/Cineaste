@@ -121,6 +121,9 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid?>("FranchiseId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsShown")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("ListId")
                         .HasColumnType("uniqueidentifier");
 

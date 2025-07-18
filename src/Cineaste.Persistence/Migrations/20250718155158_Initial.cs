@@ -325,7 +325,8 @@ namespace Cineaste.Persistence.Migrations
                     NormalizedShortOriginalTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartYear = table.Column<int>(type: "int", nullable: false),
                     EndYear = table.Column<int>(type: "int", nullable: false),
-                    SequenceNumber = table.Column<int>(type: "int", nullable: false)
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
+                    IsShown = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

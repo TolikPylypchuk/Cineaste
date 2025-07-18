@@ -547,15 +547,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading....
-        /// </summary>
-        public static string ListComponent_List_Loading {
-            get {
-                return ResourceManager.GetString("ListComponent.List.Loading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to #.
         /// </summary>
         public static string ListComponent_List_Number {

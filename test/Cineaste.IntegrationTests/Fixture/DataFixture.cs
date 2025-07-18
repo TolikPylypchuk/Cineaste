@@ -25,7 +25,7 @@ public class DataFixture : IAsyncLifetime
     }
 
     public Id<CineasteList> ListId => this.list.Id;
-    public Id<MovieKind>  MovieKindId => this.movieKind.Id;
+    public Id<MovieKind> MovieKindId => this.movieKind.Id;
     public Id<SeriesKind> SeriesKindId => this.seriesKind.Id;
 
     public async ValueTask InitializeAsync()
@@ -72,7 +72,11 @@ public class DataFixture : IAsyncLifetime
     }
 
     public Task<CineasteList> GetList(CineasteDbContext dbContext) =>
-        dbContext.Lists.Where(list => list.Id == this.list.Id).Include(list => list.Configuration).SingleAsync();
+        dbContext.Lists
+            .Where(list => list.Id == this.list.Id)
+            .Include(list => list.Configuration)
+            .Include(list => list.Items)
+            .SingleAsync();
 
     public Task<MovieKind> GetMovieKind(CineasteDbContext dbContext) =>
         dbContext.MovieKinds.Where(kind => kind.Id == this.movieKind.Id).SingleAsync();

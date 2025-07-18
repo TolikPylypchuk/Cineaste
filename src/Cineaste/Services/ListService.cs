@@ -23,7 +23,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
 
     public async Task<OffsettableData<ListItemModel>> GetListItems(int offset, int size)
     {
-        logger.LogDebug("Getting list items");
+        logger.LogDebug("Getting the list items");
 
         var list = await dbContext.Lists
             .Include(list => list.MovieKinds)
@@ -31,8 +31,20 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .SingleOrDefaultAsync()
             ?? throw this.NotFound();
 
+        int totalItems = await dbContext.ListItems
+            .Where(item => item.List.Id == list!.Id)
+            .CountAsync();
+
+        if (size == 0)
+        {
+            return new([], new(offset, size, totalItems));
+        }
+
+        await Task.Delay(5000);
+
         var items = await dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
+            .Where(item => item.IsShown)
             .Include(item => item.Movie)
                 .ThenInclude(movie => movie!.Titles)
             .Include(item => item.Movie)
@@ -61,10 +73,6 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Take(size)
             .AsSplitQuery()
             .ToListAsync();
-
-        int totalItems = await dbContext.ListItems
-            .Where(item => item.List.Id == list!.Id)
-            .CountAsync();
 
         return new(
             [.. items.Select(item => item.ToListItemModel())],

@@ -768,7 +768,4 @@
   <data name="Validation.Titles.Name.TooLong" xml:space="preserve">
     <value>The titles are too long</value>
   </data>
-  <data name="ListComponent.List.Loading" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
 </root>
