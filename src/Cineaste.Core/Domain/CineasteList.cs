@@ -178,7 +178,7 @@ public sealed class CineasteList : Entity<CineasteList>
         int sequenceNumber = 1;
         foreach (var item in this.items)
         {
-            item.SequenceNumber = sequenceNumber++;
+            item.SequenceNumber = item.IsShown ? sequenceNumber++ : 0;
         }
     }
 }

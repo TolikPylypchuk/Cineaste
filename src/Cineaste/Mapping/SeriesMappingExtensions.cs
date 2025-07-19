@@ -15,6 +15,7 @@ public static class SeriesMappingExtensions
             series.ImdbId,
             series.RottenTomatoesId,
             series.GetActiveColor()?.HexValue ?? String.Empty,
+            series.ListItem?.SequenceNumber ?? 0,
             series.FranchiseItem.ToFranchiseItemInfoModel());
 
     public static Series ToSeries(this Validated<SeriesRequest> request, Id<Series> id, SeriesKind kind) =>

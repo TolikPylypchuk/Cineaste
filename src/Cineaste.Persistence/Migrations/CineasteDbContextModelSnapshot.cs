@@ -178,7 +178,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("ListItems", t =>
                         {
-                            t.HasCheckConstraint("CH_ListItems_SequenceNumberPositive", "SequenceNumber > 0");
+                            t.HasCheckConstraint("CH_ListItems_SequenceNumberNonNegative", "SequenceNumber >= 0");
                         });
                 });
 

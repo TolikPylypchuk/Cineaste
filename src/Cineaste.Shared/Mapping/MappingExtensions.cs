@@ -11,6 +11,7 @@ public static class MappingExtensions
             movie.Year,
             movie.Year,
             movie.ListItemColor,
+            movie.ListSequenceNumber,
             movie.FranchiseItem.ToListFranchiseItem());
 
     public static ListItemModel ToListItemModel(this SeriesModel series) =>
@@ -22,6 +23,7 @@ public static class MappingExtensions
             series.StartYear,
             series.EndYear,
             series.ListItemColor,
+            series.ListSequenceNumber,
             series.FranchiseItem.ToListFranchiseItem());
 
     public static ListItemModel ToListItemModel(this FranchiseModel franchise) =>
@@ -33,6 +35,7 @@ public static class MappingExtensions
             franchise.Items.Select(item => item.StartYear).Min(),
             franchise.Items.Select(item => item.EndYear).Max(),
             franchise.ListItemColor,
+            franchise.ListSequenceNumber,
             franchise.FranchiseItem.ToListFranchiseItem());
 
     [return: NotNullIfNotNull(nameof(item))]

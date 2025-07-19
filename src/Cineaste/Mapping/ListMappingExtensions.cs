@@ -30,6 +30,7 @@ public static class ListMappingExtensions
             item.StartYear,
             item.EndYear,
             item.ActiveColor?.HexValue ?? String.Empty,
+            item.SequenceNumber,
             movie.FranchiseItem.ToFranchiseItemModel());
 
     public static ListItemModel ToListItemModel(this ListItem item, Series series) =>
@@ -41,6 +42,7 @@ public static class ListMappingExtensions
             item.StartYear,
             item.EndYear,
             item.ActiveColor?.HexValue ?? String.Empty,
+            item.SequenceNumber,
             series.FranchiseItem.ToFranchiseItemModel());
 
     public static ListItemModel ToListItemModel(this ListItem item, Franchise franchise) =>
@@ -56,6 +58,7 @@ public static class ListMappingExtensions
             item.StartYear,
             item.EndYear,
             item.ActiveColor?.HexValue ?? String.Empty,
+            item.SequenceNumber,
             franchise.FranchiseItem.ToFranchiseItemModel());
 
     [return: NotNullIfNotNull(nameof(item))]

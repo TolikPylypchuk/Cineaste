@@ -6,7 +6,7 @@ internal sealed class ListItemTypeConfiguration : IEntityTypeConfiguration<ListI
     {
         item.HasStronglyTypedId();
 
-        item.ToTable(t => t.HasCheckConstraint("CH_ListItems_SequenceNumberPositive", "SequenceNumber > 0"));
+        item.ToTable(t => t.HasCheckConstraint("CH_ListItems_SequenceNumberNonNegative", "SequenceNumber >= 0"));
 
         item.HasOne(i => i.List)
             .WithMany(l => l.Items)

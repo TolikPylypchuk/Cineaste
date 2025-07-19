@@ -31,13 +31,22 @@
   --min-row-height: 60px;
 }
 
-::deep .list-row, ::deep .mud-table-head .mud-table-row {
+::deep .list-header {
+  position: sticky;
+  top: 0;
+}
+
+::deep .list-row, ::deep .list-header .mud-table-row {
   cursor: pointer;
   width: 100%;
   min-height: var(--min-row-height);
   display: flex;
   flex-direction: row;
   align-items: stretch;
+}
+
+::deep .list-header .mud-table-row {
+  cursor: revert;
 }
 
 ::deep .list th.mud-table-cell:nth-child(1) {

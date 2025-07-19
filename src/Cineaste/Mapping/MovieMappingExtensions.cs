@@ -14,6 +14,7 @@ public static class MovieMappingExtensions
             movie.ImdbId,
             movie.RottenTomatoesId,
             movie.GetActiveColor()?.HexValue ?? String.Empty,
+            movie.ListItem?.SequenceNumber ?? 0,
             movie.FranchiseItem.ToFranchiseItemInfoModel());
 
     public static Movie ToMovie(this Validated<MovieRequest> request, Id<Movie> id, MovieKind kind) =>

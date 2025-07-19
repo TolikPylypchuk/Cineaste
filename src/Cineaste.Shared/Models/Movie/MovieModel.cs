@@ -11,5 +11,6 @@ public sealed record MovieModel(
     string? ImdbId,
     string? RottenTomatoesId,
     string ListItemColor,
+    int ListSequenceNumber,
     FranchiseItemInfoModel? FranchiseItem
 ) : ITitledModel;

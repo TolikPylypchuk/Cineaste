@@ -9,6 +9,7 @@ public record FranchiseModel(
     bool IsLooselyConnected,
     bool ContinueNumbering,
     string ListItemColor,
+    int ListSequenceNumber,
     FranchiseItemInfoModel? FranchiseItem) : ITitledModel;
 
 public record FranchiseItemModel(

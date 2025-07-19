@@ -55,19 +55,6 @@
         }
     }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-
-        if (firstRender)
-        {
-            this.SubscribeToAction<GoToFranchiseAction>(action => this.OnGoToFranchise(action.FranchiseId));
-
-            this.SubscribeToAction<GoToFranchiseComponentAction>(action =>
-                this.OnGoToFranchiseComponent(action.FranchiseId, action.SequenceNumber));
-        }
-    }
-
     private void FetchList() =>
         this.Dispatcher.Dispatch(new FetchListAction());
 
@@ -86,12 +73,6 @@
 
     private void OnItemClosed() =>
         this.Dispatcher.Dispatch(new CloseItemAction());
-
-    private void OnGoToFranchise(Guid franchiseId)
-    { }
-
-    private void OnGoToFranchiseComponent(Guid franchiseId, int sequenceNumber)
-    { }
 
     private ImmutableList<ListKindModel> GetKindsForItemType(ListItemType type) =>
         type switch

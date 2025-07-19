@@ -332,7 +332,7 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ListItems", x => x.Id);
-                    table.CheckConstraint("CH_ListItems_SequenceNumberPositive", "SequenceNumber > 0");
+                    table.CheckConstraint("CH_ListItems_SequenceNumberNonNegative", "SequenceNumber >= 0");
                     table.ForeignKey(
                         name: "FK_ListItems_Franchises_FranchiseId",
                         column: x => x.FranchiseId,

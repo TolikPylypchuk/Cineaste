@@ -8,6 +8,7 @@ public sealed record ListItemModel(
     int StartYear,
     int EndYear,
     string Color,
+    int ListSequenceNumber,
     ListFranchiseItemModel? FranchiseItem);
 
 public enum ListItemType { Movie, Series, Franchise }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20250719125215_Initial")]
+    [Migration("20250719155610_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -181,7 +181,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("ListItems", t =>
                         {
-                            t.HasCheckConstraint("CH_ListItems_SequenceNumberPositive", "SequenceNumber > 0");
+                            t.HasCheckConstraint("CH_ListItems_SequenceNumberNonNegative", "SequenceNumber >= 0");
                         });
                 });
 

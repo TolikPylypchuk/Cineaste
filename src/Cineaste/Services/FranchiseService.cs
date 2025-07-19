@@ -1,5 +1,3 @@
-using Cineaste.Core.Domain;
-
 namespace Cineaste.Services;
 
 public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<FranchiseService> logger)

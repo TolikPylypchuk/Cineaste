@@ -16,7 +16,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .AsSplitQuery()
             .AsNoTracking()
             .SingleOrDefaultAsync()
-            ?? throw this.NotFound();
+            ?? throw this.ListNotFound();
 
         return list.ToListModel();
     }
@@ -30,7 +30,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
             .SingleOrDefaultAsync()
-            ?? throw this.NotFound();
+            ?? throw this.ListNotFound();
 
         int totalItems = await dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
@@ -78,6 +78,6 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             new(offset, size, totalItems));
     }
 
-    private NotFoundException NotFound() =>
+    private NotFoundException ListNotFound() =>
         new(Resources.List, $"Could not find the list");
 }
