@@ -32,6 +32,8 @@ public sealed partial class ListItem : Entity<ListItem>
 
     public int SequenceNumber { get; set; }
 
+    public Color? ActiveColor { get; set; }
+
     public bool IsShown { get;private set; }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
@@ -43,6 +45,7 @@ public sealed partial class ListItem : Entity<ListItem>
         this.NormalizedOriginalTitle = String.Empty;
         this.NormalizedShortTitle = String.Empty;
         this.NormalizedShortOriginalTitle = String.Empty;
+        this.ActiveColor = null;
     }
 
     public ListItem(Id<ListItem> id, CineasteList list, Movie movie)
@@ -92,6 +95,7 @@ public sealed partial class ListItem : Entity<ListItem>
         this.EndYear = movie.Year;
 
         this.IsShown = true;
+        this.ActiveColor = movie.GetActiveColor();
     }
 
     [MemberNotNull(
@@ -111,6 +115,7 @@ public sealed partial class ListItem : Entity<ListItem>
         this.EndYear = series.EndYear;
 
         this.IsShown = true;
+        this.ActiveColor = series.GetActiveColor();
     }
 
     [MemberNotNull(
@@ -130,6 +135,7 @@ public sealed partial class ListItem : Entity<ListItem>
         this.EndYear = franchise.EndYear ?? 0;
 
         this.IsShown = franchise.ShowTitles;
+        this.ActiveColor = franchise.GetActiveColor();
     }
 
     [GeneratedRegex("([0-9]+)", RegexOptions.Compiled)]

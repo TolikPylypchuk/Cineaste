@@ -80,8 +80,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         Assert.Equal(dummyId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "CreateFranchise should put it into the database")]
-    public async Task CreateFranchiseShouldPutItIntoDb()
+    [Fact(DisplayName = "AddFranchise should put it into the database")]
+    public async Task AddFranchiseShouldPutItIntoDb()
     {
         // Arrange
 
@@ -111,7 +111,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             .Zip(franchise.Children.OrderBy(item => item.SequenceNumber)))
         {
             Assert.Equal(itemRequest.SequenceNumber, item.SequenceNumber);
-            Assert.Equal(itemRequest.ShouldDisplayNumber, item.DisplayNumber is null);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, item.DisplayNumber is not null);
 
             item.Do(
                 movie => Assert.Equal(FranchiseItemType.Movie, itemRequest.Type),
@@ -120,8 +120,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         }
     }
 
-    [Fact(DisplayName = "CreateFranchise should return a correct model")]
-    public async Task CreateFranchiseShouldReturnCorrectModel()
+    [Fact(DisplayName = "AddFranchise should return a correct model")]
+    public async Task AddFranchiseShouldReturnCorrectModel()
     {
         // Arrange
 
@@ -147,13 +147,13 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             .Zip(model.Items.OrderBy(item => item.SequenceNumber)))
         {
             Assert.Equal(itemRequest.SequenceNumber, itemModel.SequenceNumber);
-            Assert.Equal(itemRequest.ShouldDisplayNumber, itemModel.DisplayNumber is null);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, itemModel.DisplayNumber is not null);
             Assert.Equal(itemRequest.Type, itemModel.Type);
         }
     }
 
-    [Fact(DisplayName = "CreateFranchise should throw if the list is not found")]
-    public async Task CreateFranchiseShouldThrowIfListNotFound()
+    [Fact(DisplayName = "AddFranchise should throw if the list is not found")]
+    public async Task AddFranchiseShouldThrowIfListNotFound()
     {
         // Arrange
 
@@ -174,8 +174,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         Assert.Equal(dummyListId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "CreateFranchise should throw if a franchise item is not found")]
-    public async Task CreateFranchiseShouldThrowIfItemNotFound()
+    [Fact(DisplayName = "AddFranchise should throw if a franchise item is not found")]
+    public async Task AddFranchiseShouldThrowIfItemNotFound()
     {
         // Arrange
 
@@ -256,7 +256,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             Assert.Equal(itemRequest.Id, item.Select(m => m.Id.Value, s => s.Id.Value, f => f.Id.Value));
             Assert.Equal(itemRequest.Type, itemType);
             Assert.Equal(itemRequest.SequenceNumber, item.SequenceNumber);
-            Assert.Equal(itemRequest.ShouldDisplayNumber, item.DisplayNumber is null);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, item.DisplayNumber is not null);
         }
     }
 
@@ -328,7 +328,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             Assert.Equal(itemRequest.Id, itemModel.Id);
             Assert.Equal(itemRequest.Type, itemModel.Type);
             Assert.Equal(itemRequest.SequenceNumber, itemModel.SequenceNumber);
-            Assert.Equal(itemRequest.ShouldDisplayNumber, itemModel.DisplayNumber is null);
+            Assert.Equal(itemRequest.ShouldDisplayNumber, itemModel.DisplayNumber is not null);
         }
     }
 
@@ -400,8 +400,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
-    [Fact(DisplayName = "DeleteFranchise should remote it from the database")]
-    public async Task DeleteFranchiseShouldRemoveItFromDb()
+    [Fact(DisplayName = "RemoveFranchise should remote it from the database")]
+    public async Task RemoveFranchiseShouldRemoveItFromDb()
     {
         // Arrange
 
@@ -426,8 +426,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         Assert.True(dbContext.Franchises.All(f => f.Id != franchise.Id));
     }
 
-    [Fact(DisplayName = "DeleteFranchise should throw if franchise isn't found")]
-    public async Task DeleteFranchiseShouldThrowIfNotFound()
+    [Fact(DisplayName = "RemoveFranchise should throw if franchise isn't found")]
+    public async Task RemoveFranchiseShouldThrowIfNotFound()
     {
         // Arrange
 

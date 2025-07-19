@@ -19,34 +19,31 @@ public static class ListMappingExtensions
             config.SortingConfiguration.SortDirection);
 
     public static ListItemModel ToListItemModel(this ListItem item) =>
-        item.Select(
-            movie => movie.ToListItemModel(),
-            series => series.ToListItemModel(),
-            franchise => franchise.ToListItemModel());
+        item.Select(item.ToListItemModel, item.ToListItemModel, item.ToListItemModel);
 
-    public static ListItemModel ToListItemModel(this Movie movie) =>
+    public static ListItemModel ToListItemModel(this ListItem item, Movie movie) =>
         new(
             movie.Id.Value,
             ListItemType.Movie,
             movie.Title.Name,
             movie.OriginalTitle.Name,
-            movie.Year,
-            movie.Year,
-            movie.GetActiveColor().HexValue,
+            item.StartYear,
+            item.EndYear,
+            item.ActiveColor?.HexValue ?? String.Empty,
             movie.FranchiseItem.ToFranchiseItemModel());
 
-    public static ListItemModel ToListItemModel(this Series series) =>
+    public static ListItemModel ToListItemModel(this ListItem item, Series series) =>
         new(
             series.Id.Value,
             ListItemType.Series,
             series.Title.Name,
             series.OriginalTitle.Name,
-            series.StartYear,
-            series.EndYear,
-            series.GetActiveColor().HexValue,
+            item.StartYear,
+            item.EndYear,
+            item.ActiveColor?.HexValue ?? String.Empty,
             series.FranchiseItem.ToFranchiseItemModel());
 
-    public static ListItemModel ToListItemModel(this Franchise franchise) =>
+    public static ListItemModel ToListItemModel(this ListItem item, Franchise franchise) =>
         new(
             franchise.Id.Value,
             ListItemType.Franchise,
@@ -56,9 +53,9 @@ public static class ListMappingExtensions
             franchise.ShowTitles && franchise.OriginalTitle is not null
                 ? $"{franchise.OriginalTitle.Name}:"
                 : String.Empty,
-            franchise.GetFirstChild()?.GetStartYear() ?? 0,
-            franchise.GetLastChild()?.GetEndYear() ?? 0,
-            franchise.GetActiveColor()?.HexValue ?? String.Empty,
+            item.StartYear,
+            item.EndYear,
+            item.ActiveColor?.HexValue ?? String.Empty,
             franchise.FranchiseItem.ToFranchiseItemModel());
 
     [return: NotNullIfNotNull(nameof(item))]

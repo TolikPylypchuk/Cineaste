@@ -154,6 +154,14 @@ public static class FranchiseMappingExtensions
             var franchiseItem = find(item) ?? add(item, requestItem.ShouldDisplayNumber);
 
             franchiseItem.SequenceNumber = requestItem.SequenceNumber;
+
+            if (requestItem.ShouldDisplayNumber)
+            {
+                franchiseItem.DisplayNumber = franchiseItem.SequenceNumber;
+            } else
+            {
+                franchiseItem.DisplayNumber = null;
+            }
         }
     }
 

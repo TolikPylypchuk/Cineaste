@@ -91,9 +91,18 @@
                 </MudBlazor.TemplateColumn>
             </Columns>
             <RowLoadingContent>
-                <tr class="mud-table-row">
-                    <td class="mud-table-cell" colspan="4">
-                        <MudSkeleton />
+                <tr class="mud-table-row loader-row">
+                    <td class="mud-table-cell cell-content number loader-cell">
+                        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Class="loader-skeleton" />
+                    </td>
+                    <td class="mud-table-cell cell-content title loader-cell">
+                        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Class="loader-skeleton" />
+                    </td>
+                    <td class="mud-table-cell cell-content title loader-cell">
+                        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Class="loader-skeleton" />
+                    </td>
+                    <td class="mud-table-cell cell-content year loader-cell">
+                        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Class="loader-skeleton" />
                     </td>
                 </tr>
             </RowLoadingContent>

@@ -115,6 +115,9 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ActiveColor")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EndYear")
                         .HasColumnType("int");
 

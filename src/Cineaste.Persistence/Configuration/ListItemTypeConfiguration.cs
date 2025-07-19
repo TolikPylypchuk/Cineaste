@@ -24,6 +24,8 @@ internal sealed class ListItemTypeConfiguration : IEntityTypeConfiguration<ListI
             .WithOne(f => f.ListItem)
             .HasForeignKey<ListItem>("FranchiseId");
 
+        item.Property(k => k.ActiveColor).HasConversion<ColorConverter>();
+
         item.HasIndex(i => i.SequenceNumber);
     }
 }

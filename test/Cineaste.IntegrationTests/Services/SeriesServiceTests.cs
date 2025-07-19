@@ -87,8 +87,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "CreateSeries should put it into the database")]
-    public async Task CreateSeriesShouldPutItIntoDb()
+    [Fact(DisplayName = "AddSeries should put it into the database")]
+    public async Task AddSeriesShouldPutItIntoDb()
     {
         // Arrange
 
@@ -155,8 +155,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         }
     }
 
-    [Fact(DisplayName = "CreateSeries should return a correct model")]
-    public async Task CreateSeriesShouldReturnCorrectModel()
+    [Fact(DisplayName = "AddSeries should return a correct model")]
+    public async Task AddSeriesShouldReturnCorrectModel()
     {
         // Arrange
 
@@ -219,8 +219,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         }
     }
 
-    [Fact(DisplayName = "CreateSeries should throw if the list is not found")]
-    public async Task CreateSeriesShouldThrowIfListNotFound()
+    [Fact(DisplayName = "AddSeries should throw if the list is not found")]
+    public async Task AddSeriesShouldThrowIfListNotFound()
     {
         // Arrange
 
@@ -239,8 +239,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyListId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "CreateSeries should throw if the kind is not found")]
-    public async Task CreateSeriesShouldThrowIfKindNotFound()
+    [Fact(DisplayName = "AddSeries should throw if the kind is not found")]
+    public async Task AddSeriesShouldThrowIfKindNotFound()
     {
         // Arrange
 
@@ -259,8 +259,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyKindId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "CreateSeries should throw if the kind doesn't belong to list")]
-    public async Task CreateSeriesShouldThrowIfKindDoesNotBelongToList()
+    [Fact(DisplayName = "AddSeries should throw if the kind doesn't belong to list")]
+    public async Task AddSeriesShouldThrowIfKindDoesNotBelongToList()
     {
         // Arrange
 
@@ -482,8 +482,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
-    [Fact(DisplayName = "DeleteSeries should remote it from the database")]
-    public async Task DeleteSeriesShouldRemoveItFromDb()
+    [Fact(DisplayName = "RemoveSeries should remote it from the database")]
+    public async Task RemoveSeriesShouldRemoveItFromDb()
     {
         // Arrange
 
@@ -501,8 +501,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.True(dbContext.Series.All(m => m.Id != series.Id));
     }
 
-    [Fact(DisplayName = "DeleteSeries should throw if series isn't found")]
-    public async Task DeleteSeriesShouldThrowIfNotFound()
+    [Fact(DisplayName = "RemoveSeries should throw if series isn't found")]
+    public async Task RemoveSeriesShouldThrowIfNotFound()
     {
         // Arrange
 

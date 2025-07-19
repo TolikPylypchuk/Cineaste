@@ -52,8 +52,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "CreateMovie should put it into the database")]
-    public async Task CreateMovieShouldPutItIntoDb()
+    [Fact(DisplayName = "AddMovie should put it into the database")]
+    public async Task AddMovieShouldPutItIntoDb()
     {
         // Arrange
 
@@ -82,8 +82,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(request.RottenTomatoesId, movie.RottenTomatoesId);
     }
 
-    [Fact(DisplayName = "CreateMovie should return a correct model")]
-    public async Task CreateMovieShouldReturnCorrectModel()
+    [Fact(DisplayName = "AddMovie should return a correct model")]
+    public async Task AddMovieShouldReturnCorrectModel()
     {
         // Arrange
 
@@ -108,8 +108,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(request.RottenTomatoesId, model.RottenTomatoesId);
     }
 
-    [Fact(DisplayName = "CreateMovie should throw if the list is not found")]
-    public async Task CreateMovieShouldThrowIfListNotFound()
+    [Fact(DisplayName = "AddMovie should throw if the list is not found")]
+    public async Task AddMovieShouldThrowIfListNotFound()
     {
         // Arrange
 
@@ -129,8 +129,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyListId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "CreateMovie should throw if the kind is not found")]
-    public async Task CreateMovieShouldThrowIfKindNotFound()
+    [Fact(DisplayName = "AddMovie should throw if the kind is not found")]
+    public async Task AddMovieShouldThrowIfKindNotFound()
     {
         // Arrange
 
@@ -150,8 +150,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyKindId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "CreateMovie should throw if the kind doesn't belong to list")]
-    public async Task CreateMovieShouldThrowIfKindDoesNotBelongToList()
+    [Fact(DisplayName = "AddMovie should throw if the kind doesn't belong to list")]
+    public async Task AddMovieShouldThrowIfKindDoesNotBelongToList()
     {
         // Arrange
 
@@ -296,8 +296,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
-    [Fact(DisplayName = "DeleteMovie should remote it from the database")]
-    public async Task DeleteMovieShouldRemoveItFromDb()
+    [Fact(DisplayName = "RemoveMovie should remote it from the database")]
+    public async Task RemoveMovieShouldRemoveItFromDb()
     {
         // Arrange
 
@@ -315,8 +315,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.True(dbContext.Movies.All(m => m.Id != movie.Id));
     }
 
-    [Fact(DisplayName = "DeleteMovie should throw if movie isn't found")]
-    public async Task DeleteMovieShouldThrowIfNotFound()
+    [Fact(DisplayName = "RemoveMovie should throw if movie isn't found")]
+    public async Task RemoveMovieShouldThrowIfNotFound()
     {
         // Arrange
 

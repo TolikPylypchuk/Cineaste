@@ -43,6 +43,8 @@ internal sealed class StringOrIntComparer(IComparer<string> stringComparer) : IC
         {
             (string leftStr, string rightStr) => stringComparer.Compare(leftStr, rightStr),
             (int leftInt, int rightInt) => leftInt.CompareTo(rightInt),
+            (int leftInt, string rightStr) => stringComparer.Compare(leftInt.ToString(), rightStr),
+            (string leftStr, int rightInt) => stringComparer.Compare(leftStr, rightInt.ToString()),
             _ => throw new NotSupportedException($"{nameof(StringOrIntComparer)} only compares strings and ints")
         };
 }
