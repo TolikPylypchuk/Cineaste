@@ -36,6 +36,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
 
         int totalItems = await dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
+            .Where(item => item.IsShown)
             .CountAsync();
 
         if (size == 0)
