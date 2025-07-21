@@ -6,7 +6,6 @@
         <SpecialEpisodeForm
             Episode="@model.BackingModel"
             FormModel="@model"
-            Close="@this.Close"
             Delete="@(() => this.RemoveComponent(model))"
             GoToNextComponent="@this.GoToNextComponent"
             GoToPreviousComponent="@this.GoToPreviousComponent"
@@ -16,7 +15,6 @@
         <SeasonForm
             Season="@model.BackingModel"
             FormModel="@model"
-            Close="@this.Close"
             Delete="@(() => this.RemoveComponent(model))"
             GoToNextComponent="@this.GoToNextComponent"
             GoToPreviousComponent="@this.GoToPreviousComponent"
@@ -29,9 +27,10 @@
             FormTitle="@this.FormTitle"
             FormTitleUpdated="@this.UpdateFormTitle"
             FormModel="@this.FormModel"
+            ListConfiguration="@this.ListConfiguration"
+            AvailableKinds="@this.AvailableKinds"
             Save="@this.Save"
             Cancel="@this.Cancel"
-            Close="@this.Close"
         />
         break;
 }

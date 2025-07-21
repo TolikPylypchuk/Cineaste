@@ -6,7 +6,7 @@
         Variant="Variant.Filled"
         Size="Size.Large"
         Class="add"
-        @onclick="@this.CreateMovie"
+        @onclick="@this.AddMovie"
     >
         @this.Loc["ListActionsPanel.AddMovie"]
     </MudButton>
@@ -16,16 +16,16 @@
         Variant="Variant.Filled"
         Size="Size.Large"
         Class="add"
-        @onclick="@this.CreateSeries"
+        @onclick="@this.AddSeries"
     >
         @this.Loc["ListActionsPanel.AddSeries"]
     </MudButton>
 </div>
 
 @code {
-    [Parameter]
-    public EventCallback CreateMovie { get; set; }
+    private void AddMovie() =>
+        this.Dispatcher.Dispatch(new StartAddingMovieAction());
 
-    [Parameter]
-    public EventCallback CreateSeries { get; set; }
+    private void AddSeries() =>
+        this.Dispatcher.Dispatch(new StartAddingSeriesAction());
 }

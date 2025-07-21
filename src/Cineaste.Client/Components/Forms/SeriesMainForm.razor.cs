@@ -12,10 +12,13 @@ public partial class SeriesMainForm
     public ListItemModel? ListItem { get; set; }
 
     [Parameter]
-    public EventCallback Close { get; set; }
+    public required override SeriesFormModel FormModel { get; set; }
 
     [Parameter]
-    public required override SeriesFormModel FormModel { get; set; }
+    public required ListConfigurationModel ListConfiguration { get; set; }
+
+    [Parameter]
+    public required ImmutableList<ListKindModel> AvailableKinds { get; set; }
 
     [Parameter]
     public string FormTitle { get; set; } = String.Empty;
@@ -61,8 +64,7 @@ public partial class SeriesMainForm
     {
         if (this.ListItem is not null)
         {
-            this.Dispatcher.Dispatch(new FetchSeriesAction(
-                this.ListItem.Id, this.State.Value.AvailableKinds, this.State.Value.ListConfiguration));
+            this.Dispatcher.Dispatch(new FetchSeriesAction(this.ListItem.Id));
         }
     }
 
@@ -98,6 +100,9 @@ public partial class SeriesMainForm
 
     private bool HasRottenTomatoesId() =>
         !String.IsNullOrEmpty(this.FormModel.RottenTomatoesId);
+
+    private void Close() =>
+        this.Dispatcher.Dispatch(new CloseItemAction());
 
     private Task OnSave() =>
         this.WithValidation(this.Save.InvokeAsync);

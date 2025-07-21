@@ -17,7 +17,7 @@ public static class AddMovieReducers
             onFailure: problem => state with { Add = ApiCall.Failure(problem) });
 }
 
-public sealed class AddMovieEffect(IMovieApi api)
+public sealed class AddMovieEffects(IMovieApi api)
 {
     [EffectMethod]
     public async Task HandleAddMovie(AddMovieAction action, IDispatcher dispatcher)

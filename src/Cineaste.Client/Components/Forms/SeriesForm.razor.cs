@@ -5,40 +5,42 @@ namespace Cineaste.Client.Components.Forms;
 public partial class SeriesForm
 {
     [Parameter]
-    public Guid ListId { get; set; }
+    public required Guid ListId { get; set; }
+
+    [Parameter]
+    public required ListConfigurationModel ListConfiguration { get; set; }
+
+    [Parameter]
+    public required ImmutableList<ListKindModel> AvailableKinds { get; set; }
 
     [Parameter]
     public ListItemModel? ListItem { get; set; }
-
-    [Parameter]
-    public EventCallback Close { get; set; }
 
     private string FormTitle { get; set; } = String.Empty;
 
     private SeriesFormModel FormModel { get; set; } = null!;
 
+    protected override void OnInitialized()
+    {
+        this.SubsribeToSuccessfulResult<FetchSeriesResultAction>(this.SetPropertyValues);
+        this.SubsribeToSuccessfulResult<AddSeriesResultAction>(this.OnSeriesCreated);
+        this.SubsribeToSuccessfulResult<UpdateSeriesResultAction>(this.OnSeriesUpdated);
+
+        base.OnInitialized();
+    }
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        var config = this.State.Value.ListConfiguration;
+        var config = this.ListConfiguration;
         this.FormModel = new(
-            this.ListId, this.State.Value.AvailableKinds, config.DefaultSeasonTitle, config.DefaultSeasonOriginalTitle);
+            this.ListId, this.AvailableKinds, config.DefaultSeasonTitle, config.DefaultSeasonOriginalTitle);
 
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
-    }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-
-        if (firstRender)
-        {
-            this.SubsribeToSuccessfulResult<FetchSeriesResultAction>(this.SetPropertyValues);
-            this.SubsribeToSuccessfulResult<AddSeriesResultAction>(this.OnSeriesCreated);
-            this.SubsribeToSuccessfulResult<UpdateSeriesResultAction>(this.OnSeriesUpdated);
-        }
+        this.SetPropertyValues();
     }
 
     private void SetPropertyValues()

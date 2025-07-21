@@ -19,7 +19,7 @@ public static class RemoveFranchiseReducers
             onFailure: problem => state with { Remove = ApiCall.Failure(problem) });
 }
 
-public sealed class RemoveFranchiseEffect(IFranchiseApi api)
+public sealed class RemoveFranchiseEffects(IFranchiseApi api)
 {
     [EffectMethod]
     public async Task HandleRemoveFranchiseAction(RemoveFranchiseAction action, IDispatcher dispatcher)

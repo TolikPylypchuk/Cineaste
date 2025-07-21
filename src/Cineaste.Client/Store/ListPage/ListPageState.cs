@@ -26,3 +26,18 @@ public sealed record ListPageState
 
     public ProblemDetails? Problem { get; init; }
 }
+
+public static class Extensions
+{
+    public static ListPageSelectionMode ToListPageSelectionMode(this ListItemType itemType) =>
+        ToListPageSelectionMode((ListItemType?)itemType);
+
+    public static ListPageSelectionMode ToListPageSelectionMode(this ListItemType? itemType) =>
+        itemType switch
+        {
+            ListItemType.Movie => ListPageSelectionMode.Movie,
+            ListItemType.Series => ListPageSelectionMode.Series,
+            ListItemType.Franchise => ListPageSelectionMode.Franchise,
+            _ => ListPageSelectionMode.None
+        };
+}

@@ -6,13 +6,16 @@ namespace Cineaste.Client.Components.Forms;
 public partial class FranchiseForm
 {
     [Parameter]
-    public Guid ListId { get; set; }
+    public required Guid ListId { get; set; }
 
     [Parameter]
     public ListItemModel? ListItem { get; set; }
 
     [Parameter]
-    public EventCallback Close { get; set; }
+    public required ImmutableList<ListKindModel> AvailableMovieKinds { get; set; }
+
+    [Parameter]
+    public required ImmutableList<ListKindModel> AvailableSeriesKinds { get; set; }
 
     [Inject]
     public required IDialogService DialogService { get; init; }
@@ -21,6 +24,15 @@ public partial class FranchiseForm
 
     private bool IsSaving =>
         this.State.Value.Add.IsInProgress || this.State.Value.Update.IsInProgress;
+
+    protected override void OnInitialized()
+    {
+        this.SubsribeToSuccessfulResult<FetchFranchiseResultAction>(this.SetPropertyValues);
+        this.SubsribeToSuccessfulResult<AddFranchiseResultAction>(this.OnFranchiseCreated);
+        this.SubsribeToSuccessfulResult<UpdateFranchiseResultAction>(this.OnFranchiseUpdated);
+
+        base.OnInitialized();
+    }
 
     protected override void OnParametersSet()
     {
@@ -34,23 +46,11 @@ public partial class FranchiseForm
         this.SetPropertyValues();
     }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-
-        if (firstRender)
-        {
-            this.SubsribeToSuccessfulResult<FetchFranchiseResultAction>(this.SetPropertyValues);
-            this.SubsribeToSuccessfulResult<AddFranchiseResultAction>(this.OnFranchiseCreated);
-            this.SubsribeToSuccessfulResult<UpdateFranchiseResultAction>(this.OnFranchiseUpdated);
-        }
-    }
-
     private void FetchFranchise()
     {
         if (this.ListItem is not null)
         {
-            this.Dispatcher.Dispatch(new FetchFranchiseAction(this.ListItem.Id, this.State.Value.AvailableKinds));
+            this.Dispatcher.Dispatch(new FetchFranchiseAction(this.ListItem.Id));
         }
     }
 
@@ -65,6 +65,9 @@ public partial class FranchiseForm
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
         this.StateHasChanged();
     }
+
+    private void Close() =>
+        this.Dispatcher.Dispatch(new CloseItemAction());
 
     private void Save() =>
         this.WithValidation(request =>

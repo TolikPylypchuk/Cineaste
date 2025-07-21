@@ -1,22 +1,14 @@
 namespace Cineaste.Client.Store.Forms.SeriesForm;
 
-public sealed record FetchSeriesAction(
-    Guid Id,
-    ImmutableList<ListKindModel> AvailableKinds,
-    ListConfigurationModel ListConfiguration);
+public sealed record FetchSeriesAction(Guid Id);
 
 public sealed record FetchSeriesResultAction(ApiResult<SeriesModel> Result) : ResultAction<SeriesModel>(Result);
 
 public static class FetchSeriesReducers
 {
-    [ReducerMethod]
-    public static SeriesFormState ReduceFetchSeriesAction(SeriesFormState _, FetchSeriesAction action) =>
-        new()
-        {
-            Fetch = ApiCall.InProgress(),
-            AvailableKinds = action.AvailableKinds,
-            ListConfiguration = action.ListConfiguration
-        };
+    [ReducerMethod(typeof(FetchSeriesAction))]
+    public static SeriesFormState ReduceFetchSeriesAction(SeriesFormState _) =>
+        new() { Fetch = ApiCall.InProgress() };
 
     [ReducerMethod]
     public static SeriesFormState ReduceFetchSeriesResultAction(
@@ -28,7 +20,7 @@ public static class FetchSeriesReducers
             onFailure: problem => state with { Fetch = ApiCall.Failure(problem), SelectedSeriesComponent = null });
 }
 
-public sealed partial class FetchSeriesEffect(ISeriesApi api)
+public sealed partial class FetchSeriesEffects(ISeriesApi api)
 {
     [EffectMethod]
     public async Task HandleFetchSeries(FetchSeriesAction action, IDispatcher dispatcher)

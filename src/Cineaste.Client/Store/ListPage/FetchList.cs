@@ -48,7 +48,7 @@ public static class FetchListReducers
             onFailure: problem => new() { IsLoaded = true, Problem = problem });
 }
 
-public sealed class FetchListEffect(IListApi api)
+public sealed class FetchListEffects(IListApi api)
 {
     [EffectMethod(typeof(FetchListAction))]
     public async Task HandleFetchListAction(IDispatcher dispatcher)

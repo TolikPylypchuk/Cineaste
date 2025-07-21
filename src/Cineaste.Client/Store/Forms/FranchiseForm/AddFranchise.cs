@@ -20,7 +20,7 @@ public static class AddFranchiseReducers
             onFailure: problem => state with { Add = ApiCall.Failure(problem) });
 }
 
-public sealed class AddFranchiseEffect(IFranchiseApi api)
+public sealed class AddFranchiseEffects(IFranchiseApi api)
 {
     [EffectMethod]
     public async Task HandleAddFranchise(AddFranchiseAction action, IDispatcher dispatcher)

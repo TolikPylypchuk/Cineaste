@@ -11,7 +11,7 @@ public static class FranchiseMappingExtensions
             franchise.ShowTitles,
             franchise.IsLooselyConnected,
             franchise.ContinueNumbering,
-            franchise.GetActiveColor()?.HexValue ?? String.Empty,
+            String.Empty,
             franchise.ListItem?.SequenceNumber ?? 0,
             franchise.FranchiseItem.ToFranchiseItemInfoModel());
 

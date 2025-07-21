@@ -17,7 +17,7 @@ public static class UpdateMovieReducers
             onFailure: problem => state with { Update = ApiCall.Failure(problem) });
 }
 
-public sealed class UpdateMovieEffect(IMovieApi api)
+public sealed class UpdateMovieEffects(IMovieApi api)
 {
     [EffectMethod]
     public async Task HandleUpdateMovie(UpdateMovieAction action, IDispatcher dispatcher)

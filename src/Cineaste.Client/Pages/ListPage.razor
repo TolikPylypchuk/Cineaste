@@ -7,7 +7,7 @@
     </div>
 
     <div class="list-container">
-        <ListComponent ItemSelected="@this.SelectItem" FetchList="@this.FetchList" />
+        <ListComponent />
     </div>
 
     <div class="sidebar-container list-sidebar">
@@ -16,69 +16,32 @@
             @switch (this.State.Value.SelectionMode)
             {
                 case ListPageSelectionMode.None:
-                    <ListActionsPanel CreateMovie="@this.CreateMovie" CreateSeries="@this.CreateSeries" />
+                    <ListActionsPanel />
                     break;
                 case ListPageSelectionMode.Movie:
                     <MovieForm
                         ListId="@this.State.Value.Id"
                         ListItem="@this.State.Value.SelectedItem"
-                        Close="@this.OnItemClosed"
+                        AvailableKinds="@this.State.Value.AvailableMovieKinds"
                     />
                     break;
                 case ListPageSelectionMode.Series:
                     <SeriesForm
                         ListId="@this.State.Value.Id"
                         ListItem="@this.State.Value.SelectedItem"
-                        Close="@this.OnItemClosed"
+                        ListConfiguration="@this.State.Value.ListConfiguration"
+                        AvailableKinds="@this.State.Value.AvailableSeriesKinds"
                     />
                     break;
                 case ListPageSelectionMode.Franchise:
                     <FranchiseForm
                         ListId="@this.State.Value.Id"
                         ListItem="@this.State.Value.SelectedItem"
-                        Close="@this.OnItemClosed"
+                        AvailableMovieKinds="@this.State.Value.AvailableMovieKinds"
+                        AvailableSeriesKinds="@this.State.Value.AvailableSeriesKinds"
                     />
                     break;
             }
         }
     </div>
 </div>
-
-@code {
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-
-        if (!this.State.Value.IsLoaded)
-        {
-            this.FetchList();
-        }
-    }
-
-    private void FetchList() =>
-        this.Dispatcher.Dispatch(new FetchListAction());
-
-    private void SelectItem(ListItemModel item)
-    {
-        this.Dispatcher.Dispatch(new SelectItemAction(
-            item, this.GetKindsForItemType(item.Type), this.State.Value.ListConfiguration));
-    }
-
-    private void CreateMovie() =>
-        this.Dispatcher.Dispatch(new StartCreatingMovieAction(this.State.Value.AvailableMovieKinds));
-
-    private void CreateSeries() =>
-        this.Dispatcher.Dispatch(new StartCreatingSeriesAction(
-            this.State.Value.AvailableSeriesKinds, this.State.Value.ListConfiguration));
-
-    private void OnItemClosed() =>
-        this.Dispatcher.Dispatch(new CloseItemAction());
-
-    private ImmutableList<ListKindModel> GetKindsForItemType(ListItemType type) =>
-        type switch
-        {
-            ListItemType.Movie => this.State.Value.AvailableMovieKinds,
-            ListItemType.Series => this.State.Value.AvailableSeriesKinds,
-            _ => this.State.Value.AvailableMovieKinds.AddRange(this.State.Value.AvailableSeriesKinds)
-        };
-}

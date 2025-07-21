@@ -4,33 +4,50 @@ namespace Cineaste.Client.Store.Forms.SeriesForm;
 
 public static class OpenSeriesFormReducers
 {
-    [ReducerMethod]
-    public static SeriesFormState ReduceStartCreatingSeriesAction(
-        SeriesFormState _,
-        StartCreatingSeriesAction action) =>
-        new()
-        {
-            Fetch = ApiCall.Success(),
-            AvailableKinds = action.AvailableKinds,
-            ListConfiguration = action.ListConfiguration
-        };
+    [ReducerMethod(typeof(StartAddingSeriesAction))]
+    public static SeriesFormState ReduceStartAddingSeriesAction(SeriesFormState _) =>
+        new() { Fetch = ApiCall.Success() };
 
     [ReducerMethod]
     public static SeriesFormState ReduceSelectItemAction(SeriesFormState state, SelectItemAction action) =>
         action.Item.Type == ListItemType.Series
             ? new() { Fetch = ApiCall.InProgress() }
             : state;
+
+    [ReducerMethod(typeof(GoToFranchiseAction))]
+    public static SeriesFormState ReduceGoToFranchiseAction(SeriesFormState _) =>
+        new() { Fetch = ApiCall.Success() };
+
+    [ReducerMethod(typeof(GoToFranchiseComponentAction))]
+    public static SeriesFormState ReduceGoToFranchiseComponentAction(SeriesFormState _) =>
+        new() { Fetch = ApiCall.Success() };
 }
 
-public sealed class OpenSeriesFormEffect
+public sealed class OpenSeriesFormEffects
 {
     [EffectMethod]
     public Task HandleSelectItem(SelectItemAction action, IDispatcher dispatcher)
     {
         if (action.Item.Type == ListItemType.Series)
         {
-            dispatcher.Dispatch(new FetchSeriesAction(action.Item.Id, action.AvailableKinds, action.ListConfiguration));
+            dispatcher.Dispatch(new FetchSeriesAction(action.Item.Id));
         }
+
+        return Task.CompletedTask;
+    }
+
+    [EffectMethod]
+    public Task HandleGoToListItemResult(GoToListItemResultAction action, IDispatcher dispatcher)
+    {
+        action.Handle(
+            onSuccess: item =>
+            {
+                if (item.Type == ListItemType.Series)
+                {
+                    dispatcher.Dispatch(new FetchSeriesAction(item.Id));
+                }
+            },
+            onFailure: _ => { });
 
         return Task.CompletedTask;
     }

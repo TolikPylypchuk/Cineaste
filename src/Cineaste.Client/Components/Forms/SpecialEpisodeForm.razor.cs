@@ -1,4 +1,5 @@
 using Cineaste.Client.Store.Forms.SeriesForm;
+using Cineaste.Client.Store.ListPage;
 
 namespace Cineaste.Client.Components.Forms;
 
@@ -9,9 +10,6 @@ public partial class SpecialEpisodeForm
 
     [Parameter]
     public override SpecialEpisodeFormModel FormModel { get; set; } = null!;
-
-    [Parameter]
-    public EventCallback Close { get; set; }
 
     [Parameter]
     public EventCallback Delete { get; set; }
@@ -111,6 +109,9 @@ public partial class SpecialEpisodeForm
 
     private void GoToSeries() =>
         this.WithValidation(r => this.Dispatcher.Dispatch(new GoToSeriesAction()));
+
+    private void Close() =>
+        this.Dispatcher.Dispatch(new CloseItemAction());
 
     private void Cancel()
     {

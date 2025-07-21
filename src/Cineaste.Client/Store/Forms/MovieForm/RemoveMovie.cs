@@ -17,7 +17,7 @@ public static class RemoveMovieReducers
             onFailure: problem => state with { Remove = ApiCall.Failure(problem) });
 }
 
-public sealed class RemoveMovieEffect(IMovieApi api)
+public sealed class RemoveMovieEffects(IMovieApi api)
 {
     [EffectMethod]
     public async Task HandleRemoveMovieAction(RemoveMovieAction action, IDispatcher dispatcher)

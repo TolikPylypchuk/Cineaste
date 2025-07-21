@@ -17,12 +17,6 @@ public partial class ListComponent
 
     private readonly ConcurrentDictionary<CancellationToken, ListItemModelSource> dataSources = [];
 
-    [Parameter]
-    public EventCallback<ListItemModel> ItemSelected { get; set; }
-
-    [Parameter]
-    public required Action FetchList { get; set; }
-
     [Inject]
     public required IScrollManager ScrollManager { get; set; }
 
@@ -40,19 +34,31 @@ public partial class ListComponent
             onSuccess: data => this.TrySetResult(data, result.Token),
             onFailure: _ => this.TrySetResult(null, result.Token)));
 
-        this.SubscribeToAction<AddMovieResultAction>(this.HandleAddedOrUpdatedItem);
-        this.SubscribeToAction<AddSeriesResultAction>(this.HandleAddedOrUpdatedItem);
-        this.SubscribeToAction<AddFranchiseResultAction>(this.HandleAddedOrUpdatedItem);
+        this.SubsribeToSuccessfulResult<AddMovieResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<AddSeriesResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<AddFranchiseResultAction>(this.ReloadList);
 
-        this.SubscribeToAction<UpdateMovieResultAction>(this.HandleAddedOrUpdatedItem);
-        this.SubscribeToAction<UpdateSeriesResultAction>(this.HandleAddedOrUpdatedItem);
-        this.SubscribeToAction<UpdateFranchiseResultAction>(this.HandleAddedOrUpdatedItem);
+        this.SubsribeToSuccessfulResult<UpdateMovieResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<UpdateSeriesResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<UpdateFranchiseResultAction>(this.ReloadList);
 
-        this.SubscribeToAction<RemoveMovieResultAction>(this.HandleRemovedItem);
-        this.SubscribeToAction<RemoveSeriesResultAction>(this.HandleRemovedItem);
-        this.SubscribeToAction<RemoveFranchiseResultAction>(this.HandleRemovedItem);
+        this.SubsribeToSuccessfulResult<RemoveMovieResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<RemoveSeriesResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<RemoveFranchiseResultAction>(this.ReloadList);
+
+        this.SubsribeToSuccessfulResult<GoToListItemResultAction>(this.ReloadList);
 
         base.OnInitialized();
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (!this.State.Value.IsLoaded)
+        {
+            this.FetchList();
+        }
     }
 
     private async Task<GridData<ListItemModel>> ServerDataFunc(
@@ -73,11 +79,14 @@ public partial class ListComponent
             : new() { Items = [], TotalItems = 0 };
     }
 
-    private async Task SelectItem(ListItemModel item)
+    private void FetchList() =>
+        this.Dispatcher.Dispatch(new FetchListAction());
+
+    private void SelectItem(ListItemModel? item)
     {
-        if (item != this.State.Value.SelectedItem)
+        if (item is not null && item != this.State.Value.SelectedItem)
         {
-            await this.ItemSelected.InvokeAsync(item);
+            this.Dispatcher.Dispatch(new SelectItemAction(item));
         }
     }
 
@@ -88,16 +97,6 @@ public partial class ListComponent
             dataSource.TrySetResult(data);
         }
     }
-
-    private void HandleAddedOrUpdatedItem<T>(ResultAction<T> action) =>
-        action.Handle(
-            onSuccess: movie => this.ReloadList(),
-            onFailure: _ => { });
-
-    private void HandleRemovedItem(EmptyResultAction action) =>
-        action.Handle(
-            onSuccess: () => this.ReloadList(),
-            onFailure: _ => { });
 
     private async void ReloadList()
     {

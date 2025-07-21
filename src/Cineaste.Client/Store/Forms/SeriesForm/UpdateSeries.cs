@@ -19,7 +19,7 @@ public static class UpdateSeriesReducers
             onFailure: problem => state with { Update = ApiCall.Failure(problem) });
 }
 
-public sealed partial class UpdateSeriesEffect(ISeriesApi api)
+public sealed class UpdateSeriesEffects(ISeriesApi api)
 {
     [EffectMethod]
     public async Task HandleUpdateSeries(UpdateSeriesAction action, IDispatcher dispatcher)

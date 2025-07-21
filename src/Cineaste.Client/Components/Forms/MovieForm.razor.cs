@@ -6,13 +6,13 @@ namespace Cineaste.Client.Components.Forms;
 public partial class MovieForm
 {
     [Parameter]
-    public Guid ListId { get; set; }
+    public required Guid ListId { get; set; }
+
+    [Parameter]
+    public required ImmutableList<ListKindModel> AvailableKinds { get; set; }
 
     [Parameter]
     public ListItemModel? ListItem { get; set; }
-
-    [Parameter]
-    public EventCallback Close { get; set; }
 
     [Inject]
     public required IDialogService DialogService { get; init; }
@@ -25,11 +25,20 @@ public partial class MovieForm
     private bool IsSaving =>
         this.State.Value.Add.IsInProgress || this.State.Value.Update.IsInProgress;
 
+    protected override void OnInitialized()
+    {
+        this.SubsribeToSuccessfulResult<FetchMovieResultAction>(this.SetPropertyValues);
+        this.SubsribeToSuccessfulResult<AddMovieResultAction>(this.OnMovieCreated);
+        this.SubsribeToSuccessfulResult<UpdateMovieResultAction>(this.OnMovieUpdated);
+
+        base.OnInitialized();
+    }
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        this.FormModel = new(this.ListId, this.State.Value.AvailableKinds);
+        this.FormModel = new(this.ListId, this.AvailableKinds);
 
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
@@ -37,23 +46,11 @@ public partial class MovieForm
         this.SetPropertyValues();
     }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-
-        if (firstRender)
-        {
-            this.SubsribeToSuccessfulResult<FetchMovieResultAction>(this.SetPropertyValues);
-            this.SubsribeToSuccessfulResult<AddMovieResultAction>(this.OnMovieCreated);
-            this.SubsribeToSuccessfulResult<UpdateMovieResultAction>(this.OnMovieUpdated);
-        }
-    }
-
     private void FetchMovie()
     {
         if (this.ListItem is not null)
         {
-            this.Dispatcher.Dispatch(new FetchMovieAction(this.ListItem.Id, this.State.Value.AvailableKinds));
+            this.Dispatcher.Dispatch(new FetchMovieAction(this.ListItem.Id));
         }
     }
 
@@ -116,6 +113,9 @@ public partial class MovieForm
 
     private bool HasRottenTomatoesId() =>
         !String.IsNullOrEmpty(this.FormModel.RottenTomatoesId);
+
+    private void Close() =>
+        this.Dispatcher.Dispatch(new CloseItemAction());
 
     private void Save() =>
         this.WithValidation(request =>

@@ -142,7 +142,7 @@
                                 Label="@this.Loc["MovieForm.Kind"]"
                                 Class="kind-select form-field"
                             >
-                                @foreach (var kind in this.State.Value.AvailableKinds)
+                                @foreach (var kind in this.AvailableKinds)
                                 {
                                     <MudSelectItem Value="kind">
                                         @kind.Name

@@ -1,15 +1,15 @@
 namespace Cineaste.Client.Store.Forms.FranchiseForm;
 
-public sealed record FetchFranchiseAction(Guid Id, ImmutableList<ListKindModel> AvailableKinds);
+public sealed record FetchFranchiseAction(Guid Id);
 
 public sealed record FetchFranchiseResultAction(ApiResult<FranchiseModel> Result)
     : ResultAction<FranchiseModel>(Result);
 
 public static class FetchFranchiseReducers
 {
-    [ReducerMethod]
-    public static FranchiseFormState ReduceFetchFranchiseAction(FranchiseFormState _, FetchFranchiseAction action) =>
-        new() { Fetch = ApiCall.InProgress(), AvailableKinds = action.AvailableKinds };
+    [ReducerMethod(typeof(FetchFranchiseAction))]
+    public static FranchiseFormState ReduceFetchFranchiseAction(FranchiseFormState _) =>
+        new() { Fetch = ApiCall.InProgress() };
 
     [ReducerMethod]
     public static FranchiseFormState ReduceFetchFranchiseResultAction(
@@ -20,7 +20,7 @@ public static class FetchFranchiseReducers
             onFailure: problem => state with { Fetch = ApiCall.Failure(problem) });
 }
 
-public sealed class FetchFranchiseEffect(IFranchiseApi api)
+public sealed class FetchFranchiseEffects(IFranchiseApi api)
 {
     [EffectMethod]
     public async Task HandleFetchFranchise(FetchFranchiseAction action, IDispatcher dispatcher)

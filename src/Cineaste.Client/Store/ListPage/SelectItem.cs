@@ -1,17 +1,12 @@
 namespace Cineaste.Client.Store.ListPage;
 
-public sealed record SelectItemAction(
-    ListItemModel Item,
-    ImmutableList<ListKindModel> AvailableKinds,
-    ListConfigurationModel ListConfiguration);
+public sealed record SelectItemAction(ListItemModel Item);
 
-public sealed record StartCreatingMovieAction(ImmutableList<ListKindModel> AvailableKinds);
+public sealed record StartAddingMovieAction;
 
-public sealed record StartCreatingSeriesAction(
-    ImmutableList<ListKindModel> AvailableKinds,
-    ListConfigurationModel ListConfiguration);
+public sealed record StartAddingSeriesAction;
 
-public sealed record StartCreatingFranchiseAction(ImmutableList<ListKindModel> AvailableKinds);
+public sealed record StartAddingFranchiseAction;
 
 public sealed record CloseItemAction;
 
@@ -19,26 +14,21 @@ public static class SelectItemReducers
 {
     [ReducerMethod]
     public static ListPageState ReduceSelectItemAction(ListPageState state, SelectItemAction action) =>
-        state with { SelectedItem = action.Item, SelectionMode = GetSelectionMode(action) };
+        state with { SelectedItem = action.Item, SelectionMode = action.Item.Type.ToListPageSelectionMode() };
 
-    [ReducerMethod(typeof(StartCreatingMovieAction))]
-    public static ListPageState ReduceStartCreatingMovieAction(ListPageState state) =>
+    [ReducerMethod(typeof(StartAddingMovieAction))]
+    public static ListPageState ReduceStartAddingMovieAction(ListPageState state) =>
         state with { SelectedItem = null, SelectionMode = ListPageSelectionMode.Movie };
 
-    [ReducerMethod(typeof(StartCreatingSeriesAction))]
-    public static ListPageState ReduceStartCreatingSeriesAction(ListPageState state) =>
+    [ReducerMethod(typeof(StartAddingSeriesAction))]
+    public static ListPageState ReduceStartAddingSeriesAction(ListPageState state) =>
         state with { SelectedItem = null, SelectionMode = ListPageSelectionMode.Series };
+
+    [ReducerMethod(typeof(StartAddingFranchiseAction))]
+    public static ListPageState ReduceStartAddingFranchiseAction(ListPageState state) =>
+        state with { SelectedItem = null, SelectionMode = ListPageSelectionMode.Franchise };
 
     [ReducerMethod(typeof(CloseItemAction))]
     public static ListPageState ReduceCloseItemAction(ListPageState state) =>
         state with { SelectedItem = null, SelectionMode = ListPageSelectionMode.None };
-
-    private static ListPageSelectionMode GetSelectionMode(SelectItemAction action) =>
-        action.Item?.Type switch
-        {
-            ListItemType.Movie => ListPageSelectionMode.Movie,
-            ListItemType.Series => ListPageSelectionMode.Series,
-            ListItemType.Franchise => ListPageSelectionMode.Franchise,
-            _ => ListPageSelectionMode.None
-        };
 }

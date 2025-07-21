@@ -11,4 +11,7 @@ public abstract class CineasteComponent : FluxorComponent
 
     [Inject]
     public required IPageNavigator PageNavigator { get; init; }
+
+    [Inject]
+    public required IDispatcher Dispatcher { get; init; }
 }

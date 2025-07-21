@@ -1,5 +1,7 @@
 using System.Globalization;
 
+using Cineaste.Core.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 using Testcontainers.MsSql;
@@ -145,8 +147,10 @@ public class DataFixture : IAsyncLifetime
     public SpecialEpisode CreateSpecialEpisode(int num) =>
         new(Id.Create<SpecialEpisode>(), this.CreateTitles(), 1, 2000 + num, false, true, "Test", num);
 
-    public Franchise CreateFranchise(CineasteList list)
+    public async Task<Franchise> CreateFranchise(CineasteDbContext dbContext)
     {
+        var list = await this.GetList(dbContext);
+
         var franchise = new Franchise(
             Id.Create<Franchise>(),
             this.CreateTitles(),
@@ -156,6 +160,9 @@ public class DataFixture : IAsyncLifetime
 
         list.AddFranchise(franchise);
         list.SortItems();
+
+        dbContext.Franchises.Add(franchise);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         return franchise;
     }

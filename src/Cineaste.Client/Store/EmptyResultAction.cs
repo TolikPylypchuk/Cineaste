@@ -1,10 +1,11 @@
 namespace Cineaste.Client.Store;
 
-public abstract record EmptyResultAction
+public abstract record EmptyResultAction : ResultAction
 {
     public EmptyApiResult Result { get; }
 
     protected EmptyResultAction(EmptyApiResult result)
+        : base(result.IsSuccessful)
     {
         ArgumentNullException.ThrowIfNull(result);
         this.Result = result;

@@ -19,7 +19,7 @@ public static class RemoveSeriesReducers
             onFailure: problem => state with { Remove = ApiCall.Failure(problem) });
 }
 
-public sealed class RemoveSeriesEffect(ISeriesApi api)
+public sealed class RemoveSeriesEffects(ISeriesApi api)
 {
     [EffectMethod]
     public async Task HandleRemoveSeriesAction(RemoveSeriesAction action, IDispatcher dispatcher)
