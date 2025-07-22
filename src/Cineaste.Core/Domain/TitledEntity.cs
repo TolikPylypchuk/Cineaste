@@ -1,64 +1,81 @@
+using System.Collections.Immutable;
+
 namespace Cineaste.Core.Domain;
 
 public abstract class TitledEntity<TEntity> : Entity<TEntity>
     where TEntity : TitledEntity<TEntity>
 {
-    private readonly List<Title> titles;
+    private readonly List<Title> allTitles;
+
+    public IReadOnlyCollection<Title> AllTitles =>
+        this.allTitles.AsReadOnly();
 
     public IReadOnlyCollection<Title> Titles =>
-        this.titles.AsReadOnly();
+        [.. this.allTitles
+            .Where(title => !title.IsOriginal)
+            .OrderBy(title => title.SequenceNumber)];
+
+    public IReadOnlyCollection<Title> OriginalTitles =>
+        [.. this.allTitles
+            .Where(title => title.IsOriginal)
+            .OrderBy(title => title.SequenceNumber)];
 
     public Title Title =>
-        this.Titles
+        this.AllTitles
             .Where(title => !title.IsOriginal)
-            .OrderBy(title => title.Priority)
+            .OrderBy(title => title.SequenceNumber)
             .First();
 
     public Title OriginalTitle =>
-        this.Titles
+        this.AllTitles
             .Where(title => title.IsOriginal)
-            .OrderBy(title => title.Priority)
+            .OrderBy(title => title.SequenceNumber)
             .First();
 
     protected TitledEntity(Id<TEntity> id)
         : base(id) =>
-        this.titles = [];
+        this.allTitles = [];
 
     protected TitledEntity(Id<TEntity> id, IEnumerable<Title> titles)
         : base(id) =>
-        this.titles = [.. titles];
+        this.allTitles = Require.NotEmpty<List<Title>, Title>([.. titles]);
 
     public Title AddTitle(string name, bool isOriginal)
     {
-        int priority = this.titles
-            .Where(title => title.IsOriginal == isOriginal)
-            .Max(title => title.Priority) + 1;
+        int sequenceNumber = isOriginal ? this.OriginalTitles.Count : this.Titles.Count;
 
-        var title = new Title(name, priority, isOriginal);
-
-        this.titles.Add(title);
+        var title = new Title(name, sequenceNumber, isOriginal);
+        this.allTitles.Add(title);
 
         return title;
     }
 
-    public void RemoveTitle(string name, bool isOriginal) =>
-        this.titles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
+    public void RemoveTitle(string name, bool isOriginal)
+    {
+        this.allTitles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
+
+        int sequenceNumber = 1;
+        foreach (var title in this.allTitles.Where(title => title.IsOriginal == isOriginal))
+        {
+            title.SequenceNumber = sequenceNumber++;
+        }
+    }
 
     public IReadOnlyCollection<Title> ReplaceTitles(IEnumerable<string> names, bool isOriginal)
     {
-        var namesList = Require.NotNull(names).ToList();
+        var namesList = Require.NotNull(names).ToImmutableList();
 
         this.ValidateTitles(namesList, nameof(names));
 
-        this.titles.RemoveAll(title => title.IsOriginal == isOriginal);
+        this.allTitles.RemoveAll(title => title.IsOriginal == isOriginal);
 
         var newTitles = namesList
             .Select((name, index) => new Title(name, index + 1, isOriginal))
-            .ToList();
+            .ToImmutableList();
 
-        this.titles.AddRange(newTitles);
+        this.allTitles.AddRange(newTitles);
 
-        return newTitles.AsReadOnly();
+        return newTitles;
     }
 
     protected virtual void ValidateTitles(IReadOnlyCollection<string> names, string paramName)

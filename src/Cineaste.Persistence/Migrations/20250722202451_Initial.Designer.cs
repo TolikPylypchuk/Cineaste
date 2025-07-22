@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20250719155610_Initial")]
+    [Migration("20250722202451_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -49,6 +49,16 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<bool>("IsLooselyConnected")
                         .HasColumnType("bit");
 
+                    b.Property<string>("KindSource")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("MovieKindId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SeriesKindId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("ShowTitles")
                         .HasColumnType("bit");
 
@@ -57,6 +67,10 @@ namespace Cineaste.Persistence.Migrations
                     b.HasIndex("FranchiseItemId")
                         .IsUnique()
                         .HasFilter("[FranchiseItemId] IS NOT NULL");
+
+                    b.HasIndex("MovieKindId");
+
+                    b.HasIndex("SeriesKindId");
 
                     b.ToTable("Franchises");
                 });
@@ -245,6 +259,9 @@ namespace Cineaste.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("WatchedColor")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -402,6 +419,9 @@ namespace Cineaste.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("WatchedColor")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -530,6 +550,52 @@ namespace Cineaste.Persistence.Migrations
                         .WithOne("Franchise")
                         .HasForeignKey("Cineaste.Core.Domain.Franchise", "FranchiseItemId");
 
+                    b.HasOne("Cineaste.Core.Domain.MovieKind", "MovieKind")
+                        .WithMany()
+                        .HasForeignKey("MovieKindId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Cineaste.Core.Domain.SeriesKind", "SeriesKind")
+                        .WithMany()
+                        .HasForeignKey("SeriesKindId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.OwnsMany("Cineaste.Core.Domain.Title", "AllTitles", b1 =>
+                        {
+                            b1.Property<Guid>("FranchiseId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<bool>("IsOriginal")
+                                .HasColumnType("bit");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("SequenceNumber")
+                                .HasColumnType("int");
+
+                            b1.HasKey("FranchiseId", "Id");
+
+                            b1.ToTable("FranchiseTitles", null, t =>
+                                {
+                                    t.HasCheckConstraint("CH_FranchiseTitles_NameNotEmpty", "Name <> ''");
+
+                                    t.HasCheckConstraint("CH_FranchiseTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                                });
+
+                            b1.WithOwner()
+                                .HasForeignKey("FranchiseId");
+                        });
+
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {
                             b1.Property<Guid>("FranchiseId")
@@ -548,45 +614,15 @@ namespace Cineaste.Persistence.Migrations
                                 .HasForeignKey("FranchiseId");
                         });
 
-                    b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
-                        {
-                            b1.Property<Guid>("FranchiseId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<bool>("IsOriginal")
-                                .HasColumnType("bit");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<int>("Priority")
-                                .HasColumnType("int");
-
-                            b1.HasKey("FranchiseId", "Id");
-
-                            b1.ToTable("FranchiseTitles", null, t =>
-                                {
-                                    t.HasCheckConstraint("CH_FranchiseTitles_NameNotEmpty", "Name <> ''");
-
-                                    t.HasCheckConstraint("CH_FranchiseTitles_PriorityPositive", "Priority > 0");
-                                });
-
-                            b1.WithOwner()
-                                .HasForeignKey("FranchiseId");
-                        });
+                    b.Navigation("AllTitles");
 
                     b.Navigation("FranchiseItem");
 
+                    b.Navigation("MovieKind");
+
                     b.Navigation("Poster");
 
-                    b.Navigation("Titles");
+                    b.Navigation("SeriesKind");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.FranchiseItem", b =>
@@ -681,6 +717,40 @@ namespace Cineaste.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.OwnsMany("Cineaste.Core.Domain.Title", "AllTitles", b1 =>
+                        {
+                            b1.Property<Guid>("MovieId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<bool>("IsOriginal")
+                                .HasColumnType("bit");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("SequenceNumber")
+                                .HasColumnType("int");
+
+                            b1.HasKey("MovieId", "Id");
+
+                            b1.ToTable("MovieTitles", null, t =>
+                                {
+                                    t.HasCheckConstraint("CH_MovieTitles_NameNotEmpty", "Name <> ''");
+
+                                    t.HasCheckConstraint("CH_MovieTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                                });
+
+                            b1.WithOwner()
+                                .HasForeignKey("MovieId");
+                        });
+
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {
                             b1.Property<Guid>("MovieId")
@@ -731,39 +801,7 @@ namespace Cineaste.Persistence.Migrations
                             b1.Navigation("Tag");
                         });
 
-                    b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
-                        {
-                            b1.Property<Guid>("MovieId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<bool>("IsOriginal")
-                                .HasColumnType("bit");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<int>("Priority")
-                                .HasColumnType("int");
-
-                            b1.HasKey("MovieId", "Id");
-
-                            b1.ToTable("MovieTitles", null, t =>
-                                {
-                                    t.HasCheckConstraint("CH_MovieTitles_NameNotEmpty", "Name <> ''");
-
-                                    t.HasCheckConstraint("CH_MovieTitles_PriorityPositive", "Priority > 0");
-                                });
-
-                            b1.WithOwner()
-                                .HasForeignKey("MovieId");
-                        });
+                    b.Navigation("AllTitles");
 
                     b.Navigation("FranchiseItem");
 
@@ -772,8 +810,6 @@ namespace Cineaste.Persistence.Migrations
                     b.Navigation("Poster");
 
                     b.Navigation("Tags");
-
-                    b.Navigation("Titles");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.MovieKind", b =>
@@ -820,7 +856,7 @@ namespace Cineaste.Persistence.Migrations
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
+                    b.OwnsMany("Cineaste.Core.Domain.Title", "AllTitles", b1 =>
                         {
                             b1.Property<Guid>("SeasonId")
                                 .HasColumnType("uniqueidentifier");
@@ -838,7 +874,7 @@ namespace Cineaste.Persistence.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<int>("Priority")
+                            b1.Property<int>("SequenceNumber")
                                 .HasColumnType("int");
 
                             b1.HasKey("SeasonId", "Id");
@@ -847,14 +883,14 @@ namespace Cineaste.Persistence.Migrations
                                 {
                                     t.HasCheckConstraint("CH_SeasonTitles_NameNotEmpty", "Name <> ''");
 
-                                    t.HasCheckConstraint("CH_SeasonTitles_PriorityPositive", "Priority > 0");
+                                    t.HasCheckConstraint("CH_SeasonTitles_SequenceNumberPositive", "SequenceNumber > 0");
                                 });
 
                             b1.WithOwner()
                                 .HasForeignKey("SeasonId");
                         });
 
-                    b.Navigation("Titles");
+                    b.Navigation("AllTitles");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Series", b =>
@@ -868,6 +904,40 @@ namespace Cineaste.Persistence.Migrations
                         .HasForeignKey("KindId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.OwnsMany("Cineaste.Core.Domain.Title", "AllTitles", b1 =>
+                        {
+                            b1.Property<Guid>("SeriesId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<bool>("IsOriginal")
+                                .HasColumnType("bit");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("SequenceNumber")
+                                .HasColumnType("int");
+
+                            b1.HasKey("SeriesId", "Id");
+
+                            b1.ToTable("SeriesTitles", null, t =>
+                                {
+                                    t.HasCheckConstraint("CH_SeriesTitles_NameNotEmpty", "Name <> ''");
+
+                                    t.HasCheckConstraint("CH_SeriesTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                                });
+
+                            b1.WithOwner()
+                                .HasForeignKey("SeriesId");
+                        });
 
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {
@@ -919,39 +989,7 @@ namespace Cineaste.Persistence.Migrations
                             b1.Navigation("Tag");
                         });
 
-                    b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
-                        {
-                            b1.Property<Guid>("SeriesId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<bool>("IsOriginal")
-                                .HasColumnType("bit");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<int>("Priority")
-                                .HasColumnType("int");
-
-                            b1.HasKey("SeriesId", "Id");
-
-                            b1.ToTable("SeriesTitles", null, t =>
-                                {
-                                    t.HasCheckConstraint("CH_SeriesTitles_NameNotEmpty", "Name <> ''");
-
-                                    t.HasCheckConstraint("CH_SeriesTitles_PriorityPositive", "Priority > 0");
-                                });
-
-                            b1.WithOwner()
-                                .HasForeignKey("SeriesId");
-                        });
+                    b.Navigation("AllTitles");
 
                     b.Navigation("FranchiseItem");
 
@@ -960,8 +998,6 @@ namespace Cineaste.Persistence.Migrations
                     b.Navigation("Poster");
 
                     b.Navigation("Tags");
-
-                    b.Navigation("Titles");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.SeriesKind", b =>
@@ -979,6 +1015,40 @@ namespace Cineaste.Persistence.Migrations
                         .WithMany("SpecialEpisodes")
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.OwnsMany("Cineaste.Core.Domain.Title", "AllTitles", b1 =>
+                        {
+                            b1.Property<Guid>("SpecialEpisodeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<bool>("IsOriginal")
+                                .HasColumnType("bit");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("SequenceNumber")
+                                .HasColumnType("int");
+
+                            b1.HasKey("SpecialEpisodeId", "Id");
+
+                            b1.ToTable("SpecialEpisodeTitles", null, t =>
+                                {
+                                    t.HasCheckConstraint("CH_SpecialEpisodeTitles_NameNotEmpty", "Name <> ''");
+
+                                    t.HasCheckConstraint("CH_SpecialEpisodeTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                                });
+
+                            b1.WithOwner()
+                                .HasForeignKey("SpecialEpisodeId");
+                        });
 
                     b.OwnsOne("Cineaste.Core.Domain.Poster", "Poster", b1 =>
                         {
@@ -998,43 +1068,9 @@ namespace Cineaste.Persistence.Migrations
                                 .HasForeignKey("SpecialEpisodeId");
                         });
 
-                    b.OwnsMany("Cineaste.Core.Domain.Title", "Titles", b1 =>
-                        {
-                            b1.Property<Guid>("SpecialEpisodeId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<bool>("IsOriginal")
-                                .HasColumnType("bit");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<int>("Priority")
-                                .HasColumnType("int");
-
-                            b1.HasKey("SpecialEpisodeId", "Id");
-
-                            b1.ToTable("SpecialEpisodeTitles", null, t =>
-                                {
-                                    t.HasCheckConstraint("CH_SpecialEpisodeTitles_NameNotEmpty", "Name <> ''");
-
-                                    t.HasCheckConstraint("CH_SpecialEpisodeTitles_PriorityPositive", "Priority > 0");
-                                });
-
-                            b1.WithOwner()
-                                .HasForeignKey("SpecialEpisodeId");
-                        });
+                    b.Navigation("AllTitles");
 
                     b.Navigation("Poster");
-
-                    b.Navigation("Titles");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Tag", b =>

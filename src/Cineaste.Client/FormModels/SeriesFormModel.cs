@@ -32,21 +32,16 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
 
     public SeriesFormModel(
         Guid listId,
-        IReadOnlyCollection<ListKindModel> availableKinds,
+        ListKindModel kind,
         string defaultSeasonTitle,
         string defaultSeasonOriginalTitle)
     {
-        ArgumentNullException.ThrowIfNull(availableKinds);
+        ArgumentNullException.ThrowIfNull(kind);
         ArgumentNullException.ThrowIfNull(defaultSeasonTitle);
         ArgumentNullException.ThrowIfNull(defaultSeasonOriginalTitle);
 
-        if (availableKinds.Count == 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(availableKinds), $"{nameof(availableKinds)} is empty");
-        }
-
         this.listId = listId;
-        this.defaultKind = availableKinds.First();
+        this.defaultKind = kind;
         this.Kind = this.defaultKind;
 
         this.Components = new(this.components);

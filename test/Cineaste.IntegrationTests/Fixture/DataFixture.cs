@@ -78,6 +78,8 @@ public class DataFixture : IAsyncLifetime
             .Where(list => list.Id == this.list.Id)
             .Include(list => list.Configuration)
             .Include(list => list.Items)
+            .Include(list => list.MovieKinds)
+            .Include(list => list.SeriesKinds)
             .SingleAsync();
 
     public Task<MovieKind> GetMovieKind(CineasteDbContext dbContext) =>
@@ -154,6 +156,9 @@ public class DataFixture : IAsyncLifetime
         var franchise = new Franchise(
             Id.Create<Franchise>(),
             this.CreateTitles(),
+            await this.GetMovieKind(dbContext),
+            await this.GetSeriesKind(dbContext),
+            FranchiseKindSource.Movie,
             showTitles: true,
             isLooselyConnected: false,
             continueNumbering: false);

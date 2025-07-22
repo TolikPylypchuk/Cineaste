@@ -88,8 +88,11 @@ public sealed partial class ListItem : Entity<ListItem>
         this.NormalizedShortTitle = this.Normalize(movie.Title.Name);
         this.NormalizedShortOriginalTitle = this.Normalize(movie.OriginalTitle.Name);
 
-        this.NormalizedTitle = this.CreateFullTitle(movie.FranchiseItem, this.NormalizedShortTitle);
-        this.NormalizedOriginalTitle = this.CreateFullTitle(movie.FranchiseItem, this.NormalizedShortOriginalTitle);
+        this.NormalizedTitle = this.CreateFullTitle(
+            movie.FranchiseItem, this.NormalizedShortTitle, f => f.Title);
+
+        this.NormalizedOriginalTitle = this.CreateFullTitle(
+            movie.FranchiseItem, this.NormalizedShortOriginalTitle, f => f.OriginalTitle);
 
         this.StartYear = movie.Year;
         this.EndYear = movie.Year;
@@ -108,8 +111,11 @@ public sealed partial class ListItem : Entity<ListItem>
         this.NormalizedShortTitle = this.Normalize(series.Title.Name);
         this.NormalizedShortOriginalTitle = this.Normalize(series.OriginalTitle.Name);
 
-        this.NormalizedTitle = this.CreateFullTitle(series.FranchiseItem, this.NormalizedShortTitle);
-        this.NormalizedOriginalTitle = this.CreateFullTitle(series.FranchiseItem, this.NormalizedShortOriginalTitle);
+        this.NormalizedTitle = this.CreateFullTitle(
+            series.FranchiseItem, this.NormalizedShortTitle, f => f.Title);
+
+        this.NormalizedOriginalTitle = this.CreateFullTitle(
+            series.FranchiseItem, this.NormalizedShortOriginalTitle, f => f.OriginalTitle);
 
         this.StartYear = series.StartYear;
         this.EndYear = series.EndYear;
@@ -125,11 +131,14 @@ public sealed partial class ListItem : Entity<ListItem>
         nameof(this.NormalizedOriginalTitle))]
     public void SetProperties(Franchise franchise)
     {
-        this.NormalizedShortTitle = this.Normalize(franchise.ActualTitle?.Name);
-        this.NormalizedShortOriginalTitle = this.Normalize(franchise.ActualOriginalTitle?.Name);
+        this.NormalizedShortTitle = this.Normalize(franchise.Title.Name);
+        this.NormalizedShortOriginalTitle = this.Normalize(franchise.OriginalTitle.Name);
 
-        this.NormalizedTitle = this.CreateFullTitle(franchise.FranchiseItem, this.NormalizedShortTitle);
-        this.NormalizedOriginalTitle = this.CreateFullTitle(franchise.FranchiseItem, this.NormalizedShortOriginalTitle);
+        this.NormalizedTitle = this.CreateFullTitle(
+            franchise.FranchiseItem, this.NormalizedShortTitle, f => f.Title);
+
+        this.NormalizedOriginalTitle = this.CreateFullTitle(
+            franchise.FranchiseItem, this.NormalizedShortOriginalTitle, f => f.OriginalTitle);
 
         this.StartYear = franchise.StartYear ?? 0;
         this.EndYear = franchise.EndYear ?? 0;
@@ -144,14 +153,15 @@ public sealed partial class ListItem : Entity<ListItem>
     [GeneratedRegex("\\s+|\\p{C}+", RegexOptions.Compiled)]
     private static partial Regex CreateSpacesOrOtherCharactersRegex();
 
-    private string CreateFullTitle(FranchiseItem? item, string title) =>
+    private string CreateFullTitle(FranchiseItem? item, string title, Func<Franchise, Title> franchiseTitle) =>
         item is null
             ? title
             : this.CreateFullTitle(
                 item.ParentFranchise.FranchiseItem,
-                $"{this.Normalize(item.ParentFranchise.ActualTitle?.Name)}/" +
+                $"{this.Normalize(franchiseTitle(item.ParentFranchise).Name)}/" +
                 $"{this.DelimitNumber(item.SequenceNumber)}/" +
-                $"{title}");
+                $"{title}",
+                franchiseTitle);
 
     private string Normalize(string? str)
     {

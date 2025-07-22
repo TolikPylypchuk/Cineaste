@@ -38,7 +38,7 @@ public partial class MovieForm
     {
         base.OnParametersSet();
 
-        this.FormModel = new(this.ListId, this.AvailableKinds);
+        this.FormModel = new(this.ListId, this.AvailableKinds.First());
 
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();

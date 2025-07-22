@@ -82,7 +82,7 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
     private async Task<Movie> FindMovie(Id<Movie> id)
     {
         var movie = await this.dbContext.Movies
-            .Include(movie => movie.Titles)
+            .Include(movie => movie.AllTitles)
             .Include(movie => movie.Kind)
             .Include(movie => movie.Tags)
             .Include(movie => movie.FranchiseItem)
@@ -102,7 +102,7 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
             .Include(list => list.Configuration)
             .Include(list => list.Items)
                 .ThenInclude(item => item.Movie)
-                    .ThenInclude(movie => movie!.Titles)
+                    .ThenInclude(movie => movie!.AllTitles)
             .Include(list => list.Items)
                 .ThenInclude(item => item.Movie)
                     .ThenInclude(movie => movie!.Kind)

@@ -1,3 +1,4 @@
+using Cineaste.Core.Domain;
 using Cineaste.Shared.Models.Franchise;
 
 namespace Cineaste.Services;
@@ -88,7 +89,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
-        var request = this.CreateFranchiseRequest(movie.Id);
+        var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie);
 
         // Act
 
@@ -128,7 +129,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         var franchiseService = new FranchiseService(dbContext, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
-        var request = this.CreateFranchiseRequest(movie.Id);
+        var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie);
 
         // Act
 
@@ -161,7 +162,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var dummyListId = Id.Create<CineasteList>();
-        var request = this.CreateFranchiseRequest(movie.Id) with { ListId = dummyListId.Value };
+        var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie)
+            with { ListId = dummyListId.Value };
 
         // Act + Assert
 
@@ -183,8 +185,10 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var dummyItemId = Guid.CreateVersion7();
-        var request = this.CreateFranchiseRequest(movie.Id) with { Items =
-            ImmutableList.Create(new FranchiseItemRequest(dummyItemId, FranchiseItemType.Movie, 1, true)).AsValue()
+        var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie) with
+        {
+            Items = ImmutableList.Create(new FranchiseItemRequest(dummyItemId, FranchiseItemType.Movie, 1, true))
+                .AsValue()
         };
 
         // Act + Assert
@@ -220,6 +224,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var request = this.CreateFranchiseRequest(
+            list.MovieKinds.First().Id.Value,
+            FranchiseKindSource.Movie,
             showTitles: true,
             items:
             [
@@ -258,34 +264,6 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         }
     }
 
-    [Fact(DisplayName = "UpdateFranchise should ignore titles if ShowTitles = false")]
-    public async Task UpdateFranchiseShouldIgnoreTitlesIfShowTitlesFalse()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, this.logger);
-
-        var movie = await data.CreateMovie(dbContext);
-        var franchise = await data.CreateFranchise(dbContext);
-        franchise.AddMovie(movie, true);
-
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-        var request = this.CreateFranchiseRequest(movie.Id, showTitles: false);
-
-        // Act
-
-        var model = await franchiseService.UpdateFranchise(franchise.Id, request.Validated());
-
-        // Assert
-
-        var dbFranchise = dbContext.Franchises.Find(Id.For<Franchise>(model.Id));
-
-        Assert.NotNull(dbFranchise);
-        Assert.Empty(dbFranchise.Titles);
-    }
-
     [Fact(DisplayName = "UpdateFranchise should return a correct model")]
     public async Task UpdateFranchiseShouldReturnCorrectModel()
     {
@@ -302,7 +280,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        var request = this.CreateFranchiseRequest(movie.Id, showTitles: true);
+        var request = this.CreateFranchiseRequest(
+            movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie, showTitles: true);
 
         // Act
 
@@ -342,7 +321,9 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        var request = this.CreateFranchiseRequest(movie.Id, showTitles: true);
+        var request = this.CreateFranchiseRequest(
+            movie.Id, list.MovieKinds.First().Id.Value, FranchiseKindSource.Movie, showTitles: true);
+
         var dummyId = Id.Create<Franchise>();
 
         // Act + Assert
@@ -375,7 +356,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        var request = this.CreateFranchiseRequest(movie.Id) with { ListId = otherList.Id.Value };
+        var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie)
+            with { ListId = otherList.Id.Value };
 
         // Act + Assert
 
@@ -438,16 +420,22 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
     private FranchiseRequest CreateFranchiseRequest(
         Id<Movie> movieId,
+        Guid kindId,
+        FranchiseKindSource kindSource,
         bool showTitles = false,
         bool isLooselyConnected = false,
         bool continueNumbering = false) =>
         this.CreateFranchiseRequest(
+            kindId,
+            kindSource,
             showTitles,
             isLooselyConnected,
             continueNumbering,
             new FranchiseItemRequest(movieId.Value, FranchiseItemType.Movie, 1, true));
 
     private FranchiseRequest CreateFranchiseRequest(
+        Guid kindId,
+        FranchiseKindSource kindSource,
         bool showTitles = false,
         bool isLooselyConnected = false,
         bool continueNumbering = false,
@@ -457,6 +445,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(items).AsValue(),
+            kindId,
+            kindSource,
             showTitles,
             isLooselyConnected,
             continueNumbering);

@@ -1,12 +1,26 @@
 namespace Cineaste.Core.Domain;
 
-public abstract class Kind<TKind> : Entity<TKind>
+public interface IKind
+{
+    public string Name { get; set; }
+
+    public Color WatchedColor { get; set; }
+
+    public Color NotWatchedColor { get; set; }
+
+    public Color NotReleasedColor { get; set; }
+
+    public int SequenceNumber { get; set; }
+}
+
+public abstract class Kind<TKind> : Entity<TKind>, IKind
     where TKind : Kind<TKind>
 {
     private string name;
     private Color watchedColor;
     private Color notWatchedColor;
     private Color notReleasedColor;
+    private int sequenceNumber = 1;
 
     public string Name
     {
@@ -38,6 +52,12 @@ public abstract class Kind<TKind> : Entity<TKind>
 
         [MemberNotNull(nameof(notReleasedColor))]
         set => this.notReleasedColor = Require.NotNull(value);
+    }
+
+    public int SequenceNumber
+    {
+        get => this.sequenceNumber;
+        set => this.sequenceNumber = Require.Positive(value);
     }
 
     public Kind(Id<TKind> id, string name, Color watchedColor, Color notWatchedColor, Color notReleasedColor)

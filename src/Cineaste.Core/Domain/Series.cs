@@ -17,7 +17,7 @@ public sealed class Series : FranchiseItemEntity<Series>
     {
         get => this.kind;
 
-        [MemberNotNull(nameof(kind))]
+        [MemberNotNull(nameof(this.kind))]
         set => this.kind = Require.NotNull(value);
     }
 

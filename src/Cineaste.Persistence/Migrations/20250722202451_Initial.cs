@@ -55,7 +55,8 @@ namespace Cineaste.Persistence.Migrations
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     WatchedColor = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotWatchedColor = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NotReleasedColor = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    NotReleasedColor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,7 +79,8 @@ namespace Cineaste.Persistence.Migrations
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     WatchedColor = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NotWatchedColor = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NotReleasedColor = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    NotReleasedColor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -163,6 +165,9 @@ namespace Cineaste.Persistence.Migrations
                     ShowTitles = table.Column<bool>(type: "bit", nullable: false),
                     IsLooselyConnected = table.Column<bool>(type: "bit", nullable: false),
                     ContinueNumbering = table.Column<bool>(type: "bit", nullable: false),
+                    MovieKindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SeriesKindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    KindSource = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
@@ -174,6 +179,18 @@ namespace Cineaste.Persistence.Migrations
                         column: x => x.FranchiseItemId,
                         principalTable: "FranchiseItems",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Franchises_MovieKinds_MovieKindId",
+                        column: x => x.MovieKindId,
+                        principalTable: "MovieKinds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Franchises_SeriesKinds_SeriesKindId",
+                        column: x => x.SeriesKindId,
+                        principalTable: "SeriesKinds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,10 +201,10 @@ namespace Cineaste.Persistence.Migrations
                     Year = table.Column<int>(type: "int", nullable: false),
                     IsWatched = table.Column<bool>(type: "bit", nullable: false),
                     IsReleased = table.Column<bool>(type: "bit", nullable: false),
+                    KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -244,14 +261,14 @@ namespace Cineaste.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     IsOriginal = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FranchiseTitles", x => new { x.FranchiseId, x.Id });
                     table.CheckConstraint("CH_FranchiseTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_FranchiseTitles_PriorityPositive", "Priority > 0");
+                    table.CheckConstraint("CH_FranchiseTitles_SequenceNumberPositive", "SequenceNumber > 0");
                     table.ForeignKey(
                         name: "FK_FranchiseTitles_Franchises_FranchiseId",
                         column: x => x.FranchiseId,
@@ -294,14 +311,14 @@ namespace Cineaste.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     IsOriginal = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MovieTitles", x => new { x.MovieId, x.Id });
                     table.CheckConstraint("CH_MovieTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_MovieTitles_PriorityPositive", "Priority > 0");
+                    table.CheckConstraint("CH_MovieTitles_SequenceNumberPositive", "SequenceNumber > 0");
                     table.ForeignKey(
                         name: "FK_MovieTitles_Movies_MovieId",
                         column: x => x.MovieId,
@@ -414,14 +431,14 @@ namespace Cineaste.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     IsOriginal = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SeriesTitles", x => new { x.SeriesId, x.Id });
                     table.CheckConstraint("CH_SeriesTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_SeriesTitles_PriorityPositive", "Priority > 0");
+                    table.CheckConstraint("CH_SeriesTitles_SequenceNumberPositive", "SequenceNumber > 0");
                     table.ForeignKey(
                         name: "FK_SeriesTitles_Series_SeriesId",
                         column: x => x.SeriesId,
@@ -500,14 +517,14 @@ namespace Cineaste.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     IsOriginal = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SeasonTitles", x => new { x.SeasonId, x.Id });
                     table.CheckConstraint("CH_SeasonTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_SeasonTitles_PriorityPositive", "Priority > 0");
+                    table.CheckConstraint("CH_SeasonTitles_SequenceNumberPositive", "SequenceNumber > 0");
                     table.ForeignKey(
                         name: "FK_SeasonTitles_Seasons_SeasonId",
                         column: x => x.SeasonId,
@@ -524,14 +541,14 @@ namespace Cineaste.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     IsOriginal = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SpecialEpisodeTitles", x => new { x.SpecialEpisodeId, x.Id });
                     table.CheckConstraint("CH_SpecialEpisodeTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_SpecialEpisodeTitles_PriorityPositive", "Priority > 0");
+                    table.CheckConstraint("CH_SpecialEpisodeTitles_SequenceNumberPositive", "SequenceNumber > 0");
                     table.ForeignKey(
                         name: "FK_SpecialEpisodeTitles_SpecialEpisodes_SpecialEpisodeId",
                         column: x => x.SpecialEpisodeId,
@@ -551,6 +568,16 @@ namespace Cineaste.Persistence.Migrations
                 column: "FranchiseItemId",
                 unique: true,
                 filter: "[FranchiseItemId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Franchises_MovieKindId",
+                table: "Franchises",
+                column: "MovieKindId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Franchises_SeriesKindId",
+                table: "Franchises",
+                column: "SeriesKindId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListConfigurations_ListId",
@@ -738,22 +765,22 @@ namespace Cineaste.Persistence.Migrations
                 name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "MovieKinds");
-
-            migrationBuilder.DropTable(
                 name: "Series");
-
-            migrationBuilder.DropTable(
-                name: "SeriesKinds");
-
-            migrationBuilder.DropTable(
-                name: "Lists");
 
             migrationBuilder.DropTable(
                 name: "Franchises");
 
             migrationBuilder.DropTable(
                 name: "FranchiseItems");
+
+            migrationBuilder.DropTable(
+                name: "MovieKinds");
+
+            migrationBuilder.DropTable(
+                name: "SeriesKinds");
+
+            migrationBuilder.DropTable(
+                name: "Lists");
         }
     }
 }

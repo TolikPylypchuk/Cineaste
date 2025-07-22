@@ -5,8 +5,8 @@ public static class SeriesMappingExtensions
     public static SeriesModel ToSeriesModel(this Series series) =>
         new(
             series.Id.Value,
-            series.Titles.ToTitleModels(isOriginal: false),
-            series.Titles.ToTitleModels(isOriginal: true),
+            series.AllTitles.ToTitleModels(isOriginal: false),
+            series.AllTitles.ToTitleModels(isOriginal: true),
             series.WatchStatus,
             series.ReleaseStatus,
             series.Kind.ToListKindModel(),
@@ -55,8 +55,8 @@ public static class SeriesMappingExtensions
     private static SeasonModel ToSeasonModel(this Season season) =>
         new(
             season.Id.Value,
-            season.Titles.ToTitleModels(isOriginal: false),
-            season.Titles.ToTitleModels(isOriginal: true),
+            season.AllTitles.ToTitleModels(isOriginal: false),
+            season.AllTitles.ToTitleModels(isOriginal: true),
             season.SequenceNumber,
             season.WatchStatus,
             season.ReleaseStatus,
@@ -82,8 +82,8 @@ public static class SeriesMappingExtensions
     private static SpecialEpisodeModel ToSpecialEpisodeModel(this SpecialEpisode episode) =>
         new(
             episode.Id.Value,
-            episode.Titles.ToTitleModels(isOriginal: false),
-            episode.Titles.ToTitleModels(isOriginal: true),
+            episode.AllTitles.ToTitleModels(isOriginal: false),
+            episode.AllTitles.ToTitleModels(isOriginal: true),
             episode.SequenceNumber,
             episode.IsWatched,
             episode.IsReleased,

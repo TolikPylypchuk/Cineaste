@@ -22,17 +22,12 @@ public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieMode
     public bool IsFirst { get; private set; }
     public bool IsLast { get; private set; }
 
-    public MovieFormModel(Guid listId, IReadOnlyCollection<ListKindModel> availableKinds)
+    public MovieFormModel(Guid listId, ListKindModel kind)
     {
-        ArgumentNullException.ThrowIfNull(availableKinds);
-
-        if (availableKinds.Count == 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(availableKinds), $"{nameof(availableKinds)} is empty");
-        }
+        ArgumentNullException.ThrowIfNull(kind);
 
         this.listId = listId;
-        this.defaultKind = availableKinds.First();
+        this.defaultKind = kind;
         this.Kind = this.defaultKind;
 
         this.FinishInitialization();

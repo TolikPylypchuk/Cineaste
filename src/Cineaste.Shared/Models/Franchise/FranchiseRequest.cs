@@ -7,6 +7,8 @@ public record FranchiseRequest(
     ImmutableValueList<TitleRequest> Titles,
     ImmutableValueList<TitleRequest> OriginalTitles,
     ImmutableValueList<FranchiseItemRequest> Items,
+    Guid KindId,
+    FranchiseKindSource KindSource,
     bool ShowTitles,
     bool IsLooselyConnected,
     bool ContinueNumbering) : IValidatable<FranchiseRequest>, ITitledRequest

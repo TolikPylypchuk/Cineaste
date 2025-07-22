@@ -25,11 +25,12 @@ internal static class Extensions
             {
                 title.ToTable(tableName);
                 title.Property(t => t.Name);
-                title.Property(t => t.Priority);
+                title.Property(t => t.SequenceNumber);
                 title.Property(t => t.IsOriginal);
 
                 title.ToTable(t => t.HasCheckConstraint($"CH_{tableName}_NameNotEmpty", "Name <> ''"));
-                title.ToTable(t => t.HasCheckConstraint($"CH_{tableName}_PriorityPositive", "Priority > 0"));
+                title.ToTable(t =>
+                    t.HasCheckConstraint($"CH_{tableName}_SequenceNumberPositive", "SequenceNumber > 0"));
             })
             .UsePropertyAccessMode(PropertyAccessMode.Field);
 

@@ -45,7 +45,8 @@
                     CellClass="cell-content number"
                 >
                     <CellTemplate>
-                        @if (context.Item.FranchiseItem is { } franchiseItem)
+                        @if (context.Item.Type != ListItemType.Franchise &&
+                            context.Item.FranchiseItem is { } franchiseItem)
                         {
                             @if (franchiseItem.DisplayNumber is not null)
                             {

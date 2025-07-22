@@ -63,7 +63,8 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         list.AddSeries(this.MrRobot(liveActionSeries));
         list.AddSeries(this.Sherlock(liveActionSeries));
 
-        var lotr = this.CreateFranchise("The Lord of the Rings", showTitles: false);
+        var lotr = this.CreateFranchise(
+            "The Lord of the Rings", liveActionMovie, liveActionSeries, FranchiseKindSource.Movie, showTitles: false);
 
         var lotr1 = this.CreateMovie("The Lord of the Rings: The Fellowship of the Ring", liveActionMovie, 2001);
         var lotr2 = this.CreateMovie("The Lord of the Rings: The Two Towers", liveActionMovie, 2002);
@@ -78,7 +79,8 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         list.AddMovie(lotr2);
         list.AddMovie(lotr3);
 
-        var dollars = this.CreateFranchise("Dollars Trilogy", isLooselyConnected: true);
+        var dollars = this.CreateFranchise(
+            "Dollars Trilogy", liveActionMovie, liveActionSeries, FranchiseKindSource.Movie, isLooselyConnected: true);
 
         var dollars1 = this.CreateMovie("A Fistful of Dollars", "Per un pugno di dollari", liveActionMovie, 1964);
         var dollars2 = this.CreateMovie("For a Few Dollars More", "Per qualche dollaro in più", liveActionMovie, 1965);
@@ -94,7 +96,8 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         list.AddMovie(dollars2);
         list.AddMovie(dollars3);
 
-        var dune = this.CreateFranchise("Dune", showTitles: false);
+        var dune = this.CreateFranchise(
+            "Dune", liveActionMovie, liveActionSeries, FranchiseKindSource.Movie, showTitles: false);
 
         var dune1 = this.CreateMovie("Dune", liveActionMovie, 2021);
         var dune2 = this.CreateMovie("Dune: Part Two", liveActionMovie, 1965);
@@ -112,8 +115,10 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         list.AddSeries(duneProphecy);
         list.AddMovie(dune3);
 
-        var dc = this.CreateFranchise("DC Universe");
-        var godsAndMonsters = this.CreateFranchise("Chapter One: Gods and Monsters");
+        var dc = this.CreateFranchise("DC Universe", liveActionMovie, liveActionSeries, FranchiseKindSource.Movie);
+        var godsAndMonsters = this.CreateFranchise(
+            "Chapter One: Gods and Monsters", liveActionMovie, liveActionSeries, FranchiseKindSource.Movie);
+
         dc.AddFranchise(godsAndMonsters, true);
 
         var creatureCommandos = this.CreatureCommandos(animatedSeries);
@@ -366,10 +371,19 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
             kind);
     }
 
-    private Franchise CreateFranchise(string? title = null, bool? showTitles = null, bool isLooselyConnected = false) =>
+    private Franchise CreateFranchise(
+        string title,
+        MovieKind movieKind,
+        SeriesKind seriesKind,
+        FranchiseKindSource kindSource,
+        bool? showTitles = null,
+        bool isLooselyConnected = false) =>
         new(
             Id.Create<Franchise>(),
             title is not null ? [new(title, 1, false), new(title, 1, true)] : new List<Title>(),
+            movieKind,
+            seriesKind,
+            kindSource,
             showTitles: showTitles ?? title is not null,
             isLooselyConnected: isLooselyConnected,
             continueNumbering: false);

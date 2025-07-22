@@ -18,7 +18,7 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         this.logger.LogDebug("Creating a new franchise");
 
         var list = await this.FindList(request.Value.ListId);
-        var franchise = await this.MapToFranchise(request);
+        var franchise = await this.MapToFranchise(request, list);
 
         list.AddFranchise(franchise);
         dbContext.Franchises.Add(franchise);
@@ -79,18 +79,18 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
     private async Task<Franchise> FindFranchise(Id<Franchise> id)
     {
         var franchise = await this.dbContext.Franchises
-            .Include(franchise => franchise.Titles)
+            .Include(franchise => franchise.AllTitles)
             .Include(franchise => franchise.Children)
-                .ThenInclude(item => item.Movie!.Titles)
+                .ThenInclude(item => item.Movie!.AllTitles)
             .Include(franchise => franchise.Children)
-                .ThenInclude(item => item.Series!.Titles)
+                .ThenInclude(item => item.Series!.AllTitles)
             .Include(franchise => franchise.Children)
                 .ThenInclude(item => item.Series!.Seasons)
                     .ThenInclude(season => season!.Periods)
             .Include(franchise => franchise.Children)
                 .ThenInclude(item => item.Series!.SpecialEpisodes)
             .Include(franchise => franchise.Children)
-                .ThenInclude(item => item.Franchise!.Titles)
+                .ThenInclude(item => item.Franchise!.AllTitles)
             .Include(franchise => franchise.FranchiseItem)
                 .ThenInclude(item => item!.ParentFranchise)
                     .ThenInclude(franchise => franchise.Children)
@@ -106,9 +106,11 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
 
         var list = await this.dbContext.Lists
             .Include(list => list.Configuration)
+            .Include(list => list.MovieKinds)
+            .Include(list => list.SeriesKinds)
             .Include(list => list.Items)
                 .ThenInclude(item => item.Franchise)
-                    .ThenInclude(franchise => franchise!.Titles)
+                    .ThenInclude(franchise => franchise!.AllTitles)
             .AsSplitQuery()
             .SingleOrDefaultAsync(list => list.Id == listId);
 
@@ -117,12 +119,25 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
             : throw this.NotFound(listId);
     }
 
-    private async Task<Franchise> MapToFranchise(Validated<FranchiseRequest> request)
+    private async Task<Franchise> MapToFranchise(Validated<FranchiseRequest> request, CineasteList list)
     {
         var (movies, series, franchises) = await this.GetAllItems(request.Value);
 
+        var movieKindId = Id.For<MovieKind>(request.Value.KindId);
+        var seriesKindId = Id.For<SeriesKind>(request.Value.KindId);
+
+        var movieKind = request.Value.KindSource == FranchiseKindSource.Movie
+            ? list.MovieKinds.FirstOrDefault(kind => kind.Id == movieKindId) ?? throw this.NotFound(movieKindId)
+            : list.MovieKinds.First();
+
+        var seriesKind = request.Value.KindSource == FranchiseKindSource.Series
+            ? list.SeriesKinds.FirstOrDefault(kind => kind.Id == seriesKindId) ?? throw this.NotFound(seriesKindId)
+            : list.SeriesKinds.First();
+
         return request.ToFranchise(
             Id.Create<Franchise>(),
+            movieKind,
+            seriesKind,
             movies.ToDictionary(movie => movie.Id, movie => movie),
             series.ToDictionary(series => series.Id, series => series),
             franchises.ToDictionary(franchise => franchise.Id, franchise => franchise));
@@ -178,6 +193,14 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
             .WithProperty(movieIds)
             .WithProperty(seriesIds)
             .WithProperty(franchiseIds);
+
+    private CineasteException NotFound(Id<MovieKind> id) =>
+        new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with ID {id.Value}")
+            .WithProperty(id);
+
+    private CineasteException NotFound(Id<SeriesKind> id) =>
+        new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with ID {id.Value}")
+            .WithProperty(id);
 
     private CineasteException FranchiseDoesNotBelongToList(Id<Franchise> franchiseId, Id<CineasteList> listId) =>
         new InvalidInputException(

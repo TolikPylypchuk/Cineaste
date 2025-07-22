@@ -35,7 +35,7 @@ public partial class SeriesForm
 
         var config = this.ListConfiguration;
         this.FormModel = new(
-            this.ListId, this.AvailableKinds, config.DefaultSeasonTitle, config.DefaultSeasonOriginalTitle);
+            this.ListId, this.AvailableKinds.First(), config.DefaultSeasonTitle, config.DefaultSeasonOriginalTitle);
 
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();

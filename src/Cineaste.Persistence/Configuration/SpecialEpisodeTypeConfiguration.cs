@@ -5,7 +5,7 @@ internal sealed class SpecialEpisodeTypeConfiguration : IEntityTypeConfiguration
     public void Configure(EntityTypeBuilder<SpecialEpisode> episode)
     {
         episode.HasStronglyTypedId();
-        episode.HasTitles(e => e.Titles, "SpecialEpisodeTitles");
+        episode.HasTitles(e => e.AllTitles, "SpecialEpisodeTitles");
 
         episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_MonthValid", "Month >= 1 AND Month <= 12"));
         episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_YearPositive", "Year > 0"));
@@ -15,6 +15,8 @@ internal sealed class SpecialEpisodeTypeConfiguration : IEntityTypeConfiguration
 
         episode.HasPoster(e => e.Poster);
 
+        episode.Ignore(e => e.Titles);
+        episode.Ignore(e => e.OriginalTitles);
         episode.Ignore(e => e.Title);
         episode.Ignore(e => e.OriginalTitle);
     }

@@ -128,6 +128,8 @@ public class FranchiseRequestValidatorTests
         IEnumerable<string>? originalTitles = null,
         bool differentOriginalTitlePriorities = true,
         IEnumerable<FranchiseItemRequest>? items = null,
+        Guid kindId = default,
+        FranchiseKindSource kindSource = FranchiseKindSource.Movie,
         bool showTitles = false,
         bool isLooselyConnected = true,
         bool continueNumbering = false) =>
@@ -138,6 +140,8 @@ public class FranchiseRequestValidatorTests
             items?.ToImmutableList().AsValue()
                 ?? ImmutableList.Create(
                     new FranchiseItemRequest(Guid.CreateVersion7(), FranchiseItemType.Movie, 1, true)).AsValue(),
+            kindId,
+            kindSource,
             showTitles,
             isLooselyConnected,
             continueNumbering);

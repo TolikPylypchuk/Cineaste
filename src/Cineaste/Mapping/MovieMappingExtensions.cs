@@ -5,8 +5,8 @@ public static class MovieMappingExtensions
     public static MovieModel ToMovieModel(this Movie movie) =>
         new(
             movie.Id.Value,
-            movie.Titles.ToTitleModels(isOriginal: false),
-            movie.Titles.ToTitleModels(isOriginal: true),
+            movie.AllTitles.ToTitleModels(isOriginal: false),
+            movie.AllTitles.ToTitleModels(isOriginal: true),
             movie.Year,
             movie.IsWatched,
             movie.IsReleased,

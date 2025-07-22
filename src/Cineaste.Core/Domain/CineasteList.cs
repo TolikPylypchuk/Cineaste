@@ -14,16 +14,16 @@ public sealed class CineasteList : Entity<CineasteList>
     public ListConfiguration Configuration { get; private set; }
 
     public IReadOnlyCollection<ListItem> Items =>
-        this.items.AsReadOnly();
+        [.. this.items];
 
     public IReadOnlyCollection<MovieKind> MovieKinds =>
-        this.movieKinds.AsReadOnly();
+        [.. this.movieKinds.OrderBy(kind => kind.SequenceNumber)];
 
     public IReadOnlyCollection<SeriesKind> SeriesKinds =>
-        this.seriesKinds.AsReadOnly();
+        [.. this.seriesKinds.OrderBy(kind => kind.SequenceNumber)];
 
     public IReadOnlyCollection<Tag> Tags =>
-        this.tags.AsReadOnly();
+        [.. this.tags];
 
     public CineasteList(Id<CineasteList> id, ListConfiguration configuration)
         : base(id)
@@ -74,17 +74,37 @@ public sealed class CineasteList : Entity<CineasteList>
     public void RemoveFranchise(Franchise franchise) =>
         this.items.RemoveAll(item => item is { Franchise.Id: var id } && id == franchise.Id);
 
-    public void AddMovieKind(MovieKind movieKind) =>
+    public void AddMovieKind(MovieKind movieKind)
+    {
         this.movieKinds.Add(movieKind);
+        movieKind.SequenceNumber = this.movieKinds.Count;
+    }
 
-    public void RemoveMovieKind(MovieKind movieKind) =>
+    public void RemoveMovieKind(MovieKind movieKind)
+    {
         this.movieKinds.Remove(movieKind);
 
-    public void AddSeriesKind(SeriesKind seriesKind) =>
-        this.seriesKinds.Add(seriesKind);
+        foreach (var kind in this.movieKinds.Where(kind => kind.SequenceNumber > movieKind.SequenceNumber))
+        {
+            kind.SequenceNumber--;
+        }
+    }
 
-    public void RemoveSeriesKind(SeriesKind seriesKind) =>
+    public void AddSeriesKind(SeriesKind seriesKind)
+    {
+        this.seriesKinds.Add(seriesKind);
+        seriesKind.SequenceNumber = this.seriesKinds.Count;
+    }
+
+    public void RemoveSeriesKind(SeriesKind seriesKind)
+    {
         this.seriesKinds.Remove(seriesKind);
+
+        foreach (var kind in this.seriesKinds.Where(kind => kind.SequenceNumber > seriesKind.SequenceNumber))
+        {
+            kind.SequenceNumber--;
+        }
+    }
 
     public void AddTag(Tag tag) =>
         this.tags.Add(tag);

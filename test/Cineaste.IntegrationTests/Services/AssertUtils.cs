@@ -5,15 +5,15 @@ public static class AssertUtils
     public static void AssertTitles<TEntity>(TitledEntity<TEntity> entity, ITitledModel model)
         where TEntity : TitledEntity<TEntity>
     {
-        AssertTitles(entity.Titles, original: false, model.Titles);
-        AssertTitles(entity.Titles, original: true, model.OriginalTitles);
+        AssertTitles(entity.AllTitles, original: false, model.Titles);
+        AssertTitles(entity.AllTitles, original: true, model.OriginalTitles);
     }
 
     public static void AssertTitles<TEntity>(ITitledRequest request, TitledEntity<TEntity> entity)
         where TEntity : TitledEntity<TEntity>
     {
-        AssertTitles(request.Titles, entity.Titles, original: false);
-        AssertTitles(request.OriginalTitles, entity.Titles, original: true);
+        AssertTitles(request.Titles, entity.AllTitles, original: false);
+        AssertTitles(request.OriginalTitles, entity.AllTitles, original: true);
     }
 
     public static void AssertTitles(ITitledRequest request, ITitledModel model)
@@ -29,7 +29,7 @@ public static class AssertUtils
         Assert.Equal(
             from title in expectedTitles
             where title.IsOriginal == original
-            orderby title.Priority
+            orderby title.SequenceNumber
             select title.Name,
             from title in actualTitles
             orderby title.Priority
@@ -45,7 +45,7 @@ public static class AssertUtils
             select title.Name,
             from title in actualTitles
             where title.IsOriginal == original
-            orderby title.Priority
+            orderby title.SequenceNumber
             select title.Name);
 
     private static void AssertTitles(

@@ -104,11 +104,35 @@ public static class DomainExtensions
                 ? series.Kind.NotWatchedColor
                 : series.Kind.NotReleasedColor;
 
-    public static Color? GetActiveColor(this Franchise franchise) =>
+    public static Color? GetActiveColor(this Franchise franchise)
+    {
+        var kind = franchise.GetActiveKind();
+
+        return franchise.IsWatched()
+            ? kind.WatchedColor
+            : franchise.IsReleased()
+                ? kind.NotWatchedColor
+                : kind.NotReleasedColor;
+    }
+
+    public static IKind GetActiveKind(this Franchise franchise) =>
+        franchise.KindSource == FranchiseKindSource.Series
+            ? franchise.SeriesKind
+            : franchise.MovieKind;
+
+    public static bool IsWatched(this Franchise franchise) =>
         franchise.GetFirstChild()?.Select(
-            movie => movie.GetActiveColor(),
-            series => series.GetActiveColor(),
-            franchise => franchise.GetActiveColor());
+            movie => movie.IsWatched,
+            series => series.WatchStatus != SeriesWatchStatus.NotWatched,
+            franchise => franchise.IsWatched())
+            ?? true;
+
+    public static bool IsReleased(this Franchise franchise) =>
+        franchise.GetFirstChild()?.Select(
+            movie => movie.IsReleased,
+            series => series.ReleaseStatus != SeriesReleaseStatus.NotStarted,
+            franchise => franchise.IsReleased())
+            ?? true;
 
     public static FranchiseItem? GetFirstChild(this Franchise franchise)
     {

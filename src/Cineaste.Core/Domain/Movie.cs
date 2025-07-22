@@ -18,6 +18,14 @@ public sealed class Movie : FranchiseItemEntity<Movie>
     public bool IsWatched { get; set; }
     public bool IsReleased { get; set; }
 
+    public MovieKind Kind
+    {
+        get => this.kind;
+
+        [MemberNotNull(nameof(this.kind))]
+        set => this.kind = Require.NotNull(value);
+    }
+
     public string? ImdbId
     {
         get => this.imdbId;
@@ -31,14 +39,6 @@ public sealed class Movie : FranchiseItemEntity<Movie>
     }
 
     public Poster? Poster { get; set; }
-
-    public MovieKind Kind
-    {
-        get => this.kind;
-
-        [MemberNotNull(nameof(kind))]
-        set => this.kind = Require.NotNull(value);
-    }
 
     public IReadOnlySet<TagContainer> Tags =>
         this.tags;

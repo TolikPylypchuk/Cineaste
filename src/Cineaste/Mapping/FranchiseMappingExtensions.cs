@@ -5,9 +5,13 @@ public static class FranchiseMappingExtensions
     public static FranchiseModel ToFranchiseModel(this Franchise franchise) =>
         new(
             franchise.Id.Value,
-            franchise.Titles.ToTitleModels(isOriginal: false),
-            franchise.Titles.ToTitleModels(isOriginal: true),
+            franchise.AllTitles.ToTitleModels(isOriginal: false),
+            franchise.AllTitles.ToTitleModels(isOriginal: true),
             franchise.Children.ToItemModels(),
+            franchise.KindSource == FranchiseKindSource.Movie
+                ? franchise.MovieKind.Id.Value
+                : franchise.SeriesKind.Id.Value,
+            franchise.KindSource,
             franchise.ShowTitles,
             franchise.IsLooselyConnected,
             franchise.ContinueNumbering,
@@ -30,6 +34,8 @@ public static class FranchiseMappingExtensions
     public static Franchise ToFranchise(
         this Validated<FranchiseRequest> request,
         Id<Franchise> id,
+        MovieKind movieKind,
+        SeriesKind seriesKind,
         IReadOnlyDictionary<Id<Movie>, Movie> moviesById,
         IReadOnlyDictionary<Id<Series>, Series> seriesById,
         IReadOnlyDictionary<Id<Franchise>, Franchise> franchisesById)
@@ -37,6 +43,9 @@ public static class FranchiseMappingExtensions
         var franchise = new Franchise(
             id,
             request.Value.ToTitles(),
+            movieKind,
+            seriesKind,
+            request.Value.KindSource,
             request.Value.ShowTitles,
             request.Value.IsLooselyConnected,
             request.Value.ContinueNumbering);
@@ -84,7 +93,7 @@ public static class FranchiseMappingExtensions
                     franchise.Id.Value,
                     item.SequenceNumber,
                     item.DisplayNumber,
-                    franchise.ActualTitle?.Name ?? String.Empty,
+                    franchise.Title.Name,
                     franchise.StartYear ?? 0,
                     franchise.EndYear ?? 0,
                     FranchiseItemType.Franchise)))];

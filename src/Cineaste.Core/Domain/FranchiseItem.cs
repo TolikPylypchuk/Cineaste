@@ -32,19 +32,19 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
 
     public Franchise? Franchise { get; private set; }
 
-    public IReadOnlyCollection<Title> Titles =>
-        this.Select(movie => movie.Titles, series => series.Titles, franchise => franchise.ActualTitles);
+    public IReadOnlyCollection<Title> AllTitles =>
+        this.Select(movie => movie.AllTitles, series => series.AllTitles, franchise => franchise.AllTitles);
 
     public Title Title =>
-        this.Titles
+        this.AllTitles
             .Where(title => !title.IsOriginal)
-            .OrderBy(title => title.Priority)
+            .OrderBy(title => title.SequenceNumber)
             .First();
 
     public Title OriginalTitle =>
-        this.Titles
+        this.AllTitles
             .Where(title => title.IsOriginal)
-            .OrderBy(title => title.Priority)
+            .OrderBy(title => title.SequenceNumber)
             .First();
 
     public FranchiseItem(

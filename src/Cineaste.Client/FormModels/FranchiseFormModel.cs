@@ -7,6 +7,9 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
 
     public ReadOnlyObservableCollection<FranchiseFormComponent> Components { get; }
 
+    public ListKindModel Kind { get; set; }
+    public FranchiseKindSource KindSource { get; set; }
+
     public bool ShowTitles { get; set; }
     public bool IsLooselyConnected { get; set; }
     public bool ContinueNumbering { get; set; }
@@ -18,9 +21,14 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
     public bool IsFirst { get; private set; }
     public bool IsLast { get; private set; }
 
-    public FranchiseFormModel(Guid listId)
+    public FranchiseFormModel(
+        Guid listId,
+        ListKindModel kind,
+        FranchiseKindSource kindSource)
     {
         this.listId = listId;
+        this.Kind = kind;
+        this.KindSource = kindSource;
         this.Components = new(this.components);
         this.FinishInitialization();
     }
@@ -34,6 +42,8 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
                 .Select(c => new FranchiseItemRequest(c.Id, c.Type, c.SequenceNumber, c.ShouldDisplayNumber))
                 .ToImmutableList()
                 .AsValue(),
+            this.Kind.Id,
+            this.KindSource,
             this.ShowTitles,
             this.IsLooselyConnected,
             this.ContinueNumbering);

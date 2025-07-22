@@ -38,7 +38,7 @@ public partial class FranchiseForm
     {
         base.OnParametersSet();
 
-        this.FormModel = new(this.ListId);
+        this.FormModel = new(this.ListId, this.AvailableMovieKinds.First(), FranchiseKindSource.Movie);
 
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();

@@ -5,7 +5,7 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
     public void Configure(EntityTypeBuilder<Franchise> franchise)
     {
         franchise.HasStronglyTypedId();
-        franchise.HasTitles(f => f.Titles, "FranchiseTitles");
+        franchise.HasTitles(f => f.AllTitles, "FranchiseTitles");
         franchise.HasPoster(f => f.Poster);
 
         franchise.HasMany(f => f.Children)
@@ -17,10 +17,20 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
 
         franchise.HasFranchiseItem(f => f.FranchiseItem, fi => fi.Franchise);
 
-        franchise.Ignore(f => f.ActualTitles);
+        franchise.HasOne(f => f.MovieKind)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
+
+        franchise.HasOne(f => f.SeriesKind)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
+
+        franchise.Property(s => s.KindSource)
+            .HasConversion<string>();
+
+        franchise.Ignore(f => f.Titles);
+        franchise.Ignore(f => f.OriginalTitles);
         franchise.Ignore(f => f.Title);
         franchise.Ignore(f => f.OriginalTitle);
-        franchise.Ignore(f => f.ActualTitle);
-        franchise.Ignore(f => f.ActualOriginalTitle);
     }
 }

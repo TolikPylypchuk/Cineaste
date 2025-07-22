@@ -2,32 +2,41 @@ namespace Cineaste.Core.Domain;
 
 public sealed class Franchise : FranchiseItemEntity<Franchise>
 {
+    private MovieKind movieKind;
+    private SeriesKind seriesKind;
+    private FranchiseKindSource kindSource;
     private readonly List<FranchiseItem> children;
 
     public bool ShowTitles { get; set; }
     public bool IsLooselyConnected { get; set; }
     public bool ContinueNumbering { get; set; }
 
+    public MovieKind MovieKind
+    {
+        get => this.movieKind;
+
+        [MemberNotNull(nameof(this.movieKind))]
+        set => this.movieKind = Require.NotNull(value);
+    }
+
+    public SeriesKind SeriesKind
+    {
+        get => seriesKind;
+
+        [MemberNotNull(nameof(this.seriesKind))]
+        set => seriesKind = Require.NotNull(value);
+    }
+
+    public FranchiseKindSource KindSource
+    {
+        get => kindSource;
+        set => kindSource = Require.ValidEnum(value);
+    }
+
     public Poster? Poster { get; set; }
 
     public IReadOnlyCollection<FranchiseItem> Children =>
-        this.children.AsReadOnly();
-
-    public IReadOnlyCollection<Title> ActualTitles =>
-        this.Titles.Count != 0
-            ? this.Titles
-            : this.Children.MinBy(item => item.SequenceNumber)?.Titles
-                ?? new List<Title>().AsReadOnly();
-
-    public Title? ActualTitle =>
-        this.ActualTitles
-            .Where(title => !title.IsOriginal)
-            .MinBy(title => title.Priority);
-
-    public Title? ActualOriginalTitle =>
-        this.ActualTitles
-            .Where(title => title.IsOriginal)
-            .MinBy(title => title.Priority);
+        [.. this.children.OrderBy(item => item.SequenceNumber)];
 
     public int? StartYear =>
         this.Children.Min(item => item.Select(
@@ -40,11 +49,17 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     public Franchise(
         Id<Franchise> id,
         IEnumerable<Title> titles,
+        MovieKind movieKind,
+        SeriesKind seriesKind,
+        FranchiseKindSource kindSource,
         bool showTitles,
         bool isLooselyConnected,
         bool continueNumbering)
         : base(id, titles)
     {
+        this.MovieKind = movieKind;
+        this.SeriesKind = seriesKind;
+        this.KindSource = kindSource;
         this.ShowTitles = showTitles;
         this.IsLooselyConnected = isLooselyConnected;
         this.ContinueNumbering = continueNumbering;
@@ -54,8 +69,12 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
     private Franchise(Id<Franchise> id)
-        : base(id) =>
+        : base(id)
+    {
         this.children = [];
+        this.movieKind = null!;
+        this.seriesKind = null!;
+    }
 
     public FranchiseItem? FindMovie(Movie movie) =>
         this.Children.FirstOrDefault(item => item.Movie == movie);
