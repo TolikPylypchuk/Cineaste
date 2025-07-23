@@ -30,8 +30,8 @@ public static class MappingExtensions
         new(
             franchise.Id,
             ListItemType.Franchise,
-            franchise.Titles.FirstOrDefault()?.Name ?? String.Empty,
-            franchise.OriginalTitles.FirstOrDefault()?.Name ?? String.Empty,
+            $"{franchise.Titles.FirstOrDefault()?.Name ?? String.Empty}:",
+            $"{franchise.OriginalTitles.FirstOrDefault()?.Name ?? String.Empty}:",
             franchise.Items.Select(item => item.StartYear).Min(),
             franchise.Items.Select(item => item.EndYear).Max(),
             franchise.ListItemColor,

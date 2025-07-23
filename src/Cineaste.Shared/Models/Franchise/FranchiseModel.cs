@@ -5,7 +5,7 @@ public record FranchiseModel(
     ImmutableList<TitleModel> Titles,
     ImmutableList<TitleModel> OriginalTitles,
     ImmutableList<FranchiseItemModel> Items,
-    Guid KindId,
+    ListKindModel Kind,
     FranchiseKindSource KindSource,
     bool ShowTitles,
     bool IsLooselyConnected,

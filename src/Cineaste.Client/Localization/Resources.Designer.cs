@@ -394,6 +394,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string FranchiseForm_Kind {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Kind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use kind for.
+        /// </summary>
+        public static string FranchiseForm_KindSource {
+            get {
+                return ResourceManager.GetString("FranchiseForm.KindSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loosely connected.
         /// </summary>
         public static string FranchiseForm_LooselyConnected {
@@ -471,6 +489,24 @@ namespace Cineaste.Client.Localization {
         public static string FranchiseForm_Title {
             get {
                 return ResourceManager.GetString("FranchiseForm.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movie.
+        /// </summary>
+        public static string FranchiseKindSource_Movie {
+            get {
+                return ResourceManager.GetString("FranchiseKindSource.Movie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Series.
+        /// </summary>
+        public static string FranchiseKindSource_Series {
+            get {
+                return ResourceManager.GetString("FranchiseKindSource.Series", resourceCulture);
             }
         }
         

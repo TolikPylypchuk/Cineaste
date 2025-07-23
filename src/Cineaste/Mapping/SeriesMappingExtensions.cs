@@ -50,6 +50,8 @@ public static class SeriesMappingExtensions
 
         series.UpdateSeasons(request.Value.Seasons);
         series.UpdateSpecialEpisodes(request.Value.SpecialEpisodes);
+
+        series.ListItem?.SetProperties(series);
     }
 
     private static SeasonModel ToSeasonModel(this Season season) =>

@@ -768,4 +768,16 @@
   <data name="Validation.Titles.Name.TooLong" xml:space="preserve">
     <value>The titles are too long</value>
   </data>
+  <data name="FranchiseForm.Kind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="FranchiseForm.KindSource" xml:space="preserve">
+    <value>Use kind for</value>
+  </data>
+  <data name="FranchiseKindSource.Movie" xml:space="preserve">
+    <value>Movie</value>
+  </data>
+  <data name="FranchiseKindSource.Series" xml:space="preserve">
+    <value>Series</value>
+  </data>
 </root>

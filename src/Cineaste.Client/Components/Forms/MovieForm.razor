@@ -140,7 +140,7 @@
                             <MudSelect
                                 @bind-Value="this.FormModel.Kind"
                                 Label="@this.Loc["MovieForm.Kind"]"
-                                Class="kind-select form-field"
+                                Class="form-field"
                             >
                                 @foreach (var kind in this.AvailableKinds)
                                 {
@@ -156,6 +156,7 @@
                         <MudTextField
                             @bind-Value="@this.FormModel.ImdbId"
                             Label="@this.Loc["MovieForm.ImdbId"]"
+                            AutoGrow="true"
                             Class="form-field"
                         />
 
@@ -166,6 +167,7 @@
                         <MudTextField
                             @bind-Value="@this.FormModel.RottenTomatoesId"
                             Label="@this.Loc["MovieForm.RottenTomatoesId"]"
+                            AutoGrow="true"
                             Class="form-field"
                         />
 

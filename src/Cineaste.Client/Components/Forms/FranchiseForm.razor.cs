@@ -66,6 +66,21 @@ public partial class FranchiseForm
         this.StateHasChanged();
     }
 
+    private void OnKindSourceValueChanged(FranchiseKindSource newValue)
+    {
+        this.FormModel.KindSource = newValue;
+
+        switch (newValue)
+        {
+            case FranchiseKindSource.Movie:
+                this.FormModel.Kind = this.AvailableMovieKinds[0];
+                break;
+            case FranchiseKindSource.Series:
+                this.FormModel.Kind = this.AvailableSeriesKinds[0];
+                break;
+        }
+    }
+
     private void Close() =>
         this.Dispatcher.Dispatch(new CloseItemAction());
 

@@ -140,7 +140,7 @@
                         <MudSelect
                             @bind-Value="this.FormModel.Kind"
                             Label="@this.Loc["SeriesForm.Kind"]"
-                            Class="kind-select form-field"
+                            Class="form-field"
                         >
                             @foreach (var kind in this.AvailableKinds)
                             {
@@ -166,12 +166,13 @@
                         Class="components-grid"
                     >
                         <Columns>
-                            <MudBlazor.PropertyColumn Property="@(c => c.Title)" />
-                            <MudBlazor.PropertyColumn Property="@(c => c.Years)" />
-                            <MudBlazor.TemplateColumn>
-                                <CellTemplate>
-                                    @if (this.FormModel.Components.Count > 1)
-                                    {
+                            <PropertyColumn Property="@(c => c.Title)" />
+                            <PropertyColumn Property="@(c => c.Years)" />
+
+                            @if (this.FormModel.Components.Count > 1)
+                            {
+                                <TemplateColumn>
+                                    <CellTemplate>
                                         <MudMenu
                                             Icon="@Icons.Material.Filled.MoreVert"
                                             Size="Size.Small"
@@ -196,33 +197,33 @@
                                                 </MudMenuItem>
                                             }
                                         </MudMenu>
-                                    }
-                                </CellTemplate>
-                            </MudBlazor.TemplateColumn>
+                                    </CellTemplate>
+                                </TemplateColumn>
+                            }
                         </Columns>
                     </MudDataGrid>
 
-                    <div class="add-components">
-                        <MudButton
-                            Color="Color.Default"
-                            Variant="Variant.Text"
-                            Size="Size.Small"
-                            @onclick="@this.AddSeason"
-                        >
-                            @this.Loc["SeriesForm.AddSeason"]
-                        </MudButton>
-
-                        <MudButton
-                            Color="Color.Default"
-                            Variant="Variant.Text"
-                            Size="Size.Small"
-                            @onclick="@this.AddSpecialEpisode"
-                        >
-                            @this.Loc["SeriesForm.AddSpecialEpisode"]
-                        </MudButton>
-                    </div>
-
                     <div>
+                        <div class="add-components">
+                            <MudButton
+                                Color="Color.Default"
+                                Variant="Variant.Text"
+                                Size="Size.Small"
+                                @onclick="@this.AddSeason"
+                            >
+                                @this.Loc["SeriesForm.AddSeason"]
+                            </MudButton>
+
+                            <MudButton
+                                Color="Color.Default"
+                                Variant="Variant.Text"
+                                Size="Size.Small"
+                                @onclick="@this.AddSpecialEpisode"
+                            >
+                                @this.Loc["SeriesForm.AddSpecialEpisode"]
+                            </MudButton>
+                        </div>
+
                         <ErrorPresenter ErrorCode="Series.Seasons.*" />
                     </div>
 
@@ -230,6 +231,7 @@
                         <MudTextField
                             @bind-Value="@this.FormModel.ImdbId"
                             Label="@this.Loc["SeriesForm.ImdbId"]"
+                            AutoGrow="true"
                             Class="form-field"
                         />
 
@@ -240,6 +242,7 @@
                         <MudTextField
                             @bind-Value="@this.FormModel.RottenTomatoesId"
                             Label="@this.Loc["SeriesForm.RottenTomatoesId"]"
+                            AutoGrow="true"
                             Class="form-field"
                         />
 

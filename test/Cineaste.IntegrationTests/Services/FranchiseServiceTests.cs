@@ -103,6 +103,12 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         AssertTitles(request, franchise);
 
+        var actualKindId = franchise.KindSource == FranchiseKindSource.Movie
+            ? franchise.MovieKind.Id.Value
+            : franchise.SeriesKind.Id.Value;
+
+        Assert.Equal(request.KindId, actualKindId);
+        Assert.Equal(request.KindSource, franchise.KindSource);
         Assert.Equal(request.ShowTitles, franchise.ShowTitles);
         Assert.Equal(request.IsLooselyConnected, franchise.IsLooselyConnected);
         Assert.Equal(request.ContinueNumbering, franchise.ContinueNumbering);
@@ -139,6 +145,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         AssertTitles(request, model);
 
+        Assert.Equal(request.KindId, model.Kind.Id);
+        Assert.Equal(request.KindSource, model.KindSource);
         Assert.Equal(request.ShowTitles, model.ShowTitles);
         Assert.Equal(request.IsLooselyConnected, model.IsLooselyConnected);
         Assert.Equal(request.ContinueNumbering, model.ContinueNumbering);
@@ -245,6 +253,12 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         AssertTitles(request, model);
 
+        var actualKindId = dbFranchise.KindSource == FranchiseKindSource.Movie
+            ? dbFranchise.MovieKind.Id.Value
+            : dbFranchise.SeriesKind.Id.Value;
+
+        Assert.Equal(request.KindId, actualKindId);
+        Assert.Equal(request.KindSource, dbFranchise.KindSource);
         Assert.Equal(request.ShowTitles, dbFranchise.ShowTitles);
         Assert.Equal(request.IsLooselyConnected, dbFranchise.IsLooselyConnected);
         Assert.Equal(request.ContinueNumbering, dbFranchise.ContinueNumbering);
@@ -291,6 +305,9 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         AssertTitles(request, model);
 
+        Assert.Equal(request.KindId, model.Kind.Id);
+        Assert.Equal(request.KindSource, model.KindSource);
+        Assert.Equal(request.ShowTitles, model.ShowTitles);
         Assert.Equal(request.ShowTitles, model.ShowTitles);
         Assert.Equal(request.IsLooselyConnected, model.IsLooselyConnected);
         Assert.Equal(request.ContinueNumbering, model.ContinueNumbering);

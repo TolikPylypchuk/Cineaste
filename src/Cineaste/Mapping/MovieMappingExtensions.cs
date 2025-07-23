@@ -46,5 +46,7 @@ public static class MovieMappingExtensions
         movie.Kind = kind;
         movie.ImdbId = request.Value.ImdbId;
         movie.RottenTomatoesId = request.Value.RottenTomatoesId;
+
+        movie.ListItem?.SetProperties(movie);
     }
 }

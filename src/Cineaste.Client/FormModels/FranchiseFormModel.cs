@@ -4,6 +4,7 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
 {
     private readonly Guid listId;
     private readonly ObservableCollection<FranchiseFormComponent> components = [];
+    private readonly ListKindModel defaultKind;
 
     public ReadOnlyObservableCollection<FranchiseFormComponent> Components { get; }
 
@@ -27,6 +28,7 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
         FranchiseKindSource kindSource)
     {
         this.listId = listId;
+        this.defaultKind = kind;
         this.Kind = kind;
         this.KindSource = kindSource;
         this.Components = new(this.components);
@@ -53,6 +55,9 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
         var franchise = this.BackingModel;
 
         this.CopyTitles(franchise);
+
+        this.Kind = franchise?.Kind ?? this.defaultKind;
+        this.KindSource = franchise?.KindSource ?? FranchiseKindSource.Movie;
 
         this.ShowTitles = franchise?.ShowTitles ?? false;
         this.IsLooselyConnected = franchise?.IsLooselyConnected ?? false;

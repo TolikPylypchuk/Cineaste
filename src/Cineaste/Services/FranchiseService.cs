@@ -1,3 +1,5 @@
+using Cineaste.Core.Domain;
+
 namespace Cineaste.Services;
 
 public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<FranchiseService> logger)
@@ -43,8 +45,10 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         }
 
         var (movies, series, franchises) = await this.GetAllItems(request.Value);
+        var movieKind = this.ResolveMovieKind(request.Value, list);
+        var seriesKind = this.ResolveSeriesKind(request.Value, list);
 
-        franchise.Update(request, movies, series, franchises);
+        franchise.Update(request, movieKind, seriesKind, movies, series, franchises);
 
         list.SortItems();
         franchise.ListItem?.SetProperties(franchise);
@@ -80,24 +84,42 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
     {
         var franchise = await this.dbContext.Franchises
             .Include(franchise => franchise.AllTitles)
-            .Include(franchise => franchise.Children)
-                .ThenInclude(item => item.Movie!.AllTitles)
-            .Include(franchise => franchise.Children)
-                .ThenInclude(item => item.Series!.AllTitles)
-            .Include(franchise => franchise.Children)
-                .ThenInclude(item => item.Series!.Seasons)
-                    .ThenInclude(season => season!.Periods)
-            .Include(franchise => franchise.Children)
-                .ThenInclude(item => item.Series!.SpecialEpisodes)
-            .Include(franchise => franchise.Children)
-                .ThenInclude(item => item.Franchise!.AllTitles)
+            .Include(franchise => franchise.MovieKind)
+            .Include(franchise => franchise.SeriesKind)
             .Include(franchise => franchise.FranchiseItem)
                 .ThenInclude(item => item!.ParentFranchise)
                     .ThenInclude(franchise => franchise.Children)
             .AsSplitQuery()
-            .SingleOrDefaultAsync(franchise => franchise.Id == id);
+            .SingleOrDefaultAsync(franchise => franchise.Id == id)
+            ?? throw this.NotFound(id);
 
-        return franchise is not null ? franchise : throw this.NotFound(id);
+        await this.LoadAllChildren(franchise);
+
+        return franchise;
+    }
+
+    private async Task LoadAllChildren(Franchise franchise)
+    {
+        var children = await dbContext.Entry(franchise)
+            .Collection(franchise => franchise.Children)
+            .Query()
+            .Include(item => item.Movie)
+                .ThenInclude(movie => movie!.AllTitles)
+            .Include(item => item.Series!)
+                .ThenInclude(series => series!.AllTitles)
+            .Include(item => item.Series!.Seasons)
+                .ThenInclude(season => season!.Periods)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.SpecialEpisodes)
+            .Include(item => item.Franchise)
+                .ThenInclude(franchise => franchise!.AllTitles)
+            .AsSplitQuery()
+            .ToListAsync();
+
+        foreach (var childFranchise in children.Select(item => item.Franchise).WhereNotNull())
+        {
+            await this.LoadAllChildren(childFranchise);
+        }
     }
 
     private async Task<CineasteList> FindList(Guid id)
@@ -126,13 +148,8 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         var movieKindId = Id.For<MovieKind>(request.Value.KindId);
         var seriesKindId = Id.For<SeriesKind>(request.Value.KindId);
 
-        var movieKind = request.Value.KindSource == FranchiseKindSource.Movie
-            ? list.MovieKinds.FirstOrDefault(kind => kind.Id == movieKindId) ?? throw this.NotFound(movieKindId)
-            : list.MovieKinds.First();
-
-        var seriesKind = request.Value.KindSource == FranchiseKindSource.Series
-            ? list.SeriesKinds.FirstOrDefault(kind => kind.Id == seriesKindId) ?? throw this.NotFound(seriesKindId)
-            : list.SeriesKinds.First();
+        var movieKind = this.ResolveMovieKind(request.Value, list);
+        var seriesKind = this.ResolveSeriesKind(request.Value, list);
 
         return request.ToFranchise(
             Id.Create<Franchise>(),
@@ -141,6 +158,22 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
             movies.ToDictionary(movie => movie.Id, movie => movie),
             series.ToDictionary(series => series.Id, series => series),
             franchises.ToDictionary(franchise => franchise.Id, franchise => franchise));
+    }
+
+    private MovieKind ResolveMovieKind(FranchiseRequest request, CineasteList list)
+    {
+        var movieKindId = Id.For<MovieKind>(request.KindId);
+        return request.KindSource == FranchiseKindSource.Movie
+            ? list.MovieKinds.FirstOrDefault(kind => kind.Id == movieKindId) ?? throw this.NotFound(movieKindId)
+            : list.MovieKinds.First();
+    }
+
+    private SeriesKind ResolveSeriesKind(FranchiseRequest request, CineasteList list)
+    {
+        var seriesKindId = Id.For<SeriesKind>(request.KindId);
+        return request.KindSource == FranchiseKindSource.Series
+            ? list.SeriesKinds.FirstOrDefault(kind => kind.Id == seriesKindId) ?? throw this.NotFound(seriesKindId)
+            : list.SeriesKinds.First();
     }
 
     private async Task<(List<Movie>, List<Series>, List<Franchise>)> GetAllItems(FranchiseRequest request)

@@ -9,13 +9,13 @@ public static class FranchiseMappingExtensions
             franchise.AllTitles.ToTitleModels(isOriginal: true),
             franchise.Children.ToItemModels(),
             franchise.KindSource == FranchiseKindSource.Movie
-                ? franchise.MovieKind.Id.Value
-                : franchise.SeriesKind.Id.Value,
+                ? franchise.MovieKind.ToListKindModel()
+                : franchise.SeriesKind.ToListKindModel(),
             franchise.KindSource,
             franchise.ShowTitles,
             franchise.IsLooselyConnected,
             franchise.ContinueNumbering,
-            String.Empty,
+            franchise.GetActiveColor()?.HexValue ?? String.Empty,
             franchise.ListItem?.SequenceNumber ?? 0,
             franchise.FranchiseItem.ToFranchiseItemInfoModel());
 
@@ -101,10 +101,16 @@ public static class FranchiseMappingExtensions
     public static FranchiseUpdateResult Update(
         this Franchise franchise,
         Validated<FranchiseRequest> request,
+        MovieKind movieKind,
+        SeriesKind seriesKind,
         IEnumerable<Movie> movies,
         IEnumerable<Series> series,
         IEnumerable<Franchise> franchises)
     {
+        franchise.MovieKind = movieKind;
+        franchise.SeriesKind = seriesKind;
+        franchise.KindSource = request.Value.KindSource;
+
         franchise.ShowTitles = request.Value.ShowTitles;
         franchise.IsLooselyConnected = request.Value.IsLooselyConnected;
         franchise.ContinueNumbering = request.Value.ContinueNumbering;
@@ -120,6 +126,8 @@ public static class FranchiseMappingExtensions
         UpdateItems(franchises, franchise.FindFranchise, franchise.AddFranchise, items, FranchiseItemType.Franchise);
 
         franchise.SetDisplayNumbersForChildren();
+
+        franchise.ListItem?.SetProperties(franchise);
 
         return new FranchiseUpdateResult(removedItems);
     }

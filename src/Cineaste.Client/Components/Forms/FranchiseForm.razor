@@ -105,6 +105,59 @@
                         PropertyName="@nameof(this.FormModel.OriginalTitles)"
                     />
 
+                    <div class="form-kind">
+                        <div>
+                            <MudSelect
+                                T="FranchiseKindSource"
+                                Value="this.FormModel.KindSource"
+                                ValueChanged="this.OnKindSourceValueChanged"
+                                Label="@this.Loc["FranchiseForm.KindSource"]"
+                                Class="form-field"
+                            >
+                                @foreach (var value in Enum.GetValues<FranchiseKindSource>())
+                                {
+                                    <MudSelectItem Value="value">
+                                        @this.Loc[$"FranchiseKindSource.{value}"]
+                                    </MudSelectItem>
+                                }
+                            </MudSelect>
+                        </div>
+
+                        <div>
+                            @switch (this.FormModel.KindSource)
+                            {
+                                case FranchiseKindSource.Movie:
+                                    <MudSelect
+                                        @bind-Value="this.FormModel.Kind"
+                                        Label="@this.Loc["FranchiseForm.Kind"]"
+                                        Class="form-field"
+                                    >
+                                        @foreach (var kind in this.AvailableMovieKinds)
+                                        {
+                                            <MudSelectItem Value="kind">
+                                                @kind.Name
+                                            </MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                    break;
+                                case FranchiseKindSource.Series:
+                                    <MudSelect
+                                        @bind-Value="this.FormModel.Kind"
+                                        Label="@this.Loc["FranchiseForm.Kind"]"
+                                        Class="form-field"
+                                    >
+                                        @foreach (var kind in this.AvailableSeriesKinds)
+                                        {
+                                            <MudSelectItem Value="kind">
+                                                @kind.Name
+                                            </MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                    break;
+                            }
+                        </div>
+                    </div>
+
                     @if (this.ListItem is not null)
                     {
                         <div class="delete-container">
