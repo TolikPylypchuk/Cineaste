@@ -14,7 +14,7 @@ public static class OpenMovieFormReducers
             ? new() { Fetch = ApiCall.InProgress() }
             : state;
 
-    [ReducerMethod(typeof(GoToFranchiseAction))]
+    [ReducerMethod(typeof(GoToListItemAction))]
     public static MovieFormState ReduceGoToFranchiseAction(MovieFormState _) =>
         new() { Fetch = ApiCall.Success() };
 

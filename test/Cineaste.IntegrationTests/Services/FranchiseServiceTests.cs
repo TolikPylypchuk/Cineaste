@@ -1,4 +1,3 @@
-using Cineaste.Core.Domain;
 using Cineaste.Shared.Models.Franchise;
 
 namespace Cineaste.Services;

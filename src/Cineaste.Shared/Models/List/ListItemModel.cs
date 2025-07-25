@@ -5,8 +5,8 @@ public sealed record ListItemModel(
     ListItemType Type,
     string Title,
     string OriginalTitle,
-    int StartYear,
-    int EndYear,
+    int? StartYear,
+    int? EndYear,
     string Color,
     int ListSequenceNumber,
     ListFranchiseItemModel? FranchiseItem);

@@ -35,11 +35,11 @@ public static class SeriesMappingExtensions
     public static void Update(this Series series, Validated<SeriesRequest> request, SeriesKind kind)
     {
         series.ReplaceTitles(
-            request.Value.Titles.OrderBy(title => title.Priority).Select(title => title.Name),
+            request.Value.Titles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
             isOriginal: false);
 
         series.ReplaceTitles(
-            request.Value.OriginalTitles.OrderBy(title => title.Priority).Select(title => title.Name),
+            request.Value.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
             isOriginal: true);
 
         series.WatchStatus = request.Value.WatchStatus;
@@ -174,11 +174,11 @@ public static class SeriesMappingExtensions
     private static void Update(this Season season, SeasonRequest request)
     {
         season.ReplaceTitles(
-            request.Titles.OrderBy(title => title.Priority).Select(title => title.Name),
+            request.Titles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
             isOriginal: false);
 
         season.ReplaceTitles(
-            request.OriginalTitles.OrderBy(title => title.Priority).Select(title => title.Name),
+            request.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
             isOriginal: true);
 
         season.WatchStatus = request.WatchStatus;
@@ -218,11 +218,11 @@ public static class SeriesMappingExtensions
     private static void Update(this SpecialEpisode episode, SpecialEpisodeRequest request)
     {
         episode.ReplaceTitles(
-            request.Titles.OrderBy(title => title.Priority).Select(title => title.Name),
+            request.Titles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
             isOriginal: false);
 
         episode.ReplaceTitles(
-            request.OriginalTitles.OrderBy(title => title.Priority).Select(title => title.Name),
+            request.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
             isOriginal: true);
 
         episode.Month = request.Month;

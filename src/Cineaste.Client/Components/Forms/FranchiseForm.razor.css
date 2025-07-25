@@ -100,6 +100,72 @@
   gap: var(--s2);
 }
 
+/* Force MudDataGrid to use Flexbox since this way the column widths can actually be controlled */
+
+::deep .components-grid {
+  margin-block-start: var(--s4);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  --number-width: 32px;
+  --year-width: 80px;
+  --menu-width: 32px;
+}
+
+::deep .no-header {
+  display: none !important;
+}
+
+::deep .component-row {
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+::deep .component-row.inactive {
+  cursor: revert;
+}
+
+::deep .components-grid td.mud-table-cell {
+  padding-inline: var(--s1);
+}
+
+::deep .components-grid td.mud-table-cell:nth-child(1) {
+  padding-inline-start: var(--s2);
+  flex: 0 0 var(--number-width);
+  display: flex;
+  justify-content: start;
+  text-align: start;
+  align-items: center;
+}
+
+::deep .components-grid td.mud-table-cell:nth-child(2) {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+::deep .components-grid td.mud-table-cell:nth-child(3) {
+  flex: 0 0 var(--year-width);
+  display: flex;
+  justify-content: end;
+  text-align: end;
+  align-items: center;
+}
+
+::deep .components-grid td.mud-table-cell:nth-child(4) {
+  padding-inline-end: var(--s2);
+  flex: 0 0 var(--menu-width);
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
 .delete-container {
   display: flex;
   justify-content: center;

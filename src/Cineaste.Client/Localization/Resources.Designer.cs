@@ -367,6 +367,33 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detach.
+        /// </summary>
+        public static string FranchiseForm_Component_Detach {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Component.Detach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move down.
+        /// </summary>
+        public static string FranchiseForm_Component_Down {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Component.Down", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move up.
+        /// </summary>
+        public static string FranchiseForm_Component_Up {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Component.Up", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Continue numbering.
         /// </summary>
         public static string FranchiseForm_ContinueNumbering {

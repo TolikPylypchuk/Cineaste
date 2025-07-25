@@ -1,8 +1,6 @@
-using Cineaste.Client.Store.Forms.MovieForm;
-
 namespace Cineaste.Client.Store.ListPage;
 
-public sealed record GoToFranchiseAction(Guid FranchiseId);
+public sealed record GoToListItemAction(Guid Id);
 
 public sealed record GoToFranchiseComponentAction(Guid FranchiseId, int SequenceNumber);
 
@@ -21,9 +19,9 @@ public static class GoToListItemReducers
 public sealed class GoToListItemEffects(IListApi api)
 {
     [EffectMethod]
-    public async Task HandleGoToFranchiseAction(GoToFranchiseAction action, IDispatcher dispatcher)
+    public async Task HandleGoToListItemAction(GoToListItemAction action, IDispatcher dispatcher)
     {
-        var result = await api.GetListItem(action.FranchiseId).ToApiResultAsync();
+        var result = await api.GetListItem(action.Id).ToApiResultAsync();
         dispatcher.Dispatch(new GoToListItemResultAction(result));
     }
 

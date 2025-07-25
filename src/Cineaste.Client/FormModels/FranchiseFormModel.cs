@@ -41,7 +41,7 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
             this.ToTitleRequests(this.Titles),
             this.ToTitleRequests(this.OriginalTitles),
             this.components
-                .Select(c => new FranchiseItemRequest(c.Id, c.Type, c.SequenceNumber, c.ShouldDisplayNumber))
+                .Select(c => new FranchiseItemRequest(c.Id, c.Type, c.SequenceNumber, c.DisplayNumber is not null))
                 .ToImmutableList()
                 .AsValue(),
             this.Kind.Id,
@@ -49,6 +49,79 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
             this.ShowTitles,
             this.IsLooselyConnected,
             this.ContinueNumbering);
+
+    public void MoveComponentUp(FranchiseFormComponent component)
+    {
+        if (component.SequenceNumber == 1)
+        {
+            return;
+        }
+
+        int index = component.SequenceNumber - 1;
+
+        var previousComponent = this.components[index - 1];
+
+        this.components[index - 1] = component with
+        {
+            SequenceNumber = component.SequenceNumber - 1,
+            DisplayNumber = this.Adjust(component.DisplayNumber, n => n - 1)
+        };
+
+        this.components[index] = previousComponent with
+        {
+            SequenceNumber = previousComponent.SequenceNumber + 1,
+            DisplayNumber = this.Adjust(previousComponent.DisplayNumber, n => n + 1)
+        };
+
+        this.UpdateRequest();
+    }
+
+    public void MoveComponentDown(FranchiseFormComponent component)
+    {
+        if (component.SequenceNumber == this.components.Count)
+        {
+            return;
+        }
+
+        int index = component.SequenceNumber - 1;
+
+        var nextComponent = this.components[index + 1];
+
+        this.components[index + 1] = component with
+        {
+            SequenceNumber = component.SequenceNumber + 1,
+            DisplayNumber = this.Adjust(component.DisplayNumber, n => n + 1)
+        };
+
+        this.components[index] = nextComponent with
+        {
+            SequenceNumber = nextComponent.SequenceNumber - 1,
+            DisplayNumber = this.Adjust(nextComponent.DisplayNumber, n => n - 1)
+        };
+
+        this.UpdateRequest();
+    }
+
+    public void DetachComponent(FranchiseFormComponent component)
+    {
+        foreach (var nextComponent in this.components.Where(c => c.SequenceNumber > component.SequenceNumber).ToList())
+        {
+            this.components[nextComponent.SequenceNumber - 1] = nextComponent with
+            {
+                SequenceNumber = nextComponent.SequenceNumber - 1,
+                DisplayNumber = this.Adjust(nextComponent.DisplayNumber, n => n - 1)
+            };
+        }
+
+        this.components.Remove(component);
+
+        if (this.components.Count == 0)
+        {
+            this.ShowTitles = true;
+        }
+
+        this.UpdateRequest();
+    }
 
     protected override void CopyFromModel()
     {
@@ -69,8 +142,14 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
         {
             foreach (var item in franchise.Items)
             {
+                string years = item.StartYear is int startYear && item.EndYear is int endYear
+                    ? startYear == endYear
+                        ? startYear.ToString()
+                        : $"{startYear}-{endYear}"
+                    : String.Empty;
+
                 this.components.Add(new FranchiseFormComponent(
-                    item.Id, item.Type, item.Title, item.SequenceNumber, item.DisplayNumber is not null));
+                    item.Id, item.Type, item.Title, years, item.SequenceNumber, item.DisplayNumber));
             }
         }
 
@@ -79,4 +158,7 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
         this.IsFirst = franchise?.FranchiseItem?.IsFirstInFranchise ?? false;
         this.IsLast = franchise?.FranchiseItem?.IsLastInFranchise ?? false;
     }
+
+    private int? Adjust(int? number, Func<int, int> adjuster) =>
+        number is int num ? adjuster(num) : null;
 }

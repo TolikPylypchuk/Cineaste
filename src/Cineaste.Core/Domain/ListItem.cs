@@ -27,8 +27,8 @@ public sealed partial class ListItem : Entity<ListItem>
     public string NormalizedShortTitle { get; private set; }
     public string NormalizedShortOriginalTitle { get; private set; }
 
-    public int StartYear { get; private set; }
-    public int EndYear { get; private set; }
+    public int? StartYear { get; private set; }
+    public int? EndYear { get; private set; }
 
     public int SequenceNumber { get; set; }
 
@@ -140,8 +140,8 @@ public sealed partial class ListItem : Entity<ListItem>
         this.NormalizedOriginalTitle = this.CreateFullTitle(
             franchise.FranchiseItem, this.NormalizedShortOriginalTitle, f => f.OriginalTitle);
 
-        this.StartYear = franchise.StartYear ?? 0;
-        this.EndYear = franchise.EndYear ?? 0;
+        this.StartYear = franchise.StartYear;
+        this.EndYear = franchise.EndYear;
 
         this.IsShown = franchise.ShowTitles;
         this.ActiveColor = franchise.GetActiveColor();

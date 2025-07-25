@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20250722202451_Initial")]
+    [Migration("20250725144433_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -135,7 +135,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<string>("ActiveColor")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EndYear")
+                    b.Property<int?>("EndYear")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("FranchiseId")
@@ -172,7 +172,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid?>("SeriesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("StartYear")
+                    b.Property<int?>("StartYear")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

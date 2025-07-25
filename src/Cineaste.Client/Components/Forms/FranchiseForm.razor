@@ -72,6 +72,7 @@
                             Color="Color.Primary"
                             Size="Size.Small"
                             Dense="true"
+                            Disabled="this.FormModel.Components.Count == 0"
                         >
                             @this.Loc["FranchiseForm.ShowTitles"]
                         </MudCheckBox>
@@ -157,6 +158,80 @@
                             }
                         </div>
                     </div>
+
+                    <MudDataGrid
+                        @ref="this.ComponentGrid"
+                        Items="this.FormModel.Components"
+                        SelectedItemChanged="@((FranchiseFormComponent component) => this.OpenComponentForm(component))"
+                        HeaderClass="no-header"
+                        SortMode="@SortMode.None"
+                        RowClass="@(!this.FormModel.HasChanges ? "component-row" : "component-row inactive")"
+                        Filterable="false"
+                        Groupable="false"
+                        Dense="true"
+                        Hover="true"
+                        Class="components-grid"
+                    >
+                        <Columns>
+                            <TemplateColumn>
+                                <CellTemplate>
+                                    @if (context.Item.DisplayNumber is int number)
+                                    {
+                                        @if (this.FormModel.IsLooselyConnected)
+                                        {
+                                            @($"({number})")
+                                        } else
+                                        {
+                                            @number
+                                        }
+                                    } else
+                                    {
+                                        @("-")
+                                    }
+                                </CellTemplate>
+                            </TemplateColumn>
+
+                            <PropertyColumn Property="@(c => c.Title)" />
+                            <PropertyColumn Property="@(c => c.Years)" />
+
+                            <TemplateColumn>
+                                <CellTemplate>
+                                    <MudMenu
+                                        Icon="@Icons.Material.Filled.MoreVert"
+                                        Size="Size.Small"
+                                        aria-label="@this.Loc["AriaLabel.More"]"
+                                    >
+                                        @if (this.CanMoveUp(context.Item))
+                                        {
+                                            <MudMenuItem
+                                                Icon="@Icons.Material.Filled.KeyboardArrowUp"
+                                                @onclick="@(() => this.MoveUp(context.Item))"
+                                            >
+                                                @this.Loc["FranchiseForm.Component.Up"]
+                                            </MudMenuItem>
+                                        }
+
+                                        @if (this.CanMoveDown(context.Item))
+                                        {
+                                            <MudMenuItem
+                                                Icon="@Icons.Material.Filled.KeyboardArrowDown"
+                                                @onclick="@(() => this.MoveDown(context.Item))"
+                                            >
+                                                @this.Loc["FranchiseForm.Component.Down"]
+                                            </MudMenuItem>
+                                        }
+
+                                        <MudMenuItem
+                                            Icon="@Icons.Material.Filled.ContentCut"
+                                            @onclick="@(() => this.Detach(context.Item))"
+                                        >
+                                            @this.Loc["FranchiseForm.Component.Detach"]
+                                        </MudMenuItem>
+                                    </MudMenu>
+                                </CellTemplate>
+                            </TemplateColumn>
+                        </Columns>
+                    </MudDataGrid>
 
                     @if (this.ListItem is not null)
                     {

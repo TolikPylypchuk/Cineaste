@@ -32,7 +32,7 @@ public static class AssertUtils
             orderby title.SequenceNumber
             select title.Name,
             from title in actualTitles
-            orderby title.Priority
+            orderby title.SequenceNumber
             select title.Name);
 
     private static void AssertTitles(
@@ -41,7 +41,7 @@ public static class AssertUtils
         bool original) =>
         Assert.Equal(
             from title in expectedTitles
-            orderby title.Priority
+            orderby title.SequenceNumber
             select title.Name,
             from title in actualTitles
             where title.IsOriginal == original
@@ -53,9 +53,9 @@ public static class AssertUtils
         IEnumerable<TitleModel> actualTitles) =>
         Assert.Equal(
             from title in expectedTitles
-            orderby title.Priority
+            orderby title.SequenceNumber
             select title.Name,
             from title in actualTitles
-            orderby title.Priority
+            orderby title.SequenceNumber
             select title.Name);
 }

@@ -504,7 +504,16 @@
   <data name="SeriesForm.Component.Down" xml:space="preserve">
     <value>Move down</value>
   </data>
+  <data name="FranchiseForm.Component.Down" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="FranchiseForm.Component.Detach" xml:space="preserve">
+    <value>Detach</value>
+  </data>
   <data name="SeriesForm.Component.Up" xml:space="preserve">
+    <value>Move up</value>
+  </data>
+  <data name="FranchiseForm.Component.Up" xml:space="preserve">
     <value>Move up</value>
   </data>
   <data name="SeriesForm.DeleteDialog.Body" xml:space="preserve">

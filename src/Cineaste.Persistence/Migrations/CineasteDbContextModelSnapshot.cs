@@ -132,7 +132,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<string>("ActiveColor")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EndYear")
+                    b.Property<int?>("EndYear")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("FranchiseId")
@@ -169,7 +169,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid?>("SeriesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("StartYear")
+                    b.Property<int?>("StartYear")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

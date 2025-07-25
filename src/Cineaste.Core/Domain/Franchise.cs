@@ -137,7 +137,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
             this.children.Remove(movie.FranchiseItem);
             movie.FranchiseItem = null;
 
-            this.SetDisplayNumbersForChildren();
+            this.SetSequenceNumbersForChildren();
         }
     }
 
@@ -148,7 +148,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
             this.children.Remove(series.FranchiseItem);
             series.FranchiseItem = null;
 
-            this.SetDisplayNumbersForChildren();
+            this.SetSequenceNumbersForChildren();
         }
     }
 
@@ -159,19 +159,22 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
             this.children.Remove(franchise.FranchiseItem);
             franchise.FranchiseItem = null;
 
-            this.SetDisplayNumbersForChildren();
+            this.SetSequenceNumbersForChildren();
         }
     }
 
-    public void SetDisplayNumbersForChildren()
+    public void SetSequenceNumbersForChildren()
     {
-        int number = 1;
+        int sequenceNumber = 1;
+        int displayNumber = 1;
 
-        foreach (var item in this.children.OrderBy(item => item.SequenceNumber))
+        foreach (var item in this.children.OrderBy(item => item.SequenceNumber).ToList())
         {
+            item.SequenceNumber = sequenceNumber++;
+
             if (item.DisplayNumber is not null)
             {
-                item.DisplayNumber = number++;
+                item.DisplayNumber = displayNumber++;
             }
         }
     }

@@ -22,6 +22,8 @@ public partial class FranchiseForm
 
     private string FormTitle { get; set; } = String.Empty;
 
+    public required MudDataGrid<FranchiseFormComponent> ComponentGrid { get; set; }
+
     private bool IsSaving =>
         this.State.Value.Add.IsInProgress || this.State.Value.Update.IsInProgress;
 
@@ -81,6 +83,29 @@ public partial class FranchiseForm
         }
     }
 
+    private bool CanMoveUp(FranchiseFormComponent component) =>
+        component.SequenceNumber != 1;
+
+    private void MoveUp(FranchiseFormComponent component) =>
+        this.FormModel.MoveComponentUp(component);
+
+    private bool CanMoveDown(FranchiseFormComponent component) =>
+        component.SequenceNumber != this.FormModel.Components.Count;
+
+    private void MoveDown(FranchiseFormComponent component) =>
+        this.FormModel.MoveComponentDown(component);
+
+    private void Detach(FranchiseFormComponent component) =>
+        this.FormModel.DetachComponent(component);
+
+    private void OpenComponentForm(FranchiseFormComponent component)
+    {
+        if (component is not null && !this.FormModel.HasChanges)
+        {
+            this.Dispatcher.Dispatch(new GoToListItemAction(component.Id));
+        }
+    }
+
     private void Close() =>
         this.Dispatcher.Dispatch(new CloseItemAction());
 
@@ -120,7 +145,7 @@ public partial class FranchiseForm
     {
         if (this.FormModel.ParentFranchiseId is Guid franchiseId)
         {
-            this.Dispatcher.Dispatch(new GoToFranchiseAction(franchiseId));
+            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
         }
     }
 

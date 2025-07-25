@@ -66,6 +66,8 @@ public static class FranchiseMappingExtensions
             }
         }
 
+        franchise.SetListItemProperties();
+
         return franchise;
     }
 
@@ -94,8 +96,8 @@ public static class FranchiseMappingExtensions
                     item.SequenceNumber,
                     item.DisplayNumber,
                     franchise.Title.Name,
-                    franchise.StartYear ?? 0,
-                    franchise.EndYear ?? 0,
+                    franchise.StartYear,
+                    franchise.EndYear,
                     FranchiseItemType.Franchise)))];
 
     public static FranchiseUpdateResult Update(
@@ -125,9 +127,8 @@ public static class FranchiseMappingExtensions
         UpdateItems(series, franchise.FindSeries, franchise.AddSeries, items, FranchiseItemType.Series);
         UpdateItems(franchises, franchise.FindFranchise, franchise.AddFranchise, items, FranchiseItemType.Franchise);
 
-        franchise.SetDisplayNumbersForChildren();
-
-        franchise.ListItem?.SetProperties(franchise);
+        franchise.SetSequenceNumbersForChildren();
+        franchise.SetListItemProperties();
 
         return new FranchiseUpdateResult(removedItems);
     }
@@ -153,6 +154,7 @@ public static class FranchiseMappingExtensions
         foreach (var item in items)
         {
             item.Do(franchise.RemoveMovie, franchise.RemoveSeries, franchise.RemoveFranchise);
+            item.SetListItemProperties();
         }
 
         return items;
@@ -188,11 +190,11 @@ public static class FranchiseMappingExtensions
         if (franchise.ShowTitles)
         {
             franchise.ReplaceTitles(
-                request.Titles.OrderBy(title => title.Priority).Select(title => title.Name),
+                request.Titles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
                 isOriginal: false);
 
             franchise.ReplaceTitles(
-                request.OriginalTitles.OrderBy(title => title.Priority).Select(title => title.Name),
+                request.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
                 isOriginal: true);
         } else
         {
@@ -200,4 +202,20 @@ public static class FranchiseMappingExtensions
             franchise.ReplaceTitles([], isOriginal: true);
         }
     }
+
+    private static void SetListItemProperties(this Franchise franchise)
+    {
+        franchise.ListItem?.SetProperties(franchise);
+
+        foreach (var item in franchise.Children)
+        {
+            item.SetListItemProperties();
+        }
+    }
+
+    private static void SetListItemProperties(this FranchiseItem item) =>
+        item.Do(
+            movie => movie.ListItem?.SetProperties(movie),
+            series => series.ListItem?.SetProperties(series),
+            franchise => franchise.ListItem?.SetProperties(franchise));
 }

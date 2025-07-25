@@ -23,10 +23,9 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         var franchise = await this.MapToFranchise(request, list);
 
         list.AddFranchise(franchise);
-        dbContext.Franchises.Add(franchise);
-
         list.SortItems();
 
+        dbContext.Franchises.Add(franchise);
         await dbContext.SaveChangesAsync();
 
         return franchise.ToFranchiseModel();
@@ -48,11 +47,12 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         var movieKind = this.ResolveMovieKind(request.Value, list);
         var seriesKind = this.ResolveSeriesKind(request.Value, list);
 
-        franchise.Update(request, movieKind, seriesKind, movies, series, franchises);
+        var result = franchise.Update(request, movieKind, seriesKind, movies, series, franchises);
 
+        this.EnsureAccessibleInList(franchise);
         list.SortItems();
-        franchise.ListItem?.SetProperties(franchise);
 
+        dbContext.FranchiseItems.RemoveRange(result.RemovedItems);
         await dbContext.SaveChangesAsync();
 
         return franchise.ToFranchiseModel();
@@ -208,6 +208,14 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         var missingIds = ids.Except(items.Select(item => item.Id)).ToImmutableSortedSet();
 
         return (items, missingIds);
+    }
+
+    private void EnsureAccessibleInList(Franchise franchise)
+    {
+        if (franchise.Children.Count == 0)
+        {
+            franchise.ShowTitles = true;
+        }
     }
 
     private CineasteException NotFound(Id<Franchise> id) =>

@@ -79,14 +79,17 @@
 
                 <MudBlazor.TemplateColumn Title="@this.Loc["ListComponent.List.Year"]" CellClass="cell-content year">
                     <CellTemplate>
-                        @if (context.Item.StartYear == context.Item.EndYear)
+                        @if (context.Item.StartYear is int startYear && context.Item.EndYear is int endYear)
                         {
-                            @context.Item.StartYear
-                        } else
-                        {
-                            @context.Item.StartYear
-                            <br />
-                            @context.Item.EndYear
+                            @if (startYear == endYear)
+                            {
+                                @startYear
+                            } else
+                            {
+                                @startYear
+                                <br />
+                                @endYear
+                            }
                         }
                     </CellTemplate>
                 </MudBlazor.TemplateColumn>

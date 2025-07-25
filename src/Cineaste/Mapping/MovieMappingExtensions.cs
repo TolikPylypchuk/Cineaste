@@ -33,11 +33,11 @@ public static class MovieMappingExtensions
     public static void Update(this Movie movie, Validated<MovieRequest> request, MovieKind kind)
     {
         movie.ReplaceTitles(
-            request.Value.Titles.OrderBy(title => title.Priority).Select(title => title.Name),
+            request.Value.Titles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
             isOriginal: false);
 
         movie.ReplaceTitles(
-            request.Value.OriginalTitles.OrderBy(title => title.Priority).Select(title => title.Name),
+            request.Value.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
             isOriginal: true);
 
         movie.Year = request.Value.Year;

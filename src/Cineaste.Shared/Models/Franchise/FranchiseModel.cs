@@ -19,6 +19,6 @@ public record FranchiseItemModel(
     int SequenceNumber,
     int? DisplayNumber,
     string Title,
-    int StartYear,
-    int EndYear,
+    int? StartYear,
+    int? EndYear,
     FranchiseItemType Type);

@@ -27,21 +27,21 @@ public sealed class TitleRequestValidatorTests
         }
     }
 
-    [Property(DisplayName = "Validator should validate priority")]
-    public void ValidatorShouldValidatePriority(int priority)
+    [Property(DisplayName = "Validator should validate sequence number")]
+    public void ValidatorShouldValidateSequenceNumber(int sequenceNumber)
     {
-        var result = validator.TestValidate(this.Request(priority: priority));
+        var result = validator.TestValidate(this.Request(sequenceNumber: sequenceNumber));
 
-        if (priority <= 0)
+        if (sequenceNumber <= 0)
         {
-            result.ShouldHaveValidationErrorFor(req => req.Priority)
-                .WithErrorCode("Title.Priority.TooLow");
+            result.ShouldHaveValidationErrorFor(req => req.SequenceNumber)
+                .WithErrorCode("Title.SequenceNumber.TooLow");
         } else
         {
-            result.ShouldNotHaveValidationErrorFor(req => req.Priority);
+            result.ShouldNotHaveValidationErrorFor(req => req.SequenceNumber);
         }
     }
 
-    private TitleRequest Request(string name = Placeholder, int priority = 1) =>
-        new(name, priority);
+    private TitleRequest Request(string name = Placeholder, int sequenceNumber = 1) =>
+        new(name, sequenceNumber);
 }

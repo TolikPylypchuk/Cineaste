@@ -340,8 +340,8 @@ namespace Cineaste.Persistence.Migrations
                     NormalizedOriginalTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NormalizedShortTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NormalizedShortOriginalTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartYear = table.Column<int>(type: "int", nullable: false),
-                    EndYear = table.Column<int>(type: "int", nullable: false),
+                    StartYear = table.Column<int>(type: "int", nullable: true),
+                    EndYear = table.Column<int>(type: "int", nullable: true),
                     SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     ActiveColor = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsShown = table.Column<bool>(type: "bit", nullable: false)

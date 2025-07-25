@@ -153,7 +153,7 @@ public partial class MovieForm
     {
         if (this.FormModel.ParentFranchiseId is Guid franchiseId)
         {
-            this.Dispatcher.Dispatch(new GoToFranchiseAction(franchiseId));
+            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
         }
     }
 

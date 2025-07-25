@@ -9,7 +9,7 @@ public abstract class TitledRequestValidator<T> : CineasteValidator<T>
     where T : IValidatable<T>, ITitledRequest
 {
     private const string Names = nameof(Names);
-    private const string Priorities = nameof(Priorities);
+    private const string SequenceNumbers = nameof(SequenceNumbers);
 
     private static readonly TitleRequestValidator TitlesValidator = new(nameof(ITitledRequest.Titles));
     private static readonly TitleRequestValidator OriginalTitlesValidator = new(nameof(ITitledRequest.OriginalTitles));
@@ -36,8 +36,8 @@ public abstract class TitledRequestValidator<T> : CineasteValidator<T>
         this.RuleFor(titles)
             .Must(HaveDifferentNames)
             .WithErrorCode(this.ErrorCode(titles, Distinct, Names))
-            .Must(HaveDifferentPriorities)
-            .WithErrorCode(this.ErrorCode(titles, Distinct, Priorities));
+            .Must(HaveDifferentSequenceNumbers)
+            .WithErrorCode(this.ErrorCode(titles, Distinct, SequenceNumbers));
 
         this.RuleForEach(titles)
             .SetValidator(validator);
@@ -46,6 +46,6 @@ public abstract class TitledRequestValidator<T> : CineasteValidator<T>
     private static bool HaveDifferentNames(IEnumerable<TitleRequest> titles) =>
         titles.DistinctBy(title => title.Name).Count() == titles.Count();
 
-    private static bool HaveDifferentPriorities(IEnumerable<TitleRequest> titles) =>
-        titles.DistinctBy(title => title.Priority).Count() == titles.Count();
+    private static bool HaveDifferentSequenceNumbers(IEnumerable<TitleRequest> titles) =>
+        titles.DistinctBy(title => title.SequenceNumber).Count() == titles.Count();
 }

@@ -14,7 +14,7 @@ public static class OpenFranchiseFormReducers
             ? new() { Fetch = ApiCall.InProgress() }
             : state;
 
-    [ReducerMethod(typeof(GoToFranchiseAction))]
+    [ReducerMethod(typeof(GoToListItemAction))]
     public static FranchiseFormState ReduceGoToFranchiseAction(FranchiseFormState _) =>
         new() { Fetch = ApiCall.Success() };
 

@@ -13,8 +13,8 @@ public class TitleRequestValidator : CineasteValidator<TitleRequest>
             .MaximumLength(MaxNameLength)
             .WithErrorCode(this.ErrorCode(req => req.Name, TooLong));
 
-        this.RuleFor(req => req.Priority)
+        this.RuleFor(req => req.SequenceNumber)
             .GreaterThan(0)
-            .WithErrorCode(this.ErrorCode(req => req.Priority, TooLow));
+            .WithErrorCode(this.ErrorCode(req => req.SequenceNumber, TooLow));
     }
 }
