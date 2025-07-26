@@ -2,7 +2,6 @@ namespace Cineaste.Client.FormModels;
 
 public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieModel>
 {
-    private readonly Guid listId;
     private readonly ListKindModel defaultKind;
 
     public int Year { get; set; }
@@ -22,11 +21,10 @@ public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieMode
     public bool IsFirst { get; private set; }
     public bool IsLast { get; private set; }
 
-    public MovieFormModel(Guid listId, ListKindModel kind)
+    public MovieFormModel(ListKindModel kind)
     {
         ArgumentNullException.ThrowIfNull(kind);
 
-        this.listId = listId;
         this.defaultKind = kind;
         this.Kind = this.defaultKind;
 
@@ -35,7 +33,6 @@ public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieMode
 
     public override MovieRequest CreateRequest() =>
         new(
-            this.listId,
             this.ToTitleRequests(this.Titles),
             this.ToTitleRequests(this.OriginalTitles),
             this.Year,

@@ -180,7 +180,6 @@ public sealed class MovieRequestValidatorTests
         string? imdbId = null,
         string? rottenTomatoesId = null) =>
         new(
-            Guid.CreateVersion7(),
             TitleRequests(titles, differentTitlePriorities),
             TitleRequests(originalTitles, differentOriginalTitlePriorities),
             year ?? DateTime.Now.Year,

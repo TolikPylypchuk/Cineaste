@@ -1,5 +1,3 @@
-using Cineaste.Core.Domain;
-
 namespace Cineaste.Services;
 
 public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<FranchiseService> logger)
@@ -21,6 +19,7 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
 
         var list = await this.FindList(request.Value.ListId);
         var franchise = await this.MapToFranchise(request, list);
+        this.EnsureAccessibleInList(franchise);
 
         list.AddFranchise(franchise);
         list.SortItems();

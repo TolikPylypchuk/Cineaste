@@ -108,27 +108,6 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(request.RottenTomatoesId, model.RottenTomatoesId);
     }
 
-    [Fact(DisplayName = "AddMovie should throw if the list is not found")]
-    public async Task AddMovieShouldThrowIfListNotFound()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, this.logger);
-
-        var dummyListId = Id.Create<CineasteList>();
-        var request = this.CreateMovieRequest() with { ListId = dummyListId.Value };
-
-        // Act + Assert
-
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.AddMovie(request.Validated()));
-
-        Assert.Equal("NotFound.List", exception.MessageCode);
-        Assert.Equal("Resource.List", exception.Resource);
-        Assert.Equal(dummyListId, exception.Properties["id"]);
-    }
-
     [Fact(DisplayName = "AddMovie should throw if the kind is not found")]
     public async Task AddMovieShouldThrowIfKindNotFound()
     {
@@ -148,38 +127,6 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal("NotFound.MovieKind", exception.MessageCode);
         Assert.Equal("Resource.MovieKind", exception.Resource);
         Assert.Equal(dummyKindId, exception.Properties["id"]);
-    }
-
-    [Fact(DisplayName = "AddMovie should throw if the kind doesn't belong to list")]
-    public async Task AddMovieShouldThrowIfKindDoesNotBelongToList()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, this.logger);
-
-        var otherList = data.CreateList();
-        var otherKind = data.CreateMovieKind(otherList);
-
-        dbContext.MovieKinds.Add(otherKind);
-        dbContext.Lists.Add(otherList);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-        var request = this.CreateMovieRequest() with { KindId = otherKind.Id.Value };
-
-        // Act + Assert
-
-        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
-            movieService.AddMovie(request.Validated()));
-
-        Assert.Equal("BadRequest.MovieKind.WrongList", exception.MessageCode);
-        Assert.Equal(data.ListId, exception.Properties["listId"]);
-        Assert.Equal(otherKind.Id, exception.Properties["kindId"]);
-
-        // Clean up
-
-        dbContext.Lists.Remove(otherList);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "UpdateMovie should update it in the database")]
@@ -264,38 +211,6 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "UpdateMovie should throw if movie doesn't belong to list")]
-    public async Task UpdateMovieShouldThrowIfMovieDoesNotBelongToList()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, this.logger);
-
-        var movie = await data.CreateMovie(dbContext);
-
-        var otherList = data.CreateList();
-        dbContext.Lists.Add(otherList);
-
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-        var request = this.CreateMovieRequest() with { ListId = otherList.Id.Value };
-
-        // Act + Assert
-
-        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
-            movieService.UpdateMovie(movie.Id, request.Validated()));
-
-        Assert.Equal("BadRequest.Movie.WrongList", exception.MessageCode);
-        Assert.Equal(movie.Id, exception.Properties["movieId"]);
-        Assert.Equal(otherList.Id, exception.Properties["listId"]);
-
-        // Clean up
-
-        dbContext.Lists.Remove(otherList);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-    }
-
     [Fact(DisplayName = "RemoveMovie should remote it from the database")]
     public async Task RemoveMovieShouldRemoveItFromDb()
     {
@@ -336,7 +251,6 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 
     private MovieRequest CreateMovieRequest() =>
         new(
-            data.ListId.Value,
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(new TitleRequest("Original Test", 1)).AsValue(),
             1999,

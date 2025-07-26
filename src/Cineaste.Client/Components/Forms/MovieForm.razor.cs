@@ -6,9 +6,6 @@ namespace Cineaste.Client.Components.Forms;
 public partial class MovieForm
 {
     [Parameter]
-    public required Guid ListId { get; set; }
-
-    [Parameter]
     public required ImmutableList<ListKindModel> AvailableKinds { get; set; }
 
     [Parameter]
@@ -38,7 +35,7 @@ public partial class MovieForm
     {
         base.OnParametersSet();
 
-        this.FormModel = new(this.ListId, this.AvailableKinds.First());
+        this.FormModel = new(this.AvailableKinds.First());
 
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();

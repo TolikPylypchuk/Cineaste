@@ -9,7 +9,8 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
     {
         this.logger.LogDebug("Getting the movie with ID: {Id}", id.Value);
 
-        var movie = await this.FindMovie(id);
+        var list = await this.FindList();
+        var movie = await this.FindMovie(list, id);
         return movie.ToMovieModel();
     }
 
@@ -17,17 +18,17 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
     {
         this.logger.LogDebug("Creating a new movie");
 
-        var list = await this.FindList(request.Value.ListId);
-        var kind = await this.FindKind(request.Value.KindId, list);
+        var list = await this.FindList();
+        var kind = this.FindKind(list, Id.For<MovieKind>(request.Value.KindId));
 
         var movie = request.ToMovie(Id.Create<Movie>(), kind);
 
         list.AddMovie(movie);
-        dbContext.Movies.Add(movie);
+        this.dbContext.Movies.Add(movie);
 
         list.SortItems();
 
-        await dbContext.SaveChangesAsync();
+        await this.dbContext.SaveChangesAsync();
 
         return movie.ToMovieModel();
     }
@@ -36,22 +37,22 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
     {
         this.logger.LogDebug("Updating the movie with ID: {Id}", id.Value);
 
-        var movie = await this.FindMovie(id);
-        var list = await this.FindList(request.Value.ListId);
+        var list = await this.FindList();
+        var movie = await this.FindMovie(list, id);
 
         if (!list.ContainsMovie(movie))
         {
-            throw this.MovieDoesNotBelongToList(id, list.Id);
+            throw this.NotFound(id);
         }
 
-        var kind = await this.FindKind(request.Value.KindId, list);
+        var kind = this.FindKind(list, Id.For<MovieKind>(request.Value.KindId));
 
         movie.Update(request, kind);
         movie.ListItem?.SetProperties(movie);
 
         list.SortItems();
 
-        await dbContext.SaveChangesAsync();
+        await this.dbContext.SaveChangesAsync();
 
         return movie.ToMovieModel();
     }
@@ -60,103 +61,129 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
     {
         this.logger.LogDebug("Deleting the movie with ID: {Id}", id.Value);
 
-        var movie = await this.dbContext.Movies
-            .Where(movie => movie.Id == id)
-            .Include(movie => movie.ListItem)
-                .ThenInclude(item => item!.List)
-            .SingleOrDefaultAsync()
-            ?? throw this.NotFound(id);
+        var list = await this.FindList();
+        var movie = await this.FindMovie(list, id);
 
-        var listItem = movie.ListItem!;
+        if (movie.FranchiseItem is { } item)
+        {
+            item.ParentFranchise.RemoveMovie(movie);
+        }
 
-        var list = await this.FindList(listItem.List.Id.Value);
-        list.RemoveItem(listItem);
+        list.RemoveItem(movie.ListItem!);
         list.SortItems();
 
-        dbContext.ListItems.Remove(listItem);
-
+        this.dbContext.ListItems.Remove(movie.ListItem!);
         this.dbContext.Movies.Remove(movie);
         await this.dbContext.SaveChangesAsync();
     }
 
-    private async Task<Movie> FindMovie(Id<Movie> id)
+    private async Task<Movie> FindMovie(CineasteList list, Id<Movie> id)
     {
-        var movie = await this.dbContext.Movies
-            .Include(movie => movie.AllTitles)
-            .Include(movie => movie.Kind)
-            .Include(movie => movie.Tags)
-            .Include(movie => movie.FranchiseItem)
-                .ThenInclude(item => item!.ParentFranchise)
-                    .ThenInclude(franchise => franchise.Children)
-            .AsSplitQuery()
-            .SingleOrDefaultAsync(movie => movie.Id == id);
+        var movie = list.Items
+            .Select(item => item.Movie)
+            .WhereNotNull()
+            .FirstOrDefault(movie => movie.Id == id)
+            ?? throw this.NotFound(id);
 
-        return movie is not null ? movie : throw this.NotFound(id);
-    }
+        await this.dbContext.Entry(movie)
+            .Collection(m => m.Tags)
+            .LoadAsync();
 
-    private async Task<CineasteList> FindList(Guid id)
-    {
-        var listId = Id.For<CineasteList>(id);
+        await this.dbContext.Entry(movie)
+            .Reference(m => m.FranchiseItem)
+            .Query()
+            .Include(item => item.ParentFranchise)
+            .LoadAsync();
 
-        var list = await this.dbContext.Lists
-            .Include(list => list.Configuration)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Movie)
-                    .ThenInclude(movie => movie!.AllTitles)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Movie)
-                    .ThenInclude(movie => movie!.Kind)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Movie)
-                    .ThenInclude(movie => movie!.Tags)
-            .Include(list => list.MovieKinds)
-            .AsSplitQuery()
-            .SingleOrDefaultAsync(list => list.Id == listId);
-
-        return list is not null
-            ? list
-            : throw this.NotFound(listId);
-    }
-
-    private async Task<MovieKind> FindKind(Guid id, CineasteList list)
-    {
-        var kindId = Id.For<MovieKind>(id);
-        var kind = await this.dbContext.MovieKinds.FindAsync(kindId);
-
-        if (kind is null)
+        if (movie.FranchiseItem is not null)
         {
-            throw this.NotFound(kindId);
-        } else if (!list.MovieKinds.Contains(kind))
-        {
-            throw this.KindDoesNotBelongToList(kindId, list.Id);
+            await this.LoadFullFranchise(movie.FranchiseItem.ParentFranchise);
         }
 
-        return kind;
+        return movie;
     }
+
+    private async Task LoadFullFranchise(Franchise franchise)
+    {
+        await this.dbContext.Entry(franchise)
+            .Reference(f => f.FranchiseItem)
+            .Query()
+            .Include(item => item.ParentFranchise)
+            .LoadAsync();
+
+        if (franchise.FranchiseItem is not null)
+        {
+            await this.LoadFullFranchise(franchise.FranchiseItem.ParentFranchise);
+        } else
+        {
+            await this.LoadChildren(franchise);
+        }
+    }
+
+    private async Task LoadChildren(Franchise franchise)
+    {
+        await this.dbContext.Entry(franchise)
+            .Collection(f => f.Children)
+            .Query()
+            .Include(item => item.Movie)
+                .ThenInclude(movie => movie!.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Seasons)
+                    .ThenInclude(season => season.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.SpecialEpisodes)
+                    .ThenInclude(episode => episode.AllTitles)
+            .Include(item => item.Franchise)
+                .ThenInclude(f => f!.AllTitles)
+            .LoadAsync();
+
+        foreach (var childFranchise in franchise.Children.Select(item => item.Franchise).WhereNotNull())
+        {
+            await this.LoadChildren(childFranchise);
+        }
+    }
+
+    private async Task<CineasteList> FindList()
+    {
+        var list = await this.dbContext.Lists.FirstOrDefaultAsync() ?? throw this.ListNotFound();
+
+        await this.dbContext.Entry(list)
+            .Reference(list => list.Configuration)
+            .LoadAsync();
+
+        await this.dbContext.Entry(list)
+            .Collection(list => list.MovieKinds)
+            .LoadAsync();
+
+        await this.dbContext.Entry(list)
+            .Collection(list => list.SeriesKinds)
+            .LoadAsync();
+
+        await this.dbContext.Entry(list)
+            .Collection(list => list.Items)
+            .Query()
+            .Include(item => item.Movie)
+                .ThenInclude(movie => movie!.AllTitles)
+            .LoadAsync();
+
+        return list;
+    }
+
+    private MovieKind FindKind(CineasteList list, Id<MovieKind> id) =>
+        list.MovieKinds
+            .FirstOrDefault(kind => kind.Id == id)
+            ?? throw this.NotFound(id);
+
+    private NotFoundException ListNotFound() =>
+        new(Resources.List, "Could not find the list");
 
     private CineasteException NotFound(Id<Movie> id) =>
         new NotFoundException(Resources.Movie, $"Could not find a movie with ID {id.Value}")
             .WithProperty(id);
 
-    private CineasteException NotFound(Id<CineasteList> id) =>
-        new NotFoundException(Resources.List, $"Could not find a list with ID {id.Value}")
-            .WithProperty(id);
-
     private CineasteException NotFound(Id<MovieKind> id) =>
         new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with ID {id.Value}")
             .WithProperty(id);
-
-    private CineasteException MovieDoesNotBelongToList(Id<Movie> movieId, Id<CineasteList> listId) =>
-        new InvalidInputException(
-            $"{Resources.Movie}.WrongList",
-            $"Movie with ID {movieId.Value} does not belong to list with ID {listId}")
-            .WithProperty(movieId)
-            .WithProperty(listId);
-
-    private CineasteException KindDoesNotBelongToList(Id<MovieKind> kindId, Id<CineasteList> listId) =>
-        new InvalidInputException(
-            $"{Resources.MovieKind}.WrongList",
-            $"Movie kind with ID {kindId.Value} does not belong to list with ID {listId}")
-            .WithProperty(kindId)
-            .WithProperty(listId);
 }
