@@ -6,7 +6,6 @@ namespace Cineaste.Client.FormModels;
 
 public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesModel>
 {
-    private readonly Guid listId;
     private readonly ListKindModel defaultKind;
     private readonly ObservableCollection<ISeriesComponentFormModel> components = [];
 
@@ -31,7 +30,6 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
     public bool IsLast { get; private set; }
 
     public SeriesFormModel(
-        Guid listId,
         ListKindModel kind,
         string defaultSeasonTitle,
         string defaultSeasonOriginalTitle)
@@ -40,7 +38,6 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
         ArgumentNullException.ThrowIfNull(defaultSeasonTitle);
         ArgumentNullException.ThrowIfNull(defaultSeasonOriginalTitle);
 
-        this.listId = listId;
         this.defaultKind = kind;
         this.Kind = this.defaultKind;
 
@@ -159,7 +156,6 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
 
     public override SeriesRequest CreateRequest() =>
         new(
-            this.listId,
             this.ToTitleRequests(this.Titles),
             this.ToTitleRequests(this.OriginalTitles),
             this.WatchStatus,

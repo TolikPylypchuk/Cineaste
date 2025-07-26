@@ -11,6 +11,7 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
 
         var list = await this.FindList(token);
         var movie = await this.FindMovie(list, id, token);
+
         return movie.ToMovieModel();
     }
 
@@ -24,10 +25,9 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         var movie = request.ToMovie(Id.Create<Movie>(), kind);
 
         list.AddMovie(movie);
-        this.dbContext.Movies.Add(movie);
-
         list.SortItems();
 
+        this.dbContext.Movies.Add(movie);
         await this.dbContext.SaveChangesAsync(token);
 
         return movie.ToMovieModel();
@@ -39,11 +39,6 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
 
         var list = await this.FindList(token);
         var movie = await this.FindMovie(list, id, token);
-
-        if (!list.ContainsMovie(movie))
-        {
-            throw this.NotFound(id);
-        }
 
         var kind = this.FindKind(list, Id.For<MovieKind>(request.Value.KindId));
 
@@ -69,7 +64,7 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
             item.ParentFranchise.RemoveMovie(movie);
         }
 
-        list.RemoveItem(movie.ListItem!);
+        list.RemoveMovie(movie);
         list.SortItems();
 
         this.dbContext.ListItems.Remove(movie.ListItem!);
@@ -84,10 +79,6 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
             .WhereNotNull()
             .FirstOrDefault(movie => movie.Id == id)
             ?? throw this.NotFound(id);
-
-        await this.dbContext.Entry(movie)
-            .Collection(m => m.Tags)
-            .LoadAsync(token);
 
         await this.dbContext.Entry(movie)
             .Reference(m => m.FranchiseItem)

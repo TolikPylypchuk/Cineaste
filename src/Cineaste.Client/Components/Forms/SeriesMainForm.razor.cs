@@ -6,9 +6,6 @@ namespace Cineaste.Client.Components.Forms;
 public partial class SeriesMainForm
 {
     [Parameter]
-    public Guid ListId { get; set; }
-
-    [Parameter]
     public ListItemModel? ListItem { get; set; }
 
     [Parameter]

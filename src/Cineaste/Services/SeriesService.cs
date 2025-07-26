@@ -9,7 +9,9 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
     {
         this.logger.LogDebug("Getting the series with ID: {Id}", id.Value);
 
-        var series = await this.FindSeries(id, token);
+        var list = await this.FindList(token);
+        var series = await this.FindSeries(list, id, token);
+
         return series.ToSeriesModel();
     }
 
@@ -17,16 +19,15 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
     {
         this.logger.LogDebug("Creating a new series");
 
-        var list = await this.FindList(request.Value.ListId, token);
-        var kind = await this.FindKind(request.Value.KindId, list, token);
+        var list = await this.FindList(token);
+        var kind = this.FindKind(list, Id.For<SeriesKind>(request.Value.KindId));
 
         var series = request.ToSeries(Id.Create<Series>(), kind);
 
         list.AddSeries(series);
-        dbContext.Series.Add(series);
-
         list.SortItems();
 
+        dbContext.Series.Add(series);
         await dbContext.SaveChangesAsync(token);
 
         return series.ToSeriesModel();
@@ -39,15 +40,10 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
     {
         this.logger.LogDebug("Updating the series with ID: {Id}", id.Value);
 
-        var series = await this.FindSeries(id, token);
-        var list = await this.FindList(request.Value.ListId, token);
+        var list = await this.FindList(token);
+        var series = await this.FindSeries(list, id, token);
 
-        if (!list.ContainsSeries(series))
-        {
-            throw this.SeriesDoesNotBelongToList(id, list.Id);
-        }
-
-        var kind = await this.FindKind(request.Value.KindId, list, token);
+        var kind = this.FindKind(list, Id.For<SeriesKind>(request.Value.KindId));
 
         series.Update(request, kind);
         series.ListItem?.SetProperties(series);
@@ -63,118 +59,139 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
     {
         this.logger.LogDebug("Deleting the series with ID: {Id}", id.Value);
 
-        var series = await this.dbContext.Series
-            .Where(series => series.Id == id)
-            .Include(series => series.ListItem)
-                .ThenInclude(item => item!.List)
-            .SingleOrDefaultAsync(token)
-            ?? throw this.NotFound(id);
+        var list = await this.FindList(token);
+        var series = await this.FindSeries(list, id, token);
 
-        var listItem = series.ListItem!;
+        if (series.FranchiseItem is { } item)
+        {
+            item.ParentFranchise.RemoveSeries(series);
+        }
 
-        var list = await this.FindList(listItem.List.Id.Value, token);
         list.RemoveSeries(series);
         list.SortItems();
 
-        dbContext.ListItems.Remove(listItem);
-
+        this.dbContext.ListItems.Remove(series.ListItem!);
         this.dbContext.Series.Remove(series);
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    private async Task<Series> FindSeries(Id<Series> id, CancellationToken token)
+    private async Task<Series> FindSeries(CineasteList list, Id<Series> id, CancellationToken token)
     {
-        var series = await this.dbContext.Series
-            .Include(series => series.AllTitles)
-            .Include(series => series.Kind)
-            .Include(series => series.Seasons)
-                .ThenInclude(season => season.AllTitles)
-            .Include(series => series.Seasons)
-                .ThenInclude(season => season.Periods)
-            .Include(series => series.SpecialEpisodes)
-                .ThenInclude(episode => episode.AllTitles)
-            .Include(series => series.Tags)
-            .Include(series => series.FranchiseItem)
-                .ThenInclude(item => item!.ParentFranchise)
-                    .ThenInclude(franchise => franchise.Children)
+        var series = list.Items
+            .Select(item => item.Series)
+            .WhereNotNull()
+            .FirstOrDefault(series => series.Id == id)
+            ?? throw this.NotFound(id);
+
+        await this.dbContext.Entry(series)
+            .Collection(s => s.Seasons)
+            .Query()
+            .Include(s => s.AllTitles)
+            .Include(s => s.Periods)
             .AsSplitQuery()
-            .SingleOrDefaultAsync(series => series.Id == id, token);
+            .LoadAsync(token);
 
-        return series is not null ? series : throw this.NotFound(id);
-    }
+        await this.dbContext.Entry(series)
+            .Collection(s => s.SpecialEpisodes)
+            .Query()
+            .Include(e => e.AllTitles)
+            .LoadAsync(token);
 
-    private async Task<CineasteList> FindList(Guid id, CancellationToken token)
-    {
-        var listId = Id.For<CineasteList>(id);
+        await this.dbContext.Entry(series)
+            .Reference(s => s.FranchiseItem)
+            .Query()
+            .Include(item => item.ParentFranchise)
+            .LoadAsync(token);
 
-        return await this.dbContext.Lists
-            .Include(list => list.Configuration)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Series)
-                    .ThenInclude(series => series!.AllTitles)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Series)
-                    .ThenInclude(series => series!.Kind)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Series)
-                    .ThenInclude(series => series!.Seasons)
-                        .ThenInclude(season => season.AllTitles)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Series)
-                    .ThenInclude(series => series!.Seasons)
-                        .ThenInclude(season => season.Periods)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Series)
-                    .ThenInclude(series => series!.SpecialEpisodes)
-                        .ThenInclude(episode => episode.AllTitles)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Series)
-                    .ThenInclude(series => series!.Tags)
-            .Include(list => list.SeriesKinds)
-            .AsSplitQuery()
-            .SingleOrDefaultAsync(list => list.Id == listId, token)
-             ?? throw this.NotFound(listId);
-    }
-
-    private async Task<SeriesKind> FindKind(Guid id, CineasteList list, CancellationToken token)
-    {
-        var kindId = Id.For<SeriesKind>(id);
-        var kind = await this.dbContext.SeriesKinds.FindAsync([kindId], token);
-
-        if (kind is null)
+        if (series.FranchiseItem is not null)
         {
-            throw this.NotFound(kindId);
-        } else if (!list.SeriesKinds.Contains(kind))
-        {
-            throw this.KindDoesNotBelongToList(kindId, list.Id);
+            await this.LoadFullFranchise(series.FranchiseItem.ParentFranchise, token);
         }
 
-        return kind;
+        return series;
     }
+
+    private async Task LoadFullFranchise(Franchise franchise, CancellationToken token)
+    {
+        await this.dbContext.Entry(franchise)
+            .Reference(f => f.FranchiseItem)
+            .Query()
+            .Include(item => item.ParentFranchise)
+            .LoadAsync(token);
+
+        if (franchise.FranchiseItem is not null)
+        {
+            await this.LoadFullFranchise(franchise.FranchiseItem.ParentFranchise, token);
+        } else
+        {
+            await this.LoadChildren(franchise, token);
+        }
+    }
+
+    private async Task LoadChildren(Franchise franchise, CancellationToken token)
+    {
+        await this.dbContext.Entry(franchise)
+            .Collection(f => f.Children)
+            .Query()
+            .Include(item => item.Movie)
+                .ThenInclude(movie => movie!.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Seasons)
+                    .ThenInclude(season => season.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.SpecialEpisodes)
+                    .ThenInclude(episode => episode.AllTitles)
+            .Include(item => item.Franchise)
+                .ThenInclude(f => f!.AllTitles)
+            .LoadAsync(token);
+
+        foreach (var childFranchise in franchise.Children.Select(item => item.Franchise).WhereNotNull())
+        {
+            await this.LoadChildren(childFranchise, token);
+        }
+    }
+
+    private async Task<CineasteList> FindList(CancellationToken token)
+    {
+        var list = await this.dbContext.Lists.FirstOrDefaultAsync(token) ?? throw this.ListNotFound();
+
+        await this.dbContext.Entry(list)
+            .Reference(list => list.Configuration)
+            .LoadAsync(token);
+
+        await this.dbContext.Entry(list)
+            .Collection(list => list.MovieKinds)
+            .LoadAsync(token);
+
+        await this.dbContext.Entry(list)
+            .Collection(list => list.SeriesKinds)
+            .LoadAsync(token);
+
+        await this.dbContext.Entry(list)
+            .Collection(list => list.Items)
+            .Query()
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.AllTitles)
+            .LoadAsync(token);
+
+        return list;
+    }
+
+    private SeriesKind FindKind(CineasteList list, Id<SeriesKind> id) =>
+        list.SeriesKinds
+            .FirstOrDefault(kind => kind.Id == id)
+            ?? throw this.NotFound(id);
+
+    private NotFoundException ListNotFound() =>
+        new(Resources.List, "Could not find the list");
 
     private CineasteException NotFound(Id<Series> id) =>
         new NotFoundException(Resources.Series, $"Could not find a series with ID {id.Value}")
             .WithProperty(id);
 
-    private CineasteException NotFound(Id<CineasteList> id) =>
-        new NotFoundException(Resources.List, $"Could not find a list with ID {id.Value}")
-            .WithProperty(id);
-
     private CineasteException NotFound(Id<SeriesKind> id) =>
         new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with ID {id.Value}")
             .WithProperty(id);
-
-    private CineasteException SeriesDoesNotBelongToList(Id<Series> seriesId, Id<CineasteList> listId) =>
-        new InvalidInputException(
-            $"{Resources.Series}.WrongList",
-            $"Series with ID {seriesId.Value} does not belong to list with ID {listId}")
-            .WithProperty(seriesId)
-            .WithProperty(listId);
-
-    private CineasteException KindDoesNotBelongToList(Id<SeriesKind> kindId, Id<CineasteList> listId) =>
-        new InvalidInputException(
-            $"{Resources.SeriesKind}.WrongList",
-            $"Movie kind with ID {kindId.Value} does not belong to list with ID {listId}")
-            .WithProperty(kindId)
-            .WithProperty(listId);
 }

@@ -3,7 +3,6 @@ using Cineaste.Shared.Validation.Series;
 namespace Cineaste.Shared.Models.Series;
 
 public sealed record SeriesRequest(
-    Guid ListId,
     ImmutableValueList<TitleRequest> Titles,
     ImmutableValueList<TitleRequest> OriginalTitles,
     SeriesWatchStatus WatchStatus,

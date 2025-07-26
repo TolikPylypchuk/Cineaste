@@ -248,7 +248,6 @@ public class SeriesRequestValidatorTests
         string? imdbId = null,
         string? rottenTomatoesId = null) =>
         new(
-            Guid.CreateVersion7(),
             TitleRequests(titles, differentTitlePriorities),
             TitleRequests(originalTitles, differentOriginalTitlePriorities),
             watchStatus,

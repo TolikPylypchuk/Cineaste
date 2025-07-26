@@ -220,26 +220,6 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         }
     }
 
-    [Fact(DisplayName = "AddSeries should throw if the list is not found")]
-    public async Task AddSeriesShouldThrowIfListNotFound()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, this.logger);
-
-        var dummyListId = Id.Create<CineasteList>();
-        var request = this.CreateSeriesRequest() with { ListId = dummyListId.Value };
-
-        // Act + Assert
-
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken));
-
-        Assert.Equal("Resource.List", exception.Resource);
-        Assert.Equal(dummyListId, exception.Properties["id"]);
-    }
-
     [Fact(DisplayName = "AddSeries should throw if the kind is not found")]
     public async Task AddSeriesShouldThrowIfKindNotFound()
     {
@@ -258,38 +238,6 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         Assert.Equal("Resource.SeriesKind", exception.Resource);
         Assert.Equal(dummyKindId, exception.Properties["id"]);
-    }
-
-    [Fact(DisplayName = "AddSeries should throw if the kind doesn't belong to list")]
-    public async Task AddSeriesShouldThrowIfKindDoesNotBelongToList()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, this.logger);
-
-        var otherList = data.CreateList();
-        var otherKind = data.CreateSeriesKind(otherList);
-
-        dbContext.SeriesKinds.Add(otherKind);
-        dbContext.Lists.Add(otherList);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-        var request = this.CreateSeriesRequest() with { KindId = otherKind.Id.Value };
-
-        // Act + Assert
-
-        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
-            seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken));
-
-        Assert.Equal("BadRequest.SeriesKind.WrongList", exception.MessageCode);
-        Assert.Equal(data.ListId, exception.Properties["listId"]);
-        Assert.Equal(otherKind.Id, exception.Properties["kindId"]);
-
-        // Clean up
-
-        dbContext.Lists.Remove(otherList);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "UpdateSeries should update it in the database")]
@@ -453,38 +401,6 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "UpdateSeries should throw if series doesn't belong to list")]
-    public async Task UpdateSeriesShouldThrowIfSeriesDoesNotBelongToList()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, this.logger);
-
-        var series = await data.CreateSeries(dbContext);
-
-        var otherList = data.CreateList();
-        dbContext.Lists.Add(otherList);
-
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-        var request = this.CreateSeriesRequest() with { ListId = otherList.Id.Value };
-
-        // Act + Assert
-
-        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
-            seriesService.UpdateSeries(series.Id, request.Validated(), TestContext.Current.CancellationToken));
-
-        Assert.Equal("BadRequest.Series.WrongList", exception.MessageCode);
-        Assert.Equal(series.Id, exception.Properties["seriesId"]);
-        Assert.Equal(otherList.Id, exception.Properties["listId"]);
-
-        // Clean up
-
-        dbContext.Lists.Remove(otherList);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-    }
-
     [Fact(DisplayName = "RemoveSeries should remote it from the database")]
     public async Task RemoveSeriesShouldRemoveItFromDb()
     {
@@ -526,7 +442,6 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
     private SeriesRequest CreateSeriesRequest() =>
         new(
-            data.ListId.Value,
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(new TitleRequest("Original Test", 1)).AsValue(),
             SeriesWatchStatus.NotWatched,

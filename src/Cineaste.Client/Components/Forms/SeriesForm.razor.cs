@@ -5,9 +5,6 @@ namespace Cineaste.Client.Components.Forms;
 public partial class SeriesForm
 {
     [Parameter]
-    public required Guid ListId { get; set; }
-
-    [Parameter]
     public required ListConfigurationModel ListConfiguration { get; set; }
 
     [Parameter]
@@ -34,8 +31,7 @@ public partial class SeriesForm
         base.OnParametersSet();
 
         var config = this.ListConfiguration;
-        this.FormModel = new(
-            this.ListId, this.AvailableKinds.First(), config.DefaultSeasonTitle, config.DefaultSeasonOriginalTitle);
+        this.FormModel = new(this.AvailableKinds.First(), config.DefaultSeasonTitle, config.DefaultSeasonOriginalTitle);
 
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
