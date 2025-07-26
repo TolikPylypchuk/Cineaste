@@ -18,7 +18,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await seriesService.GetSeries(series.Id);
+        var model = await seriesService.GetSeries(series.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -81,7 +81,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.GetSeries(dummyId));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            seriesService.GetSeries(dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Series", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -99,7 +100,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await seriesService.AddSeries(request.Validated());
+        var model = await seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -167,7 +168,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await seriesService.AddSeries(request.Validated());
+        var model = await seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -233,7 +234,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            seriesService.AddSeries(request.Validated()));
+            seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.List", exception.Resource);
         Assert.Equal(dummyListId, exception.Properties["id"]);
@@ -253,7 +254,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            seriesService.AddSeries(request.Validated()));
+            seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.SeriesKind", exception.Resource);
         Assert.Equal(dummyKindId, exception.Properties["id"]);
@@ -279,7 +280,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
-            seriesService.AddSeries(request.Validated()));
+            seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("BadRequest.SeriesKind.WrongList", exception.MessageCode);
         Assert.Equal(data.ListId, exception.Properties["listId"]);
@@ -305,7 +306,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await seriesService.UpdateSeries(dbSeries.Id, request.Validated());
+        var model = await seriesService.UpdateSeries(
+            dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -375,7 +377,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await seriesService.UpdateSeries(dbSeries.Id, request.Validated());
+        var model = await seriesService.UpdateSeries(
+            dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -443,7 +446,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            seriesService.UpdateSeries(dummyId, request.Validated()));
+            seriesService.UpdateSeries(dummyId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("NotFound.Series", exception.MessageCode);
         Assert.Equal("Resource.Series", exception.Resource);
@@ -470,7 +473,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
-            seriesService.UpdateSeries(series.Id, request.Validated()));
+            seriesService.UpdateSeries(series.Id, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("BadRequest.Series.WrongList", exception.MessageCode);
         Assert.Equal(series.Id, exception.Properties["seriesId"]);
@@ -494,7 +497,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        await seriesService.RemoveSeries(series.Id);
+        await seriesService.RemoveSeries(series.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -513,7 +516,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.RemoveSeries(dummyId));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            seriesService.RemoveSeries(dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("NotFound.Series", exception.MessageCode);
         Assert.Equal("Resource.Series", exception.Resource);

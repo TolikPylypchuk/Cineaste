@@ -5,44 +5,47 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly ILogger<FranchiseService> logger = logger;
 
-    public async Task<FranchiseModel> GetFranchise(Id<Franchise> id)
+    public async Task<FranchiseModel> GetFranchise(Id<Franchise> id, CancellationToken token)
     {
         this.logger.LogDebug("Getting the franchise with ID: {Id}", id.Value);
 
-        var franchise = await this.FindFranchise(id);
+        var franchise = await this.FindFranchise(id, token);
         return franchise.ToFranchiseModel();
     }
 
-    public async Task<FranchiseModel> AddFranchise(Validated<FranchiseRequest> request)
+    public async Task<FranchiseModel> AddFranchise(Validated<FranchiseRequest> request, CancellationToken token)
     {
         this.logger.LogDebug("Creating a new franchise");
 
-        var list = await this.FindList(request.Value.ListId);
-        var franchise = await this.MapToFranchise(request, list);
+        var list = await this.FindList(request.Value.ListId, token);
+        var franchise = await this.MapToFranchise(request, list, token);
         this.EnsureAccessibleInList(franchise);
 
         list.AddFranchise(franchise);
         list.SortItems();
 
         dbContext.Franchises.Add(franchise);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(token);
 
         return franchise.ToFranchiseModel();
     }
 
-    public async Task<FranchiseModel> UpdateFranchise(Id<Franchise> id, Validated<FranchiseRequest> request)
+    public async Task<FranchiseModel> UpdateFranchise(
+        Id<Franchise> id,
+        Validated<FranchiseRequest> request,
+        CancellationToken token)
     {
         this.logger.LogDebug("Updating the franchise with ID: {Id}", id.Value);
 
-        var franchise = await this.FindFranchise(id);
-        var list = await this.FindList(request.Value.ListId);
+        var franchise = await this.FindFranchise(id, token);
+        var list = await this.FindList(request.Value.ListId, token);
 
         if (!list.ContainsFranchise(franchise))
         {
             throw this.FranchiseDoesNotBelongToList(id, list.Id);
         }
 
-        var (movies, series, franchises) = await this.GetAllItems(request.Value);
+        var (movies, series, franchises) = await this.GetAllItems(request.Value, token);
         var movieKind = this.ResolveMovieKind(request.Value, list);
         var seriesKind = this.ResolveSeriesKind(request.Value, list);
 
@@ -52,34 +55,34 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         list.SortItems();
 
         dbContext.FranchiseItems.RemoveRange(result.RemovedItems);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(token);
 
         return franchise.ToFranchiseModel();
     }
 
-    public async Task RemoveFranchise(Id<Franchise> id)
+    public async Task RemoveFranchise(Id<Franchise> id, CancellationToken token)
     {
         this.logger.LogDebug("Deleting the franchise with ID: {Id}", id.Value);
 
         var franchise = await this.dbContext.Franchises
             .Where(franchise => franchise.Id == id)
             .Include(franchise => franchise.ListItem)
-            .SingleOrDefaultAsync()
+            .SingleOrDefaultAsync(token)
             ?? throw this.NotFound(id);
 
         var listItem = franchise.ListItem!;
 
-        var list = await this.FindList(listItem.List.Id.Value);
+        var list = await this.FindList(listItem.List.Id.Value, token);
         list.RemoveItem(listItem);
         list.SortItems();
 
         dbContext.ListItems.Remove(listItem);
 
         this.dbContext.Franchises.Remove(franchise);
-        await this.dbContext.SaveChangesAsync();
+        await this.dbContext.SaveChangesAsync(token);
     }
 
-    private async Task<Franchise> FindFranchise(Id<Franchise> id)
+    private async Task<Franchise> FindFranchise(Id<Franchise> id, CancellationToken token)
     {
         var franchise = await this.dbContext.Franchises
             .Include(franchise => franchise.AllTitles)
@@ -89,15 +92,15 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
                 .ThenInclude(item => item!.ParentFranchise)
                     .ThenInclude(franchise => franchise.Children)
             .AsSplitQuery()
-            .SingleOrDefaultAsync(franchise => franchise.Id == id)
+            .SingleOrDefaultAsync(franchise => franchise.Id == id, token)
             ?? throw this.NotFound(id);
 
-        await this.LoadAllChildren(franchise);
+        await this.LoadAllChildren(franchise, token);
 
         return franchise;
     }
 
-    private async Task LoadAllChildren(Franchise franchise)
+    private async Task LoadAllChildren(Franchise franchise, CancellationToken token)
     {
         var children = await dbContext.Entry(franchise)
             .Collection(franchise => franchise.Children)
@@ -113,19 +116,19 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
             .Include(item => item.Franchise)
                 .ThenInclude(franchise => franchise!.AllTitles)
             .AsSplitQuery()
-            .ToListAsync();
+            .ToListAsync(token);
 
         foreach (var childFranchise in children.Select(item => item.Franchise).WhereNotNull())
         {
-            await this.LoadAllChildren(childFranchise);
+            await this.LoadAllChildren(childFranchise, token);
         }
     }
 
-    private async Task<CineasteList> FindList(Guid id)
+    private async Task<CineasteList> FindList(Guid id, CancellationToken token)
     {
         var listId = Id.For<CineasteList>(id);
 
-        var list = await this.dbContext.Lists
+        return await this.dbContext.Lists
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
@@ -133,16 +136,16 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
                 .ThenInclude(item => item.Franchise)
                     .ThenInclude(franchise => franchise!.AllTitles)
             .AsSplitQuery()
-            .SingleOrDefaultAsync(list => list.Id == listId);
-
-        return list is not null
-            ? list
-            : throw this.NotFound(listId);
+            .SingleOrDefaultAsync(list => list.Id == listId, token)
+            ?? throw this.NotFound(listId);
     }
 
-    private async Task<Franchise> MapToFranchise(Validated<FranchiseRequest> request, CineasteList list)
+    private async Task<Franchise> MapToFranchise(
+        Validated<FranchiseRequest> request,
+        CineasteList list,
+        CancellationToken token)
     {
-        var (movies, series, franchises) = await this.GetAllItems(request.Value);
+        var (movies, series, franchises) = await this.GetAllItems(request.Value, token);
 
         var movieKindId = Id.For<MovieKind>(request.Value.KindId);
         var seriesKindId = Id.For<SeriesKind>(request.Value.KindId);
@@ -175,11 +178,14 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
             : list.SeriesKinds.First();
     }
 
-    private async Task<(List<Movie>, List<Series>, List<Franchise>)> GetAllItems(FranchiseRequest request)
+    private async Task<(List<Movie>, List<Series>, List<Franchise>)> GetAllItems(
+        FranchiseRequest request,
+        CancellationToken token)
     {
-        var (movies, missingMovieIds) = await this.GetItems<Movie>(request, FranchiseItemType.Movie);
-        var (series, missingSeriesIds) = await this.GetItems<Series>(request, FranchiseItemType.Series);
-        var (franchises, missingFranchiseIds) = await this.GetItems<Franchise>(request, FranchiseItemType.Franchise);
+        var (movies, missingMovieIds) = await this.GetItems<Movie>(request, FranchiseItemType.Movie, token);
+        var (series, missingSeriesIds) = await this.GetItems<Series>(request, FranchiseItemType.Series, token);
+        var (franchises, missingFranchiseIds) = await this.GetItems<Franchise>(
+            request, FranchiseItemType.Franchise, token);
 
         if (missingMovieIds.Any() || missingSeriesIds.Any() || missingFranchiseIds.Any())
         {
@@ -189,7 +195,10 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         return (movies, series, franchises);
     }
 
-    private async Task<(List<T>, IReadOnlySet<Id<T>>)> GetItems<T>(FranchiseRequest request, FranchiseItemType itemType)
+    private async Task<(List<T>, IReadOnlySet<Id<T>>)> GetItems<T>(
+        FranchiseRequest request,
+        FranchiseItemType itemType,
+        CancellationToken token)
         where T : FranchiseItemEntity<T>
     {
         var ids = request.Items
@@ -202,7 +211,7 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
             : await this.dbContext.Set<T>()
                 .Where(item => ids.Contains(item.Id))
                 .Include(item => item.FranchiseItem)
-                .ToListAsync();
+                .ToListAsync(token);
 
         var missingIds = ids.Except(items.Select(item => item.Id)).ToImmutableSortedSet();
 

@@ -9,16 +9,16 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [EndpointSummary("Get a series")]
     [ProducesResponseType<SeriesModel>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<SeriesModel>> GetSeries([FromRoute] Guid id) =>
-        this.Ok(await seriesService.GetSeries(Id.For<Series>(id)));
+    public async Task<ActionResult<SeriesModel>> GetSeries(Guid id, CancellationToken token) =>
+        this.Ok(await seriesService.GetSeries(Id.For<Series>(id), token));
 
     [HttpPost]
     [EndpointSummary("Add a series to the list")]
     [ProducesResponseType<SeriesModel>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<SeriesModel>> AddSeries([FromBody] SeriesRequest request)
+    public async Task<ActionResult<SeriesModel>> AddSeries([FromBody] SeriesRequest request, CancellationToken token)
     {
-        var series = await seriesService.AddSeries(request.Validated());
+        var series = await seriesService.AddSeries(request.Validated(), token);
         return this.Created($"/api/series/{series.Id}", series);
     }
 
@@ -28,20 +28,18 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<SeriesModel>> UpdateSeries(
-        [FromRoute] Guid id,
-        [FromBody] SeriesRequest request)
-    {
-        var series = await seriesService.UpdateSeries(Id.For<Series>(id), request.Validated());
-        return this.Ok(series);
-    }
+        Guid id,
+        [FromBody] SeriesRequest request,
+        CancellationToken token) =>
+        this.Ok(await seriesService.UpdateSeries(Id.For<Series>(id), request.Validated(), token));
 
     [HttpDelete("{id}")]
     [EndpointSummary("Remove a series from the list")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> RemoveSeries([FromRoute] Guid id)
+    public async Task<ActionResult> RemoveSeries(Guid id, CancellationToken token)
     {
-        await seriesService.RemoveSeries(Id.For<Series>(id));
+        await seriesService.RemoveSeries(Id.For<Series>(id), token);
         return this.NoContent();
     }
 }

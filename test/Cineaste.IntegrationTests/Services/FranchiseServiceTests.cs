@@ -25,7 +25,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act
 
-        var model = await franchiseService.GetFranchise(franchise.Id);
+        var model = await franchiseService.GetFranchise(franchise.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -72,7 +72,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => franchiseService.GetFranchise(dummyId));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            franchiseService.GetFranchise(dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("NotFound.Franchise", exception.MessageCode);
         Assert.Equal("Resource.Franchise", exception.Resource);
@@ -92,7 +93,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act
 
-        var model = await franchiseService.AddFranchise(request.Validated());
+        var model = await franchiseService.AddFranchise(request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -138,7 +139,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act
 
-        var model = await franchiseService.AddFranchise(request.Validated());
+        var model = await franchiseService.AddFranchise(request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -175,7 +176,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.AddFranchise(request.Validated()));
+            franchiseService.AddFranchise(request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("NotFound.List", exception.MessageCode);
         Assert.Equal("Resource.List", exception.Resource);
@@ -201,7 +202,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.AddFranchise(request.Validated()));
+            franchiseService.AddFranchise(request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("NotFound.FranchiseItems", exception.MessageCode);
         Assert.Equal("Resource.FranchiseItems", exception.Resource);
@@ -242,7 +243,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act
 
-        var model = await franchiseService.UpdateFranchise(franchise.Id, request.Validated());
+        var model = await franchiseService.UpdateFranchise(
+            franchise.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -298,7 +300,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act
 
-        var model = await franchiseService.UpdateFranchise(franchise.Id, request.Validated());
+        var model = await franchiseService.UpdateFranchise(
+            franchise.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -345,7 +348,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.UpdateFranchise(dummyId, request.Validated()));
+            franchiseService.UpdateFranchise(dummyId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Franchise", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -378,7 +381,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
-            franchiseService.UpdateFranchise(franchise.Id, request.Validated()));
+            franchiseService.UpdateFranchise(franchise.Id, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("BadRequest.Franchise.WrongList", exception.MessageCode);
         Assert.Equal(franchise.Id, exception.Properties["franchiseId"]);
@@ -408,7 +411,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act
 
-        await franchiseService.RemoveFranchise(franchise.Id);
+        await franchiseService.RemoveFranchise(franchise.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -427,7 +430,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => franchiseService.RemoveFranchise(dummyId));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            franchiseService.RemoveFranchise(dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("NotFound.Franchise", exception.MessageCode);
         Assert.Equal("Resource.Franchise", exception.Resource);
