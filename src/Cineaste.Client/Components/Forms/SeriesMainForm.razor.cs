@@ -110,11 +110,11 @@ public partial class SeriesMainForm
         await this.Cancel.InvokeAsync();
     }
 
-    private async Task Delete()
+    private async Task Remove()
     {
         bool? delete = await this.DialogService.ShowMessageBox(
-            title: this.Loc["SeriesForm.DeleteDialog.Title"],
-            markupMessage: new MarkupString(this.Loc["SeriesForm.DeleteDialog.Body"]),
+            title: this.Loc["SeriesForm.RemoveDialog.Title"],
+            markupMessage: new MarkupString(this.Loc["SeriesForm.RemoveDialog.Body"]),
             yesText: this.Loc["Confirmation.Confirm"],
             noText: this.Loc["Confirmation.Cancel"]);
 

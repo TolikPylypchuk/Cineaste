@@ -144,7 +144,7 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
         await data.CreateSeries(dbContext);
 
         var franchise = await data.CreateFranchise(dbContext);
-        franchise.AddMovie(movie, true);
+        franchise.AttachMovie(movie, true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 

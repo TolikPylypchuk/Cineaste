@@ -18,8 +18,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var franchise = await data.CreateFranchise(dbContext);
 
-        franchise.AddMovie(await data.CreateMovie(dbContext), true);
-        franchise.AddSeries(await data.CreateSeries(dbContext), true);
+        franchise.AttachMovie(await data.CreateMovie(dbContext), true);
+        franchise.AttachSeries(await data.CreateSeries(dbContext), true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -160,29 +160,6 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         }
     }
 
-    [Fact(DisplayName = "AddFranchise should throw if the list is not found")]
-    public async Task AddFranchiseShouldThrowIfListNotFound()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, this.logger);
-
-        var movie = await data.CreateMovie(dbContext);
-        var dummyListId = Id.Create<CineasteList>();
-        var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie)
-            with { ListId = dummyListId.Value };
-
-        // Act + Assert
-
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.AddFranchise(request.Validated(), TestContext.Current.CancellationToken));
-
-        Assert.Equal("NotFound.List", exception.MessageCode);
-        Assert.Equal("Resource.List", exception.Resource);
-        Assert.Equal(dummyListId, exception.Properties["id"]);
-    }
-
     [Fact(DisplayName = "AddFranchise should throw if a franchise item is not found")]
     public async Task AddFranchiseShouldThrowIfItemNotFound()
     {
@@ -226,8 +203,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         var list = await data.GetList(dbContext);
 
         var franchise = await data.CreateFranchise(dbContext);
-        franchise.AddMovie(movie1, true);
-        franchise.AddMovie(movie2, true);
+        franchise.AttachMovie(movie1, true);
+        franchise.AttachMovie(movie2, true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -291,7 +268,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var franchise = await data.CreateFranchise(dbContext);
-        franchise.AddMovie(movie, true);
+        franchise.AttachMovie(movie, true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -336,7 +313,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var franchise = await data.CreateFranchise(dbContext);
-        franchise.AddMovie(movie, true);
+        franchise.AttachMovie(movie, true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -354,45 +331,6 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         Assert.Equal(dummyId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "UpdateFranchise should throw if movie doesn't belong to list")]
-    public async Task UpdateFranchiseShouldThrowIfFranchiseDoesNotBelongToList()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, this.logger);
-
-        var list = await data.GetList(dbContext);
-
-        var movie = await data.CreateMovie(dbContext);
-        var franchise = await data.CreateFranchise(dbContext);
-        franchise.AddMovie(movie, true);
-
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-        var otherList = data.CreateList();
-        dbContext.Lists.Add(otherList);
-
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-        var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie)
-            with { ListId = otherList.Id.Value };
-
-        // Act + Assert
-
-        var exception = await Assert.ThrowsAsync<InvalidInputException>(() =>
-            franchiseService.UpdateFranchise(franchise.Id, request.Validated(), TestContext.Current.CancellationToken));
-
-        Assert.Equal("BadRequest.Franchise.WrongList", exception.MessageCode);
-        Assert.Equal(franchise.Id, exception.Properties["franchiseId"]);
-        Assert.Equal(otherList.Id, exception.Properties["listId"]);
-
-        // Clean up
-
-        dbContext.Lists.Remove(otherList);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-    }
-
     [Fact(DisplayName = "RemoveFranchise should remote it from the database")]
     public async Task RemoveFranchiseShouldRemoveItFromDb()
     {
@@ -405,7 +343,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var movie = await data.CreateMovie(dbContext);
         var franchise = await data.CreateFranchise(dbContext);
-        franchise.AddMovie(movie, true);
+        franchise.AttachMovie(movie, true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -461,7 +399,6 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         bool continueNumbering = false,
         params FranchiseItemRequest[] items) =>
         new(
-            data.ListId.Value,
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
             ImmutableList.Create(items).AsValue(),

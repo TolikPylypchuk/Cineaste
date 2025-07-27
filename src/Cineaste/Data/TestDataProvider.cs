@@ -70,9 +70,9 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         var lotr2 = this.CreateMovie("The Lord of the Rings: The Two Towers", liveActionMovie, 2002);
         var lotr3 = this.CreateMovie("The Lord of the Rings: The Return of the King", liveActionMovie, 2003);
 
-        lotr.AddMovie(lotr1, true);
-        lotr.AddMovie(lotr2, true);
-        lotr.AddMovie(lotr3, true);
+        lotr.AttachMovie(lotr1, true);
+        lotr.AttachMovie(lotr2, true);
+        lotr.AttachMovie(lotr3, true);
 
         list.AddFranchise(lotr);
         list.AddMovie(lotr1);
@@ -87,9 +87,9 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         var dollars3 = this.CreateMovie(
             "The Good, the Bad and the Ugly", "Il buono, il brutto, il cattivo", liveActionMovie, 1966);
 
-        dollars.AddMovie(dollars1, true);
-        dollars.AddMovie(dollars2, true);
-        dollars.AddMovie(dollars3, true);
+        dollars.AttachMovie(dollars1, true);
+        dollars.AttachMovie(dollars2, true);
+        dollars.AttachMovie(dollars3, true);
 
         list.AddFranchise(dollars);
         list.AddMovie(dollars1);
@@ -104,10 +104,10 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         var duneProphecy = this.DuneProphecy(liveActionSeries);
         var dune3 = this.CreateMovie("Dune: Part Three", liveActionMovie, 2026, isReleased: false);
 
-        dune.AddMovie(dune1, true);
-        dune.AddMovie(dune2, true);
-        dune.AddSeries(duneProphecy, false);
-        dune.AddMovie(dune3, true);
+        dune.AttachMovie(dune1, true);
+        dune.AttachMovie(dune2, true);
+        dune.AttachSeries(duneProphecy, false);
+        dune.AttachMovie(dune3, true);
 
         list.AddFranchise(dune);
         list.AddMovie(dune1);
@@ -119,15 +119,15 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         var godsAndMonsters = this.CreateFranchise(
             "Chapter One: Gods and Monsters", liveActionMovie, liveActionSeries, FranchiseKindSource.Movie);
 
-        dc.AddFranchise(godsAndMonsters, true);
+        dc.AttachFranchise(godsAndMonsters, true);
 
         var creatureCommandos = this.CreatureCommandos(animatedSeries);
         var superman = this.CreateMovie("Superman", liveActionMovie, 2025);
         var supergirl = this.CreateMovie("Supergirl", liveActionMovie, 2026, isReleased: false);
 
-        godsAndMonsters.AddSeries(creatureCommandos, true);
-        godsAndMonsters.AddMovie(superman, true);
-        godsAndMonsters.AddMovie(supergirl, true);
+        godsAndMonsters.AttachSeries(creatureCommandos, true);
+        godsAndMonsters.AttachMovie(superman, true);
+        godsAndMonsters.AttachMovie(supergirl, true);
 
         list.AddFranchise(dc);
         list.AddFranchise(godsAndMonsters);

@@ -17,7 +17,7 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
 
     public async Task<SeriesModel> AddSeries(Validated<SeriesRequest> request, CancellationToken token)
     {
-        this.logger.LogDebug("Creating a new series");
+        this.logger.LogDebug("Adding a new series");
 
         var list = await this.FindList(token);
         var kind = this.FindKind(list, Id.For<SeriesKind>(request.Value.KindId));
@@ -57,14 +57,14 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
 
     public async Task RemoveSeries(Id<Series> id, CancellationToken token)
     {
-        this.logger.LogDebug("Deleting the series with ID: {Id}", id.Value);
+        this.logger.LogDebug("Removing the series with ID: {Id}", id.Value);
 
         var list = await this.FindList(token);
         var series = await this.FindSeries(list, id, token);
 
         if (series.FranchiseItem is { } item)
         {
-            item.ParentFranchise.RemoveSeries(series);
+            item.ParentFranchise.DetachSeries(series);
         }
 
         list.RemoveSeries(series);
@@ -137,6 +137,9 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
                 .ThenInclude(movie => movie!.AllTitles)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Seasons)
+                    .ThenInclude(season => season.Periods)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.Seasons)
                     .ThenInclude(season => season.AllTitles)

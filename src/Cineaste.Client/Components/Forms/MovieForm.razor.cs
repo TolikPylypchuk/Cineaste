@@ -126,11 +126,11 @@ public partial class MovieForm
         this.ClearValidation();
     }
 
-    private async Task Delete()
+    private async Task Remove()
     {
         bool? delete = await this.DialogService.ShowMessageBox(
-            title: this.Loc["MovieForm.DeleteDialog.Title"],
-            markupMessage: new MarkupString(this.Loc["MovieForm.DeleteDialog.Body"]),
+            title: this.Loc["MovieForm.RemoveDialog.Title"],
+            markupMessage: new MarkupString(this.Loc["MovieForm.RemoveDialog.Body"]),
             yesText: this.Loc["Confirmation.Confirm"],
             noText: this.Loc["Confirmation.Cancel"]);
 

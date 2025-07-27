@@ -34,4 +34,14 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
         [FromBody] FranchiseRequest request,
         CancellationToken token) =>
         this.Ok(await franchiseService.UpdateFranchise(Id.For<Franchise>(id), request.Validated(), token));
+
+    [HttpDelete("{id}")]
+    [EndpointSummary("Remove a franchise from the list")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> RemoveFranchise(Guid id, CancellationToken token)
+    {
+        await franchiseService.RemoveFranchise(Id.For<Franchise>(id), token);
+        return this.NoContent();
+    }
 }

@@ -85,7 +85,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     public FranchiseItem? FindFranchise(Franchise franchise) =>
         this.Children.FirstOrDefault(item => item.Franchise == franchise);
 
-    public FranchiseItem AddMovie(Movie movie, bool addDisplayNumber)
+    public FranchiseItem AttachMovie(Movie movie, bool addDisplayNumber)
     {
         var item = new FranchiseItem(
             Domain.Id.Create<FranchiseItem>(),
@@ -100,7 +100,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         return item;
     }
 
-    public FranchiseItem AddSeries(Series series, bool addDisplayNumber)
+    public FranchiseItem AttachSeries(Series series, bool addDisplayNumber)
     {
         var item = new FranchiseItem(
             Domain.Id.Create<FranchiseItem>(),
@@ -115,7 +115,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         return item;
     }
 
-    public FranchiseItem AddFranchise(Franchise franchise, bool addDisplayNumber)
+    public FranchiseItem AttachFranchise(Franchise franchise, bool addDisplayNumber)
     {
         var item = new FranchiseItem(
             Domain.Id.Create<FranchiseItem>(),
@@ -130,7 +130,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         return item;
     }
 
-    public void RemoveMovie(Movie movie)
+    public void DetachMovie(Movie movie)
     {
         if (movie.FranchiseItem is not null && this.children.Contains(movie.FranchiseItem))
         {
@@ -141,7 +141,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         }
     }
 
-    public void RemoveSeries(Series series)
+    public void DetachSeries(Series series)
     {
         if (series.FranchiseItem is not null && this.children.Contains(series.FranchiseItem))
         {
@@ -152,7 +152,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         }
     }
 
-    public void RemoveFranchise(Franchise franchise)
+    public void DetachFranchise(Franchise franchise)
     {
         if (franchise.FranchiseItem is not null && this.children.Contains(franchise.FranchiseItem))
         {
@@ -161,6 +161,31 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
 
             this.SetSequenceNumbersForChildren();
         }
+    }
+
+    public void DetachAllChildren()
+    {
+        foreach (var item in this.children)
+        {
+            item.Do(
+                movie =>
+                {
+                    movie.FranchiseItem = null;
+                    movie.ListItem!.SetProperties(movie);
+                },
+                series =>
+                {
+                    series.FranchiseItem = null;
+                    series.ListItem!.SetProperties(series);
+                },
+                franchise =>
+                {
+                    franchise.FranchiseItem = null;
+                    franchise.ListItem!.SetProperties(franchise);
+                });
+        }
+
+        this.children.Clear();
     }
 
     public void SetSequenceNumbersForChildren()

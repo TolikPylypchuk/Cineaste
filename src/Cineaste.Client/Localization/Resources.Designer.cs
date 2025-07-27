@@ -151,6 +151,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Button_Add {
+            get {
+                return ResourceManager.GetString("Button.Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Button_Cancel {
@@ -160,29 +169,20 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create.
+        ///   Looks up a localized string similar to Remove.
         /// </summary>
-        public static string Button_Create {
+        public static string Button_Remove {
             get {
-                return ResourceManager.GetString("Button.Create", resourceCulture);
+                return ResourceManager.GetString("Button.Remove", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete.
+        ///   Looks up a localized string similar to Removing.
         /// </summary>
-        public static string Button_Delete {
+        public static string Button_Remove_Busy {
             get {
-                return ResourceManager.GetString("Button.Delete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deleting.
-        /// </summary>
-        public static string Button_Delete_Busy {
-            get {
-                return ResourceManager.GetString("Button.Delete.Busy", resourceCulture);
+                return ResourceManager.GetString("Button.Remove.Busy", resourceCulture);
             }
         }
         
@@ -403,24 +403,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete this franchise? It will not delete its items, only detach them..
-        /// </summary>
-        public static string FranchiseForm_DeleteDialog_Body {
-            get {
-                return ResourceManager.GetString("FranchiseForm.DeleteDialog.Body", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Delete Franchise.
-        /// </summary>
-        public static string FranchiseForm_DeleteDialog_Title {
-            get {
-                return ResourceManager.GetString("FranchiseForm.DeleteDialog.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Kind.
         /// </summary>
         public static string FranchiseForm_Kind {
@@ -466,20 +448,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating the franchise has failed.
+        ///   Looks up a localized string similar to Adding the franchise has failed.
         /// </summary>
-        public static string FranchiseForm_Problem_CreatingFailed {
+        public static string FranchiseForm_Problem_AddingFailed {
             get {
-                return ResourceManager.GetString("FranchiseForm.Problem.CreatingFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deleting the franchise has failed.
-        /// </summary>
-        public static string FranchiseForm_Problem_DeletingFailed {
-            get {
-                return ResourceManager.GetString("FranchiseForm.Problem.DeletingFailed", resourceCulture);
+                return ResourceManager.GetString("FranchiseForm.Problem.AddingFailed", resourceCulture);
             }
         }
         
@@ -493,11 +466,38 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removing the franchise has failed.
+        /// </summary>
+        public static string FranchiseForm_Problem_RemovingFailed {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Problem.RemovingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating the franchise has failed.
         /// </summary>
         public static string FranchiseForm_Problem_UpdatingFailed {
             get {
                 return ResourceManager.GetString("FranchiseForm.Problem.UpdatingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this franchise? It will not remove its items, only detach them..
+        /// </summary>
+        public static string FranchiseForm_RemoveDialog_Body {
+            get {
+                return ResourceManager.GetString("FranchiseForm.RemoveDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Franchise.
+        /// </summary>
+        public static string FranchiseForm_RemoveDialog_Title {
+            get {
+                return ResourceManager.GetString("FranchiseForm.RemoveDialog.Title", resourceCulture);
             }
         }
         
@@ -790,24 +790,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete this movie?.
-        /// </summary>
-        public static string MovieForm_DeleteDialog_Body {
-            get {
-                return ResourceManager.GetString("MovieForm.DeleteDialog.Body", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Delete Movie.
-        /// </summary>
-        public static string MovieForm_DeleteDialog_Title {
-            get {
-                return ResourceManager.GetString("MovieForm.DeleteDialog.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to IMDb ID.
         /// </summary>
         public static string MovieForm_ImdbId {
@@ -862,20 +844,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating the moive has failed.
+        ///   Looks up a localized string similar to Adding the movie has failed.
         /// </summary>
-        public static string MovieForm_Problem_CreatingFailed {
+        public static string MovieForm_Problem_AddingFailed {
             get {
-                return ResourceManager.GetString("MovieForm.Problem.CreatingFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deleting the movie has failed.
-        /// </summary>
-        public static string MovieForm_Problem_DeletingFailed {
-            get {
-                return ResourceManager.GetString("MovieForm.Problem.DeletingFailed", resourceCulture);
+                return ResourceManager.GetString("MovieForm.Problem.AddingFailed", resourceCulture);
             }
         }
         
@@ -889,11 +862,38 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removing the movie has failed.
+        /// </summary>
+        public static string MovieForm_Problem_RemovingFailed {
+            get {
+                return ResourceManager.GetString("MovieForm.Problem.RemovingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating the movie has failed.
         /// </summary>
         public static string MovieForm_Problem_UpdatingFailed {
             get {
                 return ResourceManager.GetString("MovieForm.Problem.UpdatingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this movie?.
+        /// </summary>
+        public static string MovieForm_RemoveDialog_Body {
+            get {
+                return ResourceManager.GetString("MovieForm.RemoveDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Movie.
+        /// </summary>
+        public static string MovieForm_RemoveDialog_Title {
+            get {
+                return ResourceManager.GetString("MovieForm.RemoveDialog.Title", resourceCulture);
             }
         }
         
@@ -1348,20 +1348,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating the series has failed.
+        ///   Looks up a localized string similar to Adding the series has failed.
         /// </summary>
-        public static string SeriesForm_Problem_CreatingFailed {
+        public static string SeriesForm_Problem_AddingFailed {
             get {
-                return ResourceManager.GetString("SeriesForm.Problem.CreatingFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deleting the series has failed.
-        /// </summary>
-        public static string SeriesForm_Problem_DeletingFailed {
-            get {
-                return ResourceManager.GetString("SeriesForm.Problem.DeletingFailed", resourceCulture);
+                return ResourceManager.GetString("SeriesForm.Problem.AddingFailed", resourceCulture);
             }
         }
         
@@ -1371,6 +1362,15 @@ namespace Cineaste.Client.Localization {
         public static string SeriesForm_Problem_LoadingFailed {
             get {
                 return ResourceManager.GetString("SeriesForm.Problem.LoadingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing the series has failed.
+        /// </summary>
+        public static string SeriesForm_Problem_RemovingFailed {
+            get {
+                return ResourceManager.GetString("SeriesForm.Problem.RemovingFailed", resourceCulture);
             }
         }
         

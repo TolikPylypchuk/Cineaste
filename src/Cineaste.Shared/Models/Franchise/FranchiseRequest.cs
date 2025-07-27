@@ -3,7 +3,6 @@ using Cineaste.Shared.Validation.Franchise;
 namespace Cineaste.Shared.Models.Franchise;
 
 public record FranchiseRequest(
-    Guid ListId,
     ImmutableValueList<TitleRequest> Titles,
     ImmutableValueList<TitleRequest> OriginalTitles,
     ImmutableValueList<FranchiseItemRequest> Items,

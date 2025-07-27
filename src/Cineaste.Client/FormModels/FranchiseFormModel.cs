@@ -2,7 +2,6 @@ namespace Cineaste.Client.FormModels;
 
 public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, FranchiseModel>
 {
-    private readonly Guid listId;
     private readonly ObservableCollection<FranchiseFormComponent> components = [];
     private readonly ListKindModel defaultKind;
 
@@ -22,12 +21,8 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
     public bool IsFirst { get; private set; }
     public bool IsLast { get; private set; }
 
-    public FranchiseFormModel(
-        Guid listId,
-        ListKindModel kind,
-        FranchiseKindSource kindSource)
+    public FranchiseFormModel(ListKindModel kind, FranchiseKindSource kindSource)
     {
-        this.listId = listId;
         this.defaultKind = kind;
         this.Kind = kind;
         this.KindSource = kindSource;
@@ -37,7 +32,6 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
 
     public override FranchiseRequest CreateRequest() =>
         new(
-            this.listId,
             this.ToTitleRequests(this.Titles),
             this.ToTitleRequests(this.OriginalTitles),
             this.components

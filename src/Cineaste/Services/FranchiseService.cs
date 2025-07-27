@@ -9,23 +9,25 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
     {
         this.logger.LogDebug("Getting the franchise with ID: {Id}", id.Value);
 
-        var franchise = await this.FindFranchise(id, token);
+        var list = await this.FindList(token);
+        var franchise = await this.FindFranchise(list, id, token);
+
         return franchise.ToFranchiseModel();
     }
 
     public async Task<FranchiseModel> AddFranchise(Validated<FranchiseRequest> request, CancellationToken token)
     {
-        this.logger.LogDebug("Creating a new franchise");
+        this.logger.LogDebug("Adding a new franchise");
 
-        var list = await this.FindList(request.Value.ListId, token);
+        var list = await this.FindList(token);
         var franchise = await this.MapToFranchise(request, list, token);
         this.EnsureAccessibleInList(franchise);
 
         list.AddFranchise(franchise);
         list.SortItems();
 
-        dbContext.Franchises.Add(franchise);
-        await dbContext.SaveChangesAsync(token);
+        this.dbContext.Franchises.Add(franchise);
+        await this.dbContext.SaveChangesAsync(token);
 
         return franchise.ToFranchiseModel();
     }
@@ -37,13 +39,8 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
     {
         this.logger.LogDebug("Updating the franchise with ID: {Id}", id.Value);
 
-        var franchise = await this.FindFranchise(id, token);
-        var list = await this.FindList(request.Value.ListId, token);
-
-        if (!list.ContainsFranchise(franchise))
-        {
-            throw this.FranchiseDoesNotBelongToList(id, list.Id);
-        }
+        var list = await this.FindList(token);
+        var franchise = await this.FindFranchise(list, id, token);
 
         var (movies, series, franchises) = await this.GetAllItems(request.Value, token);
         var movieKind = this.ResolveMovieKind(request.Value, list);
@@ -54,90 +51,122 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         this.EnsureAccessibleInList(franchise);
         list.SortItems();
 
-        dbContext.FranchiseItems.RemoveRange(result.RemovedItems);
-        await dbContext.SaveChangesAsync(token);
+        this.dbContext.FranchiseItems.RemoveRange(result.RemovedItems);
+        await this.dbContext.SaveChangesAsync(token);
 
         return franchise.ToFranchiseModel();
     }
 
     public async Task RemoveFranchise(Id<Franchise> id, CancellationToken token)
     {
-        this.logger.LogDebug("Deleting the franchise with ID: {Id}", id.Value);
+        this.logger.LogDebug("Removing the franchise with ID: {Id}", id.Value);
 
-        var franchise = await this.dbContext.Franchises
-            .Where(franchise => franchise.Id == id)
-            .Include(franchise => franchise.ListItem)
-            .SingleOrDefaultAsync(token)
-            ?? throw this.NotFound(id);
+        var list = await this.FindList(token);
+        var franchise = await this.FindFranchise(list, id, token);
 
-        var listItem = franchise.ListItem!;
+        this.dbContext.FranchiseItems.RemoveRange(franchise.Children);
 
-        var list = await this.FindList(listItem.List.Id.Value, token);
-        list.RemoveItem(listItem);
+        franchise.DetachAllChildren();
+        list.RemoveFranchise(franchise);
         list.SortItems();
 
-        dbContext.ListItems.Remove(listItem);
-
+        this.dbContext.ListItems.Remove(franchise.ListItem!);
         this.dbContext.Franchises.Remove(franchise);
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    private async Task<Franchise> FindFranchise(Id<Franchise> id, CancellationToken token)
+    private async Task<Franchise> FindFranchise(CineasteList list, Id<Franchise> id, CancellationToken token)
     {
-        var franchise = await this.dbContext.Franchises
-            .Include(franchise => franchise.AllTitles)
-            .Include(franchise => franchise.MovieKind)
-            .Include(franchise => franchise.SeriesKind)
-            .Include(franchise => franchise.FranchiseItem)
-                .ThenInclude(item => item!.ParentFranchise)
-                    .ThenInclude(franchise => franchise.Children)
-            .AsSplitQuery()
-            .SingleOrDefaultAsync(franchise => franchise.Id == id, token)
+        var franchise = list.Items
+            .Select(item => item.Franchise)
+            .WhereNotNull()
+            .FirstOrDefault(franchise => franchise.Id == id)
             ?? throw this.NotFound(id);
 
-        await this.LoadAllChildren(franchise, token);
+        await this.dbContext.Entry(franchise)
+            .Reference(f => f.MovieKind)
+            .Query()
+            .LoadAsync(token);
+
+        await this.dbContext.Entry(franchise)
+            .Reference(f => f.SeriesKind)
+            .Query()
+            .LoadAsync(token);
+
+        await this.LoadFullFranchise(franchise, token);
 
         return franchise;
     }
 
-    private async Task LoadAllChildren(Franchise franchise, CancellationToken token)
+    private async Task LoadFullFranchise(Franchise franchise, CancellationToken token)
     {
-        var children = await dbContext.Entry(franchise)
-            .Collection(franchise => franchise.Children)
+        await this.dbContext.Entry(franchise)
+            .Reference(f => f.FranchiseItem)
             .Query()
-            .Include(item => item.Movie)
-                .ThenInclude(movie => movie!.AllTitles)
-            .Include(item => item.Series!)
-                .ThenInclude(series => series!.AllTitles)
-            .Include(item => item.Series!.Seasons)
-                .ThenInclude(season => season!.Periods)
-            .Include(item => item.Series)
-                .ThenInclude(series => series!.SpecialEpisodes)
-            .Include(item => item.Franchise)
-                .ThenInclude(franchise => franchise!.AllTitles)
-            .AsSplitQuery()
-            .ToListAsync(token);
+            .Include(item => item.ParentFranchise)
+            .LoadAsync(token);
 
-        foreach (var childFranchise in children.Select(item => item.Franchise).WhereNotNull())
+        if (franchise.FranchiseItem is not null)
         {
-            await this.LoadAllChildren(childFranchise, token);
+            await this.LoadFullFranchise(franchise.FranchiseItem.ParentFranchise, token);
+        } else
+        {
+            await this.LoadChildren(franchise, token);
         }
     }
 
-    private async Task<CineasteList> FindList(Guid id, CancellationToken token)
+    private async Task LoadChildren(Franchise franchise, CancellationToken token)
     {
-        var listId = Id.For<CineasteList>(id);
+        await this.dbContext.Entry(franchise)
+            .Collection(f => f.Children)
+            .Query()
+            .Include(item => item.Movie)
+                .ThenInclude(movie => movie!.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Seasons)
+                    .ThenInclude(season => season.Periods)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Seasons)
+                    .ThenInclude(season => season.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.SpecialEpisodes)
+                    .ThenInclude(episode => episode.AllTitles)
+            .Include(item => item.Franchise)
+                .ThenInclude(f => f!.AllTitles)
+            .LoadAsync(token);
 
-        return await this.dbContext.Lists
-            .Include(list => list.Configuration)
-            .Include(list => list.MovieKinds)
-            .Include(list => list.SeriesKinds)
-            .Include(list => list.Items)
-                .ThenInclude(item => item.Franchise)
-                    .ThenInclude(franchise => franchise!.AllTitles)
-            .AsSplitQuery()
-            .SingleOrDefaultAsync(list => list.Id == listId, token)
-            ?? throw this.NotFound(listId);
+        foreach (var childFranchise in franchise.Children.Select(item => item.Franchise).WhereNotNull())
+        {
+            await this.LoadChildren(childFranchise, token);
+        }
+    }
+
+    private async Task<CineasteList> FindList(CancellationToken token)
+    {
+        var list = await this.dbContext.Lists.FirstOrDefaultAsync(token) ?? throw this.ListNotFound();
+
+        await this.dbContext.Entry(list)
+            .Reference(list => list.Configuration)
+            .LoadAsync(token);
+
+        await this.dbContext.Entry(list)
+            .Collection(list => list.MovieKinds)
+            .LoadAsync(token);
+
+        await this.dbContext.Entry(list)
+            .Collection(list => list.SeriesKinds)
+            .LoadAsync(token);
+
+        await this.dbContext.Entry(list)
+            .Collection(list => list.Items)
+            .Query()
+            .Include(item => item.Franchise)
+                .ThenInclude(franchise => franchise!.AllTitles)
+            .LoadAsync(token);
+
+        return list;
     }
 
     private async Task<Franchise> MapToFranchise(
@@ -226,12 +255,11 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         }
     }
 
+    private NotFoundException ListNotFound() =>
+        new(Resources.List, "Could not find the list");
+
     private CineasteException NotFound(Id<Franchise> id) =>
         new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id.Value}")
-            .WithProperty(id);
-
-    private CineasteException NotFound(Id<CineasteList> id) =>
-        new NotFoundException(Resources.List, $"Could not find a list with ID {id.Value}")
             .WithProperty(id);
 
     private CineasteException NotFound(
@@ -250,11 +278,4 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
     private CineasteException NotFound(Id<SeriesKind> id) =>
         new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with ID {id.Value}")
             .WithProperty(id);
-
-    private CineasteException FranchiseDoesNotBelongToList(Id<Franchise> franchiseId, Id<CineasteList> listId) =>
-        new InvalidInputException(
-            $"{Resources.Franchise}.WrongList",
-            $"Franchise with ID {franchiseId.Value} does not belong to list with ID {listId}")
-            .WithProperty(franchiseId)
-            .WithProperty(listId);
 }

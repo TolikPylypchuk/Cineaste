@@ -1,3 +1,4 @@
+using Cineaste.Client.Store.Forms.FranchiseForm;
 using Cineaste.Client.Store.Forms.MovieForm;
 using Cineaste.Client.Store.Forms.SeriesForm;
 
@@ -11,6 +12,12 @@ public static class ItemRemovedReducers
 
     [ReducerMethod]
     public static ListPageState ReduceRemoveSeriesResultAction(ListPageState state, RemoveSeriesResultAction action) =>
+        ReduceRemoveResultAction(state, action);
+
+    [ReducerMethod]
+    public static ListPageState ReduceRemoveFranchiseResultAction(
+        ListPageState state,
+        RemoveFranchiseResultAction action) =>
         ReduceRemoveResultAction(state, action);
 
     private static ListPageState ReduceRemoveResultAction(ListPageState state, EmptyResultAction action) =>

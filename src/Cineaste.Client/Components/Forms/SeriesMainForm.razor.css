@@ -154,7 +154,7 @@
   gap: var(--s2);
 }
 
-.delete-container {
+.remove-container {
   display: flex;
   justify-content: center;
   margin-block: var(--s2);

@@ -255,14 +255,14 @@
 
                     @if (this.ListItem is not null)
                     {
-                        <div class="delete-container">
+                        <div class="remove-container">
                             <MudButton
                                 Variant="Variant.Filled"
                                 Color="Color.Secondary"
                                 Disabled="@this.State.Value.Remove.IsInProgress"
-                                @onclick="@this.Delete"
+                                @onclick="@this.Remove"
                             >
-                                @this.Loc[this.State.Value.Remove.IsInProgress ? "Button.Delete.Busy" : "Button.Delete"]
+                                @this.Loc[this.State.Value.Remove.IsInProgress ? "Button.Remove.Busy" : "Button.Remove"]
                             </MudButton>
                         </div>
                     }
@@ -272,7 +272,7 @@
                 {
                     <ApiProblemAlert
                         Problem="@this.State.Value.Add.Problem"
-                        Text="SeriesForm.Problem.CreatingFailed"
+                        Text="SeriesForm.Problem.AddingFailed"
                         TryAgain="@this.OnSave"
                         Class="problem-alert"
                     />
@@ -292,8 +292,8 @@
                 {
                     <ApiProblemAlert
                         Problem="@this.State.Value.Remove.Problem"
-                        Text="SeriesForm.Problem.DeletingFailed"
-                        TryAgain="this.Delete"
+                        Text="SeriesForm.Problem.RemovingFailed"
+                        TryAgain="this.Remove"
                         Class="problem-alert"
                     />
                 }

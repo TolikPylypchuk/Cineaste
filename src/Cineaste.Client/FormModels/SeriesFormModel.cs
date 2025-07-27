@@ -29,10 +29,7 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
     public bool IsFirst { get; private set; }
     public bool IsLast { get; private set; }
 
-    public SeriesFormModel(
-        ListKindModel kind,
-        string defaultSeasonTitle,
-        string defaultSeasonOriginalTitle)
+    public SeriesFormModel(ListKindModel kind, string defaultSeasonTitle, string defaultSeasonOriginalTitle)
     {
         ArgumentNullException.ThrowIfNull(kind);
         ArgumentNullException.ThrowIfNull(defaultSeasonTitle);

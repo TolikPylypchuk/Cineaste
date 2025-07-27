@@ -166,7 +166,7 @@
   align-items: center;
 }
 
-.delete-container {
+.remove-container {
   display: flex;
   justify-content: center;
   margin-block: var(--s2);

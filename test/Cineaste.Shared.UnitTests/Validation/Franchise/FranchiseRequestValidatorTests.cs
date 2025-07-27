@@ -28,14 +28,14 @@ public class FranchiseRequestValidatorTests
             .WithErrorCode("Franchise.Titles.Distinct.Names");
     }
 
-    [Property(DisplayName = "Validator should validate that titles have distinct priorities")]
-    public void ValidatorShouldValidateTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
+    [Property(DisplayName = "Validator should validate that titles have distinct sequence numbers")]
+    public void ValidatorShouldValidateTitlesDistinctSequenceNumbers(NonEmptyString title1, NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            titles: [title1.Get, title2.Get], differentTitlePriorities: false));
+            titles: [title1.Get, title2.Get], differentTitleSequenceNumbers: false));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
-            .WithErrorCode("Franchise.Titles.Distinct.Priorities");
+            .WithErrorCode("Franchise.Titles.Distinct.SequenceNumbers");
     }
 
     [Fact(DisplayName = "Validator should validate that original titles aren't empty when they are shown")]
@@ -56,14 +56,16 @@ public class FranchiseRequestValidatorTests
             .WithErrorCode("Franchise.OriginalTitles.Distinct.Names");
     }
 
-    [Property(DisplayName = "Validator should validate that original titles have distinct priorities")]
-    public void ValidatorShouldValidateOriginalTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
+    [Property(DisplayName = "Validator should validate that original titles have distinct sequence numbers")]
+    public void ValidatorShouldValidateOriginalTitlesDistinctSequenceNumbers(
+        NonEmptyString title1,
+        NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            originalTitles: [title1.Get, title2.Get], differentOriginalTitlePriorities: false));
+            originalTitles: [title1.Get, title2.Get], differentOriginalTitleSequenceNumbers: false));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
-            .WithErrorCode("Franchise.OriginalTitles.Distinct.Priorities");
+            .WithErrorCode("Franchise.OriginalTitles.Distinct.SequenceNumbers");
     }
 
     [Fact(DisplayName = "Validator should validate titles")]
@@ -124,9 +126,9 @@ public class FranchiseRequestValidatorTests
 
     private FranchiseRequest Request(
         IEnumerable<string>? titles = null,
-        bool differentTitlePriorities = true,
+        bool differentTitleSequenceNumbers = true,
         IEnumerable<string>? originalTitles = null,
-        bool differentOriginalTitlePriorities = true,
+        bool differentOriginalTitleSequenceNumbers = true,
         IEnumerable<FranchiseItemRequest>? items = null,
         Guid kindId = default,
         FranchiseKindSource kindSource = FranchiseKindSource.Movie,
@@ -134,9 +136,8 @@ public class FranchiseRequestValidatorTests
         bool isLooselyConnected = true,
         bool continueNumbering = false) =>
         new(
-            Guid.CreateVersion7(),
-            TitleRequests(titles, differentTitlePriorities),
-            TitleRequests(originalTitles, differentOriginalTitlePriorities),
+            TitleRequests(titles, differentTitleSequenceNumbers),
+            TitleRequests(originalTitles, differentOriginalTitleSequenceNumbers),
             items?.ToImmutableList().AsValue()
                 ?? ImmutableList.Create(
                     new FranchiseItemRequest(Guid.CreateVersion7(), FranchiseItemType.Movie, 1, true)).AsValue(),

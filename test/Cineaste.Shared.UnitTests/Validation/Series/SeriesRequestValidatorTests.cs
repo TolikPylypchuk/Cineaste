@@ -29,14 +29,14 @@ public class SeriesRequestValidatorTests
             .WithErrorCode("Series.Titles.Distinct.Names");
     }
 
-    [Property(DisplayName = "Validator should validate that titles have distinct priorities")]
-    public void ValidatorShouldValidateTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
+    [Property(DisplayName = "Validator should validate that titles have distinct sequence numbers")]
+    public void ValidatorShouldValidateTitlesDistinctSequenceNumbers(NonEmptyString title1, NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            titles: [title1.Get, title2.Get], differentTitlePriorities: false));
+            titles: [title1.Get, title2.Get], differentTitleSequenceNumbers: false));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
-            .WithErrorCode("Series.Titles.Distinct.Priorities");
+            .WithErrorCode("Series.Titles.Distinct.SequenceNumbers");
     }
 
     [Fact(DisplayName = "Validator should validate that original titles aren't empty")]
@@ -57,14 +57,16 @@ public class SeriesRequestValidatorTests
             .WithErrorCode("Series.OriginalTitles.Distinct.Names");
     }
 
-    [Property(DisplayName = "Validator should validate that original titles have distinct priorities")]
-    public void ValidatorShouldValidateOriginalTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
+    [Property(DisplayName = "Validator should validate that original titles have distinct sequence numbers")]
+    public void ValidatorShouldValidateOriginalTitlesDistinctSequenceNumbers(
+        NonEmptyString title1,
+        NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            originalTitles: [title1.Get, title2.Get], differentOriginalTitlePriorities: false));
+            originalTitles: [title1.Get, title2.Get], differentOriginalTitleSequenceNumbers: false));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
-            .WithErrorCode("Series.OriginalTitles.Distinct.Priorities");
+            .WithErrorCode("Series.OriginalTitles.Distinct.SequenceNumbers");
     }
 
     [Fact(DisplayName = "Validator should validate titles")]
@@ -238,9 +240,9 @@ public class SeriesRequestValidatorTests
 
     private SeriesRequest Request(
         IEnumerable<string>? titles = null,
-        bool differentTitlePriorities = true,
+        bool differentTitleSequenceNumbers = true,
         IEnumerable<string>? originalTitles = null,
-        bool differentOriginalTitlePriorities = true,
+        bool differentOriginalTitleSequenceNumbers = true,
         SeriesWatchStatus watchStatus = SeriesWatchStatus.NotWatched,
         SeriesReleaseStatus releaseStatus = SeriesReleaseStatus.Finished,
         IEnumerable<SeasonRequest>? seasons = null,
@@ -248,8 +250,8 @@ public class SeriesRequestValidatorTests
         string? imdbId = null,
         string? rottenTomatoesId = null) =>
         new(
-            TitleRequests(titles, differentTitlePriorities),
-            TitleRequests(originalTitles, differentOriginalTitlePriorities),
+            TitleRequests(titles, differentTitleSequenceNumbers),
+            TitleRequests(originalTitles, differentOriginalTitleSequenceNumbers),
             watchStatus,
             releaseStatus,
             Guid.CreateVersion7(),

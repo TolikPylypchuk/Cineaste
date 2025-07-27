@@ -32,14 +32,14 @@ public class SeasonRequestValidatorTests
             .WithErrorCode("Season.Titles.Distinct.Names");
     }
 
-    [Property(DisplayName = "Validator should validate that titles have distinct priorities")]
-    public void ValidatorShouldValidateTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
+    [Property(DisplayName = "Validator should validate that titles have distinct sequence numbers")]
+    public void ValidatorShouldValidateTitlesDistinctSequenceNumbers(NonEmptyString title1, NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            titles: [title1.Get, title2.Get], differentTitlePriorities: false));
+            titles: [title1.Get, title2.Get], differentTitleSequenceNumbers: false));
 
         result.ShouldHaveValidationErrorFor(req => req.Titles)
-            .WithErrorCode("Season.Titles.Distinct.Priorities");
+            .WithErrorCode("Season.Titles.Distinct.SequenceNumbers");
     }
 
     [Fact(DisplayName = "Validator should validate that original titles aren't empty")]
@@ -60,14 +60,16 @@ public class SeasonRequestValidatorTests
             .WithErrorCode("Season.OriginalTitles.Distinct.Names");
     }
 
-    [Property(DisplayName = "Validator should validate that original titles have distinct priorities")]
-    public void ValidatorShouldValidateOriginalTitlesDistinctPriorities(NonEmptyString title1, NonEmptyString title2)
+    [Property(DisplayName = "Validator should validate that original titles have distinct sequence numbers")]
+    public void ValidatorShouldValidateOriginalTitlesDistinctSequenceNumbers(
+        NonEmptyString title1,
+        NonEmptyString title2)
     {
         var result = validator.TestValidate(this.Request(
-            originalTitles: [title1.Get, title2.Get], differentOriginalTitlePriorities: false));
+            originalTitles: [title1.Get, title2.Get], differentOriginalTitleSequenceNumbers: false));
 
         result.ShouldHaveValidationErrorFor(req => req.OriginalTitles)
-            .WithErrorCode("Season.OriginalTitles.Distinct.Priorities");
+            .WithErrorCode("Season.OriginalTitles.Distinct.SequenceNumbers");
     }
 
     [Fact(DisplayName = "Validator should validate titles")]
@@ -197,9 +199,9 @@ public class SeasonRequestValidatorTests
 
     private SeasonRequest Request(
         IEnumerable<string>? titles = null,
-        bool differentTitlePriorities = true,
+        bool differentTitleSequenceNumbers = true,
         IEnumerable<string>? originalTitles = null,
-        bool differentOriginalTitlePriorities = true,
+        bool differentOriginalTitleSequenceNumbers = true,
         int sequenceNumber = 1,
         SeasonWatchStatus watchStatus = SeasonWatchStatus.NotWatched,
         SeasonReleaseStatus releaseStatus = SeasonReleaseStatus.Finished,
@@ -208,8 +210,8 @@ public class SeasonRequestValidatorTests
         ) =>
         new(
             null,
-            TitleRequests(titles, differentTitlePriorities),
-            TitleRequests(originalTitles, differentOriginalTitlePriorities),
+            TitleRequests(titles, differentTitleSequenceNumbers),
+            TitleRequests(originalTitles, differentOriginalTitleSequenceNumbers),
             sequenceNumber,
             watchStatus,
             releaseStatus,

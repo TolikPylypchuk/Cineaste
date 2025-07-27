@@ -6,9 +6,6 @@ namespace Cineaste.Client.Components.Forms;
 public partial class FranchiseForm
 {
     [Parameter]
-    public required Guid ListId { get; set; }
-
-    [Parameter]
     public ListItemModel? ListItem { get; set; }
 
     [Parameter]
@@ -40,7 +37,7 @@ public partial class FranchiseForm
     {
         base.OnParametersSet();
 
-        this.FormModel = new(this.ListId, this.AvailableMovieKinds.First(), FranchiseKindSource.Movie);
+        this.FormModel = new(this.AvailableMovieKinds.First(), FranchiseKindSource.Movie);
 
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
@@ -121,11 +118,11 @@ public partial class FranchiseForm
         this.ClearValidation();
     }
 
-    private async Task Delete()
+    private async Task Remove()
     {
         bool? delete = await this.DialogService.ShowMessageBox(
-            title: this.Loc["FranchiseForm.DeleteDialog.Title"],
-            markupMessage: new MarkupString(this.Loc["FranchiseForm.DeleteDialog.Body"]),
+            title: this.Loc["FranchiseForm.RemoveDialog.Title"],
+            markupMessage: new MarkupString(this.Loc["FranchiseForm.RemoveDialog.Body"]),
             yesText: this.Loc["Confirmation.Confirm"],
             noText: this.Loc["Confirmation.Cancel"]);
 

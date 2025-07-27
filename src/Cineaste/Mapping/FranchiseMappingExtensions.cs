@@ -55,13 +55,13 @@ public static class FranchiseMappingExtensions
             switch (item.Type)
             {
                 case FranchiseItemType.Movie:
-                    franchise.AddMovie(moviesById[Id.For<Movie>(item.Id)], item.ShouldDisplayNumber);
+                    franchise.AttachMovie(moviesById[Id.For<Movie>(item.Id)], item.ShouldDisplayNumber);
                     break;
                 case FranchiseItemType.Series:
-                    franchise.AddSeries(seriesById[Id.For<Series>(item.Id)], item.ShouldDisplayNumber);
+                    franchise.AttachSeries(seriesById[Id.For<Series>(item.Id)], item.ShouldDisplayNumber);
                     break;
                 case FranchiseItemType.Franchise:
-                    franchise.AddFranchise(franchisesById[Id.For<Franchise>(item.Id)], item.ShouldDisplayNumber);
+                    franchise.AttachFranchise(franchisesById[Id.For<Franchise>(item.Id)], item.ShouldDisplayNumber);
                     break;
             }
         }
@@ -123,9 +123,9 @@ public static class FranchiseMappingExtensions
 
         var removedItems = franchise.RemoveMissingItems(items);
 
-        UpdateItems(movies, franchise.FindMovie, franchise.AddMovie, items, FranchiseItemType.Movie);
-        UpdateItems(series, franchise.FindSeries, franchise.AddSeries, items, FranchiseItemType.Series);
-        UpdateItems(franchises, franchise.FindFranchise, franchise.AddFranchise, items, FranchiseItemType.Franchise);
+        UpdateItems(movies, franchise.FindMovie, franchise.AttachMovie, items, FranchiseItemType.Movie);
+        UpdateItems(series, franchise.FindSeries, franchise.AttachSeries, items, FranchiseItemType.Series);
+        UpdateItems(franchises, franchise.FindFranchise, franchise.AttachFranchise, items, FranchiseItemType.Franchise);
 
         franchise.SetSequenceNumbersForChildren();
         franchise.SetListItemProperties();
@@ -153,7 +153,7 @@ public static class FranchiseMappingExtensions
 
         foreach (var item in items)
         {
-            item.Do(franchise.RemoveMovie, franchise.RemoveSeries, franchise.RemoveFranchise);
+            item.Do(franchise.DetachMovie, franchise.DetachSeries, franchise.DetachFranchise);
             item.SetListItemProperties();
         }
 
