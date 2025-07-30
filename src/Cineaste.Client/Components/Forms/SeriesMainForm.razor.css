@@ -154,6 +154,12 @@
   gap: var(--s2);
 }
 
+.go-to-franchise-container {
+  display: flex;
+  justify-content: center;
+  margin-block: var(--s2);
+}
+
 .remove-container {
   display: flex;
   justify-content: center;

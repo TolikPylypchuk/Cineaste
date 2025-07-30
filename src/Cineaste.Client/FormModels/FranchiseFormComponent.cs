@@ -4,6 +4,7 @@ public sealed record FranchiseFormComponent(
     Guid Id,
     FranchiseItemType Type,
     string Title,
-    string Years,
+    int? StartYear,
+    int? EndYear,
     int SequenceNumber,
     int? DisplayNumber);

@@ -195,7 +195,7 @@ public sealed class CineasteList : Entity<CineasteList>
         this.items.Clear();
         this.items.AddRange(newItems);
 
-        int sequenceNumber = 1;
+        int sequenceNumber = FirstSequenceNumber;
         foreach (var item in this.items)
         {
             item.SequenceNumber = item.IsShown ? sequenceNumber++ : 0;

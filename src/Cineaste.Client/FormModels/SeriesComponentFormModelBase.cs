@@ -17,7 +17,7 @@ public abstract class SeriesComponentFormModelBase<TRequest, TModel>
     public int SequenceNumber { get; set; }
 
     public bool IsFirst =>
-        this.SequenceNumber == 1;
+        this.SequenceNumber == FirstSequenceNumber;
 
     public bool IsLast =>
         this.SequenceNumber == this.lastSequenceNumber();

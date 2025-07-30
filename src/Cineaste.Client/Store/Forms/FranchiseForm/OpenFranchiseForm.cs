@@ -4,9 +4,28 @@ namespace Cineaste.Client.Store.Forms.FranchiseForm;
 
 public static class OpenFranchiseFormReducers
 {
-    [ReducerMethod(typeof(StartAddingFranchiseAction))]
-    public static FranchiseFormState ReduceStartAddingFranchiseAction(FranchiseFormState _) =>
-        new() { Fetch = ApiCall.Success() };
+    [ReducerMethod]
+    public static FranchiseFormState ReduceStartAddingFranchiseAction(
+        FranchiseFormState _,
+        StartAddingFranchiseAction action) =>
+        new()
+        {
+            Fetch = ApiCall.Success(),
+            InitialItemId = action.Item.Id,
+            Model = new(
+                Guid.Empty,
+                [action.Title],
+                [action.OriginalTitle],
+                [action.Item],
+                action.Kind,
+                action.KindSource,
+                ShowTitles: true,
+                IsLooselyConnected: false,
+                ContinueNumbering: false,
+                ListItemColor: String.Empty,
+                ListSequenceNumber: 0,
+                FranchiseItem: null)
+        };
 
     [ReducerMethod]
     public static FranchiseFormState ReduceSelectItemAction(FranchiseFormState state, SelectItemAction action) =>
@@ -15,7 +34,7 @@ public static class OpenFranchiseFormReducers
             : state;
 
     [ReducerMethod(typeof(GoToListItemAction))]
-    public static FranchiseFormState ReduceGoToFranchiseAction(FranchiseFormState _) =>
+    public static FranchiseFormState ReduceGoToListItemAction(FranchiseFormState _) =>
         new() { Fetch = ApiCall.Success() };
 
     [ReducerMethod(typeof(GoToFranchiseComponentAction))]

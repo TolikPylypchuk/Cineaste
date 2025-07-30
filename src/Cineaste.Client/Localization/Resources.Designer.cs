@@ -403,6 +403,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to franchise.
+        /// </summary>
+        public static string FranchiseForm_GoToFranchise {
+            get {
+                return ResourceManager.GetString("FranchiseForm.GoToFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kind.
         /// </summary>
         public static string FranchiseForm_Kind {
@@ -502,11 +511,20 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show titles.
+        ///   Looks up a localized string similar to Show titles in the list.
         /// </summary>
         public static string FranchiseForm_ShowTitles {
             get {
                 return ResourceManager.GetString("FranchiseForm.ShowTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start franchise.
+        /// </summary>
+        public static string FranchiseForm_StartFranchise {
+            get {
+                return ResourceManager.GetString("FranchiseForm.StartFranchise", resourceCulture);
             }
         }
         
@@ -790,6 +808,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to franchise.
+        /// </summary>
+        public static string MovieForm_GoToFranchise {
+            get {
+                return ResourceManager.GetString("MovieForm.GoToFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IMDb ID.
         /// </summary>
         public static string MovieForm_ImdbId {
@@ -921,6 +948,15 @@ namespace Cineaste.Client.Localization {
         public static string MovieForm_RottenTomatoesId {
             get {
                 return ResourceManager.GetString("MovieForm.RottenTomatoesId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start franchise.
+        /// </summary>
+        public static string MovieForm_StartFranchise {
+            get {
+                return ResourceManager.GetString("MovieForm.StartFranchise", resourceCulture);
             }
         }
         
@@ -1312,6 +1348,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to franchise.
+        /// </summary>
+        public static string SeriesForm_GoToFranchise {
+            get {
+                return ResourceManager.GetString("SeriesForm.GoToFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IMDb ID.
         /// </summary>
         public static string SeriesForm_ImdbId {
@@ -1452,6 +1497,15 @@ namespace Cineaste.Client.Localization {
         public static string SeriesForm_RottenTomatoesId {
             get {
                 return ResourceManager.GetString("SeriesForm.RottenTomatoesId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start franchise.
+        /// </summary>
+        public static string SeriesForm_StartFranchise {
+            get {
+                return ResourceManager.GetString("SeriesForm.StartFranchise", resourceCulture);
             }
         }
         

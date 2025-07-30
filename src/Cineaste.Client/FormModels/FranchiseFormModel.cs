@@ -136,14 +136,14 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
         {
             foreach (var item in franchise.Items)
             {
-                string years = item.StartYear is int startYear && item.EndYear is int endYear
-                    ? startYear == endYear
-                        ? startYear.ToString()
-                        : $"{startYear}-{endYear}"
-                    : String.Empty;
-
                 this.components.Add(new FranchiseFormComponent(
-                    item.Id, item.Type, item.Title, years, item.SequenceNumber, item.DisplayNumber));
+                    item.Id,
+                    item.Type,
+                    item.Title,
+                    item.StartYear,
+                    item.EndYear,
+                    item.SequenceNumber,
+                    item.DisplayNumber));
             }
         }
 

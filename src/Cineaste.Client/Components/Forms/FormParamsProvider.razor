@@ -1,6 +1,6 @@
 @typeparam TFormModel where TFormModel : FormModelBase<TRequest, TModel>
 @typeparam TRequest where TRequest : IValidatable<TRequest>
-@typeparam TModel
+@typeparam TModel where TModel : IIdentifyableModel
 @typeparam TState
 
 <CascadingValue Name="@CascadingParameters.ValidationExecutor" Value="@this.For" IsFixed="true">

@@ -15,7 +15,7 @@ public sealed record SeriesModel(
     string? RottenTomatoesId,
     string ListItemColor,
     int ListSequenceNumber,
-    FranchiseItemInfoModel? FranchiseItem) : ITitledModel
+    FranchiseItemInfoModel? FranchiseItem) : IIdentifyableModel, ITitledModel
 {
     [JsonIgnore]
     public ImmutableList<ISeriesComponentModel> Components =>

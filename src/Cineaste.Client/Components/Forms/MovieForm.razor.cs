@@ -154,6 +154,30 @@ public partial class MovieForm
         }
     }
 
+    private void StartAddingFranchise()
+    {
+        if (!this.FormModel.IsNew && !this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is null &&
+            this.FormModel.BackingModel is
+                { Id: var id, Titles: [var title, ..], OriginalTitles: [var originalTitle, ..], Year: int year })
+        {
+            var action = new StartAddingFranchiseAction(
+                title,
+                originalTitle,
+                new FranchiseItemModel(
+                    id,
+                    FirstSequenceNumber,
+                    FirstSequenceNumber,
+                    title.Name,
+                    year,
+                    year,
+                    FranchiseItemType.Movie),
+                this.FormModel.Kind,
+                FranchiseKindSource.Movie);
+
+            this.Dispatcher.Dispatch(action);
+        }
+    }
+
     private void GoToNextComponent()
     {
         if (this.FormModel.ParentFranchiseId is Guid franchiseId && this.FormModel.SequenceNumber is int num)

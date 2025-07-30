@@ -8,6 +8,7 @@ namespace Cineaste.Client.FormModels;
 
 public abstract partial class FormModelBase<TRequest, TModel> : INotifyPropertyChanged
     where TRequest : IValidatable<TRequest>
+    where TModel : IIdentifyableModel
 {
     private bool isInitialized = false;
     private TRequest request = default!;
@@ -27,7 +28,11 @@ public abstract partial class FormModelBase<TRequest, TModel> : INotifyPropertyC
     [DoNotNotify]
     public IReadOnlySet<string> ValidationErrors { get; private set; } = ImmutableHashSet<string>.Empty;
 
-    public bool HasChanges => !Equals(this.request, this.requestToCompare);
+    public bool HasChanges =>
+        this.IsNew || !Equals(this.request, this.requestToCompare);
+
+    public bool IsNew =>
+        this.BackingModel is null || this.BackingModel is { Id: var id } && id == Guid.Empty;
 
     public void CopyFrom(TModel? model)
     {

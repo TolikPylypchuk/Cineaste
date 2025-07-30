@@ -13,4 +13,4 @@ public sealed record MovieModel(
     string ListItemColor,
     int ListSequenceNumber,
     FranchiseItemInfoModel? FranchiseItem
-) : ITitledModel;
+) : IIdentifyableModel, ITitledModel;

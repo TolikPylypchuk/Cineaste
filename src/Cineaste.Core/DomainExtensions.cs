@@ -87,7 +87,7 @@ public static class DomainExtensions
     }
 
     public static bool IsFirst(this FranchiseItem? item) =>
-        item is not null && item.SequenceNumber == 1;
+        item is not null && item.SequenceNumber == FirstSequenceNumber;
 
     public static bool IsLast(this FranchiseItem? item) =>
         item is not null && item.SequenceNumber == item.ParentFranchise.Children.Count;
@@ -150,6 +150,16 @@ public static class DomainExtensions
             : null;
     }
 
+    public static void SetListItemProperties(this Franchise franchise)
+    {
+        franchise.ListItem?.SetProperties(franchise);
+
+        foreach (var item in franchise.Children)
+        {
+            item.SetListItemProperties();
+        }
+    }
+
     public static int GetStartYear(this FranchiseItem item) =>
         item.Select(
             movie => movie.Year,
@@ -161,4 +171,10 @@ public static class DomainExtensions
             movie => movie.Year,
             series => series.EndYear,
             franchise => franchise.GetLastChild()?.GetEndYear() ?? 0);
+
+    public static void SetListItemProperties(this FranchiseItem item) =>
+        item.Do(
+            movie => movie.ListItem?.SetProperties(movie),
+            series => series.ListItem?.SetProperties(series),
+            franchise => franchise.SetListItemProperties());
 }

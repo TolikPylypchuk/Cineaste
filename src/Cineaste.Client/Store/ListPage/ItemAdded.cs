@@ -41,7 +41,7 @@ public static class ItemAddedReducers
                 state with
                 {
                     SelectedItem = franchise.ShowTitles ? franchise.ToListItemModel() : null,
-                    SelectionMode = franchise.ShowTitles ? ListPageSelectionMode.Franchise : ListPageSelectionMode.None
+                    SelectionMode = ListPageSelectionMode.Franchise
                 },
             onFailure: _ => state);
 }

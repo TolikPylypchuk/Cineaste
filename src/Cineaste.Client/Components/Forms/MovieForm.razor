@@ -3,7 +3,7 @@
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
         <div class="form-header">
-            @if (!this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is not null)
+            @if (!this.FormModel.IsNew && !this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is not null)
             {
                 <MudIconButton
                     Icon="@Icons.Material.Filled.KeyboardArrowUp"
@@ -177,7 +177,32 @@
                         />
                     </div>
 
-                    @if (this.ListItem is not null)
+                    @if (!(this.FormModel.IsNew || this.FormModel.HasChanges))
+                    {
+                        <div class="go-to-franchise-container">
+                            @if (this.FormModel.ParentFranchiseId is not null)
+                            {
+                                <MudButton
+                                    Variant="Variant.Filled"
+                                    Color="Color.Surface"
+                                    @onclick="@this.GoToParentFranchise"
+                                >
+                                    @this.Loc["MovieForm.GoToFranchise"]
+                                </MudButton>
+                            } else
+                            {
+                                <MudButton
+                                    Variant="Variant.Filled"
+                                    Color="Color.Surface"
+                                    @onclick="@this.StartAddingFranchise"
+                                >
+                                    @this.Loc["MovieForm.StartFranchise"]
+                                </MudButton>
+                            }
+                        </div>
+                    }
+
+                    @if (!this.FormModel.IsNew)
                     {
                         <div class="remove-container">
                             <MudButton

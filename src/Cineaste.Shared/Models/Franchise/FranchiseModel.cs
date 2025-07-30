@@ -12,7 +12,7 @@ public record FranchiseModel(
     bool ContinueNumbering,
     string ListItemColor,
     int ListSequenceNumber,
-    FranchiseItemInfoModel? FranchiseItem) : ITitledModel;
+    FranchiseItemInfoModel? FranchiseItem) : IIdentifyableModel, ITitledModel;
 
 public record FranchiseItemModel(
     Guid Id,
@@ -21,4 +21,4 @@ public record FranchiseItemModel(
     string Title,
     int? StartYear,
     int? EndYear,
-    FranchiseItemType Type);
+    FranchiseItemType Type) : IIdentifyableModel;

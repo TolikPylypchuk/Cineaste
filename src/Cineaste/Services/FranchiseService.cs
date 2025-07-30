@@ -162,8 +162,28 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         await this.dbContext.Entry(list)
             .Collection(list => list.Items)
             .Query()
+            .Include(item => item.Movie)
+                .ThenInclude(movie => movie!.AllTitles)
+            .Include(item => item.Movie)
+                .ThenInclude(movie => movie!.FranchiseItem)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.FranchiseItem)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Seasons)
+                    .ThenInclude(season => season.Periods)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.Seasons)
+                    .ThenInclude(season => season.AllTitles)
+            .Include(item => item.Series)
+                .ThenInclude(series => series!.SpecialEpisodes)
+                    .ThenInclude(episode => episode.AllTitles)
             .Include(item => item.Franchise)
                 .ThenInclude(franchise => franchise!.AllTitles)
+            .Include(item => item.Franchise)
+                .ThenInclude(franchise => franchise!.FranchiseItem)
+            .AsSplitQuery()
             .LoadAsync(token);
 
         return list;
@@ -221,6 +241,16 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
             throw this.NotFound(missingMovieIds, missingSeriesIds, missingFranchiseIds);
         }
 
+        foreach (var s in series)
+        {
+            await this.LoadSeriesComponents(s, token);
+        }
+
+        foreach (var franchise in franchises)
+        {
+            await this.LoadFullFranchise(franchise, token);
+        }
+
         return (movies, series, franchises);
     }
 
@@ -245,6 +275,22 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         var missingIds = ids.Except(items.Select(item => item.Id)).ToImmutableSortedSet();
 
         return (items, missingIds);
+    }
+
+    private async Task LoadSeriesComponents(Series series, CancellationToken token)
+    {
+        await this.dbContext.Entry(series)
+            .Collection(s => s.Seasons)
+            .Query()
+            .Include(s => s.Periods)
+            .Include(s => s.AllTitles)
+            .LoadAsync(token);
+
+        await this.dbContext.Entry(series)
+            .Collection(s => s.SpecialEpisodes)
+            .Query()
+            .Include(e => e.AllTitles)
+            .LoadAsync(token);
     }
 
     private void EnsureAccessibleInList(Franchise franchise)

@@ -15,12 +15,12 @@ public static class OpenSeriesFormReducers
             : state;
 
     [ReducerMethod(typeof(GoToListItemAction))]
-    public static SeriesFormState ReduceGoToFranchiseAction(SeriesFormState _) =>
-        new() { Fetch = ApiCall.Success() };
+    public static SeriesFormState ReduceGoToListItemAction(SeriesFormState _) =>
+        new() { Fetch = ApiCall.InProgress() };
 
     [ReducerMethod(typeof(GoToFranchiseComponentAction))]
     public static SeriesFormState ReduceGoToFranchiseComponentAction(SeriesFormState _) =>
-        new() { Fetch = ApiCall.Success() };
+        new() { Fetch = ApiCall.InProgress() };
 }
 
 public sealed class OpenSeriesFormEffects

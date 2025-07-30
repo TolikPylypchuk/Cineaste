@@ -54,7 +54,7 @@ public abstract class TitledEntity<TEntity> : Entity<TEntity>
     {
         this.allTitles.RemoveAll(title => title.Name == name && title.IsOriginal == isOriginal);
 
-        int sequenceNumber = 1;
+        int sequenceNumber = FirstSequenceNumber;
         foreach (var title in this.allTitles.Where(title => title.IsOriginal == isOriginal))
         {
             title.SequenceNumber = sequenceNumber++;

@@ -3,7 +3,7 @@
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
         <div class="form-header">
-            @if (!this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is not null)
+            @if (!this.FormModel.IsNew && !this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is not null)
             {
                 <MudIconButton
                     Icon="@Icons.Material.Filled.KeyboardArrowUp"
@@ -192,7 +192,21 @@
                             </TemplateColumn>
 
                             <PropertyColumn Property="@(c => c.Title)" />
-                            <PropertyColumn Property="@(c => c.Years)" />
+
+                            <TemplateColumn>
+                                <CellTemplate>
+                                    @if (context.Item.StartYear is int startYear && context.Item.EndYear is int endYear)
+                                    {
+                                        @if (startYear == endYear)
+                                        {
+                                            @startYear
+                                        } else
+                                        {
+                                            @($"{startYear}-{endYear}")
+                                        }
+                                    }
+                                </CellTemplate>
+                            </TemplateColumn>
 
                             <TemplateColumn>
                                 <CellTemplate>
@@ -233,7 +247,32 @@
                         </Columns>
                     </MudDataGrid>
 
-                    @if (this.ListItem is not null)
+                    @if (!(this.FormModel.IsNew || this.FormModel.HasChanges))
+                    {
+                        <div class="go-to-franchise-container">
+                            @if (this.FormModel.ParentFranchiseId is not null)
+                            {
+                                <MudButton
+                                    Variant="Variant.Filled"
+                                    Color="Color.Surface"
+                                    @onclick="@this.GoToParentFranchise"
+                                >
+                                    @this.Loc["FranchiseForm.GoToFranchise"]
+                                </MudButton>
+                            } else
+                            {
+                                <MudButton
+                                    Variant="Variant.Filled"
+                                    Color="Color.Surface"
+                                    @onclick="@this.StartAddingFranchise"
+                                >
+                                    @this.Loc["FranchiseForm.StartFranchise"]
+                                </MudButton>
+                            }
+                        </div>
+                    }
+
+                    @if (!this.FormModel.IsNew)
                     {
                         <div class="remove-container">
                             <MudButton

@@ -181,7 +181,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
                 franchise =>
                 {
                     franchise.FranchiseItem = null;
-                    franchise.ListItem!.SetProperties(franchise);
+                    franchise.SetListItemProperties();
                 });
         }
 
@@ -190,8 +190,8 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
 
     public void SetSequenceNumbersForChildren()
     {
-        int sequenceNumber = 1;
-        int displayNumber = 1;
+        int sequenceNumber = FirstSequenceNumber;
+        int displayNumber = FirstSequenceNumber;
 
         foreach (var item in this.children.OrderBy(item => item.SequenceNumber).ToList())
         {

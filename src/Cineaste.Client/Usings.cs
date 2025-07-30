@@ -28,3 +28,5 @@ global using Microsoft.Extensions.Options;
 global using MudBlazor;
 
 global using Refit;
+
+global using static Cineaste.Basic.Constants;

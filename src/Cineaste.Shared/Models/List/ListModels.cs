@@ -6,7 +6,7 @@ public sealed record ListModel(
     Guid Id,
     ListConfigurationModel Config,
     ImmutableList<ListKindModel> MovieKinds,
-    ImmutableList<ListKindModel> SeriesKinds);
+    ImmutableList<ListKindModel> SeriesKinds) : IIdentifyableModel;
 
 public sealed record ListConfigurationModel(
     string Culture,

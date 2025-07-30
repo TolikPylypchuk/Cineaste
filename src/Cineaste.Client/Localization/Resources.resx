@@ -250,7 +250,7 @@
     <value>Updating the franchise has failed</value>
   </data>
   <data name="FranchiseForm.ShowTitles" xml:space="preserve">
-    <value>Show titles</value>
+    <value>Show titles in the list</value>
   </data>
   <data name="FranchiseForm.Title" xml:space="preserve">
     <value>Title</value>
@@ -347,6 +347,24 @@
   </data>
   <data name="MovieForm.ImdbId" xml:space="preserve">
     <value>IMDb ID</value>
+  </data>
+  <data name="MovieForm.StartFranchise" xml:space="preserve">
+    <value>Start franchise</value>
+  </data>
+  <data name="FranchiseForm.StartFranchise" xml:space="preserve">
+    <value>Start franchise</value>
+  </data>
+  <data name="SeriesForm.StartFranchise" xml:space="preserve">
+    <value>Start franchise</value>
+  </data>
+  <data name="MovieForm.GoToFranchise" xml:space="preserve">
+    <value>Go to franchise</value>
+  </data>
+  <data name="FranchiseForm.GoToFranchise" xml:space="preserve">
+    <value>Go to franchise</value>
+  </data>
+  <data name="SeriesForm.GoToFranchise" xml:space="preserve">
+    <value>Go to franchise</value>
   </data>
   <data name="MovieForm.IsReleased" xml:space="preserve">
     <value>Is released</value>

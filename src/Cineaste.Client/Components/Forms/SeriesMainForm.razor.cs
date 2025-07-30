@@ -78,7 +78,7 @@ public partial class SeriesMainForm
     }
 
     private bool CanMoveUp(ISeriesComponentFormModel component) =>
-        component.SequenceNumber != 1;
+        component.SequenceNumber != FirstSequenceNumber;
 
     private void MoveUp(ISeriesComponentFormModel component) =>
         this.FormModel.MoveComponentUp(component);
@@ -129,6 +129,36 @@ public partial class SeriesMainForm
         if (this.FormModel.ParentFranchiseId is Guid franchiseId)
         {
             this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
+        }
+    }
+
+    private void StartAddingFranchise()
+    {
+        if (!this.FormModel.IsNew && !this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is null &&
+            this.FormModel.BackingModel is
+            {
+                Id: var id,
+                Titles: [var title, ..],
+                OriginalTitles: [var originalTitle, ..],
+                StartYear: int startYear,
+                EndYear: int endYear
+            })
+        {
+            var action = new StartAddingFranchiseAction(
+                title,
+                originalTitle,
+                new FranchiseItemModel(
+                    id,
+                    FirstSequenceNumber,
+                    FirstSequenceNumber,
+                    title.Name,
+                    startYear,
+                    endYear,
+                    FranchiseItemType.Series),
+                this.FormModel.Kind,
+                FranchiseKindSource.Series);
+
+            this.Dispatcher.Dispatch(action);
         }
     }
 

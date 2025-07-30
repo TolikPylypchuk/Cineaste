@@ -20,7 +20,7 @@ public abstract class Kind<TKind> : Entity<TKind>, IKind
     private Color watchedColor;
     private Color notWatchedColor;
     private Color notReleasedColor;
-    private int sequenceNumber = 1;
+    private int sequenceNumber = FirstSequenceNumber;
 
     public string Name
     {

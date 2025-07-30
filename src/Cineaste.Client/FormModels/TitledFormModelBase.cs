@@ -2,7 +2,7 @@ namespace Cineaste.Client.FormModels;
 
 public abstract class TitledFormModelBase<TRequest, TModel> : FormModelBase<TRequest, TModel>
     where TRequest : IValidatable<TRequest>, ITitledRequest
-    where TModel : ITitledModel
+    where TModel : IIdentifyableModel, ITitledModel
 {
     public IList<string> Titles { get; }
     public IList<string> OriginalTitles { get; }

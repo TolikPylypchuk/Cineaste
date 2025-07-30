@@ -6,6 +6,6 @@ public sealed record ListKindModel(
     string WatchedColor,
     string NotWatchedColor,
     string NotReleasedColor,
-    ListKindTarget Target);
+    ListKindTarget Target): IIdentifyableModel;
 
 public enum ListKindTarget { Movie, Series }

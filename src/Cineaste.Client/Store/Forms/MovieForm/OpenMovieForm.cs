@@ -15,13 +15,12 @@ public static class OpenMovieFormReducers
             : state;
 
     [ReducerMethod(typeof(GoToListItemAction))]
-    public static MovieFormState ReduceGoToFranchiseAction(MovieFormState _) =>
-        new() { Fetch = ApiCall.Success() };
+    public static MovieFormState ReduceGoToListItemAction(MovieFormState _) =>
+        new() { Fetch = ApiCall.InProgress() };
 
     [ReducerMethod(typeof(GoToFranchiseComponentAction))]
     public static MovieFormState ReduceGoToFranchiseComponentAction(MovieFormState _) =>
-        new() { Fetch = ApiCall.Success() };
-
+        new() { Fetch = ApiCall.InProgress() };
 }
 
 public sealed class OpenMovieFormEffects

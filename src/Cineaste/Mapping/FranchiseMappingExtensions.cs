@@ -187,35 +187,12 @@ public static class FranchiseMappingExtensions
 
     private static void ReplaceTitles(this Franchise franchise, FranchiseRequest request)
     {
-        if (franchise.ShowTitles)
-        {
-            franchise.ReplaceTitles(
-                request.Titles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
-                isOriginal: false);
+        franchise.ReplaceTitles(
+            request.Titles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
+            isOriginal: false);
 
-            franchise.ReplaceTitles(
-                request.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
-                isOriginal: true);
-        } else
-        {
-            franchise.ReplaceTitles([], isOriginal: false);
-            franchise.ReplaceTitles([], isOriginal: true);
-        }
+        franchise.ReplaceTitles(
+            request.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
+            isOriginal: true);
     }
-
-    private static void SetListItemProperties(this Franchise franchise)
-    {
-        franchise.ListItem?.SetProperties(franchise);
-
-        foreach (var item in franchise.Children)
-        {
-            item.SetListItemProperties();
-        }
-    }
-
-    private static void SetListItemProperties(this FranchiseItem item) =>
-        item.Do(
-            movie => movie.ListItem?.SetProperties(movie),
-            series => series.ListItem?.SetProperties(series),
-            franchise => franchise.ListItem?.SetProperties(franchise));
 }

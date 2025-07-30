@@ -38,6 +38,7 @@ public partial class FranchiseForm
         base.OnParametersSet();
 
         this.FormModel = new(this.AvailableMovieKinds.First(), FranchiseKindSource.Movie);
+        this.FormModel.CopyFrom(this.State.Value.Model);
 
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
@@ -81,7 +82,7 @@ public partial class FranchiseForm
     }
 
     private bool CanMoveUp(FranchiseFormComponent component) =>
-        component.SequenceNumber != 1;
+        component.SequenceNumber != FirstSequenceNumber;
 
     private void MoveUp(FranchiseFormComponent component) =>
         this.FormModel.MoveComponentUp(component);
@@ -116,6 +117,11 @@ public partial class FranchiseForm
     {
         this.SetPropertyValues();
         this.ClearValidation();
+
+        if (this.State.Value.InitialItemId is Guid id)
+        {
+            this.Dispatcher.Dispatch(new GoToListItemAction(id));
+        }
     }
 
     private async Task Remove()
@@ -143,6 +149,37 @@ public partial class FranchiseForm
         if (this.FormModel.ParentFranchiseId is Guid franchiseId)
         {
             this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
+        }
+    }
+
+    private void StartAddingFranchise()
+    {
+        if (!this.FormModel.IsNew && !this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is null &&
+            this.FormModel.BackingModel is
+            {
+                Id: var id,
+                Titles: [var title, ..],
+                OriginalTitles: [var originalTitle, ..]
+            })
+        {
+            var startYear = this.FormModel.Components.Select(component => component.StartYear).Min() ?? 0;
+            var endYear = this.FormModel.Components.Select(component => component.EndYear).Max() ?? 0;
+
+            var action = new StartAddingFranchiseAction(
+                title,
+                originalTitle,
+                new FranchiseItemModel(
+                    id,
+                    FirstSequenceNumber,
+                    FirstSequenceNumber,
+                    title.Name,
+                    startYear,
+                    endYear,
+                    FranchiseItemType.Franchise),
+                this.FormModel.Kind,
+                this.FormModel.KindSource);
+
+            this.Dispatcher.Dispatch(action);
         }
     }
 

@@ -6,7 +6,12 @@ public sealed record StartAddingMovieAction;
 
 public sealed record StartAddingSeriesAction;
 
-public sealed record StartAddingFranchiseAction;
+public sealed record StartAddingFranchiseAction(
+    TitleModel Title,
+    TitleModel OriginalTitle,
+    FranchiseItemModel Item,
+    ListKindModel Kind,
+    FranchiseKindSource KindSource);
 
 public sealed record CloseItemAction;
 

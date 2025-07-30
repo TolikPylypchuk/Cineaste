@@ -9,6 +9,8 @@ public static partial class Constants
 
     public const string SeasonTitleNumberPlaceholder = "#";
 
+    public const int FirstSequenceNumber = 1;
+
     public const int MaxNameLength = 100;
     public const int MinYear = 1900;
 

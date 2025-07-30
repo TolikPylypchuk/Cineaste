@@ -4,6 +4,7 @@ public abstract class CineasteForm<TFormModel, TRequest, TModel, TState>
     : StatefulComponent<TState>, IValidationExecutor
     where TFormModel : FormModelBase<TRequest, TModel>
     where TRequest : IValidatable<TRequest>
+    where TModel : IIdentifyableModel
 {
     private IValidationExecutor? validationParent;
 
