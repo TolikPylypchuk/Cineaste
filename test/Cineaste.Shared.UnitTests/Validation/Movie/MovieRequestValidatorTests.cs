@@ -189,5 +189,6 @@ public sealed class MovieRequestValidatorTests
             isReleased,
             Guid.CreateVersion7(),
             imdbId,
-            rottenTomatoesId);
+            rottenTomatoesId,
+            null);
 }

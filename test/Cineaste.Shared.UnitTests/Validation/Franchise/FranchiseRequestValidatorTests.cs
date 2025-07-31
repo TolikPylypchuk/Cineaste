@@ -145,5 +145,6 @@ public class FranchiseRequestValidatorTests
             kindSource,
             showTitles,
             isLooselyConnected,
-            continueNumbering);
+            continueNumbering,
+            null);
 }

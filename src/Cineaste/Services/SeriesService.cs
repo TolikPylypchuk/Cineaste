@@ -24,6 +24,13 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
 
         var series = request.ToSeries(Id.Create<Series>(), kind);
 
+        if (request.Value.ParentFranchiseId is Guid franchiseId)
+        {
+            var franchise = this.FindFranchise(list, Id.For<Franchise>(franchiseId));
+            var franchiseItem = franchise.AttachSeries(series, true);
+            this.dbContext.FranchiseItems.Add(franchiseItem);
+        }
+
         list.AddSeries(series);
         list.SortItems();
 
@@ -179,10 +186,12 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
                 .ThenInclude(movie => movie!.AllTitles)
             .Include(item => item.Movie)
                 .ThenInclude(movie => movie!.FranchiseItem)
+                    .ThenInclude(item => item!.ParentFranchise)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.AllTitles)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.FranchiseItem)
+                    .ThenInclude(item => item!.ParentFranchise)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.Seasons)
                     .ThenInclude(season => season.Periods)
@@ -196,6 +205,7 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
                 .ThenInclude(franchise => franchise!.AllTitles)
             .Include(item => item.Franchise)
                 .ThenInclude(franchise => franchise!.FranchiseItem)
+                    .ThenInclude(item => item!.ParentFranchise)
             .AsSplitQuery()
             .LoadAsync(token);
 
@@ -207,6 +217,13 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
             .FirstOrDefault(kind => kind.Id == id)
             ?? throw this.NotFound(id);
 
+    private Franchise FindFranchise(CineasteList list, Id<Franchise> id) =>
+        list.Items
+            .Select(item => item.Franchise)
+            .WhereNotNull()
+            .FirstOrDefault(franchise => franchise.Id == id)
+            ?? throw this.NotFound(id);
+
     private NotFoundException ListNotFound() =>
         new(Resources.List, "Could not find the list");
 
@@ -216,5 +233,9 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
 
     private CineasteException NotFound(Id<SeriesKind> id) =>
         new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with ID {id.Value}")
+            .WithProperty(id);
+
+    private CineasteException NotFound(Id<Franchise> id) =>
+        new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id.Value}")
             .WithProperty(id);
 }

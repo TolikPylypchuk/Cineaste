@@ -13,7 +13,12 @@ public static class AddMovieReducers
     [ReducerMethod]
     public static MovieFormState ReduceAddMovieResultAction(MovieFormState state, AddMovieResultAction action) =>
         action.Handle(
-            onSuccess: movie => state with { Add = ApiCall.Success(), Model = movie },
+            onSuccess: movie => state with
+            {
+                InitialParentFranchiseId = null,
+                Add = ApiCall.Success(),
+                Model = movie
+            },
             onFailure: problem => state with { Add = ApiCall.Failure(problem) });
 }
 

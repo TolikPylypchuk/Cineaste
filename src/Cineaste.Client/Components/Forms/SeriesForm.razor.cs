@@ -29,12 +29,28 @@ public partial class SeriesForm
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+        this.InitializeFormModel();
+    }
+
+    private void InitializeFormModel()
+    {
+        if (this.FormModel is not null)
+        {
+            this.FormModel.TitlesUpdated -= this.OnTitlesUpdated;
+            this.FormModel.OriginalTitlesUpdated -= this.OnOriginalTitlesUpdated;
+        }
 
         var config = this.ListConfiguration;
-        this.FormModel = new(this.AvailableKinds.First(), config.DefaultSeasonTitle, config.DefaultSeasonOriginalTitle);
+        this.FormModel = new(
+            this.AvailableKinds.First(),
+            config.DefaultSeasonTitle,
+            config.DefaultSeasonOriginalTitle,
+            this.State.Value.InitialParentFranchiseId);
 
-        this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
-        this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
+        this.FormModel.CopyFrom(this.State.Value.Model);
+
+        this.FormModel.TitlesUpdated += this.OnTitlesUpdated;
+        this.FormModel.OriginalTitlesUpdated += this.OnOriginalTitlesUpdated;
 
         this.SetPropertyValues();
     }
@@ -44,6 +60,12 @@ public partial class SeriesForm
         this.FormModel.CopyFrom(this.State.Value.Model);
         this.UpdateFormTitle();
     }
+
+    private void OnTitlesUpdated(object? sender, EventArgs e) =>
+        this.UpdateFormTitle();
+
+    private void OnOriginalTitlesUpdated(object? sender, EventArgs e) =>
+        this.StateHasChanged();
 
     private void UpdateFormTitle()
     {

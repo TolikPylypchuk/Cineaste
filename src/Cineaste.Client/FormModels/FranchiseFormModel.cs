@@ -21,12 +21,14 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
     public bool IsFirst { get; private set; }
     public bool IsLast { get; private set; }
 
-    public FranchiseFormModel(ListKindModel kind, FranchiseKindSource kindSource)
+    public FranchiseFormModel(ListKindModel kind, FranchiseKindSource kindSource, Guid? parentFranchiseId)
     {
         this.defaultKind = kind;
         this.Kind = kind;
         this.KindSource = kindSource;
         this.Components = new(this.components);
+        this.ParentFranchiseId = parentFranchiseId;
+
         this.FinishInitialization();
     }
 
@@ -42,7 +44,8 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
             this.KindSource,
             this.ShowTitles,
             this.IsLooselyConnected,
-            this.ContinueNumbering);
+            this.ContinueNumbering,
+            this.ParentFranchiseId);
 
     public void MoveComponentUp(FranchiseFormComponent component)
     {
@@ -147,10 +150,13 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
             }
         }
 
-        this.ParentFranchiseId = franchise?.FranchiseItem?.ParentFranchiseId;
-        this.SequenceNumber = franchise?.FranchiseItem?.SequenceNumber;
-        this.IsFirst = franchise?.FranchiseItem?.IsFirstInFranchise ?? false;
-        this.IsLast = franchise?.FranchiseItem?.IsLastInFranchise ?? false;
+        if (franchise?.FranchiseItem is { } franchiseItem)
+        {
+            this.ParentFranchiseId = franchiseItem.ParentFranchiseId;
+            this.SequenceNumber = franchiseItem.SequenceNumber;
+            this.IsFirst = franchiseItem.IsFirstInFranchise;
+            this.IsLast = franchiseItem.IsLastInFranchise;
+        }
     }
 
     private int? Adjust(int? number, Func<int, int> adjuster) =>

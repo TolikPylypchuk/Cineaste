@@ -10,7 +10,8 @@ public sealed record MovieRequest(
     bool IsReleased,
     Guid KindId,
     string? ImdbId,
-    string? RottenTomatoesId) : IValidatable<MovieRequest>, ITitledRequest
+    string? RottenTomatoesId,
+    Guid? ParentFranchiseId) : IValidatable<MovieRequest>, ITitledRequest
 {
     public static IValidator<MovieRequest> Validator { get; } = new MovieRequestValidator();
 }

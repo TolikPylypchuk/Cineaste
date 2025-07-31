@@ -354,6 +354,12 @@
   <data name="FranchiseForm.StartFranchise" xml:space="preserve">
     <value>Start franchise</value>
   </data>
+  <data name="FranchiseForm.AddFranchise" xml:space="preserve">
+    <value>Add new franchise</value>
+  </data>
+  <data name="FranchiseForm.AddMovie" xml:space="preserve">
+    <value>Add new movie</value>
+  </data>
   <data name="SeriesForm.StartFranchise" xml:space="preserve">
     <value>Start franchise</value>
   </data>
@@ -806,5 +812,8 @@
   </data>
   <data name="FranchiseKindSource.Series" xml:space="preserve">
     <value>Series</value>
+  </data>
+  <data name="FranchiseForm.AddSeries" xml:space="preserve">
+    <value>Add new series</value>
   </data>
 </root>

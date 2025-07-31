@@ -11,7 +11,8 @@ public sealed record SeriesRequest(
     ImmutableValueList<SeasonRequest> Seasons,
     ImmutableValueList<SpecialEpisodeRequest> SpecialEpisodes,
     string? ImdbId,
-    string? RottenTomatoesId) : IValidatable<SeriesRequest>, ITitledRequest
+    string? RottenTomatoesId,
+    Guid? ParentFranchiseId) : IValidatable<SeriesRequest>, ITitledRequest
 {
     public static IValidator<SeriesRequest> Validator { get; } = new SeriesRequestValidator();
 }

@@ -1,3 +1,4 @@
+using Cineaste.Client.Store.Forms;
 using Cineaste.Client.Store.Forms.SeriesForm;
 using Cineaste.Client.Store.ListPage;
 
@@ -108,6 +109,11 @@ public partial class SeriesMainForm
     {
         this.ClearValidation();
         await this.Cancel.InvokeAsync();
+
+        if (this.State.Value.InitialParentFranchiseId is Guid franchiseId)
+        {
+            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
+        }
     }
 
     private async Task Remove()
@@ -124,27 +130,24 @@ public partial class SeriesMainForm
         }
     }
 
-    private void GoToParentFranchise()
+    private void StartAddingParentFranchise()
     {
-        if (this.FormModel.ParentFranchiseId is Guid franchiseId)
-        {
-            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
-        }
-    }
-
-    private void StartAddingFranchise()
-    {
-        if (!this.FormModel.IsNew && !this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is null &&
-            this.FormModel.BackingModel is
+        if (this.FormModel is
             {
-                Id: var id,
-                Titles: [var title, ..],
-                OriginalTitles: [var originalTitle, ..],
-                StartYear: int startYear,
-                EndYear: int endYear
+                IsNew: false,
+                HasChanges: false,
+                ParentFranchiseId: null,
+                BackingModel:
+                {
+                    Id: var id,
+                    Titles: [var title, ..],
+                    OriginalTitles: [var originalTitle, ..],
+                    StartYear: int startYear,
+                    EndYear: int endYear
+                }
             })
         {
-            var action = new StartAddingFranchiseAction(
+            var action = new StartAddingParentFranchiseAction(
                 title,
                 originalTitle,
                 new FranchiseItemModel(
@@ -159,6 +162,14 @@ public partial class SeriesMainForm
                 FranchiseKindSource.Series);
 
             this.Dispatcher.Dispatch(action);
+        }
+    }
+
+    private void GoToParentFranchise()
+    {
+        if (this.FormModel.ParentFranchiseId is Guid franchiseId)
+        {
+            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
         }
     }
 

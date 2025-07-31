@@ -450,6 +450,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
             ImmutableList.Create(this.CreateSeasonRequest(1), this.CreateSeasonRequest(2)).AsValue(),
             ImmutableList.Create(this.CreateSpecialEpisodeRequest(3)).AsValue(),
             "tt12345678",
+            null,
             null);
 
     private SeasonRequest CreateSeasonRequest(int num) =>

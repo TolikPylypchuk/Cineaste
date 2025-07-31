@@ -29,7 +29,11 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
     public bool IsFirst { get; private set; }
     public bool IsLast { get; private set; }
 
-    public SeriesFormModel(ListKindModel kind, string defaultSeasonTitle, string defaultSeasonOriginalTitle)
+    public SeriesFormModel(
+        ListKindModel kind,
+        string defaultSeasonTitle,
+        string defaultSeasonOriginalTitle,
+        Guid? parentFranchiseId)
     {
         ArgumentNullException.ThrowIfNull(kind);
         ArgumentNullException.ThrowIfNull(defaultSeasonTitle);
@@ -39,6 +43,7 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
         this.Kind = this.defaultKind;
 
         this.Components = new(this.components);
+        this.ParentFranchiseId = parentFranchiseId;
 
         this.defaultSeasonTitle = defaultSeasonTitle;
         this.defaultSeasonOriginalTitle = defaultSeasonOriginalTitle;
@@ -169,7 +174,8 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
                 .ToImmutableList()
                 .AsValue(),
             this.ImdbId,
-            this.RottenTomatoesId);
+            this.RottenTomatoesId,
+            this.ParentFranchiseId);
 
     protected override void CopyFromModel()
     {
@@ -201,10 +207,13 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
             }
         }
 
-        this.ParentFranchiseId = series?.FranchiseItem?.ParentFranchiseId;
-        this.SequenceNumber = series?.FranchiseItem?.SequenceNumber;
-        this.IsFirst = series?.FranchiseItem?.IsFirstInFranchise ?? false;
-        this.IsLast = series?.FranchiseItem?.IsLastInFranchise ?? false;
+        if (series?.FranchiseItem is { } franchiseItem)
+        {
+            this.ParentFranchiseId = franchiseItem.ParentFranchiseId;
+            this.SequenceNumber = franchiseItem.SequenceNumber;
+            this.IsFirst = franchiseItem.IsFirstInFranchise;
+            this.IsLast = franchiseItem.IsLastInFranchise;
+        }
     }
 
     private int GetSequenceNumberForComponent(ISeriesComponentFormModel component) =>

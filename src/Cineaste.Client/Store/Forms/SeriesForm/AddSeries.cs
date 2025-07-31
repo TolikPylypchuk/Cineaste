@@ -15,7 +15,12 @@ public static class AddSeriesReducers
         SeriesFormState state,
         AddSeriesResultAction action) =>
         action.Handle(
-            onSuccess: series => state with { Add = ApiCall.Success(), Model = series },
+            onSuccess: series => state with
+            {
+                InitialParentFranchiseId = null,
+                Add = ApiCall.Success(),
+                Model = series
+            },
             onFailure: problem => state with { Add = ApiCall.Failure(problem) });
 }
 

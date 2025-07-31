@@ -10,7 +10,8 @@ public record FranchiseRequest(
     FranchiseKindSource KindSource,
     bool ShowTitles,
     bool IsLooselyConnected,
-    bool ContinueNumbering) : IValidatable<FranchiseRequest>, ITitledRequest
+    bool ContinueNumbering,
+    Guid? ParentFranchiseId) : IValidatable<FranchiseRequest>, ITitledRequest
 {
     public static IValidator<FranchiseRequest> Validator { get; } = new FranchiseRequestValidator();
 }

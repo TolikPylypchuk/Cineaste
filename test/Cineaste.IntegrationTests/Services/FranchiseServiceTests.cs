@@ -406,5 +406,6 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
             kindSource,
             showTitles,
             isLooselyConnected,
-            continueNumbering);
+            continueNumbering,
+            null);
 }

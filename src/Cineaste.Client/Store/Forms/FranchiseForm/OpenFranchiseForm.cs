@@ -8,6 +8,12 @@ public static class OpenFranchiseFormReducers
     public static FranchiseFormState ReduceStartAddingFranchiseAction(
         FranchiseFormState _,
         StartAddingFranchiseAction action) =>
+        new() { InitialParentFranchiseId = action.ParentFranchiseId, Fetch = ApiCall.Success() };
+
+    [ReducerMethod]
+    public static FranchiseFormState ReduceStartAddingParentFranchiseAction(
+        FranchiseFormState _,
+        StartAddingParentFranchiseAction action) =>
         new()
         {
             Fetch = ApiCall.Success(),

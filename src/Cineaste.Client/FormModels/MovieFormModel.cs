@@ -21,12 +21,13 @@ public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieMode
     public bool IsFirst { get; private set; }
     public bool IsLast { get; private set; }
 
-    public MovieFormModel(ListKindModel kind)
+    public MovieFormModel(ListKindModel kind, Guid? parentFranchiseId)
     {
         ArgumentNullException.ThrowIfNull(kind);
 
         this.defaultKind = kind;
         this.Kind = this.defaultKind;
+        this.ParentFranchiseId = parentFranchiseId;
 
         this.FinishInitialization();
     }
@@ -40,7 +41,8 @@ public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieMode
             this.IsReleased,
             this.Kind.Id,
             this.ImdbId,
-            this.RottenTomatoesId);
+            this.RottenTomatoesId,
+            this.ParentFranchiseId);
 
     protected override void CopyFromModel()
     {
@@ -55,9 +57,12 @@ public sealed class MovieFormModel : TitledFormModelBase<MovieRequest, MovieMode
         this.ImdbId = movie?.ImdbId ?? String.Empty;
         this.RottenTomatoesId = movie?.RottenTomatoesId ?? String.Empty;
 
-        this.ParentFranchiseId = movie?.FranchiseItem?.ParentFranchiseId;
-        this.SequenceNumber = movie?.FranchiseItem?.SequenceNumber;
-        this.IsFirst = movie?.FranchiseItem?.IsFirstInFranchise ?? false;
-        this.IsLast = movie?.FranchiseItem?.IsLastInFranchise ?? false;
+        if (movie?.FranchiseItem is { } franchiseItem)
+        {
+            this.ParentFranchiseId = franchiseItem.ParentFranchiseId;
+            this.SequenceNumber = franchiseItem.SequenceNumber;
+            this.IsFirst = franchiseItem.IsFirstInFranchise;
+            this.IsLast = franchiseItem.IsLastInFranchise;
+        }
     }
 }

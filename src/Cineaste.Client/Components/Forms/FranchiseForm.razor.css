@@ -166,6 +166,19 @@
   align-items: center;
 }
 
+.add-movie-series-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  justify-content: stretch;
+  gap: var(--s2);
+}
+
+.add-franchise-container {
+  display: flex;
+  justify-content: center;
+  margin-block: var(--s2);
+}
+
 .go-to-franchise-container {
   display: flex;
   justify-content: center;

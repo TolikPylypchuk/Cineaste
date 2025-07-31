@@ -23,6 +23,13 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         var franchise = await this.MapToFranchise(request, list, token);
         this.EnsureAccessibleInList(franchise);
 
+        if (request.Value.ParentFranchiseId is Guid franchiseId)
+        {
+            var parentFranchise = await this.FindFranchise(list, Id.For<Franchise>(franchiseId), token);
+            var franchiseItem = parentFranchise.AttachFranchise(franchise, true);
+            this.dbContext.FranchiseItems.Add(franchiseItem);
+        }
+
         list.AddFranchise(franchise);
         list.SortItems();
 

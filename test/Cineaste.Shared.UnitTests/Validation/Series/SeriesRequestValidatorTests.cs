@@ -258,7 +258,8 @@ public class SeriesRequestValidatorTests
             seasons?.ToImmutableList().AsValue() ?? this.DefaultSeasons(),
             specialEpisodes?.ToImmutableList().AsValue() ?? ImmutableList.Create<SpecialEpisodeRequest>().AsValue(),
             imdbId,
-            rottenTomatoesId);
+            rottenTomatoesId,
+            null);
 
     private ImmutableValueList<SeasonRequest> DefaultSeasons() =>
         ImmutableList.Create(this.Season(1)).AsValue();

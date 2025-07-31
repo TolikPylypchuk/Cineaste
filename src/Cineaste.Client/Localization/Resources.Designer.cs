@@ -349,11 +349,38 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new franchise.
+        /// </summary>
+        public static string FranchiseForm_AddFranchise {
+            get {
+                return ResourceManager.GetString("FranchiseForm.AddFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new movie.
+        /// </summary>
+        public static string FranchiseForm_AddMovie {
+            get {
+                return ResourceManager.GetString("FranchiseForm.AddMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add original title.
         /// </summary>
         public static string FranchiseForm_AddOriginalTitle {
             get {
                 return ResourceManager.GetString("FranchiseForm.AddOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new series.
+        /// </summary>
+        public static string FranchiseForm_AddSeries {
+            get {
+                return ResourceManager.GetString("FranchiseForm.AddSeries", resourceCulture);
             }
         }
         

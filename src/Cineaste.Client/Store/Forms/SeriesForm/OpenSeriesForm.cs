@@ -4,9 +4,9 @@ namespace Cineaste.Client.Store.Forms.SeriesForm;
 
 public static class OpenSeriesFormReducers
 {
-    [ReducerMethod(typeof(StartAddingSeriesAction))]
-    public static SeriesFormState ReduceStartAddingSeriesAction(SeriesFormState _) =>
-        new() { Fetch = ApiCall.Success() };
+    [ReducerMethod]
+    public static SeriesFormState ReduceStartAddingSeriesAction(SeriesFormState _, StartAddingSeriesAction action) =>
+        new() { InitialParentFranchiseId = action.ParentFranchiseId, Fetch = ApiCall.Success() };
 
     [ReducerMethod]
     public static SeriesFormState ReduceSelectItemAction(SeriesFormState state, SelectItemAction action) =>

@@ -4,9 +4,9 @@ namespace Cineaste.Client.Store.Forms.MovieForm;
 
 public static class OpenMovieFormReducers
 {
-    [ReducerMethod(typeof(StartAddingMovieAction))]
-    public static MovieFormState ReduceStartAddingMovieAction(MovieFormState _) =>
-        new() { Fetch = ApiCall.Success() };
+    [ReducerMethod]
+    public static MovieFormState ReduceStartAddingMovieAction(MovieFormState _, StartAddingMovieAction action) =>
+        new() { InitialParentFranchiseId = action.ParentFranchiseId, Fetch = ApiCall.Success() };
 
     [ReducerMethod]
     public static MovieFormState ReduceSelectItemAction(MovieFormState state, SelectItemAction action) =>

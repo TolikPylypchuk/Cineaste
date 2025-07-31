@@ -16,7 +16,12 @@ public static class AddFranchiseReducers
         FranchiseFormState state,
         AddFranchiseResultAction action) =>
         action.Handle(
-            onSuccess: franchise => state with { Add = ApiCall.Success(), InitialItemId = null, Model = franchise },
+            onSuccess: franchise => state with
+            {
+                InitialParentFranchiseId = null,
+                Add = ApiCall.Success(),
+                Model = franchise
+            },
             onFailure: problem => state with { Add = ApiCall.Failure(problem) });
 }
 

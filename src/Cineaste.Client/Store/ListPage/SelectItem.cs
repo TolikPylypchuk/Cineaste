@@ -1,17 +1,8 @@
+using Cineaste.Client.Store.Forms;
+
 namespace Cineaste.Client.Store.ListPage;
 
 public sealed record SelectItemAction(ListItemModel Item);
-
-public sealed record StartAddingMovieAction;
-
-public sealed record StartAddingSeriesAction;
-
-public sealed record StartAddingFranchiseAction(
-    TitleModel Title,
-    TitleModel OriginalTitle,
-    FranchiseItemModel Item,
-    ListKindModel Kind,
-    FranchiseKindSource KindSource);
 
 public sealed record CloseItemAction;
 
@@ -31,6 +22,10 @@ public static class SelectItemReducers
 
     [ReducerMethod(typeof(StartAddingFranchiseAction))]
     public static ListPageState ReduceStartAddingFranchiseAction(ListPageState state) =>
+        state with { SelectedItem = null, SelectionMode = ListPageSelectionMode.Franchise };
+
+    [ReducerMethod(typeof(StartAddingParentFranchiseAction))]
+    public static ListPageState ReduceStartAddingParentFranchiseAction(ListPageState state) =>
         state with { SelectedItem = null, SelectionMode = ListPageSelectionMode.Franchise };
 
     [ReducerMethod(typeof(CloseItemAction))]

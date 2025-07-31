@@ -1,3 +1,4 @@
+using Cineaste.Client.Store.Forms;
 using Cineaste.Client.Store.Forms.FranchiseForm;
 using Cineaste.Client.Store.ListPage;
 
@@ -36,12 +37,26 @@ public partial class FranchiseForm
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+        this.InitializeFormModel();
+    }
 
-        this.FormModel = new(this.AvailableMovieKinds.First(), FranchiseKindSource.Movie);
+    private void InitializeFormModel()
+    {
+        if (this.FormModel is not null)
+        {
+            this.FormModel.TitlesUpdated -= this.OnTitlesUpdated;
+            this.FormModel.OriginalTitlesUpdated -= this.OnOriginalTitlesUpdated;
+        }
+
+        this.FormModel = new(
+            this.AvailableMovieKinds.First(),
+            FranchiseKindSource.Movie,
+            this.State.Value.InitialParentFranchiseId);
+
         this.FormModel.CopyFrom(this.State.Value.Model);
 
-        this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
-        this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
+        this.FormModel.TitlesUpdated += this.OnTitlesUpdated;
+        this.FormModel.OriginalTitlesUpdated += this.OnOriginalTitlesUpdated;
 
         this.SetPropertyValues();
     }
@@ -59,6 +74,12 @@ public partial class FranchiseForm
         this.FormModel.CopyFrom(this.State.Value.Model);
         this.UpdateFormTitle();
     }
+
+    private void OnTitlesUpdated(object? sender, EventArgs e) =>
+        this.UpdateFormTitle();
+
+    private void OnOriginalTitlesUpdated(object? sender, EventArgs e) =>
+        this.StateHasChanged();
 
     private void UpdateFormTitle()
     {
@@ -118,9 +139,12 @@ public partial class FranchiseForm
         this.SetPropertyValues();
         this.ClearValidation();
 
-        if (this.State.Value.InitialItemId is Guid id)
+        if (this.State.Value.InitialItemId is Guid itemId)
         {
-            this.Dispatcher.Dispatch(new GoToListItemAction(id));
+            this.Dispatcher.Dispatch(new GoToListItemAction(itemId));
+        } else if (this.State.Value.InitialParentFranchiseId is Guid franchiseId)
+        {
+            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
         }
     }
 
@@ -144,28 +168,42 @@ public partial class FranchiseForm
     private void OnFranchiseUpdated() =>
         this.SetPropertyValues();
 
-    private void GoToParentFranchise()
+    private void StartAddingMovie() =>
+        this.StartAddingComponent(id => new StartAddingMovieAction(id));
+
+    private void StartAddingSeries() =>
+        this.StartAddingComponent(id => new StartAddingSeriesAction(id));
+
+    private void StartAddingFranchise() =>
+        this.StartAddingComponent(id => new StartAddingFranchiseAction(id));
+
+    private void StartAddingComponent<T>(Func<Guid, T> action)
     {
-        if (this.FormModel.ParentFranchiseId is Guid franchiseId)
+        if (this.FormModel is { IsNew: false, HasChanges: false, BackingModel.Id: var id })
         {
-            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
+            this.Dispatcher.Dispatch(action(id));
         }
     }
 
-    private void StartAddingFranchise()
+    private void StartAddingParentFranchise()
     {
-        if (!this.FormModel.IsNew && !this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is null &&
-            this.FormModel.BackingModel is
+        if (this.FormModel is
             {
-                Id: var id,
-                Titles: [var title, ..],
-                OriginalTitles: [var originalTitle, ..]
+                IsNew: false,
+                HasChanges: false,
+                ParentFranchiseId: null,
+                BackingModel:
+                {
+                    Id: var id,
+                    Titles: [var title, ..],
+                    OriginalTitles: [var originalTitle, ..]
+                }
             })
         {
             var startYear = this.FormModel.Components.Select(component => component.StartYear).Min() ?? 0;
             var endYear = this.FormModel.Components.Select(component => component.EndYear).Max() ?? 0;
 
-            var action = new StartAddingFranchiseAction(
+            var action = new StartAddingParentFranchiseAction(
                 title,
                 originalTitle,
                 new FranchiseItemModel(
@@ -180,6 +218,14 @@ public partial class FranchiseForm
                 this.FormModel.KindSource);
 
             this.Dispatcher.Dispatch(action);
+        }
+    }
+
+    private void GoToParentFranchise()
+    {
+        if (this.FormModel.ParentFranchiseId is Guid franchiseId)
+        {
+            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
         }
     }
 

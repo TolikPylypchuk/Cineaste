@@ -1,3 +1,4 @@
+using Cineaste.Client.Store.Forms;
 using Cineaste.Client.Store.Forms.MovieForm;
 using Cineaste.Client.Store.ListPage;
 
@@ -34,11 +35,23 @@ public partial class MovieForm
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+        this.InitializeFormModel();
+    }
 
-        this.FormModel = new(this.AvailableKinds.First());
+    private void InitializeFormModel()
+    {
+        if (this.FormModel is not null)
+        {
+            this.FormModel.TitlesUpdated -= this.OnTitlesUpdated;
+            this.FormModel.OriginalTitlesUpdated -= this.OnOriginalTitlesUpdated;
+        }
 
-        this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
-        this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
+        this.FormModel = new(this.AvailableKinds.First(), this.State.Value.InitialParentFranchiseId);
+
+        this.FormModel.CopyFrom(this.State.Value.Model);
+
+        this.FormModel.TitlesUpdated += this.OnTitlesUpdated;
+        this.FormModel.OriginalTitlesUpdated += this.OnOriginalTitlesUpdated;
 
         this.SetPropertyValues();
     }
@@ -57,6 +70,12 @@ public partial class MovieForm
         this.UpdateFormTitle();
         this.OnYearChanged(this.State.Value.Model?.Year ?? DateTime.Now.Year);
     }
+
+    private void OnTitlesUpdated(object? sender, EventArgs e) =>
+        this.UpdateFormTitle();
+
+    private void OnOriginalTitlesUpdated(object? sender, EventArgs e) =>
+        this.StateHasChanged();
 
     private void UpdateFormTitle()
     {
@@ -124,6 +143,11 @@ public partial class MovieForm
     {
         this.SetPropertyValues();
         this.ClearValidation();
+
+        if (this.State.Value.InitialParentFranchiseId is Guid franchiseId)
+        {
+            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
+        }
     }
 
     private async Task Remove()
@@ -146,21 +170,23 @@ public partial class MovieForm
     private void OnMovieUpdated() =>
         this.SetPropertyValues();
 
-    private void GoToParentFranchise()
+    private void StartAddingParentFranchise()
     {
-        if (this.FormModel.ParentFranchiseId is Guid franchiseId)
+        if (this.FormModel is
+            {
+                IsNew: false,
+                HasChanges: false,
+                ParentFranchiseId: null,
+                BackingModel:
+                {
+                    Id: var id,
+                    Titles: [var title, ..],
+                    OriginalTitles: [var originalTitle, ..],
+                    Year: int year
+                }
+            })
         {
-            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
-        }
-    }
-
-    private void StartAddingFranchise()
-    {
-        if (!this.FormModel.IsNew && !this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is null &&
-            this.FormModel.BackingModel is
-                { Id: var id, Titles: [var title, ..], OriginalTitles: [var originalTitle, ..], Year: int year })
-        {
-            var action = new StartAddingFranchiseAction(
+            var action = new StartAddingParentFranchiseAction(
                 title,
                 originalTitle,
                 new FranchiseItemModel(
@@ -175,6 +201,14 @@ public partial class MovieForm
                 FranchiseKindSource.Movie);
 
             this.Dispatcher.Dispatch(action);
+        }
+    }
+
+    private void GoToParentFranchise()
+    {
+        if (this.FormModel.ParentFranchiseId is Guid franchiseId)
+        {
+            this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
         }
     }
 

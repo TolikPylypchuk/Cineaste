@@ -262,5 +262,6 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
             true,
             data.MovieKindId.Value,
             "tt12345678",
+            null,
             null);
 }

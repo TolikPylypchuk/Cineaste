@@ -183,8 +183,8 @@
                             @if (this.FormModel.ParentFranchiseId is not null)
                             {
                                 <MudButton
-                                    Variant="Variant.Filled"
-                                    Color="Color.Surface"
+                                    Variant="Variant.Text"
+                                    Size="Size.Small"
                                     @onclick="@this.GoToParentFranchise"
                                 >
                                     @this.Loc["MovieForm.GoToFranchise"]
@@ -192,9 +192,9 @@
                             } else
                             {
                                 <MudButton
-                                    Variant="Variant.Filled"
-                                    Color="Color.Surface"
-                                    @onclick="@this.StartAddingFranchise"
+                                    Variant="Variant.Text"
+                                    Size="Size.Small"
+                                    @onclick="@this.StartAddingParentFranchise"
                                 >
                                     @this.Loc["MovieForm.StartFranchise"]
                                 </MudButton>
