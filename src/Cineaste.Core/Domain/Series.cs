@@ -33,8 +33,6 @@ public sealed class Series : FranchiseItemEntity<Series>
         set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
     }
 
-    public Poster? Poster { get; set; }
-
     public IReadOnlyCollection<Season> Seasons =>
         this.seasons.AsReadOnly();
 

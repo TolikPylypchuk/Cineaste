@@ -38,8 +38,6 @@ public sealed class Movie : FranchiseItemEntity<Movie>
         set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
     }
 
-    public Poster? Poster { get; set; }
-
     public IReadOnlySet<TagContainer> Tags =>
         this.tags;
 

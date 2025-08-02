@@ -6,7 +6,6 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
     {
         series.HasStronglyTypedId();
         series.HasTitles(s => s.AllTitles, "SeriesTitles");
-        series.HasPoster(s => s.Poster);
 
         series.HasMany(s => s.Seasons)
             .WithOne()

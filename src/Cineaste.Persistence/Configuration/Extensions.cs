@@ -34,15 +34,6 @@ internal static class Extensions
             })
             .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-    public static void HasPoster<T>(this EntityTypeBuilder<T> builder, Expression<Func<T, Poster?>> poster)
-        where T : Entity<T>
-    {
-        builder.OwnsOne(poster, poster => poster.Property(p => p.RawData).HasColumnName(nameof(Poster)));
-
-        builder.Navigation(poster)
-            .AutoInclude(false);
-    }
-
     public static void HasTags<T>(
         this EntityTypeBuilder<T> builder,
         Expression<Func<T, IEnumerable<TagContainer>?>> tags,

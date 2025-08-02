@@ -82,6 +82,33 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         await this.dbContext.SaveChangesAsync(token);
     }
 
+    public async Task<PosterModel> GetFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var franchise = await this.FindFranchise(list, franchiseId, token);
+
+        var poster = await this.dbContext.FranchisePosters
+            .Where(poster => poster.Franchise == franchise)
+            .FirstOrDefaultAsync(token)
+            ?? throw this.PosterNotFound(franchiseId);
+
+        return poster.ToPosterModel();
+    }
+
+    public async Task SetFranchisePoster(Id<Franchise> franchiseId, PosterRequest request, CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var franchise = await this.FindFranchise(list, franchiseId, token);
+
+        var data = new byte[request.ContentLength];
+        await request.Data.ReadExactlyAsync(data, 0, data.Length, token);
+
+        var poster = new FranchisePoster(Id.Create<FranchisePoster>(), franchise, data, request.ContentType);
+
+        this.dbContext.FranchisePosters.Add(poster);
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
     private async Task<Franchise> FindFranchise(CineasteList list, Id<Franchise> id, CancellationToken token)
     {
         var franchise = list.Items
@@ -331,4 +358,8 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
     private CineasteException NotFound(Id<SeriesKind> id) =>
         new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with ID {id.Value}")
             .WithProperty(id);
+
+    private CineasteException PosterNotFound(Id<Franchise> franchiseId) =>
+        new NotFoundException(Resources.Poster, $"Could not find a poster for franchise with ID {franchiseId.Value}")
+            .WithProperty(franchiseId);
 }

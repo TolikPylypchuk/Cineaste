@@ -33,8 +33,6 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         set => kindSource = Require.ValidEnum(value);
     }
 
-    public Poster? Poster { get; set; }
-
     public IReadOnlyCollection<FranchiseItem> Children =>
         [.. this.children.OrderBy(item => item.SequenceNumber)];
 

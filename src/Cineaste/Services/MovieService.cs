@@ -79,6 +79,33 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         await this.dbContext.SaveChangesAsync(token);
     }
 
+    public async Task<PosterModel> GetMoviePoster(Id<Movie> movieId, CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var movie = await this.FindMovie(list, movieId, token);
+
+        var poster = await this.dbContext.MoviePosters
+            .Where(poster => poster.Movie == movie)
+            .FirstOrDefaultAsync(token)
+            ?? throw this.PosterNotFound(movieId);
+
+        return poster.ToPosterModel();
+    }
+
+    public async Task SetMoviePoster(Id<Movie> movieId, PosterRequest request, CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var movie = await this.FindMovie(list, movieId, token);
+
+        var data = new byte[request.ContentLength];
+        await request.Data.ReadExactlyAsync(data, 0, data.Length, token);
+
+        var poster = new MoviePoster(Id.Create<MoviePoster>(), movie, data, request.ContentType);
+
+        this.dbContext.MoviePosters.Add(poster);
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
     private async Task<Movie> FindMovie(CineasteList list, Id<Movie> id, CancellationToken token)
     {
         var movie = list.Items
@@ -221,4 +248,8 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
     private CineasteException NotFound(Id<Franchise> id) =>
         new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id.Value}")
             .WithProperty(id);
+
+    private CineasteException PosterNotFound(Id<Movie> movieId) =>
+        new NotFoundException(Resources.Poster, $"Could not find a poster for movie with ID {movieId.Value}")
+            .WithProperty(movieId);
 }

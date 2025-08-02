@@ -7,11 +7,18 @@ using Cineaste.Infrastructure.Problems;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
+using Microsoft.AspNetCore.Http.Features;
+
 using Scalar.AspNetCore;
 
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 100L * 1024 * 1024; // 100 MB
+});
 
 builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default"),
@@ -28,6 +35,11 @@ static void AddConverters(JsonSerializerOptions options)
 builder.Services.Configure<JsonOptions>(options => AddConverters(options.SerializerOptions));
 builder.Services.Configure<CineasteOpenApiOptions>(builder.Configuration.GetSection("OpenApi"));
 
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 50L * 1024 * 1024; // 50 MB
+});
+
 builder.Services.AddProblemDetails();
 builder.Services.AddCineasteOpenApi();
 builder.Services.AddCors();
@@ -42,6 +54,8 @@ builder.Services.AddScoped<ListService>();
 builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<SeriesService>();
 builder.Services.AddScoped<FranchiseService>();
+
+builder.Services.AddSingleton<PosterContentTypeValidator>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));

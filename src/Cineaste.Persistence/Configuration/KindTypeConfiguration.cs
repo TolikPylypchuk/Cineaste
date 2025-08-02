@@ -1,13 +1,8 @@
 namespace Cineaste.Persistence.Configuration;
 
-internal sealed class KindTypeConfiguration<TKind> : IEntityTypeConfiguration<TKind>
+internal sealed class KindTypeConfiguration<TKind>(string tableName) : IEntityTypeConfiguration<TKind>
     where TKind : Kind<TKind>
 {
-    private readonly string tableName;
-
-    public KindTypeConfiguration(string tableName) =>
-        this.tableName = tableName;
-
     public void Configure(EntityTypeBuilder<TKind> kind)
     {
         kind.HasStronglyTypedId();

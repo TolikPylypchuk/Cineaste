@@ -13,8 +13,6 @@ internal sealed class SpecialEpisodeTypeConfiguration : IEntityTypeConfiguration
         episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "Channel <> ''"));
         episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "SequenceNumber > 0"));
 
-        episode.HasPoster(e => e.Poster);
-
         episode.Ignore(e => e.Titles);
         episode.Ignore(e => e.OriginalTitles);
         episode.Ignore(e => e.Title);

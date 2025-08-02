@@ -6,7 +6,6 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
     {
         franchise.HasStronglyTypedId();
         franchise.HasTitles(f => f.AllTitles, "FranchiseTitles");
-        franchise.HasPoster(f => f.Poster);
 
         franchise.HasMany(f => f.Children)
             .WithOne(item => item.ParentFranchise)

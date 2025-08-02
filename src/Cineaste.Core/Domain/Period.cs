@@ -47,8 +47,6 @@ public sealed class Period : Entity<Period>
         set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
     }
 
-    public Poster? Poster { get; set; }
-
     public Period(
         Id<Period> id,
         int startMonth,

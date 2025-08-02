@@ -43,8 +43,6 @@ public sealed class SpecialEpisode : TitledEntity<SpecialEpisode>
         set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
     }
 
-    public Poster? Poster { get; set; }
-
     public SpecialEpisode(
         Id<SpecialEpisode> id,
         IEnumerable<Title> titles,

@@ -1,7 +1,5 @@
 using System.Runtime.CompilerServices;
 
-using static Cineaste.Basic.Constants;
-
 namespace Cineaste.Core;
 
 public static class Require
@@ -17,6 +15,14 @@ public static class Require
     public static C NotEmpty<C, T>(this C value, [CallerArgumentExpression(nameof(value))] string? paramName = null)
         where C : IReadOnlyCollection<T> =>
         value.Count != 0 ? value : throw new ArgumentOutOfRangeException(paramName);
+
+    public static T[] NotEmpty<T>(this T[] value, [CallerArgumentExpression(nameof(value))] string? paramName = null) =>
+        value.Length != 0 ? value : throw new ArgumentOutOfRangeException(paramName);
+
+    public static string NotEmpty(
+        this string value,
+        [CallerArgumentExpression(nameof(value))] string? paramName = null) =>
+        value.Length != 0 ? value : throw new ArgumentOutOfRangeException(paramName);
 
     public static int Positive(int value, [CallerArgumentExpression(nameof(value))] string? paramName = null) =>
         value > 0 ? value : throw new ArgumentOutOfRangeException(paramName);

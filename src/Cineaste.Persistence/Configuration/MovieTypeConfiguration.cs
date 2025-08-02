@@ -7,7 +7,6 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
         movie.HasStronglyTypedId();
 
         movie.HasTitles(m => m.AllTitles, "MovieTitles");
-        movie.HasPoster(m => m.Poster);
 
         movie.ToTable(t => t.HasCheckConstraint("CH_Movies_YearPositive", "Year > 0"));
 

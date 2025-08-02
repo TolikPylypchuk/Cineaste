@@ -168,7 +168,6 @@ namespace Cineaste.Persistence.Migrations
                     MovieKindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SeriesKindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     KindSource = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -204,7 +203,6 @@ namespace Cineaste.Persistence.Migrations
                     KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -234,7 +232,6 @@ namespace Cineaste.Persistence.Migrations
                     KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -251,6 +248,28 @@ namespace Cineaste.Persistence.Migrations
                         principalTable: "SeriesKinds",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FranchisePosters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FranchiseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FranchisePosters", x => x.Id);
+                    table.CheckConstraint("CH_FranchisePosters_ContentTypeNotEmpty", "ContentType <> ''");
+                    table.CheckConstraint("CH_FranchisePosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.ForeignKey(
+                        name: "FK_FranchisePosters_Franchises_FranchiseId",
+                        column: x => x.FranchiseId,
+                        principalTable: "Franchises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -273,6 +292,28 @@ namespace Cineaste.Persistence.Migrations
                         name: "FK_FranchiseTitles_Franchises_FranchiseId",
                         column: x => x.FranchiseId,
                         principalTable: "Franchises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MoviePosters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MovieId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MoviePosters", x => x.Id);
+                    table.CheckConstraint("CH_MoviePosters_ContentTypeNotEmpty", "ContentType <> ''");
+                    table.CheckConstraint("CH_MoviePosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.ForeignKey(
+                        name: "FK_MoviePosters_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -399,6 +440,28 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SeriesPosters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeriesPosters", x => x.Id);
+                    table.CheckConstraint("CH_SeriesPosters_ContentTypeNotEmpty", "ContentType <> ''");
+                    table.CheckConstraint("CH_SeriesPosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.ForeignKey(
+                        name: "FK_SeriesPosters_Series_SeriesId",
+                        column: x => x.SeriesId,
+                        principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SeriesTags",
                 columns: table => new
                 {
@@ -460,7 +523,6 @@ namespace Cineaste.Persistence.Migrations
                     Channel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -490,7 +552,6 @@ namespace Cineaste.Persistence.Migrations
                     IsSingleDayRelease = table.Column<bool>(type: "bit", nullable: false),
                     EpisodeCount = table.Column<int>(type: "int", nullable: false),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -535,6 +596,28 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SpecialEpisodePosters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SpecialEpisodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpecialEpisodePosters", x => x.Id);
+                    table.CheckConstraint("CH_SpecialEpisodePosters_ContentTypeNotEmpty", "ContentType <> ''");
+                    table.CheckConstraint("CH_SpecialEpisodePosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.ForeignKey(
+                        name: "FK_SpecialEpisodePosters_SpecialEpisodes_SpecialEpisodeId",
+                        column: x => x.SpecialEpisodeId,
+                        principalTable: "SpecialEpisodes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SpecialEpisodeTitles",
                 columns: table => new
                 {
@@ -558,10 +641,37 @@ namespace Cineaste.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SeasonPosters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PeriodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeasonPosters", x => x.Id);
+                    table.CheckConstraint("CH_SeasonPosters_ContentTypeNotEmpty", "ContentType <> ''");
+                    table.CheckConstraint("CH_SeasonPosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.ForeignKey(
+                        name: "FK_SeasonPosters_Periods_PeriodId",
+                        column: x => x.PeriodId,
+                        principalTable: "Periods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_FranchiseItems_ParentFranchiseId",
                 table: "FranchiseItems",
                 column: "ParentFranchiseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FranchisePosters_FranchiseId",
+                table: "FranchisePosters",
+                column: "FranchiseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Franchises_FranchiseItemId",
@@ -629,6 +739,11 @@ namespace Cineaste.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_MoviePosters_MovieId",
+                table: "MoviePosters",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Movies_FranchiseItemId",
                 table: "Movies",
                 column: "FranchiseItemId",
@@ -649,6 +764,11 @@ namespace Cineaste.Persistence.Migrations
                 name: "IX_Periods_SeasonId",
                 table: "Periods",
                 column: "SeasonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SeasonPosters_PeriodId",
+                table: "SeasonPosters",
+                column: "PeriodId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Seasons_SeriesId",
@@ -679,9 +799,19 @@ namespace Cineaste.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_SeriesPosters_SeriesId",
+                table: "SeriesPosters",
+                column: "SeriesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SeriesTags_TagId",
                 table: "SeriesTags",
                 column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SpecialEpisodePosters_SpecialEpisodeId",
+                table: "SpecialEpisodePosters",
+                column: "SpecialEpisodeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SpecialEpisodes_SeriesId",
@@ -721,6 +851,9 @@ namespace Cineaste.Persistence.Migrations
                 table: "FranchiseItems");
 
             migrationBuilder.DropTable(
+                name: "FranchisePosters");
+
+            migrationBuilder.DropTable(
                 name: "FranchiseTitles");
 
             migrationBuilder.DropTable(
@@ -730,22 +863,31 @@ namespace Cineaste.Persistence.Migrations
                 name: "ListItems");
 
             migrationBuilder.DropTable(
+                name: "MoviePosters");
+
+            migrationBuilder.DropTable(
                 name: "MovieTags");
 
             migrationBuilder.DropTable(
                 name: "MovieTitles");
 
             migrationBuilder.DropTable(
-                name: "Periods");
+                name: "SeasonPosters");
 
             migrationBuilder.DropTable(
                 name: "SeasonTitles");
+
+            migrationBuilder.DropTable(
+                name: "SeriesPosters");
 
             migrationBuilder.DropTable(
                 name: "SeriesTags");
 
             migrationBuilder.DropTable(
                 name: "SeriesTitles");
+
+            migrationBuilder.DropTable(
+                name: "SpecialEpisodePosters");
 
             migrationBuilder.DropTable(
                 name: "SpecialEpisodeTitles");
@@ -757,13 +899,16 @@ namespace Cineaste.Persistence.Migrations
                 name: "Movies");
 
             migrationBuilder.DropTable(
-                name: "Seasons");
+                name: "Periods");
 
             migrationBuilder.DropTable(
                 name: "SpecialEpisodes");
 
             migrationBuilder.DropTable(
                 name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "Seasons");
 
             migrationBuilder.DropTable(
                 name: "Series");

@@ -5,7 +5,6 @@ internal sealed class PeriodTypeConfiguration : IEntityTypeConfiguration<Period>
     public void Configure(EntityTypeBuilder<Period> period)
     {
         period.HasStronglyTypedId();
-        period.HasPoster(p => p.Poster);
 
         period.ToTable(t => t.HasCheckConstraint("CH_Periods_StartMonthValid", "StartMonth >= 1 AND StartMonth <= 12"));
         period.ToTable(t => t.HasCheckConstraint("CH_Periods_StartYearPositive", "StartYear > 0"));

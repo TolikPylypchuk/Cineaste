@@ -1,9 +1,12 @@
+using static Cineaste.Shared.Validation.PosterContentTypes;
+
 namespace Cineaste.Controllers;
 
 [ApiController]
 [Route("/api/movies")]
 [Tags(["Movies"])]
-public sealed class MovieController(MovieService movieService) : ControllerBase
+public sealed class MovieController(MovieService movieService, PosterContentTypeValidator posterContentTypeValidator)
+    : ControllerBase
 {
     [HttpGet("{id}")]
     [EndpointSummary("Get a movie")]
@@ -40,6 +43,32 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
     public async Task<ActionResult> RemoveMovie(Guid id, CancellationToken token)
     {
         await movieService.RemoveMovie(Id.For<Movie>(id), token);
+        return this.NoContent();
+    }
+
+    [HttpGet("{id}/poster")]
+    [Produces(ImageApng, ImageAvif, ImageGif, ImageJpeg, ImagePng, ImageSvg, ImageWebp)]
+    [EndpointSummary("Get a poster for a movie")]
+    [ProducesResponseType<byte[]>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetMoviePoster(Guid id, CancellationToken token)
+    {
+        var poster = await movieService.GetMoviePoster(Id.For<Movie>(id), token);
+        return this.File(poster.Data, poster.ContentType);
+    }
+
+    [HttpPut("{id}/poster")]
+    [EndpointSummary("Set a poster for a movie")]
+    [ProducesResponseType<MovieModel>(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> SetMoviePoster(Guid id, IFormFile file, CancellationToken token)
+    {
+        posterContentTypeValidator.ValidateContentType(file.ContentType);
+
+        var request = new PosterRequest(file.OpenReadStream(), file.Length, file.ContentType);
+        await movieService.SetMoviePoster(Id.For<Movie>(id), request, token);
+
         return this.NoContent();
     }
 }
