@@ -143,7 +143,9 @@ public partial class SeriesMainForm
                     Titles: [var title, ..],
                     OriginalTitles: [var originalTitle, ..],
                     StartYear: int startYear,
-                    EndYear: int endYear
+                    EndYear: int endYear,
+                    ListItemColor: string listItemColor,
+                    ListSequenceNumber: int listSequenceNumber
                 }
             })
         {
@@ -152,12 +154,15 @@ public partial class SeriesMainForm
                 originalTitle,
                 new FranchiseItemModel(
                     id,
+                    FranchiseItemType.Series,
                     FirstSequenceNumber,
                     FirstSequenceNumber,
                     title.Name,
+                    originalTitle.Name,
                     startYear,
                     endYear,
-                    FranchiseItemType.Series),
+                    listItemColor,
+                    listSequenceNumber),
                 this.FormModel.Kind,
                 FranchiseKindSource.Series);
 

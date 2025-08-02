@@ -59,6 +59,28 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             new(offset, size, totalItems));
     }
 
+    public async Task<List<ListItemModel>> GetStandaloneListItems(CancellationToken token)
+    {
+        logger.LogDebug("Getting standalone list items");
+
+        var list = await dbContext.Lists
+            .Include(list => list.Configuration)
+            .Include(list => list.MovieKinds)
+            .Include(list => list.SeriesKinds)
+            .SingleOrDefaultAsync(token)
+            ?? throw this.ListNotFound();
+
+        var items = await dbContext.ListItems
+            .Where(item => item.List.Id == list!.Id)
+            .Where(item => item.IsShown && item.IsStandalone)
+            .IncludeRelationships()
+            .OrderBy(item => item.SequenceNumber)
+            .AsSplitQuery()
+            .ToListAsync(token);
+
+        return [.. items.Select(item => item.ToListItemModel())];
+    }
+
     public async Task<ListItemModel> GetListItem(Guid id, CancellationToken token)
     {
         logger.LogDebug("Getting the list item by ID {Id}", id);

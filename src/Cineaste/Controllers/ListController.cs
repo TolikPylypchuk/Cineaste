@@ -22,6 +22,13 @@ public sealed class ListController(ListService listService) : ControllerBase
         CancellationToken token) =>
         this.Ok(await listService.GetListItems(offset, size, token));
 
+    [HttpGet("items/standalone")]
+    [EndpointSummary("Get standalone list items")]
+    [ProducesResponseType<List<ListItemModel>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<ListItemModel>>> GetStandaloneListItems(CancellationToken token) =>
+        this.Ok(await listService.GetStandaloneListItems(token));
+
     [HttpGet("items/{id}")]
     [EndpointSummary("Get list item by ID")]
     [ProducesResponseType<ListItemModel>(StatusCodes.Status200OK)]

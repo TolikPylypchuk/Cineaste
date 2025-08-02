@@ -18,9 +18,16 @@ public partial class FranchiseForm
     [Inject]
     public required IDialogService DialogService { get; init; }
 
+    public required MudAutocomplete<ListItemModel> StandaloneItemSelect { get; set; }
+
     private string FormTitle { get; set; } = String.Empty;
 
     public required MudDataGrid<FranchiseFormComponent> ComponentGrid { get; set; }
+
+    private SortedSet<ListItemModel> StandaloneItems { get; } = [];
+    private Dictionary<Guid, ListItemModel> AddedStandaloneItems { get; } = [];
+
+    private ListItemModel? SelectedStandaloneItem { get; set; }
 
     private bool IsSaving =>
         this.State.Value.Add.IsInProgress || this.State.Value.Update.IsInProgress;
@@ -30,6 +37,7 @@ public partial class FranchiseForm
         this.SubsribeToSuccessfulResult<FetchFranchiseResultAction>(this.SetPropertyValues);
         this.SubsribeToSuccessfulResult<AddFranchiseResultAction>(this.OnFranchiseCreated);
         this.SubsribeToSuccessfulResult<UpdateFranchiseResultAction>(this.OnFranchiseUpdated);
+        this.SubsribeToSuccessfulResult<FetchStandaloneItemsResultAction>(this.UpdateStandaloneItems);
 
         base.OnInitialized();
     }
@@ -69,6 +77,9 @@ public partial class FranchiseForm
         }
     }
 
+    private void FetchStandaloneItems() =>
+        this.Dispatcher.Dispatch(new FetchStandaloneItemsAction());
+
     private void SetPropertyValues()
     {
         this.FormModel.CopyFrom(this.State.Value.Model);
@@ -102,6 +113,49 @@ public partial class FranchiseForm
         }
     }
 
+    private Task<IEnumerable<ListItemModel>> SearchStandaloneItems(string value, CancellationToken token)
+    {
+        if (String.IsNullOrWhiteSpace(value))
+        {
+            return Task.FromResult<IEnumerable<ListItemModel>>(this.StandaloneItems);
+        }
+
+        var trimmedValue = value.Trim();
+
+        var result = this.StandaloneItems
+            .Where(item => item.Title.Contains(trimmedValue, StringComparison.InvariantCultureIgnoreCase) ||
+                item.OriginalTitle.Contains(trimmedValue, StringComparison.InvariantCultureIgnoreCase));
+
+        return Task.FromResult(result);
+    }
+
+    private void UpdateStandaloneItems()
+    {
+        var itemIdToSkip = this.State.Value.Model?.FranchiseItem?.RootFranchiseId ?? this.State.Value.Model?.Id;
+
+        this.StandaloneItems.Clear();
+
+        foreach (var item in this.State.Value.StandaloneItems.Where(item => item.Id != itemIdToSkip))
+        {
+            this.StandaloneItems.Add(item);
+        }
+    }
+
+    private async Task OnSelectedStandaloneItemChanged(ListItemModel? item)
+    {
+        if (item is null)
+        {
+            return;
+        }
+
+        this.FormModel.AttachNewComponent(item);
+
+        this.StandaloneItems.Remove(item);
+        this.AddedStandaloneItems.Add(item.Id, item);
+
+        await this.StandaloneItemSelect.ClearAsync();
+    }
+
     private bool CanMoveUp(FranchiseFormComponent component) =>
         component.SequenceNumber != FirstSequenceNumber;
 
@@ -114,8 +168,32 @@ public partial class FranchiseForm
     private void MoveDown(FranchiseFormComponent component) =>
         this.FormModel.MoveComponentDown(component);
 
-    private void Detach(FranchiseFormComponent component) =>
+    private void Detach(FranchiseFormComponent component)
+    {
         this.FormModel.DetachComponent(component);
+
+        if (this.AddedStandaloneItems.TryGetValue(component.Id, out var item))
+        {
+            this.StandaloneItems.Add(item);
+            this.AddedStandaloneItems.Remove(component.Id);
+        } else if (this.State.Value.Model is { } model &&
+            model.Items.FirstOrDefault(item => item.Id == component.Id) is { } franchiseItem)
+        {
+            var listFranchiseItem = new ListFranchiseItemModel(
+                model.Id, franchiseItem.SequenceNumber, franchiseItem.DisplayNumber, model.IsLooselyConnected);
+
+            this.StandaloneItems.Add(new ListItemModel(
+                franchiseItem.Id,
+                franchiseItem.Type.ToListItemType(),
+                franchiseItem.Title,
+                franchiseItem.OriginalTitle,
+                franchiseItem.StartYear,
+                franchiseItem.EndYear,
+                franchiseItem.ListItemColor,
+                franchiseItem.ListSequenceNumber,
+                listFranchiseItem));
+        }
+    }
 
     private void OpenComponentForm(FranchiseFormComponent component)
     {
@@ -138,6 +216,13 @@ public partial class FranchiseForm
     {
         this.SetPropertyValues();
         this.ClearValidation();
+
+        foreach (var item in this.AddedStandaloneItems.Values)
+        {
+            this.StandaloneItems.Add(item);
+        }
+
+        this.AddedStandaloneItems.Clear();
 
         if (this.State.Value.InitialItemId is Guid itemId)
         {
@@ -196,7 +281,9 @@ public partial class FranchiseForm
                 {
                     Id: var id,
                     Titles: [var title, ..],
-                    OriginalTitles: [var originalTitle, ..]
+                    OriginalTitles: [var originalTitle, ..],
+                    ListItemColor: string listItemColor,
+                    ListSequenceNumber: int listSequenceNumber
                 }
             })
         {
@@ -208,12 +295,15 @@ public partial class FranchiseForm
                 originalTitle,
                 new FranchiseItemModel(
                     id,
+                    FranchiseItemType.Franchise,
                     FirstSequenceNumber,
                     FirstSequenceNumber,
                     title.Name,
+                    originalTitle.Name,
                     startYear,
                     endYear,
-                    FranchiseItemType.Franchise),
+                    listItemColor,
+                    listSequenceNumber),
                 this.FormModel.Kind,
                 this.FormModel.KindSource);
 

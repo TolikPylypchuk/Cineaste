@@ -43,4 +43,20 @@ public static class MappingExtensions
         item is not null
             ? new(item.ParentFranchiseId, item.SequenceNumber, item.DisplayNumber, item.IsLooselyConnected)
             : null;
+
+    public static ListItemType ToListItemType(this FranchiseItemType type) =>
+        type switch
+        {
+            FranchiseItemType.Movie => ListItemType.Movie,
+            FranchiseItemType.Series => ListItemType.Series,
+            _ => ListItemType.Franchise,
+        };
+
+    public static FranchiseItemType ToFranchiseItemType(this ListItemType type) =>
+        type switch
+        {
+            ListItemType.Movie => FranchiseItemType.Movie,
+            ListItemType.Series => FranchiseItemType.Series,
+            _ => FranchiseItemType.Franchise,
+        };
 }

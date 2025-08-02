@@ -16,9 +16,12 @@ public record FranchiseModel(
 
 public record FranchiseItemModel(
     Guid Id,
+    FranchiseItemType Type,
     int SequenceNumber,
     int? DisplayNumber,
     string Title,
+    string OriginalTitle,
     int? StartYear,
     int? EndYear,
-    FranchiseItemType Type) : IIdentifyableModel;
+    string ListItemColor,
+    int ListSequenceNumber) : IIdentifyableModel;

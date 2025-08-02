@@ -349,6 +349,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add existing item.
+        /// </summary>
+        public static string FranchiseForm_AddExistingItem {
+            get {
+                return ResourceManager.GetString("FranchiseForm.AddExistingItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new franchise.
         /// </summary>
         public static string FranchiseForm_AddFranchise {
@@ -498,6 +507,15 @@ namespace Cineaste.Client.Localization {
         public static string FranchiseForm_Problem_LoadingFailed {
             get {
                 return ResourceManager.GetString("FranchiseForm.Problem.LoadingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading standalone items has failed.
+        /// </summary>
+        public static string FranchiseForm_Problem_LoadingStandaloneItemsFailed {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Problem.LoadingStandaloneItemsFailed", resourceCulture);
             }
         }
         
@@ -696,6 +714,33 @@ namespace Cineaste.Client.Localization {
         public static string ListComponent_Problem_LoadingListFailed {
             get {
                 return ResourceManager.GetString("ListComponent.Problem.LoadingListFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Franchise.
+        /// </summary>
+        public static string ListItemType_Franchise {
+            get {
+                return ResourceManager.GetString("ListItemType.Franchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movie.
+        /// </summary>
+        public static string ListItemType_Movie {
+            get {
+                return ResourceManager.GetString("ListItemType.Movie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Series.
+        /// </summary>
+        public static string ListItemType_Series {
+            get {
+                return ResourceManager.GetString("ListItemType.Series", resourceCulture);
             }
         }
         

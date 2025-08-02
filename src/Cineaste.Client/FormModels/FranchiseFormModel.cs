@@ -99,6 +99,25 @@ public sealed class FranchiseFormModel : TitledFormModelBase<FranchiseRequest, F
         this.UpdateRequest();
     }
 
+    public void AttachNewComponent(ListItemModel item)
+    {
+        int sequenceNumber = this.components.Count + 1;
+        int displayNumber = this.components.Count(c => c.DisplayNumber is not null) + 1;
+
+        var component = new FranchiseFormComponent(
+            item.Id,
+            item.Type.ToFranchiseItemType(),
+            item.Title,
+            item.StartYear,
+            item.EndYear,
+            sequenceNumber,
+            displayNumber);
+
+        this.components.Add(component);
+
+        this.UpdateRequest();
+    }
+
     public void DetachComponent(FranchiseFormComponent component)
     {
         foreach (var nextComponent in this.components.Where(c => c.SequenceNumber > component.SequenceNumber).ToList())

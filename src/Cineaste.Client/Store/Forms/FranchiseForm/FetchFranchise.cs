@@ -27,5 +27,6 @@ public sealed class FetchFranchiseEffects(IFranchiseApi api)
     {
         var result = await api.GetFranchise(action.Id).ToApiResultAsync();
         dispatcher.Dispatch(new FetchFranchiseResultAction(result));
+        dispatcher.Dispatch(new FetchStandaloneItemsAction());
     }
 }

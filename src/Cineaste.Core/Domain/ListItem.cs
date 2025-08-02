@@ -34,7 +34,8 @@ public sealed partial class ListItem : Entity<ListItem>
 
     public Color? ActiveColor { get; set; }
 
-    public bool IsShown { get;private set; }
+    public bool IsStandalone { get; private set; }
+    public bool IsShown { get; private set; }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
     private ListItem(Id<ListItem> id)
@@ -97,8 +98,10 @@ public sealed partial class ListItem : Entity<ListItem>
         this.StartYear = movie.Year;
         this.EndYear = movie.Year;
 
-        this.IsShown = true;
         this.ActiveColor = movie.GetActiveColor();
+
+        this.IsStandalone = movie.FranchiseItem is null;
+        this.IsShown = true;
     }
 
     [MemberNotNull(
@@ -120,8 +123,10 @@ public sealed partial class ListItem : Entity<ListItem>
         this.StartYear = series.StartYear;
         this.EndYear = series.EndYear;
 
-        this.IsShown = true;
         this.ActiveColor = series.GetActiveColor();
+
+        this.IsStandalone = series.FranchiseItem is null;
+        this.IsShown = true;
     }
 
     [MemberNotNull(
@@ -143,8 +148,10 @@ public sealed partial class ListItem : Entity<ListItem>
         this.StartYear = franchise.StartYear;
         this.EndYear = franchise.EndYear;
 
-        this.IsShown = franchise.ShowTitles;
         this.ActiveColor = franchise.GetActiveColor();
+
+        this.IsStandalone = franchise.FranchiseItem is null;
+        this.IsShown = franchise.ShowTitles;
     }
 
     [GeneratedRegex("([0-9]+)", RegexOptions.Compiled)]

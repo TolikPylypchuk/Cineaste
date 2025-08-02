@@ -104,7 +104,7 @@ public static class DomainExtensions
                 ? series.Kind.NotWatchedColor
                 : series.Kind.NotReleasedColor;
 
-    public static Color? GetActiveColor(this Franchise franchise)
+    public static Color GetActiveColor(this Franchise franchise)
     {
         var kind = franchise.GetActiveKind();
 

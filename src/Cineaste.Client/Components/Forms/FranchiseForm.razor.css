@@ -55,6 +55,7 @@
 
 .form {
   flex: 1;
+  overflow-x: clip;
   overflow-y: auto;
   padding: var(--s2);
   display: flex;
@@ -176,7 +177,10 @@
 .add-franchise-container {
   display: flex;
   justify-content: center;
-  margin-block: var(--s2);
+}
+
+.add-existing-item-subtext {
+  font-size: calc(var(--mud-typography-default-size) * 0.75);
 }
 
 .go-to-franchise-container {

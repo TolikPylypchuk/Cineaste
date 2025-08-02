@@ -49,8 +49,8 @@ public static class ListMappingExtensions
         new(
             franchise.Id.Value,
             ListItemType.Franchise,
-            $"{franchise.Title.Name}:",
-            $"{franchise.OriginalTitle.Name}:",
+            franchise.Title.Name,
+            franchise.OriginalTitle.Name,
             item.StartYear,
             item.EndYear,
             item.ActiveColor?.HexValue ?? String.Empty,

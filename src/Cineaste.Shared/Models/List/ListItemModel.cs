@@ -9,7 +9,11 @@ public sealed record ListItemModel(
     int? EndYear,
     string Color,
     int ListSequenceNumber,
-    ListFranchiseItemModel? FranchiseItem);
+    ListFranchiseItemModel? FranchiseItem) : IComparable<ListItemModel>
+{
+    public int CompareTo(ListItemModel? other) =>
+        other is not null ? this.ListSequenceNumber.CompareTo(other.ListSequenceNumber) : 1;
+}
 
 public enum ListItemType { Movie, Series, Franchise }
 

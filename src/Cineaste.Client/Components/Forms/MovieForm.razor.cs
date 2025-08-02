@@ -182,7 +182,9 @@ public partial class MovieForm
                     Id: var id,
                     Titles: [var title, ..],
                     OriginalTitles: [var originalTitle, ..],
-                    Year: int year
+                    Year: int year,
+                    ListItemColor: string listItemColor,
+                    ListSequenceNumber: int listSequenceNumber
                 }
             })
         {
@@ -191,12 +193,15 @@ public partial class MovieForm
                 originalTitle,
                 new FranchiseItemModel(
                     id,
+                    FranchiseItemType.Movie,
                     FirstSequenceNumber,
                     FirstSequenceNumber,
                     title.Name,
+                    originalTitle.Name,
                     year,
                     year,
-                    FranchiseItemType.Movie),
+                    listItemColor,
+                    listSequenceNumber),
                 this.FormModel.Kind,
                 FranchiseKindSource.Movie);
 

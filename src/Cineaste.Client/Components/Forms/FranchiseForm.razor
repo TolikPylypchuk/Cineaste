@@ -237,6 +237,7 @@
 
                                         <MudMenuItem
                                             Icon="@Icons.Material.Filled.ContentCut"
+                                            Disabled="context.Item.Id == this.State.Value.InitialItemId"
                                             @onclick="@(() => this.Detach(context.Item))"
                                         >
                                             @this.Loc["FranchiseForm.Component.Detach"]
@@ -276,7 +277,51 @@
                                 @this.Loc["FranchiseForm.AddFranchise"]
                             </MudButton>
                         </div>
+                    }
 
+                    @if (this.State.Value.FetchStandaloneItems.IsInProgress)
+                    {
+                        <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+                    } else if (this.State.Value.FetchStandaloneItems.Problem is not null)
+                    {
+                        <ApiProblemAlert
+                            Problem="@this.State.Value.FetchStandaloneItems.Problem"
+                            Text="FranchiseForm.Problem.LoadingStandaloneItemsFailed"
+                            TryAgain="@this.FetchStandaloneItems"
+                            Class="problem-alert"
+                        />
+                    } else
+                    {
+                        <div>
+                            <MudAutocomplete
+                                @ref="this.StandaloneItemSelect"
+                                T="ListItemModel"
+                                Value="this.SelectedStandaloneItem"
+                                ValueChanged="this.OnSelectedStandaloneItemChanged"
+                                SearchFunc="this.SearchStandaloneItems"
+                                ToStringFunc="@(item => item?.Title)"
+                                Label="@this.Loc["FranchiseForm.AddExistingItem"]"
+                            >
+                                <ItemTemplate Context="item">
+                                    @{
+                                        string itemYears = item.StartYear is int start && item.EndYear is int end
+                                            ? start == end ? start.ToString() : $"{start}-{end}"
+                                            : String.Empty;
+
+                                        string itemType = this.Loc[$"ListItemType.{item.Type}"];
+                                    }
+
+                                    <p>@item.Title</p>
+                                    <p class="add-existing-item-subtext">
+                                        @($"{item.OriginalTitle} ({itemYears}) - {itemType}")
+                                    </p>
+                                </ItemTemplate>
+                            </MudAutocomplete>
+                        </div>
+                    }
+
+                    @if (!(this.FormModel.IsNew || this.FormModel.HasChanges))
+                    {
                         <div class="go-to-franchise-container">
                             @if (this.FormModel.ParentFranchiseId is not null)
                             {

@@ -40,7 +40,7 @@
             Class="list"
         >
             <Columns>
-                <MudBlazor.TemplateColumn
+                <TemplateColumn
                     Title="@this.Loc["ListComponent.List.Number"]"
                     CellClass="cell-content number"
                 >
@@ -63,21 +63,33 @@
                             }
                         }
                     </CellTemplate>
-                </MudBlazor.TemplateColumn>
+                </TemplateColumn>
 
-                <MudBlazor.PropertyColumn
-                    Title="@this.Loc["ListComponent.List.Title"]"
-                    Property="@(item => item.Title)"
-                    CellClass="cell-content title"
-                />
+                <TemplateColumn Title="@this.Loc["ListComponent.List.Title"]" CellClass="cell-content title">
+                    <CellTemplate>
+                        @if (context.Item.Type == ListItemType.Franchise)
+                        {
+                            @($"{context.Item.Title}:")
+                        } else
+                        {
+                            @context.Item.Title
+                        }
+                    </CellTemplate>
+                </TemplateColumn>
 
-                <MudBlazor.PropertyColumn
-                    Title="@this.Loc["ListComponent.List.OriginalTitle"]"
-                    Property="@(item => item.OriginalTitle)"
-                    CellClass="cell-content title"
-                />
+                <TemplateColumn Title="@this.Loc["ListComponent.List.OriginalTitle"]" CellClass="cell-content title">
+                    <CellTemplate>
+                        @if (context.Item.Type == ListItemType.Franchise)
+                        {
+                            @($"{context.Item.OriginalTitle}:")
+                        } else
+                        {
+                            @context.Item.OriginalTitle
+                        }
+                    </CellTemplate>
+                </TemplateColumn>
 
-                <MudBlazor.TemplateColumn Title="@this.Loc["ListComponent.List.Year"]" CellClass="cell-content year">
+                <TemplateColumn Title="@this.Loc["ListComponent.List.Year"]" CellClass="cell-content year">
                     <CellTemplate>
                         @if (context.Item.StartYear is int startYear && context.Item.EndYear is int endYear)
                         {
@@ -92,7 +104,7 @@
                             }
                         }
                     </CellTemplate>
-                </MudBlazor.TemplateColumn>
+                </TemplateColumn>
             </Columns>
 
             <LoadingContent>

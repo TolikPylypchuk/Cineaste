@@ -9,6 +9,9 @@ public interface IListApi
     Task<IApiResponse<OffsettableData<ListItemModel>>> GetListItems(
         [Query] int offset, [Query] int size, CancellationToken token);
 
+    [Get("/list/items/standalone")]
+    Task<IApiResponse<ImmutableList<ListItemModel>>> GetStandaloneListItems();
+
     [Get("/list/items/{id}")]
     Task<IApiResponse<ListItemModel>> GetListItem(Guid id);
 

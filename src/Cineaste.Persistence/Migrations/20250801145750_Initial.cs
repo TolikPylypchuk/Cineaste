@@ -344,6 +344,7 @@ namespace Cineaste.Persistence.Migrations
                     EndYear = table.Column<int>(type: "int", nullable: true),
                     SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     ActiveColor = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsStandalone = table.Column<bool>(type: "bit", nullable: false),
                     IsShown = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20250725144433_Initial")]
+    [Migration("20250801145750_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -142,6 +142,9 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsShown")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStandalone")
                         .HasColumnType("bit");
 
                     b.Property<Guid>("ListId")

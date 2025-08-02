@@ -15,6 +15,5 @@
   --font-header-medium: 200 2rem / var(--default-line-height) var(--body-font);
   --font-header-dialog: 400 1.75rem / var(--default-line-height) var(--body-font);
   /* Dimensions */
-  --combobox-height: 300px;
   --content-width-narrow: min(500px, 100%);
 }

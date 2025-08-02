@@ -24,6 +24,7 @@ public static class FranchiseMappingExtensions
         item is not null
             ? new(
                 item.ParentFranchise.Id.Value,
+                item.GetRootFranchiseId().Value,
                 item.SequenceNumber,
                 item.DisplayNumber,
                 item.IsFirst(),
@@ -77,28 +78,37 @@ public static class FranchiseMappingExtensions
             .Select(item => item.Select(
                 movie => new FranchiseItemModel(
                     movie.Id.Value,
+                    FranchiseItemType.Movie,
                     item.SequenceNumber,
                     item.DisplayNumber,
                     movie.Title.Name,
+                    movie.OriginalTitle.Name,
                     movie.Year,
                     movie.Year,
-                    FranchiseItemType.Movie),
+                    movie.GetActiveColor().HexValue,
+                    movie.ListItem!.SequenceNumber),
                 series => new FranchiseItemModel(
                     series.Id.Value,
+                    FranchiseItemType.Series,
                     item.SequenceNumber,
                     item.DisplayNumber,
                     series.Title.Name,
+                    series.OriginalTitle.Name,
                     series.StartYear,
                     series.EndYear,
-                    FranchiseItemType.Series),
+                    series.GetActiveColor().HexValue,
+                    series.ListItem!.SequenceNumber),
                 franchise => new FranchiseItemModel(
                     franchise.Id.Value,
+                    FranchiseItemType.Franchise,
                     item.SequenceNumber,
                     item.DisplayNumber,
                     franchise.Title.Name,
+                    franchise.OriginalTitle.Name,
                     franchise.StartYear,
                     franchise.EndYear,
-                    FranchiseItemType.Franchise)))];
+                    franchise.GetActiveColor().HexValue,
+                    franchise.ListItem!.SequenceNumber)))];
 
     public static FranchiseUpdateResult Update(
         this Franchise franchise,
@@ -195,4 +205,9 @@ public static class FranchiseMappingExtensions
             request.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
             isOriginal: true);
     }
+
+    private static Id<Franchise> GetRootFranchiseId(this FranchiseItem item) =>
+        item.ParentFranchise.FranchiseItem is { } parentItem
+            ? parentItem.GetRootFranchiseId()
+            : item.ParentFranchise.Id;
 }

@@ -246,6 +246,9 @@
   <data name="FranchiseForm.Problem.LoadingFailed" xml:space="preserve">
     <value>Loading the franchise has failed</value>
   </data>
+  <data name="FranchiseForm.Problem.LoadingStandaloneItemsFailed" xml:space="preserve">
+    <value>Loading standalone items has failed</value>
+  </data>
   <data name="FranchiseForm.Problem.UpdatingFailed" xml:space="preserve">
     <value>Updating the franchise has failed</value>
   </data>
@@ -293,6 +296,15 @@
   </data>
   <data name="ListComponent.Problem.LoadingListFailed" xml:space="preserve">
     <value>Loading the list has failed</value>
+  </data>
+  <data name="ListItemType.Franchise" xml:space="preserve">
+    <value>Franchise</value>
+  </data>
+  <data name="ListItemType.Movie" xml:space="preserve">
+    <value>Movie</value>
+  </data>
+  <data name="ListItemType.Series" xml:space="preserve">
+    <value>Series</value>
   </data>
   <data name="ListPage.Menu.Back" xml:space="preserve">
     <value>Back to home page</value>
@@ -356,6 +368,9 @@
   </data>
   <data name="FranchiseForm.AddFranchise" xml:space="preserve">
     <value>Add new franchise</value>
+  </data>
+  <data name="FranchiseForm.AddExistingItem" xml:space="preserve">
+    <value>Add existing item</value>
   </data>
   <data name="FranchiseForm.AddMovie" xml:space="preserve">
     <value>Add new movie</value>

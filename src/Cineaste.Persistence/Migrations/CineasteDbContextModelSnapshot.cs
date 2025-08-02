@@ -141,6 +141,9 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<bool>("IsShown")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsStandalone")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("ListId")
                         .HasColumnType("uniqueidentifier");
 
