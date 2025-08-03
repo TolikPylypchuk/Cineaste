@@ -1,6 +1,11 @@
 namespace Cineaste.Validation;
 
-public sealed class PosterContentTypeValidator
+public interface IPosterValidator
+{
+    void ValidateContentType(string contentType);
+}
+
+public sealed class PosterValidator : IPosterValidator
 {
     public void ValidateContentType(string contentType)
     {

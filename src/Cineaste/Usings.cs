@@ -9,6 +9,7 @@ global using Cineaste.Persistence;
 global using Cineaste.Data;
 global using Cineaste.Exceptions;
 global using Cineaste.Mapping;
+global using Cineaste.Models;
 global using Cineaste.Services;
 global using Cineaste.Shared.Models;
 global using Cineaste.Shared.Models.Franchise;

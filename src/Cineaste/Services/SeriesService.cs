@@ -2,9 +2,15 @@ using Cineaste.Core.Domain;
 
 namespace Cineaste.Services;
 
-public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesService> logger)
+public sealed class SeriesService(
+    CineasteDbContext dbContext,
+    IPosterProvider posterProvider,
+    IPosterValidator posterValidator,
+    ILogger<SeriesService> logger)
 {
     private readonly CineasteDbContext dbContext = dbContext;
+    private readonly IPosterProvider posterProvider = posterProvider;
+    private readonly IPosterValidator posterValidator = posterValidator;
     private readonly ILogger<SeriesService> logger = logger;
 
     public async Task<SeriesModel> GetSeries(Id<Series> id, CancellationToken token)
@@ -84,7 +90,7 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<PosterModel> GetSeriesPoster(Id<Series> seriesId, CancellationToken token)
+    public async Task<BinaryContentModel> GetSeriesPoster(Id<Series> seriesId, CancellationToken token)
     {
         var list = await this.FindList(token);
         var series = await this.FindSeries(list, seriesId, token);
@@ -97,21 +103,26 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
         return poster.ToPosterModel();
     }
 
-    public async Task SetSeriesPoster(Id<Series> seriesId, PosterRequest request, CancellationToken token)
+    public async Task SetSeriesPoster(Id<Series> seriesId, BinaryContentRequest request, CancellationToken token)
     {
-        var list = await this.FindList(token);
-        var series = await this.FindSeries(list, seriesId, token);
+        posterValidator.ValidateContentType(request.Type);
 
-        var data = new byte[request.ContentLength];
-        await request.Data.ReadExactlyAsync(data, 0, data.Length, token);
-
-        var poster = new SeriesPoster(Id.Create<SeriesPoster>(), series, data, request.ContentType);
-
-        this.dbContext.SeriesPosters.Add(poster);
-        await this.dbContext.SaveChangesAsync(token);
+        await this.SetSeriesPoster(
+            seriesId,
+            async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
+            token);
     }
 
-    public async Task<PosterModel> GetSeasonPoster(Id<Series> seriesId, Id<Period> periodId, CancellationToken token)
+    public async Task SetSeriesPoster(
+        Id<Series> seriesId,
+        Validated<PosterUrlRequest> request,
+        CancellationToken token) =>
+        await this.SetSeriesPoster(seriesId, () => this.FetchPoster(request, token), token);
+
+    public async Task<BinaryContentModel> GetSeasonPoster(
+        Id<Series> seriesId,
+        Id<Period> periodId,
+        CancellationToken token)
     {
         var list = await this.FindList(token);
         var series = await this.FindSeries(list, seriesId, token);
@@ -128,23 +139,26 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
     public async Task SetSeasonPoster(
         Id<Series> seriesId,
         Id<Period> periodId,
-        PosterRequest request,
+        BinaryContentRequest request,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
-        var series = await this.FindSeries(list, seriesId, token);
-        var period = this.FindPeriod(series, periodId);
+        posterValidator.ValidateContentType(request.Type);
 
-        var data = new byte[request.ContentLength];
-        await request.Data.ReadExactlyAsync(data, 0, data.Length, token);
-
-        var poster = new SeasonPoster(Id.Create<SeasonPoster>(), period, data, request.ContentType);
-
-        this.dbContext.SeasonPosters.Add(poster);
-        await this.dbContext.SaveChangesAsync(token);
+        await this.SetSeasonPoster(
+            seriesId,
+            periodId,
+            async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
+            token);
     }
 
-    public async Task<PosterModel> GetSpecialEpisodePoster(
+    public async Task SetSeasonPoster(
+        Id<Series> seriesId,
+        Id<Period> periodId,
+        Validated<PosterUrlRequest> request,
+        CancellationToken token) =>
+        await this.SetSeasonPoster(seriesId, periodId, () => this.FetchPoster(request, token), token);
+
+    public async Task<BinaryContentModel> GetSpecialEpisodePoster(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         CancellationToken token)
@@ -164,21 +178,24 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
     public async Task SetSpecialEpisodePoster(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
-        PosterRequest request,
+        BinaryContentRequest request,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
-        var series = await this.FindSeries(list, seriesId, token);
-        var episode = this.FindSpecialEpisode(series, episodeId);
+        posterValidator.ValidateContentType(request.Type);
 
-        var data = new byte[request.ContentLength];
-        await request.Data.ReadExactlyAsync(data, 0, data.Length, token);
-
-        var poster = new SpecialEpisodePoster(Id.Create<SpecialEpisodePoster>(), episode, data, request.ContentType);
-
-        this.dbContext.SpecialEpisodePosters.Add(poster);
-        await this.dbContext.SaveChangesAsync(token);
+        await this.SetSpecialEpisodePoster(
+            seriesId,
+            episodeId,
+            async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
+            token);
     }
+
+    public async Task SetSpecialEpisodePoster(
+        Id<Series> seriesId,
+        Id<SpecialEpisode> episodeId,
+        Validated<PosterUrlRequest> request,
+        CancellationToken token) =>
+        await this.SetSpecialEpisodePoster(seriesId, episodeId, () => this.FetchPoster(request, token), token);
 
     private Period FindPeriod(Series series, Id<Period> periodId) =>
         series.Seasons
@@ -332,6 +349,83 @@ public sealed class SeriesService(CineasteDbContext dbContext, ILogger<SeriesSer
             .WhereNotNull()
             .FirstOrDefault(franchise => franchise.Id == id)
             ?? throw this.NotFound(id);
+
+    private async Task SetSeriesPoster(
+        Id<Series> seriesId,
+        Func<Task<BinaryContentModel>> getContent,
+        CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var series = await this.FindSeries(list, seriesId, token);
+
+        var content = await getContent();
+
+        if (await this.dbContext.SeriesPosters.FirstOrDefaultAsync(poster => poster.Series == series, token)
+            is { } existingPoster)
+        {
+            this.dbContext.SeriesPosters.Remove(existingPoster);
+        }
+
+        var poster = new SeriesPoster(Id.Create<SeriesPoster>(), series, content.Data, content.Type);
+
+        this.dbContext.SeriesPosters.Add(poster);
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
+    private async Task SetSeasonPoster(
+        Id<Series> seriesId,
+        Id<Period> periodId,
+        Func<Task<BinaryContentModel>> getContent,
+        CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var series = await this.FindSeries(list, seriesId, token);
+        var period = this.FindPeriod(series, periodId);
+
+        var content = await getContent();
+
+        if (await this.dbContext.SeasonPosters.FirstOrDefaultAsync(poster => poster.Period == period, token)
+            is { } existingPoster)
+        {
+            this.dbContext.SeasonPosters.Remove(existingPoster);
+        }
+
+        var poster = new SeasonPoster(Id.Create<SeasonPoster>(), period, content.Data, content.Type);
+
+        this.dbContext.SeasonPosters.Add(poster);
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
+    private async Task SetSpecialEpisodePoster(
+        Id<Series> seriesId,
+        Id<SpecialEpisode> episodeId,
+        Func<Task<BinaryContentModel>> getContent,
+        CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var series = await this.FindSeries(list, seriesId, token);
+        var episode = this.FindSpecialEpisode(series, episodeId);
+
+        var content = await getContent();
+
+        if (await this.dbContext.SpecialEpisodePosters
+                .FirstOrDefaultAsync(poster => poster.SpecialEpisode == episode, token) is { } existingPoster)
+        {
+            this.dbContext.SpecialEpisodePosters.Remove(existingPoster);
+        }
+
+        var poster = new SpecialEpisodePoster(Id.Create<SpecialEpisodePoster>(), episode, content.Data, content.Type);
+
+        this.dbContext.SpecialEpisodePosters.Add(poster);
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
+    private async Task<BinaryContentModel> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token)
+    {
+        var content = await this.posterProvider.FetchPoster(request, token);
+        posterValidator.ValidateContentType(content.Type);
+        return content;
+    }
 
     private NotFoundException ListNotFound() =>
         new(Resources.List, "Could not find the list");

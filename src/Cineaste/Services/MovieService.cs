@@ -1,8 +1,14 @@
 namespace Cineaste.Services;
 
-public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieService> logger)
+public sealed class MovieService(
+    CineasteDbContext dbContext,
+    IPosterProvider posterProvider,
+    IPosterValidator posterValidator,
+    ILogger<MovieService> logger)
 {
     private readonly CineasteDbContext dbContext = dbContext;
+    private readonly IPosterProvider posterProvider = posterProvider;
+    private readonly IPosterValidator posterValidator = posterValidator;
     private readonly ILogger<MovieService> logger = logger;
 
     public async Task<MovieModel> GetMovie(Id<Movie> id, CancellationToken token)
@@ -79,7 +85,7 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<PosterModel> GetMoviePoster(Id<Movie> movieId, CancellationToken token)
+    public async Task<BinaryContentModel> GetMoviePoster(Id<Movie> movieId, CancellationToken token)
     {
         var list = await this.FindList(token);
         var movie = await this.FindMovie(list, movieId, token);
@@ -92,19 +98,18 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
         return poster.ToPosterModel();
     }
 
-    public async Task SetMoviePoster(Id<Movie> movieId, PosterRequest request, CancellationToken token)
+    public async Task SetMoviePoster(Id<Movie> movieId, BinaryContentRequest request, CancellationToken token)
     {
-        var list = await this.FindList(token);
-        var movie = await this.FindMovie(list, movieId, token);
+        posterValidator.ValidateContentType(request.Type);
 
-        var data = new byte[request.ContentLength];
-        await request.Data.ReadExactlyAsync(data, 0, data.Length, token);
-
-        var poster = new MoviePoster(Id.Create<MoviePoster>(), movie, data, request.ContentType);
-
-        this.dbContext.MoviePosters.Add(poster);
-        await this.dbContext.SaveChangesAsync(token);
+        await this.SetMoviePoster(
+            movieId,
+            async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
+            token);
     }
+
+    public async Task SetMoviePoster(Id<Movie> movieId, Validated<PosterUrlRequest> request, CancellationToken token) =>
+        await this.SetMoviePoster(movieId, () => this.FetchPoster(request, token), token);
 
     private async Task<Movie> FindMovie(CineasteList list, Id<Movie> id, CancellationToken token)
     {
@@ -233,6 +238,35 @@ public sealed class MovieService(CineasteDbContext dbContext, ILogger<MovieServi
             .WhereNotNull()
             .FirstOrDefault(franchise => franchise.Id == id)
             ?? throw this.NotFound(id);
+
+    private async Task SetMoviePoster(
+        Id<Movie> movieId,
+        Func<Task<BinaryContentModel>> getContent,
+        CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var movie = await this.FindMovie(list, movieId, token);
+
+        var content = await getContent();
+
+        if (await this.dbContext.MoviePosters.FirstOrDefaultAsync(poster => poster.Movie == movie, token)
+            is { } existingPoster)
+        {
+            this.dbContext.MoviePosters.Remove(existingPoster);
+        }
+
+        var poster = new MoviePoster(Id.Create<MoviePoster>(), movie, content.Data, content.Type);
+
+        this.dbContext.MoviePosters.Add(poster);
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
+    private async Task<BinaryContentModel> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token)
+    {
+        var content = await this.posterProvider.FetchPoster(request, token);
+        posterValidator.ValidateContentType(content.Type);
+        return content;
+    }
 
     private NotFoundException ListNotFound() =>
         new(Resources.List, "Could not find the list");

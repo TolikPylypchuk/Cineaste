@@ -5,7 +5,7 @@ namespace Cineaste.Controllers;
 [ApiController]
 [Route("/api/series")]
 [Tags(["Series"])]
-public sealed class SeriesController(SeriesService seriesService, PosterContentTypeValidator posterContentTypeValidator)
+public sealed class SeriesController(SeriesService seriesService)
     : ControllerBase
 {
     [HttpGet("{id}")]
@@ -54,7 +54,7 @@ public sealed class SeriesController(SeriesService seriesService, PosterContentT
     public async Task<ActionResult> GetSeriesPoster(Guid id, CancellationToken token)
     {
         var poster = await seriesService.GetSeriesPoster(Id.For<Series>(id), token);
-        return this.File(poster.Data, poster.ContentType);
+        return this.File(poster.Data, poster.Type);
     }
 
     [HttpPut("{id}/poster")]
@@ -64,11 +64,23 @@ public sealed class SeriesController(SeriesService seriesService, PosterContentT
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> SetSeriesPoster(Guid id, IFormFile file, CancellationToken token)
     {
-        posterContentTypeValidator.ValidateContentType(file.ContentType);
-
-        var request = new PosterRequest(file.OpenReadStream(), file.Length, file.ContentType);
+        var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
         await seriesService.SetSeriesPoster(Id.For<Series>(id), request, token);
 
+        return this.NoContent();
+    }
+
+    [HttpPut("{id}/poster")]
+    [EndpointSummary("Set a poster for a series")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> SetSeriesPoster(
+        Guid id,
+        [FromBody] PosterUrlRequest request,
+        CancellationToken token)
+    {
+        await seriesService.SetSeriesPoster(Id.For<Series>(id), request.Validated(), token);
         return this.NoContent();
     }
 
@@ -80,7 +92,7 @@ public sealed class SeriesController(SeriesService seriesService, PosterContentT
     public async Task<ActionResult> GetSeasonPoster(Guid seriesId, Guid periodId, CancellationToken token)
     {
         var poster = await seriesService.GetSeasonPoster(Id.For<Series>(seriesId), Id.For<Period>(periodId), token);
-        return this.File(poster.Data, poster.ContentType);
+        return this.File(poster.Data, poster.Type);
     }
 
     [HttpPut("{seriesId}/seasons/periods/{periodId}/poster")]
@@ -94,10 +106,25 @@ public sealed class SeriesController(SeriesService seriesService, PosterContentT
         IFormFile file,
         CancellationToken token)
     {
-        posterContentTypeValidator.ValidateContentType(file.ContentType);
-
-        var request = new PosterRequest(file.OpenReadStream(), file.Length, file.ContentType);
+        var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
         await seriesService.SetSeasonPoster(Id.For<Series>(seriesId), Id.For<Period>(periodId), request, token);
+
+        return this.NoContent();
+    }
+
+    [HttpPut("{seriesId}/seasons/periods/{periodId}/poster")]
+    [EndpointSummary("Set a poster for a season")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> SetSeasonPoster(
+        Guid seriesId,
+        Guid periodId,
+        [FromBody] PosterUrlRequest request,
+        CancellationToken token)
+    {
+        await seriesService.SetSeasonPoster(
+            Id.For<Series>(seriesId), Id.For<Period>(periodId), request.Validated(), token);
 
         return this.NoContent();
     }
@@ -112,7 +139,7 @@ public sealed class SeriesController(SeriesService seriesService, PosterContentT
         var poster = await seriesService.GetSpecialEpisodePoster(
             Id.For<Series>(seriesId), Id.For<SpecialEpisode>(episodeId), token);
 
-        return this.File(poster.Data, poster.ContentType);
+        return this.File(poster.Data, poster.Type);
     }
 
     [HttpPut("{seriesId}/special-episodes/{episodeId}/poster")]
@@ -126,11 +153,26 @@ public sealed class SeriesController(SeriesService seriesService, PosterContentT
         IFormFile file,
         CancellationToken token)
     {
-        posterContentTypeValidator.ValidateContentType(file.ContentType);
-
-        var request = new PosterRequest(file.OpenReadStream(), file.Length, file.ContentType);
+        var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
         await seriesService.SetSpecialEpisodePoster(
             Id.For<Series>(seriesId), Id.For<SpecialEpisode>(episodeId), request, token);
+
+        return this.NoContent();
+    }
+
+    [HttpPut("{seriesId}/special-episodes/{episodeId}/poster")]
+    [EndpointSummary("Set a poster for a special episode")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> SetSpecialEpisodePoster(
+        Guid seriesId,
+        Guid episodeId,
+        [FromBody] PosterUrlRequest request,
+        CancellationToken token)
+    {
+        await seriesService.SetSpecialEpisodePoster(
+            Id.For<Series>(seriesId), Id.For<SpecialEpisode>(episodeId), request.Validated(), token);
 
         return this.NoContent();
     }

@@ -89,6 +89,14 @@ internal sealed class CineasteExceptionHandlerMiddleware(RequestDelegate next)
                 Detail = $"{Problem}.{ex.MessageCode}",
                 Extensions = { [Resource] = ex.Resource, [Properties] = ex.Properties }
             },
+            PosterFetchException ex => new ProblemDetails
+            {
+                Type = FormatProblemType(Status503ServiceUnavailable),
+                Title = ReasonPhrases.GetReasonPhrase(Status503ServiceUnavailable),
+                Status = Status503ServiceUnavailable,
+                Detail = $"{Problem}.{ex.MessageCode}",
+                Extensions = { [Properties] = ex.Properties }
+            },
             UnsupportedInputException ex => new ProblemDetails
             {
                 Type = FormatProblemType(Status415UnsupportedMediaType),

@@ -40,6 +40,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 50L * 1024 * 1024; // 50 MB
 });
 
+builder.Services.AddHttpClient();
 builder.Services.AddProblemDetails();
 builder.Services.AddCineasteOpenApi();
 builder.Services.AddCors();
@@ -54,8 +55,9 @@ builder.Services.AddScoped<ListService>();
 builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<SeriesService>();
 builder.Services.AddScoped<FranchiseService>();
+builder.Services.AddScoped<IPosterProvider, PosterProvider>();
 
-builder.Services.AddSingleton<PosterContentTypeValidator>();
+builder.Services.AddSingleton<IPosterValidator, PosterValidator>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));

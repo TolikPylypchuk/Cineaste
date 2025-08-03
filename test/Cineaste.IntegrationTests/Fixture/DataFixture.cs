@@ -1,8 +1,8 @@
 using System.Globalization;
 
-using Cineaste.Core.Domain;
-
 using Microsoft.EntityFrameworkCore;
+
+using NSubstitute;
 
 using Testcontainers.MsSql;
 
@@ -21,10 +21,16 @@ public class DataFixture : IAsyncLifetime
 
     public DataFixture()
     {
+        this.PosterProvider = Substitute.For<IPosterProvider>();
+        this.PosterValidator = Substitute.For<IPosterValidator>();
+
         this.list = this.CreateList();
         this.movieKind = this.CreateMovieKind(this.list);
         this.seriesKind = this.CreateSeriesKind(this.list);
     }
+
+    public IPosterProvider PosterProvider { get; private set; }
+    public IPosterValidator PosterValidator { get; private set; }
 
     public Id<CineasteList> ListId => this.list.Id;
     public Id<MovieKind> MovieKindId => this.movieKind.Id;

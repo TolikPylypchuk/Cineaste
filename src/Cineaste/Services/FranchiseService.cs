@@ -1,8 +1,14 @@
 namespace Cineaste.Services;
 
-public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<FranchiseService> logger)
+public sealed class FranchiseService(
+    CineasteDbContext dbContext,
+    IPosterProvider posterProvider,
+    IPosterValidator posterValidator,
+    ILogger<FranchiseService> logger)
 {
     private readonly CineasteDbContext dbContext = dbContext;
+    private readonly IPosterProvider posterProvider = posterProvider;
+    private readonly IPosterValidator posterValidator = posterValidator;
     private readonly ILogger<FranchiseService> logger = logger;
 
     public async Task<FranchiseModel> GetFranchise(Id<Franchise> id, CancellationToken token)
@@ -82,7 +88,7 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<PosterModel> GetFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
+    public async Task<BinaryContentModel> GetFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
     {
         var list = await this.FindList(token);
         var franchise = await this.FindFranchise(list, franchiseId, token);
@@ -95,19 +101,24 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         return poster.ToPosterModel();
     }
 
-    public async Task SetFranchisePoster(Id<Franchise> franchiseId, PosterRequest request, CancellationToken token)
+    public async Task SetFranchisePoster(
+        Id<Franchise> franchiseId,
+        BinaryContentRequest request,
+        CancellationToken token)
     {
-        var list = await this.FindList(token);
-        var franchise = await this.FindFranchise(list, franchiseId, token);
+        posterValidator.ValidateContentType(request.Type);
 
-        var data = new byte[request.ContentLength];
-        await request.Data.ReadExactlyAsync(data, 0, data.Length, token);
-
-        var poster = new FranchisePoster(Id.Create<FranchisePoster>(), franchise, data, request.ContentType);
-
-        this.dbContext.FranchisePosters.Add(poster);
-        await this.dbContext.SaveChangesAsync(token);
+        await this.SetFranchisePoster(
+            franchiseId,
+            async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
+            token);
     }
+
+    public async Task SetFranchisePoster(
+        Id<Franchise> franchiseId,
+        Validated<PosterUrlRequest> request,
+        CancellationToken token) =>
+        await this.SetFranchisePoster(franchiseId, () => this.FetchPoster(request, token), token);
 
     private async Task<Franchise> FindFranchise(CineasteList list, Id<Franchise> id, CancellationToken token)
     {
@@ -333,6 +344,35 @@ public sealed class FranchiseService(CineasteDbContext dbContext, ILogger<Franch
         {
             franchise.ShowTitles = true;
         }
+    }
+
+    private async Task SetFranchisePoster(
+        Id<Franchise> franchiseId,
+        Func<Task<BinaryContentModel>> getContent,
+        CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var franchise = await this.FindFranchise(list, franchiseId, token);
+
+        var content = await getContent();
+
+        if (await this.dbContext.FranchisePosters.FirstOrDefaultAsync(poster => poster.Franchise == franchise, token)
+            is { } existingPoster)
+        {
+            this.dbContext.FranchisePosters.Remove(existingPoster);
+        }
+
+        var poster = new FranchisePoster(Id.Create<FranchisePoster>(), franchise, content.Data, content.Type);
+
+        this.dbContext.FranchisePosters.Add(poster);
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
+    private async Task<BinaryContentModel> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token)
+    {
+        var content = await this.posterProvider.FetchPoster(request, token);
+        posterValidator.ValidateContentType(content.Type);
+        return content;
     }
 
     private NotFoundException ListNotFound() =>

@@ -5,9 +5,7 @@ namespace Cineaste.Controllers;
 [ApiController]
 [Route("/api/franchises")]
 [Tags(["Franchises"])]
-public sealed class FranchiseController(
-    FranchiseService franchiseService,
-    PosterContentTypeValidator posterContentTypeValidator)
+public sealed class FranchiseController(FranchiseService franchiseService)
     : ControllerBase
 {
     [HttpGet("{id}")]
@@ -58,21 +56,33 @@ public sealed class FranchiseController(
     public async Task<ActionResult> GetFranchisePoster(Guid id, CancellationToken token)
     {
         var poster = await franchiseService.GetFranchisePoster(Id.For<Franchise>(id), token);
-        return this.File(poster.Data, poster.ContentType);
+        return this.File(poster.Data, poster.Type);
     }
 
     [HttpPut("{id}/poster")]
     [EndpointSummary("Set a poster for a franchise")]
-    [ProducesResponseType<MovieModel>(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> SetFranchisePoster(Guid id, IFormFile file, CancellationToken token)
     {
-        posterContentTypeValidator.ValidateContentType(file.ContentType);
-
-        var request = new PosterRequest(file.OpenReadStream(), file.Length, file.ContentType);
+        var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
         await franchiseService.SetFranchisePoster(Id.For<Franchise>(id), request, token);
 
+        return this.NoContent();
+    }
+
+    [HttpPut("{id}/poster")]
+    [EndpointSummary("Set a poster for a franchise")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> SetFranchisePoster(
+        Guid id,
+        [FromBody] PosterUrlRequest request,
+        CancellationToken token)
+    {
+        await franchiseService.SetFranchisePoster(Id.For<Franchise>(id), request.Validated(), token);
         return this.NoContent();
     }
 }
