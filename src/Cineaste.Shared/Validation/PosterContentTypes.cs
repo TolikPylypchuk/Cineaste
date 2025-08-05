@@ -20,4 +20,19 @@ public static class PosterContentTypes
         ImageSvg,
         ImageWebp
     ];
+
+    public static readonly ImmutableList<string> AcceptedImageFileExtensions =
+    [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".apng",
+        ".avif",
+        ".gif",
+        ".svg",
+        ".webp",
+        ".jfif",
+        ".pjpeg",
+        ".pjp",
+    ];
 }

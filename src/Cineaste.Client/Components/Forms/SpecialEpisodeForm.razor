@@ -46,6 +46,11 @@
             </h2>
 
             <div class="form">
+                @if (this.FormModel.BackingModel is { PosterUrl: string posterUrl })
+                {
+                    <img src="@posterUrl" alt="@this.FormTitle" title="this.FormTitle" class="poster" />
+                }
+
                 <div class="form-links">
                     @if (this.HasRottenTomatoesId())
                     {
@@ -140,7 +145,7 @@
 
                 <div class="delete-container">
                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="@this.Delete">
-                        @this.Loc["Button.Delete"]
+                        @this.Loc["Button.Remove"]
                     </MudButton>
                 </div>
             </div>

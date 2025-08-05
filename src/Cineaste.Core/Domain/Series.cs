@@ -4,6 +4,7 @@ public sealed class Series : FranchiseItemEntity<Series>
 {
     private string? imdbId;
     private string? rottenTomatoesId;
+    private string? posterHash;
     private SeriesKind kind;
 
     private readonly List<Season> seasons;
@@ -31,6 +32,12 @@ public sealed class Series : FranchiseItemEntity<Series>
     {
         get => this.rottenTomatoesId;
         set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
+    }
+
+    public string? PosterHash
+    {
+        get => this.posterHash;
+        set => this.posterHash = Require.Sha256(value);
     }
 
     public IReadOnlyCollection<Season> Seasons =>

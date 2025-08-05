@@ -30,6 +30,7 @@ public static class OpenFranchiseFormReducers
                 ContinueNumbering: false,
                 ListItemColor: String.Empty,
                 ListSequenceNumber: 0,
+                PosterUrl: null,
                 FranchiseItem: null)
         };
 

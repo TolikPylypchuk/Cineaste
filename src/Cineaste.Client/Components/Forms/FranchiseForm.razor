@@ -66,6 +66,11 @@
                 </h2>
 
                 <div class="form">
+                    @if (this.FormModel.BackingModel is { PosterUrl: string posterUrl })
+                    {
+                        <img src="@posterUrl" alt="@this.FormTitle" title="this.FormTitle" class="poster" />
+                    }
+
                     <div class="form-checkboxes">
                         <MudCheckBox
                             @bind-Value="this.FormModel.ShowTitles"

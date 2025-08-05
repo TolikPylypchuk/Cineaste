@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 
 namespace Cineaste.Persistence.Configuration;
 
@@ -13,6 +14,12 @@ internal static class Extensions
         builder.Property(x => x.Id)
             .HasConversion<IdConverter<T>>();
     }
+
+    public static void HasPosterHash<T>(this EntityTypeBuilder<T> builder, Expression<Func<T, string?>> posterHash)
+        where T : Entity<T> =>
+        builder.Property(posterHash)
+            .HasMaxLength(SHA256.HashSizeInBytes * 2)
+            .IsFixedLength();
 
     public static void HasTitles<T>(
         this EntityTypeBuilder<T> builder,

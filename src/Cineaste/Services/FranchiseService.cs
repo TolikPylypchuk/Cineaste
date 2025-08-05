@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace Cineaste.Services;
 
 public sealed class FranchiseService(
@@ -363,6 +365,8 @@ public sealed class FranchiseService(
         }
 
         var poster = new FranchisePoster(Id.Create<FranchisePoster>(), franchise, content.Data, content.Type);
+
+        franchise.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
 
         this.dbContext.FranchisePosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);

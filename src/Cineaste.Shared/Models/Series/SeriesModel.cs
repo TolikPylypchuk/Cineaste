@@ -15,6 +15,7 @@ public sealed record SeriesModel(
     string? RottenTomatoesId,
     string ListItemColor,
     int ListSequenceNumber,
+    string? PosterUrl,
     FranchiseItemInfoModel? FranchiseItem) : IIdentifyableModel, ITitledModel
 {
     [JsonIgnore]

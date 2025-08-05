@@ -5,6 +5,7 @@ public sealed class Movie : FranchiseItemEntity<Movie>
     private int year;
     private string? imdbId;
     private string? rottenTomatoesId;
+    private string? posterHash;
     private MovieKind kind;
 
     private readonly HashSet<TagContainer> tags;
@@ -36,6 +37,12 @@ public sealed class Movie : FranchiseItemEntity<Movie>
     {
         get => this.rottenTomatoesId;
         set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
+    }
+
+    public string? PosterHash
+    {
+        get => this.posterHash;
+        set => this.posterHash = Require.Sha256(value);
     }
 
     public IReadOnlySet<TagContainer> Tags =>

@@ -44,6 +44,46 @@
             </h2>
 
             <div class="form">
+                @if (this.PosterUrls.Count > 0)
+                {
+                    <div class="poster-container">
+                        <img
+                            src="@this.PosterUrls[this.CurrentPosterUrlIndex]"
+                            alt="@this.FormTitle"
+                            title="this.FormTitle"
+                            class="poster"
+                        />
+
+                        @if (this.PosterUrls.Count > 1)
+                        {
+                            <div class="poster-actions">
+                                @{
+                                    bool isFirstPoster = this.CurrentPosterUrlIndex == 0;
+                                    bool isLastPoster = this.CurrentPosterUrlIndex == this.PosterUrls.Count - 1;
+                                }
+
+                                <MudIconButton
+                                    Icon="@Icons.Material.Filled.KeyboardArrowLeft"
+                                    Size="Size.Small"
+                                    Class="@(isFirstPoster ? "invisible" : null)"
+                                    @onclick="this.ShowPreviousPoster"
+                                    aria-hidden="@isFirstPoster"
+                                    aria-label="@this.Loc["AriaLabel.Previous"]"
+                                />
+
+                                <MudIconButton
+                                    Icon="@Icons.Material.Filled.KeyboardArrowRight"
+                                    Size="Size.Small"
+                                    Class="@(isLastPoster ? "invisible" : null)"
+                                    @onclick="this.ShowNextPoster"
+                                    aria-hidden="@isLastPoster"
+                                    aria-label="@this.Loc["AriaLabel.Previous"]"
+                                />
+                            </div>
+                        }
+                    </div>
+                }
+
                 <div class="form-links">
                     @{
                         int part = 1;
@@ -152,7 +192,7 @@
 
                 <div class="button-container">
                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="@this.Delete">
-                        @this.Loc["Button.Delete"]
+                        @this.Loc["Button.Remove"]
                     </MudButton>
                 </div>
             </div>

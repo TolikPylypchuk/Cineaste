@@ -14,6 +14,8 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);
 
+        movie.HasPosterHash(m => m.PosterHash);
+
         movie.HasTags(m => m.Tags, "MovieTags");
         movie.HasFranchiseItem(m => m.FranchiseItem, fi => fi.Movie);
 

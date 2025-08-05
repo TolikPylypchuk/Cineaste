@@ -12,6 +12,7 @@ public record FranchiseModel(
     bool ContinueNumbering,
     string ListItemColor,
     int ListSequenceNumber,
+    string? PosterUrl,
     FranchiseItemInfoModel? FranchiseItem) : IIdentifyableModel, ITitledModel;
 
 public record FranchiseItemModel(

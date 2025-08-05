@@ -57,6 +57,10 @@
   gap: var(--s2);
 }
 
+.poster {
+  width: 100%;
+}
+
 .form-links {
   display: flex;
   flex-direction: row;

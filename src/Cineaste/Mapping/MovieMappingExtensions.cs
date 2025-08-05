@@ -15,6 +15,7 @@ public static class MovieMappingExtensions
             movie.RottenTomatoesId,
             movie.GetActiveColor()?.HexValue ?? String.Empty,
             movie.ListItem?.SequenceNumber ?? 0,
+            movie.GetPosterUrl(),
             movie.FranchiseItem.ToFranchiseItemInfoModel());
 
     public static Movie ToMovie(this Validated<MovieRequest> request, Id<Movie> id, MovieKind kind) =>
@@ -49,4 +50,7 @@ public static class MovieMappingExtensions
 
         movie.ListItem?.SetProperties(movie);
     }
+
+    private static string? GetPosterUrl(this Movie movie) =>
+        movie.PosterHash is not null ? $"/api/movies/{movie.Id.Value}/poster/?h={movie.PosterHash}" : null;
 }

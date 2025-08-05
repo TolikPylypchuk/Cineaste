@@ -6,6 +6,8 @@ internal sealed class PeriodTypeConfiguration : IEntityTypeConfiguration<Period>
     {
         period.HasStronglyTypedId();
 
+        period.HasPosterHash(p => p.PosterHash);
+
         period.ToTable(t => t.HasCheckConstraint("CH_Periods_StartMonthValid", "StartMonth >= 1 AND StartMonth <= 12"));
         period.ToTable(t => t.HasCheckConstraint("CH_Periods_StartYearPositive", "StartYear > 0"));
 

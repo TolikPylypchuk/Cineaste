@@ -17,6 +17,7 @@ public static class FranchiseMappingExtensions
             franchise.ContinueNumbering,
             franchise.GetActiveColor()?.HexValue ?? String.Empty,
             franchise.ListItem?.SequenceNumber ?? 0,
+            franchise.GetPosterUrl(),
             franchise.FranchiseItem.ToFranchiseItemInfoModel());
 
     [return: NotNullIfNotNull(nameof(item))]
@@ -210,4 +211,9 @@ public static class FranchiseMappingExtensions
         item.ParentFranchise.FranchiseItem is { } parentItem
             ? parentItem.GetRootFranchiseId()
             : item.ParentFranchise.Id;
+
+    private static string? GetPosterUrl(this Franchise franchise) =>
+        franchise.PosterHash is not null
+            ? $"/api/franchises/{franchise.Id.Value}/poster/?h={franchise.PosterHash}"
+            : null;
 }

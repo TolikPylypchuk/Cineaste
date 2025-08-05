@@ -880,6 +880,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fetch poster.
+        /// </summary>
+        public static string MovieForm_FetchPoster {
+            get {
+                return ResourceManager.GetString("MovieForm.FetchPoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go to franchise.
         /// </summary>
         public static string MovieForm_GoToFranchise {
@@ -1024,6 +1033,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select file.
+        /// </summary>
+        public static string MovieForm_SelectFile {
+            get {
+                return ResourceManager.GetString("MovieForm.SelectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start franchise.
         /// </summary>
         public static string MovieForm_StartFranchise {
@@ -1038,6 +1056,15 @@ namespace Cineaste.Client.Localization {
         public static string MovieForm_Title {
             get {
                 return ResourceManager.GetString("MovieForm.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload poster.
+        /// </summary>
+        public static string MovieForm_UploadPoster {
+            get {
+                return ResourceManager.GetString("MovieForm.UploadPoster", resourceCulture);
             }
         }
         

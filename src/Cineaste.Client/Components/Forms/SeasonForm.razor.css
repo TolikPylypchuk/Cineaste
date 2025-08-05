@@ -57,6 +57,25 @@
   gap: var(--s2);
 }
 
+.poster-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s1);
+}
+
+.poster {
+  width: 100%;
+}
+
+.poster-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s2);
+}
+
 .form-links {
   display: flex;
   flex-direction: row;

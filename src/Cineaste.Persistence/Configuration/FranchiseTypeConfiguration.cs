@@ -27,6 +27,8 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
         franchise.Property(s => s.KindSource)
             .HasConversion<string>();
 
+        franchise.HasPosterHash(f => f.PosterHash);
+
         franchise.Ignore(f => f.Titles);
         franchise.Ignore(f => f.OriginalTitles);
         franchise.Ignore(f => f.Title);

@@ -75,6 +75,10 @@
   display: none;
 }
 
+.poster {
+  width: 100%;
+}
+
 ::deep .form-field {
   width: 100%;
   display: block;

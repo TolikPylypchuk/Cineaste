@@ -17,7 +17,7 @@ namespace Cineaste.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -52,6 +52,11 @@ namespace Cineaste.Persistence.Migrations
 
                     b.Property<Guid>("MovieKindId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PosterHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("nchar(64)")
+                        .IsFixedLength();
 
                     b.Property<Guid>("SeriesKindId")
                         .HasColumnType("uniqueidentifier");
@@ -247,6 +252,11 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("KindId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("PosterHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("nchar(64)")
+                        .IsFixedLength();
+
                     b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
@@ -351,6 +361,11 @@ namespace Cineaste.Persistence.Migrations
 
                     b.Property<bool>("IsSingleDayRelease")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PosterHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("nchar(64)")
+                        .IsFixedLength();
 
                     b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
@@ -461,6 +476,11 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<Guid>("KindId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("PosterHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("nchar(64)")
+                        .IsFixedLength();
+
                     b.Property<string>("ReleaseStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -568,6 +588,11 @@ namespace Cineaste.Persistence.Migrations
 
                     b.Property<int>("Month")
                         .HasColumnType("int");
+
+                    b.Property<string>("PosterHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("nchar(64)")
+                        .IsFixedLength();
 
                     b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");

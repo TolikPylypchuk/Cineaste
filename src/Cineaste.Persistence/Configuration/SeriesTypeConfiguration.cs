@@ -31,6 +31,8 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);
 
+        series.HasPosterHash(s => s.PosterHash);
+
         series.HasTags(s => s.Tags, "SeriesTags");
         series.HasFranchiseItem(s => s.FranchiseItem, fi => fi.Series);
 

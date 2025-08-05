@@ -10,12 +10,13 @@ public static class SeriesMappingExtensions
             series.WatchStatus,
             series.ReleaseStatus,
             series.Kind.ToListKindModel(),
-            [.. series.Seasons.Select(season => season.ToSeasonModel())],
-            [.. series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel())],
+            [.. series.Seasons.Select(season => season.ToSeasonModel(series))],
+            [.. series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel(series))],
             series.ImdbId,
             series.RottenTomatoesId,
             series.GetActiveColor()?.HexValue ?? String.Empty,
             series.ListItem?.SequenceNumber ?? 0,
+            series.GetPosterUrl(),
             series.FranchiseItem.ToFranchiseItemInfoModel());
 
     public static Series ToSeries(this Validated<SeriesRequest> request, Id<Series> id, SeriesKind kind) =>
@@ -54,7 +55,7 @@ public static class SeriesMappingExtensions
         series.ListItem?.SetProperties(series);
     }
 
-    private static SeasonModel ToSeasonModel(this Season season) =>
+    private static SeasonModel ToSeasonModel(this Season season, Series series) =>
         new(
             season.Id.Value,
             season.AllTitles.ToTitleModels(isOriginal: false),
@@ -64,13 +65,13 @@ public static class SeriesMappingExtensions
             season.ReleaseStatus,
             season.Channel,
             [.. season.Periods
-                .Select(period => period.ToPeriodModel())
+                .Select(period => period.ToPeriodModel(series))
                 .OrderBy(period => period.StartYear)
                 .ThenBy(period => period.StartMonth)
                 .ThenBy(period => period.EndYear)
                 .ThenBy(period => period.EndMonth)]);
 
-    private static PeriodModel ToPeriodModel(this Period period) =>
+    private static PeriodModel ToPeriodModel(this Period period, Series series) =>
         new(
             period.Id.Value,
             period.StartMonth,
@@ -79,9 +80,10 @@ public static class SeriesMappingExtensions
             period.EndYear,
             period.EpisodeCount,
             period.IsSingleDayRelease,
-            period.RottenTomatoesId);
+            period.RottenTomatoesId,
+            series.GetPosterUrl(period));
 
-    private static SpecialEpisodeModel ToSpecialEpisodeModel(this SpecialEpisode episode) =>
+    private static SpecialEpisodeModel ToSpecialEpisodeModel(this SpecialEpisode episode, Series series) =>
         new(
             episode.Id.Value,
             episode.AllTitles.ToTitleModels(isOriginal: false),
@@ -92,7 +94,8 @@ public static class SeriesMappingExtensions
             episode.Channel,
             episode.Month,
             episode.Year,
-            episode.RottenTomatoesId);
+            episode.RottenTomatoesId,
+            series.GetPosterUrl(episode));
 
     private static Season ToSeason(this SeasonRequest request) =>
         new(
@@ -233,4 +236,17 @@ public static class SeriesMappingExtensions
         episode.SequenceNumber = request.SequenceNumber;
         episode.RottenTomatoesId = request.RottenTomatoesId;
     }
+
+    private static string? GetPosterUrl(this Series series) =>
+        series.PosterHash is not null ? $"/api/series/{series.Id.Value}/poster/?h={series.PosterHash}" : null;
+
+    private static string? GetPosterUrl(this Series series, Period period) =>
+        period.PosterHash is not null
+            ? $"/api/series/{series.Id.Value}/seasons/periods/{period.Id.Value}/poster/?h={period.PosterHash}"
+            : null;
+
+    private static string? GetPosterUrl(this Series series, SpecialEpisode episode) =>
+        episode.PosterHash is not null
+            ? $"/api/series/{series.Id.Value}/special-episodes/{episode.Id.Value}/poster/?h={episode.PosterHash}"
+            : null;
 }

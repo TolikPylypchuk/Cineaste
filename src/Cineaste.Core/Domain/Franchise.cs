@@ -5,6 +5,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     private MovieKind movieKind;
     private SeriesKind seriesKind;
     private FranchiseKindSource kindSource;
+    private string? posterHash;
     private readonly List<FranchiseItem> children;
 
     public bool ShowTitles { get; set; }
@@ -31,6 +32,12 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     {
         get => kindSource;
         set => kindSource = Require.ValidEnum(value);
+    }
+
+    public string? PosterHash
+    {
+        get => this.posterHash;
+        set => this.posterHash = Require.Sha256(value);
     }
 
     public IReadOnlyCollection<FranchiseItem> Children =>

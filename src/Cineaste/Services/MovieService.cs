@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace Cineaste.Services;
 
 public sealed class MovieService(
@@ -256,6 +258,8 @@ public sealed class MovieService(
         }
 
         var poster = new MoviePoster(Id.Create<MoviePoster>(), movie, content.Data, content.Type);
+
+        movie.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
 
         this.dbContext.MoviePosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);

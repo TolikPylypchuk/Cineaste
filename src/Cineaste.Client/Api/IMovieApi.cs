@@ -13,4 +13,11 @@ public interface IMovieApi
 
     [Delete("/movies/{id}")]
     public Task<IApiResponse> RemoveMovie(Guid id);
+
+    [Multipart]
+    [Post("/movies/{id}/poster")]
+    public Task<IApiResponse> SetMoviePoster(Guid id, StreamPart poster);
+
+    [Post("/movies/{id}/poster")]
+    public Task<IApiResponse> SetMoviePoster(Guid id, [Body] PosterUrlRequest poster);
 }

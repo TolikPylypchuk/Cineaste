@@ -8,6 +8,7 @@ public sealed class Period : Entity<Period>
     private int endYear;
     private int episodeCount;
     private string? rottenTomatoesId;
+    private string? posterHash;
 
     public int StartMonth
     {
@@ -45,6 +46,12 @@ public sealed class Period : Entity<Period>
     {
         get => this.rottenTomatoesId;
         set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
+    }
+
+    public string? PosterHash
+    {
+        get => this.posterHash;
+        set => this.posterHash = Require.Sha256(value);
     }
 
     public Period(

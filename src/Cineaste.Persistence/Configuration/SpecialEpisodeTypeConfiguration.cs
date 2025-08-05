@@ -7,6 +7,8 @@ internal sealed class SpecialEpisodeTypeConfiguration : IEntityTypeConfiguration
         episode.HasStronglyTypedId();
         episode.HasTitles(e => e.AllTitles, "SpecialEpisodeTitles");
 
+        episode.HasPosterHash(e => e.PosterHash);
+
         episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_MonthValid", "Month >= 1 AND Month <= 12"));
         episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_YearPositive", "Year > 0"));
 

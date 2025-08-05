@@ -27,6 +27,9 @@ public partial class SeasonForm
 
     private object PeriodValidationTrigger { get; set; } = new();
 
+    private ImmutableList<string> PosterUrls { get; set; } = [];
+    private int CurrentPosterUrlIndex { get; set; } = 0;
+
     private ImmutableArray<SeasonWatchStatus> AllWatchStatuses { get; } =
         [.. Enum.GetValues<SeasonWatchStatus>()];
 
@@ -41,6 +44,9 @@ public partial class SeasonForm
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
 
         this.UpdateFormTitle();
+
+        this.PosterUrls = [.. this.FormModel.Periods.Select(p => p.BackingModel?.PosterUrl).WhereNotNull()];
+        this.CurrentPosterUrlIndex = 0;
     }
 
     private void SetPropertyValues()
@@ -92,4 +98,10 @@ public partial class SeasonForm
         this.SetPropertyValues();
         this.ClearValidation();
     }
+
+    private void ShowNextPoster() =>
+        this.CurrentPosterUrlIndex++;
+
+    private void ShowPreviousPoster() =>
+        this.CurrentPosterUrlIndex--;
 }

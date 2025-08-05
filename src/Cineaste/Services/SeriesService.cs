@@ -1,4 +1,4 @@
-using Cineaste.Core.Domain;
+using System.Security.Cryptography;
 
 namespace Cineaste.Services;
 
@@ -368,6 +368,8 @@ public sealed class SeriesService(
 
         var poster = new SeriesPoster(Id.Create<SeriesPoster>(), series, content.Data, content.Type);
 
+        series.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
+
         this.dbContext.SeriesPosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);
     }
@@ -392,6 +394,8 @@ public sealed class SeriesService(
 
         var poster = new SeasonPoster(Id.Create<SeasonPoster>(), period, content.Data, content.Type);
 
+        period.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
+
         this.dbContext.SeasonPosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);
     }
@@ -415,6 +419,8 @@ public sealed class SeriesService(
         }
 
         var poster = new SpecialEpisodePoster(Id.Create<SpecialEpisodePoster>(), episode, content.Data, content.Type);
+
+        episode.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
 
         this.dbContext.SpecialEpisodePosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);

@@ -10,4 +10,5 @@ public sealed record SpecialEpisodeModel(
     string Channel,
     int Month,
     int Year,
-    string? RottenTomatoesId) : ISeriesComponentModel;
+    string? RottenTomatoesId,
+    string? PosterUrl) : ISeriesComponentModel;
