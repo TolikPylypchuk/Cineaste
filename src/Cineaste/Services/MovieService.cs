@@ -113,6 +113,24 @@ public sealed class MovieService(
     public async Task SetMoviePoster(Id<Movie> movieId, Validated<PosterUrlRequest> request, CancellationToken token) =>
         await this.SetMoviePoster(movieId, () => this.FetchPoster(request, token), token);
 
+    public async Task RemoveMoviePoster(Id<Movie> movieId, CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var movie = await this.FindMovie(list, movieId, token);
+
+        var poster = await this.dbContext.MoviePosters
+            .Where(poster => poster.Movie == movie)
+            .FirstOrDefaultAsync(token);
+
+        if (poster is not null)
+        {
+            this.dbContext.MoviePosters.Remove(poster);
+        }
+
+        movie.PosterHash = null;
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
     private async Task<Movie> FindMovie(CineasteList list, Id<Movie> id, CancellationToken token)
     {
         var movie = list.Items

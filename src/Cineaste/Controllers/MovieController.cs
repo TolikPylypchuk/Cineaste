@@ -83,4 +83,14 @@ public sealed class MovieController(MovieService movieService)
         await movieService.SetMoviePoster(Id.For<Movie>(id), request.Validated(), token);
         return this.NoContent();
     }
+
+    [HttpDelete("{id}/poster")]
+    [EndpointSummary("Remove a poster for a movie")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> RemoveMoviePoster(Guid id, CancellationToken token)
+    {
+        await movieService.RemoveMoviePoster(Id.For<Movie>(id), token);
+        return this.NoContent();
+    }
 }

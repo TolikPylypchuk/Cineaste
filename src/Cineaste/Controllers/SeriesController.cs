@@ -84,6 +84,16 @@ public sealed class SeriesController(SeriesService seriesService)
         return this.NoContent();
     }
 
+    [HttpDelete("{id}/poster")]
+    [EndpointSummary("Remove a poster for a series")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> RemoveSeriesPoster(Guid id, CancellationToken token)
+    {
+        await seriesService.RemoveSeriesPoster(Id.For<Series>(id), token);
+        return this.NoContent();
+    }
+
     [HttpGet("{seriesId}/seasons/periods/{periodId}/poster")]
     [Produces(ImageApng, ImageAvif, ImageGif, ImageJpeg, ImagePng, ImageSvg, ImageWebp)]
     [EndpointSummary("Get a poster for a season")]
@@ -126,6 +136,16 @@ public sealed class SeriesController(SeriesService seriesService)
         await seriesService.SetSeasonPoster(
             Id.For<Series>(seriesId), Id.For<Period>(periodId), request.Validated(), token);
 
+        return this.NoContent();
+    }
+
+    [HttpDelete("{seriesId}/seasons/periods/{periodId}/poster")]
+    [EndpointSummary("Remove a poster for a season")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> RemoveSeasonPoster(Guid seriesId, Guid periodId, CancellationToken token)
+    {
+        await seriesService.RemoveSeasonPoster(Id.For<Series>(seriesId), Id.For<Period>(periodId), token);
         return this.NoContent();
     }
 
@@ -173,6 +193,18 @@ public sealed class SeriesController(SeriesService seriesService)
     {
         await seriesService.SetSpecialEpisodePoster(
             Id.For<Series>(seriesId), Id.For<SpecialEpisode>(episodeId), request.Validated(), token);
+
+        return this.NoContent();
+    }
+
+    [HttpDelete("{seriesId}/special-episodes/{episodeId}/poster")]
+    [EndpointSummary("Remove a poster for a season")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> RemoveSpecialEpisodePoster(Guid seriesId, Guid episodeId, CancellationToken token)
+    {
+        await seriesService.RemoveSpecialEpisodePoster(
+            Id.For<Series>(seriesId), Id.For<SpecialEpisode>(episodeId), token);
 
         return this.NoContent();
     }

@@ -119,6 +119,24 @@ public sealed class SeriesService(
         CancellationToken token) =>
         await this.SetSeriesPoster(seriesId, () => this.FetchPoster(request, token), token);
 
+    public async Task RemoveSeriesPoster(Id<Series> seriesId, CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var series = await this.FindSeries(list, seriesId, token);
+
+        var poster = await this.dbContext.SeriesPosters
+            .Where(poster => poster.Series == series)
+            .FirstOrDefaultAsync(token);
+
+        if (poster is not null)
+        {
+            this.dbContext.SeriesPosters.Remove(poster);
+        }
+
+        series.PosterHash = null;
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
     public async Task<BinaryContentModel> GetSeasonPoster(
         Id<Series> seriesId,
         Id<Period> periodId,
@@ -158,6 +176,25 @@ public sealed class SeriesService(
         CancellationToken token) =>
         await this.SetSeasonPoster(seriesId, periodId, () => this.FetchPoster(request, token), token);
 
+    public async Task RemoveSeasonPoster(Id<Series> seriesId, Id<Period> periodId, CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var series = await this.FindSeries(list, seriesId, token);
+        var period = this.FindPeriod(series, periodId);
+
+        var poster = await this.dbContext.SeasonPosters
+            .Where(poster => poster.Period == period)
+            .FirstOrDefaultAsync(token);
+
+        if (poster is not null)
+        {
+            this.dbContext.SeasonPosters.Remove(poster);
+        }
+
+        period.PosterHash = null;
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
     public async Task<BinaryContentModel> GetSpecialEpisodePoster(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
@@ -196,6 +233,28 @@ public sealed class SeriesService(
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
         await this.SetSpecialEpisodePoster(seriesId, episodeId, () => this.FetchPoster(request, token), token);
+
+    public async Task RemoveSpecialEpisodePoster(
+        Id<Series> seriesId,
+        Id<SpecialEpisode> episodeId,
+        CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var series = await this.FindSeries(list, seriesId, token);
+        var episode = this.FindSpecialEpisode(series, episodeId);
+
+        var poster = await this.dbContext.SpecialEpisodePosters
+            .Where(poster => poster.SpecialEpisode == episode)
+            .FirstOrDefaultAsync(token);
+
+        if (poster is not null)
+        {
+            this.dbContext.SpecialEpisodePosters.Remove(poster);
+        }
+
+        episode.PosterHash = null;
+        await this.dbContext.SaveChangesAsync(token);
+    }
 
     private Period FindPeriod(Series series, Id<Period> periodId) =>
         series.Seasons

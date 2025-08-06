@@ -85,4 +85,14 @@ public sealed class FranchiseController(FranchiseService franchiseService)
         await franchiseService.SetFranchisePoster(Id.For<Franchise>(id), request.Validated(), token);
         return this.NoContent();
     }
+
+    [HttpDelete("{id}/poster")]
+    [EndpointSummary("Remove a poster for a franchise")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> RemoveFranchisePoster(Guid id, CancellationToken token)
+    {
+        await franchiseService.RemoveFranchisePoster(Id.For<Franchise>(id), token);
+        return this.NoContent();
+    }
 }

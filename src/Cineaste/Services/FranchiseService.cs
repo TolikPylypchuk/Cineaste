@@ -122,6 +122,24 @@ public sealed class FranchiseService(
         CancellationToken token) =>
         await this.SetFranchisePoster(franchiseId, () => this.FetchPoster(request, token), token);
 
+    public async Task RemoveFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
+    {
+        var list = await this.FindList(token);
+        var franchise = await this.FindFranchise(list, franchiseId, token);
+
+        var poster = await this.dbContext.FranchisePosters
+            .Where(poster => poster.Franchise == franchise)
+            .FirstOrDefaultAsync(token);
+
+        if (poster is not null)
+        {
+            this.dbContext.FranchisePosters.Remove(poster);
+        }
+
+        franchise.PosterHash = null;
+        await this.dbContext.SaveChangesAsync(token);
+    }
+
     private async Task<Franchise> FindFranchise(CineasteList list, Id<Franchise> id, CancellationToken token)
     {
         var franchise = list.Items
