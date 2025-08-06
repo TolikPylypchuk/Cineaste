@@ -13,6 +13,7 @@ internal sealed class SeasonTypeConfiguration : IEntityTypeConfiguration<Season>
 
         season.HasMany(s => s.Periods)
             .WithOne()
+            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         season.Navigation(s => s.Periods)

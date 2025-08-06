@@ -370,7 +370,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<string>("RottenTomatoesId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SeasonId")
+                    b.Property<Guid>("SeasonId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("StartMonth")
@@ -415,7 +415,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<int>("SequenceNumber")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("SeriesId")
+                    b.Property<Guid>("SeriesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("WatchStatus")
@@ -600,7 +600,7 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<int>("SequenceNumber")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("SeriesId")
+                    b.Property<Guid>("SeriesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Year")
@@ -973,7 +973,8 @@ namespace Cineaste.Persistence.Migrations
                     b.HasOne("Cineaste.Core.Domain.Season", null)
                         .WithMany("Periods")
                         .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Season", b =>
@@ -981,7 +982,8 @@ namespace Cineaste.Persistence.Migrations
                     b.HasOne("Cineaste.Core.Domain.Series", null)
                         .WithMany("Seasons")
                         .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.OwnsMany("Cineaste.Core.Domain.Title", "AllTitles", b1 =>
                         {
@@ -1143,7 +1145,8 @@ namespace Cineaste.Persistence.Migrations
                     b.HasOne("Cineaste.Core.Domain.Series", null)
                         .WithMany("SpecialEpisodes")
                         .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.OwnsMany("Cineaste.Core.Domain.Title", "AllTitles", b1 =>
                         {

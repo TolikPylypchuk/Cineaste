@@ -9,6 +9,7 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
 
         series.HasMany(s => s.Seasons)
             .WithOne()
+            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         series.Navigation(s => s.Seasons)
@@ -16,6 +17,7 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
 
         series.HasMany(s => s.SpecialEpisodes)
             .WithOne()
+            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         series.Navigation(s => s.SpecialEpisodes)

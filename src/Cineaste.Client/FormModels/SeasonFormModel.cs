@@ -70,7 +70,6 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
         this.defaultDate = date;
 
         this.FinishInitialization();
-
     }
 
     public void AddNewPeriod()
@@ -86,6 +85,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
         this.periods.Add(period);
 
         this.UpdateRequest();
+        this.OnPropertyChanged(nameof(this.Periods));
     }
 
     public void RemovePeriod(PeriodFormModel period)
@@ -96,6 +96,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
             period.PropertyChanged -= this.OnPeriodUpdated;
 
             this.UpdateRequest();
+            this.OnPropertyChanged(nameof(this.Periods));
         }
     }
 
