@@ -17,6 +17,10 @@
                 <MudRadio Value="PosterSelectionMode.Url" Color="Color.Primary">
                     @this.Loc["PosterDialog.SelectionMode.Url"]
                 </MudRadio>
+
+                <MudRadio Value="PosterSelectionMode.ImdbMediaUrl" Color="Color.Primary">
+                    @this.Loc["PosterDialog.SelectionMode.ImdbMediaUrl"]
+                </MudRadio>
             </MudRadioGroup>
 
             <div class="form-container">
@@ -66,6 +70,14 @@
                         />
 
                         <ErrorPresenter ErrorCode="Poster.Url.*" Trigger="@this.FormModel.PosterUrl" />
+                        break;
+                    case PosterSelectionMode.ImdbMediaUrl:
+                        <MudTextField
+                            @bind-Value="this.FormModel.ImdbMediaUrl"
+                            Label="@this.Loc["PosterDialog.Url"]"
+                        />
+
+                        <ErrorPresenter ErrorCode="Poster.ImdbMedia.Url.*" Trigger="@this.FormModel.ImdbMediaUrl" />
                         break;
                 }
             </div>

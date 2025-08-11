@@ -19,7 +19,7 @@ public interface IMovieApi
     public Task<IApiResponse> SetMoviePoster(Guid id, StreamPart file);
 
     [Put("/movies/{id}/poster")]
-    public Task<IApiResponse> SetMoviePoster(Guid id, [Body] PosterUrlRequest request);
+    public Task<IApiResponse> SetMoviePoster(Guid id, [Body] PosterRequestBase request);
 
     [Delete("/movies/{id}/poster")]
     public Task<IApiResponse> RemoveMoviePoster(Guid id);

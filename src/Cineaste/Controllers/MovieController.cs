@@ -79,11 +79,21 @@ public sealed class MovieController(MovieService movieService)
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> SetMoviePoster(
         Guid id,
-        [FromBody] PosterUrlRequest request,
+        [FromBody] PosterRequestBase request,
         CancellationToken token)
     {
         var movieId = Id.For<Movie>(id);
-        var posterHash = await movieService.SetMoviePoster(movieId, request.Validated(), token);
+
+        var posterHash = request switch
+        {
+            PosterUrlRequest urlRequest =>
+                await movieService.SetMoviePoster(movieId, urlRequest.Validated(), token),
+
+            PosterImdbMediaRequest imdbMediaRequest =>
+                await movieService.SetMoviePoster(movieId, imdbMediaRequest.Validated(), token),
+
+            _ => throw new IncompleteMatchException("Unknown poster request type")
+        };
 
         return this.Created(Urls.MoviePoster(movieId, posterHash), null);
     }

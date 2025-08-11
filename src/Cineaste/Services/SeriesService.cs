@@ -3,12 +3,10 @@ namespace Cineaste.Services;
 public sealed class SeriesService(
     CineasteDbContext dbContext,
     IPosterProvider posterProvider,
-    IPosterValidator posterValidator,
     ILogger<SeriesService> logger)
 {
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly IPosterProvider posterProvider = posterProvider;
-    private readonly IPosterValidator posterValidator = posterValidator;
     private readonly ILogger<SeriesService> logger = logger;
 
     public async Task<SeriesModel> GetSeries(Id<Series> id, CancellationToken token)
@@ -88,7 +86,7 @@ public sealed class SeriesService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<BinaryContentModel> GetSeriesPoster(Id<Series> seriesId, CancellationToken token)
+    public async Task<PosterContentModel> GetSeriesPoster(Id<Series> seriesId, CancellationToken token)
     {
         var list = await this.FindList(token);
         var series = await this.FindSeries(list, seriesId, token);
@@ -104,21 +102,20 @@ public sealed class SeriesService(
     public async Task<PosterHash> SetSeriesPoster(
         Id<Series> seriesId,
         BinaryContentRequest request,
-        CancellationToken token)
-    {
-        posterValidator.ValidateContentType(request.Type);
-
-        return await this.SetSeriesPoster(
-            seriesId,
-            async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
-            token);
-    }
+        CancellationToken token) =>
+        await this.SetSeriesPoster(seriesId, () => this.posterProvider.GetPoster(request, token), token);
 
     public async Task<PosterHash> SetSeriesPoster(
         Id<Series> seriesId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
-        await this.SetSeriesPoster(seriesId, () => this.FetchPoster(request, token), token);
+        await this.SetSeriesPoster(seriesId, () => this.posterProvider.FetchPoster(request, token), token);
+
+    public async Task<PosterHash> SetSeriesPoster(
+        Id<Series> seriesId,
+        Validated<PosterImdbMediaRequest> request,
+        CancellationToken token) =>
+        await this.SetSeriesPoster(seriesId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task RemoveSeriesPoster(Id<Series> seriesId, CancellationToken token)
     {
@@ -138,7 +135,7 @@ public sealed class SeriesService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<BinaryContentModel> GetSeasonPoster(
+    public async Task<PosterContentModel> GetSeasonPoster(
         Id<Series> seriesId,
         Id<Period> periodId,
         CancellationToken token)
@@ -159,23 +156,22 @@ public sealed class SeriesService(
         Id<Series> seriesId,
         Id<Period> periodId,
         BinaryContentRequest request,
-        CancellationToken token)
-    {
-        posterValidator.ValidateContentType(request.Type);
-
-        return await this.SetSeasonPoster(
-            seriesId,
-            periodId,
-            async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
-            token);
-    }
+        CancellationToken token) =>
+        await this.SetSeasonPoster(seriesId, periodId, () => this.posterProvider.GetPoster(request, token), token);
 
     public async Task<PosterHash> SetSeasonPoster(
         Id<Series> seriesId,
         Id<Period> periodId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
-        await this.SetSeasonPoster(seriesId, periodId, () => this.FetchPoster(request, token), token);
+        await this.SetSeasonPoster(seriesId, periodId, () => this.posterProvider.FetchPoster(request, token), token);
+
+    public async Task<PosterHash> SetSeasonPoster(
+        Id<Series> seriesId,
+        Id<Period> periodId,
+        Validated<PosterImdbMediaRequest> request,
+        CancellationToken token) =>
+        await this.SetSeasonPoster(seriesId, periodId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task RemoveSeasonPoster(Id<Series> seriesId, Id<Period> periodId, CancellationToken token)
     {
@@ -196,7 +192,7 @@ public sealed class SeriesService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<BinaryContentModel> GetSpecialEpisodePoster(
+    public async Task<PosterContentModel> GetSpecialEpisodePoster(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         CancellationToken token)
@@ -217,23 +213,25 @@ public sealed class SeriesService(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         BinaryContentRequest request,
-        CancellationToken token)
-    {
-        posterValidator.ValidateContentType(request.Type);
-
-        return await this.SetSpecialEpisodePoster(
-            seriesId,
-            episodeId,
-            async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
-            token);
-    }
+        CancellationToken token) =>
+        await this.SetSpecialEpisodePoster(
+            seriesId, episodeId, () => this.posterProvider.GetPoster(request, token), token);
 
     public async Task<PosterHash> SetSpecialEpisodePoster(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
-        await this.SetSpecialEpisodePoster(seriesId, episodeId, () => this.FetchPoster(request, token), token);
+        await this.SetSpecialEpisodePoster(
+            seriesId, episodeId, () => this.posterProvider.FetchPoster(request, token), token);
+
+    public async Task<PosterHash> SetSpecialEpisodePoster(
+        Id<Series> seriesId,
+        Id<SpecialEpisode> episodeId,
+        Validated<PosterImdbMediaRequest> request,
+        CancellationToken token) =>
+        await this.SetSpecialEpisodePoster(
+            seriesId, episodeId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task RemoveSpecialEpisodePoster(
         Id<Series> seriesId,
@@ -412,7 +410,7 @@ public sealed class SeriesService(
 
     private async Task<PosterHash> SetSeriesPoster(
         Id<Series> seriesId,
-        Func<Task<BinaryContentModel>> getContent,
+        Func<Task<PosterContentModel>> getContent,
         CancellationToken token)
     {
         var list = await this.FindList(token);
@@ -440,7 +438,7 @@ public sealed class SeriesService(
     private async Task<PosterHash> SetSeasonPoster(
         Id<Series> seriesId,
         Id<Period> periodId,
-        Func<Task<BinaryContentModel>> getContent,
+        Func<Task<PosterContentModel>> getContent,
         CancellationToken token)
     {
         var list = await this.FindList(token);
@@ -469,7 +467,7 @@ public sealed class SeriesService(
     private async Task<PosterHash> SetSpecialEpisodePoster(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
-        Func<Task<BinaryContentModel>> getContent,
+        Func<Task<PosterContentModel>> getContent,
         CancellationToken token)
     {
         var list = await this.FindList(token);
@@ -493,13 +491,6 @@ public sealed class SeriesService(
         await this.dbContext.SaveChangesAsync(token);
 
         return hash;
-    }
-
-    private async Task<BinaryContentModel> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token)
-    {
-        var content = await this.posterProvider.FetchPoster(request, token);
-        posterValidator.ValidateContentType(content.Type);
-        return content;
     }
 
     private NotFoundException ListNotFound() =>

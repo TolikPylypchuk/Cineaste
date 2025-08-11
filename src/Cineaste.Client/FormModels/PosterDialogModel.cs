@@ -2,7 +2,7 @@ namespace Cineaste.Client.FormModels;
 
 public enum PosterSelectionMode
 {
-    File, Url
+    File, Url, ImdbMediaUrl
 }
 
 public class PosterDialogModel
@@ -11,9 +11,14 @@ public class PosterDialogModel
     public const string FileTooLargeError = "Poster.File.TooLarge";
 
     private PosterSelectionMode selectionMode = PosterSelectionMode.File;
+
     private IBrowserFile? selectedFile;
+
     private string posterUrl = String.Empty;
+    private string imdbMediaUrl = String.Empty;
+
     private PosterUrlRequest? urlRequest;
+    private PosterImdbMediaRequest? imdbMediaRequest;
 
     public PosterSelectionMode SelectionMode
     {
@@ -69,6 +74,34 @@ public class PosterDialogModel
         }
     }
 
+    public string ImdbMediaUrl
+    {
+        get => this.imdbMediaUrl;
+        set
+        {
+            this.imdbMediaUrl = value;
+            this.ValidationErrors = [];
+
+            var request = new PosterImdbMediaRequest(value);
+
+            var result = PosterImdbMediaRequest.Validator.Validate(request);
+
+            if (result.IsValid)
+            {
+                this.imdbMediaRequest = request;
+            } else
+            {
+                var errors = this.ValidationErrors.ToBuilder();
+                foreach (var error in result.Errors)
+                {
+                    errors.Add(error.ErrorCode);
+                }
+
+                this.ValidationErrors = errors.ToImmutable();
+            }
+        }
+    }
+
     public ImmutableHashSet<string> ValidationErrors { get; private set; } = [];
 
     public bool IsValid =>
@@ -77,20 +110,31 @@ public class PosterDialogModel
             {
                 PosterSelectionMode.File => this.SelectedFile is not null,
                 PosterSelectionMode.Url => !String.IsNullOrWhiteSpace(this.PosterUrl),
+                PosterSelectionMode.ImdbMediaUrl => !String.IsNullOrWhiteSpace(this.ImdbMediaUrl),
                 _ => false
             };
 
     public PosterRequest? CreateRequest()
     {
-        if (this.ValidationErrors.Count != 0)
+        if (!this.IsValid)
         {
             return null;
         }
 
         return this.SelectionMode switch
         {
-            PosterSelectionMode.File => this.SelectedFile is not null ? new PosterRequest(this.SelectedFile) : null,
-            PosterSelectionMode.Url => this.urlRequest is not null ? new PosterRequest(this.urlRequest) : null,
+            PosterSelectionMode.File => this.selectedFile is not null
+                ? new PosterRequest(this.selectedFile)
+                : null,
+
+            PosterSelectionMode.Url => this.urlRequest is not null
+                ? new PosterRequest(this.urlRequest)
+                : null,
+
+            PosterSelectionMode.ImdbMediaUrl => this.imdbMediaRequest is not null
+                ? new PosterRequest(this.imdbMediaRequest)
+                : null,
+
             _ => null
         };
     }

@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 
+using AngleSharp;
+
 using Cineaste.Components;
 using Cineaste.Infrastructure.Json;
 using Cineaste.Infrastructure.OpenApi;
@@ -57,7 +59,7 @@ builder.Services.AddScoped<SeriesService>();
 builder.Services.AddScoped<FranchiseService>();
 builder.Services.AddScoped<IPosterProvider, PosterProvider>();
 
-builder.Services.AddSingleton<IPosterValidator, PosterValidator>();
+builder.Services.AddSingleton(Configuration.Default.WithDefaultLoader());
 
 builder.Services.AddControllers()
     .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));

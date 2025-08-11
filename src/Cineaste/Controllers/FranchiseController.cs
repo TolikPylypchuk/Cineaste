@@ -81,11 +81,21 @@ public sealed class FranchiseController(FranchiseService franchiseService)
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> SetFranchisePoster(
         Guid id,
-        [FromBody] PosterUrlRequest request,
+        [FromBody] PosterRequestBase request,
         CancellationToken token)
     {
         var franchiseId = Id.For<Franchise>(id);
-        var posterHash = await franchiseService.SetFranchisePoster(franchiseId, request.Validated(), token);
+
+        var posterHash = request switch
+        {
+            PosterUrlRequest urlRequest =>
+                await franchiseService.SetFranchisePoster(franchiseId, urlRequest.Validated(), token),
+
+            PosterImdbMediaRequest imdbMediaRequest =>
+                await franchiseService.SetFranchisePoster(franchiseId, imdbMediaRequest.Validated(), token),
+
+            _ => throw new IncompleteMatchException("Unknown poster request type")
+        };
 
         return this.Created(Urls.FranchisePoster(franchiseId, posterHash), null);
     }

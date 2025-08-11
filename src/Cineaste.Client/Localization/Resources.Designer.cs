@@ -1276,6 +1276,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fetch from an IMDb media URL.
+        /// </summary>
+        public static string PosterDialog_SelectionMode_ImdbMediaUrl {
+            get {
+                return ResourceManager.GetString("PosterDialog.SelectionMode.ImdbMediaUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fetch from a URL.
         /// </summary>
         public static string PosterDialog_SelectionMode_Url {

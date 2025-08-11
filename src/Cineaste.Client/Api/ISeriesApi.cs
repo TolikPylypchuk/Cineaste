@@ -19,7 +19,7 @@ public interface ISeriesApi
     public Task<IApiResponse> SetSeriesPoster(Guid id, StreamPart file);
 
     [Put("/series/{id}/poster")]
-    public Task<IApiResponse> SetSeriesPoster(Guid id, [Body] PosterUrlRequest request);
+    public Task<IApiResponse> SetSeriesPoster(Guid id, [Body] PosterRequestBase request);
 
     [Delete("/series/{id}/poster")]
     public Task<IApiResponse> RemoveSeriesPoster(Guid id);
@@ -29,7 +29,7 @@ public interface ISeriesApi
     public Task<IApiResponse> SetSeasonPoster(Guid seriesId, Guid periodId, StreamPart file);
 
     [Put("/series/{seriesId}/seasons/periods/{periodId}/poster")]
-    public Task<IApiResponse> SetSeasonPoster(Guid seriesId, Guid periodId, [Body] PosterUrlRequest request);
+    public Task<IApiResponse> SetSeasonPoster(Guid seriesId, Guid periodId, [Body] PosterRequestBase request);
 
     [Delete("/series/{seriesId}/seasons/periods/{periodId}/poster")]
     public Task<IApiResponse> RemoveSeasonPoster(Guid seriesId, Guid periodId);
@@ -39,7 +39,7 @@ public interface ISeriesApi
     public Task<IApiResponse> SetSpecialEpisodePoster(Guid seriesId, Guid episodeId, StreamPart file);
 
     [Put("/series/{seriesId}/special-episodes/{episodeId}/poster")]
-    public Task<IApiResponse> SetSpecialEpisodePoster(Guid seriesId, Guid episodeId, [Body] PosterUrlRequest request);
+    public Task<IApiResponse> SetSpecialEpisodePoster(Guid seriesId, Guid episodeId, [Body] PosterRequestBase request);
 
     [Delete("/series/{seriesId}/special-episodes/{episodeId}/poster")]
     public Task<IApiResponse> RemoveSpecialEpisodePoster(Guid seriesId, Guid episodeId);

@@ -97,7 +97,7 @@ internal sealed class CineasteExceptionHandlerMiddleware(RequestDelegate next)
                 Detail = $"{Problem}.{ex.MessageCode}",
                 Extensions = { [Properties] = ex.Properties }
             },
-            UnsupportedInputException ex => new ProblemDetails
+            UnsupportedPosterTypeException ex => new ProblemDetails
             {
                 Type = FormatProblemType(Status415UnsupportedMediaType),
                 Title = ReasonPhrases.GetReasonPhrase(Status415UnsupportedMediaType),

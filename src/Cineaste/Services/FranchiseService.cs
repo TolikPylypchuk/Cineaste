@@ -3,12 +3,10 @@ namespace Cineaste.Services;
 public sealed class FranchiseService(
     CineasteDbContext dbContext,
     IPosterProvider posterProvider,
-    IPosterValidator posterValidator,
     ILogger<FranchiseService> logger)
 {
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly IPosterProvider posterProvider = posterProvider;
-    private readonly IPosterValidator posterValidator = posterValidator;
     private readonly ILogger<FranchiseService> logger = logger;
 
     public async Task<FranchiseModel> GetFranchise(Id<Franchise> id, CancellationToken token)
@@ -88,7 +86,7 @@ public sealed class FranchiseService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<BinaryContentModel> GetFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
+    public async Task<PosterContentModel> GetFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
     {
         var list = await this.FindList(token);
         var franchise = await this.FindFranchise(list, franchiseId, token);
@@ -104,21 +102,20 @@ public sealed class FranchiseService(
     public async Task<PosterHash> SetFranchisePoster(
         Id<Franchise> franchiseId,
         BinaryContentRequest request,
-        CancellationToken token)
-    {
-        posterValidator.ValidateContentType(request.Type);
-
-        return await this.SetFranchisePoster(
-            franchiseId,
-            async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
-            token);
-    }
+        CancellationToken token) =>
+        await this.SetFranchisePoster(franchiseId, () => this.posterProvider.GetPoster(request, token), token);
 
     public async Task<PosterHash> SetFranchisePoster(
         Id<Franchise> franchiseId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
-        await this.SetFranchisePoster(franchiseId, () => this.FetchPoster(request, token), token);
+        await this.SetFranchisePoster(franchiseId, () => this.posterProvider.FetchPoster(request, token), token);
+
+    public async Task<PosterHash> SetFranchisePoster(
+        Id<Franchise> franchiseId,
+        Validated<PosterImdbMediaRequest> request,
+        CancellationToken token) =>
+        await this.SetFranchisePoster(franchiseId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task RemoveFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
     {
@@ -366,7 +363,7 @@ public sealed class FranchiseService(
 
     private async Task<PosterHash> SetFranchisePoster(
         Id<Franchise> franchiseId,
-        Func<Task<BinaryContentModel>> getContent,
+        Func<Task<PosterContentModel>> getContent,
         CancellationToken token)
     {
         var list = await this.FindList(token);
@@ -389,13 +386,6 @@ public sealed class FranchiseService(
         await this.dbContext.SaveChangesAsync(token);
 
         return hash;
-    }
-
-    private async Task<BinaryContentModel> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token)
-    {
-        var content = await this.posterProvider.FetchPoster(request, token);
-        posterValidator.ValidateContentType(content.Type);
-        return content;
     }
 
     private NotFoundException ListNotFound() =>

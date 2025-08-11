@@ -507,6 +507,9 @@
   <data name="PosterDialog.SelectionMode.Url" xml:space="preserve">
     <value>Fetch from a URL</value>
   </data>
+  <data name="PosterDialog.SelectionMode.ImdbMediaUrl" xml:space="preserve">
+    <value>Fetch from an IMDb media URL</value>
+  </data>
   <data name="PosterDialog.HeaderFormat" xml:space="preserve">
     <value>Set Poster for {0}</value>
   </data>

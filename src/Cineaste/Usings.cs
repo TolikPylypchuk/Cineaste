@@ -19,7 +19,6 @@ global using Cineaste.Shared.Models.Poster;
 global using Cineaste.Shared.Models.Series;
 global using Cineaste.Shared.Models.Shared;
 global using Cineaste.Shared.Validation;
-global using Cineaste.Validation;
 
 global using FluentValidation;
 

@@ -1,3 +1,6 @@
+using Cineaste.Core.Domain;
+using Cineaste.Services;
+
 using static Cineaste.Shared.Validation.PosterContentTypes;
 
 namespace Cineaste.Controllers;
@@ -79,11 +82,21 @@ public sealed class SeriesController(SeriesService seriesService)
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> SetSeriesPoster(
         Guid id,
-        [FromBody] PosterUrlRequest request,
+        [FromBody] PosterRequestBase request,
         CancellationToken token)
     {
         var seriesId = Id.For<Series>(id);
-        var posterHash = await seriesService.SetSeriesPoster(seriesId, request.Validated(), token);
+
+        var posterHash = request switch
+        {
+            PosterUrlRequest urlRequest =>
+                await seriesService.SetSeriesPoster(seriesId, urlRequest.Validated(), token),
+
+            PosterImdbMediaRequest imdbMediaRequest =>
+                await seriesService.SetSeriesPoster(seriesId, imdbMediaRequest.Validated(), token),
+
+            _ => throw new IncompleteMatchException("Unknown poster request type")
+        };
 
         return this.Created(Urls.SeriesPoster(seriesId, posterHash), null);
     }
@@ -138,13 +151,22 @@ public sealed class SeriesController(SeriesService seriesService)
     public async Task<ActionResult> SetSeasonPoster(
         Guid seriesId,
         Guid periodId,
-        [FromBody] PosterUrlRequest request,
+        [FromBody] PosterRequestBase request,
         CancellationToken token)
     {
         var typedSeriesId = Id.For<Series>(seriesId);
         var typedPeriodId = Id.For<Period>(periodId);
 
-        var posterHash = await seriesService.SetSeasonPoster(typedSeriesId, typedPeriodId, request.Validated(), token);
+        var posterHash = request switch
+        {
+            PosterUrlRequest urlRequest =>
+                await seriesService.SetSeasonPoster(typedSeriesId, typedPeriodId, urlRequest.Validated(), token),
+
+            PosterImdbMediaRequest imdbMediaRequest =>
+                await seriesService.SetSeasonPoster(typedSeriesId, typedPeriodId, imdbMediaRequest.Validated(), token),
+
+            _ => throw new IncompleteMatchException("Unknown poster request type")
+        };
 
         return this.Created(Urls.SeasonPoster(typedSeriesId, typedPeriodId, posterHash), null);
     }
@@ -200,14 +222,22 @@ public sealed class SeriesController(SeriesService seriesService)
     public async Task<ActionResult> SetSpecialEpisodePoster(
         Guid seriesId,
         Guid episodeId,
-        [FromBody] PosterUrlRequest request,
+        [FromBody] PosterRequestBase request,
         CancellationToken token)
     {
         var typedSeriesId = Id.For<Series>(seriesId);
         var typedEpisodeId = Id.For<SpecialEpisode>(episodeId);
 
-        var posterHash = await seriesService.SetSpecialEpisodePoster(
-            typedSeriesId, typedEpisodeId, request.Validated(), token);
+        var posterHash = request switch
+        {
+            PosterUrlRequest urlRequest => await seriesService.SetSpecialEpisodePoster(
+                typedSeriesId, typedEpisodeId, urlRequest.Validated(), token),
+
+            PosterImdbMediaRequest imdbMediaRequest => await seriesService.SetSpecialEpisodePoster(
+                typedSeriesId, typedEpisodeId, imdbMediaRequest.Validated(), token),
+
+            _ => throw new IncompleteMatchException("Unknown poster request type")
+        };
 
         return this.Created(Urls.SpecialEpisodePoster(typedSeriesId, typedEpisodeId, posterHash), null);
     }

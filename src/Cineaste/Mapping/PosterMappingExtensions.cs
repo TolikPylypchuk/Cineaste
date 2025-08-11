@@ -5,6 +5,6 @@ namespace Cineaste.Mapping;
 
 public static class PosterMappingExtensions
 {
-    public static BinaryContentModel ToPosterModel(this IPoster poster) =>
+    public static PosterContentModel ToPosterModel(this IPoster poster) =>
         new(poster.Data, poster.ContentType);
 }
