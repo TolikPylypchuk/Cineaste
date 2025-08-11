@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20250806205346_Initial")]
+    [Migration("20250809164241_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -57,7 +57,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 
@@ -256,7 +255,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 
@@ -366,7 +364,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 
@@ -480,7 +477,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 
@@ -593,7 +589,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 

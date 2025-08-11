@@ -1,4 +1,4 @@
-@inherits CineasteForm<SeasonFormModel, SeasonRequest, SeasonModel, SeriesFormState>
+@inherits PosterCineasteForm<SeasonFormModel, SeasonRequest, SeasonModel, SeriesFormState>
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
@@ -50,7 +50,7 @@
                         <img
                             src="@this.PosterUrls[this.CurrentPosterUrlIndex]"
                             alt="@this.FormTitle"
-                            title="this.FormTitle"
+                            title="@this.FormTitle"
                             class="poster"
                         />
 
@@ -174,6 +174,19 @@
                         CanRemove="@(this.FormModel.Periods.Count > 1)"
                         Removed="@(() => this.OnPeriodRemoved(period))"
                     />
+
+                    if (period.BackingModel is { Id: var periodId, PosterUrl: var posterUrl })
+                    {
+                        <PosterActions
+                            State="this.State.Value"
+                            OpenPosterDialog="@(() => this.OpenPosterDialog(periodId))"
+                            SetPoster="@(() => this.SetPoster(periodId))"
+                            RemovePoster="@(() => this.RemovePoster(periodId))"
+                            CanRemovePoster="posterUrl is not null"
+                            SetPosterText="SeasonForm.SetPoster"
+                            RemovePosterText="SeasonForm.RemovePoster"
+                        />
+                    }
                 }
 
                 <div>

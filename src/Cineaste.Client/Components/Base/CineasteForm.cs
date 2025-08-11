@@ -1,57 +1,29 @@
+using Cineaste.Client.Store;
+
 namespace Cineaste.Client.Components.Base;
 
-public abstract class CineasteForm<TFormModel, TRequest, TModel, TState>
-    : StatefulComponent<TState>, IValidationExecutor
+public abstract class CineasteForm<TFormModel, TRequest, TModel, TState> : ValidatableComponent
     where TFormModel : FormModelBase<TRequest, TModel>
     where TRequest : IValidatable<TRequest>
     where TModel : IIdentifyableModel
 {
-    private IValidationExecutor? validationParent;
-
-    [CascadingParameter(Name = CascadingParameters.ValidationExecutor)]
-    public IValidationExecutor? ValidationParent
-    {
-        get => this.validationParent;
-        set
-        {
-            if (!Equals(this.validationParent, value))
-            {
-                this.DetachValidation();
-
-                this.validationParent = value;
-
-                if (this.validationParent is not null)
-                {
-                    this.validationParent.ValidationExecuted += this.OnParentValidationExecuted;
-                    this.validationParent.ValidationCleared += this.OnParentValidationCleared;
-                }
-            }
-        }
-    }
+    [Inject]
+    public required IState<TState> State { get; init; }
 
     public virtual TFormModel FormModel { get; set; } = null!;
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-        this.ValidationResumed?.Invoke(this, EventArgs.Empty);
-    }
+    public override IReadOnlySet<string> ValidationErrors =>
+        this.FormModel.ValidationErrors;
 
-    protected override ValueTask DisposeAsyncCore(bool disposing)
-    {
-        if (disposing)
+    protected void SubsribeToSuccessfulResult<TAction>(Action action)
+        where TAction : ResultAction =>
+        this.SubscribeToAction<TAction>(result =>
         {
-            this.DetachValidation();
-        }
-
-        return base.DisposeAsyncCore(disposing);
-    }
-
-    protected void RunValidation()
-    {
-        this.ValidationExecuted?.Invoke(this, EventArgs.Empty);
-        this.StateHasChanged();
-    }
+            if (result.IsSuccessful)
+            {
+                action();
+            }
+        });
 
     protected void WithValidation(Action<TRequest> action)
     {
@@ -72,33 +44,4 @@ public abstract class CineasteForm<TFormModel, TRequest, TModel, TState>
             await action(this.FormModel.Request!);
         }
     }
-
-    protected void ClearValidation()
-    {
-        this.ValidationCleared?.Invoke(this, EventArgs.Empty);
-        this.ValidationSuspended?.Invoke(this, EventArgs.Empty);
-    }
-
-    private void OnParentValidationExecuted(object? sender, EventArgs e) =>
-        this.RunValidation();
-
-    private void OnParentValidationCleared(object? sender, EventArgs e) =>
-        this.ClearValidation();
-
-    private void DetachValidation()
-    {
-        if (this.validationParent is not null)
-        {
-            this.validationParent.ValidationExecuted -= this.OnParentValidationExecuted;
-            this.validationParent.ValidationCleared -= this.OnParentValidationCleared;
-        }
-    }
-
-    public event EventHandler<EventArgs>? ValidationExecuted;
-
-    public event EventHandler<EventArgs>? ValidationCleared;
-
-    public event EventHandler<EventArgs>? ValidationSuspended;
-
-    public event EventHandler<EventArgs>? ValidationResumed;
 }

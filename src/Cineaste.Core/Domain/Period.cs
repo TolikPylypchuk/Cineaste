@@ -7,8 +7,6 @@ public sealed class Period : Entity<Period>
     private int endMonth;
     private int endYear;
     private int episodeCount;
-    private string? rottenTomatoesId;
-    private string? posterHash;
 
     public int StartMonth
     {
@@ -42,17 +40,9 @@ public sealed class Period : Entity<Period>
         set => this.episodeCount = Require.Positive(value);
     }
 
-    public string? RottenTomatoesId
-    {
-        get => this.rottenTomatoesId;
-        set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
-    }
+    public RottenTomatoesId? RottenTomatoesId { get; set; }
 
-    public string? PosterHash
-    {
-        get => this.posterHash;
-        set => this.posterHash = Require.Sha256(value);
-    }
+    public PosterHash? PosterHash { get; set; }
 
     public Period(
         Id<Period> id,

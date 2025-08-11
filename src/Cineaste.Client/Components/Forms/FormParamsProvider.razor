@@ -1,17 +1,12 @@
-@typeparam TFormModel where TFormModel : FormModelBase<TRequest, TModel>
-@typeparam TRequest where TRequest : IValidatable<TRequest>
-@typeparam TModel where TModel : IIdentifyableModel
-@typeparam TState
-
 <CascadingValue Name="@CascadingParameters.ValidationExecutor" Value="@this.For" IsFixed="true">
-    <CascadingValue Name="@CascadingParameters.ErrorCodes" Value="@this.For.FormModel.ValidationErrors">
+    <CascadingValue Name="@CascadingParameters.ErrorCodes" Value="@this.For.ValidationErrors">
         @this.ChildContent
     </CascadingValue>
 </CascadingValue>
 
 @code {
     [Parameter]
-    public required CineasteForm<TFormModel, TRequest, TModel, TState> For { get; set; }
+    public required ValidatableComponent For { get; set; }
 
     [Parameter]
     public required RenderFragment ChildContent { get; set; }

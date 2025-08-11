@@ -1,0 +1,124 @@
+@inherits ValidatableComponent
+
+@using static PosterContentTypes
+
+<MudDialog>
+    <TitleContent>
+        <h6 class="title">@String.Format(this.Loc["PosterDialog.HeaderFormat"], this.ItemTitle)</h6>
+    </TitleContent>
+
+    <DialogContent>
+        <FormParamsProvider For="this">
+            <MudRadioGroup @bind-Value="this.FormModel.SelectionMode">
+                <MudRadio Value="PosterSelectionMode.File" Color="Color.Primary">
+                    @this.Loc["PosterDialog.SelectionMode.File"]
+                </MudRadio>
+
+                <MudRadio Value="PosterSelectionMode.Url" Color="Color.Primary">
+                    @this.Loc["PosterDialog.SelectionMode.Url"]
+                </MudRadio>
+            </MudRadioGroup>
+
+            <div class="form-container">
+                @switch (this.FormModel.SelectionMode)
+                {
+                    case PosterSelectionMode.File:
+                        <div class="file-input-container">
+                            <MudFileUpload
+                                T="IBrowserFile"
+                                FilesChanged="@this.OnSelectedPosterChanged"
+                                Accept="@AcceptedImageFileExtensions.Aggregate((acc, item) => $"{acc}, {item}")"
+                            >
+                                <ActivatorContent>
+                                    <MudButton
+                                        Variant="Variant.Filled"
+                                        Color="Color.Primary"
+                                        StartIcon="@Icons.Material.Filled.Image"
+                                    >
+                                        @this.Loc["PosterDialog.SelectFile"]
+                                    </MudButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+
+                            @if (this.FormModel.SelectedFile is { } file)
+                            {
+                                <p>@file.Name</p>
+
+                                <MudIconButton
+                                    Variant="Variant.Text"
+                                    Color="Color.Secondary"
+                                    Icon="@Icons.Material.Filled.Close"
+                                    OnClick="this.RemoveSelection"
+                                    aria-label="@this.Loc["PosterDialog.RemoveSelection"]"
+                                />
+                            } else
+                            {
+                                <p>@this.Loc["PosterDialog.NoFileSelected"]</p>
+                            }
+                        </div>
+
+                        <ErrorPresenter ErrorCode="Poster.File.*" Trigger="@this.FormModel.SelectedFile" />
+                        break;
+                    case PosterSelectionMode.Url:
+                        <MudTextField
+                            @bind-Value="this.FormModel.PosterUrl"
+                            Label="@this.Loc["PosterDialog.Url"]"
+                        />
+
+                        <ErrorPresenter ErrorCode="Poster.Url.*" Trigger="@this.FormModel.PosterUrl" />
+                        break;
+                }
+            </div>
+        </FormParamsProvider>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Color="Color.Surface" Variant="Variant.Filled" OnClick="this.Cancel">
+            @this.Loc["Button.Cancel"]
+        </MudButton>
+
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="this.Save" Disabled="@(!this.CanSave)">
+            @this.Loc["Button.Save"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    public required IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public required string ItemTitle { get; set; }
+
+    public override IReadOnlySet<string> ValidationErrors =>
+        this.FormModel.ValidationErrors;
+
+    public PosterDialogModel FormModel { get; } = new();
+
+    private void OnSelectedPosterChanged(IBrowserFile file) =>
+        this.FormModel.SelectedFile = file;
+
+    private bool CanSave =>
+        this.FormModel.IsValid;
+
+    private void RemoveSelection() =>
+        this.FormModel.SelectedFile = null;
+
+    private void Save()
+    {
+        if (!this.CanSave)
+        {
+            return;
+        }
+
+        var request = this.FormModel.CreateRequest();
+
+        if (request is not null)
+        {
+            this.MudDialog.Close(DialogResult.Ok(request, this.GetType()));
+        }
+    }
+
+    private void Cancel() =>
+        this.MudDialog.Cancel();
+}

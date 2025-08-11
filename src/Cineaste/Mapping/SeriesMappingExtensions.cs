@@ -1,3 +1,5 @@
+using Cineaste.Core.Domain;
+
 namespace Cineaste.Mapping;
 
 public static class SeriesMappingExtensions
@@ -12,9 +14,9 @@ public static class SeriesMappingExtensions
             series.Kind.ToListKindModel(),
             [.. series.Seasons.Select(season => season.ToSeasonModel(series))],
             [.. series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel(series))],
-            series.ImdbId,
-            series.RottenTomatoesId,
-            series.GetActiveColor()?.HexValue ?? String.Empty,
+            series.ImdbId?.Value,
+            series.RottenTomatoesId?.Value,
+            series.GetActiveColor().HexValue,
             series.ListItem?.SequenceNumber ?? 0,
             series.GetPosterUrl(),
             series.FranchiseItem.ToFranchiseItemInfoModel());
@@ -29,8 +31,8 @@ public static class SeriesMappingExtensions
             request.Value.ReleaseStatus,
             kind)
         {
-            ImdbId = request.Value.ImdbId,
-            RottenTomatoesId = request.Value.RottenTomatoesId
+            ImdbId = ImdbId.Nullable(request.Value.ImdbId),
+            RottenTomatoesId = RottenTomatoesId.Nullable(request.Value.RottenTomatoesId)
         };
 
     public static void Update(this Series series, Validated<SeriesRequest> request, SeriesKind kind)
@@ -46,8 +48,8 @@ public static class SeriesMappingExtensions
         series.WatchStatus = request.Value.WatchStatus;
         series.ReleaseStatus = request.Value.ReleaseStatus;
         series.Kind = kind;
-        series.ImdbId = request.Value.ImdbId;
-        series.RottenTomatoesId = request.Value.RottenTomatoesId;
+        series.ImdbId = ImdbId.Nullable(request.Value.ImdbId);
+        series.RottenTomatoesId = RottenTomatoesId.Nullable(request.Value.RottenTomatoesId);
 
         series.UpdateSeasons(request.Value.Seasons);
         series.UpdateSpecialEpisodes(request.Value.SpecialEpisodes);
@@ -80,7 +82,7 @@ public static class SeriesMappingExtensions
             period.EndYear,
             period.EpisodeCount,
             period.IsSingleDayRelease,
-            period.RottenTomatoesId,
+            period.RottenTomatoesId?.Value,
             series.GetPosterUrl(period));
 
     private static SpecialEpisodeModel ToSpecialEpisodeModel(this SpecialEpisode episode, Series series) =>
@@ -94,7 +96,7 @@ public static class SeriesMappingExtensions
             episode.Channel,
             episode.Month,
             episode.Year,
-            episode.RottenTomatoesId,
+            episode.RottenTomatoesId?.Value,
             series.GetPosterUrl(episode));
 
     private static Season ToSeason(this SeasonRequest request) =>
@@ -117,7 +119,7 @@ public static class SeriesMappingExtensions
             request.IsSingleDayRelease,
             request.EpisodeCount)
         {
-            RottenTomatoesId = request.RottenTomatoesId
+            RottenTomatoesId = RottenTomatoesId.Nullable(request.RottenTomatoesId)
         };
 
     private static SpecialEpisode ToSpecialEpisode(this SpecialEpisodeRequest request) =>
@@ -131,7 +133,7 @@ public static class SeriesMappingExtensions
             request.Channel,
             request.SequenceNumber)
         {
-            RottenTomatoesId = request.RottenTomatoesId
+            RottenTomatoesId = RottenTomatoesId.Nullable(request.RottenTomatoesId)
         };
 
     private static void UpdateSeasons(this Series series, IReadOnlyCollection<SeasonRequest> requests)
@@ -215,7 +217,7 @@ public static class SeriesMappingExtensions
         period.EndYear = request.EndYear;
         period.IsSingleDayRelease = request.IsSingleDayRelease;
         period.EpisodeCount = request.EpisodeCount;
-        period.RottenTomatoesId = request.RottenTomatoesId;
+        period.RottenTomatoesId = RottenTomatoesId.Nullable(request.RottenTomatoesId);
     }
 
     private static void Update(this SpecialEpisode episode, SpecialEpisodeRequest request)
@@ -234,19 +236,15 @@ public static class SeriesMappingExtensions
         episode.IsReleased = request.IsReleased;
         episode.Channel = request.Channel;
         episode.SequenceNumber = request.SequenceNumber;
-        episode.RottenTomatoesId = request.RottenTomatoesId;
+        episode.RottenTomatoesId = RottenTomatoesId.Nullable(request.RottenTomatoesId);
     }
 
     private static string? GetPosterUrl(this Series series) =>
-        series.PosterHash is not null ? $"/api/series/{series.Id.Value}/poster/?h={series.PosterHash}" : null;
+        Urls.SeriesPoster(series.Id, series.PosterHash);
 
     private static string? GetPosterUrl(this Series series, Period period) =>
-        period.PosterHash is not null
-            ? $"/api/series/{series.Id.Value}/seasons/periods/{period.Id.Value}/poster/?h={period.PosterHash}"
-            : null;
+        Urls.SeasonPoster(series.Id, period.Id, period.PosterHash);
 
     private static string? GetPosterUrl(this Series series, SpecialEpisode episode) =>
-        episode.PosterHash is not null
-            ? $"/api/series/{series.Id.Value}/special-episodes/{episode.Id.Value}/poster/?h={episode.PosterHash}"
-            : null;
+        Urls.SpecialEpisodePoster(series.Id, episode.Id, episode.PosterHash);
 }

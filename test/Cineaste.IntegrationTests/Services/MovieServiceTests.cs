@@ -29,8 +29,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(movie.IsWatched, model.IsWatched);
         Assert.Equal(movie.IsReleased, model.IsReleased);
         Assert.Equal(movie.Kind.Id.Value, model.Kind.Id);
-        Assert.Equal(movie.ImdbId, model.ImdbId);
-        Assert.Equal(movie.RottenTomatoesId, model.RottenTomatoesId);
+        Assert.Equal(movie.ImdbId?.Value, model.ImdbId);
+        Assert.Equal(movie.RottenTomatoesId?.Value, model.RottenTomatoesId);
     }
 
     [Fact(DisplayName = "GetMovie should throw if movie isn't found")]
@@ -79,8 +79,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(request.IsWatched, movie.IsWatched);
         Assert.Equal(request.IsReleased, movie.IsReleased);
         Assert.Equal(request.KindId, movie.Kind.Id.Value);
-        Assert.Equal(request.ImdbId, movie.ImdbId);
-        Assert.Equal(request.RottenTomatoesId, movie.RottenTomatoesId);
+        Assert.Equal(request.ImdbId, movie.ImdbId?.Value);
+        Assert.Equal(request.RottenTomatoesId, movie.RottenTomatoesId?.Value);
     }
 
     [Fact(DisplayName = "AddMovie should return a correct model")]
@@ -159,8 +159,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(request.IsWatched, dbMovie.IsWatched);
         Assert.Equal(request.IsReleased, dbMovie.IsReleased);
         Assert.Equal(request.KindId, dbMovie.Kind.Id.Value);
-        Assert.Equal(request.ImdbId, dbMovie.ImdbId);
-        Assert.Equal(request.RottenTomatoesId, dbMovie.RottenTomatoesId);
+        Assert.Equal(request.ImdbId, dbMovie.ImdbId?.Value);
+        Assert.Equal(request.RottenTomatoesId, dbMovie.RottenTomatoesId?.Value);
     }
 
     [Fact(DisplayName = "UpdateMovie should return a correct model")]

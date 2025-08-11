@@ -168,7 +168,7 @@ namespace Cineaste.Persistence.Migrations
                     MovieKindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SeriesKindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     KindSource = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, maxLength: 64, nullable: true),
+                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, nullable: true),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -204,7 +204,7 @@ namespace Cineaste.Persistence.Migrations
                     KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, maxLength: 64, nullable: true),
+                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, nullable: true),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -234,7 +234,7 @@ namespace Cineaste.Persistence.Migrations
                     KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, maxLength: 64, nullable: true),
+                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, nullable: true),
                     FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -526,7 +526,7 @@ namespace Cineaste.Persistence.Migrations
                     Channel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, maxLength: 64, nullable: true),
+                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, nullable: true),
                     SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -556,7 +556,7 @@ namespace Cineaste.Persistence.Migrations
                     IsSingleDayRelease = table.Column<bool>(type: "bit", nullable: false),
                     EpisodeCount = table.Column<int>(type: "int", nullable: false),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, maxLength: 64, nullable: true),
+                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, nullable: true),
                     SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>

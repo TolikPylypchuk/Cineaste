@@ -11,9 +11,9 @@ public static class MovieMappingExtensions
             movie.IsWatched,
             movie.IsReleased,
             movie.Kind.ToListKindModel(),
-            movie.ImdbId,
-            movie.RottenTomatoesId,
-            movie.GetActiveColor()?.HexValue ?? String.Empty,
+            movie.ImdbId?.Value,
+            movie.RottenTomatoesId?.Value,
+            movie.GetActiveColor().HexValue,
             movie.ListItem?.SequenceNumber ?? 0,
             movie.GetPosterUrl(),
             movie.FranchiseItem.ToFranchiseItemInfoModel());
@@ -27,8 +27,8 @@ public static class MovieMappingExtensions
             request.Value.IsReleased,
             kind)
         {
-            ImdbId = request.Value.ImdbId,
-            RottenTomatoesId = request.Value.RottenTomatoesId
+            ImdbId = ImdbId.Nullable(request.Value.ImdbId),
+            RottenTomatoesId = RottenTomatoesId.Nullable(request.Value.RottenTomatoesId)
         };
 
     public static void Update(this Movie movie, Validated<MovieRequest> request, MovieKind kind)
@@ -45,12 +45,12 @@ public static class MovieMappingExtensions
         movie.IsWatched = request.Value.IsWatched;
         movie.IsReleased = request.Value.IsReleased;
         movie.Kind = kind;
-        movie.ImdbId = request.Value.ImdbId;
-        movie.RottenTomatoesId = request.Value.RottenTomatoesId;
+        movie.ImdbId = ImdbId.Nullable(request.Value.ImdbId);
+        movie.RottenTomatoesId = RottenTomatoesId.Nullable(request.Value.RottenTomatoesId);
 
         movie.ListItem?.SetProperties(movie);
     }
 
     private static string? GetPosterUrl(this Movie movie) =>
-        movie.PosterHash is not null ? $"/api/movies/{movie.Id.Value}/poster/?h={movie.PosterHash}" : null;
+        Urls.MoviePoster(movie.Id, movie.PosterHash);
 }

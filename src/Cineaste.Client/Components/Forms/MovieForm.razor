@@ -1,6 +1,4 @@
-@inherits CineasteForm<MovieFormModel, MovieRequest, MovieModel, MovieFormState>
-
-@using static PosterContentTypes
+@inherits PosterCineasteForm<MovieFormModel, MovieRequest, MovieModel, MovieFormState>
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
@@ -70,7 +68,7 @@
                 <div class="form">
                     @if (this.FormModel.BackingModel is { PosterUrl: string posterUrl })
                     {
-                        <img src="@posterUrl" alt="@this.FormTitle" title="this.FormTitle" class="poster" />
+                        <img src="@posterUrl" alt="@this.FormTitle" title="@this.FormTitle" class="poster" />
                     }
 
                     <div class="form-links">
@@ -207,6 +205,16 @@
                                 </MudButton>
                             }
                         </div>
+
+                        <PosterActions
+                            State="this.State.Value"
+                            OpenPosterDialog="this.OpenPosterDialog"
+                            SetPoster="this.SetPoster"
+                            RemovePoster="this.RemovePoster"
+                            CanRemovePoster="this.FormModel.BackingModel?.PosterUrl is not null"
+                            SetPosterText="MovieForm.SetPoster"
+                            RemovePosterText="MovieForm.RemovePoster"
+                        />
                     }
 
                     @if (!this.FormModel.IsNew)

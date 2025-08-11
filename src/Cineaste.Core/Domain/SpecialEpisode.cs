@@ -6,8 +6,6 @@ public sealed class SpecialEpisode : TitledEntity<SpecialEpisode>
     private int year;
     private string channel;
     private int sequenceNumber;
-    private string? rottenTomatoesId;
-    private string? posterHash;
 
     public int Month
     {
@@ -38,17 +36,9 @@ public sealed class SpecialEpisode : TitledEntity<SpecialEpisode>
         set => this.sequenceNumber = Require.Positive(value);
     }
 
-    public string? RottenTomatoesId
-    {
-        get => this.rottenTomatoesId;
-        set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
-    }
+    public RottenTomatoesId? RottenTomatoesId { get; set; }
 
-    public string? PosterHash
-    {
-        get => this.posterHash;
-        set => this.posterHash = Require.Sha256(value);
-    }
+    public PosterHash? PosterHash { get; set; }
 
     public SpecialEpisode(
         Id<SpecialEpisode> id,

@@ -32,8 +32,29 @@ public partial class SpecialEpisodeForm
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
 
+        this.SubsribeToSuccessfulResult<SetSpecialEpisodePosterResultAction>(this.OnPosterUpdated);
+        this.SubsribeToSuccessfulResult<RemoveSpecialEpisodePosterResultAction>(this.OnPosterUpdated);
+
         this.UpdateFormTitle();
         this.OnMonthYearChanged();
+    }
+
+    protected override object? CreateSetPosterAction(Guid _, PosterRequest request) =>
+        this.FormModel.BackingModel is { Id: var episodeId } && this.State.Value.Model is { Id: var seriesId }
+            ? new SetSpecialEpisodePosterAction(seriesId, episodeId, request)
+            : null;
+
+    protected override object? CreateRemovePosterAction(Guid _) =>
+        this.FormModel.BackingModel is { Id: var episodeId } && this.State.Value.Model is { Id: var seriesId }
+            ? new RemoveSpecialEpisodePosterAction(seriesId, episodeId)
+            : null;
+
+    protected override void UpdateFormModel()
+    {
+        if (this.Episode is not null && this.State.Value.Model is { SpecialEpisodes: var episodes })
+        {
+            this.FormModel.CopyFrom(episodes.FirstOrDefault(e => e.Id == this.Episode.Id));
+        }
     }
 
     private void SetPropertyValues()
@@ -100,6 +121,18 @@ public partial class SpecialEpisodeForm
             this.FormModel.IsWatched = false;
         }
     }
+
+    private async Task OpenPosterDialog()
+    {
+        if (this.FormModel.BackingModel is not null)
+        {
+            await this.OpenPosterDialog(this.FormTitle);
+        }
+    }
+
+    private async Task RemovePoster() =>
+        await this.RemovePoster(
+            "SpecialEpisodeForm.RemovePosterDialog.Title", "SpecialEpisodeForm.RemovePosterDialog.Body");
 
     private Task OnGoToNextComponent() =>
         this.WithValidation(r => this.GoToNextComponent.InvokeAsync());

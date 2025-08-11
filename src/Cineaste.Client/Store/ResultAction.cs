@@ -35,6 +35,14 @@ public abstract record ResultAction<T> : ResultAction
             case ApiFailure<T> failure:
                 onFailure(failure.Problem);
                 break;
-        };
+        }
+    }
+
+    public void OnSuccess(Action<T> onSuccess)
+    {
+        if (this.Result is ApiSuccess<T> succes)
+        {
+            onSuccess(succes.Value);
+        }
     }
 }

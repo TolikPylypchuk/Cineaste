@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace Cineaste.Services;
 
 public sealed class FranchiseService(
@@ -103,20 +101,20 @@ public sealed class FranchiseService(
         return poster.ToPosterModel();
     }
 
-    public async Task SetFranchisePoster(
+    public async Task<PosterHash> SetFranchisePoster(
         Id<Franchise> franchiseId,
         BinaryContentRequest request,
         CancellationToken token)
     {
         posterValidator.ValidateContentType(request.Type);
 
-        await this.SetFranchisePoster(
+        return await this.SetFranchisePoster(
             franchiseId,
             async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
             token);
     }
 
-    public async Task SetFranchisePoster(
+    public async Task<PosterHash> SetFranchisePoster(
         Id<Franchise> franchiseId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
@@ -366,7 +364,7 @@ public sealed class FranchiseService(
         }
     }
 
-    private async Task SetFranchisePoster(
+    private async Task<PosterHash> SetFranchisePoster(
         Id<Franchise> franchiseId,
         Func<Task<BinaryContentModel>> getContent,
         CancellationToken token)
@@ -384,10 +382,13 @@ public sealed class FranchiseService(
 
         var poster = new FranchisePoster(Id.Create<FranchisePoster>(), franchise, content.Data, content.Type);
 
-        franchise.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
+        var hash = PosterHash.ForPoster(content.Data);
+        franchise.PosterHash = hash;
 
         this.dbContext.FranchisePosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);
+
+        return hash;
     }
 
     private async Task<BinaryContentModel> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token)

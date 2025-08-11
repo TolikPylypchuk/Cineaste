@@ -13,4 +13,14 @@ public interface IFranchiseApi
 
     [Delete("/franchises/{id}")]
     public Task<IApiResponse> RemoveFranchise(Guid id);
+
+    [Multipart]
+    [Put("/franchises/{id}/poster")]
+    public Task<IApiResponse> SetFranchisePoster(Guid id, StreamPart file);
+
+    [Put("/franchises/{id}/poster")]
+    public Task<IApiResponse> SetFranchisePoster(Guid id, [Body] PosterUrlRequest request);
+
+    [Delete("/franchises/{id}/poster")]
+    public Task<IApiResponse> RemoveFranchisePoster(Guid id);
 }

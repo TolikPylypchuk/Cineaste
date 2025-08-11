@@ -34,6 +34,13 @@ public abstract record EmptyResultAction : ResultAction
                 onFailure(failure.Problem);
                 break;
         }
-        ;
+    }
+
+    public void OnSuccess(Action onSuccess)
+    {
+        if (this.IsSuccessful)
+        {
+            onSuccess();
+        }
     }
 }

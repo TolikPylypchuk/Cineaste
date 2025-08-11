@@ -10,7 +10,8 @@ public sealed class PosterUrlRequestValidator : CineasteValidator<PosterUrlReque
             .WithErrorCode(this.ErrorCode(req => req.Url, Empty));
 
         this.RuleFor(req => req.Url)
-            .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute) && this.IsHttpUri(new Uri(url)))
+            .Must(url => String.IsNullOrWhiteSpace(url) ||
+                Uri.IsWellFormedUriString(url, UriKind.Absolute) && this.IsHttpUri(new Uri(url)))
             .WithErrorCode(this.ErrorCode(req => req.Url, Invalid));
     }
 

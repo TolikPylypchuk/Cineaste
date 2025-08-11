@@ -12,9 +12,6 @@ public partial class MovieForm
     [Parameter]
     public ListItemModel? ListItem { get; set; }
 
-    [Inject]
-    public required IDialogService DialogService { get; init; }
-
     private string FormTitle { get; set; } = String.Empty;
 
     private bool CanChangeIsWatched { get; set; } = true;
@@ -29,6 +26,9 @@ public partial class MovieForm
         this.SubsribeToSuccessfulResult<AddMovieResultAction>(this.OnMovieCreated);
         this.SubsribeToSuccessfulResult<UpdateMovieResultAction>(this.OnMovieUpdated);
 
+        this.SubsribeToSuccessfulResult<SetMoviePosterResultAction>(this.OnPosterUpdated);
+        this.SubsribeToSuccessfulResult<RemoveMoviePosterResultAction>(this.OnPosterUpdated);
+
         base.OnInitialized();
     }
 
@@ -37,6 +37,15 @@ public partial class MovieForm
         base.OnParametersSet();
         this.InitializeFormModel();
     }
+
+    protected override object? CreateSetPosterAction(Guid _, PosterRequest request) =>
+        this.FormModel.BackingModel is { Id: var id } ? new SetMoviePosterAction(id, request) : null;
+
+    protected override object? CreateRemovePosterAction(Guid _) =>
+        this.FormModel.BackingModel is { Id: var id } ? new RemoveMoviePosterAction(id) : null;
+
+    protected override void UpdateFormModel() =>
+        this.FormModel.CopyFrom(this.State.Value.Model);
 
     private void InitializeFormModel()
     {
@@ -149,6 +158,17 @@ public partial class MovieForm
             this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
         }
     }
+
+    private async Task OpenPosterDialog()
+    {
+        if (this.FormModel.BackingModel is not null)
+        {
+            await this.OpenPosterDialog(this.FormTitle);
+        }
+    }
+
+    private async Task RemovePoster() =>
+        await this.RemovePoster("MovieForm.RemovePosterDialog.Title", "MovieForm.RemovePosterDialog.Body");
 
     private async Task Remove()
     {

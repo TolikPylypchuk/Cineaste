@@ -59,20 +59,22 @@ public sealed class MovieController(MovieService movieService)
 
     [HttpPut("{id}/poster")]
     [EndpointSummary("Set a poster for a movie")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> SetMoviePoster(Guid id, IFormFile file, CancellationToken token)
     {
+        var movieId = Id.For<Movie>(id);
         var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
-        await movieService.SetMoviePoster(Id.For<Movie>(id), request, token);
 
-        return this.NoContent();
+        var posterHash = await movieService.SetMoviePoster(movieId, request, token);
+
+        return this.Created(Urls.MoviePoster(movieId, posterHash), null);
     }
 
     [HttpPut("{id}/poster")]
     [EndpointSummary("Set a poster for a movie")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> SetMoviePoster(
@@ -80,8 +82,10 @@ public sealed class MovieController(MovieService movieService)
         [FromBody] PosterUrlRequest request,
         CancellationToken token)
     {
-        await movieService.SetMoviePoster(Id.For<Movie>(id), request.Validated(), token);
-        return this.NoContent();
+        var movieId = Id.For<Movie>(id);
+        var posterHash = await movieService.SetMoviePoster(movieId, request.Validated(), token);
+
+        return this.Created(Urls.MoviePoster(movieId, posterHash), null);
     }
 
     [HttpDelete("{id}/poster")]

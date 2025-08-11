@@ -28,8 +28,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(series.WatchStatus, model.WatchStatus);
         Assert.Equal(series.ReleaseStatus, model.ReleaseStatus);
         Assert.Equal(series.Kind.Id.Value, model.Kind.Id);
-        Assert.Equal(series.ImdbId, model.ImdbId);
-        Assert.Equal(series.RottenTomatoesId, model.RottenTomatoesId);
+        Assert.Equal(series.ImdbId?.Value, model.ImdbId);
+        Assert.Equal(series.RottenTomatoesId?.Value, model.RottenTomatoesId);
 
         foreach (var (season, seasonModel) in series.Seasons.OrderBy(s => s.SequenceNumber)
             .Zip(model.Seasons.OrderBy(s => s.SequenceNumber)))
@@ -50,7 +50,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
                 Assert.Equal(period.EndYear, periodModel.EndYear);
                 Assert.Equal(period.EpisodeCount, periodModel.EpisodeCount);
                 Assert.Equal(period.IsSingleDayRelease, periodModel.IsSingleDayRelease);
-                Assert.Equal(period.RottenTomatoesId, periodModel.RottenTomatoesId);
+                Assert.Equal(period.RottenTomatoesId?.Value, periodModel.RottenTomatoesId);
             }
         }
 
@@ -65,7 +65,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
             Assert.Equal(episode.Channel, episodeModel.Channel);
             Assert.Equal(episode.Month, episodeModel.Month);
             Assert.Equal(episode.Year, episodeModel.Year);
-            Assert.Equal(episode.RottenTomatoesId, episodeModel.RottenTomatoesId);
+            Assert.Equal(episode.RottenTomatoesId?.Value, episodeModel.RottenTomatoesId);
         }
     }
 
@@ -113,8 +113,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(request.WatchStatus, series.WatchStatus);
         Assert.Equal(request.ReleaseStatus, series.ReleaseStatus);
         Assert.Equal(request.KindId, series.Kind.Id.Value);
-        Assert.Equal(request.ImdbId, series.ImdbId);
-        Assert.Equal(request.RottenTomatoesId, series.RottenTomatoesId);
+        Assert.Equal(request.ImdbId, series.ImdbId?.Value);
+        Assert.Equal(request.RottenTomatoesId, series.RottenTomatoesId?.Value);
 
         foreach (var (seasonRequest, season) in request.Seasons.OrderBy(s => s.SequenceNumber)
             .Zip(series.Seasons.OrderBy(s => s.SequenceNumber)))
@@ -137,7 +137,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
                 Assert.Equal(periodRequest.EndYear, period.EndYear);
                 Assert.Equal(periodRequest.EpisodeCount, period.EpisodeCount);
                 Assert.Equal(periodRequest.IsSingleDayRelease, period.IsSingleDayRelease);
-                Assert.Equal(periodRequest.RottenTomatoesId, period.RottenTomatoesId);
+                Assert.Equal(periodRequest.RottenTomatoesId, period.RottenTomatoesId?.Value);
             }
         }
 
@@ -152,7 +152,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
             Assert.Equal(episodeRequest.Channel, episode.Channel);
             Assert.Equal(episodeRequest.Month, episode.Month);
             Assert.Equal(episodeRequest.Year, episode.Year);
-            Assert.Equal(episodeRequest.RottenTomatoesId, episode.RottenTomatoesId);
+            Assert.Equal(episodeRequest.RottenTomatoesId, episode.RottenTomatoesId?.Value);
         }
     }
 
@@ -268,8 +268,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(request.WatchStatus, series.WatchStatus);
         Assert.Equal(request.ReleaseStatus, series.ReleaseStatus);
         Assert.Equal(request.KindId, series.Kind.Id.Value);
-        Assert.Equal(request.ImdbId, series.ImdbId);
-        Assert.Equal(request.RottenTomatoesId, series.RottenTomatoesId);
+        Assert.Equal(request.ImdbId, series.ImdbId?.Value);
+        Assert.Equal(request.RottenTomatoesId, series.RottenTomatoesId?.Value);
 
         foreach (var (seasonRequest, season) in request.Seasons.OrderBy(s => s.SequenceNumber)
             .Zip(series.Seasons.OrderBy(s => s.SequenceNumber)))
@@ -292,7 +292,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
                 Assert.Equal(periodRequest.EndYear, period.EndYear);
                 Assert.Equal(periodRequest.EpisodeCount, period.EpisodeCount);
                 Assert.Equal(periodRequest.IsSingleDayRelease, period.IsSingleDayRelease);
-                Assert.Equal(periodRequest.RottenTomatoesId, period.RottenTomatoesId);
+                Assert.Equal(periodRequest.RottenTomatoesId, period.RottenTomatoesId?.Value);
             }
         }
 
@@ -307,7 +307,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
             Assert.Equal(episodeRequest.Channel, episode.Channel);
             Assert.Equal(episodeRequest.Month, episode.Month);
             Assert.Equal(episodeRequest.Year, episode.Year);
-            Assert.Equal(episodeRequest.RottenTomatoesId, episode.RottenTomatoesId);
+            Assert.Equal(episodeRequest.RottenTomatoesId, episode.RottenTomatoesId?.Value);
         }
     }
 

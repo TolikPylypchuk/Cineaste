@@ -1,0 +1,10 @@
+.set-poster-container {
+  display: flex;
+  justify-content: center;
+}
+
+.poster-actions-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: var(--s2);
+}

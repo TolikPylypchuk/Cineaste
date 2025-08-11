@@ -1,0 +1,74 @@
+@inherits CineasteComponent
+@typeparam TModel
+
+@if (this.State.SetPoster.IsInProgress || this.State.RemovePoster.IsInProgress)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+} else
+{
+    <div class="@(this.CanRemovePoster ? "poster-actions-container" : "set-poster-container")">
+        <MudButton
+            Color="Color.Primary"
+            Variant="Variant.Text"
+            Size="Size.Small"
+            @onclick="this.OpenPosterDialog"
+        >
+            @this.Loc[this.SetPosterText]
+        </MudButton>
+
+        @if (this.CanRemovePoster)
+        {
+            <MudButton
+                Color="Color.Secondary"
+                Variant="Variant.Text"
+                Size="Size.Small"
+                @onclick="this.RemovePoster"
+            >
+                @this.Loc[this.RemovePosterText]
+            </MudButton>
+        }
+    </div>
+}
+
+@if (this.State.SetPoster.Problem is not null)
+{
+    <ApiProblemAlert
+        Problem="@this.State.SetPoster.Problem"
+        Text="FranchiseForm.Problem.SettingPosterFailed"
+        TryAgain="@this.SetPoster"
+        Class="problem-alert"
+    />
+}
+
+@if (this.State.RemovePoster.Problem is not null)
+{
+    <ApiProblemAlert
+        Problem="@this.State.RemovePoster.Problem"
+        Text="FranchiseForm.Problem.RemovingPosterFailed"
+        TryAgain="@this.RemovePoster"
+        Class="problem-alert"
+    />
+}
+
+@code {
+    [Parameter]
+    public required PosterFormState<TModel> State { get; set; }
+
+    [Parameter]
+    public required EventCallback OpenPosterDialog { get; set; }
+
+    [Parameter]
+    public required EventCallback SetPoster { get; set; }
+
+    [Parameter]
+    public required EventCallback RemovePoster { get; set; }
+
+    [Parameter]
+    public required bool CanRemovePoster { get; set; }
+
+    [Parameter]
+    public required string SetPosterText { get; set; }
+
+    [Parameter]
+    public required string RemovePosterText { get; set; }
+}

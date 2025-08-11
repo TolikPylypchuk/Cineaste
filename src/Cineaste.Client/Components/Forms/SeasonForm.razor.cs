@@ -43,10 +43,35 @@ public partial class SeasonForm
         this.FormModel.TitlesUpdated += (sender, e) => this.UpdateFormTitle();
         this.FormModel.OriginalTitlesUpdated += (sender, e) => this.StateHasChanged();
 
+        this.SubscribeToAction<SetSeasonPosterResultAction>(action =>
+            action.OnSuccess(_ => this.OnPosterUpdated(action.PeriodId)));
+
+        this.SubscribeToAction<RemoveSeasonPosterResultAction>(action =>
+            action.OnSuccess(() => this.OnPosterUpdated(action.PeriodId)));
+
         this.UpdateFormTitle();
 
         this.PosterUrls = [.. this.FormModel.Periods.Select(p => p.BackingModel?.PosterUrl).WhereNotNull()];
         this.CurrentPosterUrlIndex = 0;
+    }
+
+    protected override object? CreateSetPosterAction(Guid periodId, PosterRequest request) =>
+        this.FormModel.BackingModel is not null && this.State.Value.Model is { Id: var seriesId }
+            ? new SetSeasonPosterAction(seriesId, periodId, request)
+            : null;
+
+    protected override object? CreateRemovePosterAction(Guid periodId) =>
+        this.FormModel.BackingModel is not null && this.State.Value.Model is { Id: var seriesId }
+            ? new RemoveSeasonPosterAction(seriesId, periodId)
+            : null;
+
+    protected override void UpdateFormModel()
+    {
+        if (this.Season is not null && this.State.Value.Model is { Seasons: var seasons })
+        {
+            this.FormModel.CopyFrom(seasons.FirstOrDefault(e => e.Id == this.Season.Id));
+            this.PosterUrls = [.. this.FormModel.Periods.Select(p => p.BackingModel?.PosterUrl).WhereNotNull()];
+        }
     }
 
     private void SetPropertyValues()
@@ -80,6 +105,17 @@ public partial class SeasonForm
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
         this.StateHasChanged();
     }
+
+    private async Task OpenPosterDialog(Guid periodId)
+    {
+        if (this.FormModel.BackingModel is not null)
+        {
+            await this.OpenPosterDialog(this.FormTitle, periodId);
+        }
+    }
+
+    private async Task RemovePoster(Guid periodId) =>
+        await this.RemovePoster("SeasonForm.RemovePosterDialog.Title", "SeasonForm.RemovePosterDialog.Body", periodId);
 
     private Task OnGoToNextComponent() =>
         this.WithValidation(r => this.GoToNextComponent.InvokeAsync());

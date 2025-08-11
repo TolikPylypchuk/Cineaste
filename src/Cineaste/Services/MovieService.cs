@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace Cineaste.Services;
 
 public sealed class MovieService(
@@ -100,17 +98,23 @@ public sealed class MovieService(
         return poster.ToPosterModel();
     }
 
-    public async Task SetMoviePoster(Id<Movie> movieId, BinaryContentRequest request, CancellationToken token)
+    public async Task<PosterHash> SetMoviePoster(
+        Id<Movie> movieId,
+        BinaryContentRequest request,
+        CancellationToken token)
     {
         posterValidator.ValidateContentType(request.Type);
 
-        await this.SetMoviePoster(
+        return await this.SetMoviePoster(
             movieId,
             async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
             token);
     }
 
-    public async Task SetMoviePoster(Id<Movie> movieId, Validated<PosterUrlRequest> request, CancellationToken token) =>
+    public async Task<PosterHash> SetMoviePoster(
+        Id<Movie> movieId,
+        Validated<PosterUrlRequest> request,
+        CancellationToken token) =>
         await this.SetMoviePoster(movieId, () => this.FetchPoster(request, token), token);
 
     public async Task RemoveMoviePoster(Id<Movie> movieId, CancellationToken token)
@@ -259,7 +263,7 @@ public sealed class MovieService(
             .FirstOrDefault(franchise => franchise.Id == id)
             ?? throw this.NotFound(id);
 
-    private async Task SetMoviePoster(
+    private async Task<PosterHash> SetMoviePoster(
         Id<Movie> movieId,
         Func<Task<BinaryContentModel>> getContent,
         CancellationToken token)
@@ -277,10 +281,13 @@ public sealed class MovieService(
 
         var poster = new MoviePoster(Id.Create<MoviePoster>(), movie, content.Data, content.Type);
 
-        movie.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
+        var hash = PosterHash.ForPoster(content.Data);
+        movie.PosterHash = hash;
 
         this.dbContext.MoviePosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);
+
+        return hash;
     }
 
     private async Task<BinaryContentModel> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token)

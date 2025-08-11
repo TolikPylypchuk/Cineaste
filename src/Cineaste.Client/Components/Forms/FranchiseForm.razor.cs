@@ -15,14 +15,11 @@ public partial class FranchiseForm
     [Parameter]
     public required ImmutableList<ListKindModel> AvailableSeriesKinds { get; set; }
 
-    [Inject]
-    public required IDialogService DialogService { get; init; }
-
     public required MudAutocomplete<ListItemModel> StandaloneItemSelect { get; set; }
 
-    private string FormTitle { get; set; } = String.Empty;
-
     public required MudDataGrid<FranchiseFormComponent> ComponentGrid { get; set; }
+
+    private string FormTitle { get; set; } = String.Empty;
 
     private SortedSet<ListItemModel> StandaloneItems { get; } = [];
     private Dictionary<Guid, ListItemModel> AddedStandaloneItems { get; } = [];
@@ -39,6 +36,9 @@ public partial class FranchiseForm
         this.SubsribeToSuccessfulResult<UpdateFranchiseResultAction>(this.OnFranchiseUpdated);
         this.SubsribeToSuccessfulResult<FetchStandaloneItemsResultAction>(this.UpdateStandaloneItems);
 
+        this.SubsribeToSuccessfulResult<SetFranchisePosterResultAction>(this.OnPosterUpdated);
+        this.SubsribeToSuccessfulResult<RemoveFranchisePosterResultAction>(this.OnPosterUpdated);
+
         base.OnInitialized();
     }
 
@@ -47,6 +47,15 @@ public partial class FranchiseForm
         base.OnParametersSet();
         this.InitializeFormModel();
     }
+
+    protected override object? CreateSetPosterAction(Guid _, PosterRequest request) =>
+        this.FormModel.BackingModel is { Id: var id } ? new SetFranchisePosterAction(id, request) : null;
+
+    protected override object? CreateRemovePosterAction(Guid _) =>
+        this.FormModel.BackingModel is { Id: var id } ? new RemoveFranchisePosterAction(id) : null;
+
+    protected override void UpdateFormModel() =>
+        this.FormModel.CopyFrom(this.State.Value.Model);
 
     private void InitializeFormModel()
     {
@@ -232,6 +241,17 @@ public partial class FranchiseForm
             this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
         }
     }
+
+    private async Task OpenPosterDialog()
+    {
+        if (this.FormModel.BackingModel is not null)
+        {
+            await this.OpenPosterDialog(this.FormTitle);
+        }
+    }
+
+    private async Task RemovePoster() =>
+        await this.RemovePoster("FranchiseForm.RemovePosterDialog.Title", "FranchiseForm.RemovePosterDialog.Body");
 
     private async Task Remove()
     {

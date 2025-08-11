@@ -54,7 +54,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 
@@ -253,7 +252,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 
@@ -363,7 +361,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 
@@ -477,7 +474,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 
@@ -590,7 +586,6 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PosterHash")
-                        .HasMaxLength(64)
                         .HasColumnType("nchar(64)")
                         .IsFixedLength();
 

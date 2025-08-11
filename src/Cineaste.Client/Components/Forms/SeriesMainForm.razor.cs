@@ -30,9 +30,6 @@ public partial class SeriesMainForm
     [Parameter]
     public EventCallback Cancel { get; set; }
 
-    [Inject]
-    public required IDialogService DialogService { get; init; }
-
     public required MudDataGrid<ISeriesComponentFormModel> ComponentGrid { get; set; }
 
     private ImmutableArray<SeriesWatchStatus> AllWatchStatuses { get; } =
@@ -55,8 +52,20 @@ public partial class SeriesMainForm
             this.StateHasChanged();
         });
 
+        this.SubsribeToSuccessfulResult<SetSeriesPosterResultAction>(this.OnPosterUpdated);
+        this.SubsribeToSuccessfulResult<RemoveSeriesPosterResultAction>(this.OnPosterUpdated);
+
         base.OnInitialized();
     }
+
+    protected override object? CreateSetPosterAction(Guid _, PosterRequest request) =>
+        this.FormModel.BackingModel is { Id: var id } ? new SetSeriesPosterAction(id, request) : null;
+
+    protected override object? CreateRemovePosterAction(Guid _) =>
+        this.FormModel.BackingModel is { Id: var id } ? new RemoveSeriesPosterAction(id) : null;
+
+    protected override void UpdateFormModel() =>
+        this.FormModel.CopyFrom(this.State.Value.Model);
 
     private void FetchSeries()
     {
@@ -115,6 +124,17 @@ public partial class SeriesMainForm
             this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
         }
     }
+
+    private async Task OpenPosterDialog()
+    {
+        if (this.FormModel.BackingModel is not null)
+        {
+            await this.OpenPosterDialog(this.FormTitle);
+        }
+    }
+
+    private async Task RemovePoster() =>
+        await this.RemovePoster("SeriesForm.RemovePosterDialog.Title", "SeriesForm.RemovePosterDialog.Body");
 
     private async Task Remove()
     {

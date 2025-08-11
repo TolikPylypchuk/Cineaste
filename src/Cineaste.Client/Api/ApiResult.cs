@@ -17,13 +17,17 @@ public static class ApiResult
 
 public static class ApiResultExtensions
 {
-    public static ApiResult<T> ToApiResult<T>(this IApiResponse<T> response)
+    public static ApiResult<T> ToApiResult<T>(this IApiResponse<T> response) =>
+        response.ToApiResult(r => r.Content is not null
+            ? r.Content
+            : throw new InvalidOperationException("The response content is empty"));
+
+    public static ApiResult<T> ToApiResult<T, R>(this R response, Func<R, T> onSucces)
+        where R : IApiResponse
     {
         if (response.IsSuccessful)
         {
-            return response.Content is not null
-                ? ApiResult.Success(response.Content)
-                : throw new InvalidOperationException("The response content is empty");
+            return ApiResult.Success(onSucces(response));
         } else if (response.Error is ValidationApiException validationException &&
             validationException.Content is not null)
         {
@@ -40,4 +44,8 @@ public static class ApiResultExtensions
 
     public static async Task<ApiResult<T>> ToApiResultAsync<T>(this Task<IApiResponse<T>> task) =>
         (await task).ToApiResult();
+
+    public static async Task<ApiResult<T>> ToApiResultAsync<T, R>(this Task<R> task, Func<R, T> onSuccess)
+        where R : IApiResponse =>
+        (await task).ToApiResult(onSuccess);
 }

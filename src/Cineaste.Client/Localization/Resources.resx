@@ -354,8 +354,38 @@
   <data name="MovieForm.RemoveDialog.Body" xml:space="preserve">
     <value>Are you sure you want to remove this movie?</value>
   </data>
+  <data name="MovieForm.RemovePosterDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to remove this movie's poster?</value>
+  </data>
+  <data name="SpecialEpisodeForm.RemovePosterDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to remove this episode's poster?</value>
+  </data>
+  <data name="SeasonForm.RemovePosterDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to remove this season's poster?</value>
+  </data>
+  <data name="SeriesForm.RemovePosterDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to remove this series' poster?</value>
+  </data>
+  <data name="FranchiseForm.RemovePosterDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to remove this franchise's poster?</value>
+  </data>
   <data name="MovieForm.RemoveDialog.Title" xml:space="preserve">
     <value>Remove Movie</value>
+  </data>
+  <data name="MovieForm.RemovePosterDialog.Title" xml:space="preserve">
+    <value>Remove Movie Poster</value>
+  </data>
+  <data name="SpecialEpisodeForm.RemovePosterDialog.Title" xml:space="preserve">
+    <value>Remove Special Episode Poster</value>
+  </data>
+  <data name="SeasonForm.RemovePosterDialog.Title" xml:space="preserve">
+    <value>Remove Season Poster</value>
+  </data>
+  <data name="SeriesForm.RemovePosterDialog.Title" xml:space="preserve">
+    <value>Remove Series Poster</value>
+  </data>
+  <data name="FranchiseForm.RemovePosterDialog.Title" xml:space="preserve">
+    <value>Remove Franchise Poster</value>
   </data>
   <data name="MovieForm.ImdbId" xml:space="preserve">
     <value>IMDb ID</value>
@@ -408,6 +438,36 @@
   <data name="MovieForm.Problem.RemovingFailed" xml:space="preserve">
     <value>Removing the movie has failed</value>
   </data>
+  <data name="MovieForm.Problem.RemovingPosterFailed" xml:space="preserve">
+    <value>Removing the poster has failed</value>
+  </data>
+  <data name="SpecialEpisodeForm.Problem.RemovingPosterFailed" xml:space="preserve">
+    <value>Removing the poster has failed</value>
+  </data>
+  <data name="SeasonForm.Problem.RemovingPosterFailed" xml:space="preserve">
+    <value>Removing the poster has failed</value>
+  </data>
+  <data name="SeriesForm.Problem.RemovingPosterFailed" xml:space="preserve">
+    <value>Removing the poster has failed</value>
+  </data>
+  <data name="FranchiseForm.Problem.RemovingPosterFailed" xml:space="preserve">
+    <value>Removing the poster has failed</value>
+  </data>
+  <data name="MovieForm.Problem.SettingPosterFailed" xml:space="preserve">
+    <value>Setting the poster has failed</value>
+  </data>
+  <data name="SpecialEpisodeForm.Problem.SettingPosterFailed" xml:space="preserve">
+    <value>Setting the poster has failed</value>
+  </data>
+  <data name="SeasonForm.Problem.SettingPosterFailed" xml:space="preserve">
+    <value>Setting the poster has failed</value>
+  </data>
+  <data name="SeriesForm.Problem.SettingPosterFailed" xml:space="preserve">
+    <value>Setting the poster has failed</value>
+  </data>
+  <data name="FranchiseForm.Problem.SettingPosterFailed" xml:space="preserve">
+    <value>Setting the poster has failed</value>
+  </data>
   <data name="MovieForm.Problem.LoadingFailed" xml:space="preserve">
     <value>Loading the movie has failed</value>
   </data>
@@ -432,11 +492,26 @@
   <data name="MovieForm.UploadPoster" xml:space="preserve">
     <value>Upload poster</value>
   </data>
-  <data name="MovieForm.SelectFile" xml:space="preserve">
+  <data name="PosterDialog.SelectFile" xml:space="preserve">
     <value>Select file</value>
   </data>
-  <data name="MovieForm.FetchPoster" xml:space="preserve">
-    <value>Fetch poster</value>
+  <data name="PosterDialog.RemoveSelection" xml:space="preserve">
+    <value>Remove selection</value>
+  </data>
+  <data name="PosterDialog.NoFileSelected" xml:space="preserve">
+    <value>No file selected</value>
+  </data>
+  <data name="PosterDialog.SelectionMode.File" xml:space="preserve">
+    <value>Upload file</value>
+  </data>
+  <data name="PosterDialog.SelectionMode.Url" xml:space="preserve">
+    <value>Fetch from a URL</value>
+  </data>
+  <data name="PosterDialog.HeaderFormat" xml:space="preserve">
+    <value>Set Poster for {0}</value>
+  </data>
+  <data name="PosterDialog.Url" xml:space="preserve">
+    <value>URL</value>
   </data>
   <data name="PeriodForm.EndMonthYear" xml:space="preserve">
     <value>End month and year</value>
@@ -839,5 +914,44 @@
   </data>
   <data name="FranchiseForm.AddSeries" xml:space="preserve">
     <value>Add new series</value>
+  </data>
+  <data name="MovieForm.SetPoster" xml:space="preserve">
+    <value>Set poster</value>
+  </data>
+  <data name="SpecialEpisodeForm.SetPoster" xml:space="preserve">
+    <value>Set poster</value>
+  </data>
+  <data name="SeasonForm.SetPoster" xml:space="preserve">
+    <value>Set poster</value>
+  </data>
+  <data name="SeriesForm.SetPoster" xml:space="preserve">
+    <value>Set poster</value>
+  </data>
+  <data name="FranchiseForm.SetPoster" xml:space="preserve">
+    <value>Set poster</value>
+  </data>
+  <data name="MovieForm.RemovePoster" xml:space="preserve">
+    <value>Remove poster</value>
+  </data>
+  <data name="SpecialEpisodeForm.RemovePoster" xml:space="preserve">
+    <value>Remove poster</value>
+  </data>
+  <data name="SeasonForm.RemovePoster" xml:space="preserve">
+    <value>Remove poster</value>
+  </data>
+  <data name="SeriesForm.RemovePoster" xml:space="preserve">
+    <value>Remove poster</value>
+  </data>
+  <data name="FranchiseForm.RemovePoster" xml:space="preserve">
+    <value>Remove poster</value>
+  </data>
+  <data name="Validation.Poster.File.TooLarge" xml:space="preserve">
+    <value>The file is too large (max. 10 MB)</value>
+  </data>
+  <data name="Validation.Poster.Url.Invalid" xml:space="preserve">
+    <value>The poster URL is invalid</value>
+  </data>
+  <data name="Validation.Poster.Url.Empty" xml:space="preserve">
+    <value>The poster URL is empty</value>
   </data>
 </root>

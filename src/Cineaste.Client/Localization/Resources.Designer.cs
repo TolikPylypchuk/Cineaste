@@ -529,6 +529,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removing the poster has failed.
+        /// </summary>
+        public static string FranchiseForm_Problem_RemovingPosterFailed {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Problem.RemovingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting the poster has failed.
+        /// </summary>
+        public static string FranchiseForm_Problem_SettingPosterFailed {
+            get {
+                return ResourceManager.GetString("FranchiseForm.Problem.SettingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating the franchise has failed.
         /// </summary>
         public static string FranchiseForm_Problem_UpdatingFailed {
@@ -552,6 +570,42 @@ namespace Cineaste.Client.Localization {
         public static string FranchiseForm_RemoveDialog_Title {
             get {
                 return ResourceManager.GetString("FranchiseForm.RemoveDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove poster.
+        /// </summary>
+        public static string FranchiseForm_RemovePoster {
+            get {
+                return ResourceManager.GetString("FranchiseForm.RemovePoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this franchise&apos;s poster?.
+        /// </summary>
+        public static string FranchiseForm_RemovePosterDialog_Body {
+            get {
+                return ResourceManager.GetString("FranchiseForm.RemovePosterDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Franchise Poster.
+        /// </summary>
+        public static string FranchiseForm_RemovePosterDialog_Title {
+            get {
+                return ResourceManager.GetString("FranchiseForm.RemovePosterDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set poster.
+        /// </summary>
+        public static string FranchiseForm_SetPoster {
+            get {
+                return ResourceManager.GetString("FranchiseForm.SetPoster", resourceCulture);
             }
         }
         
@@ -880,15 +934,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fetch poster.
-        /// </summary>
-        public static string MovieForm_FetchPoster {
-            get {
-                return ResourceManager.GetString("MovieForm.FetchPoster", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Go to franchise.
         /// </summary>
         public static string MovieForm_GoToFranchise {
@@ -979,6 +1024,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removing the poster has failed.
+        /// </summary>
+        public static string MovieForm_Problem_RemovingPosterFailed {
+            get {
+                return ResourceManager.GetString("MovieForm.Problem.RemovingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting the poster has failed.
+        /// </summary>
+        public static string MovieForm_Problem_SettingPosterFailed {
+            get {
+                return ResourceManager.GetString("MovieForm.Problem.SettingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating the movie has failed.
         /// </summary>
         public static string MovieForm_Problem_UpdatingFailed {
@@ -1015,6 +1078,33 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove poster.
+        /// </summary>
+        public static string MovieForm_RemovePoster {
+            get {
+                return ResourceManager.GetString("MovieForm.RemovePoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this movie&apos;s poster?.
+        /// </summary>
+        public static string MovieForm_RemovePosterDialog_Body {
+            get {
+                return ResourceManager.GetString("MovieForm.RemovePosterDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Movie Poster.
+        /// </summary>
+        public static string MovieForm_RemovePosterDialog_Title {
+            get {
+                return ResourceManager.GetString("MovieForm.RemovePosterDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove title.
         /// </summary>
         public static string MovieForm_RemoveTitle {
@@ -1033,11 +1123,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select file.
+        ///   Looks up a localized string similar to Set poster.
         /// </summary>
-        public static string MovieForm_SelectFile {
+        public static string MovieForm_SetPoster {
             get {
-                return ResourceManager.GetString("MovieForm.SelectFile", resourceCulture);
+                return ResourceManager.GetString("MovieForm.SetPoster", resourceCulture);
             }
         }
         
@@ -1137,6 +1227,69 @@ namespace Cineaste.Client.Localization {
         public static string PeriodForm_StartMonthYear {
             get {
                 return ResourceManager.GetString("PeriodForm.StartMonthYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Poster for {0}.
+        /// </summary>
+        public static string PosterDialog_HeaderFormat {
+            get {
+                return ResourceManager.GetString("PosterDialog.HeaderFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No file selected.
+        /// </summary>
+        public static string PosterDialog_NoFileSelected {
+            get {
+                return ResourceManager.GetString("PosterDialog.NoFileSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove selection.
+        /// </summary>
+        public static string PosterDialog_RemoveSelection {
+            get {
+                return ResourceManager.GetString("PosterDialog.RemoveSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select file.
+        /// </summary>
+        public static string PosterDialog_SelectFile {
+            get {
+                return ResourceManager.GetString("PosterDialog.SelectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload file.
+        /// </summary>
+        public static string PosterDialog_SelectionMode_File {
+            get {
+                return ResourceManager.GetString("PosterDialog.SelectionMode.File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fetch from a URL.
+        /// </summary>
+        public static string PosterDialog_SelectionMode_Url {
+            get {
+                return ResourceManager.GetString("PosterDialog.SelectionMode.Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL.
+        /// </summary>
+        public static string PosterDialog_Url {
+            get {
+                return ResourceManager.GetString("PosterDialog.Url", resourceCulture);
             }
         }
         
@@ -1276,6 +1429,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removing the poster has failed.
+        /// </summary>
+        public static string SeasonForm_Problem_RemovingPosterFailed {
+            get {
+                return ResourceManager.GetString("SeasonForm.Problem.RemovingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting the poster has failed.
+        /// </summary>
+        public static string SeasonForm_Problem_SettingPosterFailed {
+            get {
+                return ResourceManager.GetString("SeasonForm.Problem.SettingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Release status.
         /// </summary>
         public static string SeasonForm_ReleaseStatus {
@@ -1326,6 +1497,42 @@ namespace Cineaste.Client.Localization {
         public static string SeasonForm_ReleaseStatus_Unknown {
             get {
                 return ResourceManager.GetString("SeasonForm.ReleaseStatus.Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove poster.
+        /// </summary>
+        public static string SeasonForm_RemovePoster {
+            get {
+                return ResourceManager.GetString("SeasonForm.RemovePoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this season&apos;s poster?.
+        /// </summary>
+        public static string SeasonForm_RemovePosterDialog_Body {
+            get {
+                return ResourceManager.GetString("SeasonForm.RemovePosterDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Season Poster.
+        /// </summary>
+        public static string SeasonForm_RemovePosterDialog_Title {
+            get {
+                return ResourceManager.GetString("SeasonForm.RemovePosterDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set poster.
+        /// </summary>
+        public static string SeasonForm_SetPoster {
+            get {
+                return ResourceManager.GetString("SeasonForm.SetPoster", resourceCulture);
             }
         }
         
@@ -1519,6 +1726,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removing the poster has failed.
+        /// </summary>
+        public static string SeriesForm_Problem_RemovingPosterFailed {
+            get {
+                return ResourceManager.GetString("SeriesForm.Problem.RemovingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting the poster has failed.
+        /// </summary>
+        public static string SeriesForm_Problem_SettingPosterFailed {
+            get {
+                return ResourceManager.GetString("SeriesForm.Problem.SettingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating the series has failed.
         /// </summary>
         public static string SeriesForm_Problem_UpdatingFailed {
@@ -1591,11 +1816,47 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove poster.
+        /// </summary>
+        public static string SeriesForm_RemovePoster {
+            get {
+                return ResourceManager.GetString("SeriesForm.RemovePoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this series&apos; poster?.
+        /// </summary>
+        public static string SeriesForm_RemovePosterDialog_Body {
+            get {
+                return ResourceManager.GetString("SeriesForm.RemovePosterDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Series Poster.
+        /// </summary>
+        public static string SeriesForm_RemovePosterDialog_Title {
+            get {
+                return ResourceManager.GetString("SeriesForm.RemovePosterDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotten Tomatoes ID.
         /// </summary>
         public static string SeriesForm_RottenTomatoesId {
             get {
                 return ResourceManager.GetString("SeriesForm.RottenTomatoesId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set poster.
+        /// </summary>
+        public static string SeriesForm_SetPoster {
+            get {
+                return ResourceManager.GetString("SeriesForm.SetPoster", resourceCulture);
             }
         }
         
@@ -1735,6 +1996,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removing the poster has failed.
+        /// </summary>
+        public static string SpecialEpisodeForm_Problem_RemovingPosterFailed {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.Problem.RemovingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting the poster has failed.
+        /// </summary>
+        public static string SpecialEpisodeForm_Problem_SettingPosterFailed {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.Problem.SettingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Release month and year.
         /// </summary>
         public static string SpecialEpisodeForm_ReleaseMonthYear {
@@ -1744,11 +2023,47 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove poster.
+        /// </summary>
+        public static string SpecialEpisodeForm_RemovePoster {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.RemovePoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this episode&apos;s poster?.
+        /// </summary>
+        public static string SpecialEpisodeForm_RemovePosterDialog_Body {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.RemovePosterDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Special Episode Poster.
+        /// </summary>
+        public static string SpecialEpisodeForm_RemovePosterDialog_Title {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.RemovePosterDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotten Tomatoes ID.
         /// </summary>
         public static string SpecialEpisodeForm_RottenTomatoesId {
             get {
                 return ResourceManager.GetString("SpecialEpisodeForm.RottenTomatoesId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set poster.
+        /// </summary>
+        public static string SpecialEpisodeForm_SetPoster {
+            get {
+                return ResourceManager.GetString("SpecialEpisodeForm.SetPoster", resourceCulture);
             }
         }
         
@@ -1983,6 +2298,33 @@ namespace Cineaste.Client.Localization {
         public static string Validation_Period_StartYear_TooLow {
             get {
                 return ResourceManager.GetString("Validation.Period.StartYear.TooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file is too large (max. 10 MB).
+        /// </summary>
+        public static string Validation_Poster_File_TooLarge {
+            get {
+                return ResourceManager.GetString("Validation.Poster.File.TooLarge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The poster URL is empty.
+        /// </summary>
+        public static string Validation_Poster_Url_Empty {
+            get {
+                return ResourceManager.GetString("Validation.Poster.Url.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The poster URL is invalid.
+        /// </summary>
+        public static string Validation_Poster_Url_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Poster.Url.Invalid", resourceCulture);
             }
         }
         

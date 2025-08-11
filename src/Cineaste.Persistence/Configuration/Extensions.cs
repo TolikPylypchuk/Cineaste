@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using System.Security.Cryptography;
 
 namespace Cineaste.Persistence.Configuration;
 
@@ -14,12 +13,6 @@ internal static class Extensions
         builder.Property(x => x.Id)
             .HasConversion<IdConverter<T>>();
     }
-
-    public static void HasPosterHash<T>(this EntityTypeBuilder<T> builder, Expression<Func<T, string?>> posterHash)
-        where T : Entity<T> =>
-        builder.Property(posterHash)
-            .HasMaxLength(SHA256.HashSizeInBytes * 2)
-            .IsFixedLength();
 
     public static void HasTitles<T>(
         this EntityTypeBuilder<T> builder,
@@ -76,6 +69,24 @@ internal static class Extensions
         where T : Entity<T> =>
         builder.Property<Id<CineasteList>>(ListId)
             .HasConversion<IdConverter<CineasteList>>();
+
+    public static void HasImdbId<T>(this EntityTypeBuilder<T> builder, Expression<Func<T, ImdbId?>> imdbId)
+        where T : Entity<T> =>
+        builder.Property(imdbId)
+            .HasConversion<ImdbIdConverter>();
+
+    public static void HasRottenTomatoesId<T>(
+        this EntityTypeBuilder<T> builder,
+        Expression<Func<T, RottenTomatoesId?>> rottenTomatoesId)
+        where T : Entity<T> =>
+        builder.Property(rottenTomatoesId)
+            .HasConversion<RottenTomatoesIdConverter>();
+
+    public static void HasPosterHash<T>(this EntityTypeBuilder<T> builder, Expression<Func<T, PosterHash?>> posterHash)
+        where T : Entity<T> =>
+        builder.Property(posterHash)
+            .HasConversion<PosterHashConverter>()
+            .IsFixedLength();
 
     public static void HasManyToOne<T>(
         this EntityTypeBuilder<CineasteList> list,

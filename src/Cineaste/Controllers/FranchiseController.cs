@@ -61,20 +61,22 @@ public sealed class FranchiseController(FranchiseService franchiseService)
 
     [HttpPut("{id}/poster")]
     [EndpointSummary("Set a poster for a franchise")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> SetFranchisePoster(Guid id, IFormFile file, CancellationToken token)
     {
+        var franchiseId = Id.For<Franchise>(id);
         var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
-        await franchiseService.SetFranchisePoster(Id.For<Franchise>(id), request, token);
 
-        return this.NoContent();
+        var posterHash = await franchiseService.SetFranchisePoster(franchiseId, request, token);
+
+        return this.Created(Urls.FranchisePoster(franchiseId, posterHash), null);
     }
 
     [HttpPut("{id}/poster")]
     [EndpointSummary("Set a poster for a franchise")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status415UnsupportedMediaType)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> SetFranchisePoster(
@@ -82,8 +84,10 @@ public sealed class FranchiseController(FranchiseService franchiseService)
         [FromBody] PosterUrlRequest request,
         CancellationToken token)
     {
-        await franchiseService.SetFranchisePoster(Id.For<Franchise>(id), request.Validated(), token);
-        return this.NoContent();
+        var franchiseId = Id.For<Franchise>(id);
+        var posterHash = await franchiseService.SetFranchisePoster(franchiseId, request.Validated(), token);
+
+        return this.Created(Urls.FranchisePoster(franchiseId, posterHash), null);
     }
 
     [HttpDelete("{id}/poster")]

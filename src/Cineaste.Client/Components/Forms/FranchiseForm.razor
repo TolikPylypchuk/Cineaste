@@ -1,4 +1,4 @@
-@inherits CineasteForm<FranchiseFormModel, FranchiseRequest, FranchiseModel, FranchiseFormState>
+@inherits PosterCineasteForm<FranchiseFormModel, FranchiseRequest, FranchiseModel, FranchiseFormState>
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
@@ -68,7 +68,7 @@
                 <div class="form">
                     @if (this.FormModel.BackingModel is { PosterUrl: string posterUrl })
                     {
-                        <img src="@posterUrl" alt="@this.FormTitle" title="this.FormTitle" class="poster" />
+                        <img src="@posterUrl" alt="@this.FormTitle" title="@this.FormTitle" class="poster" />
                     }
 
                     <div class="form-checkboxes">
@@ -348,6 +348,16 @@
                                 </MudButton>
                             }
                         </div>
+
+                        <PosterActions
+                            State="this.State.Value"
+                            OpenPosterDialog="@(() => this.OpenPosterDialog())"
+                            SetPoster="@(() => this.SetPoster())"
+                            RemovePoster="this.RemovePoster"
+                            CanRemovePoster="this.FormModel.BackingModel?.PosterUrl is not null"
+                            SetPosterText="FranchiseForm.SetPoster"
+                            RemovePosterText="FranchiseForm.RemovePoster"
+                        />
                     }
 
                     @if (!this.FormModel.IsNew)

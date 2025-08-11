@@ -3,9 +3,6 @@ namespace Cineaste.Core.Domain;
 public sealed class Movie : FranchiseItemEntity<Movie>
 {
     private int year;
-    private string? imdbId;
-    private string? rottenTomatoesId;
-    private string? posterHash;
     private MovieKind kind;
 
     private readonly HashSet<TagContainer> tags;
@@ -27,23 +24,11 @@ public sealed class Movie : FranchiseItemEntity<Movie>
         set => this.kind = Require.NotNull(value);
     }
 
-    public string? ImdbId
-    {
-        get => this.imdbId;
-        set => this.imdbId = Require.ImdbId(value);
-    }
+    public ImdbId? ImdbId { get; set; }
 
-    public string? RottenTomatoesId
-    {
-        get => this.rottenTomatoesId;
-        set => this.rottenTomatoesId = Require.RottenTomatoesId(value);
-    }
+    public RottenTomatoesId? RottenTomatoesId { get; set; }
 
-    public string? PosterHash
-    {
-        get => this.posterHash;
-        set => this.posterHash = Require.Sha256(value);
-    }
+    public PosterHash? PosterHash { get; set; }
 
     public IReadOnlySet<TagContainer> Tags =>
         this.tags;

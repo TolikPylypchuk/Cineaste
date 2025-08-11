@@ -1,4 +1,4 @@
-@inherits CineasteForm<SpecialEpisodeFormModel, SpecialEpisodeRequest, SpecialEpisodeModel, SeriesFormState>
+@inherits PosterCineasteForm<SpecialEpisodeFormModel, SpecialEpisodeRequest, SpecialEpisodeModel, SeriesFormState>
 
 <FormParamsProvider For="this">
     <div class="container list-sidebar">
@@ -48,7 +48,7 @@
             <div class="form">
                 @if (this.FormModel.BackingModel is { PosterUrl: string posterUrl })
                 {
-                    <img src="@posterUrl" alt="@this.FormTitle" title="this.FormTitle" class="poster" />
+                    <img src="@posterUrl" alt="@this.FormTitle" title="@this.FormTitle" class="poster" />
                 }
 
                 <div class="form-links">
@@ -142,6 +142,19 @@
                         Trigger="@this.FormModel.RottenTomatoesId"
                     />
                 </div>
+
+                @if (!(this.FormModel.IsNew || this.FormModel.HasChanges))
+                {
+                    <PosterActions
+                        State="this.State.Value"
+                        OpenPosterDialog="this.OpenPosterDialog"
+                        SetPoster="this.SetPoster"
+                        RemovePoster="this.RemovePoster"
+                        CanRemovePoster="this.FormModel.BackingModel?.PosterUrl is not null"
+                        SetPosterText="SpecialEpisodeForm.SetPoster"
+                        RemovePosterText="SpecialEpisodeForm.RemovePoster"
+                    />
+                }
 
                 <div class="delete-container">
                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="@this.Delete">

@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace Cineaste.Services;
 
 public sealed class SeriesService(
@@ -103,17 +101,20 @@ public sealed class SeriesService(
         return poster.ToPosterModel();
     }
 
-    public async Task SetSeriesPoster(Id<Series> seriesId, BinaryContentRequest request, CancellationToken token)
+    public async Task<PosterHash> SetSeriesPoster(
+        Id<Series> seriesId,
+        BinaryContentRequest request,
+        CancellationToken token)
     {
         posterValidator.ValidateContentType(request.Type);
 
-        await this.SetSeriesPoster(
+        return await this.SetSeriesPoster(
             seriesId,
             async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
             token);
     }
 
-    public async Task SetSeriesPoster(
+    public async Task<PosterHash> SetSeriesPoster(
         Id<Series> seriesId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
@@ -154,7 +155,7 @@ public sealed class SeriesService(
         return poster.ToPosterModel();
     }
 
-    public async Task SetSeasonPoster(
+    public async Task<PosterHash> SetSeasonPoster(
         Id<Series> seriesId,
         Id<Period> periodId,
         BinaryContentRequest request,
@@ -162,14 +163,14 @@ public sealed class SeriesService(
     {
         posterValidator.ValidateContentType(request.Type);
 
-        await this.SetSeasonPoster(
+        return await this.SetSeasonPoster(
             seriesId,
             periodId,
             async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
             token);
     }
 
-    public async Task SetSeasonPoster(
+    public async Task<PosterHash> SetSeasonPoster(
         Id<Series> seriesId,
         Id<Period> periodId,
         Validated<PosterUrlRequest> request,
@@ -212,7 +213,7 @@ public sealed class SeriesService(
         return poster.ToPosterModel();
     }
 
-    public async Task SetSpecialEpisodePoster(
+    public async Task<PosterHash> SetSpecialEpisodePoster(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         BinaryContentRequest request,
@@ -220,14 +221,14 @@ public sealed class SeriesService(
     {
         posterValidator.ValidateContentType(request.Type);
 
-        await this.SetSpecialEpisodePoster(
+        return await this.SetSpecialEpisodePoster(
             seriesId,
             episodeId,
             async () => new BinaryContentModel(await request.ReadDataAsync(token), request.Type),
             token);
     }
 
-    public async Task SetSpecialEpisodePoster(
+    public async Task<PosterHash> SetSpecialEpisodePoster(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         Validated<PosterUrlRequest> request,
@@ -409,7 +410,7 @@ public sealed class SeriesService(
             .FirstOrDefault(franchise => franchise.Id == id)
             ?? throw this.NotFound(id);
 
-    private async Task SetSeriesPoster(
+    private async Task<PosterHash> SetSeriesPoster(
         Id<Series> seriesId,
         Func<Task<BinaryContentModel>> getContent,
         CancellationToken token)
@@ -427,13 +428,16 @@ public sealed class SeriesService(
 
         var poster = new SeriesPoster(Id.Create<SeriesPoster>(), series, content.Data, content.Type);
 
-        series.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
+        var hash = PosterHash.ForPoster(content.Data);
+        series.PosterHash = hash;
 
         this.dbContext.SeriesPosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);
+
+        return hash;
     }
 
-    private async Task SetSeasonPoster(
+    private async Task<PosterHash> SetSeasonPoster(
         Id<Series> seriesId,
         Id<Period> periodId,
         Func<Task<BinaryContentModel>> getContent,
@@ -453,13 +457,16 @@ public sealed class SeriesService(
 
         var poster = new SeasonPoster(Id.Create<SeasonPoster>(), period, content.Data, content.Type);
 
-        period.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
+        var hash = PosterHash.ForPoster(content.Data);
+        period.PosterHash = hash;
 
         this.dbContext.SeasonPosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);
+
+        return hash;
     }
 
-    private async Task SetSpecialEpisodePoster(
+    private async Task<PosterHash> SetSpecialEpisodePoster(
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         Func<Task<BinaryContentModel>> getContent,
@@ -479,10 +486,13 @@ public sealed class SeriesService(
 
         var poster = new SpecialEpisodePoster(Id.Create<SpecialEpisodePoster>(), episode, content.Data, content.Type);
 
-        episode.PosterHash = Convert.ToHexStringLower(SHA256.HashData(content.Data));
+        var hash = PosterHash.ForPoster(content.Data);
+        episode.PosterHash = hash;
 
         this.dbContext.SpecialEpisodePosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);
+
+        return hash;
     }
 
     private async Task<BinaryContentModel> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token)
