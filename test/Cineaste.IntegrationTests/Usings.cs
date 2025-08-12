@@ -12,7 +12,6 @@ global using Cineaste.Shared.Collections;
 global using Cineaste.Shared.Models;
 global using Cineaste.Shared.Models.Shared;
 global using Cineaste.Shared.Validation;
-global using Cineaste.Validation;
 
 global using FluentValidation;
 

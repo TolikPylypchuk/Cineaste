@@ -7,11 +7,9 @@ namespace Cineaste.Services;
 
 public interface IPosterProvider
 {
-    Task<PosterContentModel> GetPoster(BinaryContentRequest request, CancellationToken token = default);
+    Task<StreamableContent> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token = default);
 
-    Task<PosterContentModel> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token = default);
-
-    Task<PosterContentModel> FetchPoster(Validated<PosterImdbMediaRequest> request, CancellationToken token = default);
+    Task<StreamableContent> FetchPoster(Validated<PosterImdbMediaRequest> request, CancellationToken token = default);
 }
 
 public sealed class PosterProvider(
@@ -23,25 +21,17 @@ public sealed class PosterProvider(
     private readonly IConfiguration config = config;
     private readonly ILogger<PosterProvider> logger = logger;
 
-    public async Task<PosterContentModel> GetPoster(
-        BinaryContentRequest request,
-        CancellationToken token = default)
-    {
-        this.ValidateContentType(request.Type);
-        return new PosterContentModel(await request.ReadDataAsync(token), request.Type);
-    }
-
-    public Task<PosterContentModel> FetchPoster(
+    public Task<StreamableContent> FetchPoster(
         Validated<PosterUrlRequest> request,
         CancellationToken token = default) =>
         this.FetchPoster(request.Value.Url, token);
 
-    public async Task<PosterContentModel> FetchPoster(
+    public async Task<StreamableContent> FetchPoster(
         Validated<PosterImdbMediaRequest> request,
         CancellationToken token = default) =>
         await this.FetchPoster(await this.FetchPosterUrl(request.Value.Url, token), token);
 
-    private async Task<PosterContentModel> FetchPoster(string url, CancellationToken token = default)
+    private async Task<StreamableContent> FetchPoster(string url, CancellationToken token = default)
     {
         try
         {
@@ -60,12 +50,15 @@ public sealed class PosterProvider(
             string contentType = response.Content.Headers.ContentType?.MediaType
                 ?? throw new PosterFetchException("NoMediaType", "Fetched poster does not have a media type");
 
+            long contentLength = response.Content.Headers.ContentLength
+                ?? throw new PosterFetchException("NoLength", "Fetched poster does not have a length");
+
             this.ValidateContentType(contentType);
 
-            var responseBody = await response.Content.ReadAsByteArrayAsync(token);
+            var responseBody = await response.Content.ReadAsStreamAsync(token);
 
             this.logger.LogInformation("Fetched a poster from a remote URL: {Url}", url);
-            return new PosterContentModel(responseBody, contentType);
+            return new StreamableContent(() => responseBody, contentLength, contentType);
         } catch (Exception e) when (e is CineasteException or OperationCanceledException)
         {
             throw;

@@ -18,6 +18,6 @@ public sealed class PosterUrlRequestValidator : CineasteValidator<PosterUrlReque
     private bool IsHttpUri(Uri uri)
     {
         string scheme = uri.Scheme.ToLowerInvariant();
-        return scheme == "http" || scheme == "https";
+        return scheme == Uri.UriSchemeHttp || scheme == Uri.UriSchemeHttps;
     }
 }

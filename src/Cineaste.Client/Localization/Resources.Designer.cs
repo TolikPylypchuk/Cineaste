@@ -1249,6 +1249,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        public static string PosterDialog_Preview {
+            get {
+                return ResourceManager.GetString("PosterDialog.Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove preview.
+        /// </summary>
+        public static string PosterDialog_RemovePreview {
+            get {
+                return ResourceManager.GetString("PosterDialog.RemovePreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove selection.
         /// </summary>
         public static string PosterDialog_RemoveSelection {
@@ -2316,6 +2334,24 @@ namespace Cineaste.Client.Localization {
         public static string Validation_Poster_File_TooLarge {
             get {
                 return ResourceManager.GetString("Validation.Poster.File.TooLarge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The IMDb media URL is empty.
+        /// </summary>
+        public static string Validation_Poster_ImdbMedia_Url_Empty {
+            get {
+                return ResourceManager.GetString("Validation.Poster.ImdbMedia.Url.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The IMDb media URL is invalid.
+        /// </summary>
+        public static string Validation_Poster_ImdbMedia_Url_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.Poster.ImdbMedia.Url.Invalid", resourceCulture);
             }
         }
         

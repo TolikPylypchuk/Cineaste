@@ -5,8 +5,7 @@ namespace Cineaste.Controllers;
 [ApiController]
 [Route("/api/movies")]
 [Tags(["Movies"])]
-public sealed class MovieController(MovieService movieService)
-    : ControllerBase
+public sealed class MovieController(MovieService movieService) : ControllerBase
 {
     [HttpGet("{id}")]
     [EndpointSummary("Get a movie")]
@@ -65,9 +64,9 @@ public sealed class MovieController(MovieService movieService)
     public async Task<ActionResult> SetMoviePoster(Guid id, IFormFile file, CancellationToken token)
     {
         var movieId = Id.For<Movie>(id);
-        var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
+        var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await movieService.SetMoviePoster(movieId, request, token);
+        var posterHash = await movieService.SetMoviePoster(movieId, content, token);
 
         return this.Created(Urls.MoviePoster(movieId, posterHash), null);
     }

@@ -26,8 +26,11 @@ public class PosterDialogModel
         set
         {
             this.selectionMode = value;
-            this.SelectedFile = null;
-            this.PosterUrl = String.Empty;
+            this.selectedFile = null;
+            this.posterUrl = String.Empty;
+            this.imdbMediaUrl = String.Empty;
+            this.IsPreviewEnabled = false;
+            this.ValidationErrors = [];
         }
     }
 
@@ -70,6 +73,8 @@ public class PosterDialogModel
                 }
 
                 this.ValidationErrors = errors.ToImmutable();
+
+                this.IsPreviewEnabled = false;
             }
         }
     }
@@ -98,9 +103,13 @@ public class PosterDialogModel
                 }
 
                 this.ValidationErrors = errors.ToImmutable();
+
+                this.IsPreviewEnabled = false;
             }
         }
     }
+
+    public bool IsPreviewEnabled { get; set; } = false;
 
     public ImmutableHashSet<string> ValidationErrors { get; private set; } = [];
 

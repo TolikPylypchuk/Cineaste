@@ -3,6 +3,18 @@
   font-weight: 300;
 }
 
+.dialog-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s4);
+}
+
+.two-columns {
+  grid-template-columns: 1fr 1fr;
+}
+
 .form-container {
   padding-block: var(--s4);
   display: flex;
@@ -13,6 +25,24 @@
 .file-input-container {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  gap: var(--s4);
+}
+
+.file-name {
+  max-width: 20ch;
+}
+
+.preview-container {
+  padding-block: var(--s4);
+  max-width: 300px;
+}
+
+.actions-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   gap: var(--s4);
 }

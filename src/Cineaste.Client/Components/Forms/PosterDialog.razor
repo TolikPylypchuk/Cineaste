@@ -3,95 +3,145 @@
 @using static PosterContentTypes
 
 <MudDialog>
-    <TitleContent>
-        <h6 class="title">@String.Format(this.Loc["PosterDialog.HeaderFormat"], this.ItemTitle)</h6>
-    </TitleContent>
-
     <DialogContent>
-        <FormParamsProvider For="this">
-            <MudRadioGroup @bind-Value="this.FormModel.SelectionMode">
-                <MudRadio Value="PosterSelectionMode.File" Color="Color.Primary">
-                    @this.Loc["PosterDialog.SelectionMode.File"]
-                </MudRadio>
+        <div class="@($"dialog-container{(this.FormModel.IsPreviewEnabled ? " two-columns" : "")}")">
+            <div>
+                <h6 class="title">@String.Format(this.Loc["PosterDialog.HeaderFormat"], this.ItemTitle)</h6>
 
-                <MudRadio Value="PosterSelectionMode.Url" Color="Color.Primary">
-                    @this.Loc["PosterDialog.SelectionMode.Url"]
-                </MudRadio>
+                <FormParamsProvider For="this">
+                    <MudRadioGroup @bind-Value="this.FormModel.SelectionMode">
+                        <MudRadio Value="PosterSelectionMode.File" Color="Color.Primary">
+                            @this.Loc["PosterDialog.SelectionMode.File"]
+                        </MudRadio>
 
-                <MudRadio Value="PosterSelectionMode.ImdbMediaUrl" Color="Color.Primary">
-                    @this.Loc["PosterDialog.SelectionMode.ImdbMediaUrl"]
-                </MudRadio>
-            </MudRadioGroup>
+                        <MudRadio Value="PosterSelectionMode.Url" Color="Color.Primary">
+                            @this.Loc["PosterDialog.SelectionMode.Url"]
+                        </MudRadio>
 
-            <div class="form-container">
-                @switch (this.FormModel.SelectionMode)
-                {
-                    case PosterSelectionMode.File:
-                        <div class="file-input-container">
-                            <MudFileUpload
-                                T="IBrowserFile"
-                                FilesChanged="@this.OnSelectedPosterChanged"
-                                Accept="@AcceptedImageFileExtensions.Aggregate((acc, item) => $"{acc}, {item}")"
-                            >
-                                <ActivatorContent>
-                                    <MudButton
-                                        Variant="Variant.Filled"
-                                        Color="Color.Primary"
-                                        StartIcon="@Icons.Material.Filled.Image"
+                        <MudRadio Value="PosterSelectionMode.ImdbMediaUrl" Color="Color.Primary">
+                            @this.Loc["PosterDialog.SelectionMode.ImdbMediaUrl"]
+                        </MudRadio>
+                    </MudRadioGroup>
+
+                    <div class="form-container">
+                        @switch (this.FormModel.SelectionMode)
+                        {
+                            case PosterSelectionMode.File:
+                                <div class="file-input-container">
+                                    <MudFileUpload
+                                        T="IBrowserFile"
+                                        FilesChanged="@this.OnSelectedPosterChanged"
+                                        Accept="@AcceptedImageFileExtensions.Aggregate((acc, item) => $"{acc}, {item}")"
                                     >
-                                        @this.Loc["PosterDialog.SelectFile"]
-                                    </MudButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
+                                        <ActivatorContent>
+                                            <MudButton
+                                                Variant="Variant.Filled"
+                                                Color="Color.Primary"
+                                                StartIcon="@Icons.Material.Filled.Image"
+                                            >
+                                                @this.Loc["PosterDialog.SelectFile"]
+                                            </MudButton>
+                                        </ActivatorContent>
+                                    </MudFileUpload>
 
-                            @if (this.FormModel.SelectedFile is { } file)
-                            {
-                                <p>@file.Name</p>
+                                    @if (this.FormModel.SelectedFile is { } file)
+                                    {
+                                        <p class="file-name">@file.Name</p>
 
-                                <MudIconButton
-                                    Variant="Variant.Text"
-                                    Color="Color.Secondary"
-                                    Icon="@Icons.Material.Filled.Close"
-                                    OnClick="this.RemoveSelection"
-                                    aria-label="@this.Loc["PosterDialog.RemoveSelection"]"
+                                        <MudIconButton
+                                            Variant="Variant.Text"
+                                            Color="Color.Secondary"
+                                            Icon="@Icons.Material.Filled.Close"
+                                            OnClick="this.RemoveSelection"
+                                            aria-label="@this.Loc["PosterDialog.RemoveSelection"]"
+                                        />
+                                    } else
+                                    {
+                                        <p>@this.Loc["PosterDialog.NoFileSelected"]</p>
+                                    }
+                                </div>
+
+                                <ErrorPresenter ErrorCode="Poster.File.*" Trigger="@this.FormModel.SelectedFile" />
+                                break;
+
+                            case PosterSelectionMode.Url:
+                                <MudTextField
+                                    @bind-Value="this.FormModel.PosterUrl"
+                                    Label="@this.Loc["PosterDialog.Url"]"
+                                    AutoGrow="true"
                                 />
-                            } else
-                            {
-                                <p>@this.Loc["PosterDialog.NoFileSelected"]</p>
-                            }
-                        </div>
 
-                        <ErrorPresenter ErrorCode="Poster.File.*" Trigger="@this.FormModel.SelectedFile" />
-                        break;
-                    case PosterSelectionMode.Url:
-                        <MudTextField
-                            @bind-Value="this.FormModel.PosterUrl"
-                            Label="@this.Loc["PosterDialog.Url"]"
-                        />
+                                <ErrorPresenter ErrorCode="Poster.Url.*" Trigger="@this.FormModel.PosterUrl" />
+                                break;
 
-                        <ErrorPresenter ErrorCode="Poster.Url.*" Trigger="@this.FormModel.PosterUrl" />
-                        break;
-                    case PosterSelectionMode.ImdbMediaUrl:
-                        <MudTextField
-                            @bind-Value="this.FormModel.ImdbMediaUrl"
-                            Label="@this.Loc["PosterDialog.Url"]"
-                        />
+                            case PosterSelectionMode.ImdbMediaUrl:
+                                <MudTextField
+                                    @bind-Value="this.FormModel.ImdbMediaUrl"
+                                    Label="@this.Loc["PosterDialog.Url"]"
+                                    AutoGrow="true"
+                                />
 
-                        <ErrorPresenter ErrorCode="Poster.ImdbMedia.Url.*" Trigger="@this.FormModel.ImdbMediaUrl" />
-                        break;
-                }
+                                <ErrorPresenter
+                                    ErrorCode="Poster.ImdbMedia.Url.*"
+                                    Trigger="@this.FormModel.ImdbMediaUrl"
+                                />
+                                break;
+                        }
+                    </div>
+                </FormParamsProvider>
             </div>
-        </FormParamsProvider>
+
+            @if (this.FormModel.IsPreviewEnabled)
+            {
+                <div class="preview-container">
+                    @{
+                        string imageTitle = $"Poster preview for {this.ItemTitle}";
+                    }
+
+                    @switch (this.FormModel.SelectionMode)
+                    {
+                        case PosterSelectionMode.Url:
+                            <img src="@this.FormModel.PosterUrl" alt="@imageTitle" title="@imageTitle" />
+                            break;
+
+                        case PosterSelectionMode.ImdbMediaUrl:
+                            string imageSrouce =
+                                $"/api/posters/imdb-media?url={Uri.EscapeDataString(this.FormModel.ImdbMediaUrl)}";
+
+                            <img src="@imageSrouce" alt="@imageTitle" title="@imageTitle" />
+                            break;
+                    }
+                </div>
+            }
+        </div>
     </DialogContent>
 
     <DialogActions>
-        <MudButton Color="Color.Surface" Variant="Variant.Filled" OnClick="this.Cancel">
-            @this.Loc["Button.Cancel"]
-        </MudButton>
+        <div class="actions-container">
+            <MudButton
+                Color="Color.Primary"
+                Variant="Variant.Text"
+                OnClick="this.TogglePreview"
+                Disabled="@(this.FormModel.SelectionMode == PosterSelectionMode.File || !this.CanSave)"
+            >
+                @this.Loc[$"PosterDialog.{(this.FormModel.IsPreviewEnabled ? "RemovePreview" : "Preview")}"]
+            </MudButton>
 
-        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="this.Save" Disabled="@(!this.CanSave)">
-            @this.Loc["Button.Save"]
-        </MudButton>
+            <div>
+                <MudButton Color="Color.Surface" Variant="Variant.Filled" OnClick="this.Cancel">
+                    @this.Loc["Button.Cancel"]
+                </MudButton>
+
+                <MudButton
+                    Color="Color.Primary"
+                    Variant="Variant.Filled"
+                    OnClick="this.Save"
+                    Disabled="@(!this.CanSave)"
+                >
+                    @this.Loc["Button.Save"]
+                </MudButton>
+            </div>
+        </div>
     </DialogActions>
 </MudDialog>
 
@@ -115,6 +165,9 @@
 
     private void RemoveSelection() =>
         this.FormModel.SelectedFile = null;
+
+    private void TogglePreview() =>
+        this.FormModel.IsPreviewEnabled = !this.FormModel.IsPreviewEnabled;
 
     private void Save()
     {

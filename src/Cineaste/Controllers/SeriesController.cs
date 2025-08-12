@@ -1,6 +1,3 @@
-using Cineaste.Core.Domain;
-using Cineaste.Services;
-
 using static Cineaste.Shared.Validation.PosterContentTypes;
 
 namespace Cineaste.Controllers;
@@ -8,8 +5,7 @@ namespace Cineaste.Controllers;
 [ApiController]
 [Route("/api/series")]
 [Tags(["Series"])]
-public sealed class SeriesController(SeriesService seriesService)
-    : ControllerBase
+public sealed class SeriesController(SeriesService seriesService) : ControllerBase
 {
     [HttpGet("{id}")]
     [EndpointSummary("Get a series")]
@@ -68,9 +64,9 @@ public sealed class SeriesController(SeriesService seriesService)
     public async Task<ActionResult> SetSeriesPoster(Guid id, IFormFile file, CancellationToken token)
     {
         var seriesId = Id.For<Series>(id);
-        var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
+        var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await seriesService.SetSeriesPoster(seriesId, request, token);
+        var posterHash = await seriesService.SetSeriesPoster(seriesId, content, token);
 
         return this.Created(Urls.SeriesPoster(seriesId, posterHash), null);
     }
@@ -136,9 +132,9 @@ public sealed class SeriesController(SeriesService seriesService)
         var typedSeriesId = Id.For<Series>(seriesId);
         var typedPeriodId = Id.For<Period>(periodId);
 
-        var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
+        var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await seriesService.SetSeasonPoster(typedSeriesId, typedPeriodId, request, token);
+        var posterHash = await seriesService.SetSeasonPoster(typedSeriesId, typedPeriodId, content, token);
 
         return this.Created(Urls.SeasonPoster(typedSeriesId, typedPeriodId, posterHash), null);
     }
@@ -207,9 +203,9 @@ public sealed class SeriesController(SeriesService seriesService)
     {
         var typedSeriesId = Id.For<Series>(seriesId);
         var typedEpisodeId = Id.For<SpecialEpisode>(episodeId);
-        var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
+        var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await seriesService.SetSpecialEpisodePoster(typedSeriesId, typedEpisodeId, request, token);
+        var posterHash = await seriesService.SetSpecialEpisodePoster(typedSeriesId, typedEpisodeId, content, token);
 
         return this.Created(Urls.SpecialEpisodePoster(typedSeriesId, typedEpisodeId, posterHash), null);
     }

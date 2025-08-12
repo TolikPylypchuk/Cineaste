@@ -5,8 +5,7 @@ namespace Cineaste.Controllers;
 [ApiController]
 [Route("/api/franchises")]
 [Tags(["Franchises"])]
-public sealed class FranchiseController(FranchiseService franchiseService)
-    : ControllerBase
+public sealed class FranchiseController(FranchiseService franchiseService) : ControllerBase
 {
     [HttpGet("{id}")]
     [EndpointSummary("Get a franchise")]
@@ -67,9 +66,9 @@ public sealed class FranchiseController(FranchiseService franchiseService)
     public async Task<ActionResult> SetFranchisePoster(Guid id, IFormFile file, CancellationToken token)
     {
         var franchiseId = Id.For<Franchise>(id);
-        var request = new BinaryContentRequest(file.OpenReadStream, file.Length, file.ContentType);
+        var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await franchiseService.SetFranchisePoster(franchiseId, request, token);
+        var posterHash = await franchiseService.SetFranchisePoster(franchiseId, content, token);
 
         return this.Created(Urls.FranchisePoster(franchiseId, posterHash), null);
     }

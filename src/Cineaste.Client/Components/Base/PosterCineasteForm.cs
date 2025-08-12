@@ -23,7 +23,8 @@ public abstract class PosterCineasteForm<TFormModel, TRequest, TModel, TState>
         var options = new DialogOptions
         {
             CloseOnEscapeKey = true,
-            BackdropClick = false
+            BackdropClick = false,
+            NoHeader = true
         };
 
         var dialog = await this.DialogService.ShowAsync<PosterDialog>(null, parameters, options);

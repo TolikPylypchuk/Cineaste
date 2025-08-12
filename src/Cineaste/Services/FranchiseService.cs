@@ -86,7 +86,7 @@ public sealed class FranchiseService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<PosterContentModel> GetFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
+    public async Task<BinaryContent> GetFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
     {
         var list = await this.FindList(token);
         var franchise = await this.FindFranchise(list, franchiseId, token);
@@ -101,9 +101,9 @@ public sealed class FranchiseService(
 
     public async Task<PosterHash> SetFranchisePoster(
         Id<Franchise> franchiseId,
-        BinaryContentRequest request,
+        StreamableContent content,
         CancellationToken token) =>
-        await this.SetFranchisePoster(franchiseId, () => this.posterProvider.GetPoster(request, token), token);
+        await this.SetFranchisePoster(franchiseId, () => Task.FromResult(content), token);
 
     public async Task<PosterHash> SetFranchisePoster(
         Id<Franchise> franchiseId,
@@ -361,9 +361,15 @@ public sealed class FranchiseService(
         }
     }
 
+    private Task<PosterHash> SetFranchisePoster(
+        Id<Franchise> franchiseId,
+        Func<Task<StreamableContent>> getContent,
+        CancellationToken token) =>
+        this.SetFranchisePoster(franchiseId, async () => await (await getContent()).ReadDataAsync(token), token);
+
     private async Task<PosterHash> SetFranchisePoster(
         Id<Franchise> franchiseId,
-        Func<Task<PosterContentModel>> getContent,
+        Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
         var list = await this.FindList(token);

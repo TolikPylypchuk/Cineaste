@@ -83,7 +83,7 @@ public sealed class MovieService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<PosterContentModel> GetMoviePoster(Id<Movie> movieId, CancellationToken token)
+    public async Task<BinaryContent> GetMoviePoster(Id<Movie> movieId, CancellationToken token)
     {
         var list = await this.FindList(token);
         var movie = await this.FindMovie(list, movieId, token);
@@ -96,23 +96,23 @@ public sealed class MovieService(
         return poster.ToPosterModel();
     }
 
-    public async Task<PosterHash> SetMoviePoster(
+    public Task<PosterHash> SetMoviePoster(
         Id<Movie> movieId,
-        BinaryContentRequest request,
+        StreamableContent content,
         CancellationToken token) =>
-        await this.SetMoviePoster(movieId, () => this.posterProvider.GetPoster(request, token), token);
+        this.SetMoviePoster(movieId, () => Task.FromResult(content), token);
 
-    public async Task<PosterHash> SetMoviePoster(
+    public Task<PosterHash> SetMoviePoster(
         Id<Movie> movieId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
-        await this.SetMoviePoster(movieId, () => this.posterProvider.FetchPoster(request, token), token);
+        this.SetMoviePoster(movieId, () => this.posterProvider.FetchPoster(request, token), token);
 
-    public async Task<PosterHash> SetMoviePoster(
+    public Task<PosterHash> SetMoviePoster(
         Id<Movie> movieId,
         Validated<PosterImdbMediaRequest> request,
         CancellationToken token) =>
-        await this.SetMoviePoster(movieId, () => this.posterProvider.FetchPoster(request, token), token);
+        this.SetMoviePoster(movieId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task RemoveMoviePoster(Id<Movie> movieId, CancellationToken token)
     {
@@ -260,15 +260,21 @@ public sealed class MovieService(
             .FirstOrDefault(franchise => franchise.Id == id)
             ?? throw this.NotFound(id);
 
+    private Task<PosterHash> SetMoviePoster(
+        Id<Movie> movieId,
+        Func<Task<StreamableContent>> getContent,
+        CancellationToken token) =>
+        this.SetMoviePoster(movieId, async () => await (await getContent()).ReadDataAsync(token), token);
+
     private async Task<PosterHash> SetMoviePoster(
         Id<Movie> movieId,
-        Func<Task<PosterContentModel>> getPosterContent,
+        Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
         var list = await this.FindList(token);
         var movie = await this.FindMovie(list, movieId, token);
 
-        var content = await getPosterContent();
+        var content = await getContent();
 
         if (await this.dbContext.MoviePosters.FirstOrDefaultAsync(poster => poster.Movie == movie, token)
             is { } existingPoster)

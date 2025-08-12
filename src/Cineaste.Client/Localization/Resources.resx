@@ -954,7 +954,19 @@
   <data name="Validation.Poster.Url.Invalid" xml:space="preserve">
     <value>The poster URL is invalid</value>
   </data>
+  <data name="Validation.Poster.ImdbMedia.Url.Invalid" xml:space="preserve">
+    <value>The IMDb media URL is invalid</value>
+  </data>
   <data name="Validation.Poster.Url.Empty" xml:space="preserve">
     <value>The poster URL is empty</value>
+  </data>
+  <data name="Validation.Poster.ImdbMedia.Url.Empty" xml:space="preserve">
+    <value>The IMDb media URL is empty</value>
+  </data>
+  <data name="PosterDialog.Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="PosterDialog.RemovePreview" xml:space="preserve">
+    <value>Remove preview</value>
   </data>
 </root>
