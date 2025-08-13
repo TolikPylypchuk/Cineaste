@@ -24,16 +24,18 @@ public sealed class SpecialEpisodeFormModel : SeriesComponentFormModelBase<Speci
     public SpecialEpisodeFormModel(
         string channel,
         Func<ISeriesComponentFormModel, int> getSequenceNumber,
-        Func<int> lastSequenceNumber)
-        : this(DateOnly.FromDateTime(DateTime.Now), channel, getSequenceNumber, lastSequenceNumber)
+        Func<int> lastSequenceNumber,
+        Func<bool> canSetPoster)
+        : this(DateOnly.FromDateTime(DateTime.Now), channel, getSequenceNumber, lastSequenceNumber, canSetPoster)
     { }
 
     public SpecialEpisodeFormModel(
         DateOnly date,
         string channel,
         Func<ISeriesComponentFormModel, int> getSequenceNumber,
-        Func<int> lastSequenceNumber)
-        : base(getSequenceNumber, lastSequenceNumber)
+        Func<int> lastSequenceNumber,
+        Func<bool> canSetPoster)
+        : base(getSequenceNumber, lastSequenceNumber, canSetPoster)
     {
         this.defaultDate = date.ToDateTime(TimeOnly.MinValue);
 

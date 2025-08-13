@@ -62,7 +62,8 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
             new DateOnly(lastYear + 1, 1, 1),
             this.components.Count > 0 ? this.components[^1].Channel : String.Empty,
             this.GetSequenceNumberForComponent,
-            this.GetLastSequenceNumber);
+            this.GetLastSequenceNumber,
+            this.CanComponentSetPoster);
 
         this.components.Add(season);
         season.PropertyChanged += this.OnComponentUpdated;
@@ -80,7 +81,8 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
             new DateOnly(lastYear + 1, 1, 1),
             this.components.Count > 0 ? this.components[^1].Channel : String.Empty,
             this.GetSequenceNumberForComponent,
-            this.GetLastSequenceNumber);
+            this.GetLastSequenceNumber,
+            this.CanComponentSetPoster);
 
         this.components.Add(episode);
         episode.PropertyChanged += this.OnComponentUpdated;
@@ -242,4 +244,7 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
 
     private void OnComponentUpdated(object? sender, PropertyChangedEventArgs e) =>
         this.UpdateRequest();
+
+    private bool CanComponentSetPoster() =>
+        !(this.IsNew || this.HasChanges);
 }

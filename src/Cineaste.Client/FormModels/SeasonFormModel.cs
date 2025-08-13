@@ -31,14 +31,16 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
         string originalTitle,
         string channel,
         Func<ISeriesComponentFormModel, int> getSequenceNumber,
-        Func<int> lastSequenceNumber)
+        Func<int> lastSequenceNumber,
+        Func<bool> canSetPoster)
         : this(
               title,
               originalTitle,
               DateOnly.FromDateTime(DateTime.Now),
               channel,
               getSequenceNumber,
-              lastSequenceNumber)
+              lastSequenceNumber,
+              canSetPoster)
     { }
 
     public SeasonFormModel(
@@ -47,8 +49,9 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
         DateOnly date,
         string channel,
         Func<ISeriesComponentFormModel, int> getSequenceNumber,
-        Func<int> lastSequenceNumber)
-        : base(getSequenceNumber, lastSequenceNumber)
+        Func<int> lastSequenceNumber,
+        Func<bool> canSetPoster)
+        : base(getSequenceNumber, lastSequenceNumber, canSetPoster)
     {
         var period = new PeriodFormModel(date);
         period.PropertyChanged += this.OnPeriodUpdated;

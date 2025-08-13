@@ -175,7 +175,8 @@
                         Removed="@(() => this.OnPeriodRemoved(period))"
                     />
 
-                    if (period.BackingModel is { Id: var periodId, PosterUrl: var posterUrl })
+                    if (this.FormModel.CanSetPoster &&
+                        period.BackingModel is { Id: var periodId, PosterUrl: var posterUrl })
                     {
                         <PosterActions
                             State="this.State.Value"
