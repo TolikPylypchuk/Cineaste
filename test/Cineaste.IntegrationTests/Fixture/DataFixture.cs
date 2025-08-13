@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,13 @@ namespace Cineaste.Fixture;
 
 public class DataFixture : IAsyncLifetime
 {
+    private static readonly byte[] PosterData = Convert.FromHexString(
+        "ffd8ffe000104a46494600010101004800480000ffdb004300030202020202030202020303030304060404040404080606050609080a" +
+        "0a090809090a0c0f0c0a0b0e0b09090d110d0e0f101011100a0c12131210130f101010ffc9000b080001000101011100ffcc00060010" +
+        "1005ffda0008010100003f00d2cf20ffd9");
+
+    private const string PosterType = "image/jpeg";
+
     private readonly MsSqlContainer container = new MsSqlBuilder()
         .WithReuse(true)
         .WithLabel("reuse-id", "DB")
@@ -197,5 +205,57 @@ public class DataFixture : IAsyncLifetime
         list.AddSeriesKind(kind);
 
         return kind;
+    }
+
+    public async Task<MoviePoster> CreateMoviePoster(Movie movie, CineasteDbContext dbContext)
+    {
+        var poster = new MoviePoster(Id.Create<MoviePoster>(), movie, PosterData, PosterType);
+
+        dbContext.MoviePosters.Add(poster);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        return poster;
+    }
+
+    public async Task<SeriesPoster> CreateSeriesPoster(Series series, CineasteDbContext dbContext)
+    {
+        var poster = new SeriesPoster(Id.Create<SeriesPoster>(), series, PosterData, PosterType);
+
+        dbContext.SeriesPosters.Add(poster);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        return poster;
+    }
+
+    public async Task<SeasonPoster> CreateSeasonPoster(Period period, CineasteDbContext dbContext)
+    {
+        var poster = new SeasonPoster(Id.Create<SeasonPoster>(), period, PosterData, PosterType);
+
+        dbContext.SeasonPosters.Add(poster);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        return poster;
+    }
+
+    public async Task<SpecialEpisodePoster> CreateSpecialEpisodePoster(
+        SpecialEpisode episode,
+        CineasteDbContext dbContext)
+    {
+        var poster = new SpecialEpisodePoster(Id.Create<SpecialEpisodePoster>(), episode, PosterData, PosterType);
+
+        dbContext.SpecialEpisodePosters.Add(poster);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        return poster;
+    }
+
+    public async Task<FranchisePoster> CreateFranchisePoster(Franchise franchise, CineasteDbContext dbContext)
+    {
+        var poster = new FranchisePoster(Id.Create<FranchisePoster>(), franchise, PosterData, PosterType);
+
+        dbContext.FranchisePosters.Add(poster);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        return poster;
     }
 }

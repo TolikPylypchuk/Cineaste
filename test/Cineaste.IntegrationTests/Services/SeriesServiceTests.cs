@@ -440,6 +440,247 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyId, exception.Properties["id"]);
     }
 
+    [Fact(DisplayName = "GetSeriesPoster should get the series poster")]
+    public async Task GetSeriesPoster()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var series = await data.CreateSeries(dbContext);
+        var poster = await data.CreateSeriesPoster(series, dbContext);
+
+        // Act
+
+        var posterContent = await seriesService.GetSeriesPoster(series.Id, TestContext.Current.CancellationToken);
+
+        // Assert
+
+        Assert.Equal(poster.Data, posterContent.Data);
+        Assert.Equal(poster.ContentType, posterContent.Type);
+    }
+
+    [Fact(DisplayName = "GetSeriesPoster should throw if series isn't found")]
+    public async Task GetSeriesPosterSeriesNotFound()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var dummyId = Id.Create<Series>();
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            seriesService.GetSeriesPoster(dummyId, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Resource.Series", exception.Resource);
+        Assert.Equal(dummyId, exception.Properties["id"]);
+    }
+
+    [Fact(DisplayName = "GetSeriesPoster should throw if poster isn't found")]
+    public async Task GetSeriesPosterNotFound()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var series = await data.CreateSeries(dbContext);
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            seriesService.GetSeriesPoster(series.Id, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Resource.Poster", exception.Resource);
+        Assert.Equal(series.Id, exception.Properties["seriesId"]);
+    }
+
+    [Fact(DisplayName = "GetSeasonPoster should get the season poster")]
+    public async Task GetSeasonPoster()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var series = await data.CreateSeries(dbContext);
+        var period = series.Seasons.First().Periods.First();
+        var poster = await data.CreateSeasonPoster(period, dbContext);
+
+        // Act
+
+        var posterContent = await seriesService.GetSeasonPoster(
+            series.Id, period.Id, TestContext.Current.CancellationToken);
+
+        // Assert
+
+        Assert.Equal(poster.Data, posterContent.Data);
+        Assert.Equal(poster.ContentType, posterContent.Type);
+    }
+
+    [Fact(DisplayName = "GetSeasonPoster should throw if series isn't found")]
+    public async Task GetSeasonPosterSeriesNotFound()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var dummySeriesId = Id.Create<Series>();
+        var dummyPeriodId = Id.Create<Period>();
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            seriesService.GetSeasonPoster(dummySeriesId, dummyPeriodId, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Resource.Series", exception.Resource);
+        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+    }
+
+    [Fact(DisplayName = "GetSeasonPoster should throw if period isn't found")]
+    public async Task GetSeasonPosterPeriodNotFound()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var series = await data.CreateSeries(dbContext);
+        var dummyId = Id.Create<Period>();
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            seriesService.GetSeasonPoster(series.Id, dummyId, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Resource.Period", exception.Resource);
+        Assert.Equal(dummyId, exception.Properties["id"]);
+    }
+
+    [Fact(DisplayName = "GetSeasonPoster should throw if poster isn't found")]
+    public async Task GetSeasonPosterNotFound()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var series = await data.CreateSeries(dbContext);
+        var period = series.Seasons.First().Periods.First();
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            seriesService.GetSeasonPoster(series.Id, period.Id, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Resource.Poster", exception.Resource);
+        Assert.Equal(period.Id, exception.Properties["periodId"]);
+    }
+
+    [Fact(DisplayName = "GetSpecialEpisodePoster should get the special episode poster")]
+    public async Task GetSpecialEpisodePoster()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var series = await data.CreateSeries(dbContext);
+        var episode = series.SpecialEpisodes.First();
+        var poster = await data.CreateSpecialEpisodePoster(episode, dbContext);
+
+        // Act
+
+        var posterContent = await seriesService.GetSpecialEpisodePoster(
+            series.Id, episode.Id, TestContext.Current.CancellationToken);
+
+        // Assert
+
+        Assert.Equal(poster.Data, posterContent.Data);
+        Assert.Equal(poster.ContentType, posterContent.Type);
+    }
+
+    [Fact(DisplayName = "GetSpecialEpisodePoster should throw if series isn't found")]
+    public async Task GetSpecialEpisodePosterSeriesNotFound()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var dummySeriesId = Id.Create<Series>();
+        var dummyEpisodeId = Id.Create<SpecialEpisode>();
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.GetSpecialEpisodePoster(
+            dummySeriesId, dummyEpisodeId, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Resource.Series", exception.Resource);
+        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+    }
+
+    [Fact(DisplayName = "GetSpecialEpisodePoster should throw if episode isn't found")]
+    public async Task GetSpecialEpisodePosterEpisodeNotFound()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var series = await data.CreateSeries(dbContext);
+        var dummyId = Id.Create<SpecialEpisode>();
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            seriesService.GetSpecialEpisodePoster(series.Id, dummyId, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Resource.SpecialEpisode", exception.Resource);
+        Assert.Equal(dummyId, exception.Properties["id"]);
+    }
+
+    [Fact(DisplayName = "GetSpecialEpisodePoster should throw if poster isn't found")]
+    public async Task GetSpecialEpisodePosterNotFound()
+    {
+        // Arrange
+
+        var dbContext = data.CreateDbContext();
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+
+        var series = await data.CreateSeries(dbContext);
+        var episode = series.SpecialEpisodes.First();
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+            seriesService.GetSpecialEpisodePoster(series.Id, episode.Id, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Resource.Poster", exception.Resource);
+        Assert.Equal(episode.Id, exception.Properties["episodeId"]);
+    }
+
     private SeriesRequest CreateSeriesRequest() =>
         new(
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),
