@@ -253,69 +253,6 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(dummyId, exception.Properties["id"]);
     }
 
-    [Fact(DisplayName = "GetMoviePoster should get the movie poster")]
-    public async Task GetMoviePoster()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
-
-        var movie = await data.CreateMovie(dbContext);
-        var poster = await data.CreateMoviePoster(movie, dbContext);
-
-        // Act
-
-        var posterContent = await movieService.GetMoviePoster(movie.Id, TestContext.Current.CancellationToken);
-
-        // Assert
-
-        Assert.Equal(poster.Data, posterContent.Data);
-        Assert.Equal(poster.ContentType, posterContent.Type);
-    }
-
-    [Fact(DisplayName = "GetMoviePoster should throw if movie isn't found")]
-    public async Task GetMoviePosterMovieNotFound()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
-
-        var dummyId = Id.Create<Movie>();
-
-        // Act
-
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.GetMoviePoster(dummyId, TestContext.Current.CancellationToken));
-
-        // Assert
-
-        Assert.Equal("Resource.Movie", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
-    }
-
-    [Fact(DisplayName = "GetMoviePoster should throw if poster isn't found")]
-    public async Task GetMoviePosterNotFound()
-    {
-        // Arrange
-
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
-
-        var movie = await data.CreateMovie(dbContext);
-
-        // Act
-
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.GetMoviePoster(movie.Id, TestContext.Current.CancellationToken));
-
-        // Assert
-
-        Assert.Equal("Resource.Poster", exception.Resource);
-        Assert.Equal(movie.Id, exception.Properties["movieId"]);
-    }
-
     private MovieRequest CreateMovieRequest() =>
         new(
             ImmutableList.Create(new TitleRequest("Test", 1)).AsValue(),

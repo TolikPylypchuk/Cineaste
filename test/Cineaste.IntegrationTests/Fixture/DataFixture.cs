@@ -1,5 +1,7 @@
 using System.Globalization;
-using System.Threading.Tasks;
+
+using Cineaste.Models;
+using Cineaste.Shared.Models.Poster;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -258,4 +260,13 @@ public class DataFixture : IAsyncLifetime
 
         return poster;
     }
+
+    public StreamableContent CreatePosterContent() =>
+        new(() => new MemoryStream(PosterData), PosterData.Length, PosterType);
+
+    public Validated<PosterUrlRequest> CreatePosterUrlRequest() =>
+        new PosterUrlRequest("https://tolik.io").Validated();
+
+    public Validated<PosterImdbMediaRequest> CreatePosterImdbMediaRequest() =>
+        new PosterImdbMediaRequest("https://tolik.io").Validated();
 }

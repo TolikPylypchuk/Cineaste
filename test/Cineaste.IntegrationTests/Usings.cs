@@ -17,6 +17,8 @@ global using FluentValidation;
 
 global using Microsoft.Extensions.Logging;
 
+global using NSubstitute;
+
 global using Xunit;
 
 global using static Cineaste.Services.AssertUtils;
