@@ -1,8 +1,6 @@
 using AngleSharp;
 using AngleSharp.Dom;
 
-using IConfiguration = AngleSharp.IConfiguration;
-
 namespace Cineaste.Services;
 
 public interface IPosterProvider
@@ -16,11 +14,11 @@ public interface IPosterProvider
 
 public sealed class PosterProvider(
     HttpClient httpClient,
-    IConfiguration config,
+    IBrowsingContext context,
     ILogger<PosterProvider> logger) : IPosterProvider
 {
     private readonly HttpClient httpClient = httpClient;
-    private readonly IConfiguration config = config;
+    private readonly IBrowsingContext context = context;
     private readonly ILogger<PosterProvider> logger = logger;
 
     public Task<StreamableContent> FetchPoster(
@@ -38,33 +36,9 @@ public sealed class PosterProvider(
         string url = request.Value.Url;
         this.logger.LogInformation("Fetching a poster from IMDb: {Url}", url);
 
-        var mediaId = this.GetMediaId(url);
+        var image = await this.GetImage(url, token);
+        return this.ExtractSource(image, url);
 
-        IElement? image;
-
-        try
-        {
-            using var context = BrowsingContext.New(this.config);
-
-            var document = await context.OpenAsync(url, token);
-            image = document.QuerySelector($"img[data-image-id=\"{mediaId}-curr\"]");
-        } catch (Exception e)
-        {
-            this.logger.LogError(e, "Exception when fetching IMDb media: {Url}", url);
-
-            throw new PosterFetchException("Error", "Error fetching a poster", e);
-        }
-
-        if (image is { LocalName: "img" } && image.GetAttribute("src") is string source)
-        {
-            this.logger.LogInformation("Fetched image source URL from IMDb: {Source}", source);
-            return source;
-        } else
-        {
-            throw new InvalidInputException(
-                "Imdb.Media.NotFound", "The image URL is not found in the IMDb media page")
-                .WithProperty(url);
-        }
     }
 
     private async Task<StreamableContent> FetchPoster(string url, CancellationToken token = default)
@@ -83,18 +57,7 @@ public sealed class PosterProvider(
                 throw await PosterFetchException.FromResponse(response, token);
             }
 
-            string contentType = response.Content.Headers.ContentType?.MediaType
-                ?? throw new PosterFetchException("NoMediaType", "Fetched poster does not have a media type");
-
-            long contentLength = response.Content.Headers.ContentLength
-                ?? throw new PosterFetchException("NoLength", "Fetched poster does not have a length");
-
-            this.ValidateContentType(contentType);
-
-            var responseBody = await response.Content.ReadAsStreamAsync(token);
-
-            this.logger.LogInformation("Fetched a poster from a remote URL: {Url}", url);
-            return new StreamableContent(() => responseBody, contentLength, contentType);
+            return await this.GetContent(response, url, token);
         } catch (Exception e) when (e is CineasteException or OperationCanceledException)
         {
             throw;
@@ -103,6 +66,52 @@ public sealed class PosterProvider(
             this.logger.LogError(e, "Exception when fetching a poster from a remote URL: {Url}", url);
 
             throw new PosterFetchException("Error", "Error fetching a poster", e);
+        }
+    }
+
+    private async Task<StreamableContent> GetContent(HttpResponseMessage response, string url, CancellationToken token)
+    {
+        string contentType = response.Content.Headers.ContentType?.MediaType
+            ?? throw new PosterFetchException("NoContentType", "Fetched poster does not have a media type");
+
+        long contentLength = response.Content.Headers.ContentLength
+            ?? throw new PosterFetchException("NoContentLength", "Fetched poster does not have a length");
+
+        this.ValidateContentType(contentType);
+
+        var responseBody = await response.Content.ReadAsStreamAsync(token);
+
+        this.logger.LogInformation("Fetched a poster from a remote URL: {Url}", url);
+        return new StreamableContent(() => responseBody, contentLength, contentType);
+    }
+
+    private async Task<IElement?> GetImage(string url, CancellationToken token)
+    {
+        try
+        {
+            var mediaId = this.GetMediaId(url);
+
+            var document = await this.context.OpenAsync(url, token);
+            return document.QuerySelector($"img[data-image-id=\"{mediaId}-curr\"]");
+        } catch (Exception e)
+        {
+            this.logger.LogError(e, "Exception when fetching IMDb media: {Url}", url);
+
+            throw new PosterFetchException("Error", "Error fetching a poster", e);
+        }
+    }
+
+    private string ExtractSource(IElement? image, string url)
+    {
+        if (image is { LocalName: "img" } && image.GetAttribute("src") is string source)
+        {
+            this.logger.LogInformation("Fetched image source URL from IMDb: {Source}", source);
+            return source;
+        } else
+        {
+            throw new PosterFetchException(
+                "Imdb.Media.PosterNotFound", "The image URL is not found in the IMDb media page")
+                .WithProperty(url);
         }
     }
 

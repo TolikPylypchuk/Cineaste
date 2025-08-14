@@ -2,4 +2,4 @@ namespace Cineaste.Exceptions;
 
 public sealed class UnsupportedPosterTypeException(string contentType, Exception? innerException = null)
     : CineasteException(
-        $"PosterType.Unsupported", $"Media type {contentType} is not supported for posters", innerException);
+        $"Poster.ContentType.Unsupported", $"Media type {contentType} is not supported for posters", innerException);

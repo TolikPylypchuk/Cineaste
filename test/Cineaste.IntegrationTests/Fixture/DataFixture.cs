@@ -5,20 +5,18 @@ using Cineaste.Shared.Models.Poster;
 
 using Microsoft.EntityFrameworkCore;
 
-using NSubstitute;
-
 using Testcontainers.MsSql;
 
 namespace Cineaste.Fixture;
 
 public class DataFixture : IAsyncLifetime
 {
-    private static readonly byte[] PosterData = Convert.FromHexString(
+    public static readonly byte[] PosterData = Convert.FromHexString(
         "ffd8ffe000104a46494600010101004800480000ffdb004300030202020202030202020303030304060404040404080606050609080a" +
         "0a090809090a0c0f0c0a0b0e0b09090d110d0e0f101011100a0c12131210130f101010ffc9000b080001000101011100ffcc00060010" +
         "1005ffda0008010100003f00d2cf20ffd9");
 
-    private const string PosterType = "image/jpeg";
+    public const string PosterType = "image/jpeg";
 
     private readonly MsSqlContainer container = new MsSqlBuilder()
         .WithReuse(true)

@@ -60,6 +60,7 @@ builder.Services.AddScoped<FranchiseService>();
 builder.Services.AddScoped<IPosterProvider, PosterProvider>();
 
 builder.Services.AddSingleton(Configuration.Default.WithDefaultLoader());
+builder.Services.AddTransient(sp => BrowsingContext.New(sp.GetRequiredService<AngleSharp.IConfiguration>()));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));
