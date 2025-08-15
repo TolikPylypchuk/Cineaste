@@ -1,7 +1,6 @@
-using AngleSharp;
 using AngleSharp.Dom;
 
-namespace Cineaste.Services;
+namespace Cineaste.Services.Poster;
 
 public interface IPosterProvider
 {
@@ -14,11 +13,11 @@ public interface IPosterProvider
 
 public sealed class PosterProvider(
     HttpClient httpClient,
-    IBrowsingContext context,
+    IHtmlDocumentProvider documentProvider,
     ILogger<PosterProvider> logger) : IPosterProvider
 {
     private readonly HttpClient httpClient = httpClient;
-    private readonly IBrowsingContext context = context;
+    private readonly IHtmlDocumentProvider documentProvider = documentProvider;
     private readonly ILogger<PosterProvider> logger = logger;
 
     public Task<StreamableContent> FetchPoster(
@@ -38,7 +37,6 @@ public sealed class PosterProvider(
 
         var image = await this.GetImage(url, token);
         return this.ExtractSource(image, url);
-
     }
 
     private async Task<StreamableContent> FetchPoster(string url, CancellationToken token = default)
@@ -91,8 +89,11 @@ public sealed class PosterProvider(
         {
             var mediaId = this.GetMediaId(url);
 
-            var document = await this.context.OpenAsync(url, token);
+            var document = await this.documentProvider.GetDocument(url, token);
             return document.QuerySelector($"img[data-image-id=\"{mediaId}-curr\"]");
+        } catch (OperationCanceledException)
+        {
+            throw;
         } catch (Exception e)
         {
             this.logger.LogError(e, "Exception when fetching IMDb media: {Url}", url);
@@ -116,9 +117,7 @@ public sealed class PosterProvider(
     }
 
     private string GetMediaId(string url) =>
-        new Uri(url).AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries).LastOrDefault()
-            ?? throw new InvalidInputException("Imdb.Media.Invalid", "The IMDb media URL is invalid")
-                .WithProperty(url);
+        new Uri(url).AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries).Last();
 
     private void ValidateContentType(string contentType)
     {

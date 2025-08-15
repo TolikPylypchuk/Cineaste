@@ -18,6 +18,7 @@ global using FluentValidation;
 global using Microsoft.Extensions.Logging;
 
 global using NSubstitute;
+global using NSubstitute.ExceptionExtensions;
 
 global using Xunit;
 

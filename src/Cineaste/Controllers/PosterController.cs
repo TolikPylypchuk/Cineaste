@@ -1,3 +1,5 @@
+using Cineaste.Services.Poster;
+
 namespace Cineaste.Controllers;
 
 [ApiController]

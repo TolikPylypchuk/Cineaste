@@ -1,3 +1,5 @@
+using Cineaste.Services.Poster;
+
 namespace Cineaste.Services;
 
 public sealed class FranchiseService(

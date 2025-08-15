@@ -1,8 +1,9 @@
 using System.Net;
 
-using AngleSharp;
+using AngleSharp.Dom;
 
 using Cineaste.Models;
+using Cineaste.Services.Poster;
 using Cineaste.Shared.Models.Poster;
 
 using RichardSzalay.MockHttp;
@@ -19,11 +20,11 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         // Arrange
 
         var mockHttp = new MockHttpMessageHandler();
-        var context = Substitute.For<IBrowsingContext>();
+        var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), context, this.logger);
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
 
-        var request = this.CreatePosterUrlRequest();
+        var request = data.CreatePosterUrlRequest();
 
         var expectedContent = data.CreatePosterContent();
 
@@ -53,11 +54,11 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         // Arrange
 
         var mockHttp = new MockHttpMessageHandler();
-        var context = Substitute.For<IBrowsingContext>();
+        var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), context, this.logger);
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
 
-        var request = this.CreatePosterUrlRequest();
+        var request = data.CreatePosterUrlRequest();
 
         this.SetUpHttp(mockHttp, request.Value.Url, HttpStatusCode.NotFound);
 
@@ -75,11 +76,11 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         // Arrange
 
         var mockHttp = new MockHttpMessageHandler();
-        var context = Substitute.For<IBrowsingContext>();
+        var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), context, this.logger);
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
 
-        var request = this.CreatePosterUrlRequest();
+        var request = data.CreatePosterUrlRequest();
 
         this.SetUpHttp(mockHttp, request.Value.Url, HttpStatusCode.OK, contentType: null);
 
@@ -97,11 +98,11 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         // Arrange
 
         var mockHttp = new MockHttpMessageHandler();
-        var context = Substitute.For<IBrowsingContext>();
+        var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), context, this.logger);
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
 
-        var request = this.CreatePosterUrlRequest();
+        var request = data.CreatePosterUrlRequest();
 
         this.SetUpHttp(
             mockHttp, request.Value.Url, HttpStatusCode.OK, contentType: DataFixture.PosterType, contentLength: null);
@@ -124,11 +125,11 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         // Arrange
 
         var mockHttp = new MockHttpMessageHandler();
-        var context = Substitute.For<IBrowsingContext>();
+        var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), context, this.logger);
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
 
-        var request = this.CreatePosterUrlRequest();
+        var request = data.CreatePosterUrlRequest();
 
         this.SetUpHttp(
             mockHttp,
@@ -144,6 +145,264 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
 
         Assert.Equal("Poster.ContentType.Unsupported", exception.MessageCode);
         Assert.Equal(contentType, exception.Properties["contentType"]);
+    }
+
+    [Fact(DisplayName = "FetchPoster should throw is HttpClient cancels")]
+    public async Task FetchPosterShouldThrowIfHttpClientCancels()
+    {
+        // Arrange
+
+        var mockHttp = new MockHttpMessageHandler();
+        var html = Substitute.For<IHtmlDocumentProvider>();
+
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+
+        var request = data.CreatePosterUrlRequest();
+
+        var expectedException = new OperationCanceledException();
+        this.SetUpHttpException(mockHttp, request.Value.Url, expectedException);
+
+        // Act + Assert
+
+        var actualException = await Assert.ThrowsAsync<OperationCanceledException>(() => provider.FetchPoster(
+            request, TestContext.Current.CancellationToken));
+
+        Assert.Same(expectedException, actualException);
+    }
+
+    [Fact(DisplayName = "FetchPoster should throw is HttpClient throws")]
+    public async Task FetchPosterShouldThrowIfHttpClientThrows()
+    {
+        // Arrange
+
+        var mockHttp = new MockHttpMessageHandler();
+        var html = Substitute.For<IHtmlDocumentProvider>();
+
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+
+        var request = data.CreatePosterUrlRequest();
+
+        var expectedException = new InvalidOperationException();
+        this.SetUpHttpException(mockHttp, request.Value.Url, expectedException);
+
+        // Act + Assert
+
+        var actualException = await Assert.ThrowsAsync<PosterFetchException>(() => provider.FetchPoster(
+            request, TestContext.Current.CancellationToken));
+
+        Assert.Equal("Poster.Fetch.Error", actualException.MessageCode);
+        Assert.Same(expectedException, actualException.InnerException);
+    }
+
+    [Fact(DisplayName = "GetPosterUrl should get a poster URL")]
+    public async Task GetPosterUrlShouldGetPosterUrl()
+    {
+        // Arrange
+
+        var mockHttp = new MockHttpMessageHandler();
+        var html = Substitute.For<IHtmlDocumentProvider>();
+
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+
+        var request = data.CreatePosterImdbMediaRequest();
+        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+
+        var document = this.MockDocument(html, request);
+
+        var image = Substitute.For<IElement>();
+        document.QuerySelector(DataFixture.ImdbImageSelector).Returns(image);
+
+        image.LocalName.Returns(DataFixture.Img);
+        image.GetAttribute(DataFixture.Src).Returns(expectedUrl);
+
+        // Act
+
+        var actualUrl = await provider.GetPosterUrl(request, TestContext.Current.CancellationToken);
+
+        // Assert
+
+        Assert.Equal(expectedUrl, actualUrl);
+    }
+
+    [Fact(DisplayName = "GetPosterUrl should throw if the image element is not found")]
+    public async Task GetPosterUrlShouldThrowIfImageElementNotFound()
+    {
+        // Arrange
+
+        var mockHttp = new MockHttpMessageHandler();
+        var html = Substitute.For<IHtmlDocumentProvider>();
+
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+
+        var request = data.CreatePosterImdbMediaRequest();
+        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+
+        var document = this.MockDocument(html, request);
+
+        document.QuerySelector(DataFixture.ImdbImageSelector).Returns((IElement?)null);
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<PosterFetchException>(() => provider.GetPosterUrl(
+            request, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Poster.Fetch.Imdb.Media.PosterNotFound", exception.MessageCode);
+        Assert.Equal(request.Value.Url, exception.Properties["url"]);
+    }
+
+    [Fact(DisplayName = "GetPosterUrl should throw if the element is not an image")]
+    public async Task GetPosterUrlShouldThrowIfNotImageElement()
+    {
+        // Arrange
+
+        var mockHttp = new MockHttpMessageHandler();
+        var html = Substitute.For<IHtmlDocumentProvider>();
+
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+
+        var request = data.CreatePosterImdbMediaRequest();
+        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+
+        var document = this.MockDocument(html, request);
+
+        var image = Substitute.For<IElement>();
+        document.QuerySelector(DataFixture.ImdbImageSelector).Returns(image);
+
+        image.LocalName.Returns("p");
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<PosterFetchException>(() => provider.GetPosterUrl(
+            request, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Poster.Fetch.Imdb.Media.PosterNotFound", exception.MessageCode);
+        Assert.Equal(request.Value.Url, exception.Properties["url"]);
+    }
+
+    [Fact(DisplayName = "GetPosterUrl should throw if the image has no source")]
+    public async Task GetPosterUrlShouldThrowIfImageHasNoSource()
+    {
+        // Arrange
+
+        var mockHttp = new MockHttpMessageHandler();
+        var html = Substitute.For<IHtmlDocumentProvider>();
+
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+
+        var request = data.CreatePosterImdbMediaRequest();
+        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+
+        var document = this.MockDocument(html, request);
+
+        var image = Substitute.For<IElement>();
+        document.QuerySelector(DataFixture.ImdbImageSelector).Returns(image);
+
+        image.LocalName.Returns(DataFixture.Img);
+        image.GetAttribute(DataFixture.Src).Returns((string?)null);
+
+        // Act
+
+        var exception = await Assert.ThrowsAsync<PosterFetchException>(() => provider.GetPosterUrl(
+            request, TestContext.Current.CancellationToken));
+
+        // Assert
+
+        Assert.Equal("Poster.Fetch.Imdb.Media.PosterNotFound", exception.MessageCode);
+        Assert.Equal(request.Value.Url, exception.Properties["url"]);
+    }
+
+    [Fact(DisplayName = "GetPosterUrl should throw is the HTML provider cancels")]
+    public async Task GetPosterUrlShouldThrowIfHtmlProviderCancels()
+    {
+        // Arrange
+
+        var mockHttp = new MockHttpMessageHandler();
+        var html = Substitute.For<IHtmlDocumentProvider>();
+
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+
+        var request = data.CreatePosterImdbMediaRequest();
+
+        var expectedException = new OperationCanceledException();
+        html.GetDocument(request.Value.Url, TestContext.Current.CancellationToken).ThrowsAsync(expectedException);
+
+        // Act + Assert
+
+        var actualException = await Assert.ThrowsAsync<OperationCanceledException>(() => provider.GetPosterUrl(
+            request, TestContext.Current.CancellationToken));
+
+        Assert.Same(expectedException, actualException);
+    }
+
+    [Fact(DisplayName = "GetPosterUrl should throw is the HTML provider throws")]
+    public async Task GetPosterUrlShouldThrowIfHtmlProviderThrows()
+    {
+        // Arrange
+
+        var mockHttp = new MockHttpMessageHandler();
+        var html = Substitute.For<IHtmlDocumentProvider>();
+
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+
+        var request = data.CreatePosterImdbMediaRequest();
+
+        var expectedException = new InvalidOperationException();
+        html.GetDocument(request.Value.Url, TestContext.Current.CancellationToken).ThrowsAsync(expectedException);
+
+        // Act + Assert
+
+        var actualException = await Assert.ThrowsAsync<PosterFetchException>(() => provider.GetPosterUrl(
+            request, TestContext.Current.CancellationToken));
+
+        Assert.Equal("Poster.Fetch.Error", actualException.MessageCode);
+        Assert.Same(expectedException, actualException.InnerException);
+    }
+
+    [Fact(DisplayName = "FetchPoster should fetch a poster from IMDb media")]
+    public async Task FetchPosterShouldFetchPosterFromImdbMedia()
+    {
+        // Arrange
+
+        var mockHttp = new MockHttpMessageHandler();
+        var html = Substitute.For<IHtmlDocumentProvider>();
+
+        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+
+        var request = data.CreatePosterImdbMediaRequest();
+
+        var expectedContent = data.CreatePosterContent();
+        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+
+        this.SetUpHttp(mockHttp, expectedUrl, HttpStatusCode.OK, expectedContent);
+
+        var document = this.MockDocument(html, request);
+
+        var image = Substitute.For<IElement>();
+        document.QuerySelector(DataFixture.ImdbImageSelector).Returns(image);
+
+        image.LocalName.Returns(DataFixture.Img);
+        image.GetAttribute(DataFixture.Src).Returns(expectedUrl);
+
+        // Act
+
+        var actualContent = await provider.FetchPoster(request, TestContext.Current.CancellationToken);
+
+        // Assert
+
+        Assert.Equal(expectedContent.Type, actualContent.Type);
+        Assert.Equal(expectedContent.Length, actualContent.Length);
+
+        var expectedData = new byte[expectedContent.Length];
+        expectedContent.GetStream().ReadExactly(expectedData);
+
+        var actualData = new byte[actualContent.Length];
+        expectedContent.GetStream().ReadExactly(actualData);
+
+        Assert.Equal(expectedData, actualData);
     }
 
     private void SetUpHttp(
@@ -172,6 +431,23 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
             .Respond(statusCode, content);
     }
 
-    private Validated<PosterUrlRequest> CreatePosterUrlRequest() =>
-        new PosterUrlRequest("https://tolik.io").Validated();
+    private void SetUpHttpException(
+        MockHttpMessageHandler mockHttp,
+        string url,
+        Exception exception) =>
+        mockHttp.When(HttpMethod.Get, url)
+            .Respond(req =>
+            {
+                throw exception;
+            });
+
+    private IDocument MockDocument(IHtmlDocumentProvider html, Validated<PosterImdbMediaRequest> request)
+    {
+        var document = Substitute.For<IDocument>();
+
+        html.GetDocument(request.Value.Url, TestContext.Current.CancellationToken)
+            .Returns(Task.FromResult(document));
+
+        return document;
+    }
 }

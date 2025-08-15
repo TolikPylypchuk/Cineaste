@@ -13,6 +13,11 @@ public sealed class PosterImdbMediaRequestValidator : CineasteValidator<PosterIm
             .Must(url => String.IsNullOrWhiteSpace(url) ||
                 Uri.IsWellFormedUriString(url, UriKind.Absolute) && this.IsHttpUri(new Uri(url)))
             .WithErrorCode(this.ErrorCode(req => req.Url, Invalid));
+
+        this.RuleFor(req => req.Url)
+            .Must(url => !Uri.IsWellFormedUriString(url, UriKind.Absolute) ||
+                !String.IsNullOrEmpty(new Uri(url).AbsolutePath))
+            .WithErrorCode(this.ErrorCode(req => req.Url, "NoPath"));
     }
 
     private bool IsHttpUri(Uri uri)

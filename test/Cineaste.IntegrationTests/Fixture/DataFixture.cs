@@ -1,6 +1,7 @@
 using System.Globalization;
 
 using Cineaste.Models;
+using Cineaste.Services.Poster;
 using Cineaste.Shared.Models.Poster;
 
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,11 @@ public class DataFixture : IAsyncLifetime
         "1005ffda0008010100003f00d2cf20ffd9");
 
     public const string PosterType = "image/jpeg";
+
+    public const string ImdbMediaId = "rm12345678";
+    public const string ImdbImageSelector = $"img[data-image-id=\"{ImdbMediaId}-curr\"]";
+    public const string Img = "img";
+    public const string Src = "src";
 
     private readonly MsSqlContainer container = new MsSqlBuilder()
         .WithReuse(true)
@@ -266,5 +272,5 @@ public class DataFixture : IAsyncLifetime
         new PosterUrlRequest("https://tolik.io").Validated();
 
     public Validated<PosterImdbMediaRequest> CreatePosterImdbMediaRequest() =>
-        new PosterImdbMediaRequest("https://tolik.io").Validated();
+        new PosterImdbMediaRequest($"https://tolik.io/{ImdbMediaId}").Validated();
 }

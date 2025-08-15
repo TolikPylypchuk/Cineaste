@@ -11,6 +11,7 @@ global using Cineaste.Exceptions;
 global using Cineaste.Mapping;
 global using Cineaste.Models;
 global using Cineaste.Services;
+global using Cineaste.Services.Poster;
 global using Cineaste.Shared.Models;
 global using Cineaste.Shared.Models.Franchise;
 global using Cineaste.Shared.Models.List;

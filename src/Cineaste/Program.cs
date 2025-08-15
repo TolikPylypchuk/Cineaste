@@ -1,7 +1,5 @@
 using System.Text.Json.Serialization;
 
-using AngleSharp;
-
 using Cineaste.Components;
 using Cineaste.Infrastructure.Json;
 using Cineaste.Infrastructure.OpenApi;
@@ -57,10 +55,9 @@ builder.Services.AddScoped<ListService>();
 builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<SeriesService>();
 builder.Services.AddScoped<FranchiseService>();
-builder.Services.AddScoped<IPosterProvider, PosterProvider>();
 
-builder.Services.AddSingleton(Configuration.Default.WithDefaultLoader());
-builder.Services.AddTransient(sp => BrowsingContext.New(sp.GetRequiredService<AngleSharp.IConfiguration>()));
+builder.Services.AddScoped<IPosterProvider, PosterProvider>();
+builder.Services.AddScoped<IHtmlDocumentProvider, HtmlDocumentProvider>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));
