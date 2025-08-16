@@ -2356,6 +2356,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The IMDb media URL must contain a path.
+        /// </summary>
+        public static string Validation_Poster_ImdbMedia_Url_NoPath {
+            get {
+                return ResourceManager.GetString("Validation.Poster.ImdbMedia.Url.NoPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The poster URL is empty.
         /// </summary>
         public static string Validation_Poster_Url_Empty {

@@ -15,8 +15,16 @@ public sealed class PosterImdbMediaRequestValidator : CineasteValidator<PosterIm
             .WithErrorCode(this.ErrorCode(req => req.Url, Invalid));
 
         this.RuleFor(req => req.Url)
-            .Must(url => !Uri.IsWellFormedUriString(url, UriKind.Absolute) ||
-                !String.IsNullOrEmpty(new Uri(url).AbsolutePath))
+            .Must(url =>
+            {
+                if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                {
+                    return true;
+                }
+
+                var path = new Uri(url).AbsolutePath;
+                return !String.IsNullOrEmpty(path) && path != "/";
+            })
             .WithErrorCode(this.ErrorCode(req => req.Url, "NoPath"));
     }
 

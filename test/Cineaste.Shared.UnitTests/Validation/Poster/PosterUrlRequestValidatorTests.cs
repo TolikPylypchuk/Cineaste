@@ -1,5 +1,4 @@
 using Cineaste.Shared.Models.Poster;
-using Cineaste.Shared.Validation.TestData;
 
 namespace Cineaste.Shared.Validation.Poster;
 
@@ -25,7 +24,7 @@ public sealed class PosterUrlRequestValidatorTests
             .WithErrorCode("Poster.Url.Empty");
     }
 
-    [ClassData(typeof(UrlTestData))]
+    [MemberData(nameof(ValidUrlsTestData))]
     [Theory(DisplayName = "Validator should validate the URL")]
     public void ValidatorShouldValidateUrl(string url, bool isValid)
     {
@@ -39,5 +38,14 @@ public sealed class PosterUrlRequestValidatorTests
             result.ShouldHaveValidationErrorFor(req => req.Url)
                 .WithErrorCode("Poster.Url.Invalid");
         }
+    }
+
+    public static IEnumerable<TheoryDataRow<string, bool>> ValidUrlsTestData()
+    {
+        // string url, bool isValid
+        yield return new("123qwe", false);
+        yield return new("www.tolik.io", false);
+        yield return new("http://www.tolik.io", true);
+        yield return new("https://www.tolik.io", true);
     }
 }

@@ -963,6 +963,9 @@
   <data name="Validation.Poster.ImdbMedia.Url.Empty" xml:space="preserve">
     <value>The IMDb media URL is empty</value>
   </data>
+  <data name="Validation.Poster.ImdbMedia.Url.NoPath" xml:space="preserve">
+    <value>The IMDb media URL must contain a path</value>
+  </data>
   <data name="PosterDialog.Preview" xml:space="preserve">
     <value>Preview</value>
   </data>
