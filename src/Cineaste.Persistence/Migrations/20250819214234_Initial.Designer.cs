@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20250809164241_Initial")]
+    [Migration("20250819214234_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -99,7 +99,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("FranchiseItems", t =>
                         {
-                            t.HasCheckConstraint("CH_FranchiseItems_SequenceNumberPositive", "SequenceNumber > 0");
+                            t.HasCheckConstraint("CH_FranchiseItems_SequenceNumberPositive", "[SequenceNumber] > 0");
                         });
                 });
 
@@ -125,9 +125,9 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("FranchisePosters", t =>
                         {
-                            t.HasCheckConstraint("CH_FranchisePosters_ContentTypeNotEmpty", "ContentType <> ''");
+                            t.HasCheckConstraint("CH_FranchisePosters_ContentTypeNotEmpty", "[ContentType] <> ''");
 
-                            t.HasCheckConstraint("CH_FranchisePosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                            t.HasCheckConstraint("CH_FranchisePosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                         });
                 });
 
@@ -148,13 +148,14 @@ namespace Cineaste.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ListId")
+                    b.Property<Guid?>("ListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ListId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ListId] IS NOT NULL");
 
                     b.ToTable("ListConfigurations");
                 });
@@ -230,7 +231,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("ListItems", t =>
                         {
-                            t.HasCheckConstraint("CH_ListItems_SequenceNumberNonNegative", "SequenceNumber >= 0");
+                            t.HasCheckConstraint("CH_ListItems_SequenceNumberNonNegative", "[SequenceNumber] >= 0");
                         });
                 });
 
@@ -274,7 +275,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("Movies", t =>
                         {
-                            t.HasCheckConstraint("CH_Movies_YearPositive", "Year > 0");
+                            t.HasCheckConstraint("CH_Movies_YearPositive", "[Year] > 0");
                         });
                 });
 
@@ -314,7 +315,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("MovieKinds", t =>
                         {
-                            t.HasCheckConstraint("CH_MovieKinds_NameNotEmpty", "Name <> ''");
+                            t.HasCheckConstraint("CH_MovieKinds_NameNotEmpty", "[Name] <> ''");
                         });
                 });
 
@@ -340,9 +341,9 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("MoviePosters", t =>
                         {
-                            t.HasCheckConstraint("CH_MoviePosters_ContentTypeNotEmpty", "ContentType <> ''");
+                            t.HasCheckConstraint("CH_MoviePosters_ContentTypeNotEmpty", "[ContentType] <> ''");
 
-                            t.HasCheckConstraint("CH_MoviePosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                            t.HasCheckConstraint("CH_MoviePosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                         });
                 });
 
@@ -385,17 +386,17 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("Periods", t =>
                         {
-                            t.HasCheckConstraint("CH_Periods_EndMonthValid", "StartMonth >= 1 AND StartMonth <= 12");
+                            t.HasCheckConstraint("CH_Periods_EndMonthValid", "[StartMonth] >= 1 AND [StartMonth] <= 12");
 
-                            t.HasCheckConstraint("CH_Periods_EndYearPositive", "EndYear > 0");
+                            t.HasCheckConstraint("CH_Periods_EndYearPositive", "[EndYear] > 0");
 
-                            t.HasCheckConstraint("CH_Periods_EpisodeCountPositive", "EndYear > 0");
+                            t.HasCheckConstraint("CH_Periods_EpisodeCountPositive", "[EpisodeCount] > 0");
 
-                            t.HasCheckConstraint("CH_Periods_PeriodValid", "DATEFROMPARTS(StartYear, StartMonth, 1) <= DATEFROMPARTS(EndYear, EndMonth, 1)");
+                            t.HasCheckConstraint("CH_Periods_PeriodValid", "DATEFROMPARTS([StartYear], [StartMonth], 1) <= DATEFROMPARTS([EndYear], [EndMonth], 1)");
 
-                            t.HasCheckConstraint("CH_Periods_StartMonthValid", "StartMonth >= 1 AND StartMonth <= 12");
+                            t.HasCheckConstraint("CH_Periods_StartMonthValid", "[StartMonth] >= 1 AND [StartMonth] <= 12");
 
-                            t.HasCheckConstraint("CH_Periods_StartYearPositive", "StartYear > 0");
+                            t.HasCheckConstraint("CH_Periods_StartYearPositive", "[StartYear] > 0");
                         });
                 });
 
@@ -428,9 +429,9 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("Seasons", t =>
                         {
-                            t.HasCheckConstraint("CH_Seasons_ChannelNotEmpty", "Channel <> ''");
+                            t.HasCheckConstraint("CH_Seasons_ChannelNotEmpty", "[Channel] <> ''");
 
-                            t.HasCheckConstraint("CH_Seasons_SequenceNumberPositive", "SequenceNumber > 0");
+                            t.HasCheckConstraint("CH_Seasons_SequenceNumberPositive", "[SequenceNumber] > 0");
                         });
                 });
 
@@ -456,9 +457,9 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("SeasonPosters", t =>
                         {
-                            t.HasCheckConstraint("CH_SeasonPosters_ContentTypeNotEmpty", "ContentType <> ''");
+                            t.HasCheckConstraint("CH_SeasonPosters_ContentTypeNotEmpty", "[ContentType] <> ''");
 
-                            t.HasCheckConstraint("CH_SeasonPosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                            t.HasCheckConstraint("CH_SeasonPosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                         });
                 });
 
@@ -538,7 +539,7 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("SeriesKinds", t =>
                         {
-                            t.HasCheckConstraint("CH_SeriesKinds_NameNotEmpty", "Name <> ''");
+                            t.HasCheckConstraint("CH_SeriesKinds_NameNotEmpty", "[Name] <> ''");
                         });
                 });
 
@@ -564,9 +565,9 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("SeriesPosters", t =>
                         {
-                            t.HasCheckConstraint("CH_SeriesPosters_ContentTypeNotEmpty", "ContentType <> ''");
+                            t.HasCheckConstraint("CH_SeriesPosters_ContentTypeNotEmpty", "[ContentType] <> ''");
 
-                            t.HasCheckConstraint("CH_SeriesPosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                            t.HasCheckConstraint("CH_SeriesPosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                         });
                 });
 
@@ -610,13 +611,13 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("SpecialEpisodes", t =>
                         {
-                            t.HasCheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "Channel <> ''");
+                            t.HasCheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "[Channel] <> ''");
 
-                            t.HasCheckConstraint("CH_SpecialEpisodes_MonthValid", "Month >= 1 AND Month <= 12");
+                            t.HasCheckConstraint("CH_SpecialEpisodes_MonthValid", "[Month] >= 1 AND [Month] <= 12");
 
-                            t.HasCheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "SequenceNumber > 0");
+                            t.HasCheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "[SequenceNumber] > 0");
 
-                            t.HasCheckConstraint("CH_SpecialEpisodes_YearPositive", "Year > 0");
+                            t.HasCheckConstraint("CH_SpecialEpisodes_YearPositive", "[Year] > 0");
                         });
                 });
 
@@ -642,9 +643,9 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("SpecialEpisodePosters", t =>
                         {
-                            t.HasCheckConstraint("CH_SpecialEpisodePosters_ContentTypeNotEmpty", "ContentType <> ''");
+                            t.HasCheckConstraint("CH_SpecialEpisodePosters_ContentTypeNotEmpty", "[ContentType] <> ''");
 
-                            t.HasCheckConstraint("CH_SpecialEpisodePosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                            t.HasCheckConstraint("CH_SpecialEpisodePosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                         });
                 });
 
@@ -686,9 +687,9 @@ namespace Cineaste.Persistence.Migrations
 
                     b.ToTable("Tags", t =>
                         {
-                            t.HasCheckConstraint("CH_Tag_CategoryNotEmpty", "Category <> ''");
+                            t.HasCheckConstraint("CH_Tag_CategoryNotEmpty", "[Category] <> ''");
 
-                            t.HasCheckConstraint("CH_Tag_NameNotEmpty", "Name <> ''");
+                            t.HasCheckConstraint("CH_Tag_NameNotEmpty", "[Name] <> ''");
                         });
                 });
 
@@ -705,6 +706,201 @@ namespace Cineaste.Persistence.Migrations
                     b.HasIndex("ImplyingTagId");
 
                     b.ToTable("TagImplications", (string)null);
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("Roles", (string)null);
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteRoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserLogin", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserToken", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("UserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.Franchise", b =>
@@ -750,9 +946,9 @@ namespace Cineaste.Persistence.Migrations
 
                             b1.ToTable("FranchiseTitles", null, t =>
                                 {
-                                    t.HasCheckConstraint("CH_FranchiseTitles_NameNotEmpty", "Name <> ''");
+                                    t.HasCheckConstraint("CH_FranchiseTitles_NameNotEmpty", "[Name] <> ''");
 
-                                    t.HasCheckConstraint("CH_FranchiseTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                                    t.HasCheckConstraint("CH_FranchiseTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                                 });
 
                             b1.WithOwner()
@@ -794,9 +990,7 @@ namespace Cineaste.Persistence.Migrations
                 {
                     b.HasOne("Cineaste.Core.Domain.CineasteList", null)
                         .WithOne("Configuration")
-                        .HasForeignKey("Cineaste.Core.Domain.ListConfiguration", "ListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Cineaste.Core.Domain.ListConfiguration", "ListId");
 
                     b.OwnsOne("Cineaste.Core.Domain.ListSortingConfiguration", "SortingConfiguration", b1 =>
                         {
@@ -896,9 +1090,9 @@ namespace Cineaste.Persistence.Migrations
 
                             b1.ToTable("MovieTitles", null, t =>
                                 {
-                                    t.HasCheckConstraint("CH_MovieTitles_NameNotEmpty", "Name <> ''");
+                                    t.HasCheckConstraint("CH_MovieTitles_NameNotEmpty", "[Name] <> ''");
 
-                                    t.HasCheckConstraint("CH_MovieTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                                    t.HasCheckConstraint("CH_MovieTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                                 });
 
                             b1.WithOwner()
@@ -1008,9 +1202,9 @@ namespace Cineaste.Persistence.Migrations
 
                             b1.ToTable("SeasonTitles", null, t =>
                                 {
-                                    t.HasCheckConstraint("CH_SeasonTitles_NameNotEmpty", "Name <> ''");
+                                    t.HasCheckConstraint("CH_SeasonTitles_NameNotEmpty", "[Name] <> ''");
 
-                                    t.HasCheckConstraint("CH_SeasonTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                                    t.HasCheckConstraint("CH_SeasonTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                                 });
 
                             b1.WithOwner()
@@ -1068,9 +1262,9 @@ namespace Cineaste.Persistence.Migrations
 
                             b1.ToTable("SeriesTitles", null, t =>
                                 {
-                                    t.HasCheckConstraint("CH_SeriesTitles_NameNotEmpty", "Name <> ''");
+                                    t.HasCheckConstraint("CH_SeriesTitles_NameNotEmpty", "[Name] <> ''");
 
-                                    t.HasCheckConstraint("CH_SeriesTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                                    t.HasCheckConstraint("CH_SeriesTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                                 });
 
                             b1.WithOwner()
@@ -1171,9 +1365,9 @@ namespace Cineaste.Persistence.Migrations
 
                             b1.ToTable("SpecialEpisodeTitles", null, t =>
                                 {
-                                    t.HasCheckConstraint("CH_SpecialEpisodeTitles_NameNotEmpty", "Name <> ''");
+                                    t.HasCheckConstraint("CH_SpecialEpisodeTitles_NameNotEmpty", "[Name] <> ''");
 
-                                    t.HasCheckConstraint("CH_SpecialEpisodeTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                                    t.HasCheckConstraint("CH_SpecialEpisodeTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                                 });
 
                             b1.WithOwner()
@@ -1213,6 +1407,57 @@ namespace Cineaste.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ImplyingTagId")
                         .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteRoleClaim", b =>
+                {
+                    b.HasOne("Cineaste.Identity.CineasteRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserClaim", b =>
+                {
+                    b.HasOne("Cineaste.Identity.CineasteUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserLogin", b =>
+                {
+                    b.HasOne("Cineaste.Identity.CineasteUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserRole", b =>
+                {
+                    b.HasOne("Cineaste.Identity.CineasteRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cineaste.Identity.CineasteUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserToken", b =>
+                {
+                    b.HasOne("Cineaste.Identity.CineasteUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

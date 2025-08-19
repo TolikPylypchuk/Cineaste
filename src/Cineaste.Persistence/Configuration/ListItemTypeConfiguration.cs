@@ -4,9 +4,9 @@ internal sealed class ListItemTypeConfiguration : IEntityTypeConfiguration<ListI
 {
     public void Configure(EntityTypeBuilder<ListItem> item)
     {
-        item.HasStronglyTypedId();
+        item.HasKey(i => i.Id);
 
-        item.ToTable(t => t.HasCheckConstraint("CH_ListItems_SequenceNumberNonNegative", "SequenceNumber >= 0"));
+        item.ToTable(t => t.HasCheckConstraint("CH_ListItems_SequenceNumberNonNegative", "[SequenceNumber] >= 0"));
 
         item.HasOne(i => i.List)
             .WithMany(l => l.Items)
@@ -23,8 +23,6 @@ internal sealed class ListItemTypeConfiguration : IEntityTypeConfiguration<ListI
         item.HasOne(i => i.Franchise)
             .WithOne(f => f.ListItem)
             .HasForeignKey<ListItem>("FranchiseId");
-
-        item.Property(k => k.ActiveColor).HasConversion<ColorConverter>();
 
         item.HasIndex(i => i.SequenceNumber);
     }

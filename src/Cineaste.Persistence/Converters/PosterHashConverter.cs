@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Cineaste.Persistence.Configuration;
+namespace Cineaste.Persistence.Converters;
 
 internal sealed class PosterHashConverter : ValueConverter<PosterHash, string>
 {

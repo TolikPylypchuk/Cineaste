@@ -23,6 +23,45 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ListConfigurations",
                 columns: table => new
                 {
@@ -33,7 +72,7 @@ namespace Cineaste.Persistence.Migrations
                     FirstSortOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SecondSortOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SortDirection = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,8 +81,7 @@ namespace Cineaste.Persistence.Migrations
                         name: "FK_ListConfigurations_Lists_ListId",
                         column: x => x.ListId,
                         principalTable: "Lists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -61,7 +99,7 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MovieKinds", x => x.Id);
-                    table.CheckConstraint("CH_MovieKinds_NameNotEmpty", "Name <> ''");
+                    table.CheckConstraint("CH_MovieKinds_NameNotEmpty", "[Name] <> ''");
                     table.ForeignKey(
                         name: "FK_MovieKinds_Lists_ListId",
                         column: x => x.ListId,
@@ -85,7 +123,7 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SeriesKinds", x => x.Id);
-                    table.CheckConstraint("CH_SeriesKinds_NameNotEmpty", "Name <> ''");
+                    table.CheckConstraint("CH_SeriesKinds_NameNotEmpty", "[Name] <> ''");
                     table.ForeignKey(
                         name: "FK_SeriesKinds_Lists_ListId",
                         column: x => x.ListId,
@@ -110,13 +148,119 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tags", x => x.Id);
-                    table.CheckConstraint("CH_Tag_CategoryNotEmpty", "Category <> ''");
-                    table.CheckConstraint("CH_Tag_NameNotEmpty", "Name <> ''");
+                    table.CheckConstraint("CH_Tag_CategoryNotEmpty", "[Category] <> ''");
+                    table.CheckConstraint("CH_Tag_NameNotEmpty", "[Name] <> ''");
                     table.ForeignKey(
                         name: "FK_Tags_Lists_ListId",
                         column: x => x.ListId,
                         principalTable: "Lists",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoleClaims_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserClaims_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_UserLogins_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_UserTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,7 +298,7 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FranchiseItems", x => x.Id);
-                    table.CheckConstraint("CH_FranchiseItems_SequenceNumberPositive", "SequenceNumber > 0");
+                    table.CheckConstraint("CH_FranchiseItems_SequenceNumberPositive", "[SequenceNumber] > 0");
                 });
 
             migrationBuilder.CreateTable(
@@ -210,7 +354,7 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Movies", x => x.Id);
-                    table.CheckConstraint("CH_Movies_YearPositive", "Year > 0");
+                    table.CheckConstraint("CH_Movies_YearPositive", "[Year] > 0");
                     table.ForeignKey(
                         name: "FK_Movies_FranchiseItems_FranchiseItemId",
                         column: x => x.FranchiseItemId,
@@ -265,8 +409,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FranchisePosters", x => x.Id);
-                    table.CheckConstraint("CH_FranchisePosters_ContentTypeNotEmpty", "ContentType <> ''");
-                    table.CheckConstraint("CH_FranchisePosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.CheckConstraint("CH_FranchisePosters_ContentTypeNotEmpty", "[ContentType] <> ''");
+                    table.CheckConstraint("CH_FranchisePosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                     table.ForeignKey(
                         name: "FK_FranchisePosters_Franchises_FranchiseId",
                         column: x => x.FranchiseId,
@@ -289,8 +433,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FranchiseTitles", x => new { x.FranchiseId, x.Id });
-                    table.CheckConstraint("CH_FranchiseTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_FranchiseTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                    table.CheckConstraint("CH_FranchiseTitles_NameNotEmpty", "[Name] <> ''");
+                    table.CheckConstraint("CH_FranchiseTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                     table.ForeignKey(
                         name: "FK_FranchiseTitles_Franchises_FranchiseId",
                         column: x => x.FranchiseId,
@@ -311,8 +455,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MoviePosters", x => x.Id);
-                    table.CheckConstraint("CH_MoviePosters_ContentTypeNotEmpty", "ContentType <> ''");
-                    table.CheckConstraint("CH_MoviePosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.CheckConstraint("CH_MoviePosters_ContentTypeNotEmpty", "[ContentType] <> ''");
+                    table.CheckConstraint("CH_MoviePosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                     table.ForeignKey(
                         name: "FK_MoviePosters_Movies_MovieId",
                         column: x => x.MovieId,
@@ -361,8 +505,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MovieTitles", x => new { x.MovieId, x.Id });
-                    table.CheckConstraint("CH_MovieTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_MovieTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                    table.CheckConstraint("CH_MovieTitles_NameNotEmpty", "[Name] <> ''");
+                    table.CheckConstraint("CH_MovieTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                     table.ForeignKey(
                         name: "FK_MovieTitles_Movies_MovieId",
                         column: x => x.MovieId,
@@ -394,7 +538,7 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ListItems", x => x.Id);
-                    table.CheckConstraint("CH_ListItems_SequenceNumberNonNegative", "SequenceNumber >= 0");
+                    table.CheckConstraint("CH_ListItems_SequenceNumberNonNegative", "[SequenceNumber] >= 0");
                     table.ForeignKey(
                         name: "FK_ListItems_Franchises_FranchiseId",
                         column: x => x.FranchiseId,
@@ -432,8 +576,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Seasons", x => x.Id);
-                    table.CheckConstraint("CH_Seasons_ChannelNotEmpty", "Channel <> ''");
-                    table.CheckConstraint("CH_Seasons_SequenceNumberPositive", "SequenceNumber > 0");
+                    table.CheckConstraint("CH_Seasons_ChannelNotEmpty", "[Channel] <> ''");
+                    table.CheckConstraint("CH_Seasons_SequenceNumberPositive", "[SequenceNumber] > 0");
                     table.ForeignKey(
                         name: "FK_Seasons_Series_SeriesId",
                         column: x => x.SeriesId,
@@ -454,8 +598,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SeriesPosters", x => x.Id);
-                    table.CheckConstraint("CH_SeriesPosters_ContentTypeNotEmpty", "ContentType <> ''");
-                    table.CheckConstraint("CH_SeriesPosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.CheckConstraint("CH_SeriesPosters_ContentTypeNotEmpty", "[ContentType] <> ''");
+                    table.CheckConstraint("CH_SeriesPosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                     table.ForeignKey(
                         name: "FK_SeriesPosters_Series_SeriesId",
                         column: x => x.SeriesId,
@@ -504,8 +648,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SeriesTitles", x => new { x.SeriesId, x.Id });
-                    table.CheckConstraint("CH_SeriesTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_SeriesTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                    table.CheckConstraint("CH_SeriesTitles_NameNotEmpty", "[Name] <> ''");
+                    table.CheckConstraint("CH_SeriesTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                     table.ForeignKey(
                         name: "FK_SeriesTitles_Series_SeriesId",
                         column: x => x.SeriesId,
@@ -532,10 +676,10 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SpecialEpisodes", x => x.Id);
-                    table.CheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "Channel <> ''");
-                    table.CheckConstraint("CH_SpecialEpisodes_MonthValid", "Month >= 1 AND Month <= 12");
-                    table.CheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "SequenceNumber > 0");
-                    table.CheckConstraint("CH_SpecialEpisodes_YearPositive", "Year > 0");
+                    table.CheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "[Channel] <> ''");
+                    table.CheckConstraint("CH_SpecialEpisodes_MonthValid", "[Month] >= 1 AND [Month] <= 12");
+                    table.CheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "[SequenceNumber] > 0");
+                    table.CheckConstraint("CH_SpecialEpisodes_YearPositive", "[Year] > 0");
                     table.ForeignKey(
                         name: "FK_SpecialEpisodes_Series_SeriesId",
                         column: x => x.SeriesId,
@@ -562,12 +706,12 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Periods", x => x.Id);
-                    table.CheckConstraint("CH_Periods_EndMonthValid", "StartMonth >= 1 AND StartMonth <= 12");
-                    table.CheckConstraint("CH_Periods_EndYearPositive", "EndYear > 0");
-                    table.CheckConstraint("CH_Periods_EpisodeCountPositive", "EndYear > 0");
-                    table.CheckConstraint("CH_Periods_PeriodValid", "DATEFROMPARTS(StartYear, StartMonth, 1) <= DATEFROMPARTS(EndYear, EndMonth, 1)");
-                    table.CheckConstraint("CH_Periods_StartMonthValid", "StartMonth >= 1 AND StartMonth <= 12");
-                    table.CheckConstraint("CH_Periods_StartYearPositive", "StartYear > 0");
+                    table.CheckConstraint("CH_Periods_EndMonthValid", "[StartMonth] >= 1 AND [StartMonth] <= 12");
+                    table.CheckConstraint("CH_Periods_EndYearPositive", "[EndYear] > 0");
+                    table.CheckConstraint("CH_Periods_EpisodeCountPositive", "[EpisodeCount] > 0");
+                    table.CheckConstraint("CH_Periods_PeriodValid", "DATEFROMPARTS([StartYear], [StartMonth], 1) <= DATEFROMPARTS([EndYear], [EndMonth], 1)");
+                    table.CheckConstraint("CH_Periods_StartMonthValid", "[StartMonth] >= 1 AND [StartMonth] <= 12");
+                    table.CheckConstraint("CH_Periods_StartYearPositive", "[StartYear] > 0");
                     table.ForeignKey(
                         name: "FK_Periods_Seasons_SeasonId",
                         column: x => x.SeasonId,
@@ -590,8 +734,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SeasonTitles", x => new { x.SeasonId, x.Id });
-                    table.CheckConstraint("CH_SeasonTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_SeasonTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                    table.CheckConstraint("CH_SeasonTitles_NameNotEmpty", "[Name] <> ''");
+                    table.CheckConstraint("CH_SeasonTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                     table.ForeignKey(
                         name: "FK_SeasonTitles_Seasons_SeasonId",
                         column: x => x.SeasonId,
@@ -612,8 +756,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SpecialEpisodePosters", x => x.Id);
-                    table.CheckConstraint("CH_SpecialEpisodePosters_ContentTypeNotEmpty", "ContentType <> ''");
-                    table.CheckConstraint("CH_SpecialEpisodePosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.CheckConstraint("CH_SpecialEpisodePosters_ContentTypeNotEmpty", "[ContentType] <> ''");
+                    table.CheckConstraint("CH_SpecialEpisodePosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                     table.ForeignKey(
                         name: "FK_SpecialEpisodePosters_SpecialEpisodes_SpecialEpisodeId",
                         column: x => x.SpecialEpisodeId,
@@ -636,8 +780,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SpecialEpisodeTitles", x => new { x.SpecialEpisodeId, x.Id });
-                    table.CheckConstraint("CH_SpecialEpisodeTitles_NameNotEmpty", "Name <> ''");
-                    table.CheckConstraint("CH_SpecialEpisodeTitles_SequenceNumberPositive", "SequenceNumber > 0");
+                    table.CheckConstraint("CH_SpecialEpisodeTitles_NameNotEmpty", "[Name] <> ''");
+                    table.CheckConstraint("CH_SpecialEpisodeTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
                     table.ForeignKey(
                         name: "FK_SpecialEpisodeTitles_SpecialEpisodes_SpecialEpisodeId",
                         column: x => x.SpecialEpisodeId,
@@ -658,8 +802,8 @@ namespace Cineaste.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SeasonPosters", x => x.Id);
-                    table.CheckConstraint("CH_SeasonPosters_ContentTypeNotEmpty", "ContentType <> ''");
-                    table.CheckConstraint("CH_SeasonPosters_DataNotEmpty", "DATALENGTH(Data) > 0");
+                    table.CheckConstraint("CH_SeasonPosters_ContentTypeNotEmpty", "[ContentType] <> ''");
+                    table.CheckConstraint("CH_SeasonPosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                     table.ForeignKey(
                         name: "FK_SeasonPosters_Periods_PeriodId",
                         column: x => x.PeriodId,
@@ -699,7 +843,8 @@ namespace Cineaste.Persistence.Migrations
                 name: "IX_ListConfigurations_ListId",
                 table: "ListConfigurations",
                 column: "ListId",
-                unique: true);
+                unique: true,
+                filter: "[ListId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListItems_FranchiseId",
@@ -771,6 +916,18 @@ namespace Cineaste.Persistence.Migrations
                 column: "SeasonId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RoleClaims_RoleId",
+                table: "RoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "Roles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SeasonPosters_PeriodId",
                 table: "SeasonPosters",
                 column: "PeriodId");
@@ -839,6 +996,33 @@ namespace Cineaste.Persistence.Migrations
                 columns: new[] { "Name", "Category" },
                 unique: true);
 
+            migrationBuilder.CreateIndex(
+                name: "IX_UserClaims_UserId",
+                table: "UserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserLogins_UserId",
+                table: "UserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_RoleId",
+                table: "UserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "Users",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "Users",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_FranchiseItems_Franchises_ParentFranchiseId",
                 table: "FranchiseItems",
@@ -877,6 +1061,9 @@ namespace Cineaste.Persistence.Migrations
                 name: "MovieTitles");
 
             migrationBuilder.DropTable(
+                name: "RoleClaims");
+
+            migrationBuilder.DropTable(
                 name: "SeasonPosters");
 
             migrationBuilder.DropTable(
@@ -901,6 +1088,18 @@ namespace Cineaste.Persistence.Migrations
                 name: "TagImplications");
 
             migrationBuilder.DropTable(
+                name: "UserClaims");
+
+            migrationBuilder.DropTable(
+                name: "UserLogins");
+
+            migrationBuilder.DropTable(
+                name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "UserTokens");
+
+            migrationBuilder.DropTable(
                 name: "Movies");
 
             migrationBuilder.DropTable(
@@ -911,6 +1110,12 @@ namespace Cineaste.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Seasons");

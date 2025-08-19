@@ -1,6 +1,20 @@
+using Cineaste.Identity;
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 namespace Cineaste.Persistence;
 
-public class CineasteDbContext(DbContextOptions<CineasteDbContext> options) : DbContext(options)
+public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
+    : IdentityDbContext<
+        CineasteUser,
+        CineasteRole,
+        Id<CineasteUser>,
+        CineasteUserClaim,
+        CineasteUserRole,
+        CineasteUserLogin,
+        CineasteRoleClaim,
+        CineasteUserToken
+    >(options)
 {
     public DbSet<Franchise> Franchises =>
         this.Set<Franchise>();
@@ -58,6 +72,8 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options) : Db
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
+
         builder.ApplyConfiguration(new KindTypeConfiguration<MovieKind>(nameof(this.MovieKinds)));
         builder.ApplyConfiguration(new KindTypeConfiguration<SeriesKind>(nameof(this.SeriesKinds)));
         builder.ApplyConfiguration(new TagTypeConfiguration());
@@ -83,5 +99,57 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options) : Db
         builder.ApplyConfiguration(new ListConfigurationTypeConfiguration());
         builder.ApplyConfiguration(new CineasteListTypeConfiguration());
         builder.ApplyConfiguration(new ListItemTypeConfiguration());
+
+        builder.Entity<CineasteUser>(u => u.ToTable(nameof(this.Users)));
+        builder.Entity<CineasteUserClaim>(u => u.ToTable(nameof(this.UserClaims)));
+        builder.Entity<CineasteRole>(u => u.ToTable(nameof(this.Roles)));
+        builder.Entity<CineasteRoleClaim>(u => u.ToTable(nameof(this.RoleClaims)));
+        builder.Entity<CineasteUserRole>(u => u.ToTable(nameof(this.UserRoles)));
+        builder.Entity<CineasteUserLogin>(u => u.ToTable(nameof(this.UserLogins)));
+        builder.Entity<CineasteUserToken>(u => u.ToTable(nameof(this.UserTokens)));
     }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+    {
+        base.ConfigureConventions(builder);
+
+        this.ConfigureIdConverters(builder);
+
+        builder.Properties<Enum>()
+            .HaveConversion<string>();
+
+        builder.Properties<Color>()
+            .HaveConversion<ColorConverter>();
+
+        builder.Properties<ImdbId>()
+            .HaveConversion<ImdbIdConverter>();
+
+        builder.Properties<PosterHash>()
+            .HaveConversion<PosterHashConverter>();
+
+        builder.Properties<RottenTomatoesId>()
+            .HaveConversion<RottenTomatoesIdConverter>();
+    }
+
+    private void ConfigureIdConverters(ModelConfigurationBuilder builder)
+    {
+        typeof(Entity<>)
+            .Assembly
+            .GetTypes()
+            .Where(type => !type.IsAbstract && type.IsEntityType())
+            .ForEach(type => builder
+                .Properties(typeof(Id<>).MakeGenericType(type))
+                .HaveConversion(typeof(IdConverter<>).MakeGenericType(type)));
+
+        builder.Properties<Id<CineasteUser>>()
+            .HaveConversion<IdConverter<CineasteUser>>();
+    }
+}
+
+file static class Extensions
+{
+    public static bool IsEntityType(this Type type) =>
+        type.BaseType is { } baseType &&
+            (baseType.IsGenericType && baseType.GetGenericTypeDefinition() == typeof(Entity<>) ||
+                baseType.IsEntityType());
 }

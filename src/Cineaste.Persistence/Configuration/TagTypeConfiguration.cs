@@ -4,18 +4,15 @@ internal sealed class TagTypeConfiguration : IEntityTypeConfiguration<Tag>
 {
     public void Configure(EntityTypeBuilder<Tag> tag)
     {
-        tag.HasStronglyTypedId();
+        tag.HasKey(t => t.Id);
 
         tag.HasIndex(t => new { t.Name, t.Category }).IsUnique();
 
         tag.Property(t => t.Category)
             .HasConversion(category => category.Name, name => new TagCategory(name));
 
-        tag.ToTable(t => t.HasCheckConstraint($"CH_Tag_NameNotEmpty", "Name <> ''"));
-        tag.ToTable(t => t.HasCheckConstraint($"CH_Tag_CategoryNotEmpty", "Category <> ''"));
-
-        tag.Property(k => k.Color)
-            .HasConversion<ColorConverter>();
+        tag.ToTable(t => t.HasCheckConstraint($"CH_Tag_NameNotEmpty", "[Name] <> ''"));
+        tag.ToTable(t => t.HasCheckConstraint($"CH_Tag_CategoryNotEmpty", "[Category] <> ''"));
 
         tag.HasMany(t => t.ImpliedTags)
             .WithMany(t => t.ImplyingTags)

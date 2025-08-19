@@ -4,7 +4,7 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
 {
     public void Configure(EntityTypeBuilder<Series> series)
     {
-        series.HasStronglyTypedId();
+        series.HasKey(s => s.Id);
         series.HasTitles(s => s.AllTitles, "SeriesTitles");
 
         series.HasMany(s => s.Seasons)
@@ -23,19 +23,12 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
         series.Navigation(s => s.SpecialEpisodes)
             .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-        series.Property(s => s.WatchStatus)
-            .HasConversion<string>();
-
-        series.Property(s => s.ReleaseStatus)
-            .HasConversion<string>();
-
         series.HasOne(s => s.Kind)
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);
 
-        series.HasImdbId(s => s.ImdbId);
-        series.HasRottenTomatoesId(s => s.RottenTomatoesId);
-        series.HasPosterHash(s => s.PosterHash);
+        series.Property(s => s.PosterHash)
+            .IsFixedLength();
 
         series.HasTags(s => s.Tags, "SeriesTags");
         series.HasFranchiseItem(s => s.FranchiseItem, fi => fi.Series);

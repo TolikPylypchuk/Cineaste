@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 
 using Cineaste.Components;
+using Cineaste.Identity;
 using Cineaste.Infrastructure.Json;
 using Cineaste.Infrastructure.OpenApi;
 using Cineaste.Infrastructure.Problems;
@@ -8,6 +9,7 @@ using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 
 using Scalar.AspNetCore;
 
@@ -23,6 +25,19 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default"),
     sql => sql.MigrationsHistoryTable("Migrations")));
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+}).AddIdentityCookies();
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddIdentityCore<CineasteUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<CineasteDbContext>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
 
 static void AddConverters(JsonSerializerOptions options)
 {

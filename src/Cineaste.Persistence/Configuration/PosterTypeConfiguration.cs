@@ -5,9 +5,9 @@ internal sealed class PosterTypeConfiguration<TPoster>(string tableName) : IEnti
 {
     public void Configure(EntityTypeBuilder<TPoster> poster)
     {
-        poster.HasStronglyTypedId();
+        poster.HasKey(p => p.Id);
 
-        poster.ToTable(t => t.HasCheckConstraint($"CH_{tableName}_DataNotEmpty", "DATALENGTH(Data) > 0"));
-        poster.ToTable(t => t.HasCheckConstraint($"CH_{tableName}_ContentTypeNotEmpty", "ContentType <> ''"));
+        poster.ToTable(t => t.HasCheckConstraint($"CH_{tableName}_DataNotEmpty", "DATALENGTH([Data]) > 0"));
+        poster.ToTable(t => t.HasCheckConstraint($"CH_{tableName}_ContentTypeNotEmpty", "[ContentType] <> ''"));
     }
 }

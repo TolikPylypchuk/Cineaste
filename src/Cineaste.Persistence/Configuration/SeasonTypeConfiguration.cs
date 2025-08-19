@@ -4,12 +4,12 @@ internal sealed class SeasonTypeConfiguration : IEntityTypeConfiguration<Season>
 {
     public void Configure(EntityTypeBuilder<Season> season)
     {
-        season.HasStronglyTypedId();
+        season.HasKey(s => s.Id);
 
         season.HasTitles(s => s.AllTitles, "SeasonTitles");
 
-        season.ToTable(t => t.HasCheckConstraint("CH_Seasons_ChannelNotEmpty", "Channel <> ''"));
-        season.ToTable(t => t.HasCheckConstraint("CH_Seasons_SequenceNumberPositive", "SequenceNumber > 0"));
+        season.ToTable(t => t.HasCheckConstraint("CH_Seasons_ChannelNotEmpty", "[Channel] <> ''"));
+        season.ToTable(t => t.HasCheckConstraint("CH_Seasons_SequenceNumberPositive", "[SequenceNumber] > 0"));
 
         season.HasMany(s => s.Periods)
             .WithOne()
@@ -18,12 +18,6 @@ internal sealed class SeasonTypeConfiguration : IEntityTypeConfiguration<Season>
 
         season.Navigation(s => s.Periods)
             .UsePropertyAccessMode(PropertyAccessMode.Field);
-
-        season.Property(s => s.WatchStatus)
-            .HasConversion<string>();
-
-        season.Property(s => s.ReleaseStatus)
-            .HasConversion<string>();
 
         season.Ignore(s => s.Titles);
         season.Ignore(s => s.OriginalTitles);

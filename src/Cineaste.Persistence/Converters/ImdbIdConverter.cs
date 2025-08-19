@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Cineaste.Persistence.Configuration;
+namespace Cineaste.Persistence.Converters;
 
 internal sealed class ImdbIdConverter : ValueConverter<ImdbId, string>
 {

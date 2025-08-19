@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Cineaste.Client\Cineaste.Client.csproj" />
     <ProjectReference Include="..\Cineaste.Core\Cineaste.Core.csproj" />
+    <ProjectReference Include="..\Cineaste.Identity\Cineaste.Identity.csproj" />
     <ProjectReference Include="..\Cineaste.Persistence\Cineaste.Persistence.csproj" />
     <ProjectReference Include="..\Cineaste.Shared\Cineaste.Shared.csproj" />
   </ItemGroup>

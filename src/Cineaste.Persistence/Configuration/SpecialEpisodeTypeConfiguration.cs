@@ -4,17 +4,17 @@ internal sealed class SpecialEpisodeTypeConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<SpecialEpisode> episode)
     {
-        episode.HasStronglyTypedId();
+        episode.HasKey(e => e.Id);
         episode.HasTitles(e => e.AllTitles, "SpecialEpisodeTitles");
 
-        episode.HasRottenTomatoesId(e => e.RottenTomatoesId);
-        episode.HasPosterHash(e => e.PosterHash);
+        episode.Property(e => e.PosterHash)
+            .IsFixedLength();
 
-        episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_MonthValid", "Month >= 1 AND Month <= 12"));
-        episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_YearPositive", "Year > 0"));
+        episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_MonthValid", "[Month] >= 1 AND [Month] <= 12"));
+        episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_YearPositive", "[Year] > 0"));
 
-        episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "Channel <> ''"));
-        episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "SequenceNumber > 0"));
+        episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "[Channel] <> ''"));
+        episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "[SequenceNumber] > 0"));
 
         episode.Ignore(e => e.Titles);
         episode.Ignore(e => e.OriginalTitles);

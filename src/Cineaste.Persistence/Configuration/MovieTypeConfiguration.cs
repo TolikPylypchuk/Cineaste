@@ -4,19 +4,18 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
 {
     public void Configure(EntityTypeBuilder<Movie> movie)
     {
-        movie.HasStronglyTypedId();
+        movie.HasKey(m => m.Id);
 
         movie.HasTitles(m => m.AllTitles, "MovieTitles");
 
-        movie.ToTable(t => t.HasCheckConstraint("CH_Movies_YearPositive", "Year > 0"));
+        movie.ToTable(t => t.HasCheckConstraint("CH_Movies_YearPositive", "[Year] > 0"));
 
         movie.HasOne(m => m.Kind)
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);
 
-        movie.HasImdbId(m => m.ImdbId);
-        movie.HasRottenTomatoesId(m => m.RottenTomatoesId);
-        movie.HasPosterHash(m => m.PosterHash);
+        movie.Property(m => m.PosterHash)
+            .IsFixedLength();
 
         movie.HasTags(m => m.Tags, "MovieTags");
         movie.HasFranchiseItem(m => m.FranchiseItem, fi => fi.Movie);

@@ -6,8 +6,7 @@ internal sealed class ListConfigurationTypeConfiguration : IEntityTypeConfigurat
 {
     public void Configure(EntityTypeBuilder<ListConfiguration> config)
     {
-        config.HasStronglyTypedId();
-        config.HasListId();
+        config.HasKey(c => c.Id);
 
         config.Property(c => c.Culture)
             .HasConversion(culture => culture.ToString(), code => CultureInfo.GetCultureInfo(code));
@@ -17,16 +16,13 @@ internal sealed class ListConfigurationTypeConfiguration : IEntityTypeConfigurat
             sorting =>
             {
                 sorting.Property(s => s.FirstSortOrder)
-                    .HasColumnName(nameof(ListSortingConfiguration.FirstSortOrder))
-                    .HasConversion<string>();
+                    .HasColumnName(nameof(ListSortingConfiguration.FirstSortOrder));
 
                 sorting.Property(s => s.SecondSortOrder)
-                    .HasColumnName(nameof(ListSortingConfiguration.SecondSortOrder))
-                    .HasConversion<string>();
+                    .HasColumnName(nameof(ListSortingConfiguration.SecondSortOrder));
 
                 sorting.Property(s => s.SortDirection)
-                    .HasColumnName(nameof(ListSortingConfiguration.SortDirection))
-                    .HasConversion<string>();
+                    .HasColumnName(nameof(ListSortingConfiguration.SortDirection));
             });
     }
 }

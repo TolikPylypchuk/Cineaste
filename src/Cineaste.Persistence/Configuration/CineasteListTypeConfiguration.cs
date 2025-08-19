@@ -4,7 +4,7 @@ internal sealed class CineasteListTypeConfiguration : IEntityTypeConfiguration<C
 {
     public void Configure(EntityTypeBuilder<CineasteList> list)
     {
-        list.HasStronglyTypedId();
+        list.HasKey(l => l.Id);
 
         list.HasOne(l => l.Configuration)
             .WithOne()

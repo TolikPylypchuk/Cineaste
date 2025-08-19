@@ -4,7 +4,7 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
 {
     public void Configure(EntityTypeBuilder<Franchise> franchise)
     {
-        franchise.HasStronglyTypedId();
+        franchise.HasKey(f => f.Id);
         franchise.HasTitles(f => f.AllTitles, "FranchiseTitles");
 
         franchise.HasMany(f => f.Children)
@@ -24,10 +24,8 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);
 
-        franchise.Property(s => s.KindSource)
-            .HasConversion<string>();
-
-        franchise.HasPosterHash(f => f.PosterHash);
+        franchise.Property(f => f.PosterHash)
+            .IsFixedLength();
 
         franchise.Ignore(f => f.Titles);
         franchise.Ignore(f => f.OriginalTitles);
