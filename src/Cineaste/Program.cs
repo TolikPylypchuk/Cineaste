@@ -22,22 +22,14 @@ builder.WebHost.ConfigureKestrel(options =>
     options.Limits.MaxRequestBodySize = 100L * 1024 * 1024; // 100 MB
 });
 
-builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("Default"),
-    sql => sql.MigrationsHistoryTable("Migrations")));
+builder.Services.AddRazorComponents()
+    .AddInteractiveWebAssemblyComponents()
+    .AddAuthenticationStateSerialization();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-}).AddIdentityCookies();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));
 
-builder.Services.AddAuthorization();
-
-builder.Services.AddIdentityCore<CineasteUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<CineasteDbContext>()
-    .AddSignInManager()
-    .AddDefaultTokenProviders();
+builder.Services.Configure<JsonOptions>(options => AddConverters(options.SerializerOptions));
 
 static void AddConverters(JsonSerializerOptions options)
 {
@@ -47,17 +39,33 @@ static void AddConverters(JsonSerializerOptions options)
     options.Converters.Add(new ValidatedJsonConverterFactory());
 }
 
-builder.Services.Configure<JsonOptions>(options => AddConverters(options.SerializerOptions));
-builder.Services.Configure<CineasteOpenApiOptions>(builder.Configuration.GetSection("OpenApi"));
-
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 50L * 1024 * 1024; // 50 MB
 });
 
+builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("Default"),
+    sql => sql.MigrationsHistoryTable("Migrations")));
+
+builder.Services.AddIdentityCore<CineasteUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<CineasteDbContext>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddCascadingAuthenticationState();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+}).AddIdentityCookies();
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddHttpClient();
 builder.Services.AddProblemDetails();
-builder.Services.AddCineasteOpenApi();
+builder.Services.AddCineasteOpenApi(builder.Configuration.GetSection("OpenApi"));
 builder.Services.AddCors();
 
 builder.Services.AddOutputCache(options =>
@@ -73,12 +81,6 @@ builder.Services.AddScoped<FranchiseService>();
 
 builder.Services.AddScoped<IPosterProvider, PosterProvider>();
 builder.Services.AddScoped<IHtmlDocumentProvider, HtmlDocumentProvider>();
-
-builder.Services.AddControllers()
-    .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));
-
-builder.Services.AddRazorComponents()
-    .AddInteractiveWebAssemblyComponents();
 
 if (builder.Environment.IsDevelopment())
 {
