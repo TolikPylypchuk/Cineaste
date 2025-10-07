@@ -1,9 +1,10 @@
-using Cineaste.Services.Poster;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cineaste.Controllers;
 
 [ApiController]
 [Route("/api/posters")]
+[Authorize]
 [Tags(["Posters"])]
 public sealed class PosterController(IPosterProvider posterProvider) : ControllerBase
 {

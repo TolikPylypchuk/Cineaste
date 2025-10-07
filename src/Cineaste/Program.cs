@@ -1,6 +1,8 @@
+using System.ComponentModel;
 using System.Text.Json.Serialization;
 
 using Cineaste.Components;
+using Cineaste.Core.Converter;
 using Cineaste.Identity;
 using Cineaste.Infrastructure.Json;
 using Cineaste.Infrastructure.OpenApi;
@@ -48,20 +50,16 @@ builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer
     builder.Configuration.GetConnectionString("Default"),
     sql => sql.MigrationsHistoryTable("Migrations")));
 
-builder.Services.AddIdentityCore<CineasteUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentityApiEndpoints<CineasteUser>()
     .AddEntityFrameworkStores<CineasteDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
 builder.Services.AddCascadingAuthenticationState();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-}).AddIdentityCookies();
-
 builder.Services.AddAuthorization();
+
+TypeDescriptor.AddAttributes(typeof(Id<CineasteUser>), new TypeConverterAttribute(typeof(IdConverter<CineasteUser>)));
 
 builder.Services.AddHttpClient();
 builder.Services.AddProblemDetails();
@@ -102,6 +100,9 @@ app.UseCineasteExceptionHandling();
 app.UseRouting();
 app.UseAntiforgery();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 app.MapStaticAssets();
 
@@ -117,6 +118,8 @@ if (app.Environment.IsDevelopment())
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Cineaste.Client._Imports).Assembly);
+
+app.MapIdentityApi<CineasteUser>();
 
 app.MapFallback("/api/{**path}", () =>
 {

@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
+
 using static Cineaste.Shared.Validation.PosterContentTypes;
 
 namespace Cineaste.Controllers;
 
 [ApiController]
 [Route("/api/series")]
+[Authorize]
 [Tags(["Series"])]
 public sealed class SeriesController(SeriesService seriesService) : ControllerBase
 {

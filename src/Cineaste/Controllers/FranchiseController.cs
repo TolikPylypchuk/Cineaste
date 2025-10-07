@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
+
 using static Cineaste.Shared.Validation.PosterContentTypes;
 
 namespace Cineaste.Controllers;
 
 [ApiController]
 [Route("/api/franchises")]
+[Authorize]
 [Tags(["Franchises"])]
 public sealed class FranchiseController(FranchiseService franchiseService) : ControllerBase
 {

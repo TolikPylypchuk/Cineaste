@@ -5,6 +5,9 @@ public readonly record struct Id<T>(Guid Value) : IComparable<Id<T>>, IComparabl
     public readonly int CompareTo(Id<T> other) =>
         this.Value.CompareTo(other.Value);
 
+    public readonly override string ToString() =>
+        this.Value.ToString();
+
     readonly int IComparable.CompareTo(object? obj) =>
         obj != null ? this.CompareTo((Id<T>)obj) : 1;
 }

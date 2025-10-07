@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace Cineaste.Controllers;
 
 [ApiController]
 [Route("/api/list")]
+[Authorize]
 [Tags(["List"])]
 public sealed class ListController(ListService listService) : ControllerBase
 {
