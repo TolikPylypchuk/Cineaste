@@ -8,6 +8,6 @@
 }
 
 .title {
-  font: var(--font-app-title);
+  font: var(--font-header-large);
   outline: none;
 }

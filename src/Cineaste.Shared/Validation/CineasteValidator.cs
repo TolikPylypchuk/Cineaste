@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace Cineaste.Shared.Validation;
 
-public abstract class CineasteValidator<T> : AbstractValidator<T>
+public abstract class CineasteValidator<T>(string errorCodePrefix) : AbstractValidator<T>
     where T : IValidatable<T>
 {
     protected static readonly string Contains = nameof(Contains);
@@ -18,15 +18,10 @@ public abstract class CineasteValidator<T> : AbstractValidator<T>
 
     protected static readonly string IndexPlaceholder = "{CollectionIndex}";
 
-    private readonly string errorCodePrefix;
-
-    protected CineasteValidator(string errorCodePrefix) =>
-        this.errorCodePrefix = errorCodePrefix;
-
     protected string ErrorCode<TProp>(Expression<Func<T, TProp>> property, params string?[] errorComponents) =>
-        $"{this.errorCodePrefix}.{property.GetMemberName()}." +
+        $"{errorCodePrefix}.{property.GetMemberName()}." +
         $"{String.Join(".", errorComponents.Where(c => !String.IsNullOrWhiteSpace(c)))}";
 
     protected string ErrorCode(params string?[] errorComponents) =>
-        $"{this.errorCodePrefix}.{String.Join(".", errorComponents.Where(c => !String.IsNullOrWhiteSpace(c)))}";
+        $"{errorCodePrefix}.{String.Join(".", errorComponents.Where(c => !String.IsNullOrWhiteSpace(c)))}";
 }

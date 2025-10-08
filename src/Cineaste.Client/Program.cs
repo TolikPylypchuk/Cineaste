@@ -27,9 +27,14 @@ var apiBaseAddress = new Uri(baseAddress, "/api");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = baseAddress });
 
+builder.Services.AddAuthorizationCore()
+    .AddCascadingAuthenticationState()
+    .AddAuthenticationStateDeserialization();
+
 builder.Services.AddMudServices();
 
 builder.Services.AddRefitClient<ICultureApi>(apiBaseAddress);
+builder.Services.AddRefitClient<IIdentityApi>(apiBaseAddress);
 builder.Services.AddRefitClient<IListApi>(apiBaseAddress);
 builder.Services.AddRefitClient<IMovieApi>(apiBaseAddress);
 builder.Services.AddRefitClient<ISeriesApi>(apiBaseAddress);

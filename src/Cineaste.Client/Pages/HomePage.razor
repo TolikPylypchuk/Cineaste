@@ -1,15 +1,33 @@
 @page "/"
 @inherits CineasteComponent
 
-<div class="container">
-    <h1 class="title">@this.Loc["Cineaste"]</h1>
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <h1 class="title">@this.Loc["Cineaste"]</h1>
 
-    <MudButton
-        Color="Color.Primary"
-        Variant="Variant.Filled"
-        Size="Size.Large"
-        @onclick="@(() => this.PageNavigator.GoToListPage())"
-    >
-        @this.Loc["HomePage.GoToList"]
-    </MudButton>
-</div>
+            <MudButton
+                Color="Color.Primary"
+                Variant="Variant.Filled"
+                Size="Size.Large"
+                @onclick="@(() => this.PageNavigator.GoToListPage())"
+            >
+                @this.Loc["HomePage.GoToList"]
+            </MudButton>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="container">
+            <h1 class="title">@this.Loc["Cineaste"]</h1>
+
+            <MudButton
+                Color="Color.Primary"
+                Variant="Variant.Filled"
+                Size="Size.Large"
+                @onclick="@(() => this.PageNavigator.GoToLoginPage())"
+            >
+                Log in
+            </MudButton>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>

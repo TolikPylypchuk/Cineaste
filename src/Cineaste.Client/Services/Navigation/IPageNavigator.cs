@@ -2,15 +2,23 @@ namespace Cineaste.Client.Services.Navigation;
 
 public interface IPageNavigator
 {
-    string HomePage();
+    string HomePage { get; }
+
+    string LoginPage { get; }
+
+    string RegisterPage { get; }
+
+    string ListPage { get; }
+
+    string ListSettingsPage { get; }
 
     void GoToHomePage();
 
-    string ListPage();
+    void GoToLoginPage();
+
+    void GoToRegsiterPage();
 
     void GoToListPage();
-
-    string ListSettingsPage();
 
     void GoToListSettingsPage();
 }

@@ -111,6 +111,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi().CacheOutput("OpenApi");
     app.MapScalarApiReference(options =>
     {
+        options.TagSorter = TagSorter.Alpha;
         options.OperationSorter = OperationSorter.Alpha;
     });
 }
@@ -119,7 +120,9 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Cineaste.Client._Imports).Assembly);
 
-app.MapIdentityApi<CineasteUser>();
+app.MapGroup("/api/identity")
+    .WithTags("Identity")
+    .MapIdentityApi<CineasteUser>();
 
 app.MapFallback("/api/{**path}", () =>
 {

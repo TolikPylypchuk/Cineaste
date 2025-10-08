@@ -15,6 +15,7 @@ global using Cineaste.Shared.Collections;
 global using Cineaste.Shared.Mapping;
 global using Cineaste.Shared.Models;
 global using Cineaste.Shared.Models.Franchise;
+global using Cineaste.Shared.Models.Identity;
 global using Cineaste.Shared.Models.List;
 global using Cineaste.Shared.Models.Movie;
 global using Cineaste.Shared.Models.Poster;
