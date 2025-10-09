@@ -972,4 +972,22 @@
   <data name="PosterDialog.RemovePreview" xml:space="preserve">
     <value>Remove preview</value>
   </data>
+  <data name="LoginPage.LogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="LoginPage.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="LoginPage.Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="LoginPage.RememberMe" xml:space="preserve">
+    <value>Remember me</value>
+  </data>
+  <data name="LoginPage.BackToHomePage" xml:space="preserve">
+    <value>Back to home page</value>
+  </data>
+  <data name="LoginPage.InvalidLoginAttempt" xml:space="preserve">
+    <value>The username of password is incorrect</value>
+  </data>
 </root>

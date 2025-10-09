@@ -14,11 +14,13 @@ public interface IPageNavigator
 
     void GoToHomePage();
 
-    void GoToLoginPage();
+    void GoToLoginPage(bool forceReload = false);
 
     void GoToRegsiterPage();
 
     void GoToListPage();
 
     void GoToListSettingsPage();
+
+    void GoToPage(string? url);
 }

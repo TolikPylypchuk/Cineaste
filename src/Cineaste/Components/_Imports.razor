@@ -3,13 +3,24 @@
 
 @using Cineaste
 @using Cineaste.Client
+@using Cineaste.Client.Components.Layout
+@using Cineaste.Client.Services.Navigation
 @using Cineaste.Components
 
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.Extensions.Localization
 @using Microsoft.JSInterop
+
+@using Fluxor.Blazor.Web
 
 @using MudBlazor
 @using MudBlazor.Services
+@using MudBlazor.StaticInput
+
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+
+@using Resources = Cineaste.Client.Localization.Resources

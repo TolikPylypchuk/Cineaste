@@ -17,17 +17,18 @@
     <link rel="stylesheet" href="css/loader.css" />
     <link rel="stylesheet" href="css/styles.css" />
 
+    <link rel="stylesheet" href="Cineaste.styles.css" />
     <link rel="stylesheet" href="Cineaste.Client.styles.css" />
 
     <ImportMap />
 
     <link rel="icon" type="image/ico" href="favicon.ico" />
 
-    <HeadOutlet @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
+    <HeadOutlet />
 </head>
 
 <body>
-    <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
+    <Routes />
 
     <div id="loader"> <!-- This loader is hidden in the main layout in the client project -->
         <div class="loading-progress-container">

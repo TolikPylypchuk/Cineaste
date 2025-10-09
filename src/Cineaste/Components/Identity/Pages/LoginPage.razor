@@ -1,0 +1,105 @@
+@page "/login"
+
+@inject SignInManager<CineasteUser> SignInManager
+@inject IStringLocalizer<Resources> Loc
+@inject IPageNavigator PageNavigator
+
+<div class="container">
+    <h1 class="title">Log In to Cineaste</h1>
+
+    @if (!String.IsNullOrEmpty(this.errorMessage))
+    {
+        <MudAlert Severity="Severity.Error" NoIcon="true">@this.errorMessage</MudAlert>
+    }
+
+    <EditForm
+        FormName="login"
+        Model="this.Model"
+        OnValidSubmit="this.OnLogin"
+        id="login-form"
+        method="post"
+        class="login-form"
+    >
+        <MudStaticTextField
+            For="@(() => this.Model.Email)"
+            @bind-Value="this.Model.Email"
+            Label="@this.Loc["LoginPage.Email"]"
+            InputType="InputType.Email"
+            Required="true"
+            autocomplete="username"
+        />
+
+        <MudStaticTextField
+            For="@(() => this.Model.Password)"
+            @bind-Value="this.Model.Password"
+            Label="@this.Loc["LoginPage.Password"]"
+            InputType="InputType.Password"
+            Required="true"
+            autocomplete="current-password"
+        />
+
+        <MudStaticCheckBox
+            For="@(() => this.Model.RememberUser)"
+            @bind-Value="this.Model.RememberUser"
+            Label="@this.Loc["LoginPage.RememberMe"]"
+            Color="Color.Primary"
+        />
+    </EditForm>
+
+    <div class="actions">
+        <MudStaticButton
+            Color="Color.Primary"
+            Variant="Variant.Filled"
+            FormAction="FormAction.Submit"
+            form="login-form"
+        >
+            @this.Loc["LoginPage.LogIn"]
+        </MudStaticButton>
+
+        <MudButton Href="@this.PageNavigator.HomePage" Color="Color.Surface" Variant="Variant.Text">
+            @this.Loc["LoginPage.BackToHomePage"]
+        </MudButton>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    public required HttpContext HttpContext { get; set; }
+
+    [SupplyParameterFromForm]
+    private LoginModel Model { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HttpMethods.IsGet(this.HttpContext.Request.Method))
+        {
+            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        }
+    }
+
+    public async Task OnLogin()
+    {
+        var result = await this.SignInManager.PasswordSignInAsync(
+            this.Model.Email, this.Model.Password, this.Model.RememberUser, lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        {
+            this.PageNavigator.GoToPage(this.ReturnUrl);
+        } else
+        {
+            this.errorMessage = this.Loc["LoginPage.InvalidLoginAttempt"];
+        }
+    }
+
+    private sealed class LoginModel
+    {
+        public string Email { get; set; } = String.Empty;
+        public string Password { get; set; } = String.Empty;
+        public bool RememberUser { get; set; } = false;
+    }
+}

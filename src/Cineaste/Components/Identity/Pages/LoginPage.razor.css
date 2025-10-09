@@ -11,3 +11,16 @@
   font: var(--font-header-large);
   outline: none;
 }
+
+::deep .login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--s2);
+}

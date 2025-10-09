@@ -34,7 +34,6 @@ builder.Services.AddAuthorizationCore()
 builder.Services.AddMudServices();
 
 builder.Services.AddRefitClient<ICultureApi>(apiBaseAddress);
-builder.Services.AddRefitClient<IIdentityApi>(apiBaseAddress);
 builder.Services.AddRefitClient<IListApi>(apiBaseAddress);
 builder.Services.AddRefitClient<IMovieApi>(apiBaseAddress);
 builder.Services.AddRefitClient<ISeriesApi>(apiBaseAddress);

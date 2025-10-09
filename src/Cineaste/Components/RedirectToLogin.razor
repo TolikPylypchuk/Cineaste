@@ -1,0 +1,7 @@
+@inject IPageNavigator PageNavigator
+
+@code {
+    protected override void OnInitialized() {
+        this.PageNavigator.GoToLoginPage(forceReload: true);
+    }
+}

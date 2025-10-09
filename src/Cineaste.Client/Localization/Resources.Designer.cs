@@ -826,6 +826,60 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to home page.
+        /// </summary>
+        public static string LoginPage_BackToHomePage {
+            get {
+                return ResourceManager.GetString("LoginPage.BackToHomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string LoginPage_Email {
+            get {
+                return ResourceManager.GetString("LoginPage.Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The username of password is incorrect.
+        /// </summary>
+        public static string LoginPage_InvalidLoginAttempt {
+            get {
+                return ResourceManager.GetString("LoginPage.InvalidLoginAttempt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        public static string LoginPage_LogIn {
+            get {
+                return ResourceManager.GetString("LoginPage.LogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string LoginPage_Password {
+            get {
+                return ResourceManager.GetString("LoginPage.Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember me.
+        /// </summary>
+        public static string LoginPage_RememberMe {
+            get {
+                return ResourceManager.GetString("LoginPage.RememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to January.
         /// </summary>
         public static string Month_1 {

@@ -13,8 +13,18 @@ public sealed class PageNavigator(NavigationManager navigationManager) : IPageNa
     public void GoToHomePage() =>
         this.GoTo(this.HomePage);
 
-    public void GoToLoginPage() =>
-        this.GoTo(this.LoginPage);
+    public void GoToLoginPage(bool forceReload = false)
+    {
+        var returnUrl = this.ToUri(this.navigationManager.Uri)
+            .MakeRelativeUri(this.ToUri(this.navigationManager.BaseUri))
+            .ToString();
+
+        this.GoTo(
+            String.IsNullOrEmpty(returnUrl) || returnUrl == "/"
+                ? this.LoginPage
+                : $"{this.LoginPage}?returnUrl={Uri.EscapeDataString(returnUrl)}",
+            forceReload);
+    }
 
     public void GoToRegsiterPage() =>
         this.GoTo(this.RegisterPage);
@@ -25,6 +35,20 @@ public sealed class PageNavigator(NavigationManager navigationManager) : IPageNa
     public void GoToListSettingsPage() =>
         this.GoTo(this.ListSettingsPage);
 
-    private void GoTo(string page) =>
-        this.navigationManager.NavigateTo(page);
+    public void GoToPage(string? url)
+    {
+        if (!String.IsNullOrEmpty(url))
+        {
+            this.navigationManager.NavigateTo(url);
+        } else
+        {
+            this.GoToHomePage();
+        }
+    }
+
+    private void GoTo(string url, bool forceLoad = false) =>
+        this.navigationManager.NavigateTo(url, forceLoad);
+
+    private Uri ToUri(string uri) =>
+        new(uri, UriKind.Absolute);
 }

@@ -1,4 +1,5 @@
 @page "/"
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 @inherits CineasteComponent
 
 <AuthorizeView>
@@ -7,10 +8,10 @@
             <h1 class="title">@this.Loc["Cineaste"]</h1>
 
             <MudButton
+                Href="@this.PageNavigator.ListPage"
                 Color="Color.Primary"
                 Variant="Variant.Filled"
                 Size="Size.Large"
-                @onclick="@(() => this.PageNavigator.GoToListPage())"
             >
                 @this.Loc["HomePage.GoToList"]
             </MudButton>
@@ -21,10 +22,10 @@
             <h1 class="title">@this.Loc["Cineaste"]</h1>
 
             <MudButton
+                Href="@this.PageNavigator.LoginPage"
                 Color="Color.Primary"
                 Variant="Variant.Filled"
                 Size="Size.Large"
-                @onclick="@(() => this.PageNavigator.GoToLoginPage())"
             >
                 Log in
             </MudButton>

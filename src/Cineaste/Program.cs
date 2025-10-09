@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 
+using Cineaste.Client.Services.Navigation;
 using Cineaste.Components;
 using Cineaste.Core.Converter;
 using Cineaste.Identity;
@@ -12,6 +13,8 @@ using Cineaste.Shared.Validation.Json;
 
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+
+using MudBlazor.Services;
 
 using Scalar.AspNetCore;
 
@@ -50,10 +53,16 @@ builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer
     builder.Configuration.GetConnectionString("Default"),
     sql => sql.MigrationsHistoryTable("Migrations")));
 
-builder.Services.AddIdentityApiEndpoints<CineasteUser>()
+builder.Services.AddIdentityCore<CineasteUser>()
     .AddEntityFrameworkStores<CineasteDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+}).AddIdentityCookies();
 
 builder.Services.AddCascadingAuthenticationState();
 
@@ -70,6 +79,12 @@ builder.Services.AddOutputCache(options =>
 {
     options.AddPolicy("OpenApi", policy => policy.Expire(TimeSpan.FromHours(1)));
 });
+
+builder.Services.AddMudServices();
+
+builder.Services.AddLocalization();
+
+builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 
 builder.Services.AddScoped<CultureProvider>();
 builder.Services.AddScoped<ListService>();
@@ -119,10 +134,6 @@ if (app.Environment.IsDevelopment())
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Cineaste.Client._Imports).Assembly);
-
-app.MapGroup("/api/identity")
-    .WithTags("Identity")
-    .MapIdentityApi<CineasteUser>();
 
 app.MapFallback("/api/{**path}", () =>
 {

@@ -4,7 +4,6 @@ global using System.Diagnostics.CodeAnalysis;
 global using Cineaste.Basic;
 global using Cineaste.Shared.Collections;
 global using Cineaste.Shared.Models.Franchise;
-global using Cineaste.Shared.Models.Identity;
 global using Cineaste.Shared.Models.List;
 global using Cineaste.Shared.Models.Movie;
 global using Cineaste.Shared.Models.Poster;
