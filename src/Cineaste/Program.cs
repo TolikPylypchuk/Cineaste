@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 
+using Cineaste.Client;
+using Cineaste.Client.Services.BaseUri;
 using Cineaste.Client.Services.Navigation;
 using Cineaste.Components;
 using Cineaste.Core.Converter;
@@ -8,6 +10,8 @@ using Cineaste.Identity;
 using Cineaste.Infrastructure.Json;
 using Cineaste.Infrastructure.OpenApi;
 using Cineaste.Infrastructure.Problems;
+using Cineaste.Routes;
+using Cineaste.Services.BaseUri;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
@@ -81,10 +85,13 @@ builder.Services.AddOutputCache(options =>
 });
 
 builder.Services.AddMudServices();
-
 builder.Services.AddLocalization();
 
+builder.Services.AddCineasteRefitClients();
+builder.Services.AddCineasteFluxor();
+
 builder.Services.AddScoped<IPageNavigator, PageNavigator>();
+builder.Services.AddSingleton<IBaseUriProvider, ServerBaseUriProvider>();
 
 builder.Services.AddScoped<CultureProvider>();
 builder.Services.AddScoped<ListService>();
@@ -134,6 +141,8 @@ if (app.Environment.IsDevelopment())
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Cineaste.Client._Imports).Assembly);
+
+app.MapAdditionalIdentityEndpoints();
 
 app.MapFallback("/api/{**path}", () =>
 {

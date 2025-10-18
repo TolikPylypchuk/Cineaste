@@ -1,0 +1,10 @@
+@page "/"
+
+<AuthorizeView>
+    <Authorized>
+        <ListPage />
+    </Authorized>
+    <NotAuthorized>
+        <LandingPage />
+    </NotAuthorized>
+</AuthorizeView>

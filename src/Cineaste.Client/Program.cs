@@ -1,10 +1,8 @@
-using System.Reflection;
 using System.Text.Json.Serialization;
 
+using Cineaste.Client.Services.BaseUri;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
-
-using Fluxor.Blazor.Web.ReduxDevTools;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -23,32 +21,20 @@ builder.Services.Configure<JsonSerializerOptions>(options =>
 });
 
 var baseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-var apiBaseAddress = new Uri(baseAddress, "/api");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = baseAddress });
+
+builder.Services.AddSingleton<IBaseUriProvider>(sp => new StaticBaseUriProvider(baseAddress));
 
 builder.Services.AddAuthorizationCore()
     .AddCascadingAuthenticationState()
     .AddAuthenticationStateDeserialization();
 
 builder.Services.AddMudServices();
-
-builder.Services.AddRefitClient<ICultureApi>(apiBaseAddress);
-builder.Services.AddRefitClient<IListApi>(apiBaseAddress);
-builder.Services.AddRefitClient<IMovieApi>(apiBaseAddress);
-builder.Services.AddRefitClient<ISeriesApi>(apiBaseAddress);
-builder.Services.AddRefitClient<IFranchiseApi>(apiBaseAddress);
-
 builder.Services.AddLocalization();
 
-builder.Services.AddFluxor(options =>
-{
-    options.ScanAssemblies(Assembly.GetExecutingAssembly());
-
-#if DEBUG
-    options.UseReduxDevTools();
-#endif
-});
+builder.Services.AddCineasteRefitClients();
+builder.Services.AddCineasteFluxor();
 
 builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 

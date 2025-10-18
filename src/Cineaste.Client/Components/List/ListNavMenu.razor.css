@@ -1,0 +1,22 @@
+.container {
+  height: 100%;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: var(--s2);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin-inline: var(--s1);
+  margin-block: var(--s2);
+  text-align: center;
+}
+
+.menu-container {
+  padding-inline: var(--s2);
+  padding-block: var(--s2);
+}

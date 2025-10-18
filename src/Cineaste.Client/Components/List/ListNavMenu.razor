@@ -1,28 +1,60 @@
 @inherits CineasteComponent
+@inject NavigationManager NavigationManager
 
-<MudNavMenu Bordered="true">
-    <MudNavLink
-        Href="@this.PageNavigator.ListPage"
-        Match="NavLinkMatch.All"
-        Icon="@Icons.Material.Filled.List"
-    >
-        @this.Loc["ListPage.Menu.List"]
-    </MudNavLink>
+<div class="container">
+    <div>
+        <h3 class="title">
+            @this.Loc["ListNavMenu.Title"]
+        </h3>
 
-    <MudNavLink
-        Href="@this.PageNavigator.ListSettingsPage"
-        Match="NavLinkMatch.All"
-        Icon="@Icons.Material.Filled.Settings"
-        Disabled="true"
-    >
-        @this.Loc["ListPage.Menu.Settings"]
-    </MudNavLink>
+        <MudNavMenu Bordered="true">
+            <MudNavLink
+                Href="@this.PageNavigator.ListPage"
+                Match="NavLinkMatch.All"
+                Icon="@Icons.Material.Filled.List"
+            >
+                @this.Loc["ListNavMenu.List"]
+            </MudNavLink>
 
-    <MudNavLink
-        Href="@this.PageNavigator.HomePage"
-        Match="NavLinkMatch.All"
-        Icon="@Icons.Material.Filled.Home"
-    >
-        @this.Loc["ListPage.Menu.Back"]
-    </MudNavLink>
-</MudNavMenu>
+            <MudNavLink
+                Href="@this.PageNavigator.ListSettingsPage"
+                Match="NavLinkMatch.All"
+                Icon="@Icons.Material.Filled.Settings"
+                Disabled="true"
+            >
+                @this.Loc["ListNavMenu.Settings"]
+            </MudNavLink>
+        </MudNavMenu>
+    </div>
+
+    <div class="menu-container">
+        <MudNavMenu Bordered="true">
+            <MudNavLink
+                Href="@this.PageNavigator.ListPage"
+                Match="NavLinkMatch.All"
+                Icon="@Icons.Material.Filled.Person"
+                Disabled="true"
+            >
+                @this.Loc["ListNavMenu.Profile"]
+            </MudNavLink>
+
+            <form action="identity/logout" method="post">
+                <input type="hidden" name="ReturnUrl" value="@this.currentUrl" />
+                <button type="submit" class="mud-nav-link mud-ripple">
+                    <MudIcon Icon="@Icons.Material.Filled.Logout"></MudIcon>
+                    @this.Loc["ListNavMenu.LogOut"]
+                </button>
+            </form>
+        </MudNavMenu>
+    </div>
+</div>
+
+@code {
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        this.currentUrl = this.NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        base.OnInitialized();
+    }
+}

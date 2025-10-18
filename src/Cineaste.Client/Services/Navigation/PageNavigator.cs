@@ -7,8 +7,8 @@ public sealed class PageNavigator(NavigationManager navigationManager) : IPageNa
     public string HomePage => "/";
     public string LoginPage => "/login";
     public string RegisterPage => "/register";
-    public string ListPage => "/list";
-    public string ListSettingsPage => "/list/settings";
+    public string ListPage => "/";
+    public string ListSettingsPage => "/settings";
 
     public void GoToHomePage() =>
         this.GoTo(this.HomePage);

@@ -24,11 +24,11 @@
 
     <link rel="icon" type="image/ico" href="favicon.ico" />
 
-    <HeadOutlet />
+    <HeadOutlet @rendermode="this.RenderMode" />
 </head>
 
 <body>
-    <Routes />
+    <Routes @rendermode="this.RenderMode" />
 
     <div id="loader"> <!-- This loader is hidden in the main layout in the client project -->
         <div class="loading-progress-container">
@@ -45,3 +45,11 @@
 </body>
 
 </html>
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private IComponentRenderMode? RenderMode =>
+        this.HttpContext.AcceptsInteractiveRouting() ? new InteractiveWebAssemblyRenderMode(prerender: false) : null;
+}

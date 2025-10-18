@@ -799,29 +799,56 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to home page.
+        ///   Looks up a localized string similar to List.
         /// </summary>
-        public static string ListPage_Menu_Back {
+        public static string ListNavMenu_List {
             get {
-                return ResourceManager.GetString("ListPage.Menu.Back", resourceCulture);
+                return ResourceManager.GetString("ListNavMenu.List", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List.
+        ///   Looks up a localized string similar to Log out.
         /// </summary>
-        public static string ListPage_Menu_List {
+        public static string ListNavMenu_LogOut {
             get {
-                return ResourceManager.GetString("ListPage.Menu.List", resourceCulture);
+                return ResourceManager.GetString("ListNavMenu.LogOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profile.
+        /// </summary>
+        public static string ListNavMenu_Profile {
+            get {
+                return ResourceManager.GetString("ListNavMenu.Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profile settings.
+        /// </summary>
+        public static string ListNavMenu_ProfileSettings {
+            get {
+                return ResourceManager.GetString("ListNavMenu.ProfileSettings", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
-        public static string ListPage_Menu_Settings {
+        public static string ListNavMenu_Settings {
             get {
-                return ResourceManager.GetString("ListPage.Menu.Settings", resourceCulture);
+                return ResourceManager.GetString("ListNavMenu.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cineaste.
+        /// </summary>
+        public static string ListNavMenu_Title {
+            get {
+                return ResourceManager.GetString("ListNavMenu.Title", resourceCulture);
             }
         }
         

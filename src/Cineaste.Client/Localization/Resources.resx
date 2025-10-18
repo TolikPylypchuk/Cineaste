@@ -306,13 +306,10 @@
   <data name="ListItemType.Series" xml:space="preserve">
     <value>Series</value>
   </data>
-  <data name="ListPage.Menu.Back" xml:space="preserve">
-    <value>Back to home page</value>
-  </data>
-  <data name="ListPage.Menu.List" xml:space="preserve">
+  <data name="ListNavMenu.List" xml:space="preserve">
     <value>List</value>
   </data>
-  <data name="ListPage.Menu.Settings" xml:space="preserve">
+  <data name="ListNavMenu.Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="Month.1" xml:space="preserve">
@@ -989,5 +986,17 @@
   </data>
   <data name="LoginPage.InvalidLoginAttempt" xml:space="preserve">
     <value>The username of password is incorrect</value>
+  </data>
+  <data name="ListNavMenu.Title" xml:space="preserve">
+    <value>Cineaste</value>
+  </data>
+  <data name="ListNavMenu.ProfileSettings" xml:space="preserve">
+    <value>Profile settings</value>
+  </data>
+  <data name="ListNavMenu.Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="ListNavMenu.LogOut" xml:space="preserve">
+    <value>Log out</value>
   </data>
 </root>
