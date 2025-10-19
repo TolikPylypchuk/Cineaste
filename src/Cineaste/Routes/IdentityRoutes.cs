@@ -14,7 +14,7 @@ public static class IdentityRoutes
         {
             await signInManager.SignOutAsync();
             return TypedResults.LocalRedirect("~/");
-        }).DisableAntiforgery();
+        });
 
         return identityGroup;
     }

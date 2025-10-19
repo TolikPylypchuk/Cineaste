@@ -35,6 +35,10 @@
             Label="@this.Loc["LoginPage.Password"]"
             InputType="InputType.Password"
             Required="true"
+            Adornment="Adornment.End"
+            AdornmentIcon="@Icons.Material.Filled.Visibility"
+            AdornmentClickFunction="showPassword"
+            AdornmentAriaLabel="@this.Loc["LoginPage.ShowPassword"]"
             autocomplete="current-password"
         />
 
@@ -65,7 +69,40 @@
             @this.Loc["LoginPage.BackToLandingPage"]
         </MudButton>
     </div>
+
+    <div class="hidden" aria-hidden="true">
+        <MudIcon Icon="@Icons.Material.Filled.Visibility" id="icon-visibility-on" aria-hidden="true" />
+        <MudIcon Icon="@Icons.Material.Filled.VisibilityOff" id="icon-visibility-off" aria-hidden="true" />
+    </div>
 </div>
+
+<script>
+   function findButton(element) {
+       return !element || element.tagName?.toLowerCase() === 'button'
+           ? element
+           : findButton(element.parentElement);
+   }
+
+   function showPassword(inputElement, clickedElement) {
+       const button = findButton(clickedElement);
+
+       if (inputElement.type === 'password') {
+           inputElement.type = 'text';
+
+           const icon = document.getElementById('icon-visibility-off');
+           if (icon && button) {
+               button.innerHTML = icon.outerHTML;
+           }
+       } else {
+           inputElement.type = 'password';
+
+           const icon = document.getElementById('icon-visibility-on');
+           if (icon && button) {
+               button.innerHTML = icon.outerHTML;
+           }
+       }
+   }
+</script>
 
 @code {
     [CascadingParameter]

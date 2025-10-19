@@ -38,6 +38,7 @@
             </MudNavLink>
 
             <form action="identity/logout" method="post">
+                <AntiforgeryToken />
                 <button type="submit" class="mud-nav-link mud-ripple">
                     <MudIcon Icon="@Icons.Material.Filled.Logout"></MudIcon>
                     @this.Loc["ListNavMenu.LogOut"]

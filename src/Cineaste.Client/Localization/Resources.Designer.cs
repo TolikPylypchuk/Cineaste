@@ -907,6 +907,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show password.
+        /// </summary>
+        public static string LoginPage_ShowPassword {
+            get {
+                return ResourceManager.GetString("LoginPage.ShowPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to January.
         /// </summary>
         public static string Month_1 {

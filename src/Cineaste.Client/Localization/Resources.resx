@@ -999,4 +999,7 @@
   <data name="ListNavMenu.LogOut" xml:space="preserve">
     <value>Log out</value>
   </data>
+  <data name="LoginPage.ShowPassword" xml:space="preserve">
+    <value>Show password</value>
+  </data>
 </root>

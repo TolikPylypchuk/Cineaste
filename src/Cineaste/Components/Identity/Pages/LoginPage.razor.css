@@ -24,3 +24,7 @@
   align-items: baseline;
   gap: var(--s2);
 }
+
+.hidden {
+  display: none;
+}
