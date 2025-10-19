@@ -981,8 +981,8 @@
   <data name="LoginPage.RememberMe" xml:space="preserve">
     <value>Remember me</value>
   </data>
-  <data name="LoginPage.BackToHomePage" xml:space="preserve">
-    <value>Back to home page</value>
+  <data name="LoginPage.BackToLandingPage" xml:space="preserve">
+    <value>Back</value>
   </data>
   <data name="LoginPage.InvalidLoginAttempt" xml:space="preserve">
     <value>The username of password is incorrect</value>

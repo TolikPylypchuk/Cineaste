@@ -6,6 +6,7 @@ using Cineaste.Client.Services.BaseUri;
 using Cineaste.Client.Services.Navigation;
 using Cineaste.Components;
 using Cineaste.Core.Converter;
+using Cineaste.Core.Domain;
 using Cineaste.Identity;
 using Cineaste.Infrastructure.Json;
 using Cineaste.Infrastructure.OpenApi;
@@ -62,15 +63,25 @@ builder.Services.AddIdentityCore<CineasteUser>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-}).AddIdentityCookies();
+builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+    .AddIdentityCookies(cookies =>
+    {
+        cookies.ApplicationCookie?.Configure(options =>
+        {
+            options.Cookie.Name = "Cineaste.Identity";
+            options.LoginPath = "/login";
+            options.ReturnUrlParameter = "returnUrl";
+        });
+    });
 
 builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.Name = "Cineaste.Antiforgery";
+});
 
 TypeDescriptor.AddAttributes(typeof(Id<CineasteUser>), new TypeConverterAttribute(typeof(IdConverter<CineasteUser>)));
 

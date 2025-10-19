@@ -41,9 +41,10 @@
         <MudStaticCheckBox
             For="@(() => this.Model.RememberUser)"
             @bind-Value="this.Model.RememberUser"
-            Label="@this.Loc["LoginPage.RememberMe"]"
             Color="Color.Primary"
-        />
+        >
+            @this.Loc["LoginPage.RememberMe"]
+        </MudStaticCheckBox>
     </EditForm>
 
     <div class="actions">
@@ -56,8 +57,12 @@
             @this.Loc["LoginPage.LogIn"]
         </MudStaticButton>
 
-        <MudButton Href="@this.PageNavigator.HomePage" Color="Color.Surface" Variant="Variant.Text">
-            @this.Loc["LoginPage.BackToHomePage"]
+        <MudButton
+            Href="@this.PageNavigator.GetPageUrl(CineastePage.Landing)"
+            Color="Color.Surface"
+            Variant="Variant.Text"
+        >
+            @this.Loc["LoginPage.BackToLandingPage"]
         </MudButton>
     </div>
 </div>
@@ -73,14 +78,6 @@
     private string? ReturnUrl { get; set; }
 
     private string? errorMessage;
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (HttpMethods.IsGet(this.HttpContext.Request.Method))
-        {
-            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-        }
-    }
 
     public async Task OnLogin()
     {

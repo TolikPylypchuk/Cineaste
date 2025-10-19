@@ -853,11 +853,11 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to home page.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
-        public static string LoginPage_BackToHomePage {
+        public static string LoginPage_BackToLandingPage {
             get {
-                return ResourceManager.GetString("LoginPage.BackToHomePage", resourceCulture);
+                return ResourceManager.GetString("LoginPage.BackToLandingPage", resourceCulture);
             }
         }
         

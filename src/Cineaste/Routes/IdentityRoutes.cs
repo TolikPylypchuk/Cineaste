@@ -10,12 +10,10 @@ public static class IdentityRoutes
     {
         var identityGroup = endpoints.MapGroup("/identity");
 
-        identityGroup.MapPost("/logout", async (
-            [FromServices] SignInManager<CineasteUser> signInManager,
-            [FromForm] string returnUrl) =>
+        identityGroup.MapPost("/logout", async ([FromServices] SignInManager<CineasteUser> signInManager) =>
         {
             await signInManager.SignOutAsync();
-            return TypedResults.LocalRedirect($"~/{returnUrl}");
+            return TypedResults.LocalRedirect("~/");
         }).DisableAntiforgery();
 
         return identityGroup;

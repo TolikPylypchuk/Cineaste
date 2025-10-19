@@ -2,53 +2,74 @@ namespace Cineaste.Client.Services.Navigation;
 
 public sealed class PageNavigator(NavigationManager navigationManager) : IPageNavigator
 {
-    private readonly NavigationManager navigationManager = navigationManager;
+    private const string LandingPage = "/";
+    private const string LoginPage = "/login";
+    private const string RegisterPage = "/register";
+    private const string ListPage = "/list";
+    private const string ListSettingsPage = "/list/settings";
+    private const string ProfilePage = "/profile";
 
-    public string HomePage => "/";
-    public string LoginPage => "/login";
-    public string RegisterPage => "/register";
-    public string ListPage => "/";
-    public string ListSettingsPage => "/settings";
+    public string GetPageUrl(CineastePage page) =>
+        page switch
+        {
+            CineastePage.Landing => LandingPage,
+            CineastePage.Login => LoginPage,
+            CineastePage.Register => RegisterPage,
+            CineastePage.List => ListPage,
+            CineastePage.Profile => ProfilePage,
+            _ => LandingPage
+        };
 
-    public void GoToHomePage() =>
-        this.GoTo(this.HomePage);
-
-    public void GoToLoginPage(bool forceReload = false)
+    public void GoToPage(CineastePage page, bool forceReload = false)
     {
-        var returnUrl = this.ToUri(this.navigationManager.Uri)
-            .MakeRelativeUri(this.ToUri(this.navigationManager.BaseUri))
+        switch (page)
+        {
+            case CineastePage.Landing:
+                this.GoTo(LandingPage, forceReload);
+                break;
+            case CineastePage.Login:
+                this.GoToLoginPage(forceReload);
+                break;
+            case CineastePage.Register:
+                this.GoTo(RegisterPage, forceReload);
+                break;
+            case CineastePage.List:
+                this.GoTo(ListPage, forceReload);
+                break;
+            case CineastePage.ListSettings:
+                this.GoTo(ListSettingsPage, forceReload);
+                break;
+            case CineastePage.Profile:
+                this.GoTo(ProfilePage, forceReload);
+                break;
+        }
+    }
+
+    public void GoToPage(string? url, bool forceReload = false)
+    {
+        if (String.IsNullOrEmpty(url))
+        {
+            this.GoTo(LandingPage, forceReload);
+        } else
+        {
+            this.GoTo(url, forceReload);
+        }
+    }
+
+    private void GoToLoginPage(bool forceReload)
+    {
+        var returnUrl = new Uri(navigationManager.Uri, UriKind.Absolute)
+            .MakeRelativeUri(new Uri(navigationManager.BaseUri, UriKind.Absolute))
             .ToString();
 
         this.GoTo(
             String.IsNullOrEmpty(returnUrl) || returnUrl == "/"
-                ? this.LoginPage
-                : $"{this.LoginPage}?returnUrl={Uri.EscapeDataString(returnUrl)}",
+                ? LoginPage
+                : navigationManager.GetUriWithQueryParameters(
+                    LoginPage, new Dictionary<string, object?> { ["returnUrl"] = returnUrl }),
             forceReload);
     }
 
-    public void GoToRegsiterPage() =>
-        this.GoTo(this.RegisterPage);
-
-    public void GoToListPage() =>
-        this.GoTo(this.ListPage);
-
-    public void GoToListSettingsPage() =>
-        this.GoTo(this.ListSettingsPage);
-
-    public void GoToPage(string? url)
-    {
-        if (!String.IsNullOrEmpty(url))
-        {
-            this.navigationManager.NavigateTo(url);
-        } else
-        {
-            this.GoToHomePage();
-        }
-    }
-
-    private void GoTo(string url, bool forceLoad = false) =>
-        this.navigationManager.NavigateTo(url, forceLoad);
-
-    private Uri ToUri(string uri) =>
-        new(uri, UriKind.Absolute);
+    private void GoTo(string url, bool forceReload) =>
+        navigationManager.NavigateTo(url, forceReload);
 }

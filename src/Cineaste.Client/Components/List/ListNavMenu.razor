@@ -1,5 +1,4 @@
 @inherits CineasteComponent
-@inject NavigationManager NavigationManager
 
 <div class="container">
     <div>
@@ -9,7 +8,7 @@
 
         <MudNavMenu Bordered="true">
             <MudNavLink
-                Href="@this.PageNavigator.ListPage"
+                Href="@this.PageNavigator.GetPageUrl(CineastePage.List)"
                 Match="NavLinkMatch.All"
                 Icon="@Icons.Material.Filled.List"
             >
@@ -17,7 +16,7 @@
             </MudNavLink>
 
             <MudNavLink
-                Href="@this.PageNavigator.ListSettingsPage"
+                Href="@this.PageNavigator.GetPageUrl(CineastePage.ListSettings)"
                 Match="NavLinkMatch.All"
                 Icon="@Icons.Material.Filled.Settings"
                 Disabled="true"
@@ -30,7 +29,7 @@
     <div class="menu-container">
         <MudNavMenu Bordered="true">
             <MudNavLink
-                Href="@this.PageNavigator.ListPage"
+                Href="@this.PageNavigator.GetPageUrl(CineastePage.Profile)"
                 Match="NavLinkMatch.All"
                 Icon="@Icons.Material.Filled.Person"
                 Disabled="true"
@@ -39,7 +38,6 @@
             </MudNavLink>
 
             <form action="identity/logout" method="post">
-                <input type="hidden" name="ReturnUrl" value="@this.currentUrl" />
                 <button type="submit" class="mud-nav-link mud-ripple">
                     <MudIcon Icon="@Icons.Material.Filled.Logout"></MudIcon>
                     @this.Loc["ListNavMenu.LogOut"]
@@ -48,13 +46,3 @@
         </MudNavMenu>
     </div>
 </div>
-
-@code {
-    private string? currentUrl;
-
-    protected override void OnInitialized()
-    {
-        this.currentUrl = this.NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-        base.OnInitialized();
-    }
-}
