@@ -1,5 +1,6 @@
 global using System.Collections.Immutable;
 global using System.Diagnostics.CodeAnalysis;
+global using System.Security.Claims;
 global using System.Text.Json;
 
 global using Cineaste.Basic;
@@ -8,6 +9,7 @@ global using Cineaste.Core.Domain;
 global using Cineaste.Persistence;
 global using Cineaste.Data;
 global using Cineaste.Exceptions;
+global using Cineaste.Identity;
 global using Cineaste.Mapping;
 global using Cineaste.Models;
 global using Cineaste.Services;

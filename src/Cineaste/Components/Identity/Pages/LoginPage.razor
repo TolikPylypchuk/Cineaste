@@ -1,5 +1,6 @@
 @page "/login"
 
+@inject UserManager<CineasteUser> UserManager
 @inject SignInManager<CineasteUser> SignInManager
 @inject IStringLocalizer<Resources> Loc
 @inject IPageNavigator PageNavigator
@@ -116,19 +117,43 @@
 
     private string? errorMessage;
 
-    public async Task OnLogin()
+    protected override async Task OnInitializedAsync()
     {
-        var result = await this.SignInManager.PasswordSignInAsync(
-            this.Model.Email, this.Model.Password, this.Model.RememberUser, lockoutOnFailure: false);
-
-        if (result.Succeeded)
+        if (HttpMethods.IsGet(this.HttpContext.Request.Method))
         {
-            this.PageNavigator.GoToPage(this.ReturnUrl);
-        } else
-        {
-            this.errorMessage = this.Loc["LoginPage.InvalidLoginAttempt"];
+            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         }
     }
+
+    private async Task OnLogin()
+    {
+        var user = await this.UserManager.Users
+            .Include(user => user.List)
+            .FirstOrDefaultAsync(user => user.Email == this.Model.Email);
+
+        if (user == null)
+        {
+            this.SetErrorMessage();
+            return;
+        }
+
+        var attempt = await this.SignInManager.CheckPasswordSignInAsync(
+            user, this.Model.Password, lockoutOnFailure: false);
+
+        if (!attempt.Succeeded)
+        {
+            this.SetErrorMessage();
+            return;
+        }
+
+        await this.SignInManager.SignInWithClaimsAsync(
+            user, this.Model.RememberUser, [new Claim(CineasteClaims.ListId, user.List.Id.ToString())]);
+
+        this.PageNavigator.GoToPage(this.ReturnUrl);
+    }
+
+    private void SetErrorMessage() =>
+        this.errorMessage = this.Loc["LoginPage.InvalidLoginAttempt"];
 
     private sealed class LoginModel
     {

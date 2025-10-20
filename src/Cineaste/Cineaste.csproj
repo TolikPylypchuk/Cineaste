@@ -37,4 +37,8 @@
     <ProjectReference Include="..\Cineaste.Shared\Cineaste.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Identity\" />
+  </ItemGroup>
+
 </Project>

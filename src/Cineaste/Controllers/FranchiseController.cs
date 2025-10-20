@@ -15,7 +15,7 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
     [ProducesResponseType<FranchiseModel>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<FranchiseModel>> GetFranchise(Guid id, CancellationToken token) =>
-        this.Ok(await franchiseService.GetFranchise(Id.For<Franchise>(id), token));
+        this.Ok(await franchiseService.GetFranchise(this.GetCurrentListId(), Id.For<Franchise>(id), token));
 
     [HttpPost]
     [EndpointSummary("Add a franchise to the list")]
@@ -25,7 +25,7 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
         [FromBody] FranchiseRequest request,
         CancellationToken token)
     {
-        var franchise = await franchiseService.AddFranchise(request.Validated(), token);
+        var franchise = await franchiseService.AddFranchise(this.GetCurrentListId(), request.Validated(), token);
         return this.Created($"/api/franchises/{franchise.Id}", franchise);
     }
 
@@ -38,7 +38,8 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
         [FromRoute] Guid id,
         [FromBody] FranchiseRequest request,
         CancellationToken token) =>
-        this.Ok(await franchiseService.UpdateFranchise(Id.For<Franchise>(id), request.Validated(), token));
+        this.Ok(await franchiseService.UpdateFranchise(
+            this.GetCurrentListId(), Id.For<Franchise>(id), request.Validated(), token));
 
     [HttpDelete("{id}")]
     [EndpointSummary("Remove a franchise from the list")]
@@ -46,7 +47,7 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveFranchise(Guid id, CancellationToken token)
     {
-        await franchiseService.RemoveFranchise(Id.For<Franchise>(id), token);
+        await franchiseService.RemoveFranchise(this.GetCurrentListId(), Id.For<Franchise>(id), token);
         return this.NoContent();
     }
 
@@ -57,7 +58,7 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetFranchisePoster(Guid id, CancellationToken token)
     {
-        var poster = await franchiseService.GetFranchisePoster(Id.For<Franchise>(id), token);
+        var poster = await franchiseService.GetFranchisePoster(this.GetCurrentListId(), Id.For<Franchise>(id), token);
         return this.File(poster.Data, poster.Type);
     }
 
@@ -71,7 +72,8 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
         var franchiseId = Id.For<Franchise>(id);
         var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await franchiseService.SetFranchisePoster(franchiseId, content, token);
+        var posterHash = await franchiseService.SetFranchisePoster(
+            this.GetCurrentListId(), franchiseId, content, token);
 
         return this.Created(Urls.FranchisePoster(franchiseId, posterHash), null);
     }
@@ -91,10 +93,12 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
         var posterHash = request switch
         {
             PosterUrlRequest urlRequest =>
-                await franchiseService.SetFranchisePoster(franchiseId, urlRequest.Validated(), token),
+                await franchiseService.SetFranchisePoster(
+                    this.GetCurrentListId(), franchiseId, urlRequest.Validated(), token),
 
             PosterImdbMediaRequest imdbMediaRequest =>
-                await franchiseService.SetFranchisePoster(franchiseId, imdbMediaRequest.Validated(), token),
+                await franchiseService.SetFranchisePoster(
+                    this.GetCurrentListId(), franchiseId, imdbMediaRequest.Validated(), token),
 
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
@@ -108,7 +112,10 @@ public sealed class FranchiseController(FranchiseService franchiseService) : Con
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveFranchisePoster(Guid id, CancellationToken token)
     {
-        await franchiseService.RemoveFranchisePoster(Id.For<Franchise>(id), token);
+        await franchiseService.RemoveFranchisePoster(this.GetCurrentListId(), Id.For<Franchise>(id), token);
         return this.NoContent();
     }
+
+    private Id<CineasteList> GetCurrentListId() =>
+        this.User.GetListId() ?? throw new InvalidOperationException("List ID not found in the current user's claims");
 }

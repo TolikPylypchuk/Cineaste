@@ -20,7 +20,7 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await listService.GetList(TestContext.Current.CancellationToken);
+        var model = await listService.GetList(data.ListId, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -53,7 +53,7 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await listService.GetListItems(offset, size, TestContext.Current.CancellationToken);
+        var model = await listService.GetListItems(data.ListId, offset, size, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -101,7 +101,7 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await listService.GetListItem(movie.Id.Value, TestContext.Current.CancellationToken);
+        var model = await listService.GetListItem(data.ListId, movie.Id.Value, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -155,7 +155,7 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
         // Act
 
         var model = await listService.GetListItemByParentFranchise(
-            franchise.Id.Value, 1, TestContext.Current.CancellationToken);
+            data.ListId, franchise.Id.Value, 1, TestContext.Current.CancellationToken);
 
         // Assert
 

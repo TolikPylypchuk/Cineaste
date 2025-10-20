@@ -1,5 +1,3 @@
-using Cineaste.Services.Poster;
-
 namespace Cineaste.Services;
 
 public sealed class FranchiseService(
@@ -11,21 +9,24 @@ public sealed class FranchiseService(
     private readonly IPosterProvider posterProvider = posterProvider;
     private readonly ILogger<FranchiseService> logger = logger;
 
-    public async Task<FranchiseModel> GetFranchise(Id<Franchise> id, CancellationToken token)
+    public async Task<FranchiseModel> GetFranchise(Id<CineasteList> listId, Id<Franchise> id, CancellationToken token)
     {
         this.logger.LogDebug("Getting the franchise with ID: {Id}", id.Value);
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, id, token);
 
         return franchise.ToFranchiseModel();
     }
 
-    public async Task<FranchiseModel> AddFranchise(Validated<FranchiseRequest> request, CancellationToken token)
+    public async Task<FranchiseModel> AddFranchise(
+        Id<CineasteList> listId,
+        Validated<FranchiseRequest> request,
+        CancellationToken token)
     {
         this.logger.LogDebug("Adding a new franchise");
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var franchise = await this.MapToFranchise(request, list, token);
         this.EnsureAccessibleInList(franchise);
 
@@ -46,13 +47,14 @@ public sealed class FranchiseService(
     }
 
     public async Task<FranchiseModel> UpdateFranchise(
+        Id<CineasteList> listId,
         Id<Franchise> id,
         Validated<FranchiseRequest> request,
         CancellationToken token)
     {
         this.logger.LogDebug("Updating the franchise with ID: {Id}", id.Value);
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, id, token);
 
         var (movies, series, franchises) = await this.GetAllItems(request.Value, token);
@@ -70,11 +72,11 @@ public sealed class FranchiseService(
         return franchise.ToFranchiseModel();
     }
 
-    public async Task RemoveFranchise(Id<Franchise> id, CancellationToken token)
+    public async Task RemoveFranchise(Id<CineasteList> listId, Id<Franchise> id, CancellationToken token)
     {
         this.logger.LogDebug("Removing the franchise with ID: {Id}", id.Value);
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, id, token);
 
         this.dbContext.FranchiseItems.RemoveRange(franchise.Children);
@@ -88,9 +90,12 @@ public sealed class FranchiseService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<BinaryContent> GetFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
+    public async Task<BinaryContent> GetFranchisePoster(
+        Id<CineasteList> listId,
+        Id<Franchise> franchiseId,
+        CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, franchiseId, token);
 
         var poster = await this.dbContext.FranchisePosters
@@ -102,26 +107,31 @@ public sealed class FranchiseService(
     }
 
     public async Task<PosterHash> SetFranchisePoster(
+        Id<CineasteList> listId,
         Id<Franchise> franchiseId,
         StreamableContent content,
         CancellationToken token) =>
-        await this.SetFranchisePoster(franchiseId, () => Task.FromResult(content), token);
+        await this.SetFranchisePoster(listId, franchiseId, () => Task.FromResult(content), token);
 
     public async Task<PosterHash> SetFranchisePoster(
+        Id<CineasteList> listId,
         Id<Franchise> franchiseId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
-        await this.SetFranchisePoster(franchiseId, () => this.posterProvider.FetchPoster(request, token), token);
+        await this.SetFranchisePoster(
+            listId, franchiseId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task<PosterHash> SetFranchisePoster(
+        Id<CineasteList> listId,
         Id<Franchise> franchiseId,
         Validated<PosterImdbMediaRequest> request,
         CancellationToken token) =>
-        await this.SetFranchisePoster(franchiseId, () => this.posterProvider.FetchPoster(request, token), token);
+        await this.SetFranchisePoster(
+            listId, franchiseId, () => this.posterProvider.FetchPoster(request, token), token);
 
-    public async Task RemoveFranchisePoster(Id<Franchise> franchiseId, CancellationToken token)
+    public async Task RemoveFranchisePoster(Id<CineasteList> listId, Id<Franchise> franchiseId, CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, franchiseId, token);
 
         var poster = await this.dbContext.FranchisePosters
@@ -205,9 +215,10 @@ public sealed class FranchiseService(
         }
     }
 
-    private async Task<CineasteList> FindList(CancellationToken token)
+    private async Task<CineasteList> FindList(Id<CineasteList> listId, CancellationToken token)
     {
-        var list = await this.dbContext.Lists.FirstOrDefaultAsync(token) ?? throw this.ListNotFound();
+        var list = await this.dbContext.Lists.SingleOrDefaultAsync(list => list.Id == listId, token)
+            ?? throw this.NotFound(listId);
 
         await this.dbContext.Entry(list)
             .Reference(list => list.Configuration)
@@ -364,17 +375,20 @@ public sealed class FranchiseService(
     }
 
     private Task<PosterHash> SetFranchisePoster(
+        Id<CineasteList> listId,
         Id<Franchise> franchiseId,
         Func<Task<StreamableContent>> getContent,
         CancellationToken token) =>
-        this.SetFranchisePoster(franchiseId, async () => await (await getContent()).ReadDataAsync(token), token);
+        this.SetFranchisePoster(
+            listId, franchiseId, async () => await (await getContent()).ReadDataAsync(token), token);
 
     private async Task<PosterHash> SetFranchisePoster(
+        Id<CineasteList> listId,
         Id<Franchise> franchiseId,
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, franchiseId, token);
 
         var content = await getContent();
@@ -396,8 +410,8 @@ public sealed class FranchiseService(
         return hash;
     }
 
-    private NotFoundException ListNotFound() =>
-        new(Resources.List, "Could not find the list");
+    private NotFoundException NotFound(Id<CineasteList> id) =>
+        new(Resources.List, $"Could not find the list with ID {id}");
 
     private CineasteException NotFound(Id<Franchise> id) =>
         new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id.Value}")

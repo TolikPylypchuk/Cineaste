@@ -20,7 +20,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act
 
         var posterContent = await franchiseService.GetFranchisePoster(
-            franchise.Id, TestContext.Current.CancellationToken);
+            data.ListId, franchise.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -41,7 +41,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.GetFranchisePoster(dummyId, TestContext.Current.CancellationToken));
+            franchiseService.GetFranchisePoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Franchise", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -60,7 +60,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.GetFranchisePoster(franchise.Id, TestContext.Current.CancellationToken));
+            franchiseService.GetFranchisePoster(data.ListId, franchise.Id, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Poster", exception.Resource);
         Assert.Equal(franchise.Id, exception.Properties["franchiseId"]);
@@ -83,7 +83,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act
 
         var posterHash = await franchiseService.SetFranchisePoster(
-            franchise.Id, posterData, TestContext.Current.CancellationToken);
+            data.ListId, franchise.Id, posterData, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -112,7 +112,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.SetFranchisePoster(dummyId, posterData, TestContext.Current.CancellationToken));
+            franchiseService.SetFranchisePoster(
+                data.ListId, dummyId, posterData, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Franchise", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -141,7 +142,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act
 
         var posterHash = await franchiseService.SetFranchisePoster(
-            franchise.Id, request, TestContext.Current.CancellationToken);
+            data.ListId, franchise.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -172,7 +173,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.SetFranchisePoster(dummyId, request, TestContext.Current.CancellationToken));
+            franchiseService.SetFranchisePoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Franchise", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -205,7 +206,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act
 
         var posterHash = await franchiseService.SetFranchisePoster(
-            franchise.Id, request, TestContext.Current.CancellationToken);
+            data.ListId, franchise.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -236,7 +237,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.SetFranchisePoster(dummyId, request, TestContext.Current.CancellationToken));
+            franchiseService.SetFranchisePoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Franchise", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -259,7 +260,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
 
         // Act
 
-        await franchiseService.RemoveFranchisePoster(franchise.Id, TestContext.Current.CancellationToken);
+        await franchiseService.RemoveFranchisePoster(data.ListId, franchise.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -279,7 +280,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act + Assert
 
         var exception = await Record.ExceptionAsync(() =>
-            franchiseService.RemoveFranchisePoster(franchise.Id, TestContext.Current.CancellationToken));
+            franchiseService.RemoveFranchisePoster(data.ListId, franchise.Id, TestContext.Current.CancellationToken));
 
         Assert.Null(exception);
     }
@@ -297,7 +298,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            franchiseService.RemoveFranchisePoster(dummyId, TestContext.Current.CancellationToken));
+            franchiseService.RemoveFranchisePoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Franchise", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);

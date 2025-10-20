@@ -1,5 +1,3 @@
-using Cineaste.Services.Poster;
-
 namespace Cineaste.Services;
 
 public sealed class SeriesService(
@@ -11,21 +9,24 @@ public sealed class SeriesService(
     private readonly IPosterProvider posterProvider = posterProvider;
     private readonly ILogger<SeriesService> logger = logger;
 
-    public async Task<SeriesModel> GetSeries(Id<Series> id, CancellationToken token)
+    public async Task<SeriesModel> GetSeries(Id<CineasteList> listId, Id<Series> id, CancellationToken token)
     {
         this.logger.LogDebug("Getting the series with ID: {Id}", id.Value);
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, id, token);
 
         return series.ToSeriesModel();
     }
 
-    public async Task<SeriesModel> AddSeries(Validated<SeriesRequest> request, CancellationToken token)
+    public async Task<SeriesModel> AddSeries(
+        Id<CineasteList> listId,
+        Validated<SeriesRequest> request,
+        CancellationToken token)
     {
         this.logger.LogDebug("Adding a new series");
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var kind = this.FindKind(list, Id.For<SeriesKind>(request.Value.KindId));
 
         var series = request.ToSeries(Id.Create<Series>(), kind);
@@ -47,13 +48,14 @@ public sealed class SeriesService(
     }
 
     public async Task<SeriesModel> UpdateSeries(
+        Id<CineasteList> listId,
         Id<Series> id,
         Validated<SeriesRequest> request,
         CancellationToken token)
     {
         this.logger.LogDebug("Updating the series with ID: {Id}", id.Value);
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, id, token);
 
         var kind = this.FindKind(list, Id.For<SeriesKind>(request.Value.KindId));
@@ -68,11 +70,11 @@ public sealed class SeriesService(
         return series.ToSeriesModel();
     }
 
-    public async Task RemoveSeries(Id<Series> id, CancellationToken token)
+    public async Task RemoveSeries(Id<CineasteList> listId, Id<Series> id, CancellationToken token)
     {
         this.logger.LogDebug("Removing the series with ID: {Id}", id.Value);
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, id, token);
 
         if (series.FranchiseItem is { } item)
@@ -88,9 +90,12 @@ public sealed class SeriesService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<BinaryContent> GetSeriesPoster(Id<Series> seriesId, CancellationToken token)
+    public async Task<BinaryContent> GetSeriesPoster(
+        Id<CineasteList> listId,
+        Id<Series> seriesId,
+        CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
 
         var poster = await this.dbContext.SeriesPosters
@@ -102,26 +107,29 @@ public sealed class SeriesService(
     }
 
     public async Task<PosterHash> SetSeriesPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         StreamableContent content,
         CancellationToken token) =>
-        await this.SetSeriesPoster(seriesId, () => Task.FromResult(content), token);
+        await this.SetSeriesPoster(listId, seriesId, () => Task.FromResult(content), token);
 
     public async Task<PosterHash> SetSeriesPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
-        await this.SetSeriesPoster(seriesId, () => this.posterProvider.FetchPoster(request, token), token);
+        await this.SetSeriesPoster(listId, seriesId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task<PosterHash> SetSeriesPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Validated<PosterImdbMediaRequest> request,
         CancellationToken token) =>
-        await this.SetSeriesPoster(seriesId, () => this.posterProvider.FetchPoster(request, token), token);
+        await this.SetSeriesPoster(listId, seriesId, () => this.posterProvider.FetchPoster(request, token), token);
 
-    public async Task RemoveSeriesPoster(Id<Series> seriesId, CancellationToken token)
+    public async Task RemoveSeriesPoster(Id<CineasteList> listId, Id<Series> seriesId, CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
 
         var poster = await this.dbContext.SeriesPosters
@@ -138,11 +146,12 @@ public sealed class SeriesService(
     }
 
     public async Task<BinaryContent> GetSeasonPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<Period> periodId,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var period = this.FindPeriod(series, periodId);
 
@@ -155,29 +164,38 @@ public sealed class SeriesService(
     }
 
     public async Task<PosterHash> SetSeasonPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<Period> periodId,
         StreamableContent content,
         CancellationToken token) =>
-        await this.SetSeasonPoster(seriesId, periodId, () => Task.FromResult(content), token);
+        await this.SetSeasonPoster(listId, seriesId, periodId, () => Task.FromResult(content), token);
 
     public async Task<PosterHash> SetSeasonPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<Period> periodId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
-        await this.SetSeasonPoster(seriesId, periodId, () => this.posterProvider.FetchPoster(request, token), token);
+        await this.SetSeasonPoster(
+            listId, seriesId, periodId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task<PosterHash> SetSeasonPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<Period> periodId,
         Validated<PosterImdbMediaRequest> request,
         CancellationToken token) =>
-        await this.SetSeasonPoster(seriesId, periodId, () => this.posterProvider.FetchPoster(request, token), token);
+        await this.SetSeasonPoster(
+            listId, seriesId, periodId, () => this.posterProvider.FetchPoster(request, token), token);
 
-    public async Task RemoveSeasonPoster(Id<Series> seriesId, Id<Period> periodId, CancellationToken token)
+    public async Task RemoveSeasonPoster(
+        Id<CineasteList> listId,
+        Id<Series> seriesId,
+        Id<Period> periodId,
+        CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var period = this.FindPeriod(series, periodId);
 
@@ -195,11 +213,12 @@ public sealed class SeriesService(
     }
 
     public async Task<BinaryContent> GetSpecialEpisodePoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var episode = this.FindSpecialEpisode(series, episodeId);
 
@@ -212,34 +231,38 @@ public sealed class SeriesService(
     }
 
     public async Task<PosterHash> SetSpecialEpisodePoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         StreamableContent content,
         CancellationToken token) =>
-        await this.SetSpecialEpisodePoster(seriesId, episodeId, () => Task.FromResult(content), token);
+        await this.SetSpecialEpisodePoster(listId, seriesId, episodeId, () => Task.FromResult(content), token);
 
     public async Task<PosterHash> SetSpecialEpisodePoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
         await this.SetSpecialEpisodePoster(
-            seriesId, episodeId, () => this.posterProvider.FetchPoster(request, token), token);
+            listId, seriesId, episodeId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task<PosterHash> SetSpecialEpisodePoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         Validated<PosterImdbMediaRequest> request,
         CancellationToken token) =>
         await this.SetSpecialEpisodePoster(
-            seriesId, episodeId, () => this.posterProvider.FetchPoster(request, token), token);
+            listId, seriesId, episodeId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task RemoveSpecialEpisodePoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var episode = this.FindSpecialEpisode(series, episodeId);
 
@@ -348,9 +371,10 @@ public sealed class SeriesService(
         }
     }
 
-    private async Task<CineasteList> FindList(CancellationToken token)
+    private async Task<CineasteList> FindList(Id<CineasteList> listId, CancellationToken token)
     {
-        var list = await this.dbContext.Lists.FirstOrDefaultAsync(token) ?? throw this.ListNotFound();
+        var list = await this.dbContext.Lists.SingleOrDefaultAsync(list => list.Id == listId, token)
+            ?? throw this.NotFound(listId);
 
         await this.dbContext.Entry(list)
             .Reference(list => list.Configuration)
@@ -410,17 +434,19 @@ public sealed class SeriesService(
             ?? throw this.NotFound(id);
 
     private Task<PosterHash> SetSeriesPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Func<Task<StreamableContent>> getContent,
         CancellationToken token) =>
-        this.SetSeriesPoster(seriesId, async () => await (await getContent()).ReadDataAsync(token), token);
+        this.SetSeriesPoster(listId, seriesId, async () => await (await getContent()).ReadDataAsync(token), token);
 
     private async Task<PosterHash> SetSeriesPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
 
         var content = await getContent();
@@ -443,20 +469,22 @@ public sealed class SeriesService(
     }
 
     private Task<PosterHash> SetSeasonPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<Period> periodId,
         Func<Task<StreamableContent>> getContent,
         CancellationToken token) =>
         this.SetSeasonPoster(
-            seriesId, periodId, async () => await (await getContent()).ReadDataAsync(token), token);
+            listId, seriesId, periodId, async () => await (await getContent()).ReadDataAsync(token), token);
 
     private async Task<PosterHash> SetSeasonPoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<Period> periodId,
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var period = this.FindPeriod(series, periodId);
 
@@ -480,20 +508,22 @@ public sealed class SeriesService(
     }
 
     private Task<PosterHash> SetSpecialEpisodePoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         Func<Task<StreamableContent>> getContent,
         CancellationToken token) =>
         this.SetSpecialEpisodePoster(
-            seriesId, episodeId, async () => await (await getContent()).ReadDataAsync(token), token);
+            listId, seriesId, episodeId, async () => await (await getContent()).ReadDataAsync(token), token);
 
     private async Task<PosterHash> SetSpecialEpisodePoster(
+        Id<CineasteList> listId,
         Id<Series> seriesId,
         Id<SpecialEpisode> episodeId,
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var episode = this.FindSpecialEpisode(series, episodeId);
 
@@ -516,8 +546,8 @@ public sealed class SeriesService(
         return hash;
     }
 
-    private NotFoundException ListNotFound() =>
-        new(Resources.List, "Could not find the list");
+    private NotFoundException NotFound(Id<CineasteList> id) =>
+        new(Resources.List, $"Could not find the list with ID {id}");
 
     private CineasteException NotFound(Id<Series> id) =>
         new NotFoundException(Resources.Series, $"Could not find a series with ID {id.Value}")

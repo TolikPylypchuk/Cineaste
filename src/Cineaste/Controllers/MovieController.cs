@@ -15,7 +15,7 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
     [ProducesResponseType<MovieModel>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<MovieModel>> GetMovie(Guid id, CancellationToken token) =>
-        this.Ok(await movieService.GetMovie(Id.For<Movie>(id), token));
+        this.Ok(await movieService.GetMovie(this.GetCurrentListId(), Id.For<Movie>(id), token));
 
     [HttpPost]
     [EndpointSummary("Add a movie to the list")]
@@ -23,7 +23,7 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<MovieModel>> AddMovie([FromBody] MovieRequest request, CancellationToken token)
     {
-        var movie = await movieService.AddMovie(request.Validated(), token);
+        var movie = await movieService.AddMovie(this.GetCurrentListId(), request.Validated(), token);
         return this.Created($"/api/movies/{movie.Id}", movie);
     }
 
@@ -36,7 +36,7 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
         Guid id,
         [FromBody] MovieRequest request,
         CancellationToken token) =>
-        this.Ok(await movieService.UpdateMovie(Id.For<Movie>(id), request.Validated(), token));
+        this.Ok(await movieService.UpdateMovie(this.GetCurrentListId(), Id.For<Movie>(id), request.Validated(), token));
 
     [HttpDelete("{id}")]
     [EndpointSummary("Remove a movie from the list")]
@@ -44,7 +44,7 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveMovie(Guid id, CancellationToken token)
     {
-        await movieService.RemoveMovie(Id.For<Movie>(id), token);
+        await movieService.RemoveMovie(this.GetCurrentListId(), Id.For<Movie>(id), token);
         return this.NoContent();
     }
 
@@ -55,7 +55,7 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetMoviePoster(Guid id, CancellationToken token)
     {
-        var poster = await movieService.GetMoviePoster(Id.For<Movie>(id), token);
+        var poster = await movieService.GetMoviePoster(this.GetCurrentListId(), Id.For<Movie>(id), token);
         return this.File(poster.Data, poster.Type);
     }
 
@@ -69,7 +69,7 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
         var movieId = Id.For<Movie>(id);
         var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await movieService.SetMoviePoster(movieId, content, token);
+        var posterHash = await movieService.SetMoviePoster(this.GetCurrentListId(), movieId, content, token);
 
         return this.Created(Urls.MoviePoster(movieId, posterHash), null);
     }
@@ -89,10 +89,11 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
         var posterHash = request switch
         {
             PosterUrlRequest urlRequest =>
-                await movieService.SetMoviePoster(movieId, urlRequest.Validated(), token),
+                await movieService.SetMoviePoster(this.GetCurrentListId(), movieId, urlRequest.Validated(), token),
 
             PosterImdbMediaRequest imdbMediaRequest =>
-                await movieService.SetMoviePoster(movieId, imdbMediaRequest.Validated(), token),
+                await movieService.SetMoviePoster(
+                    this.GetCurrentListId(), movieId, imdbMediaRequest.Validated(), token),
 
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
@@ -106,7 +107,10 @@ public sealed class MovieController(MovieService movieService) : ControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveMoviePoster(Guid id, CancellationToken token)
     {
-        await movieService.RemoveMoviePoster(Id.For<Movie>(id), token);
+        await movieService.RemoveMoviePoster(this.GetCurrentListId(), Id.For<Movie>(id), token);
         return this.NoContent();
     }
+
+    private Id<CineasteList> GetCurrentListId() =>
+        this.User.GetListId() ?? throw new InvalidOperationException("List ID not found in the current user's claims");
 }

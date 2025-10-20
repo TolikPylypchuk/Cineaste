@@ -1,5 +1,3 @@
-using Cineaste.Services.Poster;
-
 namespace Cineaste.Services;
 
 public sealed class MovieService(
@@ -11,21 +9,24 @@ public sealed class MovieService(
     private readonly IPosterProvider posterProvider = posterProvider;
     private readonly ILogger<MovieService> logger = logger;
 
-    public async Task<MovieModel> GetMovie(Id<Movie> id, CancellationToken token)
+    public async Task<MovieModel> GetMovie(Id<CineasteList> listId, Id<Movie> id, CancellationToken token)
     {
         this.logger.LogDebug("Getting the movie with ID: {Id}", id.Value);
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, id, token);
 
         return movie.ToMovieModel();
     }
 
-    public async Task<MovieModel> AddMovie(Validated<MovieRequest> request, CancellationToken token)
+    public async Task<MovieModel> AddMovie(
+        Id<CineasteList> listId,
+        Validated<MovieRequest> request,
+        CancellationToken token)
     {
         this.logger.LogDebug("Adding a new movie");
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var kind = this.FindKind(list, Id.For<MovieKind>(request.Value.KindId));
 
         var movie = request.ToMovie(Id.Create<Movie>(), kind);
@@ -46,11 +47,15 @@ public sealed class MovieService(
         return movie.ToMovieModel();
     }
 
-    public async Task<MovieModel> UpdateMovie(Id<Movie> id, Validated<MovieRequest> request, CancellationToken token)
+    public async Task<MovieModel> UpdateMovie(
+        Id<CineasteList> listId,
+        Id<Movie> id,
+        Validated<MovieRequest> request,
+        CancellationToken token)
     {
         this.logger.LogDebug("Updating the movie with ID: {Id}", id.Value);
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, id, token);
 
         var kind = this.FindKind(list, Id.For<MovieKind>(request.Value.KindId));
@@ -65,11 +70,11 @@ public sealed class MovieService(
         return movie.ToMovieModel();
     }
 
-    public async Task RemoveMovie(Id<Movie> id, CancellationToken token)
+    public async Task RemoveMovie(Id<CineasteList> listId, Id<Movie> id, CancellationToken token)
     {
         this.logger.LogDebug("Removing the movie with ID: {Id}", id.Value);
 
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, id, token);
 
         if (movie.FranchiseItem is { } item)
@@ -85,9 +90,9 @@ public sealed class MovieService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    public async Task<BinaryContent> GetMoviePoster(Id<Movie> movieId, CancellationToken token)
+    public async Task<BinaryContent> GetMoviePoster(Id<CineasteList> listId, Id<Movie> movieId, CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, movieId, token);
 
         var poster = await this.dbContext.MoviePosters
@@ -99,26 +104,29 @@ public sealed class MovieService(
     }
 
     public Task<PosterHash> SetMoviePoster(
+        Id<CineasteList> listId,
         Id<Movie> movieId,
         StreamableContent content,
         CancellationToken token) =>
-        this.SetMoviePoster(movieId, () => Task.FromResult(content), token);
+        this.SetMoviePoster(listId, movieId, () => Task.FromResult(content), token);
 
     public Task<PosterHash> SetMoviePoster(
+        Id<CineasteList> listId,
         Id<Movie> movieId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
-        this.SetMoviePoster(movieId, () => this.posterProvider.FetchPoster(request, token), token);
+        this.SetMoviePoster(listId, movieId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public Task<PosterHash> SetMoviePoster(
+        Id<CineasteList> listId,
         Id<Movie> movieId,
         Validated<PosterImdbMediaRequest> request,
         CancellationToken token) =>
-        this.SetMoviePoster(movieId, () => this.posterProvider.FetchPoster(request, token), token);
+        this.SetMoviePoster(listId, movieId, () => this.posterProvider.FetchPoster(request, token), token);
 
-    public async Task RemoveMoviePoster(Id<Movie> movieId, CancellationToken token)
+    public async Task RemoveMoviePoster(Id<CineasteList> listId, Id<Movie> movieId, CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, movieId, token);
 
         var poster = await this.dbContext.MoviePosters
@@ -201,9 +209,10 @@ public sealed class MovieService(
         }
     }
 
-    private async Task<CineasteList> FindList(CancellationToken token)
+    private async Task<CineasteList> FindList(Id<CineasteList> listId, CancellationToken token)
     {
-        var list = await this.dbContext.Lists.FirstOrDefaultAsync(token) ?? throw this.ListNotFound();
+        var list = await this.dbContext.Lists.SingleOrDefaultAsync(list => list.Id == listId, token)
+            ?? throw this.NotFound(listId);
 
         await this.dbContext.Entry(list)
             .Reference(list => list.Configuration)
@@ -263,17 +272,19 @@ public sealed class MovieService(
             ?? throw this.NotFound(id);
 
     private Task<PosterHash> SetMoviePoster(
+        Id<CineasteList> listId,
         Id<Movie> movieId,
         Func<Task<StreamableContent>> getContent,
         CancellationToken token) =>
-        this.SetMoviePoster(movieId, async () => await (await getContent()).ReadDataAsync(token), token);
+        this.SetMoviePoster(listId, movieId, async () => await (await getContent()).ReadDataAsync(token), token);
 
     private async Task<PosterHash> SetMoviePoster(
+        Id<CineasteList> listId,
         Id<Movie> movieId,
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
-        var list = await this.FindList(token);
+        var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, movieId, token);
 
         var content = await getContent();
@@ -295,22 +306,22 @@ public sealed class MovieService(
         return hash;
     }
 
-    private NotFoundException ListNotFound() =>
-        new(Resources.List, "Could not find the list");
+    private NotFoundException NotFound(Id<CineasteList> id) =>
+        new(Resources.List, $"Could not find the list with ID {id}");
 
     private CineasteException NotFound(Id<Movie> id) =>
-        new NotFoundException(Resources.Movie, $"Could not find a movie with ID {id.Value}")
+        new NotFoundException(Resources.Movie, $"Could not find a movie with ID {id}")
             .WithProperty(id);
 
     private CineasteException NotFound(Id<MovieKind> id) =>
-        new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with ID {id.Value}")
+        new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with ID {id}")
             .WithProperty(id);
 
     private CineasteException NotFound(Id<Franchise> id) =>
-        new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id.Value}")
+        new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id}")
             .WithProperty(id);
 
     private CineasteException PosterNotFound(Id<Movie> movieId) =>
-        new NotFoundException(Resources.Poster, $"Could not find a poster for movie with ID {movieId.Value}")
+        new NotFoundException(Resources.Poster, $"Could not find a poster for movie with ID {movieId}")
             .WithProperty(movieId);
 }

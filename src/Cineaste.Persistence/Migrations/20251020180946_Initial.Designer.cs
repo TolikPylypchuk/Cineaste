@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20250819214234_Initial")]
+    [Migration("20251020180946_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Cineaste.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -778,6 +778,9 @@ namespace Cineaste.Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("ListId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -812,6 +815,8 @@ namespace Cineaste.Persistence.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ListId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -1417,6 +1422,17 @@ namespace Cineaste.Persistence.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUser", b =>
+                {
+                    b.HasOne("Cineaste.Core.Domain.CineasteList", "List")
+                        .WithMany()
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("List");
                 });
 
             modelBuilder.Entity("Cineaste.Identity.CineasteUserClaim", b =>

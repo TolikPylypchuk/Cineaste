@@ -11,8 +11,4 @@
     <ProjectReference Include="..\Cineaste.Identity\Cineaste.Identity.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

@@ -6,13 +6,14 @@ using Cineaste.Client.Services.BaseUri;
 using Cineaste.Client.Services.Navigation;
 using Cineaste.Components;
 using Cineaste.Core.Converter;
-using Cineaste.Core.Domain;
 using Cineaste.Identity;
 using Cineaste.Infrastructure.Json;
 using Cineaste.Infrastructure.OpenApi;
 using Cineaste.Infrastructure.Problems;
 using Cineaste.Routes;
 using Cineaste.Services.BaseUri;
+using Cineaste.Services.List;
+using Cineaste.Services.User;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
@@ -63,16 +64,19 @@ builder.Services.AddIdentityCore<CineasteUser>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
-    .AddIdentityCookies(cookies =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+}).AddIdentityCookies(cookies =>
+{
+    cookies.ApplicationCookie?.Configure(options =>
     {
-        cookies.ApplicationCookie?.Configure(options =>
-        {
-            options.Cookie.Name = "Cineaste.Identity";
-            options.LoginPath = "/login";
-            options.ReturnUrlParameter = "returnUrl";
-        });
+        options.Cookie.Name = "Cineaste.Identity";
+        options.LoginPath = "/login";
+        options.ReturnUrlParameter = "returnUrl";
     });
+});
 
 builder.Services.AddCascadingAuthenticationState();
 
@@ -105,6 +109,7 @@ builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 builder.Services.AddSingleton<IBaseUriProvider, ServerBaseUriProvider>();
 
 builder.Services.AddScoped<CultureProvider>();
+builder.Services.AddScoped<IDefaultListCreator, DefaultListCreator>();
 builder.Services.AddScoped<ListService>();
 builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<SeriesService>();
@@ -112,6 +117,8 @@ builder.Services.AddScoped<FranchiseService>();
 
 builder.Services.AddScoped<IPosterProvider, PosterProvider>();
 builder.Services.AddScoped<IHtmlDocumentProvider, HtmlDocumentProvider>();
+
+builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
 if (builder.Environment.IsDevelopment())
 {

@@ -18,7 +18,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await seriesService.GetSeries(series.Id, TestContext.Current.CancellationToken);
+        var model = await seriesService.GetSeries(data.ListId, series.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -82,7 +82,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            seriesService.GetSeries(dummyId, TestContext.Current.CancellationToken));
+            seriesService.GetSeries(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Series", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -100,7 +100,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken);
+        var model = await seriesService.AddSeries(
+            data.ListId, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -168,7 +169,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken);
+        var model = await seriesService.AddSeries(
+            data.ListId, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -234,7 +236,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            seriesService.AddSeries(request.Validated(), TestContext.Current.CancellationToken));
+            seriesService.AddSeries(data.ListId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.SeriesKind", exception.Resource);
         Assert.Equal(dummyKindId, exception.Properties["id"]);
@@ -255,7 +257,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act
 
         var model = await seriesService.UpdateSeries(
-            dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
+            data.ListId, dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -326,7 +328,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act
 
         var model = await seriesService.UpdateSeries(
-            dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
+            data.ListId, dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -394,7 +396,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            seriesService.UpdateSeries(dummyId, request.Validated(), TestContext.Current.CancellationToken));
+            seriesService.UpdateSeries(
+                data.ListId, dummyId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal("NotFound.Series", exception.MessageCode);
         Assert.Equal("Resource.Series", exception.Resource);
@@ -413,7 +416,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        await seriesService.RemoveSeries(series.Id, TestContext.Current.CancellationToken);
+        await seriesService.RemoveSeries(data.ListId, series.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -433,7 +436,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            seriesService.RemoveSeries(dummyId, TestContext.Current.CancellationToken));
+            seriesService.RemoveSeries(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("NotFound.Series", exception.MessageCode);
         Assert.Equal("Resource.Series", exception.Resource);

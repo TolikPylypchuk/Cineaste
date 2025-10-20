@@ -15,7 +15,7 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<SeriesModel>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<SeriesModel>> GetSeries(Guid id, CancellationToken token) =>
-        this.Ok(await seriesService.GetSeries(Id.For<Series>(id), token));
+        this.Ok(await seriesService.GetSeries(this.GetCurrentListId(), Id.For<Series>(id), token));
 
     [HttpPost]
     [EndpointSummary("Add a series to the list")]
@@ -23,7 +23,7 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<SeriesModel>> AddSeries([FromBody] SeriesRequest request, CancellationToken token)
     {
-        var series = await seriesService.AddSeries(request.Validated(), token);
+        var series = await seriesService.AddSeries(this.GetCurrentListId(), request.Validated(), token);
         return this.Created($"/api/series/{series.Id}", series);
     }
 
@@ -36,7 +36,8 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
         Guid id,
         [FromBody] SeriesRequest request,
         CancellationToken token) =>
-        this.Ok(await seriesService.UpdateSeries(Id.For<Series>(id), request.Validated(), token));
+        this.Ok(await seriesService.UpdateSeries(
+            this.GetCurrentListId(), Id.For<Series>(id), request.Validated(), token));
 
     [HttpDelete("{id}")]
     [EndpointSummary("Remove a series from the list")]
@@ -44,7 +45,7 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveSeries(Guid id, CancellationToken token)
     {
-        await seriesService.RemoveSeries(Id.For<Series>(id), token);
+        await seriesService.RemoveSeries(this.GetCurrentListId(), Id.For<Series>(id), token);
         return this.NoContent();
     }
 
@@ -55,7 +56,7 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetSeriesPoster(Guid id, CancellationToken token)
     {
-        var poster = await seriesService.GetSeriesPoster(Id.For<Series>(id), token);
+        var poster = await seriesService.GetSeriesPoster(this.GetCurrentListId(), Id.For<Series>(id), token);
         return this.File(poster.Data, poster.Type);
     }
 
@@ -69,7 +70,7 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
         var seriesId = Id.For<Series>(id);
         var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await seriesService.SetSeriesPoster(seriesId, content, token);
+        var posterHash = await seriesService.SetSeriesPoster(this.GetCurrentListId(), seriesId, content, token);
 
         return this.Created(Urls.SeriesPoster(seriesId, posterHash), null);
     }
@@ -89,10 +90,12 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
         var posterHash = request switch
         {
             PosterUrlRequest urlRequest =>
-                await seriesService.SetSeriesPoster(seriesId, urlRequest.Validated(), token),
+                await seriesService.SetSeriesPoster(
+                    this.GetCurrentListId(), seriesId, urlRequest.Validated(), token),
 
             PosterImdbMediaRequest imdbMediaRequest =>
-                await seriesService.SetSeriesPoster(seriesId, imdbMediaRequest.Validated(), token),
+                await seriesService.SetSeriesPoster(
+                    this.GetCurrentListId(), seriesId, imdbMediaRequest.Validated(), token),
 
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
@@ -106,7 +109,7 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveSeriesPoster(Guid id, CancellationToken token)
     {
-        await seriesService.RemoveSeriesPoster(Id.For<Series>(id), token);
+        await seriesService.RemoveSeriesPoster(this.GetCurrentListId(), Id.For<Series>(id), token);
         return this.NoContent();
     }
 
@@ -117,7 +120,9 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetSeasonPoster(Guid seriesId, Guid periodId, CancellationToken token)
     {
-        var poster = await seriesService.GetSeasonPoster(Id.For<Series>(seriesId), Id.For<Period>(periodId), token);
+        var poster = await seriesService.GetSeasonPoster(
+            this.GetCurrentListId(), Id.For<Series>(seriesId), Id.For<Period>(periodId), token);
+
         return this.File(poster.Data, poster.Type);
     }
 
@@ -137,7 +142,8 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
 
         var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await seriesService.SetSeasonPoster(typedSeriesId, typedPeriodId, content, token);
+        var posterHash = await seriesService.SetSeasonPoster(
+            this.GetCurrentListId(), typedSeriesId, typedPeriodId, content, token);
 
         return this.Created(Urls.SeasonPoster(typedSeriesId, typedPeriodId, posterHash), null);
     }
@@ -159,10 +165,12 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
         var posterHash = request switch
         {
             PosterUrlRequest urlRequest =>
-                await seriesService.SetSeasonPoster(typedSeriesId, typedPeriodId, urlRequest.Validated(), token),
+                await seriesService.SetSeasonPoster(
+                    this.GetCurrentListId(), typedSeriesId, typedPeriodId, urlRequest.Validated(), token),
 
             PosterImdbMediaRequest imdbMediaRequest =>
-                await seriesService.SetSeasonPoster(typedSeriesId, typedPeriodId, imdbMediaRequest.Validated(), token),
+                await seriesService.SetSeasonPoster(
+                    this.GetCurrentListId(), typedSeriesId, typedPeriodId, imdbMediaRequest.Validated(), token),
 
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
@@ -176,7 +184,9 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RemoveSeasonPoster(Guid seriesId, Guid periodId, CancellationToken token)
     {
-        await seriesService.RemoveSeasonPoster(Id.For<Series>(seriesId), Id.For<Period>(periodId), token);
+        await seriesService.RemoveSeasonPoster(
+            this.GetCurrentListId(), Id.For<Series>(seriesId), Id.For<Period>(periodId), token);
+
         return this.NoContent();
     }
 
@@ -188,7 +198,7 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     public async Task<ActionResult> GetSpecialEpisodePoster(Guid seriesId, Guid episodeId, CancellationToken token)
     {
         var poster = await seriesService.GetSpecialEpisodePoster(
-            Id.For<Series>(seriesId), Id.For<SpecialEpisode>(episodeId), token);
+            this.GetCurrentListId(), Id.For<Series>(seriesId), Id.For<SpecialEpisode>(episodeId), token);
 
         return this.File(poster.Data, poster.Type);
     }
@@ -208,7 +218,8 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
         var typedEpisodeId = Id.For<SpecialEpisode>(episodeId);
         var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
-        var posterHash = await seriesService.SetSpecialEpisodePoster(typedSeriesId, typedEpisodeId, content, token);
+        var posterHash = await seriesService.SetSpecialEpisodePoster(
+            this.GetCurrentListId(), typedSeriesId, typedEpisodeId, content, token);
 
         return this.Created(Urls.SpecialEpisodePoster(typedSeriesId, typedEpisodeId, posterHash), null);
     }
@@ -230,10 +241,10 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
         var posterHash = request switch
         {
             PosterUrlRequest urlRequest => await seriesService.SetSpecialEpisodePoster(
-                typedSeriesId, typedEpisodeId, urlRequest.Validated(), token),
+                this.GetCurrentListId(), typedSeriesId, typedEpisodeId, urlRequest.Validated(), token),
 
             PosterImdbMediaRequest imdbMediaRequest => await seriesService.SetSpecialEpisodePoster(
-                typedSeriesId, typedEpisodeId, imdbMediaRequest.Validated(), token),
+                this.GetCurrentListId(), typedSeriesId, typedEpisodeId, imdbMediaRequest.Validated(), token),
 
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
@@ -248,8 +259,11 @@ public sealed class SeriesController(SeriesService seriesService) : ControllerBa
     public async Task<ActionResult> RemoveSpecialEpisodePoster(Guid seriesId, Guid episodeId, CancellationToken token)
     {
         await seriesService.RemoveSpecialEpisodePoster(
-            Id.For<Series>(seriesId), Id.For<SpecialEpisode>(episodeId), token);
+            this.GetCurrentListId(), Id.For<Series>(seriesId), Id.For<SpecialEpisode>(episodeId), token);
 
         return this.NoContent();
     }
+
+    private Id<CineasteList> GetCurrentListId() =>
+        this.User.GetListId() ?? throw new InvalidOperationException("List ID not found in the current user's claims");
 }

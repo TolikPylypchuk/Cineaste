@@ -1,48 +1,55 @@
-using System.Globalization;
+using Cineaste.Services.User;
 
 namespace Cineaste.Data;
 
-internal sealed class TestDataProvider(CineasteDbContext dbContext)
+internal sealed class TestDataProvider(
+    CineasteDbContext dbContext,
+    IUserRegistrationService userRegistrationService,
+    ILogger<TestDataProvider> logger)
 {
     public async Task CreateTestDataIfNeeded()
     {
         bool listsPresentInDb = await dbContext.Lists.AnyAsync();
 
-        if (!listsPresentInDb)
+        if (listsPresentInDb)
         {
-            var list = this.CreateList();
-            dbContext.Lists.Add(list);
+            return;
+        }
+
+        await using var transaction = await dbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            var (user, result) = await userRegistrationService.RegisterUser("test@email.com", "123Password!");
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    logger.LogError("Error when registering a test user: {Error}", error);
+                }
+
+                return;
+            }
+
+            this.FillList(user.List);
+
             await dbContext.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+        } catch
+        {
+            await transaction.RollbackAsync();
+            throw;
         }
     }
 
-    private CineasteList CreateList()
+    private void FillList(CineasteList list)
     {
-        var config = new ListConfiguration(
-            Id.Create<ListConfiguration>(),
-            CultureInfo.InvariantCulture,
-            "Season #",
-            "Season #",
-            ListSortingConfiguration.CreateDefault());
-
-        var list = new CineasteList(Id.Create<CineasteList>(), config);
-
-        var black = new Color("#000000");
-        var blue = new Color("#3949ab");
-        var green = new Color("#43a047");
-        var lightBlue = new Color("#1e88e5");
-        var red = new Color("#e35953");
-        var darkRed = new Color("#b71c1c");
-
-        var liveActionMovie = new MovieKind(Id.Create<MovieKind>(), "Live-Action", black, red, darkRed);
-        var animatedMovie = new MovieKind(Id.Create<MovieKind>(), "Animation", green, red, darkRed);
-        var liveActionSeries = new SeriesKind(Id.Create<SeriesKind>(), "Live-Action", blue, red, darkRed);
-        var animatedSeries = new SeriesKind(Id.Create<SeriesKind>(), "Animation", lightBlue, red, darkRed);
-
-        list.AddMovieKind(liveActionMovie);
-        list.AddMovieKind(animatedMovie);
-        list.AddSeriesKind(liveActionSeries);
-        list.AddSeriesKind(animatedSeries);
+        var liveActionMovie = list.MovieKinds.First(kind => kind.Name == "Live-Action");
+        var animatedMovie = list.MovieKinds.First(kind => kind.Name == "Animation");
+        var liveActionSeries = list.SeriesKinds.First(kind => kind.Name == "Live-Action");
+        var animatedSeries = list.SeriesKinds.First(kind => kind.Name == "Animation");
 
         list.AddMovie(this.CreateMovie("12 Angry Men", liveActionMovie, 1957));
         list.AddMovie(this.CreateMovie("Anatomy of a Fall", "Anatomie d'une chute", liveActionMovie, 2023));
@@ -136,8 +143,6 @@ internal sealed class TestDataProvider(CineasteDbContext dbContext)
         list.AddMovie(supergirl);
 
         list.SortItems();
-
-        return list;
     }
 
     private Movie CreateMovie(string title, MovieKind kind, int year, bool isReleased = true) =>

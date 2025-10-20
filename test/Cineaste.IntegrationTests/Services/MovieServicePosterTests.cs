@@ -19,7 +19,8 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
 
         // Act
 
-        var posterContent = await movieService.GetMoviePoster(movie.Id, TestContext.Current.CancellationToken);
+        var posterContent = await movieService.GetMoviePoster(
+            data.ListId, movie.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -40,7 +41,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.GetMoviePoster(dummyId, TestContext.Current.CancellationToken));
+            movieService.GetMoviePoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Movie", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -59,7 +60,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.GetMoviePoster(movie.Id, TestContext.Current.CancellationToken));
+            movieService.GetMoviePoster(data.ListId, movie.Id, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Poster", exception.Resource);
         Assert.Equal(movie.Id, exception.Properties["movieId"]);
@@ -82,7 +83,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Act
 
         var posterHash = await movieService.SetMoviePoster(
-            movie.Id, posterData, TestContext.Current.CancellationToken);
+            data.ListId, movie.Id, posterData, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -111,7 +112,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.SetMoviePoster(dummyId, posterData, TestContext.Current.CancellationToken));
+            movieService.SetMoviePoster(data.ListId, dummyId, posterData, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Movie", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -139,7 +140,8 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
 
         // Act
 
-        var posterHash = await movieService.SetMoviePoster(movie.Id, request, TestContext.Current.CancellationToken);
+        var posterHash = await movieService.SetMoviePoster(
+            data.ListId, movie.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -170,7 +172,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.SetMoviePoster(dummyId, request, TestContext.Current.CancellationToken));
+            movieService.SetMoviePoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Movie", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -202,7 +204,8 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
 
         // Act
 
-        var posterHash = await movieService.SetMoviePoster(movie.Id, request, TestContext.Current.CancellationToken);
+        var posterHash = await movieService.SetMoviePoster(
+            data.ListId, movie.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -233,7 +236,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.SetMoviePoster(dummyId, request, TestContext.Current.CancellationToken));
+            movieService.SetMoviePoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Movie", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);
@@ -256,7 +259,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
 
         // Act
 
-        await movieService.RemoveMoviePoster(movie.Id, TestContext.Current.CancellationToken);
+        await movieService.RemoveMoviePoster(data.ListId, movie.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -276,7 +279,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Act + Assert
 
         var exception = await Record.ExceptionAsync(() =>
-            movieService.RemoveMoviePoster(movie.Id, TestContext.Current.CancellationToken));
+            movieService.RemoveMoviePoster(data.ListId, movie.Id, TestContext.Current.CancellationToken));
 
         Assert.Null(exception);
     }
@@ -294,7 +297,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            movieService.RemoveMoviePoster(dummyId, TestContext.Current.CancellationToken));
+            movieService.RemoveMoviePoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal("Resource.Movie", exception.Resource);
         Assert.Equal(dummyId, exception.Properties["id"]);

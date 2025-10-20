@@ -4,11 +4,14 @@ public sealed class CineasteUser : IdentityUser<Id<CineasteUser>>
 {
     public CineasteUser()
     {
-        Id = Core.Domain.Id.Create<CineasteUser>();
-        SecurityStamp = Guid.CreateVersion7().ToString();
+        this.Id = Core.Domain.Id.Create<CineasteUser>();
+        this.SecurityStamp = Guid.CreateVersion7().ToString();
+        this.List = null!;
     }
 
     public CineasteUser(string userName)
         : this() =>
         this.UserName = userName;
+
+    public CineasteList List { get; set; }
 }

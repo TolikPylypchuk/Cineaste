@@ -7,7 +7,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly ILogger<ListService> logger = logger;
 
-    public async Task<ListModel> GetList(CancellationToken token)
+    public async Task<ListModel> GetList(Id<CineasteList> listId, CancellationToken token)
     {
         logger.LogDebug("Getting the list");
 
@@ -17,13 +17,17 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.SeriesKinds)
             .AsSplitQuery()
             .AsNoTracking()
-            .SingleOrDefaultAsync(token)
-            ?? throw this.ListNotFound();
+            .SingleOrDefaultAsync(list => list.Id == listId, token)
+            ?? throw this.ListNotFound(listId);
 
         return list.ToListModel();
     }
 
-    public async Task<OffsettableData<ListItemModel>> GetListItems(int offset, int size, CancellationToken token)
+    public async Task<OffsettableData<ListItemModel>> GetListItems(
+        Id<CineasteList> listId,
+        int offset,
+        int size,
+        CancellationToken token)
     {
         logger.LogDebug("Getting the list items");
 
@@ -31,8 +35,8 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
-            .SingleOrDefaultAsync(token)
-            ?? throw this.ListNotFound();
+            .SingleOrDefaultAsync(list => list.Id == listId, token)
+            ?? throw this.ListNotFound(listId);
 
         int totalItems = await dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
@@ -59,7 +63,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             new(offset, size, totalItems));
     }
 
-    public async Task<List<ListItemModel>> GetStandaloneListItems(CancellationToken token)
+    public async Task<List<ListItemModel>> GetStandaloneListItems(Id<CineasteList> listId, CancellationToken token)
     {
         logger.LogDebug("Getting standalone list items");
 
@@ -67,8 +71,8 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
-            .SingleOrDefaultAsync(token)
-            ?? throw this.ListNotFound();
+            .SingleOrDefaultAsync(list => list.Id == listId, token)
+            ?? throw this.ListNotFound(listId);
 
         var items = await dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
@@ -81,7 +85,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
         return [.. items.Select(item => item.ToListItemModel())];
     }
 
-    public async Task<ListItemModel> GetListItem(Guid id, CancellationToken token)
+    public async Task<ListItemModel> GetListItem(Id<CineasteList> listId, Guid id, CancellationToken token)
     {
         logger.LogDebug("Getting the list item by ID {Id}", id);
 
@@ -89,8 +93,8 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
-            .SingleOrDefaultAsync(token)
-            ?? throw this.ListNotFound();
+            .SingleOrDefaultAsync(list => list.Id == listId, token)
+            ?? throw this.ListNotFound(listId);
 
         var movieId = Id.For<Movie>(id);
         var seriesId = Id.For<Series>(id);
@@ -110,6 +114,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
     }
 
     public async Task<ListItemModel> GetListItemByParentFranchise(
+        Id<CineasteList> listId,
         Guid parentFranchiseId,
         int sequenceNumber,
         CancellationToken token)
@@ -123,8 +128,8 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
-            .SingleOrDefaultAsync(token)
-            ?? throw this.ListNotFound();
+            .SingleOrDefaultAsync(list => list.Id == listId, token)
+            ?? throw this.ListNotFound(listId);
 
         var parentFranchiseStrongId = Id.For<Franchise>(parentFranchiseId);
 
@@ -161,8 +166,8 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
         return item.ToListItemModel();
     }
 
-    private NotFoundException ListNotFound() =>
-        new(Resources.List, "Could not find the list");
+    private NotFoundException ListNotFound(Id<CineasteList> listId) =>
+        new(Resources.List, $"Could not find the list with ID {listId}");
 
     private NotFoundException ListItemNotFound(FranchiseItem item)
     {
