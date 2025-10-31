@@ -11,3 +11,10 @@
   font: var(--font-app-title);
   outline: none;
 }
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--s4);
+}

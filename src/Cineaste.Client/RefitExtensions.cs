@@ -1,4 +1,4 @@
-using Cineaste.Client.Services.BaseUri;
+using Cineaste.Client.BaseUri;
 
 namespace Cineaste.Client;
 

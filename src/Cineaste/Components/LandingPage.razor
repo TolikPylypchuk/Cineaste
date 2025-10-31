@@ -1,4 +1,5 @@
 @page "/"
+@using Cineaste.Client.Navigation
 @attribute [ExcludeFromInteractiveRouting]
 
 @inject IStringLocalizer<Resources> Loc
@@ -10,16 +11,27 @@
     </Authorized>
     <NotAuthorized>
         <div class="container">
-            <h1 class="title">@this.Loc["Cineaste"]</h1>
+            <h1 class="title">@this.Loc["LandingPage.Title"]</h1>
 
-            <MudButton
-                Href="@this.PageNavigator.GetPageUrl(CineastePage.Login)"
-                Color="Color.Primary"
-                Variant="Variant.Filled"
-                Size="Size.Large"
-            >
-                Log in
-            </MudButton>
+            <div class="actions">
+                <MudButton
+                    Href="@this.PageNavigator.GetPageUrl(CineastePage.Login)"
+                    Color="Color.Primary"
+                    Variant="Variant.Filled"
+                    Size="Size.Large"
+                >
+                    @this.Loc["LandingPage.LogIn"]
+                </MudButton>
+
+                <MudButton
+                    Href="@this.PageNavigator.GetPageUrl(CineastePage.Register)"
+                    Color="Color.Primary"
+                    Variant="Variant.Text"
+                    Size="Size.Large"
+                >
+                    @this.Loc["LandingPage.Register"]
+                </MudButton>
+            </div>
         </div>
     </NotAuthorized>
 </AuthorizeView>

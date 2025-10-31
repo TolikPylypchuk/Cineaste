@@ -1,7 +1,8 @@
+@using Cineaste.Client.Navigation
 @inject IPageNavigator PageNavigator
 
 @code {
     protected override void OnInitialized() {
-        this.PageNavigator.GoToPage(CineastePage.Login, forceReload: true);
+        this.PageNavigator.GoToPageWithCurrentReturnUrl(CineastePage.Login, forceReload: true);
     }
 }

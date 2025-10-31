@@ -12,14 +12,14 @@
   outline: none;
 }
 
-::deep .login-form {
+::deep .register-form {
   display: flex;
   flex-direction: column;
   gap: var(--s2);
 }
 
 .actions {
-  margin: var(--s2);
+  margin: var(--s4);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -27,7 +27,7 @@
   gap: var(--s2);
 }
 
-.register-container {
+.login-container {
   margin-block-start: var(--s2);
   display: flex;
   flex-direction: row;

@@ -230,6 +230,24 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserInvitationCodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AssignedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserInvitationCodes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserInvitationCodes_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserLogins",
                 columns: table => new
                 {
@@ -1009,6 +1027,11 @@ namespace Cineaste.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserInvitationCodes_UserId",
+                table: "UserInvitationCodes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserLogins_UserId",
                 table: "UserLogins",
                 column: "UserId");
@@ -1101,6 +1124,9 @@ namespace Cineaste.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserClaims");
+
+            migrationBuilder.DropTable(
+                name: "UserInvitationCodes");
 
             migrationBuilder.DropTable(
                 name: "UserLogins");

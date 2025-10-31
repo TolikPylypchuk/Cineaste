@@ -1,0 +1,191 @@
+@page "/register"
+@using Cineaste.Client.Navigation
+
+@inject IUserRegistrationService UserRegistrationService
+@inject SignInManager<CineasteUser> SignInManager
+@inject IStringLocalizer<Resources> Loc
+@inject IPageNavigator PageNavigator
+
+<PageTitle>@this.Loc["RegsiterPage.PageTitle"]</PageTitle>
+
+<div class="container">
+    <h1 class="title">@this.Loc["RegisterPage.Title"]</h1>
+
+    @if (!String.IsNullOrEmpty(this.errorMessage))
+    {
+        <MudAlert Severity="Severity.Error" NoIcon="true">@this.errorMessage</MudAlert>
+    }
+
+    <EditForm
+        FormName="login"
+        Model="this.Model"
+        OnValidSubmit="this.OnRegister"
+        id="register-form"
+        method="post"
+        class="register-form"
+    >
+        <MudStaticTextField
+            For="@(() => this.Model.InvitationCode)"
+            @bind-Value="this.Model.InvitationCode"
+            Label="@this.Loc["RegisterPage.InvitationCode"]"
+            Required="true"
+        />
+
+        <MudStaticTextField
+            For="@(() => this.Model.Email)"
+            @bind-Value="this.Model.Email"
+            Label="@this.Loc["RegisterPage.Email"]"
+            InputType="InputType.Email"
+            Required="true"
+        />
+
+        <MudStaticTextField
+            For="@(() => this.Model.Password)"
+            @bind-Value="this.Model.Password"
+            Label="@this.Loc["RegisterPage.Password"]"
+            InputType="InputType.Password"
+            Required="true"
+            Adornment="Adornment.End"
+            AdornmentIcon="@Icons.Material.Filled.Visibility"
+            AdornmentClickFunction="showPassword"
+            AdornmentAriaLabel="@this.Loc["RegisterPage.ShowPassword"]"
+        />
+
+        <MudStaticTextField
+            For="@(() => this.Model.PasswordConfirmation)"
+            @bind-Value="this.Model.PasswordConfirmation"
+            Label="@this.Loc["RegisterPage.ConfirmPassword"]"
+            InputType="InputType.Password"
+            Required="true"
+            Adornment="Adornment.End"
+            AdornmentIcon="@Icons.Material.Filled.Visibility"
+            AdornmentClickFunction="showPassword"
+            AdornmentAriaLabel="@this.Loc["RegisterPage.ShowPassword"]"
+        />
+
+        <div class="actions">
+            <MudStaticButton
+                Color="Color.Primary"
+                Variant="Variant.Filled"
+                FormAction="FormAction.Submit"
+            >
+                @this.Loc["RegisterPage.Register"]
+            </MudStaticButton>
+
+            <MudButton
+                Href="@this.PageNavigator.GetPageUrl(CineastePage.Landing)"
+                Color="Color.Surface"
+                Variant="Variant.Text"
+            >
+                @this.Loc["RegisterPage.BackToLandingPage"]
+            </MudButton>
+        </div>
+
+        <div class="login-container">
+            <p>@this.Loc["RegisterPage.AlreadyHaveAccount"]</p>
+            <MudButton
+                Href="@this.PageNavigator.GetPageUrlWithReturnUrl(CineastePage.Login, this.ReturnUrl)"
+                Color="Color.Secondary"
+                Variant="Variant.Text"
+            >
+                @this.Loc["RegisterPage.LogIn"]
+            </MudButton>
+        </div>
+    </EditForm>
+</div>
+
+<template id="password-icon-show-password">
+    <MudIcon Icon="@Icons.Material.Filled.Visibility" aria-label="@this.Loc["RegisterPage.ShowPassword"]" />
+</template>
+
+<template id="password-icon-hide-password">
+    <MudIcon Icon="@Icons.Material.Filled.VisibilityOff" aria-label="@this.Loc["RegisterPage.HidePassword"]" />
+</template>
+
+<script src="@this.Assets["js/showPassword.js"]"></script>
+
+@code {
+    [CascadingParameter]
+    public required HttpContext HttpContext { get; set; }
+
+    [SupplyParameterFromForm]
+    private RegisterModel Model { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    private string? errorMessage;
+
+    private async Task OnRegister()
+    {
+        var (isValid, invitationCode) = this.ValidateModel();
+
+        if (isValid && invitationCode is Guid code)
+        {
+            await this.RegisterUser(code);
+        }
+    }
+
+    private (bool, Guid?) ValidateModel()
+    {
+        if (String.IsNullOrWhiteSpace(this.Model.Email))
+        {
+            this.SetErrorMessage("EmailRequired");
+            return (false, null);
+        }
+
+        if (String.IsNullOrWhiteSpace(this.Model.Password))
+        {
+            this.SetErrorMessage("PasswordRequired");
+            return (false, null);
+        }
+
+        if (String.IsNullOrWhiteSpace(this.Model.PasswordConfirmation))
+        {
+            this.SetErrorMessage("PasswordConfirmationRequired");
+            return (false, null);
+        }
+
+        if (this.Model.Password != this.Model.PasswordConfirmation)
+        {
+            this.SetErrorMessage("InvalidPasswordConfirmation");
+            return (false, null);
+        }
+
+        if (!Guid.TryParse(this.Model.InvitationCode, out var invitationCode))
+        {
+            this.SetErrorMessage("InvalidInvitationCode");
+            return (false, null);
+        }
+
+        return (true, invitationCode);
+    }
+
+    private async Task RegisterUser(Guid invitationCode)
+    {
+        var (user, result) = await this.UserRegistrationService.RegisterUser(
+            this.Model.Email, this.Model.Password, invitationCode);
+
+        if (!result.Succeeded)
+        {
+            this.errorMessage = String.Join("; ", result.Errors.Select(error => error.Description));
+            return;
+        }
+
+        await this.SignInManager.SignInWithClaimsAsync(
+            user, false, [new Claim(CineasteClaims.ListId, user.List.Id.ToString())]);
+
+        this.PageNavigator.GoToPage(CineastePage.List);
+    }
+
+    private void SetErrorMessage(string message) =>
+        this.errorMessage = this.Loc[$"RegisterPage.{message}"];
+
+    private sealed class RegisterModel
+    {
+        public string InvitationCode { get; set; } = String.Empty;
+        public string Email { get; set; } = String.Empty;
+        public string Password { get; set; } = String.Empty;
+        public string PasswordConfirmation { get; set; } = String.Empty;
+    }
+}

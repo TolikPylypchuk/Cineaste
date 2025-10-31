@@ -1,4 +1,4 @@
-using Cineaste.Client.Services.BaseUri;
+using Cineaste.Client.BaseUri;
 
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;

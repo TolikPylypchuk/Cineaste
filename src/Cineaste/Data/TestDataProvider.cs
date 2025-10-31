@@ -20,7 +20,11 @@ internal sealed class TestDataProvider(
 
         try
         {
-            var (user, result) = await userRegistrationService.RegisterUser("test@email.com", "123Password!");
+            var invitationCode = new CineasteUserInvitationCode(Id.Create<CineasteUserInvitationCode>());
+            dbContext.UserInvitationCodes.Add(invitationCode);
+
+            var (user, result) = await userRegistrationService.RegisterUser(
+                "test@email.com", "123Password!", invitationCode.Id.Value);
 
             if (!result.Succeeded)
             {

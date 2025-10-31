@@ -1,3 +1,5 @@
+using Cineaste.Client.Navigation;
+
 using Fluxor.Blazor.Web.Components;
 
 using Microsoft.Extensions.Localization;

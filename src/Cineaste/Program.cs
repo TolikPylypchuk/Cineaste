@@ -2,11 +2,10 @@ using System.ComponentModel;
 using System.Text.Json.Serialization;
 
 using Cineaste.Client;
-using Cineaste.Client.Services.BaseUri;
-using Cineaste.Client.Services.Navigation;
+using Cineaste.Client.BaseUri;
+using Cineaste.Client.Navigation;
 using Cineaste.Components;
 using Cineaste.Core.Converter;
-using Cineaste.Identity;
 using Cineaste.Infrastructure.Json;
 using Cineaste.Infrastructure.OpenApi;
 using Cineaste.Infrastructure.Problems;
@@ -73,8 +72,8 @@ builder.Services.AddAuthentication(options =>
     cookies.ApplicationCookie?.Configure(options =>
     {
         options.Cookie.Name = "Cineaste.Identity";
-        options.LoginPath = "/login";
-        options.ReturnUrlParameter = "returnUrl";
+        options.LoginPath = NavigationPages.LoginPage;
+        options.ReturnUrlParameter = NavigationPages.ReturnUrlParameter;
     });
 });
 
@@ -94,9 +93,11 @@ builder.Services.AddProblemDetails();
 builder.Services.AddCineasteOpenApi(builder.Configuration.GetSection("OpenApi"));
 builder.Services.AddCors();
 
+var openApiCachePolicy = "OpenApi";
+
 builder.Services.AddOutputCache(options =>
 {
-    options.AddPolicy("OpenApi", policy => policy.Expire(TimeSpan.FromHours(1)));
+    options.AddPolicy(openApiCachePolicy, policy => policy.Expire(TimeSpan.FromHours(1)));
 });
 
 builder.Services.AddMudServices();
@@ -148,7 +149,7 @@ app.MapStaticAssets();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi().CacheOutput("OpenApi");
+    app.MapOpenApi().CacheOutput(openApiCachePolicy);
     app.MapScalarApiReference(options =>
     {
         options.TagSorter = TagSorter.Alpha;

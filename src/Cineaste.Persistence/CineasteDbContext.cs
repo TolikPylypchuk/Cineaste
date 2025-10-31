@@ -70,6 +70,9 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
     public DbSet<Tag> Tags =>
         this.Set<Tag>();
 
+    public DbSet<CineasteUserInvitationCode> UserInvitationCodes =>
+        this.Set<CineasteUserInvitationCode>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -99,6 +102,8 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
         builder.ApplyConfiguration(new ListConfigurationTypeConfiguration());
         builder.ApplyConfiguration(new CineasteListTypeConfiguration());
         builder.ApplyConfiguration(new ListItemTypeConfiguration());
+
+        builder.ApplyConfiguration(new CineasteUserInvitationCodeTypeConfiguration());
 
         builder.Entity<CineasteUser>(u => u.ToTable(nameof(this.Users)));
         builder.Entity<CineasteUserClaim>(u => u.ToTable(nameof(this.UserClaims)));
@@ -143,6 +148,9 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
 
         builder.Properties<Id<CineasteUser>>()
             .HaveConversion<IdConverter<CineasteUser>>();
+
+        builder.Properties<Id<CineasteUserInvitationCode>>()
+            .HaveConversion<IdConverter<CineasteUserInvitationCode>>();
     }
 }
 

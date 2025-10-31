@@ -5,8 +5,10 @@
 @inject IStringLocalizer<Resources> Loc
 @inject IPageNavigator PageNavigator
 
+<PageTitle>@this.Loc["LoginPage.PageTitle"]</PageTitle>
+
 <div class="container">
-    <h1 class="title">Log In to Cineaste</h1>
+    <h1 class="title">@this.Loc["LoginPage.Title"]</h1>
 
     @if (!String.IsNullOrEmpty(this.errorMessage))
     {
@@ -50,60 +52,47 @@
         >
             @this.Loc["LoginPage.RememberMe"]
         </MudStaticCheckBox>
+
+        <div class="actions">
+            <MudStaticButton
+                Color="Color.Primary"
+                Variant="Variant.Filled"
+                FormAction="FormAction.Submit"
+            >
+                @this.Loc["LoginPage.LogIn"]
+            </MudStaticButton>
+
+            <MudButton
+                Href="@this.PageNavigator.GetPageUrl(CineastePage.Landing)"
+                Color="Color.Surface"
+                Variant="Variant.Text"
+            >
+                @this.Loc["LoginPage.BackToLandingPage"]
+            </MudButton>
+        </div>
+
+        <div class="register-container">
+            <p>@this.Loc["LoginPage.NoAccount"]</p>
+            <MudButton
+                Href="@this.PageNavigator.GetPageUrlWithReturnUrl(CineastePage.Register, this.ReturnUrl)"
+                Color="Color.Secondary"
+                Variant="Variant.Text"
+            >
+                @this.Loc["LoginPage.Register"]
+            </MudButton>
+        </div>
     </EditForm>
-
-    <div class="actions">
-        <MudStaticButton
-            Color="Color.Primary"
-            Variant="Variant.Filled"
-            FormAction="FormAction.Submit"
-            form="login-form"
-        >
-            @this.Loc["LoginPage.LogIn"]
-        </MudStaticButton>
-
-        <MudButton
-            Href="@this.PageNavigator.GetPageUrl(CineastePage.Landing)"
-            Color="Color.Surface"
-            Variant="Variant.Text"
-        >
-            @this.Loc["LoginPage.BackToLandingPage"]
-        </MudButton>
-    </div>
-
-    <div class="hidden" aria-hidden="true">
-        <MudIcon Icon="@Icons.Material.Filled.Visibility" id="icon-visibility-on" aria-hidden="true" />
-        <MudIcon Icon="@Icons.Material.Filled.VisibilityOff" id="icon-visibility-off" aria-hidden="true" />
-    </div>
 </div>
 
-<script>
-   function findButton(element) {
-       return !element || element.tagName?.toLowerCase() === 'button'
-           ? element
-           : findButton(element.parentElement);
-   }
+<template id="password-icon-show-password">
+    <MudIcon Icon="@Icons.Material.Filled.Visibility" aria-label="@this.Loc["LoginPage.ShowPassword"]" />
+</template>
 
-   function showPassword(inputElement, clickedElement) {
-       const button = findButton(clickedElement);
+<template id="password-icon-hide-password">
+    <MudIcon Icon="@Icons.Material.Filled.VisibilityOff" aria-label="@this.Loc["LoginPage.HidePassword"]" />
+</template>
 
-       if (inputElement.type === 'password') {
-           inputElement.type = 'text';
-
-           const icon = document.getElementById('icon-visibility-off');
-           if (icon && button) {
-               button.innerHTML = icon.outerHTML;
-           }
-       } else {
-           inputElement.type = 'password';
-
-           const icon = document.getElementById('icon-visibility-on');
-           if (icon && button) {
-               button.innerHTML = icon.outerHTML;
-           }
-       }
-   }
-</script>
+<script src=@this.Assets["js/showPassword.js"]></script>
 
 @code {
     [CascadingParameter]
@@ -127,6 +116,18 @@
 
     private async Task OnLogin()
     {
+        if (String.IsNullOrWhiteSpace(this.Model.Email))
+        {
+            this.SetErrorMessage("EmailRequired");
+            return;
+        }
+
+        if (String.IsNullOrWhiteSpace(this.Model.Password))
+        {
+            this.SetErrorMessage("PasswordRequired");
+            return;
+        }
+
         var user = await this.UserManager.Users
             .Include(user => user.List)
             .FirstOrDefaultAsync(user => user.Email == this.Model.Email);
@@ -152,8 +153,8 @@
         this.PageNavigator.GoToPage(this.ReturnUrl);
     }
 
-    private void SetErrorMessage() =>
-        this.errorMessage = this.Loc["LoginPage.InvalidLoginAttempt"];
+    private void SetErrorMessage(string message = "InvalidLoginAttempt") =>
+        this.errorMessage = this.Loc[$"LoginPage.{message}"];
 
     private sealed class LoginModel
     {

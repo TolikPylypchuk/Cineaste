@@ -1,4 +1,4 @@
-namespace Cineaste.Client.Services.BaseUri;
+namespace Cineaste.Client.BaseUri;
 
 public interface IBaseUriProvider
 {

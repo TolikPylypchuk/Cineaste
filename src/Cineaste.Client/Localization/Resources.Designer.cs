@@ -205,15 +205,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cineaste.
-        /// </summary>
-        public static string Cineaste {
-            get {
-                return ResourceManager.GetString("Cineaste", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Confirmation_Cancel {
@@ -655,11 +646,29 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go to list.
+        ///   Looks up a localized string similar to Log in.
         /// </summary>
-        public static string HomePage_GoToList {
+        public static string LandingPage_LogIn {
             get {
-                return ResourceManager.GetString("HomePage.GoToList", resourceCulture);
+                return ResourceManager.GetString("LandingPage.LogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string LandingPage_Register {
+            get {
+                return ResourceManager.GetString("LandingPage.Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cineaste.
+        /// </summary>
+        public static string LandingPage_Title {
+            get {
+                return ResourceManager.GetString("LandingPage.Title", resourceCulture);
             }
         }
         
@@ -871,6 +880,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The email is required.
+        /// </summary>
+        public static string LoginPage_EmailRequired {
+            get {
+                return ResourceManager.GetString("LoginPage.EmailRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide password.
+        /// </summary>
+        public static string LoginPage_HidePassword {
+            get {
+                return ResourceManager.GetString("LoginPage.HidePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The username of password is incorrect.
         /// </summary>
         public static string LoginPage_InvalidLoginAttempt {
@@ -889,11 +916,47 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No account?.
+        /// </summary>
+        public static string LoginPage_NoAccount {
+            get {
+                return ResourceManager.GetString("LoginPage.NoAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login | Cineaste.
+        /// </summary>
+        public static string LoginPage_PageTitle {
+            get {
+                return ResourceManager.GetString("LoginPage.PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string LoginPage_Password {
             get {
                 return ResourceManager.GetString("LoginPage.Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password is required.
+        /// </summary>
+        public static string LoginPage_PasswordRequired {
+            get {
+                return ResourceManager.GetString("LoginPage.PasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string LoginPage_Register {
+            get {
+                return ResourceManager.GetString("LoginPage.Register", resourceCulture);
             }
         }
         
@@ -912,6 +975,15 @@ namespace Cineaste.Client.Localization {
         public static string LoginPage_ShowPassword {
             get {
                 return ResourceManager.GetString("LoginPage.ShowPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log In to Cineaste.
+        /// </summary>
+        public static string LoginPage_Title {
+            get {
+                return ResourceManager.GetString("LoginPage.Title", resourceCulture);
             }
         }
         
@@ -1506,6 +1578,141 @@ namespace Cineaste.Client.Localization {
         public static string Problem_ValidationFailed_CreateList {
             get {
                 return ResourceManager.GetString("Problem.ValidationFailed.CreateList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Already have an account?.
+        /// </summary>
+        public static string RegisterPage_AlreadyHaveAccount {
+            get {
+                return ResourceManager.GetString("RegisterPage.AlreadyHaveAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string RegisterPage_BackToLandingPage {
+            get {
+                return ResourceManager.GetString("RegisterPage.BackToLandingPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm password.
+        /// </summary>
+        public static string RegisterPage_ConfirmPassword {
+            get {
+                return ResourceManager.GetString("RegisterPage.ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string RegisterPage_Email {
+            get {
+                return ResourceManager.GetString("RegisterPage.Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The email is required.
+        /// </summary>
+        public static string RegisterPage_EmailRequired {
+            get {
+                return ResourceManager.GetString("RegisterPage.EmailRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invitation code.
+        /// </summary>
+        public static string RegisterPage_InvitationCode {
+            get {
+                return ResourceManager.GetString("RegisterPage.InvitationCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        public static string RegisterPage_LogIn {
+            get {
+                return ResourceManager.GetString("RegisterPage.LogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register | Cineaste.
+        /// </summary>
+        public static string RegisterPage_PageTitle {
+            get {
+                return ResourceManager.GetString("RegisterPage.PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string RegisterPage_Password {
+            get {
+                return ResourceManager.GetString("RegisterPage.Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password confirmation is required.
+        /// </summary>
+        public static string RegisterPage_PasswordConfirmationRequired {
+            get {
+                return ResourceManager.GetString("RegisterPage.PasswordConfirmationRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password is required.
+        /// </summary>
+        public static string RegisterPage_PasswordRequired {
+            get {
+                return ResourceManager.GetString("RegisterPage.PasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string RegisterPage_Register {
+            get {
+                return ResourceManager.GetString("RegisterPage.Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show password.
+        /// </summary>
+        public static string RegisterPage_ShowPassword {
+            get {
+                return ResourceManager.GetString("RegisterPage.ShowPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register in Cineaste.
+        /// </summary>
+        public static string RegisterPage_Title {
+            get {
+                return ResourceManager.GetString("RegisterPage.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passwords don&apos;t match.
+        /// </summary>
+        public static string RegsiterPage_InvalidPasswordConfirmation {
+            get {
+                return ResourceManager.GetString("RegsiterPage.InvalidPasswordConfirmation", resourceCulture);
             }
         }
         

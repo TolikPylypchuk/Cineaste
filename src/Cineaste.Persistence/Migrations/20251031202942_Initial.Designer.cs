@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cineaste.Persistence.Migrations
 {
     [DbContext(typeof(CineasteDbContext))]
-    [Migration("20251020180946_Initial")]
+    [Migration("20251031202942_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -853,6 +853,24 @@ namespace Cineaste.Persistence.Migrations
                     b.ToTable("UserClaims", (string)null);
                 });
 
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserInvitationCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("AssignedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserInvitationCodes");
+                });
+
             modelBuilder.Entity("Cineaste.Identity.CineasteUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
@@ -1442,6 +1460,15 @@ namespace Cineaste.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Cineaste.Identity.CineasteUserInvitationCode", b =>
+                {
+                    b.HasOne("Cineaste.Identity.CineasteUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Cineaste.Identity.CineasteUserLogin", b =>

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-using Cineaste.Client.Services.BaseUri;
+using Cineaste.Client.BaseUri;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
