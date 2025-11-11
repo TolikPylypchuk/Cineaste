@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Cineaste.Infrastructure.OpenApi;
 
@@ -20,12 +20,14 @@ public static class CineasteOpenApiExtensions
                     document.Info.Description = options.Info.Description;
                     document.Info.Version = options.Info.Version;
 
-                    document.Servers.Clear();
-                    document.Servers.Add(new OpenApiServer
-                    {
-                        Url = options.Server.Url,
-                        Description = options.Server.Description
-                    });
+                    document.Servers =
+                    [
+                        new OpenApiServer
+                        {
+                            Url = options.Server.Url,
+                            Description = options.Server.Description
+                        }
+                    ];
 
                     return Task.CompletedTask;
                 });

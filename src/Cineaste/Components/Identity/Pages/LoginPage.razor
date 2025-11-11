@@ -99,7 +99,7 @@
     public required HttpContext HttpContext { get; set; }
 
     [SupplyParameterFromForm]
-    private LoginModel Model { get; set; } = new();
+    public LoginModel Model { get; set; } = new();
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
@@ -156,7 +156,7 @@
     private void SetErrorMessage(string message = "InvalidLoginAttempt") =>
         this.errorMessage = this.Loc[$"LoginPage.{message}"];
 
-    private sealed class LoginModel
+    public sealed class LoginModel
     {
         public string Email { get; set; } = String.Empty;
         public string Password { get; set; } = String.Empty;

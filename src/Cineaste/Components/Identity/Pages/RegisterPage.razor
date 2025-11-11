@@ -109,7 +109,7 @@
     public required HttpContext HttpContext { get; set; }
 
     [SupplyParameterFromForm]
-    private RegisterModel Model { get; set; } = new();
+    public RegisterModel Model { get; set; } = new();
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
@@ -181,7 +181,7 @@
     private void SetErrorMessage(string message) =>
         this.errorMessage = this.Loc[$"RegisterPage.{message}"];
 
-    private sealed class RegisterModel
+    public sealed class RegisterModel
     {
         public string InvitationCode { get; set; } = String.Empty;
         public string Email { get; set; } = String.Empty;
