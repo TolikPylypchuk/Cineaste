@@ -23,6 +23,8 @@ internal sealed class TestDataProvider(
             var invitationCode = new CineasteUserInvitationCode(Id.Create<CineasteUserInvitationCode>());
             dbContext.UserInvitationCodes.Add(invitationCode);
 
+            await dbContext.SaveChangesAsync();
+
             var (user, result) = await userRegistrationService.RegisterUser(
                 "test@email.com", "123Password!", invitationCode.Id.Value);
 
