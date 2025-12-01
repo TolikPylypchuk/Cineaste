@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -18,4 +18,4 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Run Tests
-        run: dotnet test --logger "console;verbosity=detailed"
+        run: dotnet test --output Detailed

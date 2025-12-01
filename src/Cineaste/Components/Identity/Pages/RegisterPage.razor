@@ -109,12 +109,18 @@
     public required HttpContext HttpContext { get; set; }
 
     [SupplyParameterFromForm]
-    public RegisterModel Model { get; set; } = new();
+    public RegisterModel Model { get; set; } = null!;
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
 
     private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        this.Model ??= new();
+        base.OnInitialized();
+    }
 
     private async Task OnRegister()
     {
