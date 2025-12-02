@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="1.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cineaste.Basic\Cineaste.Basic.csproj" />
+    <ProjectReference Include="..\Cineaste.Core\Cineaste.Core.csproj" />
+    <ProjectReference Include="..\Cineaste.Identity\Cineaste.Identity.csproj" />
+    <ProjectReference Include="..\Cineaste.Persistence\Cineaste.Persistence.csproj" />
+    <ProjectReference Include="..\Cineaste.Shared\Cineaste.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 
+using Cineaste.Application.Services.List;
+using Cineaste.Application.Services.User;
 using Cineaste.Client;
 using Cineaste.Client.BaseUri;
 using Cineaste.Client.Navigation;
@@ -11,8 +13,6 @@ using Cineaste.Infrastructure.OpenApi;
 using Cineaste.Infrastructure.Problems;
 using Cineaste.Routes;
 using Cineaste.Services.BaseUri;
-using Cineaste.Services.List;
-using Cineaste.Services.User;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
@@ -165,7 +165,7 @@ app.MapAdditionalIdentityEndpoints();
 
 app.MapFallback("/api/{**path}", () =>
 {
-    throw new NotFoundException(Cineaste.Resources.Any, "The requested resource was not found");
+    throw new NotFoundException(Resources.Any, "The requested resource was not found");
 });
 
 if (builder.Environment.IsDevelopment())

@@ -1,4 +1,4 @@
-using Cineaste.Services.User;
+using Cineaste.Application.Services.User;
 
 namespace Cineaste.Data;
 
