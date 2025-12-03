@@ -1,4 +1,4 @@
-namespace Cineaste.Infrastructure.OpenApi;
+namespace Cineaste.OpenApi;
 
 public record CineasteOpenApiOptions
 {

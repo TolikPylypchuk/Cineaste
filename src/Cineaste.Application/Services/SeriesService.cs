@@ -101,7 +101,7 @@ public sealed class SeriesService(
         var poster = await this.dbContext.SeriesPosters
             .Where(poster => poster.Series == series)
             .FirstOrDefaultAsync(token)
-            ?? throw this.PosterNotFound(seriesId);
+            ?? throw new SeriesPosterNotFoundException(seriesId);
 
         return poster.ToPosterModel();
     }
@@ -158,7 +158,7 @@ public sealed class SeriesService(
         var poster = await this.dbContext.SeasonPosters
             .Where(poster => poster.Period == period)
             .FirstOrDefaultAsync(token)
-            ?? throw this.PosterNotFound(periodId);
+            ?? throw new SeasonPosterNotFoundException(periodId);
 
         return poster.ToPosterModel();
     }
@@ -225,7 +225,7 @@ public sealed class SeriesService(
         var poster = await this.dbContext.SpecialEpisodePosters
             .Where(poster => poster.SpecialEpisode == episode)
             .FirstOrDefaultAsync(token)
-            ?? throw this.PosterNotFound(episodeId);
+            ?? throw new SpecialEpisodePosterNotFoundException(episodeId);
 
         return poster.ToPosterModel();
     }
@@ -283,12 +283,12 @@ public sealed class SeriesService(
         series.Seasons
             .SelectMany(season => season.Periods)
             .FirstOrDefault(period => period.Id == periodId)
-            ?? throw this.NotFound(periodId);
+            ?? throw new PeriodNotFoundException(periodId);
 
     private SpecialEpisode FindSpecialEpisode(Series series, Id<SpecialEpisode> episodeId) =>
         series.SpecialEpisodes
             .FirstOrDefault(episode => episode.Id == episodeId)
-            ?? throw this.NotFound(episodeId);
+            ?? throw new SpecialEpisodeNotFoundException(episodeId);
 
     private async Task<Series> FindSeries(CineasteList list, Id<Series> id, CancellationToken token)
     {
@@ -296,7 +296,7 @@ public sealed class SeriesService(
             .Select(item => item.Series)
             .WhereNotNull()
             .FirstOrDefault(series => series.Id == id)
-            ?? throw this.NotFound(id);
+            ?? throw new SeriesNotFoundException(id);
 
         await this.dbContext.Entry(series)
             .Collection(s => s.Seasons)
@@ -374,7 +374,7 @@ public sealed class SeriesService(
     private async Task<CineasteList> FindList(Id<CineasteList> listId, CancellationToken token)
     {
         var list = await this.dbContext.Lists.SingleOrDefaultAsync(list => list.Id == listId, token)
-            ?? throw this.NotFound(listId);
+            ?? throw new ListNotFoundException(listId);
 
         await this.dbContext.Entry(list)
             .Reference(list => list.Configuration)
@@ -424,14 +424,14 @@ public sealed class SeriesService(
     private SeriesKind FindKind(CineasteList list, Id<SeriesKind> id) =>
         list.SeriesKinds
             .FirstOrDefault(kind => kind.Id == id)
-            ?? throw this.NotFound(id);
+            ?? throw new SeriesKindNotFoundException(id);
 
     private Franchise FindFranchise(CineasteList list, Id<Franchise> id) =>
         list.Items
             .Select(item => item.Franchise)
             .WhereNotNull()
             .FirstOrDefault(franchise => franchise.Id == id)
-            ?? throw this.NotFound(id);
+            ?? throw new FranchiseNotFoundException(id);
 
     private Task<PosterHash> SetSeriesPoster(
         Id<CineasteList> listId,
@@ -545,39 +545,4 @@ public sealed class SeriesService(
 
         return hash;
     }
-
-    private NotFoundException NotFound(Id<CineasteList> id) =>
-        new(Resources.List, $"Could not find the list with ID {id}");
-
-    private CineasteException NotFound(Id<Series> id) =>
-        new NotFoundException(Resources.Series, $"Could not find a series with ID {id.Value}")
-            .WithProperty(id);
-
-    private CineasteException NotFound(Id<Period> id) =>
-        new NotFoundException(Resources.Period, $"Could not find a period with ID {id.Value}")
-            .WithProperty(id);
-
-    private CineasteException NotFound(Id<SpecialEpisode> id) =>
-        new NotFoundException(Resources.SpecialEpisode, $"Could not find a special episode with ID {id.Value}")
-            .WithProperty(id);
-
-    private CineasteException NotFound(Id<SeriesKind> id) =>
-        new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with ID {id.Value}")
-            .WithProperty(id);
-
-    private CineasteException NotFound(Id<Franchise> id) =>
-        new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id.Value}")
-            .WithProperty(id);
-
-    private CineasteException PosterNotFound(Id<Series> seriesId) =>
-        new NotFoundException(Resources.Poster, $"Could not find a poster for series with ID {seriesId.Value}")
-            .WithProperty(seriesId);
-
-    private CineasteException PosterNotFound(Id<Period> periodId) =>
-        new NotFoundException(Resources.Poster, $"Could not find a poster for period with ID {periodId.Value}")
-            .WithProperty(periodId);
-
-    private CineasteException PosterNotFound(Id<SpecialEpisode> episodeId) =>
-        new NotFoundException(Resources.Poster, $"Could not find a poster for episode with ID {episodeId.Value}")
-            .WithProperty(episodeId);
 }

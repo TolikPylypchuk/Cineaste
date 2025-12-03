@@ -101,7 +101,7 @@ public sealed class FranchiseService(
         var poster = await this.dbContext.FranchisePosters
             .Where(poster => poster.Franchise == franchise)
             .FirstOrDefaultAsync(token)
-            ?? throw this.PosterNotFound(franchiseId);
+            ?? throw new FranchisePosterNotFoundException(franchiseId);
 
         return poster.ToPosterModel();
     }
@@ -153,7 +153,7 @@ public sealed class FranchiseService(
             .Select(item => item.Franchise)
             .WhereNotNull()
             .FirstOrDefault(franchise => franchise.Id == id)
-            ?? throw this.NotFound(id);
+            ?? throw new FranchiseNotFoundException(id);
 
         await this.dbContext.Entry(franchise)
             .Reference(f => f.MovieKind)
@@ -218,7 +218,7 @@ public sealed class FranchiseService(
     private async Task<CineasteList> FindList(Id<CineasteList> listId, CancellationToken token)
     {
         var list = await this.dbContext.Lists.SingleOrDefaultAsync(list => list.Id == listId, token)
-            ?? throw this.NotFound(listId);
+            ?? throw new ListNotFoundException(listId);
 
         await this.dbContext.Entry(list)
             .Reference(list => list.Configuration)
@@ -288,7 +288,8 @@ public sealed class FranchiseService(
     {
         var movieKindId = Id.For<MovieKind>(request.KindId);
         return request.KindSource == FranchiseKindSource.Movie
-            ? list.MovieKinds.FirstOrDefault(kind => kind.Id == movieKindId) ?? throw this.NotFound(movieKindId)
+            ? list.MovieKinds.FirstOrDefault(kind => kind.Id == movieKindId)
+                ?? throw new MovieKindNotFoundException(movieKindId)
             : list.MovieKinds.First();
     }
 
@@ -296,7 +297,8 @@ public sealed class FranchiseService(
     {
         var seriesKindId = Id.For<SeriesKind>(request.KindId);
         return request.KindSource == FranchiseKindSource.Series
-            ? list.SeriesKinds.FirstOrDefault(kind => kind.Id == seriesKindId) ?? throw this.NotFound(seriesKindId)
+            ? list.SeriesKinds.FirstOrDefault(kind => kind.Id == seriesKindId)
+                ?? throw new SeriesKindNotFoundException(seriesKindId)
             : list.SeriesKinds.First();
     }
 
@@ -311,7 +313,7 @@ public sealed class FranchiseService(
 
         if (missingMovieIds.Any() || missingSeriesIds.Any() || missingFranchiseIds.Any())
         {
-            throw this.NotFound(missingMovieIds, missingSeriesIds, missingFranchiseIds);
+            throw new FranchiseItemsNotFoundException(missingMovieIds, missingSeriesIds, missingFranchiseIds);
         }
 
         foreach (var s in series)
@@ -409,32 +411,4 @@ public sealed class FranchiseService(
 
         return hash;
     }
-
-    private NotFoundException NotFound(Id<CineasteList> id) =>
-        new(Resources.List, $"Could not find the list with ID {id}");
-
-    private CineasteException NotFound(Id<Franchise> id) =>
-        new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id.Value}")
-            .WithProperty(id);
-
-    private CineasteException NotFound(
-        IEnumerable<Id<Movie>> movieIds,
-        IEnumerable<Id<Series>> seriesIds,
-        IEnumerable<Id<Franchise>> franchiseIds) =>
-        new NotFoundException(Resources.FranchiseItems, $"Could not find franchise items")
-            .WithProperty(movieIds)
-            .WithProperty(seriesIds)
-            .WithProperty(franchiseIds);
-
-    private CineasteException NotFound(Id<MovieKind> id) =>
-        new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with ID {id.Value}")
-            .WithProperty(id);
-
-    private CineasteException NotFound(Id<SeriesKind> id) =>
-        new NotFoundException(Resources.SeriesKind, $"Could not find a series kind with ID {id.Value}")
-            .WithProperty(id);
-
-    private CineasteException PosterNotFound(Id<Franchise> franchiseId) =>
-        new NotFoundException(Resources.Poster, $"Could not find a poster for franchise with ID {franchiseId.Value}")
-            .WithProperty(franchiseId);
 }

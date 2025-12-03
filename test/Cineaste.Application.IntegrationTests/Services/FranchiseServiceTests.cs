@@ -73,12 +73,10 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
             franchiseService.GetFranchise(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("NotFound.Franchise", exception.MessageCode);
-        Assert.Equal("Resource.Franchise", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.FranchiseId);
     }
 
     [Fact(DisplayName = "AddFranchise should put it into the database")]
@@ -181,14 +179,12 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchiseItemsNotFoundException>(() =>
             franchiseService.AddFranchise(data.ListId, request.Validated(), TestContext.Current.CancellationToken));
 
-        Assert.Equal("NotFound.FranchiseItems", exception.MessageCode);
-        Assert.Equal("Resource.FranchiseItems", exception.Resource);
-        Assert.Equal(ImmutableList.Create(Id.For<Movie>(dummyItemId)), exception.Properties["movieIds"]);
-        Assert.Equal(ImmutableList.Create<Guid>(), exception.Properties["seriesIds"]);
-        Assert.Equal(ImmutableList.Create<Guid>(), exception.Properties["franchiseIds"]);
+        Assert.Equal([Id.For<Movie>(dummyItemId)], exception.MovieIds);
+        Assert.Equal([], exception.SeriesIds);
+        Assert.Equal([], exception.FranchiseIds);
     }
 
     [Fact(DisplayName = "UpdateFranchise should update it in the database")]
@@ -327,12 +323,11 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
             franchiseService.UpdateFranchise(
                 data.ListId, dummyId, request.Validated(), TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Franchise", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.FranchiseId);
     }
 
     [Fact(DisplayName = "RemoveFranchise should remote it from the database")]
@@ -372,12 +367,10 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
             franchiseService.RemoveFranchise(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("NotFound.Franchise", exception.MessageCode);
-        Assert.Equal("Resource.Franchise", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.FranchiseId);
     }
 
     private FranchiseRequest CreateFranchiseRequest(

@@ -5,7 +5,7 @@
         <p class="main-text">@this.Loc[this.Text]</p>
 
         <div class="button-panel">
-            @if (this.Problem is not null && this.Problem.Detail is not null)
+            @if (this.Problem is not null && this.Problem.Type is not null)
             {
                 <MudButton
                     Variant="Variant.Text"
@@ -31,14 +31,11 @@
         </div>
     </div>
 
-    @if (this.Problem is not null && this.Problem.Detail is not null && this.IsOpened)
+    @if (this.Problem is not null && this.Problem.Type is not null && this.IsOpened)
     {
         <MudDivider Class="details-divider" DividerType="DividerType.FullWidth"></MudDivider>
         <p class="details-container">
-            <span class="details">@this.Loc[this.Problem.Detail]</span>
-            <MudLink Class="details-link" Href="@this.Problem.Type" Target="_blank">
-                @this.Problem.Status @this.Problem.Title
-            </MudLink>
+            <span class="details">@this.Loc[$"Problem:{this.Problem.Type}"]</span>
         </p>
     }
 </MudAlert>

@@ -1,4 +1,4 @@
-namespace Cineaste.Infrastructure.Problems;
+namespace Cineaste.Problems;
 
 internal static class CineasteExceptionHandlerExtensions
 {

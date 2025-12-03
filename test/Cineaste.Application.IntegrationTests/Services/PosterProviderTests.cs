@@ -60,14 +60,16 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
 
         var request = data.CreatePosterUrlRequest();
 
-        this.SetUpHttp(mockHttp, request.Value.Url, HttpStatusCode.NotFound);
+        var statusCode = HttpStatusCode.NotFound;
+        this.SetUpHttp(mockHttp, request.Value.Url, statusCode);
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<PosterFetchException>(() => provider.FetchPoster(
+        var exception = await Assert.ThrowsAsync<PosterFetchResponseException>(() => provider.FetchPoster(
             request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Poster.Fetch.UnsuccessfulResponse", exception.MessageCode);
+        Assert.Equal(request.Value.Url, exception.Url);
+        Assert.Equal((int)statusCode, exception.Response.StatusCode);
     }
 
     [Fact(DisplayName = "FetchPoster should throw is response has no content type")]
@@ -86,10 +88,10 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<PosterFetchException>(() => provider.FetchPoster(
+        var exception = await Assert.ThrowsAsync<NoPosterContentTypeException>(() => provider.FetchPoster(
             request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Poster.Fetch.NoContentType", exception.MessageCode);
+        Assert.Equal(request.Value.Url, exception.Url);
     }
 
     [Fact(DisplayName = "FetchPoster should throw is response has no content length")]
@@ -109,10 +111,10 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<PosterFetchException>(() => provider.FetchPoster(
+        var exception = await Assert.ThrowsAsync<NoPosterContentLengthException>(() => provider.FetchPoster(
             request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Poster.Fetch.NoContentLength", exception.MessageCode);
+        Assert.Equal(request.Value.Url, exception.Url);
     }
 
     [Theory(DisplayName = "FetchPoster should throw is response has invalid content type")]
@@ -143,8 +145,7 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var exception = await Assert.ThrowsAsync<UnsupportedPosterTypeException>(() => provider.FetchPoster(
             request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Poster.ContentType.Unsupported", exception.MessageCode);
-        Assert.Equal(contentType, exception.Properties["contentType"]);
+        Assert.Equal(contentType, exception.ContentType);
     }
 
     [Fact(DisplayName = "FetchPoster should throw is HttpClient cancels")]
@@ -190,7 +191,6 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var actualException = await Assert.ThrowsAsync<PosterFetchException>(() => provider.FetchPoster(
             request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Poster.Fetch.Error", actualException.MessageCode);
         Assert.Same(expectedException, actualException.InnerException);
     }
 
@@ -243,13 +243,12 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
 
         // Act
 
-        var exception = await Assert.ThrowsAsync<PosterFetchException>(() => provider.GetPosterUrl(
+        var exception = await Assert.ThrowsAsync<ImdbMediaImageNotFoundException>(() => provider.GetPosterUrl(
             request, TestContext.Current.CancellationToken));
 
         // Assert
 
-        Assert.Equal("Poster.Fetch.Imdb.Media.PosterNotFound", exception.MessageCode);
-        Assert.Equal(request.Value.Url, exception.Properties["url"]);
+        Assert.Equal(request.Value.Url, exception.Url);
     }
 
     [Fact(DisplayName = "GetPosterUrl should throw if the element is not an image")]
@@ -274,13 +273,12 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
 
         // Act
 
-        var exception = await Assert.ThrowsAsync<PosterFetchException>(() => provider.GetPosterUrl(
+        var exception = await Assert.ThrowsAsync<ImdbMediaImageNotFoundException>(() => provider.GetPosterUrl(
             request, TestContext.Current.CancellationToken));
 
         // Assert
 
-        Assert.Equal("Poster.Fetch.Imdb.Media.PosterNotFound", exception.MessageCode);
-        Assert.Equal(request.Value.Url, exception.Properties["url"]);
+        Assert.Equal(request.Value.Url, exception.Url);
     }
 
     [Fact(DisplayName = "GetPosterUrl should throw if the image has no source")]
@@ -306,13 +304,12 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
 
         // Act
 
-        var exception = await Assert.ThrowsAsync<PosterFetchException>(() => provider.GetPosterUrl(
+        var exception = await Assert.ThrowsAsync<ImdbMediaImageNotFoundException>(() => provider.GetPosterUrl(
             request, TestContext.Current.CancellationToken));
 
         // Assert
 
-        Assert.Equal("Poster.Fetch.Imdb.Media.PosterNotFound", exception.MessageCode);
-        Assert.Equal(request.Value.Url, exception.Properties["url"]);
+        Assert.Equal(request.Value.Url, exception.Url);
     }
 
     [Fact(DisplayName = "GetPosterUrl should throw is the HTML provider cancels")]
@@ -358,7 +355,6 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var actualException = await Assert.ThrowsAsync<PosterFetchException>(() => provider.GetPosterUrl(
             request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Poster.Fetch.Error", actualException.MessageCode);
         Assert.Same(expectedException, actualException.InnerException);
     }
 

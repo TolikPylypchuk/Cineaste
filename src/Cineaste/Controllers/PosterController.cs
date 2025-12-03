@@ -1,3 +1,5 @@
+using Cineaste.Application.Services.Poster;
+
 using Microsoft.AspNetCore.Authorization;
 
 namespace Cineaste.Controllers;

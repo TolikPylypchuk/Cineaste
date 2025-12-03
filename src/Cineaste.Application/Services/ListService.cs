@@ -9,7 +9,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
 
     public async Task<ListModel> GetList(Id<CineasteList> listId, CancellationToken token)
     {
-        logger.LogDebug("Getting the list");
+        this.logger.LogDebug("Getting the list");
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
@@ -18,7 +18,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .AsSplitQuery()
             .AsNoTracking()
             .SingleOrDefaultAsync(list => list.Id == listId, token)
-            ?? throw this.ListNotFound(listId);
+            ?? throw new ListNotFoundException(listId);
 
         return list.ToListModel();
     }
@@ -29,14 +29,14 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
         int size,
         CancellationToken token)
     {
-        logger.LogDebug("Getting the list items");
+        this.logger.LogDebug("Getting the list items");
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
             .SingleOrDefaultAsync(list => list.Id == listId, token)
-            ?? throw this.ListNotFound(listId);
+            ?? throw new ListNotFoundException(listId);
 
         int totalItems = await dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
@@ -72,7 +72,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
             .SingleOrDefaultAsync(list => list.Id == listId, token)
-            ?? throw this.ListNotFound(listId);
+            ?? throw new ListNotFoundException(listId);
 
         var items = await dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
@@ -87,14 +87,14 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
 
     public async Task<ListItemModel> GetListItem(Id<CineasteList> listId, Guid id, CancellationToken token)
     {
-        logger.LogDebug("Getting the list item by ID {Id}", id);
+        this.logger.LogDebug("Getting the list item by ID {Id}", id);
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
             .SingleOrDefaultAsync(list => list.Id == listId, token)
-            ?? throw this.ListNotFound(listId);
+            ?? throw new ListNotFoundException(listId);
 
         var movieId = Id.For<Movie>(id);
         var seriesId = Id.For<Series>(id);
@@ -108,7 +108,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
                 item.Franchise!.Id == franchiseId)
             .IncludeRelationships()
             .SingleOrDefaultAsync(token)
-            ?? throw new NotFoundException(Resources.ListItem, $"Could not find list item with ID {id}");
+            ?? throw new ListItemNotFoundException(id);
 
         return item.ToListItemModel();
     }
@@ -119,7 +119,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
         int sequenceNumber,
         CancellationToken token)
     {
-        logger.LogDebug(
+        this.logger.LogDebug(
             "Getting the list item by parent franchise ID {ParentFranchiseId} and sequence number {SequenceNumber}",
             parentFranchiseId,
             sequenceNumber);
@@ -129,7 +129,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
             .SingleOrDefaultAsync(list => list.Id == listId, token)
-            ?? throw this.ListNotFound(listId);
+            ?? throw new ListNotFoundException(listId);
 
         var parentFranchiseStrongId = Id.For<Franchise>(parentFranchiseId);
 
@@ -143,13 +143,11 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(franchise => franchise.Children)
                 .ThenInclude(item => item.Franchise)
             .SingleOrDefaultAsync(token)
-            ?? throw new NotFoundException(Resources.Franchise, $"Franchise with ID {parentFranchiseId} not found");
+            ?? throw new FranchiseNotFoundException(parentFranchiseStrongId);
 
         var childItem = parentFranchise.Children
             .FirstOrDefault(item => item.SequenceNumber == sequenceNumber)
-            ?? throw new NotFoundException(
-                Resources.ListItem,
-                $"List item not found by parent franchise ID {parentFranchiseId} and sequence number {sequenceNumber}");
+            ?? throw new FranchiseItemWithNumberNotFoundException(parentFranchiseStrongId, sequenceNumber);
 
         var itemIdPredicate = childItem.Select<Expression<Func<ListItem, bool>>>(
             movie => item => item.Movie!.Id == movie.Id,
@@ -161,22 +159,9 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Where(itemIdPredicate)
             .IncludeRelationships()
             .SingleOrDefaultAsync(token)
-            ?? throw this.ListItemNotFound(childItem);
+            ?? throw new FranchiseItemNotFoundException(childItem);
 
         return item.ToListItemModel();
-    }
-
-    private NotFoundException ListNotFound(Id<CineasteList> listId) =>
-        new(Resources.List, $"Could not find the list with ID {listId}");
-
-    private NotFoundException ListItemNotFound(FranchiseItem item)
-    {
-        var itemIdValue = item.Select(
-            movie => movie.Id.Value,
-            series => series.Id.Value,
-            franchise => franchise.Id.Value);
-
-        return new NotFoundException(Resources.ListItem, $"Could not find list item with ID {itemIdValue}");
     }
 }
 

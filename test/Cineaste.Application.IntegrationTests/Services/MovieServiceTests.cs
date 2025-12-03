@@ -45,12 +45,10 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<MovieNotFoundException>(() =>
             movieService.GetMovie(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("NotFound.Movie", exception.MessageCode);
-        Assert.Equal("Resource.Movie", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.MovieId);
     }
 
     [Fact(DisplayName = "AddMovie should put it into the database")]
@@ -124,12 +122,10 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<MovieKindNotFoundException>(() =>
             movieService.AddMovie(data.ListId, request.Validated(), TestContext.Current.CancellationToken));
 
-        Assert.Equal("NotFound.MovieKind", exception.MessageCode);
-        Assert.Equal("Resource.MovieKind", exception.Resource);
-        Assert.Equal(dummyKindId, exception.Properties["id"]);
+        Assert.Equal(dummyKindId, exception.KindId);
     }
 
     [Fact(DisplayName = "UpdateMovie should update it in the database")]
@@ -209,11 +205,10 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<MovieNotFoundException>(() =>
             movieService.UpdateMovie(data.ListId, dummyId, request.Validated(), TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Movie", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.MovieId);
     }
 
     [Fact(DisplayName = "RemoveMovie should remote it from the database")]
@@ -247,12 +242,10 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<MovieNotFoundException>(() =>
             movieService.RemoveMovie(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("NotFound.Movie", exception.MessageCode);
-        Assert.Equal("Resource.Movie", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.MovieId);
     }
 
     private MovieRequest CreateMovieRequest() =>

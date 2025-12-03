@@ -1,15 +1,8 @@
+using System.Net.Http.Headers;
+
 using AngleSharp.Dom;
 
 namespace Cineaste.Application.Services.Poster;
-
-public interface IPosterProvider
-{
-    Task<StreamableContent> FetchPoster(Validated<PosterUrlRequest> request, CancellationToken token = default);
-
-    Task<StreamableContent> FetchPoster(Validated<PosterImdbMediaRequest> request, CancellationToken token = default);
-
-    Task<string> GetPosterUrl(Validated<PosterImdbMediaRequest> request, CancellationToken token = default);
-}
 
 public sealed class PosterProvider(
     HttpClient httpClient,
@@ -52,30 +45,33 @@ public sealed class PosterProvider(
                 this.logger.LogInformation(
                     "Unsuccessful response when fetching a poster from a remote URL: {Url}", url);
 
-                throw await PosterFetchException.FromResponse(response, token);
+                throw await this.ExceptionFromResponse(url, response, token);
             }
 
             return await this.GetContent(response, url, token);
-        } catch (Exception e) when (e is CineasteException or OperationCanceledException)
+        } catch (Exception e) when (e is PosterException or OperationCanceledException)
         {
             throw;
         } catch (Exception e)
         {
             this.logger.LogError(e, "Exception when fetching a poster from a remote URL: {Url}", url);
 
-            throw new PosterFetchException("Error", "Error fetching a poster", e);
+            throw new PosterFetchException(e);
         }
     }
 
     private async Task<StreamableContent> GetContent(HttpResponseMessage response, string url, CancellationToken token)
     {
         string contentType = response.Content.Headers.ContentType?.MediaType
-            ?? throw new PosterFetchException("NoContentType", "Fetched poster does not have a media type");
+            ?? throw new NoPosterContentTypeException(url);
 
         long contentLength = response.Content.Headers.ContentLength
-            ?? throw new PosterFetchException("NoContentLength", "Fetched poster does not have a length");
+            ?? throw new NoPosterContentLengthException(url);
 
-        this.ValidateContentType(contentType);
+        if (!PosterContentTypes.AcceptedImageContentTypes.Contains(contentType))
+        {
+            throw new UnsupportedPosterTypeException(contentType, url);
+        }
 
         var responseBody = await response.Content.ReadAsStreamAsync(token);
 
@@ -98,7 +94,7 @@ public sealed class PosterProvider(
         {
             this.logger.LogError(e, "Exception when fetching IMDb media: {Url}", url);
 
-            throw new PosterFetchException("Error", "Error fetching a poster", e);
+            throw new PosterFetchException(e);
         }
     }
 
@@ -110,21 +106,35 @@ public sealed class PosterProvider(
             return source;
         } else
         {
-            throw new PosterFetchException(
-                "Imdb.Media.PosterNotFound", "The image URL is not found in the IMDb media page")
-                .WithProperty(url);
+            throw new ImdbMediaImageNotFoundException(url);
         }
     }
 
     private string GetMediaId(string url) =>
         new Uri(url).AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries).Last();
 
-    private void ValidateContentType(string contentType)
+    private async Task<PosterFetchResponseException> ExceptionFromResponse(
+        string url,
+        HttpResponseMessage response,
+        CancellationToken token = default)
     {
-        if (!PosterContentTypes.AcceptedImageContentTypes.Contains(contentType))
-        {
-            throw new UnsupportedPosterTypeException(contentType)
-                .WithProperty(contentType);
-        }
+        var responseData = new OriginalResponseDetails(
+            (int)response.StatusCode,
+            response.Headers.ToDictionary(),
+            await response.Content.ReadAsStringAsync(token));
+
+        throw new PosterFetchResponseException(url, responseData);
+    }
+}
+
+file static class Extensions
+{
+    public static Dictionary<string, object> ToDictionary(this HttpResponseHeaders headers) =>
+        headers.ToDictionary(header => header.Key, header => header.Value.ToStringOrList());
+
+    private static object ToStringOrList(this IEnumerable<string> value)
+    {
+        var list = value.ToList();
+        return list.Count == 1 ? list[0] : list;
     }
 }

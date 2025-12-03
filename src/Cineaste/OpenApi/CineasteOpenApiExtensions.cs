@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 
-namespace Cineaste.Infrastructure.OpenApi;
+namespace Cineaste.OpenApi;
 
 public static class CineasteOpenApiExtensions
 {

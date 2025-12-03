@@ -3,6 +3,7 @@ global using System.Text.Json;
 
 global using Cineaste.Application;
 global using Cineaste.Application.Exceptions;
+global using Cineaste.Application.Services;
 global using Cineaste.Application.Models;
 global using Cineaste.Basic;
 global using Cineaste.Core;
@@ -10,8 +11,6 @@ global using Cineaste.Core.Domain;
 global using Cineaste.Persistence;
 global using Cineaste.Data;
 global using Cineaste.Identity;
-global using Cineaste.Application.Services;
-global using Cineaste.Application.Services.Poster;
 global using Cineaste.Shared.Models;
 global using Cineaste.Shared.Models.Franchise;
 global using Cineaste.Shared.Models.List;

@@ -98,7 +98,7 @@ public sealed class MovieService(
         var poster = await this.dbContext.MoviePosters
             .Where(poster => poster.Movie == movie)
             .FirstOrDefaultAsync(token)
-            ?? throw this.PosterNotFound(movieId);
+            ?? throw new MoviePosterNotFoundException(movieId);
 
         return poster.ToPosterModel();
     }
@@ -148,7 +148,7 @@ public sealed class MovieService(
             .Select(item => item.Movie)
             .WhereNotNull()
             .FirstOrDefault(movie => movie.Id == id)
-            ?? throw this.NotFound(id);
+            ?? throw new MovieNotFoundException(id);
 
         await this.dbContext.Entry(movie)
             .Reference(m => m.FranchiseItem)
@@ -212,7 +212,7 @@ public sealed class MovieService(
     private async Task<CineasteList> FindList(Id<CineasteList> listId, CancellationToken token)
     {
         var list = await this.dbContext.Lists.SingleOrDefaultAsync(list => list.Id == listId, token)
-            ?? throw this.NotFound(listId);
+            ?? throw new ListNotFoundException(listId);
 
         await this.dbContext.Entry(list)
             .Reference(list => list.Configuration)
@@ -262,14 +262,14 @@ public sealed class MovieService(
     private MovieKind FindKind(CineasteList list, Id<MovieKind> id) =>
         list.MovieKinds
             .FirstOrDefault(kind => kind.Id == id)
-            ?? throw this.NotFound(id);
+            ?? throw new MovieKindNotFoundException(id);
 
     private Franchise FindFranchise(CineasteList list, Id<Franchise> id) =>
         list.Items
             .Select(item => item.Franchise)
             .WhereNotNull()
             .FirstOrDefault(franchise => franchise.Id == id)
-            ?? throw this.NotFound(id);
+            ?? throw new FranchiseNotFoundException(id);
 
     private Task<PosterHash> SetMoviePoster(
         Id<CineasteList> listId,
@@ -305,23 +305,4 @@ public sealed class MovieService(
 
         return hash;
     }
-
-    private NotFoundException NotFound(Id<CineasteList> id) =>
-        new(Resources.List, $"Could not find the list with ID {id}");
-
-    private CineasteException NotFound(Id<Movie> id) =>
-        new NotFoundException(Resources.Movie, $"Could not find a movie with ID {id}")
-            .WithProperty(id);
-
-    private CineasteException NotFound(Id<MovieKind> id) =>
-        new NotFoundException(Resources.MovieKind, $"Could not find a movie kind with ID {id}")
-            .WithProperty(id);
-
-    private CineasteException NotFound(Id<Franchise> id) =>
-        new NotFoundException(Resources.Franchise, $"Could not find a franchise with ID {id}")
-            .WithProperty(id);
-
-    private CineasteException PosterNotFound(Id<Movie> movieId) =>
-        new NotFoundException(Resources.Poster, $"Could not find a poster for movie with ID {movieId}")
-            .WithProperty(movieId);
 }

@@ -40,11 +40,10 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
             franchiseService.GetFranchisePoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Franchise", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.FranchiseId);
     }
 
     [Fact(DisplayName = "GetFranchisePoster should throw if poster isn't found")]
@@ -59,11 +58,10 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchisePosterNotFoundException>(() =>
             franchiseService.GetFranchisePoster(data.ListId, franchise.Id, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Poster", exception.Resource);
-        Assert.Equal(franchise.Id, exception.Properties["franchiseId"]);
+        Assert.Equal(franchise.Id, exception.FranchiseId);
     }
 
     [Fact(DisplayName = "SetFranchisePoster should set the franchise poster from a stream")]
@@ -99,7 +97,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
     }
 
     [Fact(DisplayName = "SetFranchisePoster from stream should throw if the franchise isn't found")]
-    public async Task SetFranchisePosterStreamMovieNotFound()
+    public async Task SetFranchisePosterStreamFranchiseNotFound()
     {
         // Arrange
 
@@ -111,12 +109,11 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
             franchiseService.SetFranchisePoster(
                 data.ListId, dummyId, posterData, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Franchise", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.FranchiseId);
     }
 
     [Fact(DisplayName = "SetFranchisePoster should set the franchise poster from a URL")]
@@ -158,7 +155,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
     }
 
     [Fact(DisplayName = "SetFranchisePoster from a URL should throw if the franchise isn't found")]
-    public async Task SetFranchisePosterUrlMovieNotFound()
+    public async Task SetFranchisePosterUrlFranchiseNotFound()
     {
         // Arrange
 
@@ -172,11 +169,10 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
             franchiseService.SetFranchisePoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Franchise", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.FranchiseId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -222,7 +218,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
     }
 
     [Fact(DisplayName = "SetFranchisePoster from IMDb media should throw if the franchise isn't found")]
-    public async Task SetFranchisePosterImdbMediaMovieNotFound()
+    public async Task SetFranchisePosterImdbMediaFranchiseNotFound()
     {
         // Arrange
 
@@ -236,11 +232,10 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
             franchiseService.SetFranchisePoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Franchise", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.FranchiseId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -286,7 +281,7 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
     }
 
     [Fact(DisplayName = "RemoveFranchisePoster should throw if the franchise isn't found")]
-    public async Task RemoveFranchisePosterMovieNotFound()
+    public async Task RemoveFranchisePosterFranchiseNotFound()
     {
         // Arrange
 
@@ -297,10 +292,9 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
             franchiseService.RemoveFranchisePoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Franchise", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.FranchiseId);
     }
 }

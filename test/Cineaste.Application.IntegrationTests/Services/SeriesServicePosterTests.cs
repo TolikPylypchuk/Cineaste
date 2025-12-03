@@ -40,11 +40,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.GetSeriesPoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.SeriesId);
     }
 
     [Fact(DisplayName = "GetSeriesPoster should throw if poster isn't found")]
@@ -59,11 +58,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SeriesPosterNotFoundException>(() =>
             seriesService.GetSeriesPoster(data.ListId, series.Id, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Poster", exception.Resource);
-        Assert.Equal(series.Id, exception.Properties["seriesId"]);
+        Assert.Equal(series.Id, exception.SeriesId);
     }
 
     [Fact(DisplayName = "GetSeasonPoster should get the season poster")]
@@ -102,12 +100,11 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.GetSeasonPoster(
                 data.ListId, dummySeriesId, dummyPeriodId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
     }
 
     [Fact(DisplayName = "GetSeasonPoster should throw if period isn't found")]
@@ -123,11 +120,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() =>
             seriesService.GetSeasonPoster(data.ListId, series.Id, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Period", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.PeriodId);
     }
 
     [Fact(DisplayName = "GetSeasonPoster should throw if poster isn't found")]
@@ -143,11 +139,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SeasonPosterNotFoundException>(() =>
             seriesService.GetSeasonPoster(data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Poster", exception.Resource);
-        Assert.Equal(period.Id, exception.Properties["periodId"]);
+        Assert.Equal(period.Id, exception.PeriodId);
     }
 
     [Fact(DisplayName = "GetSpecialEpisodePoster should get the special episode poster")]
@@ -186,11 +181,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.GetSpecialEpisodePoster(
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.GetSpecialEpisodePoster(
             data.ListId, dummySeriesId, dummyEpisodeId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
     }
 
     [Fact(DisplayName = "GetSpecialEpisodePoster should throw if episode isn't found")]
@@ -206,12 +200,11 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SpecialEpisodeNotFoundException>(() =>
             seriesService.GetSpecialEpisodePoster(
                 data.ListId, series.Id, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.SpecialEpisode", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.EpisodeId);
     }
 
     [Fact(DisplayName = "GetSpecialEpisodePoster should throw if poster isn't found")]
@@ -227,12 +220,11 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SpecialEpisodePosterNotFoundException>(() =>
             seriesService.GetSpecialEpisodePoster(
                 data.ListId, series.Id, episode.Id, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Poster", exception.Resource);
-        Assert.Equal(episode.Id, exception.Properties["episodeId"]);
+        Assert.Equal(episode.Id, exception.EpisodeId);
     }
 
     [Fact(DisplayName = "SetSeriesPoster should set the series poster from a stream")]
@@ -280,11 +272,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.SetSeriesPoster(data.ListId, dummyId, posterData, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.SeriesId);
     }
 
     [Fact(DisplayName = "SetSeriesPoster should set the series poster from a URL")]
@@ -340,11 +331,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.SetSeriesPoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.SeriesId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -404,11 +394,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.SetSeriesPoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.SeriesId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -462,11 +451,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSeasonPoster(
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSeasonPoster(
             data.ListId, dummySeriesId, dummyPeriodId, posterData, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
     }
 
     [Fact(DisplayName = "SetSeasonPoster from stream should throw if the period isn't found")]
@@ -483,11 +471,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSeasonPoster(
+        var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() => seriesService.SetSeasonPoster(
             data.ListId, series.Id, dummyPeriodId, posterData, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Period", exception.Resource);
-        Assert.Equal(dummyPeriodId, exception.Properties["id"]);
+        Assert.Equal(dummyPeriodId, exception.PeriodId);
     }
 
     [Fact(DisplayName = "SetSeasonPoster should set the season poster from a URL")]
@@ -545,11 +532,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSeasonPoster(
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSeasonPoster(
             data.ListId, dummySeriesId, dummyPeriodId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -572,11 +558,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSeasonPoster(
+        var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() => seriesService.SetSeasonPoster(
             data.ListId, series.Id, dummyPeriodId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Period", exception.Resource);
-        Assert.Equal(dummyPeriodId, exception.Properties["id"]);
+        Assert.Equal(dummyPeriodId, exception.PeriodId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -638,11 +623,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSeasonPoster(
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSeasonPoster(
             data.ListId, dummySeriesId, dummyPeriodId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -696,11 +680,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSpecialEpisodePoster(
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSpecialEpisodePoster(
             data.ListId, dummySeriesId, dummyEpisodeId, posterData, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
     }
 
     [Fact(DisplayName = "SetSpecialEpisodePoster from stream should throw if the special episode isn't found")]
@@ -717,11 +700,11 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSpecialEpisodePoster(
-            data.ListId, series.Id, dummyEpisodeId, posterData, TestContext.Current.CancellationToken));
+        var exception = await Assert.ThrowsAsync<SpecialEpisodeNotFoundException>(() =>
+            seriesService.SetSpecialEpisodePoster(
+                data.ListId, series.Id, dummyEpisodeId, posterData, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.SpecialEpisode", exception.Resource);
-        Assert.Equal(dummyEpisodeId, exception.Properties["id"]);
+        Assert.Equal(dummyEpisodeId, exception.EpisodeId);
     }
 
     [Fact(DisplayName = "SetSpecialEpisodePoster should set the special episode poster from a URL")]
@@ -779,11 +762,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSpecialEpisodePoster(
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSpecialEpisodePoster(
             data.ListId, dummySeriesId, dummyEpisodeId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -806,11 +788,11 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSpecialEpisodePoster(
-            data.ListId, series.Id, dummyEpisodeId, request, TestContext.Current.CancellationToken));
+        var exception = await Assert.ThrowsAsync<SpecialEpisodeNotFoundException>(() =>
+            seriesService.SetSpecialEpisodePoster(
+                data.ListId, series.Id, dummyEpisodeId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.SpecialEpisode", exception.Resource);
-        Assert.Equal(dummyEpisodeId, exception.Properties["id"]);
+        Assert.Equal(dummyEpisodeId, exception.EpisodeId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -856,7 +838,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         Assert.Equal(posterContent.Type, dbPoster.ContentType);
     }
 
-    [Fact(DisplayName = "SetSpecialEpisodePoster from IMDb media should throw if the special episode isn't found")]
+    [Fact(DisplayName = "SetSpecialEpisodePoster from IMDb media should throw if the series isn't found")]
     public async Task SetSpecialEpisodePosterImdbMediaSeriesNotFound()
     {
         // Arrange
@@ -872,11 +854,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.SetSpecialEpisodePoster(
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSpecialEpisodePoster(
             data.ListId, dummySeriesId, dummyEpisodeId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
 
         await data.PosterProvider
             .DidNotReceive()
@@ -933,11 +914,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.RemoveSeriesPoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummyId, exception.Properties["id"]);
+        Assert.Equal(dummyId, exception.SeriesId);
     }
 
     [Fact(DisplayName = "RemoveSeasonPoster should remove the series poster")]
@@ -994,11 +974,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.RemoveSeasonPoster(
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.RemoveSeasonPoster(
             data.ListId, dummySeriesId, dummyPeriodId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
     }
 
     [Fact(DisplayName = "RemoveSeasonPoster should throw if the period isn't found")]
@@ -1014,11 +993,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.RemoveSeasonPoster(
+        var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() => seriesService.RemoveSeasonPoster(
             data.ListId, series.Id, dummyPeriodId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Period", exception.Resource);
-        Assert.Equal(dummyPeriodId, exception.Properties["id"]);
+        Assert.Equal(dummyPeriodId, exception.PeriodId);
     }
 
     [Fact(DisplayName = "RemoveSpecialEpisodePoster should remove the special episode poster")]
@@ -1075,11 +1053,11 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.RemoveSpecialEpisodePoster(
-            data.ListId, dummySeriesId, dummyEpisodeId, TestContext.Current.CancellationToken));
+        var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
+            seriesService.RemoveSpecialEpisodePoster(
+                data.ListId, dummySeriesId, dummyEpisodeId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.Series", exception.Resource);
-        Assert.Equal(dummySeriesId, exception.Properties["id"]);
+        Assert.Equal(dummySeriesId, exception.SeriesId);
     }
 
     [Fact(DisplayName = "RemoveSpecialEpisodePoster should throw if the special episode isn't found")]
@@ -1095,10 +1073,10 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => seriesService.RemoveSpecialEpisodePoster(
-            data.ListId, series.Id, dummyEpisodeId, TestContext.Current.CancellationToken));
+        var exception = await Assert.ThrowsAsync<SpecialEpisodeNotFoundException>(() =>
+            seriesService.RemoveSpecialEpisodePoster(
+                data.ListId, series.Id, dummyEpisodeId, TestContext.Current.CancellationToken));
 
-        Assert.Equal("Resource.SpecialEpisode", exception.Resource);
-        Assert.Equal(dummyEpisodeId, exception.Properties["id"]);
+        Assert.Equal(dummyEpisodeId, exception.EpisodeId);
     }
 }

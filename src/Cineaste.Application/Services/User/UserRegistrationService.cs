@@ -34,7 +34,7 @@ public sealed class UserRegistrationService(
             .UserInvitationCodes
             .Where(code => code.Id == codeId && code.User == null)
             .SingleOrDefaultAsync()
-            ?? throw new ArgumentException("Invitation code is invalid", nameof(invitationCode));
+            ?? throw new InvalidInvitationCodeException(invitationCode);
 
         var user = new CineasteUser(email);
         await userStore.SetEmailAsync(user, email, CancellationToken.None);
