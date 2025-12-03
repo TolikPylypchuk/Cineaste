@@ -20,8 +20,11 @@ public sealed record Validated<T>
 
 public static class ValidationExtensions
 {
-    [return: NotNullIfNotNull(nameof(value))]
-    public static Validated<T>? Validated<T>(this T? value)
-        where T : IValidatable<T> =>
-        Validation.Validated<T>.Create(value);
+    extension<T>(T? value)
+        where T : IValidatable<T>
+    {
+        [return: NotNullIfNotNull(nameof(value))]
+        public Validated<T>? Validated() =>
+            Validation.Validated<T>.Create(value);
+    }
 }

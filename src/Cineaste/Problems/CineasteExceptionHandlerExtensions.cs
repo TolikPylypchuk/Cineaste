@@ -2,7 +2,10 @@ namespace Cineaste.Problems;
 
 internal static class CineasteExceptionHandlerExtensions
 {
-    public static IApplicationBuilder UseCineasteExceptionHandling(this IApplicationBuilder app) =>
-        app.UseExceptionHandler(exceptionHandlerApp =>
-            exceptionHandlerApp.UseMiddleware<CineasteExceptionHandlerMiddleware>());
+    extension(IApplicationBuilder app)
+    {
+        public IApplicationBuilder UseCineasteExceptionHandling() =>
+            app.UseExceptionHandler(exceptionHandlerApp =>
+                exceptionHandlerApp.UseMiddleware<CineasteExceptionHandlerMiddleware>());
+    }
 }

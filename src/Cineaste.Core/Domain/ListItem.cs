@@ -98,7 +98,7 @@ public sealed partial class ListItem : Entity<ListItem>
         this.StartYear = movie.Year;
         this.EndYear = movie.Year;
 
-        this.ActiveColor = movie.GetActiveColor();
+        this.ActiveColor = movie.ActiveColor;
 
         this.IsStandalone = movie.FranchiseItem is null;
         this.IsShown = true;
@@ -123,7 +123,7 @@ public sealed partial class ListItem : Entity<ListItem>
         this.StartYear = series.StartYear;
         this.EndYear = series.EndYear;
 
-        this.ActiveColor = series.GetActiveColor();
+        this.ActiveColor = series.ActiveColor;
 
         this.IsStandalone = series.FranchiseItem is null;
         this.IsShown = true;
@@ -148,7 +148,7 @@ public sealed partial class ListItem : Entity<ListItem>
         this.StartYear = franchise.StartYear;
         this.EndYear = franchise.EndYear;
 
-        this.ActiveColor = franchise.GetActiveColor();
+        this.ActiveColor = franchise.ActiveColor;
 
         this.IsStandalone = franchise.FranchiseItem is null;
         this.IsShown = franchise.ShowTitles;
@@ -229,8 +229,11 @@ public sealed partial class ListItem : Entity<ListItem>
 
 internal static class ListItemExtensions
 {
-    internal static IEnumerable<object> WithSplitNumbers(this string title) =>
-        title.Split(NumberDelimiter, StringSplitOptions.RemoveEmptyEntries).Select(TryParseNumber);
+    extension(string title)
+    {
+        internal IEnumerable<object> WithSplitNumbers() =>
+            title.Split(NumberDelimiter, StringSplitOptions.RemoveEmptyEntries).Select(TryParseNumber);
+    }
 
     private static object TryParseNumber(string str) =>
         Int32.TryParse(str, out int result) ? result : str;

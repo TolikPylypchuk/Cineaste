@@ -4,7 +4,7 @@ using AngleSharp.Dom;
 
 namespace Cineaste.Application.Services.Poster;
 
-public sealed class PosterProvider(
+internal sealed class PosterProvider(
     HttpClient httpClient,
     IHtmlDocumentProvider documentProvider,
     ILogger<PosterProvider> logger) : IPosterProvider
@@ -129,12 +129,18 @@ public sealed class PosterProvider(
 
 file static class Extensions
 {
-    public static Dictionary<string, object> ToDictionary(this HttpResponseHeaders headers) =>
-        headers.ToDictionary(header => header.Key, header => header.Value.ToStringOrList());
-
-    private static object ToStringOrList(this IEnumerable<string> value)
+    extension(HttpResponseHeaders headers)
     {
-        var list = value.ToList();
-        return list.Count == 1 ? list[0] : list;
+        public Dictionary<string, object> ToDictionary() =>
+            headers.ToDictionary(header => header.Key, header => header.Value.ToStringOrList());
+    }
+
+    extension(IEnumerable<string> value)
+    {
+        private object ToStringOrList()
+        {
+            var list = value.ToList();
+            return list.Count == 1 ? list[0] : list;
+        }
     }
 }

@@ -5,13 +5,8 @@ using IConfiguration = AngleSharp.IConfiguration;
 
 namespace Cineaste.Application.Services.Poster;
 
-public interface IHtmlDocumentProvider
-{
-    Task<IDocument> GetDocument(string url, CancellationToken token = default);
-}
-
 [ExcludeFromCodeCoverage]
-public class HtmlDocumentProvider : IHtmlDocumentProvider
+internal class HtmlDocumentProvider : IHtmlDocumentProvider
 {
     private readonly IConfiguration config = Configuration.Default.WithDefaultLoader();
 

@@ -141,7 +141,7 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
         typeof(Entity<>)
             .Assembly
             .GetTypes()
-            .Where(type => !type.IsAbstract && type.IsEntityType())
+            .Where(type => !type.IsAbstract && type.IsEntityType)
             .ForEach(type => builder
                 .Properties(typeof(Id<>).MakeGenericType(type))
                 .HaveConversion(typeof(IdConverter<>).MakeGenericType(type)));
@@ -156,8 +156,11 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
 
 file static class Extensions
 {
-    public static bool IsEntityType(this Type type) =>
-        type.BaseType is { } baseType &&
-            (baseType.IsGenericType && baseType.GetGenericTypeDefinition() == typeof(Entity<>) ||
-                baseType.IsEntityType());
+    extension(Type type)
+    {
+        public bool IsEntityType =>
+            type.BaseType is { } baseType &&
+                (baseType.IsGenericType && baseType.GetGenericTypeDefinition() == typeof(Entity<>) ||
+                    baseType.IsEntityType);
+    }
 }

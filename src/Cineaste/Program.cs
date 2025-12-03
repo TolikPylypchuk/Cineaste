@@ -1,9 +1,6 @@
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 
-using Cineaste.Application.Services.List;
-using Cineaste.Application.Services.Poster;
-using Cineaste.Application.Services.User;
 using Cineaste.Client;
 using Cineaste.Client.BaseUri;
 using Cineaste.Client.Navigation;
@@ -102,6 +99,8 @@ builder.Services.AddOutputCache(options =>
     options.AddPolicy(openApiCachePolicy, policy => policy.Expire(TimeSpan.FromHours(1)));
 });
 
+builder.Services.AddApplicationServices();
+
 builder.Services.AddMudServices();
 builder.Services.AddLocalization();
 
@@ -110,18 +109,6 @@ builder.Services.AddCineasteFluxor();
 
 builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 builder.Services.AddSingleton<IBaseUriProvider, ServerBaseUriProvider>();
-
-builder.Services.AddScoped<CultureProvider>();
-builder.Services.AddScoped<IDefaultListCreator, DefaultListCreator>();
-builder.Services.AddScoped<ListService>();
-builder.Services.AddScoped<MovieService>();
-builder.Services.AddScoped<SeriesService>();
-builder.Services.AddScoped<FranchiseService>();
-
-builder.Services.AddScoped<IPosterProvider, PosterProvider>();
-builder.Services.AddScoped<IHtmlDocumentProvider, HtmlDocumentProvider>();
-
-builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
 if (builder.Environment.IsDevelopment())
 {

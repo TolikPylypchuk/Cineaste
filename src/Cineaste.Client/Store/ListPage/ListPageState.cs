@@ -29,15 +29,21 @@ public sealed record ListPageState
 
 public static class Extensions
 {
-    public static ListPageSelectionMode ToListPageSelectionMode(this ListItemType itemType) =>
-        ToListPageSelectionMode((ListItemType?)itemType);
+    extension(ListItemType itemType)
+    {
+        public ListPageSelectionMode ToListPageSelectionMode() =>
+            ToListPageSelectionMode((ListItemType?)itemType);
+    }
 
-    public static ListPageSelectionMode ToListPageSelectionMode(this ListItemType? itemType) =>
-        itemType switch
-        {
-            ListItemType.Movie => ListPageSelectionMode.Movie,
-            ListItemType.Series => ListPageSelectionMode.Series,
-            ListItemType.Franchise => ListPageSelectionMode.Franchise,
-            _ => ListPageSelectionMode.None
-        };
+    extension(ListItemType? itemType)
+    {
+        public ListPageSelectionMode ToListPageSelectionMode() =>
+            itemType switch
+            {
+                ListItemType.Movie => ListPageSelectionMode.Movie,
+                ListItemType.Series => ListPageSelectionMode.Series,
+                ListItemType.Franchise => ListPageSelectionMode.Franchise,
+                _ => ListPageSelectionMode.None
+            };
+    }
 }

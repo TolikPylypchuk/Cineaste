@@ -14,20 +14,26 @@ public sealed record EmptyApiFailure(ProblemDetails Problem) : EmptyApiResult(fa
 
 public static class EmptyApiResultExtensions
 {
-    public static EmptyApiResult ToApiResult(this IApiResponse response)
+    extension(IApiResponse response)
     {
-        if (response.IsSuccessStatusCode)
+        public EmptyApiResult ToApiResult()
         {
-            return EmptyApiResult.Success;
-        } else if (response.Error is ValidationApiException exception && exception.Content is not null)
-        {
-            return EmptyApiResult.Failure(exception.Content);
-        } else
-        {
-            throw new InvalidOperationException("The response's error must be of type application/problem+json");
+            if (response.IsSuccessStatusCode)
+            {
+                return EmptyApiResult.Success;
+            } else if (response.Error is ValidationApiException exception && exception.Content is not null)
+            {
+                return EmptyApiResult.Failure(exception.Content);
+            } else
+            {
+                throw new InvalidOperationException("The response's error must be of type application/problem+json");
+            }
         }
     }
 
-    public static async Task<EmptyApiResult> ToApiResultAsync(this Task<IApiResponse> task) =>
-        (await task).ToApiResult();
+    extension(Task<IApiResponse> task)
+    {
+        public async Task<EmptyApiResult> ToApiResultAsync() =>
+            (await task).ToApiResult();
+    }
 }

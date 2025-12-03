@@ -167,15 +167,18 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
 
 file static class Extensions
 {
-    public static IQueryable<ListItem> IncludeRelationships(this IQueryable<ListItem> items) =>
-        items
-            .Include(item => item.Movie)
-                .ThenInclude(movie => movie!.FranchiseItem)
-                    .ThenInclude(item => item!.ParentFranchise)
-            .Include(item => item.Series)
-                .ThenInclude(series => series!.FranchiseItem)
-                    .ThenInclude(item => item!.ParentFranchise)
-            .Include(item => item.Franchise)
-                .ThenInclude(franchise => franchise!.FranchiseItem)
-                    .ThenInclude(item => item!.ParentFranchise);
+    extension(IQueryable<ListItem> items)
+    {
+        public IQueryable<ListItem> IncludeRelationships() =>
+            items
+                .Include(item => item.Movie)
+                    .ThenInclude(movie => movie!.FranchiseItem)
+                        .ThenInclude(item => item!.ParentFranchise)
+                .Include(item => item.Series)
+                    .ThenInclude(series => series!.FranchiseItem)
+                        .ThenInclude(item => item!.ParentFranchise)
+                .Include(item => item.Franchise)
+                    .ThenInclude(franchise => franchise!.FranchiseItem)
+                        .ThenInclude(item => item!.ParentFranchise);
+    }
 }

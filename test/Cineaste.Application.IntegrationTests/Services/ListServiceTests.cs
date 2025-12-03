@@ -64,18 +64,18 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
 
         foreach (var (expectedItem, actualItem) in list.Items.Zip(model.Items))
         {
-            Assert.Equal(expectedItem.GetId(), actualItem.Id);
-            Assert.Equal(expectedItem.GetTitle(), actualItem.Title);
-            Assert.Equal(expectedItem.GetOriginalTitle(), actualItem.OriginalTitle);
+            Assert.Equal(expectedItem.ItemId, actualItem.Id);
+            Assert.Equal(expectedItem.Title, actualItem.Title);
+            Assert.Equal(expectedItem.OriginalTitle, actualItem.OriginalTitle);
             Assert.Equal(expectedItem.StartYear, actualItem.StartYear);
             Assert.Equal(expectedItem.EndYear, actualItem.EndYear);
-            Assert.Equal(expectedItem.GetColor()?.HexValue ?? String.Empty, actualItem.Color);
+            Assert.Equal(expectedItem.Color?.HexValue ?? String.Empty, actualItem.Color);
             Assert.Equal(expectedItem.SequenceNumber, actualItem.ListSequenceNumber);
-            Assert.Equal(expectedItem.GetParentFranchise()?.Id.Value, actualItem.FranchiseItem?.FranchiseId);
-            Assert.Equal(expectedItem.GetFranchiseSequenceNumber(), actualItem.FranchiseItem?.SequenceNumber);
-            Assert.Equal(expectedItem.GetFranchiseDisplayNumber(), actualItem.FranchiseItem?.DisplayNumber);
+            Assert.Equal(expectedItem.ParentFranchise?.Id.Value, actualItem.FranchiseItem?.FranchiseId);
+            Assert.Equal(expectedItem.FranchiseSequenceNumber, actualItem.FranchiseItem?.SequenceNumber);
+            Assert.Equal(expectedItem.FranchiseDisplayNumber, actualItem.FranchiseItem?.DisplayNumber);
             Assert.Equal(
-                expectedItem.GetParentFranchise()?.IsLooselyConnected, actualItem.FranchiseItem?.IsLooselyConnected);
+                expectedItem.ParentFranchise?.IsLooselyConnected, actualItem.FranchiseItem?.IsLooselyConnected);
         }
     }
 
@@ -111,7 +111,7 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(movie.OriginalTitle.Name, model.OriginalTitle);
         Assert.Equal(movie.Year, model.StartYear);
         Assert.Equal(movie.Year, model.EndYear);
-        Assert.Equal(movie.GetActiveColor().HexValue ?? String.Empty, model.Color);
+        Assert.Equal(movie.ActiveColor.HexValue ?? String.Empty, model.Color);
         Assert.Equal(movie.ListItem!.SequenceNumber, model.ListSequenceNumber);
 
         if (movie.FranchiseItem is { } franchiseItem)
@@ -165,7 +165,7 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
         Assert.Equal(movie.OriginalTitle.Name, model.OriginalTitle);
         Assert.Equal(movie.Year, model.StartYear);
         Assert.Equal(movie.Year, model.EndYear);
-        Assert.Equal(movie.GetActiveColor().HexValue ?? String.Empty, model.Color);
+        Assert.Equal(movie.ActiveColor.HexValue ?? String.Empty, model.Color);
         Assert.Equal(movie.ListItem!.SequenceNumber, model.ListSequenceNumber);
 
         if (movie.FranchiseItem is { } franchiseItem)
@@ -184,49 +184,52 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
 
 file static class Extensions
 {
-    public static Guid GetId(this ListItem item) =>
-        item.Select(
-            movie => movie.Id.Value,
-            series => series.Id.Value,
-            franchise => franchise.Id.Value);
+    extension(ListItem item)
+    {
+        public Guid ItemId =>
+            item.Select(
+                movie => movie.Id.Value,
+                series => series.Id.Value,
+                franchise => franchise.Id.Value);
 
-    public static string GetTitle(this ListItem item) =>
-        item.Select(
-            movie => movie.Title.Name,
-            series => series.Title.Name,
-            franchise => franchise.ShowTitles && franchise.Title is not null
-                ? $"{franchise.Title.Name}:"
-                : String.Empty);
+        public string Title =>
+            item.Select(
+                movie => movie.Title.Name,
+                series => series.Title.Name,
+                franchise => franchise.ShowTitles && franchise.Title is not null
+                    ? $"{franchise.Title.Name}:"
+                    : String.Empty);
 
-    public static string GetOriginalTitle(this ListItem item) =>
-        item.Select(
-            movie => movie.OriginalTitle.Name,
-            series => series.OriginalTitle.Name,
-            franchise => franchise.ShowTitles && franchise.OriginalTitle is not null
-                ? $"{franchise.OriginalTitle.Name}:"
-                : String.Empty);
+        public string OriginalTitle =>
+            item.Select(
+                movie => movie.OriginalTitle.Name,
+                series => series.OriginalTitle.Name,
+                franchise => franchise.ShowTitles && franchise.OriginalTitle is not null
+                    ? $"{franchise.OriginalTitle.Name}:"
+                    : String.Empty);
 
-    public static Franchise? GetParentFranchise(this ListItem item) =>
-        item.Select(
-            movie => movie.FranchiseItem?.ParentFranchise,
-            series => series.FranchiseItem?.ParentFranchise,
-            franchise => franchise.FranchiseItem?.ParentFranchise);
+        public Franchise? ParentFranchise =>
+            item.Select(
+                movie => movie.FranchiseItem?.ParentFranchise,
+                series => series.FranchiseItem?.ParentFranchise,
+                franchise => franchise.FranchiseItem?.ParentFranchise);
 
-    public static int? GetFranchiseSequenceNumber(this ListItem item) =>
-        item.Select(
-            movie => movie.FranchiseItem?.SequenceNumber,
-            series => series.FranchiseItem?.SequenceNumber,
-            franchise => franchise.FranchiseItem?.SequenceNumber);
+        public int? FranchiseSequenceNumber =>
+            item.Select(
+                movie => movie.FranchiseItem?.SequenceNumber,
+                series => series.FranchiseItem?.SequenceNumber,
+                franchise => franchise.FranchiseItem?.SequenceNumber);
 
-    public static int? GetFranchiseDisplayNumber(this ListItem item) =>
-        item.Select(
-            movie => movie.FranchiseItem?.DisplayNumber,
-            series => series.FranchiseItem?.DisplayNumber,
-            franchise => franchise.FranchiseItem?.DisplayNumber);
+        public int? FranchiseDisplayNumber =>
+            item.Select(
+                movie => movie.FranchiseItem?.DisplayNumber,
+                series => series.FranchiseItem?.DisplayNumber,
+                franchise => franchise.FranchiseItem?.DisplayNumber);
 
-    public static Color? GetColor(this ListItem item) =>
-        item.Select(
-            movie => movie.GetActiveColor(),
-            series => series.GetActiveColor(),
-            franchise => franchise.GetActiveColor());
+        public Color? Color =>
+            item.Select(
+                movie => movie.ActiveColor,
+                series => series.ActiveColor,
+                franchise => franchise.ActiveColor);
+    }
 }

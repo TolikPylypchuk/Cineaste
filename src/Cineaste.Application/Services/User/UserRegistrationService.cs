@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Cineaste.Application.Services.User;
 
-public sealed class UserRegistrationService(
+internal sealed class UserRegistrationService(
     UserManager<CineasteUser> userManager,
     IUserStore<CineasteUser> userStore,
     CineasteDbContext dbContext,

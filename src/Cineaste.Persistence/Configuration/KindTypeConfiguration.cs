@@ -8,7 +8,7 @@ internal sealed class KindTypeConfiguration<TKind>(string tableName) : IEntityTy
         kind.HasKey(k => k.Id);
         kind.HasListId();
 
-        kind.HasIndex(nameof(Kind<TKind>.Name), Extensions.ListId).IsUnique();
+        kind.HasIndex(nameof(Kind<>.Name), Extensions.ListId).IsUnique();
         kind.ToTable(t => t.HasCheckConstraint($"CH_{tableName}_NameNotEmpty", "[Name] <> ''"));
     }
 }

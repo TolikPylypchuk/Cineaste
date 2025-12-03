@@ -1,10 +1,8 @@
 using System.Globalization;
 
-using Microsoft.Extensions.Logging;
-
 namespace Cineaste.Application.Services.List;
 
-public sealed class DefaultListCreator(ILogger<DefaultListCreator> logger) : IDefaultListCreator
+internal sealed class DefaultListCreator(ILogger<DefaultListCreator> logger) : IDefaultListCreator
 {
     public CineasteList CreateDefaultList()
     {
