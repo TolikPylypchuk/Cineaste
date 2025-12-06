@@ -19,7 +19,7 @@ namespace Cineaste.Client.Localization {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -1479,105 +1479,6 @@ namespace Cineaste.Client.Localization {
         public static string PosterDialog_Url {
             get {
                 return ResourceManager.GetString("PosterDialog.Url", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A list with this handle already exists.
-        /// </summary>
-        public static string Problem_Conflict_List {
-            get {
-                return ResourceManager.GetString("Problem.Conflict.List", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The resource couldn&apos;t be found.
-        /// </summary>
-        public static string Problem_NotFound_Any {
-            get {
-                return ResourceManager.GetString("Problem.NotFound.Any", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The list couldn&apos;t be found - please check that the URL is correct.
-        /// </summary>
-        public static string Problem_NotFound_List {
-            get {
-                return ResourceManager.GetString("Problem.NotFound.List", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The movie couldn&apos;t be found.
-        /// </summary>
-        public static string Problem_NotFound_Movie {
-            get {
-                return ResourceManager.GetString("Problem.NotFound.Movie", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to any.
-        /// </summary>
-        public static string Problem_NotFound_Resource_Any {
-            get {
-                return ResourceManager.GetString("Problem.NotFound.Resource.Any", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to list.
-        /// </summary>
-        public static string Problem_NotFound_Resource_List {
-            get {
-                return ResourceManager.GetString("Problem.NotFound.Resource.List", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to movie.
-        /// </summary>
-        public static string Problem_NotFound_Resource_Movie {
-            get {
-                return ResourceManager.GetString("Problem.NotFound.Resource.Movie", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The series couldn&apos;t be found.
-        /// </summary>
-        public static string Problem_NotFound_Series {
-            get {
-                return ResourceManager.GetString("Problem.NotFound.Series", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to An unknown problem has occured.
-        /// </summary>
-        public static string Problem_Unknown {
-            get {
-                return ResourceManager.GetString("Problem.Unknown", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The validation has failed.
-        /// </summary>
-        public static string Problem_ValidationFailed {
-            get {
-                return ResourceManager.GetString("Problem.ValidationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The list to create is invalid.
-        /// </summary>
-        public static string Problem_ValidationFailed_CreateList {
-            get {
-                return ResourceManager.GetString("Problem.ValidationFailed.CreateList", resourceCulture);
             }
         }
         

@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 
 using Cineaste.Client.BaseUri;
+using Cineaste.Client.Problems;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
@@ -36,6 +37,7 @@ builder.Services.AddLocalization();
 builder.Services.AddCineasteRefitClients();
 builder.Services.AddCineasteFluxor();
 
+builder.Services.AddScoped<IProblemLocalizer, ProblemLocalizer>();
 builder.Services.AddScoped<IPageNavigator, PageNavigator>();
 
 var english = new CultureInfo("en-US");

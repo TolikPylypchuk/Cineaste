@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Cineaste.Client;
 using Cineaste.Client.BaseUri;
 using Cineaste.Client.Navigation;
+using Cineaste.Client.Problems;
 using Cineaste.Components;
 using Cineaste.Core.Converter;
 using Cineaste.Json;
@@ -88,7 +89,6 @@ builder.Services.AddAntiforgery(options =>
 TypeDescriptor.AddAttributes(typeof(Id<CineasteUser>), new TypeConverterAttribute(typeof(IdConverter<CineasteUser>)));
 
 builder.Services.AddHttpClient();
-builder.Services.AddProblemDetails();
 builder.Services.AddCineasteOpenApi(builder.Configuration.GetSection("OpenApi"));
 builder.Services.AddCors();
 
@@ -101,6 +101,8 @@ builder.Services.AddOutputCache(options =>
 
 builder.Services.AddApplicationServices();
 
+builder.Services.AddCineasteProblemDetails();
+
 builder.Services.AddMudServices();
 builder.Services.AddLocalization();
 
@@ -108,6 +110,7 @@ builder.Services.AddCineasteRefitClients();
 builder.Services.AddCineasteFluxor();
 
 builder.Services.AddScoped<IPageNavigator, PageNavigator>();
+builder.Services.AddScoped<IProblemLocalizer, ProblemLocalizer>();
 builder.Services.AddSingleton<IBaseUriProvider, ServerBaseUriProvider>();
 
 if (builder.Environment.IsDevelopment())
@@ -124,8 +127,6 @@ if (app.Environment.IsDevelopment())
     app.UseWebAssemblyDebugging();
     app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 }
-
-app.UseCineasteExceptionHandling();
 
 app.UseRouting();
 app.UseAntiforgery();

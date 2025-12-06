@@ -534,39 +534,6 @@
   <data name="PeriodForm.StartMonthYear" xml:space="preserve">
     <value>Start month and year</value>
   </data>
-  <data name="Problem.Conflict.List" xml:space="preserve">
-    <value>A list with this handle already exists</value>
-  </data>
-  <data name="Problem.NotFound.Any" xml:space="preserve">
-    <value>The resource couldn't be found</value>
-  </data>
-  <data name="Problem.NotFound.List" xml:space="preserve">
-    <value>The list couldn't be found - please check that the URL is correct</value>
-  </data>
-  <data name="Problem.NotFound.Movie" xml:space="preserve">
-    <value>The movie couldn't be found</value>
-  </data>
-  <data name="Problem.NotFound.Resource.Any" xml:space="preserve">
-    <value>any</value>
-  </data>
-  <data name="Problem.NotFound.Resource.List" xml:space="preserve">
-    <value>list</value>
-  </data>
-  <data name="Problem.NotFound.Resource.Movie" xml:space="preserve">
-    <value>movie</value>
-  </data>
-  <data name="Problem.NotFound.Series" xml:space="preserve">
-    <value>The series couldn't be found</value>
-  </data>
-  <data name="Problem.Unknown" xml:space="preserve">
-    <value>An unknown problem has occured</value>
-  </data>
-  <data name="Problem.ValidationFailed" xml:space="preserve">
-    <value>The validation has failed</value>
-  </data>
-  <data name="Problem.ValidationFailed.CreateList" xml:space="preserve">
-    <value>The list to create is invalid</value>
-  </data>
   <data name="SeasonForm.AddPeriod" xml:space="preserve">
     <value>Add period</value>
   </data>

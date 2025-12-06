@@ -1,11 +1,27 @@
+using Microsoft.AspNetCore.Diagnostics;
+
 namespace Cineaste.Problems;
 
 internal static class CineasteExceptionHandlerExtensions
 {
-    extension(IApplicationBuilder app)
+    extension(IServiceCollection services)
     {
-        public IApplicationBuilder UseCineasteExceptionHandling() =>
-            app.UseExceptionHandler(exceptionHandlerApp =>
-                exceptionHandlerApp.UseMiddleware<CineasteExceptionHandlerMiddleware>());
+        public IServiceCollection AddCineasteProblemDetails() =>
+            services.AddSingleton<ProblemCustomizer>()
+                .AddProblemDetails(options =>
+                    options.CustomizeProblemDetails = context =>
+                    {
+                        var exception = context.HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
+                        if (exception is not null)
+                        {
+                            var customizer = context.HttpContext.RequestServices.GetService<ProblemCustomizer>();
+                            customizer?.CustomizeProblemDetails(context.ProblemDetails, exception);
+                        }
+
+                        if (context.ProblemDetails.Status is int statusCode)
+                        {
+                            context.HttpContext.Response.StatusCode = statusCode;
+                        }
+                    });
     }
 }

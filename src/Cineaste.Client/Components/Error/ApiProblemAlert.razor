@@ -1,4 +1,7 @@
+@using Cineaste.Client.Problems
+
 @inherits CineasteComponent
+@inject IProblemLocalizer ProblemLoc
 
 <MudAlert Severity="Severity.Error" NoIcon="true" Class="@this.Class">
     <div class="summary-container">
@@ -35,7 +38,7 @@
     {
         <MudDivider Class="details-divider" DividerType="DividerType.FullWidth"></MudDivider>
         <p class="details-container">
-            <span class="details">@this.Loc[$"Problem:{this.Problem.Type}"]</span>
+            <span class="details">@this.ProblemLoc[this.Problem.Type]</span>
         </p>
     }
 </MudAlert>
