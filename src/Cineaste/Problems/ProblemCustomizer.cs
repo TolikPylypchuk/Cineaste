@@ -1,3 +1,5 @@
+using Cineaste.Identity.Exceptions;
+
 using Microsoft.AspNetCore.WebUtilities;
 
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -6,7 +8,7 @@ namespace Cineaste.Problems;
 
 internal class ProblemCustomizer(IHostEnvironment env)
 {
-    public void CustomizeProblemDetails(ProblemDetails problemDetails, Exception exception)
+    public void CustomizeProblemDetails(ProblemDetails problemDetails, Exception exception, string endpoint)
     {
         switch (exception)
         {
@@ -29,6 +31,16 @@ internal class ProblemCustomizer(IHostEnvironment env)
                 problemDetails.Title = "Not implemented";
                 problemDetails.Status = Status501NotImplemented;
                 break;
+            case ListIdClaimMissingException ex:
+                problemDetails.Type = this.CreateProblemType(Types.Claim, Types.ListId, Types.Missing);
+                problemDetails.Title = "List id claim is missing";
+                problemDetails.Status = Status400BadRequest;
+                break;
+            case ListIdClaimInvalidException ex:
+                problemDetails.Type = this.CreateProblemType(Types.Claim, Types.ListId, Types.Invalid);
+                problemDetails.Title = "List id claim is invalid";
+                problemDetails.Status = Status400BadRequest;
+                break;
             default:
                 this.CustomizeDefaultProblemDetails(problemDetails);
                 break;
@@ -43,6 +55,7 @@ internal class ProblemCustomizer(IHostEnvironment env)
         problemDetails.Title ??= ReasonPhrases.GetReasonPhrase(status);
 
         problemDetails.Detail ??= exception.Message;
+        problemDetails.Instance ??= endpoint;
     }
 
     private void CustomizeProblemDetails(ProblemDetails problemDetails, PosterException exception)
@@ -220,6 +233,8 @@ internal class ProblemCustomizer(IHostEnvironment env)
 
 file static class Types
 {
+    public const string Claim = "claim";
+
     public const string ErrorResponse = "error-response";
 
     public const string Franchise = "franchise";
@@ -228,9 +243,11 @@ file static class Types
 
     public const string Image = "image";
     public const string ImdbMedia = "imdb-media";
+    public const string Invalid = "invalid";
 
     public const string Length = "length";
     public const string List = "list";
+    public const string ListId = "list-id";
     public const string ListItem = "list-item";
 
     public const string Missing = "missing";

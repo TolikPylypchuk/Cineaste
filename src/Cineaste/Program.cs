@@ -7,10 +7,10 @@ using Cineaste.Client.Navigation;
 using Cineaste.Client.Problems;
 using Cineaste.Components;
 using Cineaste.Core.Converter;
+using Cineaste.Endpoints;
 using Cineaste.Json;
 using Cineaste.OpenApi;
 using Cineaste.Problems;
-using Cineaste.Routes;
 using Cineaste.Services.BaseUri;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
@@ -36,18 +36,14 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents()
     .AddAuthenticationStateSerialization();
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options => AddConverters(options.JsonSerializerOptions));
-
-builder.Services.Configure<JsonOptions>(options => AddConverters(options.SerializerOptions));
-
-static void AddConverters(JsonSerializerOptions options)
+builder.Services.Configure<JsonOptions>(options =>
 {
-    options.Converters.Add(new JsonStringEnumConverter());
-    options.Converters.Add(new ImmutableValueListConverterFactory());
-    options.Converters.Add(new IdJsonConverterFactory());
-    options.Converters.Add(new ValidatedJsonConverterFactory());
-}
+    var converters = options.SerializerOptions.Converters;
+    converters.Add(new JsonStringEnumConverter());
+    converters.Add(new ImmutableValueListConverterFactory());
+    converters.Add(new IdJsonConverterFactory());
+    converters.Add(new ValidatedJsonConverterFactory());
+});
 
 builder.Services.Configure<FormOptions>(options =>
 {
@@ -134,7 +130,9 @@ app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapApiEndpoints();
+app.MapAdditionalIdentityEndpoints();
+
 app.MapStaticAssets();
 
 if (app.Environment.IsDevelopment())
@@ -150,8 +148,6 @@ if (app.Environment.IsDevelopment())
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Cineaste.Client._Imports).Assembly);
-
-app.MapAdditionalIdentityEndpoints();
 
 app.MapFallback("/api/{**path}", (string path) =>
     TypedResults.Problem(

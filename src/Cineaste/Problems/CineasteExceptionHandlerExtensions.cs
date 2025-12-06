@@ -15,7 +15,8 @@ internal static class CineasteExceptionHandlerExtensions
                         if (exception is not null)
                         {
                             var customizer = context.HttpContext.RequestServices.GetService<ProblemCustomizer>();
-                            customizer?.CustomizeProblemDetails(context.ProblemDetails, exception);
+                            customizer?.CustomizeProblemDetails(
+                                context.ProblemDetails, exception, context.HttpContext.Request.Path);
                         }
 
                         if (context.ProblemDetails.Status is int statusCode)

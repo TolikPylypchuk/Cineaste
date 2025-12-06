@@ -61,6 +61,33 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The current user&apos;s list ID claim is invalid.
+        /// </summary>
+        public static string _problem_claim_list_id_invalid {
+            get {
+                return ResourceManager.GetString("/problem/claim/list-id/invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current user&apos;s list ID claim is missing.
+        /// </summary>
+        public static string _problem_claim_list_id_missing {
+            get {
+                return ResourceManager.GetString("/problem/claim/list-id/missing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The requested resource was not found.
+        /// </summary>
+        public static string _problem_not_found {
+            get {
+                return ResourceManager.GetString("/problem/not-found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Franchise not found.
         /// </summary>
         public static string _problem_not_found_franchise {

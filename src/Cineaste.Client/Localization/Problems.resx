@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="/problem/claim/list-id/invalid" xml:space="preserve">
+    <value>The current user's list ID claim is invalid</value>
+  </data>
+  <data name="/problem/claim/list-id/missing" xml:space="preserve">
+    <value>The current user's list ID claim is missing</value>
+  </data>
+  <data name="/problem/not-found" xml:space="preserve">
+    <value>The requested resource was not found</value>
+  </data>
   <data name="/problem/not-found/franchise" xml:space="preserve">
     <value>Franchise not found</value>
   </data>
