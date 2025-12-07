@@ -2,11 +2,11 @@ using System.Globalization;
 
 namespace Cineaste.Application.Services.List;
 
-internal sealed class DefaultListCreator(ILogger<DefaultListCreator> logger) : IDefaultListCreator
+internal sealed partial class DefaultListCreator(ILogger<DefaultListCreator> logger) : IDefaultListCreator
 {
     public CineasteList CreateDefaultList()
     {
-        logger.LogDebug("Creating a default list");
+        this.LogCreatingDefaultList();
 
         var config = new ListConfiguration(
             Id.Create<ListConfiguration>(),
@@ -36,4 +36,7 @@ internal sealed class DefaultListCreator(ILogger<DefaultListCreator> logger) : I
 
         return list;
     }
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Creating a default list")]
+    private partial void LogCreatingDefaultList();
 }

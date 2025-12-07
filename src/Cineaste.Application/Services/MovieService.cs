@@ -1,6 +1,6 @@
 namespace Cineaste.Application.Services;
 
-public sealed class MovieService(
+public sealed partial class MovieService(
     CineasteDbContext dbContext,
     IPosterProvider posterProvider,
     ILogger<MovieService> logger)
@@ -11,7 +11,7 @@ public sealed class MovieService(
 
     public async Task<MovieModel> GetMovie(Id<CineasteList> listId, Id<Movie> id, CancellationToken token)
     {
-        this.logger.LogDebug("Getting the movie with ID: {Id}", id.Value);
+        this.LogGetMovie(id, listId);
 
         var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, id, token);
@@ -24,7 +24,7 @@ public sealed class MovieService(
         Validated<MovieRequest> request,
         CancellationToken token)
     {
-        this.logger.LogDebug("Adding a new movie");
+        this.LogAddMovie(listId);
 
         var list = await this.FindList(listId, token);
         var kind = this.FindKind(list, Id.For<MovieKind>(request.Value.KindId));
@@ -53,7 +53,7 @@ public sealed class MovieService(
         Validated<MovieRequest> request,
         CancellationToken token)
     {
-        this.logger.LogDebug("Updating the movie with ID: {Id}", id.Value);
+        this.LogUpdateMovie(id, listId);
 
         var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, id, token);
@@ -72,7 +72,7 @@ public sealed class MovieService(
 
     public async Task RemoveMovie(Id<CineasteList> listId, Id<Movie> id, CancellationToken token)
     {
-        this.logger.LogDebug("Removing the movie with ID: {Id}", id.Value);
+        this.LogRemoveMovie(id, listId);
 
         var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, id, token);
@@ -92,6 +92,8 @@ public sealed class MovieService(
 
     public async Task<BinaryContent> GetMoviePoster(Id<CineasteList> listId, Id<Movie> movieId, CancellationToken token)
     {
+        this.LogGetMoviePoster(movieId, listId);
+
         var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, movieId, token);
 
@@ -126,6 +128,8 @@ public sealed class MovieService(
 
     public async Task RemoveMoviePoster(Id<CineasteList> listId, Id<Movie> movieId, CancellationToken token)
     {
+        this.LogRemoveMoviePoster(movieId, listId);
+
         var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, movieId, token);
 
@@ -284,6 +288,8 @@ public sealed class MovieService(
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
+        this.LogSetMoviePoster(movieId, listId);
+
         var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, movieId, token);
 
@@ -305,4 +311,25 @@ public sealed class MovieService(
 
         return hash;
     }
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Getting movie {MovieId} in list {ListId}")]
+    private partial void LogGetMovie(Id<Movie> movieId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding movie to list {ListId}")]
+    private partial void LogAddMovie(Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Updating movie {MovieId} in list {ListId}")]
+    private partial void LogUpdateMovie(Id<Movie> movieId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Removing movie {MovieId} from list {ListId}")]
+    private partial void LogRemoveMovie(Id<Movie> movieId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Getting the poster for movie {MovieId} in list {ListId}")]
+    private partial void LogGetMoviePoster(Id<Movie> movieId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Setting the poster for movie {MovieId} in list {ListId}")]
+    private partial void LogSetMoviePoster(Id<Movie> movieId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Removing the poster for movie {MovieId} in list {ListId}")]
+    private partial void LogRemoveMoviePoster(Id<Movie> movieId, Id<CineasteList> listId);
 }

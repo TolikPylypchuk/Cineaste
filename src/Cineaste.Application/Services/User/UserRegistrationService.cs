@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Cineaste.Application.Services.User;
 
-internal sealed class UserRegistrationService(
+internal sealed partial class UserRegistrationService(
     UserManager<CineasteUser> userManager,
     IUserStore<CineasteUser> userStore,
     CineasteDbContext dbContext,
@@ -26,7 +26,7 @@ internal sealed class UserRegistrationService(
     public async Task<(CineasteUser User, IdentityResult Result)> RegisterUser(
         string email, string password, Guid invitationCode)
     {
-        this.logger.LogInformation("Registering a new user with email {Email}", email);
+        this.LogUserRegistration(email);
 
         var codeId = Id.For<CineasteUserInvitationCode>(invitationCode);
 
@@ -51,4 +51,7 @@ internal sealed class UserRegistrationService(
 
         return (user, result);
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Registering a new user with email {Email}")]
+    private partial void LogUserRegistration(string email);
 }

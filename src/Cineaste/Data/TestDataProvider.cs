@@ -1,38 +1,47 @@
 using Cineaste.Application.Services.User;
 
+using Microsoft.AspNetCore.Identity;
+
 namespace Cineaste.Data;
 
-internal sealed class TestDataProvider(
+internal sealed partial class TestDataProvider(
     CineasteDbContext dbContext,
     IUserRegistrationService userRegistrationService,
     ILogger<TestDataProvider> logger)
 {
+    private readonly CineasteDbContext dbContext = dbContext;
+    private readonly IUserRegistrationService userRegistrationService = userRegistrationService;
+    private readonly ILogger<TestDataProvider> logger = logger;
+
     public async Task CreateTestDataIfNeeded()
     {
-        bool listsPresentInDb = await dbContext.Lists.AnyAsync();
+        bool listsPresentInDb = await this.dbContext.Lists.AnyAsync();
 
         if (listsPresentInDb)
         {
             return;
         }
 
-        await using var transaction = await dbContext.Database.BeginTransactionAsync();
+        await using var transaction = await this.dbContext.Database.BeginTransactionAsync();
 
         try
         {
             var invitationCode = new CineasteUserInvitationCode(Id.Create<CineasteUserInvitationCode>());
-            dbContext.UserInvitationCodes.Add(invitationCode);
+            this.dbContext.UserInvitationCodes.Add(invitationCode);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
-            var (user, result) = await userRegistrationService.RegisterUser(
+            var (user, result) = await this.userRegistrationService.RegisterUser(
                 "test@email.com", "123Password!", invitationCode.Id.Value);
 
             if (!result.Succeeded)
             {
-                foreach (var error in result.Errors)
+                if (this.logger.IsEnabled(LogLevel.Error))
                 {
-                    logger.LogError("Error when registering a test user: {Error}", error);
+                    foreach (var error in result.Errors)
+                    {
+                        this.LogUserRegistrationError(error);
+                    }
                 }
 
                 return;
@@ -40,7 +49,7 @@ internal sealed class TestDataProvider(
 
             this.FillList(user.List);
 
-            await dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             await transaction.CommitAsync();
         } catch
@@ -398,4 +407,10 @@ internal sealed class TestDataProvider(
             showTitles: showTitles ?? title is not null,
             isLooselyConnected: isLooselyConnected,
             continueNumbering: false);
+
+    [LoggerMessage(
+        Level = LogLevel.Error,
+        Message = "Error when registering a test user: {Error}",
+        SkipEnabledCheck = true)]
+    private partial void LogUserRegistrationError(IdentityError? error);
 }

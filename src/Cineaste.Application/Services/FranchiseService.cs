@@ -1,6 +1,6 @@
 namespace Cineaste.Application.Services;
 
-public sealed class FranchiseService(
+public sealed partial class FranchiseService(
     CineasteDbContext dbContext,
     IPosterProvider posterProvider,
     ILogger<FranchiseService> logger)
@@ -11,7 +11,7 @@ public sealed class FranchiseService(
 
     public async Task<FranchiseModel> GetFranchise(Id<CineasteList> listId, Id<Franchise> id, CancellationToken token)
     {
-        this.logger.LogDebug("Getting the franchise with ID: {Id}", id.Value);
+        this.LogGetFranchise(id, listId);
 
         var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, id, token);
@@ -24,7 +24,7 @@ public sealed class FranchiseService(
         Validated<FranchiseRequest> request,
         CancellationToken token)
     {
-        this.logger.LogDebug("Adding a new franchise");
+        this.LogAddFranchise(listId);
 
         var list = await this.FindList(listId, token);
         var franchise = await this.MapToFranchise(request, list, token);
@@ -52,7 +52,7 @@ public sealed class FranchiseService(
         Validated<FranchiseRequest> request,
         CancellationToken token)
     {
-        this.logger.LogDebug("Updating the franchise with ID: {Id}", id.Value);
+        this.LogUpdateFranchise(id, listId);
 
         var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, id, token);
@@ -74,7 +74,7 @@ public sealed class FranchiseService(
 
     public async Task RemoveFranchise(Id<CineasteList> listId, Id<Franchise> id, CancellationToken token)
     {
-        this.logger.LogDebug("Removing the franchise with ID: {Id}", id.Value);
+        this.LogRemoveFranchise(id, listId);
 
         var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, id, token);
@@ -95,6 +95,8 @@ public sealed class FranchiseService(
         Id<Franchise> franchiseId,
         CancellationToken token)
     {
+        this.LogGetFranchisePoster(franchiseId, listId);
+
         var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, franchiseId, token);
 
@@ -131,6 +133,8 @@ public sealed class FranchiseService(
 
     public async Task RemoveFranchisePoster(Id<CineasteList> listId, Id<Franchise> franchiseId, CancellationToken token)
     {
+        this.LogRemoveFranchisePoster(franchiseId, listId);
+
         var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, franchiseId, token);
 
@@ -390,6 +394,8 @@ public sealed class FranchiseService(
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
+        this.LogSetFranchisePoster(franchiseId, listId);
+
         var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, franchiseId, token);
 
@@ -411,4 +417,27 @@ public sealed class FranchiseService(
 
         return hash;
     }
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Getting franchise {FranchiseId} in list {ListId}")]
+    private partial void LogGetFranchise(Id<Franchise> franchiseId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding franchise to list {ListId}")]
+    private partial void LogAddFranchise(Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Updating franchise {FranchiseId} in list {ListId}")]
+    private partial void LogUpdateFranchise(Id<Franchise> franchiseId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Removing franchise {FranchiseId} from list {ListId}")]
+    private partial void LogRemoveFranchise(Id<Franchise> franchiseId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Getting the poster for franchise {FranchiseId} in list {ListId}")]
+    private partial void LogGetFranchisePoster(Id<Franchise> franchiseId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Setting the poster for franchise {FranchiseId} in list {ListId}")]
+    private partial void LogSetFranchisePoster(Id<Franchise> franchiseId, Id<CineasteList> listId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Removing the poster for franchise {FranchiseId} in list {ListId}")]
+    private partial void LogRemoveFranchisePoster(Id<Franchise> franchiseId, Id<CineasteList> listId);
 }

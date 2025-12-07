@@ -4,7 +4,7 @@ using AngleSharp.Dom;
 
 namespace Cineaste.Application.Services.Poster;
 
-internal sealed class PosterProvider(
+internal sealed partial class PosterProvider(
     HttpClient httpClient,
     IHtmlDocumentProvider documentProvider,
     ILogger<PosterProvider> logger) : IPosterProvider
@@ -26,7 +26,7 @@ internal sealed class PosterProvider(
     public async Task<string> GetPosterUrl(Validated<PosterImdbMediaRequest> request, CancellationToken token)
     {
         string url = request.Value.Url;
-        this.logger.LogInformation("Fetching a poster from IMDb: {Url}", url);
+        this.LogFetchingPosterFromImdb(url);
 
         var image = await this.GetImage(url, token);
         return this.ExtractSource(image, url);
@@ -36,15 +36,13 @@ internal sealed class PosterProvider(
     {
         try
         {
-            this.logger.LogInformation("Fetching a poster from a remote URL: {Url}", url);
+            this.LogFetchingPosterFromUrl(url);
 
             var response = await this.httpClient.GetAsync(url, token);
 
             if (!response.IsSuccessStatusCode)
             {
-                this.logger.LogInformation(
-                    "Unsuccessful response when fetching a poster from a remote URL: {Url}", url);
-
+                this.LogUnsuccessfulPosterFetchResponse(url);
                 throw await this.ExceptionFromResponse(url, response, token);
             }
 
@@ -54,8 +52,7 @@ internal sealed class PosterProvider(
             throw;
         } catch (Exception e)
         {
-            this.logger.LogError(e, "Exception when fetching a poster from a remote URL: {Url}", url);
-
+            this.LogPosterFetchException(e, url);
             throw new PosterFetchException(e);
         }
     }
@@ -75,7 +72,7 @@ internal sealed class PosterProvider(
 
         var responseBody = await response.Content.ReadAsStreamAsync(token);
 
-        this.logger.LogInformation("Fetched a poster from a remote URL: {Url}", url);
+        this.LogFetchedPosterFromUrl(url);
         return new StreamableContent(() => responseBody, contentLength, contentType);
     }
 
@@ -92,8 +89,7 @@ internal sealed class PosterProvider(
             throw;
         } catch (Exception e)
         {
-            this.logger.LogError(e, "Exception when fetching IMDb media: {Url}", url);
-
+            this.LogImdbMediaFetchException(e, url);
             throw new PosterFetchException(e);
         }
     }
@@ -102,7 +98,7 @@ internal sealed class PosterProvider(
     {
         if (image is { LocalName: "img" } && image.GetAttribute("src") is string source)
         {
-            this.logger.LogInformation("Fetched image source URL from IMDb: {Source}", source);
+            this.LogFetchedImageSourceUrlFromImdb(source);
             return source;
         } else
         {
@@ -125,6 +121,29 @@ internal sealed class PosterProvider(
 
         throw new PosterFetchResponseException(url, responseData);
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Fetching a poster from IMDb: {Url}")]
+    private partial void LogFetchingPosterFromImdb(string url);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Fetched image source URL from IMDb: {Source}")]
+    private partial void LogFetchedImageSourceUrlFromImdb(string source);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Fetching a poster from a remote URL: {Url}")]
+    private partial void LogFetchingPosterFromUrl(string url);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Fetched a poster from a remote URL: {Url}")]
+    private partial void LogFetchedPosterFromUrl(string url);
+
+    [LoggerMessage(
+        Level = LogLevel.Error,
+        Message = "Unsuccessful response when fetching a poster from a remote URL: {Url}")]
+    private partial void LogUnsuccessfulPosterFetchResponse(string url);
+
+    [LoggerMessage(Level = LogLevel.Error, Message = "Exception when fetching a poster from a remote URL: {Url}")]
+    private partial void LogPosterFetchException(Exception e, string url);
+
+    [LoggerMessage(Level = LogLevel.Error, Message = "Exception when fetching IMDb media: {Url}")]
+    private partial void LogImdbMediaFetchException(Exception e, string url);
 }
 
 file static class Extensions

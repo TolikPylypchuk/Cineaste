@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Diagnostics;
 
 namespace Cineaste.Problems;
 
-internal static class CineasteExceptionHandlerExtensions
+internal static class CineasteProblemDetailsExtensions
 {
     extension(IServiceCollection services)
     {

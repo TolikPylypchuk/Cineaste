@@ -71,5 +71,5 @@ public static class ListEndpoints
         ClaimsPrincipal principal,
         CancellationToken token) =>
         TypedResults.Ok(await listService.GetListItemByParentFranchise(
-            principal.ListId, parentFranchiseId, sequenceNumber, token));
+            principal.ListId, Id.For<Franchise>(parentFranchiseId), sequenceNumber, token));
 }

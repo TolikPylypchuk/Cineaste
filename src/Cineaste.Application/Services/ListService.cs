@@ -2,14 +2,14 @@ using System.Linq.Expressions;
 
 namespace Cineaste.Application.Services;
 
-public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService> logger)
+public sealed partial class ListService(CineasteDbContext dbContext, ILogger<ListService> logger)
 {
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly ILogger<ListService> logger = logger;
 
     public async Task<ListModel> GetList(Id<CineasteList> listId, CancellationToken token)
     {
-        this.logger.LogDebug("Getting the list");
+        this.LogGetList(listId);
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
@@ -29,7 +29,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
         int size,
         CancellationToken token)
     {
-        this.logger.LogDebug("Getting the list items");
+        this.LogGetListItems(listId, offset, size);
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
@@ -65,7 +65,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
 
     public async Task<List<ListItemModel>> GetStandaloneListItems(Id<CineasteList> listId, CancellationToken token)
     {
-        logger.LogDebug("Getting standalone list items");
+        this.LogGetStandaloneListItems(listId);
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
@@ -87,7 +87,7 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
 
     public async Task<ListItemModel> GetListItem(Id<CineasteList> listId, Guid id, CancellationToken token)
     {
-        this.logger.LogDebug("Getting the list item by ID {Id}", id);
+        this.LogGetListItem(listId, id);
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
@@ -115,14 +115,11 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
 
     public async Task<ListItemModel> GetListItemByParentFranchise(
         Id<CineasteList> listId,
-        Guid parentFranchiseId,
+        Id<Franchise> parentFranchiseId,
         int sequenceNumber,
         CancellationToken token)
     {
-        this.logger.LogDebug(
-            "Getting the list item by parent franchise ID {ParentFranchiseId} and sequence number {SequenceNumber}",
-            parentFranchiseId,
-            sequenceNumber);
+        this.LogGetListItemByParentFranchise(listId, parentFranchiseId, sequenceNumber);
 
         var list = await dbContext.Lists
             .Include(list => list.Configuration)
@@ -131,10 +128,8 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .SingleOrDefaultAsync(list => list.Id == listId, token)
             ?? throw new ListNotFoundException(listId);
 
-        var parentFranchiseStrongId = Id.For<Franchise>(parentFranchiseId);
-
         var parentFranchise = await dbContext.Franchises
-            .Where(franchise => franchise.Id == parentFranchiseStrongId)
+            .Where(franchise => franchise.Id == parentFranchiseId)
             .Where(franchise => franchise.ListItem!.List.Id == list.Id)
             .Include(franchise => franchise.Children)
                 .ThenInclude(item => item.Movie)
@@ -143,11 +138,11 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
             .Include(franchise => franchise.Children)
                 .ThenInclude(item => item.Franchise)
             .SingleOrDefaultAsync(token)
-            ?? throw new FranchiseNotFoundException(parentFranchiseStrongId);
+            ?? throw new FranchiseNotFoundException(parentFranchiseId);
 
         var childItem = parentFranchise.Children
             .FirstOrDefault(item => item.SequenceNumber == sequenceNumber)
-            ?? throw new FranchiseItemWithNumberNotFoundException(parentFranchiseStrongId, sequenceNumber);
+            ?? throw new FranchiseItemWithNumberNotFoundException(parentFranchiseId, sequenceNumber);
 
         var itemIdPredicate = childItem.Select<Expression<Func<ListItem, bool>>>(
             movie => item => item.Movie!.Id == movie.Id,
@@ -163,6 +158,29 @@ public sealed class ListService(CineasteDbContext dbContext, ILogger<ListService
 
         return item.ToListItemModel();
     }
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Getting list {ListId}")]
+    private partial void LogGetList(Id<CineasteList> listId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Getting items of list {ListId} with offset {Offset} and size {Size}")]
+    private partial void LogGetListItems(Id<CineasteList> listId, int offset, int size);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Getting standalone items of list {ListId}")]
+    private partial void LogGetStandaloneListItems(Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Getting item {ItemId} of list {ListId}")]
+    private partial void LogGetListItem(Id<CineasteList> listId, Guid itemId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Getting the item of list {ListId} by parent franchise {ParentFranchiseId} " +
+            "and sequence number {SequenceNumber}")]
+    private partial void LogGetListItemByParentFranchise(
+        Id<CineasteList> listId,
+        Id<Franchise> parentFranchiseId,
+        int sequenceNumber);
 }
 
 file static class Extensions

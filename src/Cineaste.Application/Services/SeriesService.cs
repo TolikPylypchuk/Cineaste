@@ -1,6 +1,6 @@
 namespace Cineaste.Application.Services;
 
-public sealed class SeriesService(
+public sealed partial class SeriesService(
     CineasteDbContext dbContext,
     IPosterProvider posterProvider,
     ILogger<SeriesService> logger)
@@ -11,7 +11,7 @@ public sealed class SeriesService(
 
     public async Task<SeriesModel> GetSeries(Id<CineasteList> listId, Id<Series> id, CancellationToken token)
     {
-        this.logger.LogDebug("Getting the series with ID: {Id}", id.Value);
+        this.LogGetSeries(id, listId);
 
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, id, token);
@@ -24,7 +24,7 @@ public sealed class SeriesService(
         Validated<SeriesRequest> request,
         CancellationToken token)
     {
-        this.logger.LogDebug("Adding a new series");
+        this.LogAddSeries(listId);
 
         var list = await this.FindList(listId, token);
         var kind = this.FindKind(list, Id.For<SeriesKind>(request.Value.KindId));
@@ -53,7 +53,7 @@ public sealed class SeriesService(
         Validated<SeriesRequest> request,
         CancellationToken token)
     {
-        this.logger.LogDebug("Updating the series with ID: {Id}", id.Value);
+        this.LogUpdateSeries(id, listId);
 
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, id, token);
@@ -72,7 +72,7 @@ public sealed class SeriesService(
 
     public async Task RemoveSeries(Id<CineasteList> listId, Id<Series> id, CancellationToken token)
     {
-        this.logger.LogDebug("Removing the series with ID: {Id}", id.Value);
+        this.LogRemoveSeries(id, listId);
 
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, id, token);
@@ -95,6 +95,8 @@ public sealed class SeriesService(
         Id<Series> seriesId,
         CancellationToken token)
     {
+        this.LogGetSeriesPoster(seriesId, listId);
+
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
 
@@ -129,6 +131,8 @@ public sealed class SeriesService(
 
     public async Task RemoveSeriesPoster(Id<CineasteList> listId, Id<Series> seriesId, CancellationToken token)
     {
+        this.LogRemoveSeriesPoster(seriesId, listId);
+
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
 
@@ -151,6 +155,8 @@ public sealed class SeriesService(
         Id<Period> periodId,
         CancellationToken token)
     {
+        this.LogGetSeasonPoster(periodId, seriesId, listId);
+
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var period = this.FindPeriod(series, periodId);
@@ -195,6 +201,8 @@ public sealed class SeriesService(
         Id<Period> periodId,
         CancellationToken token)
     {
+        this.LogRemoveSeasonPoster(periodId, seriesId, listId);
+
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var period = this.FindPeriod(series, periodId);
@@ -218,6 +226,8 @@ public sealed class SeriesService(
         Id<SpecialEpisode> episodeId,
         CancellationToken token)
     {
+        this.LogGetSpecialEpisodePoster(episodeId, seriesId, listId);
+
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var episode = this.FindSpecialEpisode(series, episodeId);
@@ -262,6 +272,8 @@ public sealed class SeriesService(
         Id<SpecialEpisode> episodeId,
         CancellationToken token)
     {
+        this.LogRemoveSpecialEpisodePoster(episodeId, seriesId, listId);
+
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var episode = this.FindSpecialEpisode(series, episodeId);
@@ -446,6 +458,8 @@ public sealed class SeriesService(
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
+        this.LogSetSeriesPoster(seriesId, listId);
+
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
 
@@ -484,6 +498,8 @@ public sealed class SeriesService(
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
+        this.LogSetSeasonPoster(periodId, seriesId, listId);
+
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var period = this.FindPeriod(series, periodId);
@@ -523,6 +539,8 @@ public sealed class SeriesService(
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
+        this.LogSetSpecialEpisodePoster(episodeId, seriesId, listId);
+
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
         var episode = this.FindSpecialEpisode(series, episodeId);
@@ -545,4 +563,64 @@ public sealed class SeriesService(
 
         return hash;
     }
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Getting series {SeriesId} in list {ListId}")]
+    private partial void LogGetSeries(Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding series to list {ListId}")]
+    private partial void LogAddSeries(Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Updating series {SeriesId} in list {ListId}")]
+    private partial void LogUpdateSeries(Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Removing series {SeriesId} from list {ListId}")]
+    private partial void LogRemoveSeries(Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Getting the poster for series {SeriesId} in list {ListId}")]
+    private partial void LogGetSeriesPoster(Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Setting the poster for series {SeriesId} in list {ListId}")]
+    private partial void LogSetSeriesPoster(Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Removing the poster for series {SeriesId} in list {ListId}")]
+    private partial void LogRemoveSeriesPoster(Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Getting the poster for season period {PeriodId} of series {SeriesId} in list {ListId}")]
+    private partial void LogGetSeasonPoster(Id<Period> periodId, Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Setting the poster for season period {PeriodId} of series {SeriesId} in list {ListId}")]
+    private partial void LogSetSeasonPoster(Id<Period> periodId, Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Removing the poster for season period {PeriodId} of series {SeriesId} in list {ListId}")]
+    private partial void LogRemoveSeasonPoster(Id<Period> periodId, Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Getting the poster for special episode {EpisodeId} of series {SeriesId} in list {ListId}")]
+    private partial void LogGetSpecialEpisodePoster(
+        Id<SpecialEpisode> episodeId,
+        Id<Series> seriesId,
+        Id<CineasteList> listId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Setting the poster for special episode {EpisodeId} of series {SeriesId} in list {ListId}")]
+    private partial void LogSetSpecialEpisodePoster(
+        Id<SpecialEpisode> episodeId,
+        Id<Series> seriesId,
+        Id<CineasteList> listId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Removing the poster for special episode {EpisodeId} of series {SeriesId} in list {ListId}")]
+    private partial void LogRemoveSpecialEpisodePoster(
+        Id<SpecialEpisode> episodeId,
+        Id<Series> seriesId,
+        Id<CineasteList> listId);
 }

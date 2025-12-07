@@ -155,7 +155,7 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
         // Act
 
         var model = await listService.GetListItemByParentFranchise(
-            data.ListId, franchise.Id.Value, 1, TestContext.Current.CancellationToken);
+            data.ListId, franchise.Id, 1, TestContext.Current.CancellationToken);
 
         // Assert
 
