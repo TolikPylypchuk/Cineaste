@@ -226,15 +226,3 @@ public sealed partial class ListItem : Entity<ListItem>
     private string DelimitNumber(int num) =>
         $"{NumberDelimiter}{num}{NumberDelimiter}";
 }
-
-internal static class ListItemExtensions
-{
-    extension(string title)
-    {
-        internal IEnumerable<object> WithSplitNumbers() =>
-            title.Split(NumberDelimiter, StringSplitOptions.RemoveEmptyEntries).Select(TryParseNumber);
-    }
-
-    private static object TryParseNumber(string str) =>
-        Int32.TryParse(str, out int result) ? result : str;
-}

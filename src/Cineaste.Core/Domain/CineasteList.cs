@@ -127,45 +127,45 @@ public sealed class CineasteList : Entity<CineasteList>
         bool secondOrderOriginal =
             this.Configuration.SortingConfiguration.SecondSortOrder == ListSortOrder.ByOriginalTitleSimple;
 
-        var comparer = new StringOrIntComparer(
-            this.Configuration.Culture.CompareInfo.GetStringComparer(CompareOptions.IgnoreCase));
+        var comparer = this.Configuration.Culture.CompareInfo.GetStringComparer(
+            CompareOptions.NumericOrdering | CompareOptions.IgnoreCase);
 
         var orderedItems = this.Configuration.SortingConfiguration.FirstSortOrder switch
         {
             ListSortOrder.ByTitle => ascending
                 ? this.items
-                    .OrderBy(item => item.NormalizedTitle.WithSplitNumbers(), comparer)
+                    .OrderBy(item => item.NormalizedTitle, comparer)
                     .ThenBy(item => item.StartYear)
                     .ThenBy(item => item.EndYear)
                 : this.items
-                    .OrderByDescending(item => item.NormalizedTitle.WithSplitNumbers(), comparer)
+                    .OrderByDescending(item => item.NormalizedTitle, comparer)
                     .ThenByDescending(item => item.StartYear)
                     .ThenByDescending(item => item.EndYear),
             ListSortOrder.ByOriginalTitle => ascending
                 ? this.items
-                    .OrderBy(item => item.NormalizedOriginalTitle.WithSplitNumbers(), comparer)
+                    .OrderBy(item => item.NormalizedOriginalTitle, comparer)
                     .ThenBy(item => item.StartYear)
                     .ThenBy(item => item.EndYear)
                 : this.items
-                    .OrderByDescending(item => item.NormalizedOriginalTitle.WithSplitNumbers(), comparer)
+                    .OrderByDescending(item => item.NormalizedOriginalTitle, comparer)
                     .ThenByDescending(item => item.StartYear)
                     .ThenByDescending(item => item.EndYear),
             ListSortOrder.ByTitleSimple => ascending
                 ? this.items
-                    .OrderBy(item => item.NormalizedShortTitle.WithSplitNumbers(), comparer)
+                    .OrderBy(item => item.NormalizedShortTitle, comparer)
                     .ThenBy(item => item.StartYear)
                     .ThenBy(item => item.EndYear)
                 : this.items
-                    .OrderByDescending(item => item.NormalizedShortTitle.WithSplitNumbers(), comparer)
+                    .OrderByDescending(item => item.NormalizedShortTitle, comparer)
                     .ThenByDescending(item => item.StartYear)
                     .ThenByDescending(item => item.EndYear),
             ListSortOrder.ByOriginalTitleSimple => ascending
                 ? this.items
-                    .OrderBy(item => item.NormalizedShortOriginalTitle.WithSplitNumbers(), comparer)
+                    .OrderBy(item => item.NormalizedShortOriginalTitle, comparer)
                     .ThenBy(item => item.StartYear)
                     .ThenBy(item => item.EndYear)
                 : this.items
-                    .OrderByDescending(item => item.NormalizedShortOriginalTitle.WithSplitNumbers(), comparer)
+                    .OrderByDescending(item => item.NormalizedShortOriginalTitle, comparer)
                     .ThenByDescending(item => item.StartYear)
                     .ThenByDescending(item => item.EndYear),
             ListSortOrder.ByYear => ascending
@@ -173,20 +173,20 @@ public sealed class CineasteList : Entity<CineasteList>
                     ? this.items
                         .OrderBy(item => item.StartYear)
                         .ThenBy(item => item.EndYear)
-                        .ThenBy(item => item.NormalizedShortTitle.WithSplitNumbers(), comparer)
+                        .ThenBy(item => item.NormalizedShortTitle, comparer)
                     : this.items
                         .OrderBy(item => item.StartYear)
                         .ThenBy(item => item.EndYear)
-                        .ThenBy(item => item.NormalizedShortOriginalTitle.WithSplitNumbers(), comparer)
+                        .ThenBy(item => item.NormalizedShortOriginalTitle, comparer)
                 : secondOrderOriginal
                     ? this.items
                         .OrderByDescending(item => item.StartYear)
                         .ThenByDescending(item => item.EndYear)
-                        .ThenByDescending(item => item.NormalizedShortTitle.WithSplitNumbers(), comparer)
+                        .ThenByDescending(item => item.NormalizedShortTitle, comparer)
                     : this.items
                         .OrderByDescending(item => item.StartYear)
                         .ThenByDescending(item => item.EndYear)
-                        .ThenByDescending(item => item.NormalizedShortOriginalTitle.WithSplitNumbers(), comparer),
+                        .ThenByDescending(item => item.NormalizedShortOriginalTitle, comparer),
             _ => this.items.AsEnumerable()
         };
 

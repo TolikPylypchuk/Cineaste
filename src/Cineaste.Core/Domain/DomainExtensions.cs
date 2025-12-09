@@ -1,4 +1,4 @@
-namespace Cineaste.Core;
+namespace Cineaste.Core.Domain;
 
 public static class DomainExtensions
 {

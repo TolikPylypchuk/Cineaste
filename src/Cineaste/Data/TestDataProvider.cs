@@ -75,7 +75,7 @@ internal sealed partial class TestDataProvider(
         list.AddMovie(this.CreateMovie("The Grand Budapest Hotel", liveActionMovie, 2014));
         list.AddMovie(this.CreateMovie("Soul", animatedMovie, 2020));
         list.AddMovie(this.CreateMovie("Tangled", animatedMovie, 2010));
-        list.AddMovie(this.CreateMovie("Pulp Fiction", animatedMovie, 1994));
+        list.AddMovie(this.CreateMovie("Pulp Fiction", liveActionMovie, 1994));
         list.AddMovie(this.CreateMovie("The Intouchables", "Intouchables", liveActionMovie, 2011));
         list.AddMovie(this.CreateMovie("Amélie", "Le fabuleux destin d'Amélie Poulain", liveActionMovie, 2001));
         list.AddMovie(this.CreateMovie("Ratatouille", animatedMovie, 2007));
