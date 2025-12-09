@@ -12,7 +12,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var franchise = await data.CreateFranchise(dbContext);
         var poster = await data.CreateFranchisePoster(franchise, dbContext);
@@ -34,7 +35,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Franchise>();
 
@@ -52,7 +54,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var franchise = await data.CreateFranchise(dbContext);
 
@@ -70,7 +73,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var franchise = await data.CreateFranchise(dbContext);
         var poster = await data.CreateFranchisePoster(franchise, dbContext);
@@ -102,7 +106,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Franchise>();
         var posterData = data.CreatePosterContent();
@@ -122,7 +127,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var franchise = await data.CreateFranchise(dbContext);
         var poster = await data.CreateFranchisePoster(franchise, dbContext);
@@ -160,7 +166,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Franchise>();
         var posterData = data.CreatePosterContent();
@@ -185,7 +192,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var franchise = await data.CreateFranchise(dbContext);
         var poster = await data.CreateFranchisePoster(franchise, dbContext);
@@ -223,7 +231,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Franchise>();
         var posterData = data.CreatePosterContent();
@@ -248,7 +257,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var franchise = await data.CreateFranchise(dbContext);
         var poster = await data.CreateFranchisePoster(franchise, dbContext);
@@ -268,7 +278,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var franchise = await data.CreateFranchise(dbContext);
 
@@ -286,7 +297,8 @@ public sealed class FranchiseServicePosterTests(DataFixture data, ITestOutputHel
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Franchise>();
 

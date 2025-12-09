@@ -12,7 +12,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var list = await data.GetList(dbContext);
 
@@ -67,7 +68,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Franchise>();
 
@@ -85,7 +87,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
         var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie);
@@ -132,7 +135,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
         var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie);
@@ -167,7 +171,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
         var dummyItemId = Guid.CreateVersion7();
@@ -193,7 +198,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie1 = await data.CreateMovie(dbContext);
         var movie2 = await data.CreateMovie(dbContext);
@@ -261,7 +267,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var list = await data.GetList(dbContext);
 
@@ -306,7 +313,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var list = await data.GetList(dbContext);
 
@@ -336,7 +344,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var list = await data.GetList(dbContext);
 
@@ -361,7 +370,8 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(dbContext, data.PosterProvider, this.logger);
+        var franchiseService = new FranchiseService(
+            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Franchise>();
 

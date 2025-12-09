@@ -22,6 +22,9 @@ public readonly partial record struct PosterHash
     public static PosterHash? Nullable(string? value) =>
         value is not null ? new(value) : null;
 
+    public override string ToString() =>
+        this.Value;
+
     [GeneratedRegex("^[0-9a-f]{64}$", RegexOptions.Compiled)]
     private static partial Regex GenerateSha256Regex();
 }

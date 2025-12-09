@@ -3,10 +3,12 @@ namespace Cineaste.Application.Services;
 public sealed partial class MovieService(
     CineasteDbContext dbContext,
     IPosterProvider posterProvider,
+    IPosterUrlProvider posterUrlProvider,
     ILogger<MovieService> logger)
 {
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly IPosterProvider posterProvider = posterProvider;
+    private readonly IPosterUrlProvider posterUrlProvider = posterUrlProvider;
     private readonly ILogger<MovieService> logger = logger;
 
     public async Task<MovieModel> GetMovie(Id<CineasteList> listId, Id<Movie> id, CancellationToken token)
@@ -16,7 +18,7 @@ public sealed partial class MovieService(
         var list = await this.FindList(listId, token);
         var movie = await this.FindMovie(list, id, token);
 
-        return movie.ToMovieModel();
+        return movie.ToMovieModel(this.posterUrlProvider);
     }
 
     public async Task<MovieModel> AddMovie(
@@ -44,7 +46,7 @@ public sealed partial class MovieService(
         this.dbContext.Movies.Add(movie);
         await this.dbContext.SaveChangesAsync(token);
 
-        return movie.ToMovieModel();
+        return movie.ToMovieModel(this.posterUrlProvider);
     }
 
     public async Task<MovieModel> UpdateMovie(
@@ -67,7 +69,7 @@ public sealed partial class MovieService(
 
         await this.dbContext.SaveChangesAsync(token);
 
-        return movie.ToMovieModel();
+        return movie.ToMovieModel(this.posterUrlProvider);
     }
 
     public async Task RemoveMovie(Id<CineasteList> listId, Id<Movie> id, CancellationToken token)

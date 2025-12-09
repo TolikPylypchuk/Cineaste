@@ -1,3 +1,5 @@
+using Cineaste.Application.Services.Poster;
+
 namespace Cineaste.Endpoints;
 
 public static class SeriesEndpoints
@@ -162,6 +164,7 @@ public static class SeriesEndpoints
         Guid id,
         IFormFile file,
         SeriesService seriesService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -170,13 +173,14 @@ public static class SeriesEndpoints
 
         var posterHash = await seriesService.SetSeriesPoster(principal.ListId, seriesId, content, token);
 
-        return TypedResults.Created(Urls.SeriesPoster(seriesId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(seriesId, posterHash));
     }
 
     public static async Task<Created> SetIndirectSeriesPoster(
         Guid id,
         PosterRequestBase request,
         SeriesService seriesService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -193,7 +197,7 @@ public static class SeriesEndpoints
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
 
-        return TypedResults.Created(Urls.SeriesPoster(seriesId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(seriesId, posterHash));
     }
 
     public static async Task<NoContent> RemoveSeriesPoster(
@@ -224,6 +228,7 @@ public static class SeriesEndpoints
         Guid periodId,
         IFormFile file,
         SeriesService seriesService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -235,7 +240,7 @@ public static class SeriesEndpoints
         var posterHash = await seriesService.SetSeasonPoster(
             principal.ListId, typedSeriesId, typedPeriodId, content, token);
 
-        return TypedResults.Created(Urls.SeasonPoster(typedSeriesId, typedPeriodId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(typedSeriesId, typedPeriodId, posterHash));
     }
 
     public static async Task<Created> SetIndirectSeasonPoster(
@@ -243,6 +248,7 @@ public static class SeriesEndpoints
         Guid periodId,
         PosterRequestBase request,
         SeriesService seriesService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -262,7 +268,7 @@ public static class SeriesEndpoints
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
 
-        return TypedResults.Created(Urls.SeasonPoster(typedSeriesId, typedPeriodId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(typedSeriesId, typedPeriodId, posterHash));
     }
 
     public static async Task<NoContent> RemoveSeasonPoster(
@@ -296,6 +302,7 @@ public static class SeriesEndpoints
         Guid episodeId,
         IFormFile file,
         SeriesService seriesService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -306,7 +313,7 @@ public static class SeriesEndpoints
         var posterHash = await seriesService.SetSpecialEpisodePoster(
             principal.ListId, typedSeriesId, typedEpisodeId, content, token);
 
-        return TypedResults.Created(Urls.SpecialEpisodePoster(typedSeriesId, typedEpisodeId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(typedSeriesId, typedEpisodeId, posterHash));
     }
 
     public static async Task<Created> SetIndirectSpecialEpisodePoster(
@@ -314,6 +321,7 @@ public static class SeriesEndpoints
         Guid episodeId,
         PosterRequestBase request,
         SeriesService seriesService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -331,7 +339,7 @@ public static class SeriesEndpoints
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
 
-        return TypedResults.Created(Urls.SpecialEpisodePoster(typedSeriesId, typedEpisodeId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(typedSeriesId, typedEpisodeId, posterHash));
     }
 
     public static async Task<NoContent> RemoveSpecialEpisodePoster(

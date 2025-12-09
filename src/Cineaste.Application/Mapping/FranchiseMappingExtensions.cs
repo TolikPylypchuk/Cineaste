@@ -4,7 +4,7 @@ public static class FranchiseMappingExtensions
 {
     extension(Franchise franchise)
     {
-        public FranchiseModel ToFranchiseModel() =>
+        public FranchiseModel ToFranchiseModel(IPosterUrlProvider posterUrlProvider) =>
             new(
                 franchise.Id.Value,
                 franchise.AllTitles.ToTitleModels(isOriginal: false),
@@ -19,7 +19,7 @@ public static class FranchiseMappingExtensions
                 franchise.ContinueNumbering,
                 franchise.ActiveColor.HexValue,
                 franchise.ListItem?.SequenceNumber ?? 0,
-                franchise.PosterUrl,
+                posterUrlProvider.GetPosterUrl(franchise.Id, franchise.PosterHash),
                 franchise.FranchiseItem.ToFranchiseItemInfoModel());
 
         public FranchiseUpdateResult Update(
@@ -91,9 +91,6 @@ public static class FranchiseMappingExtensions
                 request.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
                 isOriginal: true);
         }
-
-        private string? PosterUrl =>
-            Urls.FranchisePoster(franchise.Id, franchise.PosterHash);
     }
 
     extension(FranchiseItem? item)

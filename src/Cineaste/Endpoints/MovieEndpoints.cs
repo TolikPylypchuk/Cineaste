@@ -114,6 +114,7 @@ public static class MovieEndpoints
         Guid id,
         IFormFile file,
         MovieService movieService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -122,13 +123,14 @@ public static class MovieEndpoints
 
         var posterHash = await movieService.SetMoviePoster(principal.ListId, movieId, content, token);
 
-        return TypedResults.Created(Urls.MoviePoster(movieId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(movieId, posterHash));
     }
 
     public static async Task<Created> SetIndirectMoviePoster(
         Guid id,
         PosterRequestBase request,
         MovieService movieService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -145,7 +147,7 @@ public static class MovieEndpoints
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
 
-        return TypedResults.Created(Urls.MoviePoster(movieId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(movieId, posterHash));
     }
 
     public static async Task<NoContent> RemoveMoviePoster(

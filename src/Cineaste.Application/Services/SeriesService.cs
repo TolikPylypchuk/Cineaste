@@ -3,10 +3,12 @@ namespace Cineaste.Application.Services;
 public sealed partial class SeriesService(
     CineasteDbContext dbContext,
     IPosterProvider posterProvider,
+    IPosterUrlProvider posterUrlProvider,
     ILogger<SeriesService> logger)
 {
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly IPosterProvider posterProvider = posterProvider;
+    private readonly IPosterUrlProvider posterUrlProvider = posterUrlProvider;
     private readonly ILogger<SeriesService> logger = logger;
 
     public async Task<SeriesModel> GetSeries(Id<CineasteList> listId, Id<Series> id, CancellationToken token)
@@ -16,7 +18,7 @@ public sealed partial class SeriesService(
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, id, token);
 
-        return series.ToSeriesModel();
+        return series.ToSeriesModel(this.posterUrlProvider);
     }
 
     public async Task<SeriesModel> AddSeries(
@@ -44,7 +46,7 @@ public sealed partial class SeriesService(
         dbContext.Series.Add(series);
         await dbContext.SaveChangesAsync(token);
 
-        return series.ToSeriesModel();
+        return series.ToSeriesModel(this.posterUrlProvider);
     }
 
     public async Task<SeriesModel> UpdateSeries(
@@ -67,7 +69,7 @@ public sealed partial class SeriesService(
 
         await dbContext.SaveChangesAsync(token);
 
-        return series.ToSeriesModel();
+        return series.ToSeriesModel(this.posterUrlProvider);
     }
 
     public async Task RemoveSeries(Id<CineasteList> listId, Id<Series> id, CancellationToken token)

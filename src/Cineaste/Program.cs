@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 
+using Cineaste.Application.Services.Poster;
 using Cineaste.Client;
 using Cineaste.Client.BaseUri;
 using Cineaste.Client.Navigation;
@@ -12,6 +13,7 @@ using Cineaste.Json;
 using Cineaste.OpenApi;
 using Cineaste.Problems;
 using Cineaste.Services.BaseUri;
+using Cineaste.Services.Poster;
 using Cineaste.Shared.Collections.Json;
 using Cineaste.Shared.Validation.Json;
 
@@ -96,6 +98,7 @@ builder.Services.AddOutputCache(options =>
 });
 
 builder.Services.AddApplicationServices();
+builder.Services.AddSingleton<IPosterUrlProvider, PosterUrlProvider>();
 
 builder.Services.AddCineasteProblemDetails();
 

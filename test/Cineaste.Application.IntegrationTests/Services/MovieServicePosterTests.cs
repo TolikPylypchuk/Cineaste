@@ -12,7 +12,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
         var poster = await data.CreateMoviePoster(movie, dbContext);
@@ -34,7 +34,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Movie>();
 
@@ -52,7 +52,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
 
@@ -70,7 +70,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
         var poster = await data.CreateMoviePoster(movie, dbContext);
@@ -102,7 +102,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Movie>();
         var posterData = data.CreatePosterContent();
@@ -121,7 +121,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
         var poster = await data.CreateMoviePoster(movie, dbContext);
@@ -159,7 +159,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Movie>();
         var posterData = data.CreatePosterContent();
@@ -184,7 +184,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
         var poster = await data.CreateMoviePoster(movie, dbContext);
@@ -222,7 +222,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Movie>();
         var posterData = data.CreatePosterContent();
@@ -247,7 +247,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
         var poster = await data.CreateMoviePoster(movie, dbContext);
@@ -267,7 +267,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var movie = await data.CreateMovie(dbContext);
 
@@ -285,7 +285,7 @@ public sealed class MovieServicePosterTests(DataFixture data, ITestOutputHelper 
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, this.logger);
+        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Movie>();
 

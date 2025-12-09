@@ -4,7 +4,7 @@ public static class MovieMappingExtensions
 {
     extension(Movie movie)
     {
-        public MovieModel ToMovieModel() =>
+        public MovieModel ToMovieModel(IPosterUrlProvider posterUrlProvider) =>
             new(
                 movie.Id.Value,
                 movie.AllTitles.ToTitleModels(isOriginal: false),
@@ -17,7 +17,7 @@ public static class MovieMappingExtensions
                 movie.RottenTomatoesId?.Value,
                 movie.ActiveColor.HexValue,
                 movie.ListItem?.SequenceNumber ?? 0,
-                movie.PosterUrl,
+                posterUrlProvider.GetPosterUrl(movie.Id, movie.PosterHash),
                 movie.FranchiseItem.ToFranchiseItemInfoModel());
 
         public void Update(Validated<MovieRequest> request, MovieKind kind)
@@ -39,9 +39,6 @@ public static class MovieMappingExtensions
 
             movie.ListItem?.SetProperties(movie);
         }
-
-        private string? PosterUrl =>
-            Urls.MoviePoster(movie.Id, movie.PosterHash);
     }
 
     extension(Validated<MovieRequest> request)

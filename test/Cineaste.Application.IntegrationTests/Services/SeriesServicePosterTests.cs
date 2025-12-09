@@ -12,7 +12,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var poster = await data.CreateSeriesPoster(series, dbContext);
@@ -34,7 +34,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Series>();
 
@@ -52,7 +52,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
 
@@ -70,7 +70,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
@@ -93,7 +93,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
@@ -113,7 +113,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var dummyId = Id.Create<Period>();
@@ -132,7 +132,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
@@ -151,7 +151,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
@@ -174,7 +174,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
@@ -193,7 +193,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var dummyId = Id.Create<SpecialEpisode>();
@@ -213,7 +213,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
@@ -233,7 +233,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var poster = await data.CreateSeriesPoster(series, dbContext);
@@ -265,7 +265,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Series>();
         var posterData = data.CreatePosterContent();
@@ -284,7 +284,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var poster = await data.CreateSeriesPoster(series, dbContext);
@@ -322,7 +322,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Series>();
         var posterData = data.CreatePosterContent();
@@ -347,7 +347,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var poster = await data.CreateSeriesPoster(series, dbContext);
@@ -385,7 +385,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Series>();
         var posterData = data.CreatePosterContent();
@@ -410,7 +410,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
@@ -443,7 +443,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
@@ -463,7 +463,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var dummyPeriodId = Id.Create<Period>();
@@ -483,7 +483,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
@@ -522,7 +522,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
@@ -548,7 +548,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var dummyPeriodId = Id.Create<Period>();
@@ -574,7 +574,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
@@ -613,7 +613,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
@@ -639,7 +639,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
@@ -672,7 +672,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
@@ -692,7 +692,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
@@ -713,7 +713,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
@@ -752,7 +752,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
@@ -778,7 +778,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
@@ -805,7 +805,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
@@ -844,7 +844,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
@@ -870,7 +870,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var poster = await data.CreateSeriesPoster(series, dbContext);
@@ -890,7 +890,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
 
@@ -908,7 +908,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummyId = Id.Create<Series>();
 
@@ -926,7 +926,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
@@ -948,7 +948,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
@@ -967,7 +967,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
@@ -986,7 +986,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var dummyPeriodId = Id.Create<Period>();
@@ -1005,7 +1005,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
@@ -1027,7 +1027,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
@@ -1046,7 +1046,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
@@ -1066,7 +1066,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Arrange
 
         var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, this.logger);
+        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
 
         var series = await data.CreateSeries(dbContext);
         var dummyEpisodeId = Id.Create<SpecialEpisode>();

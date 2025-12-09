@@ -114,6 +114,7 @@ public static class FranchiseEndpoints
         Guid id,
         IFormFile file,
         FranchiseService franchiseService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -122,13 +123,14 @@ public static class FranchiseEndpoints
 
         var posterHash = await franchiseService.SetFranchisePoster(principal.ListId, franchiseId, content, token);
 
-        return TypedResults.Created(Urls.FranchisePoster(franchiseId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(franchiseId, posterHash));
     }
 
     private static async Task<Created> SetIndirectFranchisePoster(
         Guid id,
         PosterRequestBase request,
         FranchiseService franchiseService,
+        IPosterUrlProvider posterUrlProvider,
         ClaimsPrincipal principal,
         CancellationToken token)
     {
@@ -146,7 +148,7 @@ public static class FranchiseEndpoints
             _ => throw new IncompleteMatchException("Unknown poster request type")
         };
 
-        return TypedResults.Created(Urls.FranchisePoster(franchiseId, posterHash));
+        return TypedResults.Created(posterUrlProvider.GetPosterUrl(franchiseId, posterHash));
     }
 
     private static async Task<NoContent> RemoveFranchisePoster(

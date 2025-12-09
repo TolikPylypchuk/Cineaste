@@ -36,6 +36,7 @@ public class DataFixture : IAsyncLifetime
     public DataFixture()
     {
         this.PosterProvider = Substitute.For<IPosterProvider>();
+        this.PosterUrlProvider = Substitute.For<IPosterUrlProvider>();
 
         this.list = this.CreateList();
         this.movieKind = this.CreateMovieKind(this.list);
@@ -43,6 +44,8 @@ public class DataFixture : IAsyncLifetime
     }
 
     public IPosterProvider PosterProvider { get; private set; }
+
+    public IPosterUrlProvider PosterUrlProvider { get; private set; }
 
     public Id<CineasteList> ListId => this.list.Id;
     public Id<MovieKind> MovieKindId => this.movieKind.Id;

@@ -4,7 +4,7 @@ public static class SeriesMappingExtensions
 {
     extension(Series series)
     {
-        public SeriesModel ToSeriesModel() =>
+        public SeriesModel ToSeriesModel(IPosterUrlProvider posterUrlProvider) =>
             new(
                 series.Id.Value,
                 series.AllTitles.ToTitleModels(isOriginal: false),
@@ -12,13 +12,13 @@ public static class SeriesMappingExtensions
                 series.WatchStatus,
                 series.ReleaseStatus,
                 series.Kind.ToListKindModel(),
-                [.. series.Seasons.Select(season => season.ToSeasonModel(series))],
-                [.. series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel(series))],
+                [.. series.Seasons.Select(season => season.ToSeasonModel(series, posterUrlProvider))],
+                [.. series.SpecialEpisodes.Select(episode => episode.ToSpecialEpisodeModel(series, posterUrlProvider))],
                 series.ImdbId?.Value,
                 series.RottenTomatoesId?.Value,
                 series.ActiveColor.HexValue,
                 series.ListItem?.SequenceNumber ?? 0,
-                series.PosterUrl,
+                posterUrlProvider.GetPosterUrl(series.Id, series.PosterHash),
                 series.FranchiseItem.ToFranchiseItemInfoModel());
 
         public void Update(Validated<SeriesRequest> request, SeriesKind kind)
@@ -82,15 +82,6 @@ public static class SeriesMappingExtensions
                 series.AddSpecialEpisode(request.ToSpecialEpisode());
             }
         }
-
-        private string? PosterUrl =>
-            Urls.SeriesPoster(series.Id, series.PosterHash);
-
-        private string? GetPosterUrl(Period period) =>
-            Urls.SeasonPoster(series.Id, period.Id, period.PosterHash);
-
-        private string? GetPosterUrl(SpecialEpisode episode) =>
-            Urls.SpecialEpisodePoster(series.Id, episode.Id, episode.PosterHash);
     }
 
     extension(Validated<SeriesRequest> request)
@@ -112,7 +103,7 @@ public static class SeriesMappingExtensions
 
     extension(Season season)
     {
-        private SeasonModel ToSeasonModel(Series series) =>
+        private SeasonModel ToSeasonModel(Series series, IPosterUrlProvider posterUrlProvider) =>
             new(
                 season.Id.Value,
                 season.AllTitles.ToTitleModels(isOriginal: false),
@@ -122,7 +113,7 @@ public static class SeriesMappingExtensions
                 season.ReleaseStatus,
                 season.Channel,
                 [.. season.Periods
-                .Select(period => period.ToPeriodModel(series))
+                .Select(period => period.ToPeriodModel(series, posterUrlProvider))
                 .OrderBy(period => period.StartYear)
                 .ThenBy(period => period.StartMonth)
                 .ThenBy(period => period.EndYear)
@@ -164,7 +155,7 @@ public static class SeriesMappingExtensions
 
     extension(Period period)
     {
-        private PeriodModel ToPeriodModel(Series series) =>
+        private PeriodModel ToPeriodModel(Series series, IPosterUrlProvider posterUrlProvider) =>
             new(
                 period.Id.Value,
                 period.StartMonth,
@@ -174,7 +165,7 @@ public static class SeriesMappingExtensions
                 period.EpisodeCount,
                 period.IsSingleDayRelease,
                 period.RottenTomatoesId?.Value,
-                series.GetPosterUrl(period));
+                posterUrlProvider.GetPosterUrl(series.Id, period.Id, period.PosterHash));
 
         private void Update(PeriodRequest request)
         {
@@ -190,7 +181,7 @@ public static class SeriesMappingExtensions
 
     extension(SpecialEpisode episode)
     {
-        private SpecialEpisodeModel ToSpecialEpisodeModel(Series series) =>
+        private SpecialEpisodeModel ToSpecialEpisodeModel(Series series, IPosterUrlProvider posterUrlProvider) =>
             new(
                 episode.Id.Value,
                 episode.AllTitles.ToTitleModels(isOriginal: false),
@@ -202,7 +193,7 @@ public static class SeriesMappingExtensions
                 episode.Month,
                 episode.Year,
                 episode.RottenTomatoesId?.Value,
-                series.GetPosterUrl(episode));
+                posterUrlProvider.GetPosterUrl(series.Id, episode.Id, episode.PosterHash));
 
         private void Update(SpecialEpisodeRequest request)
         {

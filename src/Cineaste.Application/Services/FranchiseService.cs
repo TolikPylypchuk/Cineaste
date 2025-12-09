@@ -3,10 +3,12 @@ namespace Cineaste.Application.Services;
 public sealed partial class FranchiseService(
     CineasteDbContext dbContext,
     IPosterProvider posterProvider,
+    IPosterUrlProvider posterUrlProvider,
     ILogger<FranchiseService> logger)
 {
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly IPosterProvider posterProvider = posterProvider;
+    private readonly IPosterUrlProvider posterUrlProvider = posterUrlProvider;
     private readonly ILogger<FranchiseService> logger = logger;
 
     public async Task<FranchiseModel> GetFranchise(Id<CineasteList> listId, Id<Franchise> id, CancellationToken token)
@@ -16,7 +18,7 @@ public sealed partial class FranchiseService(
         var list = await this.FindList(listId, token);
         var franchise = await this.FindFranchise(list, id, token);
 
-        return franchise.ToFranchiseModel();
+        return franchise.ToFranchiseModel(this.posterUrlProvider);
     }
 
     public async Task<FranchiseModel> AddFranchise(
@@ -43,7 +45,7 @@ public sealed partial class FranchiseService(
         this.dbContext.Franchises.Add(franchise);
         await this.dbContext.SaveChangesAsync(token);
 
-        return franchise.ToFranchiseModel();
+        return franchise.ToFranchiseModel(this.posterUrlProvider);
     }
 
     public async Task<FranchiseModel> UpdateFranchise(
@@ -69,7 +71,7 @@ public sealed partial class FranchiseService(
         this.dbContext.FranchiseItems.RemoveRange(result.RemovedItems);
         await this.dbContext.SaveChangesAsync(token);
 
-        return franchise.ToFranchiseModel();
+        return franchise.ToFranchiseModel(this.posterUrlProvider);
     }
 
     public async Task RemoveFranchise(Id<CineasteList> listId, Id<Franchise> id, CancellationToken token)
