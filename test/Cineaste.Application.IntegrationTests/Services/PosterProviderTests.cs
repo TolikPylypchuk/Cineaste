@@ -10,7 +10,8 @@ using RichardSzalay.MockHttp;
 
 namespace Cineaste.Application.Services;
 
-public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper output)
+public sealed class PosterProviderTests(DbFixture dbFixture, ITestOutputHelper output)
+    : TestClassBase(dbFixture)
 {
     private readonly ILogger<PosterProvider> logger = XUnitLogger.Create<PosterProvider>(output);
 
@@ -22,11 +23,11 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
-        var expectedContent = data.CreatePosterContent();
+        var expectedContent = this.data.CreatePosterContent();
 
         this.SetUpHttp(mockHttp, request.Value.Url, HttpStatusCode.OK, expectedContent);
 
@@ -56,9 +57,9 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         var statusCode = HttpStatusCode.NotFound;
         this.SetUpHttp(mockHttp, request.Value.Url, statusCode);
@@ -80,9 +81,9 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         this.SetUpHttp(mockHttp, request.Value.Url, HttpStatusCode.OK, contentType: null);
 
@@ -102,9 +103,9 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         this.SetUpHttp(
             mockHttp, request.Value.Url, HttpStatusCode.OK, contentType: DataFixture.PosterType, contentLength: null);
@@ -129,9 +130,9 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         this.SetUpHttp(
             mockHttp,
@@ -156,9 +157,9 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         var expectedException = new OperationCanceledException();
         this.SetUpHttpException(mockHttp, request.Value.Url, expectedException);
@@ -179,9 +180,9 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         var expectedException = new InvalidOperationException();
         this.SetUpHttpException(mockHttp, request.Value.Url, expectedException);
@@ -202,10 +203,10 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterImdbMediaRequest();
-        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+        var request = this.data.CreatePosterImdbMediaRequest();
+        var expectedUrl = this.data.CreatePosterUrlRequest().Value.Url;
 
         var document = this.MockDocument(html, request);
 
@@ -232,10 +233,10 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterImdbMediaRequest();
-        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+        var request = this.data.CreatePosterImdbMediaRequest();
+        var expectedUrl = this.data.CreatePosterUrlRequest().Value.Url;
 
         var document = this.MockDocument(html, request);
 
@@ -259,10 +260,10 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterImdbMediaRequest();
-        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+        var request = this.data.CreatePosterImdbMediaRequest();
+        var expectedUrl = this.data.CreatePosterUrlRequest().Value.Url;
 
         var document = this.MockDocument(html, request);
 
@@ -289,10 +290,10 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterImdbMediaRequest();
-        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+        var request = this.data.CreatePosterImdbMediaRequest();
+        var expectedUrl = this.data.CreatePosterUrlRequest().Value.Url;
 
         var document = this.MockDocument(html, request);
 
@@ -320,9 +321,9 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterImdbMediaRequest();
+        var request = this.data.CreatePosterImdbMediaRequest();
 
         var expectedException = new OperationCanceledException();
         html.GetDocument(request.Value.Url, TestContext.Current.CancellationToken).ThrowsAsync(expectedException);
@@ -343,9 +344,9 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterImdbMediaRequest();
+        var request = this.data.CreatePosterImdbMediaRequest();
 
         var expectedException = new InvalidOperationException();
         html.GetDocument(request.Value.Url, TestContext.Current.CancellationToken).ThrowsAsync(expectedException);
@@ -366,12 +367,12 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
         var mockHttp = new MockHttpMessageHandler();
         var html = Substitute.For<IHtmlDocumentProvider>();
 
-        var provider = new PosterProvider(mockHttp.ToHttpClient(), html, this.logger);
+        var provider = this.CreatePosterProvider(mockHttp, html);
 
-        var request = data.CreatePosterImdbMediaRequest();
+        var request = this.data.CreatePosterImdbMediaRequest();
 
-        var expectedContent = data.CreatePosterContent();
-        var expectedUrl = data.CreatePosterUrlRequest().Value.Url;
+        var expectedContent = this.data.CreatePosterContent();
+        var expectedUrl = this.data.CreatePosterUrlRequest().Value.Url;
 
         this.SetUpHttp(mockHttp, expectedUrl, HttpStatusCode.OK, expectedContent);
 
@@ -400,6 +401,9 @@ public sealed class PosterProviderTests(DataFixture data, ITestOutputHelper outp
 
         Assert.Equal(expectedData, actualData);
     }
+
+    private PosterProvider CreatePosterProvider(MockHttpMessageHandler mockHttp, IHtmlDocumentProvider html) =>
+        new(mockHttp.ToHttpClient(), html, this.logger);
 
     private void SetUpHttp(
         MockHttpMessageHandler mockHttp,

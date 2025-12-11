@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cineaste.Application.Services;
 
-public class ListServiceTests(DataFixture data, ITestOutputHelper output)
+public class ListServiceTests(DbFixture dbFixture, ITestOutputHelper output)
 {
+    private readonly DbFixture dbFixture = dbFixture;
     private readonly ILogger<ListService> logger = XUnitLogger.Create<ListService>(output);
 
     [Fact(DisplayName = "GetList should return a correct list")]
@@ -13,8 +14,9 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
+        var data = await this.CreateDataFixture();
         var dbContext = data.CreateDbContext();
-        var listService = new ListService(dbContext, this.logger);
+        var listService = this.CreateListService(dbContext);
 
         var list = await data.GetList(dbContext);
 
@@ -35,11 +37,9 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
+        var data = await this.CreateDataFixture();
         var dbContext = data.CreateDbContext();
-        var listService = new ListService(dbContext, this.logger);
-
-        dbContext.ListItems.RemoveRange(dbContext.ListItems);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var listService = this.CreateListService(dbContext);
 
         var list = await data.GetList(dbContext);
 
@@ -53,7 +53,8 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await listService.GetListItems(data.ListId, offset, size, TestContext.Current.CancellationToken);
+        var model = await listService.GetListItems(
+            data.ListId, offset, size, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -84,11 +85,9 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
+        var data = await this.CreateDataFixture();
         var dbContext = data.CreateDbContext();
-        var listService = new ListService(dbContext, this.logger);
-
-        dbContext.ListItems.RemoveRange(dbContext.ListItems);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var listService = this.CreateListService(dbContext);
 
         var movie = await data.CreateMovie(dbContext);
         await data.CreateMovie(dbContext);
@@ -101,7 +100,8 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
 
         // Act
 
-        var model = await listService.GetListItem(data.ListId, movie.Id.Value, TestContext.Current.CancellationToken);
+        var model = await listService.GetListItem(
+            data.ListId, movie.Id.Value, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -132,11 +132,9 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
+        var data = await this.CreateDataFixture();
         var dbContext = data.CreateDbContext();
-        var listService = new ListService(dbContext, this.logger);
-
-        dbContext.ListItems.RemoveRange(dbContext.ListItems);
-        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var listService = this.CreateListService(dbContext);
 
         var movie = await data.CreateMovie(dbContext);
         await data.CreateMovie(dbContext);
@@ -180,6 +178,16 @@ public class ListServiceTests(DataFixture data, ITestOutputHelper output)
             Assert.Null(model.FranchiseItem);
         }
     }
+
+    private async ValueTask<DataFixture> CreateDataFixture()
+    {
+        var data = new DataFixture(this.dbFixture);
+        await data.InitializeAsync();
+        return data;
+    }
+
+    private ListService CreateListService(CineasteDbContext dbContext) =>
+        new(dbContext, this.logger);
 }
 
 file static class Extensions

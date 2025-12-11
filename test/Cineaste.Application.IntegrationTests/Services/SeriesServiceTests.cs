@@ -2,7 +2,8 @@ using Cineaste.Shared.Models.Series;
 
 namespace Cineaste.Application.Services;
 
-public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
+public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
+    : TestClassBase(dbFixture)
 {
     private readonly ILogger<SeriesService> logger = XUnitLogger.Create<SeriesService>(output);
 
@@ -11,14 +12,14 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
 
         // Act
 
-        var model = await seriesService.GetSeries(data.ListId, series.Id, TestContext.Current.CancellationToken);
+        var model = await seriesService.GetSeries(this.data.ListId, series.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -74,15 +75,15 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummyId = Id.Create<Series>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
-            seriesService.GetSeries(data.ListId, dummyId, TestContext.Current.CancellationToken));
+            seriesService.GetSeries(this.data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.SeriesId);
     }
@@ -92,15 +93,15 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var request = this.CreateSeriesRequest();
 
         // Act
 
         var model = await seriesService.AddSeries(
-            data.ListId, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -161,15 +162,15 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var request = this.CreateSeriesRequest();
 
         // Act
 
         var model = await seriesService.AddSeries(
-            data.ListId, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -226,8 +227,8 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummyKindId = Id.Create<SeriesKind>();
         var request = this.CreateSeriesRequest() with { KindId = dummyKindId.Value };
@@ -235,7 +236,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesKindNotFoundException>(() =>
-            seriesService.AddSeries(data.ListId, request.Validated(), TestContext.Current.CancellationToken));
+            seriesService.AddSeries(this.data.ListId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyKindId, exception.KindId);
     }
@@ -245,17 +246,17 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var dbSeries = await data.CreateSeries(dbContext);
+        var dbSeries = await this.data.CreateSeries(dbContext);
 
         var request = this.CreateSeriesRequest();
 
         // Act
 
         var model = await seriesService.UpdateSeries(
-            data.ListId, dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -316,17 +317,17 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var dbSeries = await data.CreateSeries(dbContext);
+        var dbSeries = await this.data.CreateSeries(dbContext);
 
         var request = this.CreateSeriesRequest();
 
         // Act
 
         var model = await seriesService.UpdateSeries(
-            data.ListId, dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -383,10 +384,10 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var dbSeries = await data.CreateSeries(dbContext);
+        var dbSeries = await this.data.CreateSeries(dbContext);
 
         var request = this.CreateSeriesRequest();
         var dummyId = Id.Create<Series>();
@@ -395,7 +396,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.UpdateSeries(
-                data.ListId, dummyId, request.Validated(), TestContext.Current.CancellationToken));
+                this.data.ListId, dummyId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.SeriesId);
     }
@@ -405,14 +406,14 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
 
         // Act
 
-        await seriesService.RemoveSeries(data.ListId, series.Id, TestContext.Current.CancellationToken);
+        await seriesService.RemoveSeries(this.data.ListId, series.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -424,18 +425,21 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummyId = Id.Create<Series>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
-            seriesService.RemoveSeries(data.ListId, dummyId, TestContext.Current.CancellationToken));
+            seriesService.RemoveSeries(this.data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.SeriesId);
     }
+
+    private SeriesService CreateSeriesService(CineasteDbContext dbContext) =>
+        new(dbContext, this.data.PosterProvider, this.data.PosterUrlProvider, this.logger);
 
     private SeriesRequest CreateSeriesRequest() =>
         new(
@@ -443,7 +447,7 @@ public class SeriesServiceTests(DataFixture data, ITestOutputHelper output)
             ImmutableList.Create(new TitleRequest("Original Test", 1)).AsValue(),
             SeriesWatchStatus.NotWatched,
             SeriesReleaseStatus.Finished,
-            data.SeriesKindId.Value,
+            this.data.SeriesKindId.Value,
             ImmutableList.Create(this.CreateSeasonRequest(1), this.CreateSeasonRequest(2)).AsValue(),
             ImmutableList.Create(this.CreateSpecialEpisodeRequest(3)).AsValue(),
             "tt12345678",

@@ -2,7 +2,8 @@ using Cineaste.Shared.Models.Movie;
 
 namespace Cineaste.Application.Services;
 
-public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
+public class MovieServiceTests(DbFixture dbFixture, ITestOutputHelper output)
+    : TestClassBase(dbFixture)
 {
     private readonly ILogger<MovieService> logger = XUnitLogger.Create<MovieService>(output);
 
@@ -11,14 +12,14 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
 
         // Act
 
-        var model = await movieService.GetMovie(data.ListId, movie.Id, TestContext.Current.CancellationToken);
+        var model = await movieService.GetMovie(this.data.ListId, movie.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -38,15 +39,15 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
         var dummyId = Id.Create<Movie>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<MovieNotFoundException>(() =>
-            movieService.GetMovie(data.ListId, dummyId, TestContext.Current.CancellationToken));
+            movieService.GetMovie(this.data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.MovieId);
     }
@@ -56,15 +57,15 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
         var request = this.CreateMovieRequest();
 
         // Act
 
         var model = await movieService.AddMovie(
-            data.ListId, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -87,15 +88,15 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
         var request = this.CreateMovieRequest();
 
         // Act
 
         var model = await movieService.AddMovie(
-            data.ListId, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -114,8 +115,8 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
         var dummyKindId = Id.Create<MovieKind>();
         var request = this.CreateMovieRequest() with { KindId = dummyKindId.Value };
@@ -123,7 +124,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<MovieKindNotFoundException>(() =>
-            movieService.AddMovie(data.ListId, request.Validated(), TestContext.Current.CancellationToken));
+            movieService.AddMovie(this.data.ListId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyKindId, exception.KindId);
     }
@@ -133,17 +134,17 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
 
         var request = this.CreateMovieRequest();
 
         // Act
 
         var model = await movieService.UpdateMovie(
-            data.ListId, movie.Id, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, movie.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -166,17 +167,17 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
 
         var request = this.CreateMovieRequest();
 
         // Act
 
         var model = await movieService.UpdateMovie(
-            data.ListId, movie.Id, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, movie.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -195,10 +196,10 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
 
         var request = this.CreateMovieRequest();
         var dummyId = Id.Create<Movie>();
@@ -206,7 +207,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<MovieNotFoundException>(() =>
-            movieService.UpdateMovie(data.ListId, dummyId, request.Validated(), TestContext.Current.CancellationToken));
+            movieService.UpdateMovie(this.data.ListId, dummyId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.MovieId);
     }
@@ -216,14 +217,14 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
 
         // Act
 
-        await movieService.RemoveMovie(data.ListId, movie.Id, TestContext.Current.CancellationToken);
+        await movieService.RemoveMovie(this.data.ListId, movie.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -235,18 +236,21 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var movieService = new MovieService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var movieService = this.CreateMovieService(dbContext);
 
         var dummyId = Id.Create<Movie>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<MovieNotFoundException>(() =>
-            movieService.RemoveMovie(data.ListId, dummyId, TestContext.Current.CancellationToken));
+            movieService.RemoveMovie(this.data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.MovieId);
     }
+
+    private MovieService CreateMovieService(CineasteDbContext dbContext) =>
+        new(dbContext, this.data.PosterProvider, this.data.PosterUrlProvider, this.logger);
 
     private MovieRequest CreateMovieRequest() =>
         new(
@@ -255,7 +259,7 @@ public class MovieServiceTests(DataFixture data, ITestOutputHelper output)
             1999,
             false,
             true,
-            data.MovieKindId.Value,
+            this.data.MovieKindId.Value,
             "tt12345678",
             null,
             null);

@@ -2,7 +2,8 @@ using Cineaste.Shared.Models.Franchise;
 
 namespace Cineaste.Application.Services;
 
-public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper output)
+public sealed class FranchiseServiceTests(DbFixture dbFixture, ITestOutputHelper output)
+    : TestClassBase(dbFixture)
 {
     private readonly ILogger<FranchiseService> logger = XUnitLogger.Create<FranchiseService>(output);
 
@@ -11,23 +12,22 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
-        var list = await data.GetList(dbContext);
+        var list = await this.data.GetList(dbContext);
 
-        var franchise = await data.CreateFranchise(dbContext);
+        var franchise = await this.data.CreateFranchise(dbContext);
 
-        franchise.AttachMovie(await data.CreateMovie(dbContext), true);
-        franchise.AttachSeries(await data.CreateSeries(dbContext), true);
+        franchise.AttachMovie(await this.data.CreateMovie(dbContext), true);
+        franchise.AttachSeries(await this.data.CreateSeries(dbContext), true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
 
         var model = await franchiseService.GetFranchise(
-            data.ListId, franchise.Id, TestContext.Current.CancellationToken);
+            this.data.ListId, franchise.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -67,16 +67,15 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
         var dummyId = Id.Create<Franchise>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
-            franchiseService.GetFranchise(data.ListId, dummyId, TestContext.Current.CancellationToken));
+            franchiseService.GetFranchise(this.data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.FranchiseId);
     }
@@ -86,17 +85,16 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
         var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie);
 
         // Act
 
         var model = await franchiseService.AddFranchise(
-            data.ListId, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -134,17 +132,16 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
         var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie);
 
         // Act
 
         var model = await franchiseService.AddFranchise(
-            data.ListId, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -170,11 +167,10 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
         var dummyItemId = Guid.CreateVersion7();
         var request = this.CreateFranchiseRequest(movie.Id, movie.Kind.Id.Value, FranchiseKindSource.Movie) with
         {
@@ -185,7 +181,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<FranchiseItemsNotFoundException>(() =>
-            franchiseService.AddFranchise(data.ListId, request.Validated(), TestContext.Current.CancellationToken));
+            franchiseService.AddFranchise(this.data.ListId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal([Id.For<Movie>(dummyItemId)], exception.MovieIds);
         Assert.Equal([], exception.SeriesIds);
@@ -197,17 +193,16 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
-        var movie1 = await data.CreateMovie(dbContext);
-        var movie2 = await data.CreateMovie(dbContext);
-        var movie3 = await data.CreateMovie(dbContext);
+        var movie1 = await this.data.CreateMovie(dbContext);
+        var movie2 = await this.data.CreateMovie(dbContext);
+        var movie3 = await this.data.CreateMovie(dbContext);
 
-        var list = await data.GetList(dbContext);
+        var list = await this.data.GetList(dbContext);
 
-        var franchise = await data.CreateFranchise(dbContext);
+        var franchise = await this.data.CreateFranchise(dbContext);
         franchise.AttachMovie(movie1, true);
         franchise.AttachMovie(movie2, true);
 
@@ -226,7 +221,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Act
 
         var model = await franchiseService.UpdateFranchise(
-            data.ListId, franchise.Id, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, franchise.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -266,14 +261,13 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
-        var list = await data.GetList(dbContext);
+        var list = await this.data.GetList(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
-        var franchise = await data.CreateFranchise(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
+        var franchise = await this.data.CreateFranchise(dbContext);
         franchise.AttachMovie(movie, true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -284,7 +278,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
         // Act
 
         var model = await franchiseService.UpdateFranchise(
-            data.ListId, franchise.Id, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, franchise.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -312,14 +306,13 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
-        var list = await data.GetList(dbContext);
+        var list = await this.data.GetList(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
-        var franchise = await data.CreateFranchise(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
+        var franchise = await this.data.CreateFranchise(dbContext);
         franchise.AttachMovie(movie, true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -333,7 +326,7 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
 
         var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
             franchiseService.UpdateFranchise(
-                data.ListId, dummyId, request.Validated(), TestContext.Current.CancellationToken));
+                this.data.ListId, dummyId, request.Validated(), TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.FranchiseId);
     }
@@ -343,21 +336,20 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
-        var list = await data.GetList(dbContext);
+        var list = await this.data.GetList(dbContext);
 
-        var movie = await data.CreateMovie(dbContext);
-        var franchise = await data.CreateFranchise(dbContext);
+        var movie = await this.data.CreateMovie(dbContext);
+        var franchise = await this.data.CreateFranchise(dbContext);
         franchise.AttachMovie(movie, true);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
 
-        await franchiseService.RemoveFranchise(data.ListId, franchise.Id, TestContext.Current.CancellationToken);
+        await franchiseService.RemoveFranchise(this.data.ListId, franchise.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -369,19 +361,21 @@ public sealed class FranchiseServiceTests(DataFixture data, ITestOutputHelper ou
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var franchiseService = new FranchiseService(
-            dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var franchiseService = this.CreateFranchiseService(dbContext);
 
         var dummyId = Id.Create<Franchise>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<FranchiseNotFoundException>(() =>
-            franchiseService.RemoveFranchise(data.ListId, dummyId, TestContext.Current.CancellationToken));
+            franchiseService.RemoveFranchise(this.data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.FranchiseId);
     }
+
+    private FranchiseService CreateFranchiseService(CineasteDbContext dbContext) =>
+        new(dbContext, this.data.PosterProvider, this.data.PosterUrlProvider, this.logger);
 
     private FranchiseRequest CreateFranchiseRequest(
         Id<Movie> movieId,

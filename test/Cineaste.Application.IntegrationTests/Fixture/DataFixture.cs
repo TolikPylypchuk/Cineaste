@@ -6,11 +6,9 @@ using Cineaste.Shared.Models.Poster;
 
 using Microsoft.EntityFrameworkCore;
 
-using Testcontainers.MsSql;
-
 namespace Cineaste.Application.Fixture;
 
-public class DataFixture : IAsyncLifetime
+public sealed class DataFixture : IAsyncLifetime
 {
     public static readonly byte[] PosterData = Convert.FromHexString(
         "ffd8ffe000104a46494600010101004800480000ffdb004300030202020202030202020303030304060404040404080606050609080a" +
@@ -24,23 +22,22 @@ public class DataFixture : IAsyncLifetime
     public const string Img = "img";
     public const string Src = "src";
 
-    private readonly MsSqlContainer container = new MsSqlBuilder()
-        .WithReuse(true)
-        .WithLabel("reuse-id", "DB")
-        .Build();
+    private readonly DbFixture db;
 
     private readonly CineasteList list;
     private readonly MovieKind movieKind;
     private readonly SeriesKind seriesKind;
 
-    public DataFixture()
+    public DataFixture(DbFixture dbFixture)
     {
-        this.PosterProvider = Substitute.For<IPosterProvider>();
-        this.PosterUrlProvider = Substitute.For<IPosterUrlProvider>();
+        this.db = dbFixture;
 
         this.list = this.CreateList();
         this.movieKind = this.CreateMovieKind(this.list);
         this.seriesKind = this.CreateSeriesKind(this.list);
+
+        this.PosterProvider = Substitute.For<IPosterProvider>();
+        this.PosterUrlProvider = Substitute.For<IPosterUrlProvider>();
     }
 
     public IPosterProvider PosterProvider { get; private set; }
@@ -53,24 +50,7 @@ public class DataFixture : IAsyncLifetime
 
     public async ValueTask InitializeAsync()
     {
-        await this.container.StartAsync();
-
         var dbContext = this.CreateDbContext();
-        await dbContext.Database.MigrateAsync(TestContext.Current.CancellationToken);
-
-        dbContext.Tags.RemoveRange(dbContext.Tags);
-        dbContext.FranchiseItems.RemoveRange(dbContext.FranchiseItems);
-        dbContext.Franchises.RemoveRange(dbContext.Franchises);
-        dbContext.Movies.RemoveRange(dbContext.Movies);
-        dbContext.Periods.RemoveRange(dbContext.Periods);
-        dbContext.Seasons.RemoveRange(dbContext.Seasons);
-        dbContext.SpecialEpisodes.RemoveRange(dbContext.SpecialEpisodes);
-        dbContext.Series.RemoveRange(dbContext.Series);
-        dbContext.MovieKinds.RemoveRange(dbContext.MovieKinds);
-        dbContext.SeriesKinds.RemoveRange(dbContext.SeriesKinds);
-        dbContext.ListConfigurations.RemoveRange(dbContext.ListConfigurations);
-        dbContext.ListItems.RemoveRange(dbContext.ListItems);
-        dbContext.Lists.RemoveRange(dbContext.Lists);
 
         dbContext.MovieKinds.Add(this.movieKind);
         dbContext.SeriesKinds.Add(this.seriesKind);
@@ -79,20 +59,11 @@ public class DataFixture : IAsyncLifetime
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
-    public async ValueTask DisposeAsync()
-    {
-        await this.container.DisposeAsync();
-        GC.SuppressFinalize(this);
-    }
+    public ValueTask DisposeAsync() =>
+        ValueTask.CompletedTask;
 
-    public CineasteDbContext CreateDbContext()
-    {
-        var options = new DbContextOptionsBuilder<CineasteDbContext>()
-            .UseSqlServer(this.container.GetConnectionString())
-            .Options;
-
-        return new CineasteDbContext(options);
-    }
+    public CineasteDbContext CreateDbContext() =>
+        this.db.CreateDbContext();
 
     public Task<CineasteList> GetList(CineasteDbContext dbContext) =>
         dbContext.Lists

@@ -2,7 +2,8 @@ using System.Security.Cryptography;
 
 namespace Cineaste.Application.Services;
 
-public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper output)
+public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHelper output)
+    : TestClassBase(dbFixture)
 {
     private readonly ILogger<SeriesService> logger = XUnitLogger.Create<SeriesService>(output);
 
@@ -11,16 +12,16 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
-        var poster = await data.CreateSeriesPoster(series, dbContext);
+        var series = await this.data.CreateSeries(dbContext);
+        var poster = await this.data.CreateSeriesPoster(series, dbContext);
 
         // Act
 
         var posterContent = await seriesService.GetSeriesPoster(
-            data.ListId, series.Id, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -33,15 +34,15 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummyId = Id.Create<Series>();
 
         // Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
-            seriesService.GetSeriesPoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
+            seriesService.GetSeriesPoster(this.data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.SeriesId);
     }
@@ -51,15 +52,15 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
 
         // Assert
 
         var exception = await Assert.ThrowsAsync<SeriesPosterNotFoundException>(() =>
-            seriesService.GetSeriesPoster(data.ListId, series.Id, TestContext.Current.CancellationToken));
+            seriesService.GetSeriesPoster(this.data.ListId, series.Id, TestContext.Current.CancellationToken));
 
         Assert.Equal(series.Id, exception.SeriesId);
     }
@@ -69,17 +70,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
-        var poster = await data.CreateSeasonPoster(period, dbContext);
+        var poster = await this.data.CreateSeasonPoster(period, dbContext);
 
         // Act
 
         var posterContent = await seriesService.GetSeasonPoster(
-            data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -92,8 +93,8 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
@@ -102,7 +103,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.GetSeasonPoster(
-                data.ListId, dummySeriesId, dummyPeriodId, TestContext.Current.CancellationToken));
+                this.data.ListId, dummySeriesId, dummyPeriodId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
     }
@@ -112,16 +113,16 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var dummyId = Id.Create<Period>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() =>
-            seriesService.GetSeasonPoster(data.ListId, series.Id, dummyId, TestContext.Current.CancellationToken));
+            seriesService.GetSeasonPoster(this.data.ListId, series.Id, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.PeriodId);
     }
@@ -131,16 +132,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeasonPosterNotFoundException>(() =>
-            seriesService.GetSeasonPoster(data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken));
+            seriesService.GetSeasonPoster(
+                this.data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken));
 
         Assert.Equal(period.Id, exception.PeriodId);
     }
@@ -150,17 +152,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
-        var poster = await data.CreateSpecialEpisodePoster(episode, dbContext);
+        var poster = await this.data.CreateSpecialEpisodePoster(episode, dbContext);
 
         // Act
 
         var posterContent = await seriesService.GetSpecialEpisodePoster(
-            data.ListId, series.Id, episode.Id, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, episode.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -173,8 +175,8 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
@@ -182,7 +184,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.GetSpecialEpisodePoster(
-            data.ListId, dummySeriesId, dummyEpisodeId, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyEpisodeId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
     }
@@ -192,17 +194,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var dummyId = Id.Create<SpecialEpisode>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SpecialEpisodeNotFoundException>(() =>
             seriesService.GetSpecialEpisodePoster(
-                data.ListId, series.Id, dummyId, TestContext.Current.CancellationToken));
+                this.data.ListId, series.Id, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.EpisodeId);
     }
@@ -212,17 +214,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SpecialEpisodePosterNotFoundException>(() =>
             seriesService.GetSpecialEpisodePoster(
-                data.ListId, series.Id, episode.Id, TestContext.Current.CancellationToken));
+                this.data.ListId, series.Id, episode.Id, TestContext.Current.CancellationToken));
 
         Assert.Equal(episode.Id, exception.EpisodeId);
     }
@@ -232,19 +234,19 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
-        var poster = await data.CreateSeriesPoster(series, dbContext);
+        var series = await this.data.CreateSeries(dbContext);
+        var poster = await this.data.CreateSeriesPoster(series, dbContext);
 
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
 
         // Act
 
         var posterHash = await seriesService.SetSeriesPoster(
-            data.ListId, series.Id, posterData, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, posterData, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -264,16 +266,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummyId = Id.Create<Series>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
-            seriesService.SetSeriesPoster(data.ListId, dummyId, posterData, TestContext.Current.CancellationToken));
+            seriesService.SetSeriesPoster(
+                this.data.ListId, dummyId, posterData, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.SeriesId);
     }
@@ -283,25 +286,25 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
-        var poster = await data.CreateSeriesPoster(series, dbContext);
+        var series = await this.data.CreateSeries(dbContext);
+        var poster = await this.data.CreateSeriesPoster(series, dbContext);
 
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
-        data.PosterProvider
+        this.data.PosterProvider
             .FetchPoster(request, TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(posterData));
 
         // Act
 
         var posterHash = await seriesService.SetSeriesPoster(
-            data.ListId, series.Id, request, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -321,22 +324,22 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummyId = Id.Create<Series>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
-            seriesService.SetSeriesPoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
+            seriesService.SetSeriesPoster(this.data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.SeriesId);
 
-        await data.PosterProvider
+        await this.data.PosterProvider
             .DidNotReceive()
             .FetchPoster(request, TestContext.Current.CancellationToken);
     }
@@ -346,25 +349,25 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
-        var poster = await data.CreateSeriesPoster(series, dbContext);
+        var series = await this.data.CreateSeries(dbContext);
+        var poster = await this.data.CreateSeriesPoster(series, dbContext);
 
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
 
-        var request = data.CreatePosterImdbMediaRequest();
+        var request = this.data.CreatePosterImdbMediaRequest();
 
-        data.PosterProvider
+        this.data.PosterProvider
             .FetchPoster(request, TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(posterData));
 
         // Act
 
         var posterHash = await seriesService.SetSeriesPoster(
-            data.ListId, series.Id, request, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -384,22 +387,22 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummyId = Id.Create<Series>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
-        var request = data.CreatePosterImdbMediaRequest();
+        var request = this.data.CreatePosterImdbMediaRequest();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
-            seriesService.SetSeriesPoster(data.ListId, dummyId, request, TestContext.Current.CancellationToken));
+            seriesService.SetSeriesPoster(this.data.ListId, dummyId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.SeriesId);
 
-        await data.PosterProvider
+        await this.data.PosterProvider
             .DidNotReceive()
             .FetchPoster(request, TestContext.Current.CancellationToken);
     }
@@ -409,20 +412,20 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
-        var poster = await data.CreateSeasonPoster(period, dbContext);
+        var poster = await this.data.CreateSeasonPoster(period, dbContext);
 
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
 
         // Act
 
         var posterHash = await seriesService.SetSeasonPoster(
-            data.ListId, series.Id, period.Id, posterData, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, period.Id, posterData, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -442,17 +445,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSeasonPoster(
-            data.ListId, dummySeriesId, dummyPeriodId, posterData, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyPeriodId, posterData, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
     }
@@ -462,17 +465,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var dummyPeriodId = Id.Create<Period>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() => seriesService.SetSeasonPoster(
-            data.ListId, series.Id, dummyPeriodId, posterData, TestContext.Current.CancellationToken));
+            this.data.ListId, series.Id, dummyPeriodId, posterData, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyPeriodId, exception.PeriodId);
     }
@@ -482,26 +485,26 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
-        var poster = await data.CreateSeasonPoster(period, dbContext);
+        var poster = await this.data.CreateSeasonPoster(period, dbContext);
 
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
-        data.PosterProvider
+        this.data.PosterProvider
             .FetchPoster(request, TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(posterData));
 
         // Act
 
         var posterHash = await seriesService.SetSeasonPoster(
-            data.ListId, series.Id, period.Id, request, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, period.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -521,23 +524,23 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSeasonPoster(
-            data.ListId, dummySeriesId, dummyPeriodId, request, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyPeriodId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
 
-        await data.PosterProvider
+        await this.data.PosterProvider
             .DidNotReceive()
             .FetchPoster(request, TestContext.Current.CancellationToken);
     }
@@ -547,23 +550,23 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var dummyPeriodId = Id.Create<Period>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() => seriesService.SetSeasonPoster(
-            data.ListId, series.Id, dummyPeriodId, request, TestContext.Current.CancellationToken));
+            this.data.ListId, series.Id, dummyPeriodId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyPeriodId, exception.PeriodId);
 
-        await data.PosterProvider
+        await this.data.PosterProvider
             .DidNotReceive()
             .FetchPoster(request, TestContext.Current.CancellationToken);
     }
@@ -573,26 +576,26 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
-        var poster = await data.CreateSeasonPoster(period, dbContext);
+        var poster = await this.data.CreateSeasonPoster(period, dbContext);
 
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
 
-        var request = data.CreatePosterImdbMediaRequest();
+        var request = this.data.CreatePosterImdbMediaRequest();
 
-        data.PosterProvider
+        this.data.PosterProvider
             .FetchPoster(request, TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(posterData));
 
         // Act
 
         var posterHash = await seriesService.SetSeasonPoster(
-            data.ListId, series.Id, period.Id, request, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, period.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -612,23 +615,23 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
-        var request = data.CreatePosterImdbMediaRequest();
+        var request = this.data.CreatePosterImdbMediaRequest();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSeasonPoster(
-            data.ListId, dummySeriesId, dummyPeriodId, request, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyPeriodId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
 
-        await data.PosterProvider
+        await this.data.PosterProvider
             .DidNotReceive()
             .FetchPoster(request, TestContext.Current.CancellationToken);
     }
@@ -638,20 +641,20 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
-        var poster = await data.CreateSpecialEpisodePoster(episode, dbContext);
+        var poster = await this.data.CreateSpecialEpisodePoster(episode, dbContext);
 
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
 
         // Act
 
         var posterHash = await seriesService.SetSpecialEpisodePoster(
-            data.ListId, series.Id, episode.Id, posterData, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, episode.Id, posterData, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -671,17 +674,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSpecialEpisodePoster(
-            data.ListId, dummySeriesId, dummyEpisodeId, posterData, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyEpisodeId, posterData, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
     }
@@ -691,18 +694,18 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SpecialEpisodeNotFoundException>(() =>
             seriesService.SetSpecialEpisodePoster(
-                data.ListId, series.Id, dummyEpisodeId, posterData, TestContext.Current.CancellationToken));
+                this.data.ListId, series.Id, dummyEpisodeId, posterData, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyEpisodeId, exception.EpisodeId);
     }
@@ -712,26 +715,26 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
-        var poster = await data.CreateSpecialEpisodePoster(episode, dbContext);
+        var poster = await this.data.CreateSpecialEpisodePoster(episode, dbContext);
 
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
-        data.PosterProvider
+        this.data.PosterProvider
             .FetchPoster(request, TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(posterData));
 
         // Act
 
         var posterHash = await seriesService.SetSpecialEpisodePoster(
-            data.ListId, series.Id, episode.Id, request, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, episode.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -751,23 +754,23 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSpecialEpisodePoster(
-            data.ListId, dummySeriesId, dummyEpisodeId, request, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyEpisodeId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
 
-        await data.PosterProvider
+        await this.data.PosterProvider
             .DidNotReceive()
             .FetchPoster(request, TestContext.Current.CancellationToken);
     }
@@ -777,24 +780,24 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
-        var request = data.CreatePosterUrlRequest();
+        var request = this.data.CreatePosterUrlRequest();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SpecialEpisodeNotFoundException>(() =>
             seriesService.SetSpecialEpisodePoster(
-                data.ListId, series.Id, dummyEpisodeId, request, TestContext.Current.CancellationToken));
+                this.data.ListId, series.Id, dummyEpisodeId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyEpisodeId, exception.EpisodeId);
 
-        await data.PosterProvider
+        await this.data.PosterProvider
             .DidNotReceive()
             .FetchPoster(request, TestContext.Current.CancellationToken);
     }
@@ -804,26 +807,26 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
-        var poster = await data.CreateSpecialEpisodePoster(episode, dbContext);
+        var poster = await this.data.CreateSpecialEpisodePoster(episode, dbContext);
 
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
 
-        var request = data.CreatePosterImdbMediaRequest();
+        var request = this.data.CreatePosterImdbMediaRequest();
 
-        data.PosterProvider
+        this.data.PosterProvider
             .FetchPoster(request, TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(posterData));
 
         // Act
 
         var posterHash = await seriesService.SetSpecialEpisodePoster(
-            data.ListId, series.Id, episode.Id, request, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, episode.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -843,23 +846,23 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
-        var posterData = data.CreatePosterContent();
+        var posterData = this.data.CreatePosterContent();
 
-        var request = data.CreatePosterImdbMediaRequest();
+        var request = this.data.CreatePosterImdbMediaRequest();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSpecialEpisodePoster(
-            data.ListId, dummySeriesId, dummyEpisodeId, request, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyEpisodeId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
 
-        await data.PosterProvider
+        await this.data.PosterProvider
             .DidNotReceive()
             .FetchPoster(request, TestContext.Current.CancellationToken);
     }
@@ -869,15 +872,15 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
-        var poster = await data.CreateSeriesPoster(series, dbContext);
+        var series = await this.data.CreateSeries(dbContext);
+        var poster = await this.data.CreateSeriesPoster(series, dbContext);
 
         // Act
 
-        await seriesService.RemoveSeriesPoster(data.ListId, series.Id, TestContext.Current.CancellationToken);
+        await seriesService.RemoveSeriesPoster(this.data.ListId, series.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -889,15 +892,15 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
 
         // Act + Assert
 
         var exception = await Record.ExceptionAsync(() =>
-            seriesService.RemoveSeriesPoster(data.ListId, series.Id, TestContext.Current.CancellationToken));
+            seriesService.RemoveSeriesPoster(this.data.ListId, series.Id, TestContext.Current.CancellationToken));
 
         Assert.Null(exception);
     }
@@ -907,15 +910,15 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummyId = Id.Create<Series>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
-            seriesService.RemoveSeriesPoster(data.ListId, dummyId, TestContext.Current.CancellationToken));
+            seriesService.RemoveSeriesPoster(this.data.ListId, dummyId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyId, exception.SeriesId);
     }
@@ -925,17 +928,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
-        var poster = await data.CreateSeasonPoster(period, dbContext);
+        var poster = await this.data.CreateSeasonPoster(period, dbContext);
 
         // Act
 
         await seriesService.RemoveSeasonPoster(
-            data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -947,16 +950,16 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var period = series.Seasons.First().Periods.First();
 
         // Act + Assert
 
         var exception = await Record.ExceptionAsync(() => seriesService.RemoveSeasonPoster(
-            data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken));
+            this.data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken));
 
         Assert.Null(exception);
     }
@@ -966,8 +969,8 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyPeriodId = Id.Create<Period>();
@@ -975,7 +978,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.RemoveSeasonPoster(
-            data.ListId, dummySeriesId, dummyPeriodId, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyPeriodId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
     }
@@ -985,16 +988,16 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var dummyPeriodId = Id.Create<Period>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() => seriesService.RemoveSeasonPoster(
-            data.ListId, series.Id, dummyPeriodId, TestContext.Current.CancellationToken));
+            this.data.ListId, series.Id, dummyPeriodId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyPeriodId, exception.PeriodId);
     }
@@ -1004,17 +1007,17 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
-        var poster = await data.CreateSpecialEpisodePoster(episode, dbContext);
+        var poster = await this.data.CreateSpecialEpisodePoster(episode, dbContext);
 
         // Act
 
         await seriesService.RemoveSpecialEpisodePoster(
-            data.ListId, series.Id, episode.Id, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, episode.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -1026,16 +1029,16 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var episode = series.SpecialEpisodes.First();
 
         // Act + Assert
 
         var exception = await Record.ExceptionAsync(() => seriesService.RemoveSpecialEpisodePoster(
-            data.ListId, series.Id, episode.Id, TestContext.Current.CancellationToken));
+            this.data.ListId, series.Id, episode.Id, TestContext.Current.CancellationToken));
 
         Assert.Null(exception);
     }
@@ -1045,8 +1048,8 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
@@ -1055,7 +1058,7 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.RemoveSpecialEpisodePoster(
-                data.ListId, dummySeriesId, dummyEpisodeId, TestContext.Current.CancellationToken));
+                this.data.ListId, dummySeriesId, dummyEpisodeId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
     }
@@ -1065,18 +1068,21 @@ public sealed class SeriesServicePosterTests(DataFixture data, ITestOutputHelper
     {
         // Arrange
 
-        var dbContext = data.CreateDbContext();
-        var seriesService = new SeriesService(dbContext, data.PosterProvider, data.PosterUrlProvider, this.logger);
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
 
-        var series = await data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
         var dummyEpisodeId = Id.Create<SpecialEpisode>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SpecialEpisodeNotFoundException>(() =>
             seriesService.RemoveSpecialEpisodePoster(
-                data.ListId, series.Id, dummyEpisodeId, TestContext.Current.CancellationToken));
+                this.data.ListId, series.Id, dummyEpisodeId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummyEpisodeId, exception.EpisodeId);
     }
+
+    private SeriesService CreateSeriesService(CineasteDbContext dbContext) =>
+        new(dbContext, this.data.PosterProvider, this.data.PosterUrlProvider, this.logger);
 }
