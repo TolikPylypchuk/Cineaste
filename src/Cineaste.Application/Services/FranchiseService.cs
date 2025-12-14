@@ -9,7 +9,6 @@ public sealed partial class FranchiseService(
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly IPosterProvider posterProvider = posterProvider;
     private readonly IPosterUrlProvider posterUrlProvider = posterUrlProvider;
-    private readonly ILogger<FranchiseService> logger = logger;
 
     public async Task<FranchiseModel> GetFranchise(Id<CineasteList> listId, Id<Franchise> id, CancellationToken token)
     {
@@ -423,7 +422,7 @@ public sealed partial class FranchiseService(
     [LoggerMessage(Level = LogLevel.Debug, Message = "Getting franchise {FranchiseId} in list {ListId}")]
     private partial void LogGetFranchise(Id<Franchise> franchiseId, Id<CineasteList> listId);
 
-    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding franchise to list {ListId}")]
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding a franchise to list {ListId}")]
     private partial void LogAddFranchise(Id<CineasteList> listId);
 
     [LoggerMessage(Level = LogLevel.Debug, Message = "Updating franchise {FranchiseId} in list {ListId}")]

@@ -9,7 +9,6 @@ public sealed partial class SeriesService(
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly IPosterProvider posterProvider = posterProvider;
     private readonly IPosterUrlProvider posterUrlProvider = posterUrlProvider;
-    private readonly ILogger<SeriesService> logger = logger;
 
     public async Task<SeriesModel> GetSeries(Id<CineasteList> listId, Id<Series> id, CancellationToken token)
     {
@@ -569,7 +568,7 @@ public sealed partial class SeriesService(
     [LoggerMessage(Level = LogLevel.Debug, Message = "Getting series {SeriesId} in list {ListId}")]
     private partial void LogGetSeries(Id<Series> seriesId, Id<CineasteList> listId);
 
-    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding series to list {ListId}")]
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding a series to list {ListId}")]
     private partial void LogAddSeries(Id<CineasteList> listId);
 
     [LoggerMessage(Level = LogLevel.Debug, Message = "Updating series {SeriesId} in list {ListId}")]

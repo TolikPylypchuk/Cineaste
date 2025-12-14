@@ -7,7 +7,7 @@ using Cineaste.Client.BaseUri;
 using Cineaste.Client.Navigation;
 using Cineaste.Client.Problems;
 using Cineaste.Components;
-using Cineaste.Core.Converter;
+using Cineaste.Core.Converters;
 using Cineaste.Endpoints;
 using Cineaste.Json;
 using Cineaste.OpenApi;

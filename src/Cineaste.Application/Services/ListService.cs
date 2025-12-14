@@ -11,7 +11,7 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
     {
         this.LogGetList(listId);
 
-        var list = await dbContext.Lists
+        var list = await this.dbContext.Lists
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
@@ -31,14 +31,15 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
     {
         this.LogGetListItems(listId, offset, size);
 
-        var list = await dbContext.Lists
+        var list = await this.dbContext.Lists
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
+            .AsSplitQuery()
             .SingleOrDefaultAsync(list => list.Id == listId, token)
             ?? throw new ListNotFoundException(listId);
 
-        int totalItems = await dbContext.ListItems
+        int totalItems = await this.dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
             .Where(item => item.IsShown)
             .CountAsync(token);
@@ -48,7 +49,7 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
             return new([], new(offset, size, totalItems));
         }
 
-        var items = await dbContext.ListItems
+        var items = await this.dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
             .Where(item => item.IsShown)
             .IncludeRelationships()
@@ -67,14 +68,14 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
     {
         this.LogGetStandaloneListItems(listId);
 
-        var list = await dbContext.Lists
+        var list = await this.dbContext.Lists
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
             .SingleOrDefaultAsync(list => list.Id == listId, token)
             ?? throw new ListNotFoundException(listId);
 
-        var items = await dbContext.ListItems
+        var items = await this.dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
             .Where(item => item.IsShown && item.IsStandalone)
             .IncludeRelationships()
@@ -89,7 +90,7 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
     {
         this.LogGetListItem(listId, id);
 
-        var list = await dbContext.Lists
+        var list = await this.dbContext.Lists
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
@@ -100,7 +101,7 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
         var seriesId = Id.For<Series>(id);
         var franchiseId = Id.For<Franchise>(id);
 
-        var item = await dbContext.ListItems
+        var item = await this.dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
             .Where(item =>
                 item.Movie!.Id == movieId ||
@@ -121,14 +122,14 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
     {
         this.LogGetListItemByParentFranchise(listId, parentFranchiseId, sequenceNumber);
 
-        var list = await dbContext.Lists
+        var list = await this.dbContext.Lists
             .Include(list => list.Configuration)
             .Include(list => list.MovieKinds)
             .Include(list => list.SeriesKinds)
             .SingleOrDefaultAsync(list => list.Id == listId, token)
             ?? throw new ListNotFoundException(listId);
 
-        var parentFranchise = await dbContext.Franchises
+        var parentFranchise = await this.dbContext.Franchises
             .Where(franchise => franchise.Id == parentFranchiseId)
             .Where(franchise => franchise.ListItem!.List.Id == list.Id)
             .Include(franchise => franchise.Children)
@@ -149,7 +150,7 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
             series => item => item.Series!.Id == series.Id,
             franchise => item => item.Franchise!.Id == franchise.Id);
 
-        var item = await dbContext.ListItems
+        var item = await this.dbContext.ListItems
             .Where(item => item.List.Id == list!.Id)
             .Where(itemIdPredicate)
             .IncludeRelationships()

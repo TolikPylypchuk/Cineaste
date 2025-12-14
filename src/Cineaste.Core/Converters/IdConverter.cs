@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Cineaste.Core.Converter;
+namespace Cineaste.Core.Converters;
 
 public sealed class IdConverter<T> : TypeConverter
 {

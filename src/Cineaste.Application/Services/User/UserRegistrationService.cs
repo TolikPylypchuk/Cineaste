@@ -17,7 +17,6 @@ internal sealed partial class UserRegistrationService(
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly IDefaultListCreator defaultListCreator = defaultListCreator;
     private readonly TimeProvider timeProvider = timeProvider;
-    private readonly ILogger<UserRegistrationService> logger = logger;
 
     private readonly IUserEmailStore<CineasteUser> userStore = userStore is IUserEmailStore<CineasteUser> userEmailStore
         ? userEmailStore
@@ -39,9 +38,9 @@ internal sealed partial class UserRegistrationService(
         var user = new CineasteUser(email);
         await userStore.SetEmailAsync(user, email, CancellationToken.None);
 
-        user.List = defaultListCreator.CreateDefaultList();
+        user.List = this.defaultListCreator.CreateDefaultList();
 
-        var result = await userManager.CreateAsync(user, password);
+        var result = await this.userManager.CreateAsync(user, password);
 
         if (result.Succeeded)
         {

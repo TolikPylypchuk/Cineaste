@@ -9,7 +9,6 @@ public sealed partial class MovieService(
     private readonly CineasteDbContext dbContext = dbContext;
     private readonly IPosterProvider posterProvider = posterProvider;
     private readonly IPosterUrlProvider posterUrlProvider = posterUrlProvider;
-    private readonly ILogger<MovieService> logger = logger;
 
     public async Task<MovieModel> GetMovie(Id<CineasteList> listId, Id<Movie> id, CancellationToken token)
     {
@@ -317,7 +316,7 @@ public sealed partial class MovieService(
     [LoggerMessage(Level = LogLevel.Debug, Message = "Getting movie {MovieId} in list {ListId}")]
     private partial void LogGetMovie(Id<Movie> movieId, Id<CineasteList> listId);
 
-    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding movie to list {ListId}")]
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Adding a movie to list {ListId}")]
     private partial void LogAddMovie(Id<CineasteList> listId);
 
     [LoggerMessage(Level = LogLevel.Debug, Message = "Updating movie {MovieId} in list {ListId}")]
