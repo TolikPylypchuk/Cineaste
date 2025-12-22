@@ -1,3 +1,6 @@
+using Cineaste.Endpoints;
+using Cineaste.Problems;
+
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 
@@ -33,6 +36,8 @@ public static class CineasteOpenApiExtensions
 
                         return Task.CompletedTask;
                     });
+
+                    options.AddOperationTransformer<ProblemDetailsOperationTransformer>();
                 });
     }
 }

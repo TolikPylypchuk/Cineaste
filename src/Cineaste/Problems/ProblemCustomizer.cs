@@ -8,7 +8,7 @@ namespace Cineaste.Problems;
 
 internal class ProblemCustomizer(IHostEnvironment env)
 {
-    public void CustomizeProblemDetails(ProblemDetails problemDetails, Exception exception, string endpoint)
+    public void CustomizeProblemDetails(ProblemDetails problemDetails, Exception exception, string? endpoint)
     {
         switch (exception)
         {

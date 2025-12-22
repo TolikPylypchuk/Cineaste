@@ -141,11 +141,7 @@ app.MapStaticAssets();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi().CacheOutput(openApiCachePolicy);
-    app.MapScalarApiReference(options =>
-    {
-        options.TagSorter = TagSorter.Alpha;
-        options.OperationSorter = OperationSorter.Alpha;
-    });
+    app.MapScalarApiReference(options => options.SortTagsAlphabetically());
 }
 
 app.MapRazorComponents<App>()

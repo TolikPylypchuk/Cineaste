@@ -1,3 +1,5 @@
+using Cineaste.Problems;
+
 using static Cineaste.Shared.Validation.PosterContentTypes;
 
 namespace Cineaste.Endpoints;
@@ -12,5 +14,8 @@ public static class EndpointExtensions
         public RouteHandlerBuilder ProducesPosterContentTypes(int statusCode = StatusCodes.Status200OK) =>
             endpoint.Produces<byte[]>(
                 statusCode, ImageApng, ImageAvif, ImageGif, ImageJpeg, ImagePng, ImageSvg, ImageWebp);
+
+        public RouteHandlerBuilder ProducesProblem(Func<Exception> exceptionFunc) =>
+            endpoint.WithMetadata(new ProblemEndpointMetadata(exceptionFunc));
     }
 }

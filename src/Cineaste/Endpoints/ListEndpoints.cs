@@ -11,25 +11,33 @@ public static class ListEndpoints
                 .WithTags("List");
 
             list.MapGet("/", GetList)
+                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
                 .WithName(nameof(GetList))
                 .WithSummary("Get the list");
 
             list.MapGet("/items", GetListItems)
+                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
                 .WithName(nameof(GetListItems))
                 .WithSummary("Get list items");
 
             list.MapGet("/items/standalone", GetStandaloneListItems)
+                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
                 .WithName(nameof(GetStandaloneListItems))
                 .WithSummary("Get standalone list items");
 
             list.MapGet("/items/{id}", GetListItem)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesProblem(() => new ListItemNotFoundException(Guid.CreateVersion7()))
+                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
                 .WithName(nameof(GetListItem))
                 .WithSummary("Get list item");
 
             list.MapGet(
                 "items/parent-franchise-{parentFranchiseId}/{sequenceNumber}", GetListItemByParentFranchise)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesProblem(() => new FranchiseNotFoundException(Id.Create<Franchise>()))
+                .ProducesProblem(() => new FranchiseItemWithNumberNotFoundException(Id.Create<Franchise>(), 1))
+                .ProducesProblem(() => new FranchiseItemNotFoundException(
+                    Guid.CreateVersion7(), FranchiseItemType.Movie))
+                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
                 .WithName(nameof(GetListItemByParentFranchise))
                 .WithSummary("Get list item by parent franchise and sequence number");
 

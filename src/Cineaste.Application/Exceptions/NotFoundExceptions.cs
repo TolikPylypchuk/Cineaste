@@ -1,3 +1,5 @@
+using Cineaste.Core.Domain;
+
 namespace Cineaste.Application.Exceptions;
 
 public abstract class NotFoundException(
@@ -110,21 +112,28 @@ public sealed class FranchiseNotFoundException(
 }
 
 public sealed class FranchiseItemNotFoundException(
-    FranchiseItem franchiseItem,
+    Guid id,
+    FranchiseItemType itemType,
     Exception? innerException = null)
-    : NotFoundException($"List item with ID {GetItemId(franchiseItem)} not found", innerException)
+    : NotFoundException($"List item with ID {id} not found", innerException)
 {
-    public Guid ItemId { get; } = GetItemId(franchiseItem);
+    public FranchiseItemNotFoundException(FranchiseItem franchiseItem, Exception? innerException = null)
+        : this(GetItemId(franchiseItem), GetItemType(franchiseItem), innerException)
+    { }
 
-    public FranchiseItemType ItemType { get; } = franchiseItem.Select(
-        movie => FranchiseItemType.Movie,
-        series => FranchiseItemType.Series,
-        franchise => FranchiseItemType.Franchise);
+    public Guid ItemId { get; } = id;
+
+    public FranchiseItemType ItemType { get; } = itemType;
 
     private static Guid GetItemId(FranchiseItem item) => item.Select(
             movie => movie.Id.Value,
             series => series.Id.Value,
             franchise => franchise.Id.Value);
+
+    private static FranchiseItemType GetItemType(FranchiseItem item) => item.Select(
+        movie => FranchiseItemType.Movie,
+        series => FranchiseItemType.Series,
+        franchise => FranchiseItemType.Franchise);
 }
 
 public sealed class FranchiseItemWithNumberNotFoundException(
