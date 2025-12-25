@@ -14,8 +14,7 @@ public static class PosterEndpoints
 
             posters.MapGet("/imdb-media", FetchPosterFromImdbMedia)
                 .Produces(StatusCodes.Status302Found)
-                .ProducesProblem(StatusCodes.Status400BadRequest)
-                .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+                .ProducesImdbPosterProblems()
                 .WithName(nameof(FetchPosterFromImdbMedia))
                 .WithSummary("Get a poster URL from IMDb media");
 

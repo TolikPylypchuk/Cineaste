@@ -11,33 +11,33 @@ public static class ListEndpoints
                 .WithTags("List");
 
             list.MapGet("/", GetList)
-                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetList))
                 .WithSummary("Get the list");
 
             list.MapGet("/items", GetListItems)
-                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetListItems))
                 .WithSummary("Get list items");
 
             list.MapGet("/items/standalone", GetStandaloneListItems)
-                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetStandaloneListItems))
                 .WithSummary("Get standalone list items");
 
             list.MapGet("/items/{id}", GetListItem)
                 .ProducesProblem(() => new ListItemNotFoundException(Guid.CreateVersion7()))
-                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetListItem))
                 .WithSummary("Get list item");
 
             list.MapGet(
                 "items/parent-franchise-{parentFranchiseId}/{sequenceNumber}", GetListItemByParentFranchise)
-                .ProducesProblem(() => new FranchiseNotFoundException(Id.Create<Franchise>()))
+                .ProducesFranchiseNotFoundProblem()
                 .ProducesProblem(() => new FranchiseItemWithNumberNotFoundException(Id.Create<Franchise>(), 1))
                 .ProducesProblem(() => new FranchiseItemNotFoundException(
                     Guid.CreateVersion7(), FranchiseItemType.Movie))
-                .ProducesProblem(() => new ListNotFoundException(Id.Create<CineasteList>()))
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetListItemByParentFranchise))
                 .WithSummary("Get list item by parent franchise and sequence number");
 

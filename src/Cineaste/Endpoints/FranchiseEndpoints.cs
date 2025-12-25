@@ -13,48 +13,63 @@ public static class FranchiseEndpoints
                 .WithTags("Franchises");
 
             franchises.MapGet("/{id}", GetFranchise)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetFranchise))
                 .WithSummary("Get a franchise");
 
             franchises.MapPost("/", AddFranchise)
-                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .ProducesFranchiseRequestValidationProblem()
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesFranchiseItemsNotFoundProblem()
+                .ProducesMovieKindNotFoundProblem()
+                .ProducesSeriesKindNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(AddFranchise))
                 .WithSummary("Add a franchise to the list");
 
             franchises.MapPut("/{id}", UpdateFranchise)
-                .ProducesProblem(StatusCodes.Status400BadRequest)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesFranchiseRequestValidationProblem()
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesFranchiseItemsNotFoundProblem()
+                .ProducesMovieKindNotFoundProblem()
+                .ProducesSeriesKindNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(UpdateFranchise))
                 .WithSummary("Update a franchise");
 
             franchises.MapDelete("/{id}", RemoveFranchise)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveFranchise))
                 .WithSummary("Remove a franchise from the list");
 
             franchises.MapGet("/{id}/poster", GetFranchisePoster)
                 .ProducesPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesFranchisePosterNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetFranchisePoster))
-                .WithSummary("Get a poster for a movie");
+                .WithSummary("Get a poster for a franchise");
 
             franchises.MapPut("/{id}/poster", SetFranchisePoster)
                 .AcceptsPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
+                .ProducesPosterProblems()
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetFranchisePoster))
                 .WithSummary("Set a poster for a franchise");
 
             franchises.MapPut("/{id}/poster", SetIndirectFranchisePoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
-                .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+                .ProducesImdbPosterProblems()
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetIndirectFranchisePoster))
                 .WithSummary("Set a poster for a franchise");
 
             franchises.MapDelete("/{id}/poster", RemoveFranchisePoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveFranchisePoster))
                 .WithSummary("Remove a poster for a franchise");
 

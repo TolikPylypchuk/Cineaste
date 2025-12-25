@@ -13,98 +13,126 @@ public static class SeriesEndpoints
                 .WithTags("Series");
 
             series.MapGet("/{id}", GetSeries)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesSeriesNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetSeries))
                 .WithSummary("Get a series");
 
             series.MapPost("/", AddSeries)
-                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .ProducesSeriesRequestValidationProblem()
+                .ProducesSeriesKindNotFoundProblem()
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(AddSeries))
                 .WithSummary("Add a series to the list");
 
             series.MapPut("/{id}", UpdateSeries)
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .ProducesSeriesRequestValidationProblem()
+                .ProducesSeriesNotFoundProblem()
+                .ProducesSeriesKindNotFoundProblem()
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(UpdateSeries))
                 .WithSummary("Update a series");
 
             series.MapDelete("/{id}", RemoveSeries)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesSeriesNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveSeries))
                 .WithSummary("Remove a series from the list");
 
             series.MapGet("/{id}/poster", GetSeriesPoster)
                 .ProducesPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesSeriesNotFoundProblem()
+                .ProducesSeriesPosterNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetSeriesPoster))
                 .WithSummary("Get a poster for a series");
 
             series.MapPut("/{id}/poster", SetSeriesPoster)
                 .AcceptsPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
+                .ProducesPosterProblems()
+                .ProducesSeriesNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetSeriesPoster))
                 .WithSummary("Set a poster for a series");
 
             series.MapPut("/{id}/poster", SetIndirectSeriesPoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
-                .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+                .ProducesImdbPosterProblems()
+                .ProducesSeriesNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetIndirectSeriesPoster))
                 .WithSummary("Set a poster for a series");
 
             series.MapDelete("/{id}/poster", RemoveSeriesPoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesSeriesNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveSeriesPoster))
                 .WithSummary("Remove a poster for a series");
 
             series.MapGet("/{seriesId}/seasons/periods/{periodId}/poster", GetSeasonPoster)
                 .ProducesPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesSeriesNotFoundProblem()
+                .ProducesPeriodNotFoundProblem()
+                .ProducesSeasonPosterNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetSeasonPoster))
                 .WithSummary("Get a poster for a season");
 
             series.MapPut("/{seriesId}/seasons/periods/{periodId}/poster", SetSeasonPoster)
                 .AcceptsPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
+                .ProducesPosterProblems()
+                .ProducesSeriesNotFoundProblem()
+                .ProducesPeriodNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetSeasonPoster))
                 .WithSummary("Set a poster for a season");
 
             series.MapPut("/{seriesId}/seasons/periods/{periodId}/poster", SetIndirectSeasonPoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
-                .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+                .ProducesImdbPosterProblems()
+                .ProducesSeriesNotFoundProblem()
+                .ProducesPeriodNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetIndirectSeasonPoster))
                 .WithSummary("Set a poster for a season");
 
             series.MapDelete("/{seriesId}/seasons/periods/{periodId}/poster", RemoveSeasonPoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesSeriesNotFoundProblem()
+                .ProducesPeriodNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveSeasonPoster))
                 .WithSummary("Remove a poster for a season");
 
             series.MapGet("/{seriesId}/special-episodes/{episodeId}/poster", GetSpecialEpisodePoster)
                 .ProducesPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesSeriesNotFoundProblem()
+                .ProducesSpecialEpisodeNotFoundProblem()
+                .ProducesSpecialEpisodePosterNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetSpecialEpisodePoster))
                 .WithSummary("Get a poster for a special episode");
 
             series.MapPut("/{seriesId}/special-episodes/{episodeId}/poster", SetSpecialEpisodePoster)
                 .AcceptsPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
+                .ProducesPosterProblems()
+                .ProducesSeriesNotFoundProblem()
+                .ProducesSpecialEpisodeNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetSpecialEpisodePoster))
                 .WithSummary("Set a poster for a special episode");
 
             series.MapPut("/{seriesId}/special-episodes/{episodeId}/poster", SetIndirectSpecialEpisodePoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
-                .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+                .ProducesImdbPosterProblems()
+                .ProducesSeriesNotFoundProblem()
+                .ProducesSpecialEpisodeNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetIndirectSpecialEpisodePoster))
                 .WithSummary("Set a poster for a special episode");
 
             series.MapDelete("/{seriesId}/special-episodes/{episodeId}/poster", RemoveSpecialEpisodePoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesSeriesNotFoundProblem()
+                .ProducesSpecialEpisodeNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveSpecialEpisodePoster))
                 .WithSummary("Remove a poster for a special episode");
 

@@ -1,4 +1,3 @@
-using Cineaste.Client.Localization;
 using Cineaste.Endpoints;
 
 using Microsoft.AspNetCore.OpenApi;
@@ -12,31 +11,14 @@ namespace Cineaste.Problems;
 
 public sealed class ProblemDetailsOperationTransformer(IOptions<JsonOptions> options) : IOpenApiOperationTransformer
 {
-    private const string ProblemJsonContentType = "application/problem+json";
-
-    private static readonly OpenApiSchema ProblemSchema = new()
-    {
-        Type = JsonSchemaType.Object,
-        Properties = new Dictionary<string, IOpenApiSchema>
-        {
-            ["type"] = new OpenApiSchema { Type = JsonSchemaType.String, Format = "uri" },
-            ["title"] = new OpenApiSchema { Type = JsonSchemaType.String },
-            ["status"] = new OpenApiSchema { Type = JsonSchemaType.Integer, Format = "int32" },
-            ["detail"] = new OpenApiSchema { Type = JsonSchemaType.String },
-            ["instance"] = new OpenApiSchema { Type = JsonSchemaType.String, Format = "uri" },
-        },
-        AdditionalPropertiesAllowed = true,
-        Required = new HashSet<string> { "type", "title", "status", "detail", "instance" }
-    };
-
     private readonly JsonSerializerOptions jsonSerializerOptions = options.Value.SerializerOptions;
 
-    public Task TransformAsync(
+    public async Task TransformAsync(
         OpenApiOperation operation,
         OpenApiOperationTransformerContext context,
         CancellationToken cancellationToken)
     {
-        context.Description
+        var problemsByStatus = context.Description
             .ActionDescriptor
             .EndpointMetadata
             .OfType<ProblemEndpointMetadata>()
@@ -44,10 +26,12 @@ public sealed class ProblemDetailsOperationTransformer(IOptions<JsonOptions> opt
             .WhereNotNull()
             .GroupBy(problemDetails => problemDetails.Status)
             .Where(group => group.Key is not null)
-            .ToDictionary(group => group.Key ?? 0, group => group.ToList())
-            .ForEach(group => this.AddProblemResponse(operation, group.Key, group.Value));
+            .ToDictionary(group => group.Key ?? 0, group => group.ToList());
 
-        return Task.CompletedTask;
+        foreach (var (status, problems) in problemsByStatus)
+        {
+            await this.AddProblemResponse(operation, status, problems, context, cancellationToken);
+        }
     }
 
     private ProblemDetails? CreateProblemDetails(
@@ -67,9 +51,31 @@ public sealed class ProblemDetailsOperationTransformer(IOptions<JsonOptions> opt
         return problemDetails;
     }
 
-    private void AddProblemResponse(OpenApiOperation operation, int status, List<ProblemDetails> problemDetails)
+    private async Task AddProblemResponse(
+        OpenApiOperation operation,
+        int status,
+        List<ProblemDetails> problems,
+        OpenApiOperationTransformerContext context,
+        CancellationToken cancellationToken)
     {
-        var examples = problemDetails.GroupBy(problemDetails => problemDetails.NonNullTitle)
+        var response = new OpenApiResponse
+        {
+            Description = ReasonPhrases.GetReasonPhrase(status)
+        };
+
+        response.Content ??= new Dictionary<string, OpenApiMediaType>();
+        response.Content["application/problem+json"] = new OpenApiMediaType
+        {
+            Schema = await context.GetOrCreateSchemaAsync(typeof(ProblemDetails), cancellationToken: cancellationToken),
+            Examples = this.CreateExamples(problems)
+        };
+
+        operation.Responses ??= [];
+        operation.Responses[status.ToString()] = response;
+    }
+
+    private Dictionary<string, IOpenApiExample> CreateExamples(List<ProblemDetails> problems) =>
+        problems.GroupBy(problemDetails => problemDetails.NonNullTitle)
             .Select(group => group.ToList())
             .SelectMany(group => group.Count == 1
                 ? group.Select(problem => (Title: problem.NonNullTitle, Problem: problem))
@@ -81,22 +87,6 @@ public sealed class ProblemDetailsOperationTransformer(IOptions<JsonOptions> opt
                     Summary = titleAndProblem.Title,
                     Value = JsonSerializer.SerializeToNode(titleAndProblem.Problem, this.jsonSerializerOptions)
                 });
-
-        var response = new OpenApiResponse
-        {
-            Description = ReasonPhrases.GetReasonPhrase(status)
-        };
-
-        response.Content ??= new Dictionary<string, OpenApiMediaType>();
-        response.Content[ProblemJsonContentType] = new OpenApiMediaType
-        {
-            Schema = ProblemSchema,
-            Examples = examples
-        };
-
-        operation.Responses ??= [];
-        operation.Responses[status.ToString()] = response;
-    }
 }
 
 file static class Extensions

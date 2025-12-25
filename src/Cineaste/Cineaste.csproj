@@ -20,7 +20,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.1" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.11.9" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.11.10" />
     <PackageReference Include="System.Interactive" Version="7.0.0" />
   </ItemGroup>
 

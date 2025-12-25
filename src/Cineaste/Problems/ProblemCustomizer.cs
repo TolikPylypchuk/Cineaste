@@ -79,6 +79,7 @@ internal class ProblemCustomizer(IHostEnvironment env)
                 problemDetails.Title = "Unsupported poster type";
                 problemDetails.Status = Status415UnsupportedMediaType;
                 problemDetails.Extensions[Props.ContentType] = ex.ContentType;
+                problemDetails.Extensions[Props.Url] = ex.Url;
                 break;
             case NoPosterContentTypeException ex:
                 problemDetails.Type = this.CreateProblemType(Types.Poster, Types.Type, Types.Missing);

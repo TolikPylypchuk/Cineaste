@@ -13,48 +13,60 @@ public static class MovieEndpoints
                 .WithTags("Movies");
 
             movies.MapGet("/{id}", GetMovie)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesMovieNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetMovie))
                 .WithSummary("Get a movie");
 
             movies.MapPost("/", AddMovie)
-                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .ProducesMovieRequestValidationProblem()
+                .ProducesMovieKindNotFoundProblem()
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(AddMovie))
                 .WithSummary("Add a movie to the list");
             
             movies.MapPut("/{id}", UpdateMovie)
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .ProducesMovieRequestValidationProblem()
+                .ProducesMovieNotFoundProblem()
+                .ProducesMovieKindNotFoundProblem()
+                .ProducesFranchiseNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(UpdateMovie))
                 .WithSummary("Update a movie");
 
             movies.MapDelete("/{id}", RemoveMovie)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesMovieNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveMovie))
                 .WithSummary("Remove a movie from the list");
 
             movies.MapGet("/{id}/poster", GetMoviePoster)
                 .ProducesPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesMovieNotFoundProblem()
+                .ProducesMoviePosterNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(GetMoviePoster))
                 .WithSummary("Get a poster for a movie");
 
             movies.MapPut("/{id}/poster", SetMoviePoster)
                 .AcceptsPosterContentTypes()
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
+                .ProducesPosterProblems()
+                .ProducesMovieNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetMoviePoster))
                 .WithSummary("Set a poster for a movie");
 
             movies.MapPut("/{id}/poster", SetIndirectMoviePoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .ProducesProblem(StatusCodes.Status415UnsupportedMediaType)
-                .ProducesProblem(StatusCodes.Status503ServiceUnavailable)
+                .ProducesImdbPosterProblems()
+                .ProducesMovieNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(SetIndirectMoviePoster))
                 .WithSummary("Set a poster for a movie");
 
             movies.MapDelete("/{id}/poster", RemoveMoviePoster)
-                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesMovieNotFoundProblem()
+                .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveMoviePoster))
                 .WithSummary("Remove a poster for a movie");
 
