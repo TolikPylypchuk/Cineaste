@@ -10,7 +10,7 @@ namespace Cineaste.Application.Fixture;
 
 public sealed class DbFixture : IAsyncLifetime
 {
-    private readonly MsSqlContainer container = new MsSqlBuilder()
+    private readonly MsSqlContainer container = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2025-latest")
         .WithReuse(true)
         .WithLabel("reuse-id", "DB")
         .Build();

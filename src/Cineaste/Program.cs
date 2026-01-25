@@ -54,7 +54,7 @@ builder.Services.Configure<FormOptions>(options =>
 
 builder.Services.AddDbContext<CineasteDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Default"),
-    sql => sql.MigrationsHistoryTable("Migrations")));
+    sql => sql.MigrationsHistoryTable("Migrations").EnableRetryOnFailure()));
 
 builder.Services.AddIdentityCore<CineasteUser>()
     .AddEntityFrameworkStores<CineasteDbContext>()
