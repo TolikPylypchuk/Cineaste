@@ -172,7 +172,7 @@ public partial class MovieForm
 
     private async Task Remove()
     {
-        bool? delete = await this.DialogService.ShowMessageBox(
+        bool? delete = await this.DialogService.ShowMessageBoxAsync(
             title: this.Loc["MovieForm.RemoveDialog.Title"],
             markupMessage: new MarkupString(this.Loc["MovieForm.RemoveDialog.Body"]),
             yesText: this.Loc["Confirmation.Confirm"],

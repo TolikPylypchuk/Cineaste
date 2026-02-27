@@ -255,7 +255,7 @@ public partial class FranchiseForm
 
     private async Task Remove()
     {
-        bool? delete = await this.DialogService.ShowMessageBox(
+        bool? delete = await this.DialogService.ShowMessageBoxAsync(
             title: this.Loc["FranchiseForm.RemoveDialog.Title"],
             markupMessage: new MarkupString(this.Loc["FranchiseForm.RemoveDialog.Body"]),
             yesText: this.Loc["Confirmation.Confirm"],

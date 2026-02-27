@@ -33,15 +33,17 @@
                                         FilesChanged="@this.OnSelectedPosterChanged"
                                         Accept="@AcceptedImageFileExtensions.Aggregate((acc, item) => $"{acc}, {item}")"
                                     >
-                                        <ActivatorContent>
+                                        <CustomContent>
                                             <MudButton
                                                 Variant="Variant.Filled"
                                                 Color="Color.Primary"
                                                 StartIcon="@Icons.Material.Filled.Image"
+                                                OnClick="@context.OpenFilePickerAsync"
                                             >
                                                 @this.Loc["PosterDialog.SelectFile"]
                                             </MudButton>
-                                        </ActivatorContent>
+                                        </CustomContent>
+                                        <SelectedTemplate />
                                     </MudFileUpload>
 
                                     @if (this.FormModel.SelectedFile is { } file)
@@ -68,7 +70,7 @@
                                 <MudTextField
                                     @bind-Value="this.FormModel.PosterUrl"
                                     Label="@this.Loc["PosterDialog.Url"]"
-                                    AutoGrow="true"
+                                    Sizing="InputSizing.Auto"
                                 />
 
                                 <ErrorPresenter ErrorCode="Poster.Url.*" Trigger="@this.FormModel.PosterUrl" />
@@ -78,7 +80,7 @@
                                 <MudTextField
                                     @bind-Value="this.FormModel.ImdbMediaUrl"
                                     Label="@this.Loc["PosterDialog.Url"]"
-                                    AutoGrow="true"
+                                    Sizing="InputSizing.Auto"
                                 />
 
                                 <ErrorPresenter

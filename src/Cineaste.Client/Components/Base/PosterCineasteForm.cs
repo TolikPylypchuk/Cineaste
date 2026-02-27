@@ -40,7 +40,7 @@ public abstract class PosterCineasteForm<TFormModel, TRequest, TModel, TState>
 
     protected async Task RemovePoster(string title, string body, Guid id = default)
     {
-        bool? delete = await this.DialogService.ShowMessageBox(
+        bool? delete = await this.DialogService.ShowMessageBoxAsync(
             title: this.Loc[title],
             markupMessage: new MarkupString(this.Loc[body]),
             yesText: this.Loc["Confirmation.Confirm"],
