@@ -20,7 +20,7 @@ public sealed class Movie : FranchiseItemEntity<Movie>
     {
         get => this.kind;
 
-        [MemberNotNull(nameof(this.kind))]
+        [MemberNotNull(nameof(kind))]
         set => this.kind = Require.NotNull(value);
     }
 

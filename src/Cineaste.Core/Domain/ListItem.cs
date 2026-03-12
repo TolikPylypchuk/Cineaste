@@ -80,10 +80,10 @@ public sealed partial class ListItem : Entity<ListItem>
     }
 
     [MemberNotNull(
-        nameof(this.NormalizedShortTitle),
-        nameof(this.NormalizedShortOriginalTitle),
-        nameof(this.NormalizedTitle),
-        nameof(this.NormalizedOriginalTitle))]
+        nameof(NormalizedShortTitle),
+        nameof(NormalizedShortOriginalTitle),
+        nameof(NormalizedTitle),
+        nameof(NormalizedOriginalTitle))]
     public void SetProperties(Movie movie)
     {
         this.NormalizedShortTitle = this.Normalize(movie.Title.Name);
@@ -105,10 +105,10 @@ public sealed partial class ListItem : Entity<ListItem>
     }
 
     [MemberNotNull(
-        nameof(this.NormalizedShortTitle),
-        nameof(this.NormalizedShortOriginalTitle),
-        nameof(this.NormalizedTitle),
-        nameof(this.NormalizedOriginalTitle))]
+        nameof(NormalizedShortTitle),
+        nameof(NormalizedShortOriginalTitle),
+        nameof(NormalizedTitle),
+        nameof(NormalizedOriginalTitle))]
     public void SetProperties(Series series)
     {
         this.NormalizedShortTitle = this.Normalize(series.Title.Name);
@@ -130,10 +130,10 @@ public sealed partial class ListItem : Entity<ListItem>
     }
 
     [MemberNotNull(
-        nameof(this.NormalizedShortTitle),
-        nameof(this.NormalizedShortOriginalTitle),
-        nameof(this.NormalizedTitle),
-        nameof(this.NormalizedOriginalTitle))]
+        nameof(NormalizedShortTitle),
+        nameof(NormalizedShortOriginalTitle),
+        nameof(NormalizedTitle),
+        nameof(NormalizedOriginalTitle))]
     public void SetProperties(Franchise franchise)
     {
         this.NormalizedShortTitle = this.Normalize(franchise.Title.Name);

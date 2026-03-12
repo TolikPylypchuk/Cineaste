@@ -15,7 +15,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     {
         get => this.movieKind;
 
-        [MemberNotNull(nameof(this.movieKind))]
+        [MemberNotNull(nameof(movieKind))]
         set => this.movieKind = Require.NotNull(value);
     }
 
@@ -23,7 +23,7 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     {
         get => seriesKind;
 
-        [MemberNotNull(nameof(this.seriesKind))]
+        [MemberNotNull(nameof(seriesKind))]
         set => seriesKind = Require.NotNull(value);
     }
 
