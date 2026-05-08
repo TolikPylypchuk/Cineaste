@@ -1,6 +1,6 @@
 global using System.Collections.Immutable;
 
-global using Cineaste.Basic;
+global using Cineaste.Common;
 global using Cineaste.Shared.Collections;
 
 global using FluentValidation;
@@ -12,4 +12,4 @@ global using FsCheck.Xunit;
 
 global using Xunit;
 
-global using static Cineaste.Basic.Constants;
+global using static Cineaste.Common.Constants;

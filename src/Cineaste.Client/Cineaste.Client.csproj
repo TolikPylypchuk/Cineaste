@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cineaste.Basic\Cineaste.Basic.csproj" />
+    <ProjectReference Include="..\Cineaste.Common\Cineaste.Common.csproj" />
     <ProjectReference Include="..\Cineaste.Shared\Cineaste.Shared.csproj" />
   </ItemGroup>
 

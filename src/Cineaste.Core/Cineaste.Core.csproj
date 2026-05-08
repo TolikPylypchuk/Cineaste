@@ -5,7 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cineaste.Basic\Cineaste.Basic.csproj" />
+    <ProjectReference Include="..\Cineaste.Common\Cineaste.Common.csproj" />
   </ItemGroup>
 
 </Project>

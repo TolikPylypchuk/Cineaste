@@ -3,7 +3,6 @@ global using System.Collections.ObjectModel;
 global using System.Globalization;
 global using System.Text.Json;
 
-global using Cineaste.Basic;
 global using Cineaste.Client;
 global using Cineaste.Client.Api;
 global using Cineaste.Client.FormModels;
@@ -11,6 +10,7 @@ global using Cineaste.Client.Localization;
 global using Cineaste.Client.Models;
 global using Cineaste.Client.Navigation;
 global using Cineaste.Client.Validation;
+global using Cineaste.Common;
 global using Cineaste.Shared.Collections;
 global using Cineaste.Shared.Mapping;
 global using Cineaste.Shared.Models;
@@ -32,4 +32,4 @@ global using MudBlazor;
 
 global using Refit;
 
-global using static Cineaste.Basic.Constants;
+global using static Cineaste.Common.Constants;

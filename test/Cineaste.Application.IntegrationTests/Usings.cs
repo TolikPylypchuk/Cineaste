@@ -1,7 +1,7 @@
 global using System.Collections.Immutable;
 
 global using Cineaste.Application.Exceptions;
-global using Cineaste.Basic;
+global using Cineaste.Common;
 global using Cineaste.Core;
 global using Cineaste.Core.Domain;
 global using Cineaste.Persistence;

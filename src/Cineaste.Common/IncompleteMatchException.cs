@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Cineaste.Basic;
+namespace Cineaste.Common;
 
 [ExcludeFromCodeCoverage]
 public sealed class IncompleteMatchException : Exception

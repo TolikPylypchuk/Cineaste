@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Cineaste.Basic;
+namespace Cineaste.Common;
 
 public static partial class Constants
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-using static Cineaste.Basic.Constants;
+using static Cineaste.Common.Constants;
 
 namespace Cineaste.Client.FormModels;
 

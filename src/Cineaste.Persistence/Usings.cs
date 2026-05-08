@@ -1,4 +1,3 @@
-global using Cineaste.Basic;
 global using Cineaste.Core.Domain;
 global using Cineaste.Persistence.Configuration;
 global using Cineaste.Persistence.Converters;

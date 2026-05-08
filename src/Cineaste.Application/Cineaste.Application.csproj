@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cineaste.Basic\Cineaste.Basic.csproj" />
     <ProjectReference Include="..\Cineaste.Core\Cineaste.Core.csproj" />
     <ProjectReference Include="..\Cineaste.Identity\Cineaste.Identity.csproj" />
     <ProjectReference Include="..\Cineaste.Persistence\Cineaste.Persistence.csproj" />

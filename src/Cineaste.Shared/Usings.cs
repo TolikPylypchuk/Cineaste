@@ -1,7 +1,7 @@
 global using System.Collections.Immutable;
 global using System.Diagnostics.CodeAnalysis;
 
-global using Cineaste.Basic;
+global using Cineaste.Common;
 global using Cineaste.Shared.Collections;
 global using Cineaste.Shared.Models.Franchise;
 global using Cineaste.Shared.Models.List;

@@ -1,4 +1,4 @@
-using static Cineaste.Basic.Constants;
+using static Cineaste.Common.Constants;
 
 namespace Cineaste.Shared.Validation.Series;
 

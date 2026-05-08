@@ -1,4 +1,4 @@
-namespace Cineaste.Basic;
+namespace Cineaste.Common;
 
 public enum ListSortOrder
 {
