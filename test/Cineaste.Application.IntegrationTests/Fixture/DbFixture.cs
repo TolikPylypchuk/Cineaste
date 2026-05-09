@@ -1,5 +1,3 @@
-using Cineaste.Application.Services.Poster;
-
 using Microsoft.EntityFrameworkCore;
 
 using Testcontainers.MsSql;
@@ -30,6 +28,7 @@ public sealed class DbFixture : IAsyncLifetime
         dbContext.Seasons.RemoveRange(dbContext.Seasons);
         dbContext.SpecialEpisodes.RemoveRange(dbContext.SpecialEpisodes);
         dbContext.Series.RemoveRange(dbContext.Series);
+        dbContext.LimitedSeries.RemoveRange(dbContext.LimitedSeries);
         dbContext.MovieKinds.RemoveRange(dbContext.MovieKinds);
         dbContext.SeriesKinds.RemoveRange(dbContext.SeriesKinds);
         dbContext.ListConfigurations.RemoveRange(dbContext.ListConfigurations);

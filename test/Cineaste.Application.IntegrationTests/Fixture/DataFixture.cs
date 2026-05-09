@@ -141,6 +141,29 @@ public sealed class DataFixture : IAsyncLifetime
     public SpecialEpisode CreateSpecialEpisode(int num) =>
         new(Id.Create<SpecialEpisode>(), this.CreateTitles(), Month.January, 2000 + num, false, true, "Test", num);
 
+    public async Task<LimitedSeries> CreateLimitedSeries(CineasteDbContext dbContext)
+    {
+        var list = await this.GetList(dbContext);
+        var kind = await this.GetSeriesKind(dbContext);
+
+        var limitedSeries = new LimitedSeries(
+            Id.Create<LimitedSeries>(),
+            this.CreateTitles(),
+            new(Month.January, 2000, Month.February, 2000, false, 10),
+            SeriesWatchStatus.NotWatched,
+            SeriesReleaseStatus.Finished,
+            "Test",
+            kind);
+
+        list.AddLimitedSeries(limitedSeries);
+        list.SortItems();
+
+        dbContext.LimitedSeries.Add(limitedSeries);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        return limitedSeries;
+    }
+
     public async Task<Franchise> CreateFranchise(CineasteDbContext dbContext)
     {
         var list = await this.GetList(dbContext);
@@ -224,6 +247,16 @@ public sealed class DataFixture : IAsyncLifetime
         var poster = new SpecialEpisodePoster(Id.Create<SpecialEpisodePoster>(), episode, PosterData, PosterType);
 
         dbContext.SpecialEpisodePosters.Add(poster);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        return poster;
+    }
+
+    public async Task<LimitedSeriesPoster> CreateLimitedSeriesPoster(LimitedSeries movie, CineasteDbContext dbContext)
+    {
+        var poster = new LimitedSeriesPoster(Id.Create<LimitedSeriesPoster>(), movie, PosterData, PosterType);
+
+        dbContext.LimitedSeriesPosters.Add(poster);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         return poster;

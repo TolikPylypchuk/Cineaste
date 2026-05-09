@@ -73,7 +73,7 @@ public static class SeriesEndpoints
             series.MapGet("/{seriesId}/seasons/periods/{periodId}/poster", GetSeasonPoster)
                 .ProducesPosterContentTypes()
                 .ProducesSeriesNotFoundProblem()
-                .ProducesPeriodNotFoundProblem()
+                .ProducesSeasonPartNotFoundProblem()
                 .ProducesSeasonPosterNotFoundProblem()
                 .ProducesListNotFoundProblem()
                 .WithName(nameof(GetSeasonPoster))
@@ -83,7 +83,7 @@ public static class SeriesEndpoints
                 .AcceptsPosterContentTypes()
                 .ProducesPosterProblems()
                 .ProducesSeriesNotFoundProblem()
-                .ProducesPeriodNotFoundProblem()
+                .ProducesSeasonPartNotFoundProblem()
                 .ProducesListNotFoundProblem()
                 .WithName(nameof(SetSeasonPoster))
                 .WithSummary("Set a poster for a season");
@@ -91,14 +91,14 @@ public static class SeriesEndpoints
             series.MapPut("/{seriesId}/seasons/periods/{periodId}/poster", SetIndirectSeasonPoster)
                 .ProducesImdbPosterProblems()
                 .ProducesSeriesNotFoundProblem()
-                .ProducesPeriodNotFoundProblem()
+                .ProducesSeasonPartNotFoundProblem()
                 .ProducesListNotFoundProblem()
                 .WithName(nameof(SetIndirectSeasonPoster))
                 .WithSummary("Set a poster for a season");
 
             series.MapDelete("/{seriesId}/seasons/periods/{periodId}/poster", RemoveSeasonPoster)
                 .ProducesSeriesNotFoundProblem()
-                .ProducesPeriodNotFoundProblem()
+                .ProducesSeasonPartNotFoundProblem()
                 .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveSeasonPoster))
                 .WithSummary("Remove a poster for a season");

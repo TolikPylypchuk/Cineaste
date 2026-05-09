@@ -101,14 +101,14 @@ public sealed class SpecialEpisodePoster : Poster<SpecialEpisodePoster>
 
 public sealed class LimitedSeriesPoster : Poster<LimitedSeriesPoster>
 {
-    public LimitedSeries Series { get; private set; }
+    public LimitedSeries LimitedSeries { get; private set; }
 
-    public LimitedSeriesPoster(Id<LimitedSeriesPoster> id, LimitedSeries series, byte[] data, string contentType)
+    public LimitedSeriesPoster(Id<LimitedSeriesPoster> id, LimitedSeries limitedSeries, byte[] data, string contentType)
         : base(id, data, contentType) =>
-        this.Series = Require.NotNull(series);
+        this.LimitedSeries = Require.NotNull(limitedSeries);
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
     private LimitedSeriesPoster(Id<LimitedSeriesPoster> id)
         : base(id) =>
-        this.Series = null!;
+        this.LimitedSeries = null!;
 }

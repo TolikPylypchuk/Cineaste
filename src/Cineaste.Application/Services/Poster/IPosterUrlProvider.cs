@@ -15,5 +15,8 @@ public interface IPosterUrlProvider
     string? GetPosterUrl(Id<Series> seriesId, Id<SpecialEpisode> episodeId, PosterHash? posterHash);
 
     [return: NotNullIfNotNull(nameof(posterHash))]
+    string? GetPosterUrl(Id<LimitedSeries> limitedSeriesId, PosterHash? posterHash);
+
+    [return: NotNullIfNotNull(nameof(posterHash))]
     string? GetPosterUrl(Id<Franchise> franchiseId, PosterHash? posterHash);
 }

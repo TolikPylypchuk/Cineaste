@@ -164,28 +164,9 @@ public static class SeriesMappingExtensions
 
         private void Update(SeasonPartRequest request)
         {
-            seasonPart.Period = new(
-                request.Period.StartMonth.ToMonth(),
-                request.Period.StartYear,
-                request.Period.EndMonth.ToMonth(),
-                request.Period.EndYear,
-                request.Period.IsSingleDayRelease,
-                request.Period.EpisodeCount);
-
+            seasonPart.Period = request.Period.ToReleasePeriod();
             seasonPart.RottenTomatoesId = RottenTomatoesId.Nullable(request.RottenTomatoesId);
         }
-    }
-
-    extension(ReleasePeriod period)
-    {
-        private ReleasePeriodModel ToPeriodModel() =>
-            new(
-                period.StartMonth.Value,
-                period.StartYear,
-                period.EndMonth.Value,
-                period.EndYear,
-                period.EpisodeCount,
-                period.IsSingleDayRelease);
     }
 
     extension(SpecialEpisode episode)
@@ -244,18 +225,6 @@ public static class SeriesMappingExtensions
             {
                 RottenTomatoesId = RottenTomatoesId.Nullable(request.RottenTomatoesId)
             };
-    }
-
-    extension(ReleasePeriodRequest request)
-    {
-        private ReleasePeriod ToReleasePeriod() =>
-            new(
-                request.StartMonth.ToMonth(),
-                request.StartYear,
-                request.EndMonth.ToMonth(),
-                request.EndYear,
-                request.IsSingleDayRelease,
-                request.EpisodeCount);
     }
 
     extension(SpecialEpisodeRequest request)

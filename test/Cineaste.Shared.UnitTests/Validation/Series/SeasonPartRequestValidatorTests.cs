@@ -13,8 +13,8 @@ public class SeasonPartRequestValidatorTests
     public static Arbitrary<byte> ValidMonth =>
         new ArbitraryValidMonth();
 
-    [Fact(DisplayName = "Validator should validate periods")]
-    public void ValidatorShouldValidateParts()
+    [Fact(DisplayName = "Validator should validate the period")]
+    public void ValidatorShouldValidatePeriod()
     {
         var result = validator.TestValidate(this.Request(1, 2000, 2, 1999, 5, false, null));
 

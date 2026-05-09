@@ -231,12 +231,12 @@ namespace Cineaste.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<Guid>("SeriesId")
+                    b.Property<Guid>("LimitedSeriesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SeriesId");
+                    b.HasIndex("LimitedSeriesId");
 
                     b.ToTable("LimitedSeriesPosters", t =>
                         {
@@ -1237,13 +1237,13 @@ namespace Cineaste.Persistence.Migrations
 
             modelBuilder.Entity("Cineaste.Core.Domain.LimitedSeriesPoster", b =>
                 {
-                    b.HasOne("Cineaste.Core.Domain.LimitedSeries", "Series")
+                    b.HasOne("Cineaste.Core.Domain.LimitedSeries", "LimitedSeries")
                         .WithMany()
-                        .HasForeignKey("SeriesId")
+                        .HasForeignKey("LimitedSeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Series");
+                    b.Navigation("LimitedSeries");
                 });
 
             modelBuilder.Entity("Cineaste.Core.Domain.ListConfiguration", b =>

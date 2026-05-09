@@ -516,7 +516,7 @@ namespace Cineaste.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LimitedSeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -526,8 +526,8 @@ namespace Cineaste.Persistence.Migrations
                     table.CheckConstraint("CH_LimitedSeriesPosters_ContentTypeNotEmpty", "[ContentType] <> ''");
                     table.CheckConstraint("CH_LimitedSeriesPosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                     table.ForeignKey(
-                        name: "FK_LimitedSeriesPosters_LimitedSeries_SeriesId",
-                        column: x => x.SeriesId,
+                        name: "FK_LimitedSeriesPosters_LimitedSeries_LimitedSeriesId",
+                        column: x => x.LimitedSeriesId,
                         principalTable: "LimitedSeries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -998,9 +998,9 @@ namespace Cineaste.Persistence.Migrations
                 column: "KindId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LimitedSeriesPosters_SeriesId",
+                name: "IX_LimitedSeriesPosters_LimitedSeriesId",
                 table: "LimitedSeriesPosters",
-                column: "SeriesId");
+                column: "LimitedSeriesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LimitedSeriesTags_TagId",

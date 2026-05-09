@@ -110,6 +110,18 @@ internal class ProblemCustomizer(IHostEnvironment env)
     {
         switch (exception)
         {
+            case LimitedSeriesNotFoundException ex:
+                problemDetails.Type = this.CreateProblemType(Types.NotFound, Types.LimitedSeries);
+                problemDetails.Title = "Limited series not found";
+                problemDetails.Status = Status404NotFound;
+                problemDetails.Extensions[Props.Id] = ex.LimitedSeriesId;
+                break;
+            case LimitedSeriesPosterNotFoundException ex:
+                problemDetails.Type = this.CreateProblemType(Types.NotFound, Types.Poster, Types.LimitedSeries);
+                problemDetails.Title = "Limited series poster not found";
+                problemDetails.Status = Status404NotFound;
+                problemDetails.Extensions[Props.LimitedSeriesId] = ex.LimitedSeriesId;
+                break;
             case ListNotFoundException ex:
                 problemDetails.Type = this.CreateProblemType(Types.NotFound, Types.List);
                 problemDetails.Title = "List not found";
@@ -247,6 +259,7 @@ file static class Types
     public const string Invalid = "invalid";
 
     public const string Length = "length";
+    public const string LimitedSeries = "limited-series";
     public const string List = "list";
     public const string ListId = "list-id";
     public const string ListItem = "list-item";
@@ -287,6 +300,8 @@ file static class Props
 
     public const string Id = "id";
     public const string ItemType = "itemType";
+
+    public const string LimitedSeriesId = "limitedSeriesId";
 
     public const string MovieId = "movieId";
     public const string MovieIds = "movieIds";

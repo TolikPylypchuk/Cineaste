@@ -1,11 +1,25 @@
-using Cineaste.Core.Domain;
-
 namespace Cineaste.Application.Exceptions;
 
 public abstract class NotFoundException(
     string? message = null,
     Exception? innerException = null)
     : Exception(message, innerException);
+
+public sealed class LimitedSeriesNotFoundException(
+    Id<LimitedSeries> limitedSeriesId,
+    Exception? innerException = null)
+    : NotFoundException($"Limited series with ID {limitedSeriesId} not found", innerException)
+{
+    public Id<LimitedSeries> LimitedSeriesId { get; } = limitedSeriesId;
+}
+
+public sealed class LimitedSeriesPosterNotFoundException(
+    Id<LimitedSeries> limitedSeriesId,
+    Exception? innerException = null)
+    : NotFoundException($"Poster for limited series with ID {limitedSeriesId} not found", innerException)
+{
+    public Id<LimitedSeries> LimitedSeriesId { get; } = limitedSeriesId;
+}
 
 public sealed class ListNotFoundException(
     Id<CineasteList> listId,

@@ -152,7 +152,7 @@ public class MovieServiceTests(DbFixture dbFixture, ITestOutputHelper output)
 
         Assert.NotNull(dbMovie);
 
-        AssertTitles(request, model);
+        AssertTitles(request, dbMovie);
 
         Assert.Equal(request.Year, dbMovie.Year);
         Assert.Equal(request.IsWatched, dbMovie.IsWatched);

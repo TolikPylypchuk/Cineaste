@@ -12,6 +12,7 @@ public static class ApiEndpoints
             api.MapListEndpoints();
             api.MapMovieEndpoints();
             api.MapSeriesEndpoints();
+            api.MapLimitedSeriesEndpoints();
             api.MapFranchiseEndpoints();
             api.MapPosterEndpoints();
 

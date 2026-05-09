@@ -33,6 +33,9 @@ public static class EndpointExtensions
         public RouteHandlerBuilder ProducesSeriesRequestValidationProblem() =>
             endpoint.ProducesValidationProblem("Series request is invalid");
 
+        public RouteHandlerBuilder ProducesLimitedSeriesRequestValidationProblem() =>
+            endpoint.ProducesValidationProblem("Limited series request is invalid");
+
         public RouteHandlerBuilder ProducesFranchiseRequestValidationProblem() =>
             endpoint.ProducesValidationProblem("Franchise request is invalid");
 
@@ -45,11 +48,14 @@ public static class EndpointExtensions
         public RouteHandlerBuilder ProducesSeriesNotFoundProblem() =>
             endpoint.ProducesProblem(() => new SeriesNotFoundException(Id.Create<Series>()));
 
-        public RouteHandlerBuilder ProducesPeriodNotFoundProblem() =>
+        public RouteHandlerBuilder ProducesSeasonPartNotFoundProblem() =>
             endpoint.ProducesProblem(() => new SeasonPartNotFoundException(Id.Create<SeasonPart>()));
 
         public RouteHandlerBuilder ProducesSpecialEpisodeNotFoundProblem() =>
             endpoint.ProducesProblem(() => new SpecialEpisodeNotFoundException(Id.Create<SpecialEpisode>()));
+
+        public RouteHandlerBuilder ProducesLimitedSeriesNotFoundProblem() =>
+            endpoint.ProducesProblem(() => new LimitedSeriesNotFoundException(Id.Create<LimitedSeries>()));
 
         public RouteHandlerBuilder ProducesFranchiseNotFoundProblem() =>
             endpoint.ProducesProblem(() => new FranchiseNotFoundException(Id.Create<Franchise>()));
@@ -75,6 +81,9 @@ public static class EndpointExtensions
 
         public RouteHandlerBuilder ProducesSpecialEpisodePosterNotFoundProblem() =>
             endpoint.ProducesProblem(() => new SpecialEpisodePosterNotFoundException(Id.Create<SpecialEpisode>()));
+
+        public RouteHandlerBuilder ProducesLimitedSeriesPosterNotFoundProblem() =>
+            endpoint.ProducesProblem(() => new LimitedSeriesPosterNotFoundException(Id.Create<LimitedSeries>()));
 
         public RouteHandlerBuilder ProducesFranchisePosterNotFoundProblem() =>
             endpoint.ProducesProblem(() => new FranchisePosterNotFoundException(Id.Create<Franchise>()));

@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
             services.AddScoped<ListService>();
             services.AddScoped<MovieService>();
             services.AddScoped<SeriesService>();
+            services.AddScoped<LimitedSeriesService>();
             services.AddScoped<FranchiseService>();
 
             services.AddScoped<IPosterProvider, PosterProvider>();

@@ -251,31 +251,31 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
         var dbContext = this.data.CreateDbContext();
         var seriesService = this.CreateSeriesService(dbContext);
 
-        var dbSeries = await this.data.CreateSeries(dbContext);
+        var series = await this.data.CreateSeries(dbContext);
 
         var request = this.CreateSeriesRequest();
 
         // Act
 
         var model = await seriesService.UpdateSeries(
-            this.data.ListId, dbSeries.Id, request.Validated(), TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, request.Validated(), TestContext.Current.CancellationToken);
 
         // Assert
 
-        var series = dbContext.Series.Find(Id.For<Series>(model.Id));
+        var dbSeries = dbContext.Series.Find(Id.For<Series>(model.Id));
 
-        Assert.NotNull(series);
+        Assert.NotNull(dbSeries);
 
-        AssertTitles(request, series);
+        AssertTitles(request, dbSeries);
 
-        Assert.Equal(request.WatchStatus, series.WatchStatus);
-        Assert.Equal(request.ReleaseStatus, series.ReleaseStatus);
-        Assert.Equal(request.KindId, series.Kind.Id.Value);
-        Assert.Equal(request.ImdbId, series.ImdbId?.Value);
-        Assert.Equal(request.RottenTomatoesId, series.RottenTomatoesId?.Value);
+        Assert.Equal(request.WatchStatus, dbSeries.WatchStatus);
+        Assert.Equal(request.ReleaseStatus, dbSeries.ReleaseStatus);
+        Assert.Equal(request.KindId, dbSeries.Kind.Id.Value);
+        Assert.Equal(request.ImdbId, dbSeries.ImdbId?.Value);
+        Assert.Equal(request.RottenTomatoesId, dbSeries.RottenTomatoesId?.Value);
 
         foreach (var (seasonRequest, season) in request.Seasons.OrderBy(s => s.SequenceNumber)
-            .Zip(series.Seasons.OrderBy(s => s.SequenceNumber)))
+            .Zip(dbSeries.Seasons.OrderBy(s => s.SequenceNumber)))
         {
             AssertTitles(seasonRequest, season);
 
@@ -300,7 +300,7 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
         }
 
         foreach (var (episodeRequest, episode) in request.SpecialEpisodes.OrderBy(e => e.SequenceNumber)
-            .Zip(series.SpecialEpisodes.OrderBy(e => e.SequenceNumber)))
+            .Zip(dbSeries.SpecialEpisodes.OrderBy(e => e.SequenceNumber)))
         {
             AssertTitles(episodeRequest, episode);
 

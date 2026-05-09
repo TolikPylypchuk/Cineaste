@@ -239,7 +239,7 @@ public sealed class FranchiseServiceTests(DbFixture dbFixture, ITestOutputHelper
 
         Assert.NotNull(dbFranchise);
 
-        AssertTitles(request, model);
+        AssertTitles(request, dbFranchise);
 
         var actualKindId = dbFranchise.KindSource == FranchiseKindSource.Movie
             ? dbFranchise.MovieKind.Id.Value

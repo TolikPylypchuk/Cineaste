@@ -1,15 +1,17 @@
-namespace Cineaste.Shared.Models.Movie;
+namespace Cineaste.Shared.Models.Series;
 
-public sealed record MovieModel(
+public sealed record LimitedSeriesModel(
     Guid Id,
     ImmutableList<TitleModel> Titles,
     ImmutableList<TitleModel> OriginalTitles,
-    int Year,
-    bool IsWatched,
-    bool IsReleased,
+    ReleasePeriodModel Period,
+    SeriesWatchStatus WatchStatus,
+    SeriesReleaseStatus ReleaseStatus,
+    string Channel,
     ListKindModel Kind,
     string? ImdbId,
     string? RottenTomatoesId,
+    string? RottenTomatoesSubId,
     string ListItemColor,
     int ListSequenceNumber,
     string? PosterUrl,
