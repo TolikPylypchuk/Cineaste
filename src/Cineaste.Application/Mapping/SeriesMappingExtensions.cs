@@ -112,12 +112,12 @@ public static class SeriesMappingExtensions
                 season.WatchStatus,
                 season.ReleaseStatus,
                 season.Channel,
-                [.. season.Periods
-                .Select(period => period.ToPeriodModel(series, posterUrlProvider))
-                .OrderBy(period => period.StartYear)
-                .ThenBy(period => period.StartMonth)
-                .ThenBy(period => period.EndYear)
-                .ThenBy(period => period.EndMonth)]);
+                [.. season.Parts
+                    .Select(part => part.ToSeasonPartModel(series, posterUrlProvider))
+                    .OrderBy(part => part.Period.StartYear)
+                    .ThenBy(part => part.Period.StartMonth)
+                    .ThenBy(part => part.Period.EndYear)
+                    .ThenBy(part => part.Period.EndMonth)]);
 
         private void Update(SeasonRequest request)
         {
@@ -134,49 +134,58 @@ public static class SeriesMappingExtensions
             season.Channel = request.Channel;
             season.SequenceNumber = request.SequenceNumber;
 
-            var requestIds = request.Periods.Select(req => req.Id).WhereValueNotNull().ToHashSet();
+            var requestIds = request.Parts.Select(req => req.Id).WhereValueNotNull().ToHashSet();
 
-            foreach (var period in season.Periods.Where(e => !requestIds.Contains(e.Id.Value)).ToList())
+            foreach (var period in season.Parts.Where(e => !requestIds.Contains(e.Id.Value)).ToList())
             {
-                season.RemovePeriod(period);
+                season.RemovePart(period);
             }
 
-            foreach (var period in season.Periods.Where(e => requestIds.Contains(e.Id.Value)))
+            foreach (var period in season.Parts.Where(e => requestIds.Contains(e.Id.Value)))
             {
-                period.Update(request.Periods.First(req => req.Id == period.Id.Value));
+                period.Update(request.Parts.First(req => req.Id == period.Id.Value));
             }
 
-            foreach (var periodRequest in request.Periods.Where(req => !req.Id.HasValue))
+            foreach (var periodRequest in request.Parts.Where(req => !req.Id.HasValue))
             {
-                season.AddPeriod(periodRequest.ToPeriod());
+                season.AddPart(periodRequest.ToSeasonPart());
             }
         }
     }
 
-    extension(Period period)
+    extension(SeasonPart seasonPart)
     {
-        private PeriodModel ToPeriodModel(Series series, IPosterUrlProvider posterUrlProvider) =>
+        private SeasonPartModel ToSeasonPartModel(Series series, IPosterUrlProvider posterUrlProvider) =>
             new(
-                period.Id.Value,
-                period.StartMonth,
+                seasonPart.Id.Value,
+                seasonPart.Period.ToPeriodModel(),
+                seasonPart.RottenTomatoesId?.Value,
+                posterUrlProvider.GetPosterUrl(series.Id, seasonPart.Id, seasonPart.PosterHash));
+
+        private void Update(SeasonPartRequest request)
+        {
+            seasonPart.Period = new(
+                request.Period.StartMonth.ToMonth(),
+                request.Period.StartYear,
+                request.Period.EndMonth.ToMonth(),
+                request.Period.EndYear,
+                request.Period.IsSingleDayRelease,
+                request.Period.EpisodeCount);
+
+            seasonPart.RottenTomatoesId = RottenTomatoesId.Nullable(request.RottenTomatoesId);
+        }
+    }
+
+    extension(ReleasePeriod period)
+    {
+        private ReleasePeriodModel ToPeriodModel() =>
+            new(
+                period.StartMonth.Value,
                 period.StartYear,
-                period.EndMonth,
+                period.EndMonth.Value,
                 period.EndYear,
                 period.EpisodeCount,
-                period.IsSingleDayRelease,
-                period.RottenTomatoesId?.Value,
-                posterUrlProvider.GetPosterUrl(series.Id, period.Id, period.PosterHash));
-
-        private void Update(PeriodRequest request)
-        {
-            period.StartMonth = request.StartMonth;
-            period.StartYear = request.StartYear;
-            period.EndMonth = request.EndMonth;
-            period.EndYear = request.EndYear;
-            period.IsSingleDayRelease = request.IsSingleDayRelease;
-            period.EpisodeCount = request.EpisodeCount;
-            period.RottenTomatoesId = RottenTomatoesId.Nullable(request.RottenTomatoesId);
-        }
+                period.IsSingleDayRelease);
     }
 
     extension(SpecialEpisode episode)
@@ -190,7 +199,7 @@ public static class SeriesMappingExtensions
                 episode.IsWatched,
                 episode.IsReleased,
                 episode.Channel,
-                episode.Month,
+                episode.Month.Value,
                 episode.Year,
                 episode.RottenTomatoesId?.Value,
                 posterUrlProvider.GetPosterUrl(series.Id, episode.Id, episode.PosterHash));
@@ -205,7 +214,7 @@ public static class SeriesMappingExtensions
                 request.OriginalTitles.OrderBy(title => title.SequenceNumber).Select(title => title.Name),
                 isOriginal: true);
 
-            episode.Month = request.Month;
+            episode.Month = request.Month.ToMonth();
             episode.Year = request.Year;
             episode.IsWatched = request.IsWatched;
             episode.IsReleased = request.IsReleased;
@@ -225,23 +234,28 @@ public static class SeriesMappingExtensions
                 request.ReleaseStatus,
                 request.Channel,
                 request.SequenceNumber,
-                request.Periods.Select(ToPeriod));
+                request.Parts.Select(ToSeasonPart));
     }
 
-    extension(PeriodRequest request)
+    extension(SeasonPartRequest request)
     {
-        private Period ToPeriod() =>
-            new(
-                Id.ForNullable<Period>(request.Id),
-                request.StartMonth,
-                request.StartYear,
-                request.EndMonth,
-                request.EndYear,
-                request.IsSingleDayRelease,
-                request.EpisodeCount)
+        private SeasonPart ToSeasonPart() =>
+            new(Id.ForNullable<SeasonPart>(request.Id), request.Period.ToReleasePeriod())
             {
                 RottenTomatoesId = RottenTomatoesId.Nullable(request.RottenTomatoesId)
             };
+    }
+
+    extension(ReleasePeriodRequest request)
+    {
+        private ReleasePeriod ToReleasePeriod() =>
+            new(
+                request.StartMonth.ToMonth(),
+                request.StartYear,
+                request.EndMonth.ToMonth(),
+                request.EndYear,
+                request.IsSingleDayRelease,
+                request.EpisodeCount);
     }
 
     extension(SpecialEpisodeRequest request)
@@ -250,7 +264,7 @@ public static class SeriesMappingExtensions
             new(
                 Id.ForNullable<SpecialEpisode>(request.Id),
                 request.ToTitles(),
-                request.Month,
+                request.Month.ToMonth(),
                 request.Year,
                 request.IsWatched,
                 request.IsReleased,

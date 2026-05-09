@@ -1,6 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public sealed class PeriodFormModel : FormModelBase<PeriodRequest, PeriodModel>
+public sealed class PeriodFormModel : FormModelBase<SeasonPartRequest, SeasonPartModel>
 {
     private readonly DateTime defaultDate;
 
@@ -40,32 +40,33 @@ public sealed class PeriodFormModel : FormModelBase<PeriodRequest, PeriodModel>
         this.FinishInitialization();
     }
 
-    public override PeriodRequest CreateRequest() =>
+    public override SeasonPartRequest CreateRequest() =>
         new(
             this.BackingModel?.Id,
-            this.StartMonth,
-            this.StartYear,
-            this.EndMonth,
-            this.EndYear,
-            this.EpisodeCount,
-            this.IsSingleDayRelease,
+            new ReleasePeriodRequest(
+                this.StartMonth,
+                this.StartYear,
+                this.EndMonth,
+                this.EndYear,
+                this.EpisodeCount,
+                this.IsSingleDayRelease),
             this.RottenTomatoesId);
 
     protected override void CopyFromModel()
     {
-        var period = this.BackingModel;
+        var part = this.BackingModel;
 
-        this.StartDate = period?.StartMonth is not null && period?.StartYear is not null
-            ? new DateTime(period.StartYear, period.StartMonth, 1)
+        this.StartDate = part?.Period.StartMonth is not null && part?.Period.StartYear is not null
+            ? new DateTime(part.Period.StartYear, part.Period.StartMonth, 1)
             : this.defaultDate;
 
-        this.EndDate = period?.EndMonth is not null && period?.EndYear is not null
-            ? new DateTime(period.EndYear, period.EndMonth, 1)
+        this.EndDate = part?.Period.EndMonth is not null && part?.Period.EndYear is not null
+            ? new DateTime(part.Period.EndYear, part.Period.EndMonth, 1)
             : this.defaultDate;
 
-        this.EpisodeCount = period?.EpisodeCount ?? 1;
-        this.IsSingleDayRelease = period?.IsSingleDayRelease ?? false;
+        this.EpisodeCount = part?.Period.EpisodeCount ?? 1;
+        this.IsSingleDayRelease = part?.Period.IsSingleDayRelease ?? false;
 
-        this.RottenTomatoesId = period?.RottenTomatoesId ?? String.Empty;
+        this.RottenTomatoesId = part?.RottenTomatoesId ?? String.Empty;
     }
 }

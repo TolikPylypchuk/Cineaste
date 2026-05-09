@@ -10,7 +10,7 @@ public sealed record SeasonRequest(
     SeasonWatchStatus WatchStatus,
     SeasonReleaseStatus ReleaseStatus,
     string Channel,
-    ImmutableValueList<PeriodRequest> Periods) : IValidatable<SeasonRequest>, ITitledRequest
+    ImmutableValueList<SeasonPartRequest> Parts) : IValidatable<SeasonRequest>, ITitledRequest
 {
     public static IValidator<SeasonRequest> Validator { get; } = new SeasonRequestValidator();
 }

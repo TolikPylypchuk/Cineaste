@@ -137,6 +137,8 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
             .Include(franchise => franchise.Children)
                 .ThenInclude(item => item.Series)
             .Include(franchise => franchise.Children)
+                .ThenInclude(item => item.LimitedSeries)
+            .Include(franchise => franchise.Children)
                 .ThenInclude(item => item.Franchise)
             .SingleOrDefaultAsync(token)
             ?? throw new FranchiseNotFoundException(parentFranchiseId);
@@ -148,6 +150,7 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
         var itemIdPredicate = childItem.Select<Expression<Func<ListItem, bool>>>(
             movie => item => item.Movie!.Id == movie.Id,
             series => item => item.Series!.Id == series.Id,
+            limitedSeries => item => item.LimitedSeries!.Id == limitedSeries.Id,
             franchise => item => item.Franchise!.Id == franchise.Id);
 
         var item = await this.dbContext.ListItems
@@ -198,6 +201,9 @@ file static class Extensions
                         .ThenInclude(item => item!.ParentFranchise)
                 .Include(item => item.Franchise)
                     .ThenInclude(franchise => franchise!.FranchiseItem)
+                        .ThenInclude(item => item!.ParentFranchise)
+                .Include(item => item.LimitedSeries)
+                    .ThenInclude(limitedSeries => limitedSeries!.FranchiseItem)
                         .ThenInclude(item => item!.ParentFranchise);
     }
 }

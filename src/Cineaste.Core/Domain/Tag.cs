@@ -2,48 +2,29 @@ namespace Cineaste.Core.Domain;
 
 public sealed record TagContainer
 {
-    public Tag Tag { get; init; } = null!;
+    public required Tag Tag { get; init; }
 }
 
 public sealed class Tag : Entity<Tag>
 {
-    private string name;
-    private TagCategory category;
-    private string? description;
-    private Color color;
-
     private readonly List<Tag> impliedTags;
     private readonly List<Tag> implyingTags;
 
     public string Name
     {
-        get => this.name;
-
-        [MemberNotNull(nameof(name))]
-        set => this.name = Require.NotBlank(value);
+        get;
+        set => field = Require.NotBlank(value);
     }
 
-    public TagCategory Category
-    {
-        get => this.category;
-
-        [MemberNotNull(nameof(category))]
-        set => this.category = Require.NotNull(value);
-    }
+    public TagCategory Category { get; set; }
 
     public string? Description
     {
-        get => this.description;
-        set => this.description = String.IsNullOrEmpty(value) ? null : value.Trim();
+        get;
+        set => field = String.IsNullOrEmpty(value) ? null : value.Trim();
     }
 
-    public Color Color
-    {
-        get => this.color;
-
-        [MemberNotNull(nameof(color))]
-        set => this.color = Require.NotNull(value);
-    }
+    public Color Color { get; set; }
 
     public bool IsApplicableToMovies { get; set; } = true;
     public bool IsApplicableToSeries { get; set; } = true;

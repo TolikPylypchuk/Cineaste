@@ -9,7 +9,7 @@ public interface IPosterUrlProvider
     string? GetPosterUrl(Id<Series> seriesId, PosterHash? posterHash);
 
     [return: NotNullIfNotNull(nameof(posterHash))]
-    string? GetPosterUrl(Id<Series> seriesId, Id<Period> periodId, PosterHash? posterHash);
+    string? GetPosterUrl(Id<Series> seriesId, Id<SeasonPart> periodId, PosterHash? posterHash);
 
     [return: NotNullIfNotNull(nameof(posterHash))]
     string? GetPosterUrl(Id<Series> seriesId, Id<SpecialEpisode> episodeId, PosterHash? posterHash);

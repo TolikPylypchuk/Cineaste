@@ -42,16 +42,18 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
             Assert.Equal(season.ReleaseStatus, seasonModel.ReleaseStatus);
             Assert.Equal(season.Channel, seasonModel.Channel);
 
-            foreach (var (period, periodModel) in season.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth)
-                .Zip(seasonModel.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth)))
+            foreach (var (part, partModel) in season.Parts
+                .OrderBy(p => p.Period.StartYear)
+                .ThenBy(p => p.Period.StartMonth)
+                .Zip(seasonModel.Parts.OrderBy(p => p.Period.StartYear).ThenBy(p => p.Period.StartMonth)))
             {
-                Assert.Equal(period.StartMonth, periodModel.StartMonth);
-                Assert.Equal(period.StartYear, periodModel.StartYear);
-                Assert.Equal(period.EndMonth, periodModel.EndMonth);
-                Assert.Equal(period.EndYear, periodModel.EndYear);
-                Assert.Equal(period.EpisodeCount, periodModel.EpisodeCount);
-                Assert.Equal(period.IsSingleDayRelease, periodModel.IsSingleDayRelease);
-                Assert.Equal(period.RottenTomatoesId?.Value, periodModel.RottenTomatoesId);
+                Assert.Equal(part.Period.StartMonth.Value, partModel.Period.StartMonth);
+                Assert.Equal(part.Period.StartYear, partModel.Period.StartYear);
+                Assert.Equal(part.Period.EndMonth.Value, partModel.Period.EndMonth);
+                Assert.Equal(part.Period.EndYear, partModel.Period.EndYear);
+                Assert.Equal(part.Period.EpisodeCount, partModel.Period.EpisodeCount);
+                Assert.Equal(part.Period.IsSingleDayRelease, partModel.Period.IsSingleDayRelease);
+                Assert.Equal(part.RottenTomatoesId?.Value, partModel.RottenTomatoesId);
             }
         }
 
@@ -64,7 +66,7 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
             Assert.Equal(episode.IsWatched, episodeModel.IsWatched);
             Assert.Equal(episode.IsReleased, episodeModel.IsReleased);
             Assert.Equal(episode.Channel, episodeModel.Channel);
-            Assert.Equal(episode.Month, episodeModel.Month);
+            Assert.Equal(episode.Month.Value, episodeModel.Month);
             Assert.Equal(episode.Year, episodeModel.Year);
             Assert.Equal(episode.RottenTomatoesId?.Value, episodeModel.RottenTomatoesId);
         }
@@ -127,18 +129,18 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
             Assert.Equal(seasonRequest.ReleaseStatus, season.ReleaseStatus);
             Assert.Equal(seasonRequest.Channel, season.Channel);
 
-            foreach (var (periodRequest, period) in seasonRequest.Periods
-                .OrderBy(p => p.StartYear)
-                .ThenBy(p => p.StartMonth)
-                .Zip(season.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth)))
+            foreach (var (partRequest, part) in seasonRequest.Parts
+                .OrderBy(p => p.Period.StartYear)
+                .ThenBy(p => p.Period.StartMonth)
+                .Zip(season.Parts.OrderBy(p => p.Period.StartYear).ThenBy(p => p.Period.StartMonth)))
             {
-                Assert.Equal(periodRequest.StartMonth, period.StartMonth);
-                Assert.Equal(periodRequest.StartYear, period.StartYear);
-                Assert.Equal(periodRequest.EndMonth, period.EndMonth);
-                Assert.Equal(periodRequest.EndYear, period.EndYear);
-                Assert.Equal(periodRequest.EpisodeCount, period.EpisodeCount);
-                Assert.Equal(periodRequest.IsSingleDayRelease, period.IsSingleDayRelease);
-                Assert.Equal(periodRequest.RottenTomatoesId, period.RottenTomatoesId?.Value);
+                Assert.Equal(partRequest.Period.StartMonth, part.Period.StartMonth.Value);
+                Assert.Equal(partRequest.Period.StartYear, part.Period.StartYear);
+                Assert.Equal(partRequest.Period.EndMonth, part.Period.EndMonth.Value);
+                Assert.Equal(partRequest.Period.EndYear, part.Period.EndYear);
+                Assert.Equal(partRequest.Period.EpisodeCount, part.Period.EpisodeCount);
+                Assert.Equal(partRequest.Period.IsSingleDayRelease, part.Period.IsSingleDayRelease);
+                Assert.Equal(partRequest.RottenTomatoesId, part.RottenTomatoesId?.Value);
             }
         }
 
@@ -151,7 +153,7 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
             Assert.Equal(episodeRequest.IsWatched, episode.IsWatched);
             Assert.Equal(episodeRequest.IsReleased, episode.IsReleased);
             Assert.Equal(episodeRequest.Channel, episode.Channel);
-            Assert.Equal(episodeRequest.Month, episode.Month);
+            Assert.Equal(episodeRequest.Month, episode.Month.Value);
             Assert.Equal(episodeRequest.Year, episode.Year);
             Assert.Equal(episodeRequest.RottenTomatoesId, episode.RottenTomatoesId?.Value);
         }
@@ -192,18 +194,18 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
             Assert.Equal(seasonRequest.ReleaseStatus, seasonModel.ReleaseStatus);
             Assert.Equal(seasonRequest.Channel, seasonModel.Channel);
 
-            foreach (var (periodRequest, periodModel) in seasonRequest.Periods
-                .OrderBy(p => p.StartYear)
-                .ThenBy(p => p.StartMonth)
-                .Zip(seasonModel.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth)))
+            foreach (var (partRequest, partModel) in seasonRequest.Parts
+                .OrderBy(p => p.Period.StartYear)
+                .ThenBy(p => p.Period.StartMonth)
+                .Zip(seasonModel.Parts.OrderBy(p => p.Period.StartYear).ThenBy(p => p.Period.StartMonth)))
             {
-                Assert.Equal(periodRequest.StartMonth, periodModel.StartMonth);
-                Assert.Equal(periodRequest.StartYear, periodModel.StartYear);
-                Assert.Equal(periodRequest.EndMonth, periodModel.EndMonth);
-                Assert.Equal(periodRequest.EndYear, periodModel.EndYear);
-                Assert.Equal(periodRequest.EpisodeCount, periodModel.EpisodeCount);
-                Assert.Equal(periodRequest.IsSingleDayRelease, periodModel.IsSingleDayRelease);
-                Assert.Equal(periodRequest.RottenTomatoesId, periodModel.RottenTomatoesId);
+                Assert.Equal(partRequest.Period.StartMonth, partModel.Period.StartMonth);
+                Assert.Equal(partRequest.Period.StartYear, partModel.Period.StartYear);
+                Assert.Equal(partRequest.Period.EndMonth, partModel.Period.EndMonth);
+                Assert.Equal(partRequest.Period.EndYear, partModel.Period.EndYear);
+                Assert.Equal(partRequest.Period.EpisodeCount, partModel.Period.EpisodeCount);
+                Assert.Equal(partRequest.Period.IsSingleDayRelease, partModel.Period.IsSingleDayRelease);
+                Assert.Equal(partRequest.RottenTomatoesId, partModel.RottenTomatoesId);
             }
         }
 
@@ -282,17 +284,17 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
             Assert.Equal(seasonRequest.ReleaseStatus, season.ReleaseStatus);
             Assert.Equal(seasonRequest.Channel, season.Channel);
 
-            foreach (var (periodRequest, period) in seasonRequest.Periods
-                .OrderBy(p => p.StartYear)
-                .ThenBy(p => p.StartMonth)
-                .Zip(season.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth)))
+            foreach (var (periodRequest, period) in seasonRequest.Parts
+                .OrderBy(p => p.Period.StartYear)
+                .ThenBy(p => p.Period.StartMonth)
+                .Zip(season.Parts.OrderBy(p => p.Period.StartYear).ThenBy(p => p.Period.StartMonth)))
             {
-                Assert.Equal(periodRequest.StartMonth, period.StartMonth);
-                Assert.Equal(periodRequest.StartYear, period.StartYear);
-                Assert.Equal(periodRequest.EndMonth, period.EndMonth);
-                Assert.Equal(periodRequest.EndYear, period.EndYear);
-                Assert.Equal(periodRequest.EpisodeCount, period.EpisodeCount);
-                Assert.Equal(periodRequest.IsSingleDayRelease, period.IsSingleDayRelease);
+                Assert.Equal(periodRequest.Period.StartMonth, period.Period.StartMonth.Value);
+                Assert.Equal(periodRequest.Period.StartYear, period.Period.StartYear);
+                Assert.Equal(periodRequest.Period.EndMonth, period.Period.EndMonth.Value);
+                Assert.Equal(periodRequest.Period.EndYear, period.Period.EndYear);
+                Assert.Equal(periodRequest.Period.EpisodeCount, period.Period.EpisodeCount);
+                Assert.Equal(periodRequest.Period.IsSingleDayRelease, period.Period.IsSingleDayRelease);
                 Assert.Equal(periodRequest.RottenTomatoesId, period.RottenTomatoesId?.Value);
             }
         }
@@ -306,7 +308,7 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
             Assert.Equal(episodeRequest.IsWatched, episode.IsWatched);
             Assert.Equal(episodeRequest.IsReleased, episode.IsReleased);
             Assert.Equal(episodeRequest.Channel, episode.Channel);
-            Assert.Equal(episodeRequest.Month, episode.Month);
+            Assert.Equal(episodeRequest.Month, episode.Month.Value);
             Assert.Equal(episodeRequest.Year, episode.Year);
             Assert.Equal(episodeRequest.RottenTomatoesId, episode.RottenTomatoesId?.Value);
         }
@@ -349,18 +351,18 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
             Assert.Equal(seasonRequest.ReleaseStatus, seasonModel.ReleaseStatus);
             Assert.Equal(seasonRequest.Channel, seasonModel.Channel);
 
-            foreach (var (periodRequest, periodModel) in seasonRequest.Periods
-                .OrderBy(p => p.StartYear)
-                .ThenBy(p => p.StartMonth)
-                .Zip(seasonModel.Periods.OrderBy(p => p.StartYear).ThenBy(p => p.StartMonth)))
+            foreach (var (partRequest, partModel) in seasonRequest.Parts
+                .OrderBy(p => p.Period.StartYear)
+                .ThenBy(p => p.Period.StartMonth)
+                .Zip(seasonModel.Parts.OrderBy(p => p.Period.StartYear).ThenBy(p => p.Period.StartMonth)))
             {
-                Assert.Equal(periodRequest.StartMonth, periodModel.StartMonth);
-                Assert.Equal(periodRequest.StartYear, periodModel.StartYear);
-                Assert.Equal(periodRequest.EndMonth, periodModel.EndMonth);
-                Assert.Equal(periodRequest.EndYear, periodModel.EndYear);
-                Assert.Equal(periodRequest.EpisodeCount, periodModel.EpisodeCount);
-                Assert.Equal(periodRequest.IsSingleDayRelease, periodModel.IsSingleDayRelease);
-                Assert.Equal(periodRequest.RottenTomatoesId, periodModel.RottenTomatoesId);
+                Assert.Equal(partRequest.Period.StartMonth, partModel.Period.StartMonth);
+                Assert.Equal(partRequest.Period.StartYear, partModel.Period.StartYear);
+                Assert.Equal(partRequest.Period.EndMonth, partModel.Period.EndMonth);
+                Assert.Equal(partRequest.Period.EndYear, partModel.Period.EndYear);
+                Assert.Equal(partRequest.Period.EpisodeCount, partModel.Period.EpisodeCount);
+                Assert.Equal(partRequest.Period.IsSingleDayRelease, partModel.Period.IsSingleDayRelease);
+                Assert.Equal(partRequest.RottenTomatoesId, partModel.RottenTomatoesId);
             }
         }
 
@@ -463,7 +465,8 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
             SeasonWatchStatus.NotWatched,
             SeasonReleaseStatus.Finished,
             "Test",
-            ImmutableList.Create(new PeriodRequest(null, 1, 2000 + num, 2, 2000 + num, 10, false, null)).AsValue());
+            ImmutableList.Create(new SeasonPartRequest(
+                null, new(1, 2000 + num, 2, 2000 + num, 10, false), null)).AsValue());
 
     private SpecialEpisodeRequest CreateSpecialEpisodeRequest(int num) =>
         new(

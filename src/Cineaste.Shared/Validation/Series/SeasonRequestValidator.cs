@@ -35,24 +35,25 @@ public sealed class SeasonRequestValidator : TitledRequestValidator<SeasonReques
             .MaximumLength(MaxNameLength)
             .WithErrorCode(this.ErrorCode(req => req.Channel, TooLong));
 
-        this.RuleFor(req => req.Periods)
+        this.RuleFor(req => req.Parts)
             .NotEmpty()
-            .WithErrorCode(this.ErrorCode(req => req.Periods, Empty))
+            .WithErrorCode(this.ErrorCode(req => req.Parts, Empty))
             .Must(NotOverlap)
-            .WithErrorCode(this.ErrorCode(req => req.Periods, Overlap));
+            .WithErrorCode(this.ErrorCode(req => req.Parts, Overlap));
 
-        this.RuleForEach(req => req.Periods)
-            .SetValidator(PeriodRequest.Validator);
+        this.RuleForEach(req => req.Parts)
+            .SetValidator(SeasonPartRequest.Validator);
     }
 
-    private static bool NotOverlap(IEnumerable<PeriodRequest> periods) =>
-        periods
-            .OrderBy(period => period.StartYear)
-            .ThenBy(period => period.StartMonth)
-            .ThenBy(period => period.EndYear)
-            .ThenBy(period => period.EndMonth)
+    private static bool NotOverlap(IEnumerable<SeasonPartRequest> seasonParts) =>
+        seasonParts
+            .OrderBy(period => period.Period.StartYear)
+            .ThenBy(period => period.Period.StartMonth)
+            .ThenBy(period => period.Period.EndYear)
+            .ThenBy(period => period.Period.EndMonth)
             .Buffer(2, 1)
             .Where(periods => periods.Count == 2)
-            .All(periods => periods[0].EndYear < periods[1].StartYear ||
-                periods[0].EndYear == periods[1].StartYear && periods[0].EndMonth <= periods[1].StartMonth);
+            .All(parts => parts[0].Period.EndYear < parts[1].Period.StartYear ||
+                parts[0].Period.EndYear == parts[1].Period.StartYear &&
+                parts[0].Period.EndMonth <= parts[1].Period.StartMonth);
 }

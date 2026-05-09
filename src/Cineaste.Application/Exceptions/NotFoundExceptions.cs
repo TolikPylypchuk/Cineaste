@@ -71,20 +71,20 @@ public sealed class SeriesPosterNotFoundException(
     public Id<Series> SeriesId { get; } = seriesId;
 }
 
-public sealed class PeriodNotFoundException(
-    Id<Period> periodId,
+public sealed class SeasonPartNotFoundException(
+    Id<SeasonPart> partId,
     Exception? innerException = null)
-    : NotFoundException($"Period with ID {periodId} not found", innerException)
+    : NotFoundException($"Season part with ID {partId} not found", innerException)
 {
-    public Id<Period> PeriodId { get; } = periodId;
+    public Id<SeasonPart> PartId { get; } = partId;
 }
 
 public sealed class SeasonPosterNotFoundException(
-    Id<Period> periodId,
+    Id<SeasonPart> partId,
     Exception? innerException = null)
-    : NotFoundException($"Poster for period with ID {periodId} not found", innerException)
+    : NotFoundException($"Poster for season part with ID {partId} not found", innerException)
 {
-    public Id<Period> PeriodId { get; } = periodId;
+    public Id<SeasonPart> PartId { get; } = partId;
 }
 
 public sealed class SpecialEpisodeNotFoundException(
@@ -128,11 +128,13 @@ public sealed class FranchiseItemNotFoundException(
     private static Guid GetItemId(FranchiseItem item) => item.Select(
             movie => movie.Id.Value,
             series => series.Id.Value,
+            limitedSeries => limitedSeries.Id.Value,
             franchise => franchise.Id.Value);
 
     private static FranchiseItemType GetItemType(FranchiseItem item) => item.Select(
         movie => FranchiseItemType.Movie,
         series => FranchiseItemType.Series,
+        series => FranchiseItemType.LimitedSeries,
         franchise => FranchiseItemType.Franchise);
 }
 

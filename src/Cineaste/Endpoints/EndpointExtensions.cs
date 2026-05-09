@@ -46,7 +46,7 @@ public static class EndpointExtensions
             endpoint.ProducesProblem(() => new SeriesNotFoundException(Id.Create<Series>()));
 
         public RouteHandlerBuilder ProducesPeriodNotFoundProblem() =>
-            endpoint.ProducesProblem(() => new PeriodNotFoundException(Id.Create<Period>()));
+            endpoint.ProducesProblem(() => new SeasonPartNotFoundException(Id.Create<SeasonPart>()));
 
         public RouteHandlerBuilder ProducesSpecialEpisodeNotFoundProblem() =>
             endpoint.ProducesProblem(() => new SpecialEpisodeNotFoundException(Id.Create<SpecialEpisode>()));
@@ -71,7 +71,7 @@ public static class EndpointExtensions
             endpoint.ProducesProblem(() => new SeriesPosterNotFoundException(Id.Create<Series>()));
 
         public RouteHandlerBuilder ProducesSeasonPosterNotFoundProblem() =>
-            endpoint.ProducesProblem(() => new SeasonPosterNotFoundException(Id.Create<Period>()));
+            endpoint.ProducesProblem(() => new SeasonPosterNotFoundException(Id.Create<SeasonPart>()));
 
         public RouteHandlerBuilder ProducesSpecialEpisodePosterNotFoundProblem() =>
             endpoint.ProducesProblem(() => new SpecialEpisodePosterNotFoundException(Id.Create<SpecialEpisode>()));

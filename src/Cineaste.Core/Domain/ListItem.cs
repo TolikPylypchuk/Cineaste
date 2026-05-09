@@ -19,6 +19,7 @@ public sealed partial class ListItem : Entity<ListItem>
 
     public Movie? Movie { get; private set; }
     public Series? Series { get; private set; }
+    public LimitedSeries? LimitedSeries { get; private set; }
     public Franchise? Franchise { get; private set; }
 
     public string NormalizedTitle { get; private set; }
@@ -67,6 +68,16 @@ public sealed partial class ListItem : Entity<ListItem>
 
         this.SetProperties(series);
         series.ListItem = this;
+    }
+
+    public ListItem(Id<ListItem> id, CineasteList list, LimitedSeries limitedSeries)
+        : base(id)
+    {
+        this.List = list;
+        this.LimitedSeries = limitedSeries;
+
+        this.SetProperties(limitedSeries);
+        limitedSeries.ListItem = this;
     }
 
     public ListItem(Id<ListItem> id, CineasteList list, Franchise franchise)
@@ -122,6 +133,31 @@ public sealed partial class ListItem : Entity<ListItem>
 
         this.StartYear = series.StartYear;
         this.EndYear = series.EndYear;
+
+        this.ActiveColor = series.ActiveColor;
+
+        this.IsStandalone = series.FranchiseItem is null;
+        this.IsShown = true;
+    }
+
+    [MemberNotNull(
+        nameof(NormalizedShortTitle),
+        nameof(NormalizedShortOriginalTitle),
+        nameof(NormalizedTitle),
+        nameof(NormalizedOriginalTitle))]
+    public void SetProperties(LimitedSeries series)
+    {
+        this.NormalizedShortTitle = this.Normalize(series.Title.Name);
+        this.NormalizedShortOriginalTitle = this.Normalize(series.OriginalTitle.Name);
+
+        this.NormalizedTitle = this.CreateFullTitle(
+            series.FranchiseItem, this.NormalizedShortTitle, f => f.Title);
+
+        this.NormalizedOriginalTitle = this.CreateFullTitle(
+            series.FranchiseItem, this.NormalizedShortOriginalTitle, f => f.OriginalTitle);
+
+        this.StartYear = series.Period.StartYear;
+        this.EndYear = series.Period.EndYear;
 
         this.ActiveColor = series.ActiveColor;
 

@@ -5,7 +5,7 @@ internal sealed class SpecialEpisodeTypeConfiguration : IEntityTypeConfiguration
     public void Configure(EntityTypeBuilder<SpecialEpisode> episode)
     {
         episode.HasKey(e => e.Id);
-        episode.HasTitles(e => e.AllTitles, "SpecialEpisodeTitles");
+        episode.HasTitles("SpecialEpisodeTitles");
 
         episode.Property(e => e.PosterHash)
             .IsFixedLength();
@@ -15,10 +15,5 @@ internal sealed class SpecialEpisodeTypeConfiguration : IEntityTypeConfiguration
 
         episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_ChannelNotEmpty", "[Channel] <> ''"));
         episode.ToTable(t => t.HasCheckConstraint("CH_SpecialEpisodes_SequenceNumberPositive", "[SequenceNumber] > 0"));
-
-        episode.Ignore(e => e.Titles);
-        episode.Ignore(e => e.OriginalTitles);
-        episode.Ignore(e => e.Title);
-        episode.Ignore(e => e.OriginalTitle);
     }
 }

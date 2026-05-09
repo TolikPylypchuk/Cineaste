@@ -60,7 +60,7 @@ public static class SetSeasonPosterReducers
                 Seasons = [.. series.Seasons.Select(season =>
                     season with
                     {
-                        Periods = [.. season.Periods.Select(period =>
+                        Parts = [.. season.Parts.Select(period =>
                             period.Id == periodId ? period with { PosterUrl = posterUrl } : period)]
                     })]
             }

@@ -5,7 +5,7 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
     public void Configure(EntityTypeBuilder<Series> series)
     {
         series.HasKey(s => s.Id);
-        series.HasTitles(s => s.AllTitles, "SeriesTitles");
+        series.HasTitles("SeriesTitles");
 
         series.HasMany(s => s.Seasons)
             .WithOne()
@@ -33,10 +33,6 @@ internal sealed class SeriesTypeConfiguration : IEntityTypeConfiguration<Series>
         series.HasTags(s => s.Tags, "SeriesTags");
         series.HasFranchiseItem(s => s.FranchiseItem, fi => fi.Series);
 
-        series.Ignore(s => s.Titles);
-        series.Ignore(s => s.OriginalTitles);
-        series.Ignore(s => s.Title);
-        series.Ignore(s => s.OriginalTitle);
         series.Ignore(s => s.StartYear);
         series.Ignore(s => s.EndYear);
     }

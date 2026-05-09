@@ -363,6 +363,49 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LimitedSeries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WatchStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReleaseStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Channel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    KindId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImdbId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RottenTomatoesSubId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, nullable: true),
+                    EndMonth = table.Column<int>(type: "int", nullable: false),
+                    EndYear = table.Column<int>(type: "int", nullable: false),
+                    EpisodeCount = table.Column<int>(type: "int", nullable: false),
+                    IsSingleDayRelease = table.Column<bool>(type: "bit", nullable: false),
+                    StartMonth = table.Column<int>(type: "int", nullable: false),
+                    StartYear = table.Column<int>(type: "int", nullable: false),
+                    FranchiseItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LimitedSeries", x => x.Id);
+                    table.CheckConstraint("CH__EndMonthValid", "[StartMonth] >= 1 AND [StartMonth] <= 12");
+                    table.CheckConstraint("CH__EndYearPositive", "[EndYear] > 0");
+                    table.CheckConstraint("CH__EpisodeCountPositive", "[EpisodeCount] > 0");
+                    table.CheckConstraint("CH__PeriodValid", "DATEFROMPARTS([StartYear], [StartMonth], 1) <= DATEFROMPARTS([EndYear], [EndMonth], 1)");
+                    table.CheckConstraint("CH__StartMonthValid", "[StartMonth] >= 1 AND [StartMonth] <= 12");
+                    table.CheckConstraint("CH__StartYearPositive", "[StartYear] > 0");
+                    table.ForeignKey(
+                        name: "FK_LimitedSeries_FranchiseItems_FranchiseItemId",
+                        column: x => x.FranchiseItemId,
+                        principalTable: "FranchiseItems",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_LimitedSeries_SeriesKinds_KindId",
+                        column: x => x.KindId,
+                        principalTable: "SeriesKinds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Movies",
                 columns: table => new
                 {
@@ -469,6 +512,78 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LimitedSeriesPosters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LimitedSeriesPosters", x => x.Id);
+                    table.CheckConstraint("CH_LimitedSeriesPosters_ContentTypeNotEmpty", "[ContentType] <> ''");
+                    table.CheckConstraint("CH_LimitedSeriesPosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
+                    table.ForeignKey(
+                        name: "FK_LimitedSeriesPosters_LimitedSeries_SeriesId",
+                        column: x => x.SeriesId,
+                        principalTable: "LimitedSeries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LimitedSeriesTags",
+                columns: table => new
+                {
+                    LimitedSeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LimitedSeriesTags", x => new { x.LimitedSeriesId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_LimitedSeriesTags_LimitedSeries_LimitedSeriesId",
+                        column: x => x.LimitedSeriesId,
+                        principalTable: "LimitedSeries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LimitedSeriesTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LimitedSeriesTitles",
+                columns: table => new
+                {
+                    LimitedSeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
+                    IsOriginal = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LimitedSeriesTitles", x => new { x.LimitedSeriesId, x.Id });
+                    table.CheckConstraint("CH_LimitedSeriesTitles_NameNotEmpty", "[Name] <> ''");
+                    table.CheckConstraint("CH_LimitedSeriesTitles_SequenceNumberPositive", "[SequenceNumber] > 0");
+                    table.ForeignKey(
+                        name: "FK_LimitedSeriesTitles_LimitedSeries_LimitedSeriesId",
+                        column: x => x.LimitedSeriesId,
+                        principalTable: "LimitedSeries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MoviePosters",
                 columns: table => new
                 {
@@ -548,6 +663,7 @@ namespace Cineaste.Persistence.Migrations
                     ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MovieId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LimitedSeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     FranchiseId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     NormalizedTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NormalizedOriginalTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -568,6 +684,11 @@ namespace Cineaste.Persistence.Migrations
                         name: "FK_ListItems_Franchises_FranchiseId",
                         column: x => x.FranchiseId,
                         principalTable: "Franchises",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ListItems_LimitedSeries_LimitedSeriesId",
+                        column: x => x.LimitedSeriesId,
+                        principalTable: "LimitedSeries",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ListItems_Lists_ListId",
@@ -714,31 +835,31 @@ namespace Cineaste.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Periods",
+                name: "SeasonPeriods",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartMonth = table.Column<int>(type: "int", nullable: false),
-                    StartYear = table.Column<int>(type: "int", nullable: false),
-                    EndMonth = table.Column<int>(type: "int", nullable: false),
-                    EndYear = table.Column<int>(type: "int", nullable: false),
-                    IsSingleDayRelease = table.Column<bool>(type: "bit", nullable: false),
-                    EpisodeCount = table.Column<int>(type: "int", nullable: false),
                     RottenTomatoesId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PosterHash = table.Column<string>(type: "nchar(64)", fixedLength: true, nullable: true),
-                    SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EndMonth = table.Column<int>(type: "int", nullable: false),
+                    EndYear = table.Column<int>(type: "int", nullable: false),
+                    EpisodeCount = table.Column<int>(type: "int", nullable: false),
+                    IsSingleDayRelease = table.Column<bool>(type: "bit", nullable: false),
+                    StartMonth = table.Column<int>(type: "int", nullable: false),
+                    StartYear = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Periods", x => x.Id);
-                    table.CheckConstraint("CH_Periods_EndMonthValid", "[StartMonth] >= 1 AND [StartMonth] <= 12");
-                    table.CheckConstraint("CH_Periods_EndYearPositive", "[EndYear] > 0");
-                    table.CheckConstraint("CH_Periods_EpisodeCountPositive", "[EpisodeCount] > 0");
-                    table.CheckConstraint("CH_Periods_PeriodValid", "DATEFROMPARTS([StartYear], [StartMonth], 1) <= DATEFROMPARTS([EndYear], [EndMonth], 1)");
-                    table.CheckConstraint("CH_Periods_StartMonthValid", "[StartMonth] >= 1 AND [StartMonth] <= 12");
-                    table.CheckConstraint("CH_Periods_StartYearPositive", "[StartYear] > 0");
+                    table.PrimaryKey("PK_SeasonPeriods", x => x.Id);
+                    table.CheckConstraint("CH__EndMonthValid1", "[StartMonth] >= 1 AND [StartMonth] <= 12");
+                    table.CheckConstraint("CH__EndYearPositive1", "[EndYear] > 0");
+                    table.CheckConstraint("CH__EpisodeCountPositive1", "[EpisodeCount] > 0");
+                    table.CheckConstraint("CH__PeriodValid1", "DATEFROMPARTS([StartYear], [StartMonth], 1) <= DATEFROMPARTS([EndYear], [EndMonth], 1)");
+                    table.CheckConstraint("CH__StartMonthValid1", "[StartMonth] >= 1 AND [StartMonth] <= 12");
+                    table.CheckConstraint("CH__StartYearPositive1", "[StartYear] > 0");
                     table.ForeignKey(
-                        name: "FK_Periods_Seasons_SeasonId",
+                        name: "FK_SeasonPeriods_Seasons_SeasonId",
                         column: x => x.SeasonId,
                         principalTable: "Seasons",
                         principalColumn: "Id",
@@ -820,7 +941,7 @@ namespace Cineaste.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PeriodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SeasonPartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -830,9 +951,9 @@ namespace Cineaste.Persistence.Migrations
                     table.CheckConstraint("CH_SeasonPosters_ContentTypeNotEmpty", "[ContentType] <> ''");
                     table.CheckConstraint("CH_SeasonPosters_DataNotEmpty", "DATALENGTH([Data]) > 0");
                     table.ForeignKey(
-                        name: "FK_SeasonPosters_Periods_PeriodId",
-                        column: x => x.PeriodId,
-                        principalTable: "Periods",
+                        name: "FK_SeasonPosters_SeasonPeriods_SeasonPartId",
+                        column: x => x.SeasonPartId,
+                        principalTable: "SeasonPeriods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -865,6 +986,28 @@ namespace Cineaste.Persistence.Migrations
                 column: "SeriesKindId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LimitedSeries_FranchiseItemId",
+                table: "LimitedSeries",
+                column: "FranchiseItemId",
+                unique: true,
+                filter: "[FranchiseItemId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LimitedSeries_KindId",
+                table: "LimitedSeries",
+                column: "KindId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LimitedSeriesPosters_SeriesId",
+                table: "LimitedSeriesPosters",
+                column: "SeriesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LimitedSeriesTags_TagId",
+                table: "LimitedSeriesTags",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ListConfigurations_ListId",
                 table: "ListConfigurations",
                 column: "ListId",
@@ -877,6 +1020,13 @@ namespace Cineaste.Persistence.Migrations
                 column: "FranchiseId",
                 unique: true,
                 filter: "[FranchiseId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ListItems_LimitedSeriesId",
+                table: "ListItems",
+                column: "LimitedSeriesId",
+                unique: true,
+                filter: "[LimitedSeriesId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListItems_ListId",
@@ -936,11 +1086,6 @@ namespace Cineaste.Persistence.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Periods_SeasonId",
-                table: "Periods",
-                column: "SeasonId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
                 table: "RoleClaims",
                 column: "RoleId");
@@ -953,9 +1098,14 @@ namespace Cineaste.Persistence.Migrations
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SeasonPosters_PeriodId",
+                name: "IX_SeasonPeriods_SeasonId",
+                table: "SeasonPeriods",
+                column: "SeasonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SeasonPosters_SeasonPartId",
                 table: "SeasonPosters",
-                column: "PeriodId");
+                column: "SeasonPartId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Seasons_SeriesId",
@@ -1081,6 +1231,15 @@ namespace Cineaste.Persistence.Migrations
                 name: "FranchiseTitles");
 
             migrationBuilder.DropTable(
+                name: "LimitedSeriesPosters");
+
+            migrationBuilder.DropTable(
+                name: "LimitedSeriesTags");
+
+            migrationBuilder.DropTable(
+                name: "LimitedSeriesTitles");
+
+            migrationBuilder.DropTable(
                 name: "ListConfigurations");
 
             migrationBuilder.DropTable(
@@ -1138,10 +1297,13 @@ namespace Cineaste.Persistence.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
+                name: "LimitedSeries");
+
+            migrationBuilder.DropTable(
                 name: "Movies");
 
             migrationBuilder.DropTable(
-                name: "Periods");
+                name: "SeasonPeriods");
 
             migrationBuilder.DropTable(
                 name: "SpecialEpisodes");

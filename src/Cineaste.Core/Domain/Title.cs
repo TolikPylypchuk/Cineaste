@@ -2,14 +2,12 @@ namespace Cineaste.Core.Domain;
 
 public sealed record Title
 {
-    private int sequenceNumber;
-
     public string Name { get; }
 
     public int SequenceNumber
     {
-        get => sequenceNumber;
-        set => sequenceNumber = Require.Positive(value);
+        get;
+        set => field = Require.Positive(value);
     }
 
     public bool IsOriginal { get; }

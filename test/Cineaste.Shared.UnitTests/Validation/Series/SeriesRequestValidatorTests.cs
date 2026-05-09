@@ -177,7 +177,7 @@ public class SeriesRequestValidatorTests
                 SeasonWatchStatus.NotWatched,
                 SeasonReleaseStatus.Finished,
                 "",
-                ImmutableList.Create(new PeriodRequest(null, 1, 2000, 2, 2000, 5, false, null)).AsValue())
+                ImmutableList.Create(new SeasonPartRequest(null, new(1, 2000, 2, 2000, 5, false), null)).AsValue())
         ]));
 
         result.ShouldHaveValidationErrors()
@@ -273,7 +273,7 @@ public class SeriesRequestValidatorTests
             SeasonWatchStatus.NotWatched,
             SeasonReleaseStatus.Finished,
             "Test",
-            ImmutableList.Create(new PeriodRequest(null, 1, 2000, 2, 2000, 5, false, null)).AsValue());
+            ImmutableList.Create(new SeasonPartRequest(null, new(1, 2000, 2, 2000, 5, false), null)).AsValue());
 
     private SpecialEpisodeRequest SpecialEpisode(int sequenceNumber) =>
         new(null, TitleRequests("Test"), TitleRequests("Test"), sequenceNumber, false, true, "Test", 1, 2000, null);

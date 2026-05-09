@@ -15,7 +15,7 @@ public sealed class PosterUrlProvider : IPosterUrlProvider
         posterHash is not null ? $"/api/series/{seriesId}/poster?h={posterHash}" : null;
 
     [return: NotNullIfNotNull(nameof(posterHash))]
-    public string? GetPosterUrl(Id<Series> seriesId, Id<Period> periodId, PosterHash? posterHash) =>
+    public string? GetPosterUrl(Id<Series> seriesId, Id<SeasonPart> periodId, PosterHash? posterHash) =>
         posterHash is not null ? $"/api/series/{seriesId}/seasons/periods/{periodId}/poster?h={posterHash}" : null;
 
     [return: NotNullIfNotNull(nameof(posterHash))]

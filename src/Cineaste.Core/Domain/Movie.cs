@@ -2,15 +2,14 @@ namespace Cineaste.Core.Domain;
 
 public sealed class Movie : FranchiseItemEntity<Movie>
 {
-    private int year;
     private MovieKind kind;
 
     private readonly HashSet<TagContainer> tags;
 
     public int Year
     {
-        get => this.year;
-        set => this.year = Require.Positive(value);
+        get;
+        set => field = Require.Positive(value);
     }
 
     public bool IsWatched { get; set; }

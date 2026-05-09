@@ -27,14 +27,14 @@ public sealed record SeriesModel(
     [JsonIgnore]
     public int StartYear =>
         this.Seasons
-            .Select(season => season.Periods.Min(period => period.StartYear))
+            .Select(season => season.Parts.Min(part => part.Period.StartYear))
             .Concat(this.SpecialEpisodes.Select(episode => episode.Year))
             .Min();
 
     [JsonIgnore]
     public int EndYear =>
         this.Seasons
-            .Select(season => season.Periods.Max(period => period.EndYear))
+            .Select(season => season.Parts.Max(part => part.Period.EndYear))
             .Concat(this.SpecialEpisodes.Select(episode => episode.Year))
             .Max();
 }

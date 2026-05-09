@@ -8,8 +8,17 @@ public sealed class Series : FranchiseItemEntity<Series>
     private readonly List<SpecialEpisode> specialEpisodes;
     private readonly HashSet<TagContainer> tags;
 
-    public SeriesWatchStatus WatchStatus { get; set; }
-    public SeriesReleaseStatus ReleaseStatus { get; set; }
+    public SeriesWatchStatus WatchStatus
+    {
+        get;
+        set => field = Require.ValidEnum(value);
+    }
+
+    public SeriesReleaseStatus ReleaseStatus
+    {
+        get;
+        set => field = Require.ValidEnum(value);
+    }
 
     public SeriesKind Kind
     {

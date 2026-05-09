@@ -61,11 +61,12 @@ public static class FranchiseMappingExtensions
             var items = franchise.Children
                 .Where(item =>
                 {
-                    var id = item.Select(m => m.Id.Value, s => s.Id.Value, f => f.Id.Value);
+                    var id = item.Select(m => m.Id.Value, s => s.Id.Value, ls => ls.Id.Value, f => f.Id.Value);
 
                     var type = item.Select(
                         m => FranchiseItemType.Movie,
                         s => FranchiseItemType.Series,
+                        ls => FranchiseItemType.LimitedSeries,
                         f => FranchiseItemType.Franchise);
 
                     return !itemsById.ContainsKey((id, type));
@@ -74,7 +75,12 @@ public static class FranchiseMappingExtensions
 
             foreach (var item in items)
             {
-                item.Do(franchise.DetachMovie, franchise.DetachSeries, franchise.DetachFranchise);
+                item.Do(
+                    franchise.DetachMovie,
+                    franchise.DetachSeries,
+                    franchise.DetachLimitedSeries,
+                    franchise.DetachFranchise);
+
                 item.SetListItemProperties();
             }
 
@@ -187,6 +193,17 @@ public static class FranchiseMappingExtensions
                         series.EndYear,
                         series.ActiveColor.HexValue,
                         series.ListItem!.SequenceNumber),
+                    limitedSeries => new FranchiseItemModel(
+                        limitedSeries.Id.Value,
+                        FranchiseItemType.Series,
+                        item.SequenceNumber,
+                        item.DisplayNumber,
+                        limitedSeries.Title.Name,
+                        limitedSeries.OriginalTitle.Name,
+                        limitedSeries.Period.StartYear,
+                        limitedSeries.Period.EndYear,
+                        limitedSeries.ActiveColor.HexValue,
+                        limitedSeries.ListItem!.SequenceNumber),
                     franchise => new FranchiseItemModel(
                         franchise.Id.Value,
                         FranchiseItemType.Franchise,

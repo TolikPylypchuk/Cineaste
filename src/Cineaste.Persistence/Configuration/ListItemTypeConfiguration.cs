@@ -20,6 +20,10 @@ internal sealed class ListItemTypeConfiguration : IEntityTypeConfiguration<ListI
             .WithOne(s => s.ListItem)
             .HasForeignKey<ListItem>("SeriesId"); ;
 
+        item.HasOne(i => i.LimitedSeries)
+            .WithOne(ls => ls.ListItem)
+            .HasForeignKey<ListItem>("LimitedSeriesId");
+
         item.HasOne(i => i.Franchise)
             .WithOne(f => f.ListItem)
             .HasForeignKey<ListItem>("FranchiseId");

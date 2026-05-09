@@ -144,7 +144,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
 
         if (season is not null)
         {
-            foreach (var period in season.Periods)
+            foreach (var period in season.Parts)
             {
                 var form = new PeriodFormModel();
                 form.CopyFrom(period);

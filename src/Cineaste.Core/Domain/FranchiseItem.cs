@@ -3,8 +3,6 @@ namespace Cineaste.Core.Domain;
 public sealed class FranchiseItem : Entity<FranchiseItem>
 {
     private Franchise parentFranchise;
-    private int sequenceNumber;
-    private int? displayNumber;
 
     public Franchise ParentFranchise
     {
@@ -16,24 +14,30 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
 
     public int SequenceNumber
     {
-        get => this.sequenceNumber;
-        set => this.sequenceNumber = Require.Positive(value);
+        get;
+        set => field = Require.Positive(value);
     }
 
     public int? DisplayNumber
     {
-        get => this.displayNumber;
-        set => this.displayNumber = Require.Positive(value);
+        get;
+        set => field = Require.Positive(value);
     }
 
     public Movie? Movie { get; private set; }
 
     public Series? Series { get; private set; }
 
+    public LimitedSeries? LimitedSeries { get; private set; }
+
     public Franchise? Franchise { get; private set; }
 
     public IReadOnlyCollection<Title> AllTitles =>
-        this.Select(movie => movie.AllTitles, series => series.AllTitles, franchise => franchise.AllTitles);
+        this.Select(
+            movie => movie.AllTitles,
+            series => series.AllTitles,
+            series => series.AllTitles,
+            franchise => franchise.AllTitles);
 
     public Title Title =>
         this.AllTitles
@@ -64,6 +68,15 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
         int? displayNumber)
         : this(id, parentFranchise, sequenceNumber, displayNumber) =>
         this.Series = Require.NotNull(series);
+
+    public FranchiseItem(
+        Id<FranchiseItem> id,
+        LimitedSeries limitedSeries,
+        Franchise parentFranchise,
+        int sequenceNumber,
+        int? displayNumber)
+        : this(id, parentFranchise, sequenceNumber, displayNumber) =>
+        this.LimitedSeries = Require.NotNull(limitedSeries);
 
     public FranchiseItem(
         Id<FranchiseItem> id,

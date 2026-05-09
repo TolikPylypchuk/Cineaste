@@ -73,16 +73,16 @@ public sealed class FranchisePoster : Poster<FranchisePoster>
 
 public sealed class SeasonPoster : Poster<SeasonPoster>
 {
-    public Period Period { get; private set; }
+    public SeasonPart SeasonPart { get; private set; }
 
-    public SeasonPoster(Id<SeasonPoster> id, Period period, byte[] data, string contentType)
+    public SeasonPoster(Id<SeasonPoster> id, SeasonPart part, byte[] data, string contentType)
         : base(id, data, contentType) =>
-        this.Period = Require.NotNull(period);
+        this.SeasonPart = Require.NotNull(part);
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
     private SeasonPoster(Id<SeasonPoster> id)
         : base(id) =>
-        this.Period = null!;
+        this.SeasonPart = null!;
 }
 
 public sealed class SpecialEpisodePoster : Poster<SpecialEpisodePoster>
@@ -97,4 +97,18 @@ public sealed class SpecialEpisodePoster : Poster<SpecialEpisodePoster>
     private SpecialEpisodePoster(Id<SpecialEpisodePoster> id)
         : base(id) =>
         this.SpecialEpisode = null!;
+}
+
+public sealed class LimitedSeriesPoster : Poster<LimitedSeriesPoster>
+{
+    public LimitedSeries Series { get; private set; }
+
+    public LimitedSeriesPoster(Id<LimitedSeriesPoster> id, LimitedSeries series, byte[] data, string contentType)
+        : base(id, data, contentType) =>
+        this.Series = Require.NotNull(series);
+
+    [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
+    private LimitedSeriesPoster(Id<LimitedSeriesPoster> id)
+        : base(id) =>
+        this.Series = null!;
 }

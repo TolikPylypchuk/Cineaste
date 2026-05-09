@@ -153,19 +153,19 @@ public sealed partial class SeriesService(
     public async Task<BinaryContent> GetSeasonPoster(
         Id<CineasteList> listId,
         Id<Series> seriesId,
-        Id<Period> periodId,
+        Id<SeasonPart> partId,
         CancellationToken token)
     {
-        this.LogGetSeasonPoster(periodId, seriesId, listId);
+        this.LogGetSeasonPoster(partId, seriesId, listId);
 
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
-        var period = this.FindPeriod(series, periodId);
+        var part = this.FindSeasonPart(series, partId);
 
         var poster = await this.dbContext.SeasonPosters
-            .Where(poster => poster.Period == period)
+            .Where(poster => poster.SeasonPart == part)
             .FirstOrDefaultAsync(token)
-            ?? throw new SeasonPosterNotFoundException(periodId);
+            ?? throw new SeasonPosterNotFoundException(partId);
 
         return poster.ToPosterModel();
     }
@@ -173,43 +173,43 @@ public sealed partial class SeriesService(
     public async Task<PosterHash> SetSeasonPoster(
         Id<CineasteList> listId,
         Id<Series> seriesId,
-        Id<Period> periodId,
+        Id<SeasonPart> partId,
         StreamableContent content,
         CancellationToken token) =>
-        await this.SetSeasonPoster(listId, seriesId, periodId, () => Task.FromResult(content), token);
+        await this.SetSeasonPoster(listId, seriesId, partId, () => Task.FromResult(content), token);
 
     public async Task<PosterHash> SetSeasonPoster(
         Id<CineasteList> listId,
         Id<Series> seriesId,
-        Id<Period> periodId,
+        Id<SeasonPart> partId,
         Validated<PosterUrlRequest> request,
         CancellationToken token) =>
         await this.SetSeasonPoster(
-            listId, seriesId, periodId, () => this.posterProvider.FetchPoster(request, token), token);
+            listId, seriesId, partId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task<PosterHash> SetSeasonPoster(
         Id<CineasteList> listId,
         Id<Series> seriesId,
-        Id<Period> periodId,
+        Id<SeasonPart> partId,
         Validated<PosterImdbMediaRequest> request,
         CancellationToken token) =>
         await this.SetSeasonPoster(
-            listId, seriesId, periodId, () => this.posterProvider.FetchPoster(request, token), token);
+            listId, seriesId, partId, () => this.posterProvider.FetchPoster(request, token), token);
 
     public async Task RemoveSeasonPoster(
         Id<CineasteList> listId,
         Id<Series> seriesId,
-        Id<Period> periodId,
+        Id<SeasonPart> partId,
         CancellationToken token)
     {
-        this.LogRemoveSeasonPoster(periodId, seriesId, listId);
+        this.LogRemoveSeasonPoster(partId, seriesId, listId);
 
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
-        var period = this.FindPeriod(series, periodId);
+        var part = this.FindSeasonPart(series, partId);
 
         var poster = await this.dbContext.SeasonPosters
-            .Where(poster => poster.Period == period)
+            .Where(poster => poster.SeasonPart == part)
             .FirstOrDefaultAsync(token);
 
         if (poster is not null)
@@ -217,7 +217,7 @@ public sealed partial class SeriesService(
             this.dbContext.SeasonPosters.Remove(poster);
         }
 
-        period.PosterHash = null;
+        part.PosterHash = null;
         await this.dbContext.SaveChangesAsync(token);
     }
 
@@ -292,11 +292,11 @@ public sealed partial class SeriesService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
-    private Period FindPeriod(Series series, Id<Period> periodId) =>
+    private SeasonPart FindSeasonPart(Series series, Id<SeasonPart> partId) =>
         series.Seasons
-            .SelectMany(season => season.Periods)
-            .FirstOrDefault(period => period.Id == periodId)
-            ?? throw new PeriodNotFoundException(periodId);
+            .SelectMany(season => season.Parts)
+            .FirstOrDefault(part => part.Id == partId)
+            ?? throw new SeasonPartNotFoundException(partId);
 
     private SpecialEpisode FindSpecialEpisode(Series series, Id<SpecialEpisode> episodeId) =>
         series.SpecialEpisodes
@@ -315,7 +315,7 @@ public sealed partial class SeriesService(
             .Collection(s => s.Seasons)
             .Query()
             .Include(s => s.AllTitles)
-            .Include(s => s.Periods)
+            .Include(s => s.Parts)
             .AsSplitQuery()
             .LoadAsync(token);
 
@@ -367,13 +367,15 @@ public sealed partial class SeriesService(
                 .ThenInclude(series => series!.AllTitles)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.Seasons)
-                    .ThenInclude(season => season.Periods)
+                    .ThenInclude(season => season.Parts)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.Seasons)
                     .ThenInclude(season => season.AllTitles)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.SpecialEpisodes)
                     .ThenInclude(episode => episode.AllTitles)
+            .Include(item => item.LimitedSeries)
+                .ThenInclude(limitedSeries => limitedSeries!.AllTitles)
             .Include(item => item.Franchise)
                 .ThenInclude(f => f!.AllTitles)
             .LoadAsync(token);
@@ -416,13 +418,18 @@ public sealed partial class SeriesService(
                     .ThenInclude(item => item!.ParentFranchise)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.Seasons)
-                    .ThenInclude(season => season.Periods)
+                    .ThenInclude(season => season.Parts)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.Seasons)
                     .ThenInclude(season => season.AllTitles)
             .Include(item => item.Series)
                 .ThenInclude(series => series!.SpecialEpisodes)
                     .ThenInclude(episode => episode.AllTitles)
+            .Include(item => item.LimitedSeries)
+                .ThenInclude(limitedSeries => limitedSeries!.AllTitles)
+            .Include(item => item.LimitedSeries)
+                .ThenInclude(limitedSeries => limitedSeries!.FranchiseItem)
+                    .ThenInclude(item => item!.ParentFranchise)
             .Include(item => item.Franchise)
                 .ThenInclude(franchise => franchise!.AllTitles)
             .Include(item => item.Franchise)
@@ -486,37 +493,37 @@ public sealed partial class SeriesService(
     private Task<PosterHash> SetSeasonPoster(
         Id<CineasteList> listId,
         Id<Series> seriesId,
-        Id<Period> periodId,
+        Id<SeasonPart> partId,
         Func<Task<StreamableContent>> getContent,
         CancellationToken token) =>
         this.SetSeasonPoster(
-            listId, seriesId, periodId, async () => await (await getContent()).ReadDataAsync(token), token);
+            listId, seriesId, partId, async () => await (await getContent()).ReadDataAsync(token), token);
 
     private async Task<PosterHash> SetSeasonPoster(
         Id<CineasteList> listId,
         Id<Series> seriesId,
-        Id<Period> periodId,
+        Id<SeasonPart> partId,
         Func<Task<BinaryContent>> getContent,
         CancellationToken token)
     {
-        this.LogSetSeasonPoster(periodId, seriesId, listId);
+        this.LogSetSeasonPoster(partId, seriesId, listId);
 
         var list = await this.FindList(listId, token);
         var series = await this.FindSeries(list, seriesId, token);
-        var period = this.FindPeriod(series, periodId);
+        var part = this.FindSeasonPart(series, partId);
 
         var content = await getContent();
 
-        if (await this.dbContext.SeasonPosters.FirstOrDefaultAsync(poster => poster.Period == period, token)
+        if (await this.dbContext.SeasonPosters.FirstOrDefaultAsync(poster => poster.SeasonPart == part, token)
             is { } existingPoster)
         {
             this.dbContext.SeasonPosters.Remove(existingPoster);
         }
 
-        var poster = new SeasonPoster(Id.Create<SeasonPoster>(), period, content.Data, content.Type);
+        var poster = new SeasonPoster(Id.Create<SeasonPoster>(), part, content.Data, content.Type);
 
         var hash = PosterHash.ForPoster(content.Data);
-        period.PosterHash = hash;
+        part.PosterHash = hash;
 
         this.dbContext.SeasonPosters.Add(poster);
         await this.dbContext.SaveChangesAsync(token);
@@ -588,18 +595,18 @@ public sealed partial class SeriesService(
 
     [LoggerMessage(
         Level = LogLevel.Debug,
-        Message = "Getting the poster for season period {PeriodId} of series {SeriesId} in list {ListId}")]
-    private partial void LogGetSeasonPoster(Id<Period> periodId, Id<Series> seriesId, Id<CineasteList> listId);
+        Message = "Getting the poster for season part {PartId} of series {SeriesId} in list {ListId}")]
+    private partial void LogGetSeasonPoster(Id<SeasonPart> partId, Id<Series> seriesId, Id<CineasteList> listId);
 
     [LoggerMessage(
         Level = LogLevel.Debug,
-        Message = "Setting the poster for season period {PeriodId} of series {SeriesId} in list {ListId}")]
-    private partial void LogSetSeasonPoster(Id<Period> periodId, Id<Series> seriesId, Id<CineasteList> listId);
+        Message = "Setting the poster for season part {PartId} of series {SeriesId} in list {ListId}")]
+    private partial void LogSetSeasonPoster(Id<SeasonPart> partId, Id<Series> seriesId, Id<CineasteList> listId);
 
     [LoggerMessage(
         Level = LogLevel.Debug,
-        Message = "Removing the poster for season period {PeriodId} of series {SeriesId} in list {ListId}")]
-    private partial void LogRemoveSeasonPoster(Id<Period> periodId, Id<Series> seriesId, Id<CineasteList> listId);
+        Message = "Removing the poster for season part {PartId} of series {SeriesId} in list {ListId}")]
+    private partial void LogRemoveSeasonPoster(Id<SeasonPart> partId, Id<Series> seriesId, Id<CineasteList> listId);
 
     [LoggerMessage(
         Level = LogLevel.Debug,

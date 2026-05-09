@@ -74,13 +74,13 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var period = series.Seasons.First().Periods.First();
-        var poster = await this.data.CreateSeasonPoster(period, dbContext);
+        var part = series.Seasons.First().Parts.First();
+        var poster = await this.data.CreateSeasonPoster(part, dbContext);
 
         // Act
 
         var posterContent = await seriesService.GetSeasonPoster(
-            this.data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, part.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -97,19 +97,19 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
-        var dummyPeriodId = Id.Create<Period>();
+        var dummyPartId = Id.Create<SeasonPart>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() =>
             seriesService.GetSeasonPoster(
-                this.data.ListId, dummySeriesId, dummyPeriodId, TestContext.Current.CancellationToken));
+                this.data.ListId, dummySeriesId, dummyPartId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
     }
 
-    [Fact(DisplayName = "GetSeasonPoster should throw if period isn't found")]
-    public async Task GetSeasonPosterPeriodNotFound()
+    [Fact(DisplayName = "GetSeasonPoster should throw if season part isn't found")]
+    public async Task GetSeasonPosterSeasonPartNotFound()
     {
         // Arrange
 
@@ -117,14 +117,14 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var dummyId = Id.Create<Period>();
+        var dummyId = Id.Create<SeasonPart>();
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() =>
+        var exception = await Assert.ThrowsAsync<SeasonPartNotFoundException>(() =>
             seriesService.GetSeasonPoster(this.data.ListId, series.Id, dummyId, TestContext.Current.CancellationToken));
 
-        Assert.Equal(dummyId, exception.PeriodId);
+        Assert.Equal(dummyId, exception.PartId);
     }
 
     [Fact(DisplayName = "GetSeasonPoster should throw if poster isn't found")]
@@ -136,15 +136,15 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var period = series.Seasons.First().Periods.First();
+        var part = series.Seasons.First().Parts.First();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeasonPosterNotFoundException>(() =>
             seriesService.GetSeasonPoster(
-                this.data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken));
+                this.data.ListId, series.Id, part.Id, TestContext.Current.CancellationToken));
 
-        Assert.Equal(period.Id, exception.PeriodId);
+        Assert.Equal(part.Id, exception.PartId);
     }
 
     [Fact(DisplayName = "GetSpecialEpisodePoster should get the special episode poster")]
@@ -416,8 +416,8 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var period = series.Seasons.First().Periods.First();
-        var poster = await this.data.CreateSeasonPoster(period, dbContext);
+        var part = series.Seasons.First().Parts.First();
+        var poster = await this.data.CreateSeasonPoster(part, dbContext);
 
         var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
@@ -425,7 +425,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         // Act
 
         var posterHash = await seriesService.SetSeasonPoster(
-            this.data.ListId, series.Id, period.Id, posterData, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, part.Id, posterData, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -433,7 +433,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
 
         Assert.False(dbContext.SeasonPosters.Any(p => p.Id == poster.Id));
 
-        var dbPoster = dbContext.SeasonPosters.FirstOrDefault(p => p.Period == period);
+        var dbPoster = dbContext.SeasonPosters.FirstOrDefault(p => p.SeasonPart == part);
 
         Assert.NotNull(dbPoster);
         Assert.Equal(posterContent.Data, dbPoster.Data);
@@ -449,19 +449,19 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
-        var dummyPeriodId = Id.Create<Period>();
+        var dummyPartId = Id.Create<SeasonPart>();
         var posterData = this.data.CreatePosterContent();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSeasonPoster(
-            this.data.ListId, dummySeriesId, dummyPeriodId, posterData, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyPartId, posterData, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
     }
 
-    [Fact(DisplayName = "SetSeasonPoster from stream should throw if the period isn't found")]
-    public async Task SetSeasonPosterStreamPeriodNotFound()
+    [Fact(DisplayName = "SetSeasonPoster from stream should throw if the season part isn't found")]
+    public async Task SetSeasonPosterStreamSeasonPartNotFound()
     {
         // Arrange
 
@@ -469,15 +469,15 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var dummyPeriodId = Id.Create<Period>();
+        var dummyPartId = Id.Create<SeasonPart>();
         var posterData = this.data.CreatePosterContent();
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() => seriesService.SetSeasonPoster(
-            this.data.ListId, series.Id, dummyPeriodId, posterData, TestContext.Current.CancellationToken));
+        var exception = await Assert.ThrowsAsync<SeasonPartNotFoundException>(() => seriesService.SetSeasonPoster(
+            this.data.ListId, series.Id, dummyPartId, posterData, TestContext.Current.CancellationToken));
 
-        Assert.Equal(dummyPeriodId, exception.PeriodId);
+        Assert.Equal(dummyPartId, exception.PartId);
     }
 
     [Fact(DisplayName = "SetSeasonPoster should set the season poster from a URL")]
@@ -489,8 +489,8 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var period = series.Seasons.First().Periods.First();
-        var poster = await this.data.CreateSeasonPoster(period, dbContext);
+        var part = series.Seasons.First().Parts.First();
+        var poster = await this.data.CreateSeasonPoster(part, dbContext);
 
         var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
@@ -504,7 +504,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         // Act
 
         var posterHash = await seriesService.SetSeasonPoster(
-            this.data.ListId, series.Id, period.Id, request, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, part.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -512,7 +512,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
 
         Assert.False(dbContext.SeasonPosters.Any(p => p.Id == poster.Id));
 
-        var dbPoster = dbContext.SeasonPosters.FirstOrDefault(p => p.Period == period);
+        var dbPoster = dbContext.SeasonPosters.FirstOrDefault(p => p.SeasonPart == part);
 
         Assert.NotNull(dbPoster);
         Assert.Equal(posterContent.Data, dbPoster.Data);
@@ -528,7 +528,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
-        var dummyPeriodId = Id.Create<Period>();
+        var dummyPartId = Id.Create<SeasonPart>();
         var posterData = this.data.CreatePosterContent();
 
         var request = this.data.CreatePosterUrlRequest();
@@ -536,7 +536,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSeasonPoster(
-            this.data.ListId, dummySeriesId, dummyPeriodId, request, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyPartId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
 
@@ -545,8 +545,8 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
             .FetchPoster(request, TestContext.Current.CancellationToken);
     }
 
-    [Fact(DisplayName = "SetSeasonPoster from a URL should throw if the period isn't found")]
-    public async Task SetSeasonPosterUrlPeriodNotFound()
+    [Fact(DisplayName = "SetSeasonPoster from a URL should throw if the season part isn't found")]
+    public async Task SetSeasonPosterUrlSeasonPartNotFound()
     {
         // Arrange
 
@@ -554,17 +554,17 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var dummyPeriodId = Id.Create<Period>();
+        var dummyPartId = Id.Create<SeasonPart>();
         var posterData = this.data.CreatePosterContent();
 
         var request = this.data.CreatePosterUrlRequest();
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() => seriesService.SetSeasonPoster(
-            this.data.ListId, series.Id, dummyPeriodId, request, TestContext.Current.CancellationToken));
+        var exception = await Assert.ThrowsAsync<SeasonPartNotFoundException>(() => seriesService.SetSeasonPoster(
+            this.data.ListId, series.Id, dummyPartId, request, TestContext.Current.CancellationToken));
 
-        Assert.Equal(dummyPeriodId, exception.PeriodId);
+        Assert.Equal(dummyPartId, exception.PartId);
 
         await this.data.PosterProvider
             .DidNotReceive()
@@ -580,8 +580,8 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var period = series.Seasons.First().Periods.First();
-        var poster = await this.data.CreateSeasonPoster(period, dbContext);
+        var part = series.Seasons.First().Parts.First();
+        var poster = await this.data.CreateSeasonPoster(part, dbContext);
 
         var posterData = this.data.CreatePosterContent();
         var posterContent = await posterData.ReadDataAsync(TestContext.Current.CancellationToken);
@@ -595,7 +595,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         // Act
 
         var posterHash = await seriesService.SetSeasonPoster(
-            this.data.ListId, series.Id, period.Id, request, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, part.Id, request, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -603,7 +603,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
 
         Assert.False(dbContext.SeasonPosters.Any(p => p.Id == poster.Id));
 
-        var dbPoster = dbContext.SeasonPosters.FirstOrDefault(p => p.Period == period);
+        var dbPoster = dbContext.SeasonPosters.FirstOrDefault(p => p.SeasonPart == part);
 
         Assert.NotNull(dbPoster);
         Assert.Equal(posterContent.Data, dbPoster.Data);
@@ -619,7 +619,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
-        var dummyPeriodId = Id.Create<Period>();
+        var dummyPartId = Id.Create<SeasonPart>();
         var posterData = this.data.CreatePosterContent();
 
         var request = this.data.CreatePosterImdbMediaRequest();
@@ -627,7 +627,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.SetSeasonPoster(
-            this.data.ListId, dummySeriesId, dummyPeriodId, request, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyPartId, request, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
 
@@ -690,7 +690,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
     }
 
     [Fact(DisplayName = "SetSpecialEpisodePoster from stream should throw if the special episode isn't found")]
-    public async Task SetSpecialEpisodePosterStreamPeriodNotFound()
+    public async Task SetSpecialEpisodePosterStreamEpisodeNotFound()
     {
         // Arrange
 
@@ -776,7 +776,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
     }
 
     [Fact(DisplayName = "SetSpecialEpisodePoster from a URL should throw if the special episode isn't found")]
-    public async Task SetSpecialEpisodePosterUrlPeriodNotFound()
+    public async Task SetSpecialEpisodePosterUrlEpisodeNotFound()
     {
         // Arrange
 
@@ -932,13 +932,13 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var period = series.Seasons.First().Periods.First();
-        var poster = await this.data.CreateSeasonPoster(period, dbContext);
+        var part = series.Seasons.First().Parts.First();
+        var poster = await this.data.CreateSeasonPoster(part, dbContext);
 
         // Act
 
         await seriesService.RemoveSeasonPoster(
-            this.data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken);
+            this.data.ListId, series.Id, part.Id, TestContext.Current.CancellationToken);
 
         // Assert
 
@@ -954,12 +954,12 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var period = series.Seasons.First().Periods.First();
+        var part = series.Seasons.First().Parts.First();
 
         // Act + Assert
 
         var exception = await Record.ExceptionAsync(() => seriesService.RemoveSeasonPoster(
-            this.data.ListId, series.Id, period.Id, TestContext.Current.CancellationToken));
+            this.data.ListId, series.Id, part.Id, TestContext.Current.CancellationToken));
 
         Assert.Null(exception);
     }
@@ -973,18 +973,18 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var dummySeriesId = Id.Create<Series>();
-        var dummyPeriodId = Id.Create<Period>();
+        var dummyPartId = Id.Create<SeasonPart>();
 
         // Act + Assert
 
         var exception = await Assert.ThrowsAsync<SeriesNotFoundException>(() => seriesService.RemoveSeasonPoster(
-            this.data.ListId, dummySeriesId, dummyPeriodId, TestContext.Current.CancellationToken));
+            this.data.ListId, dummySeriesId, dummyPartId, TestContext.Current.CancellationToken));
 
         Assert.Equal(dummySeriesId, exception.SeriesId);
     }
 
-    [Fact(DisplayName = "RemoveSeasonPoster should throw if the period isn't found")]
-    public async Task RemoveSeasonPosterPeriodNotFound()
+    [Fact(DisplayName = "RemoveSeasonPoster should throw if the season part isn't found")]
+    public async Task RemoveSeasonPosterSeasonPartNotFound()
     {
         // Arrange
 
@@ -992,14 +992,14 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
         var seriesService = this.CreateSeriesService(dbContext);
 
         var series = await this.data.CreateSeries(dbContext);
-        var dummyPeriodId = Id.Create<Period>();
+        var dummyPartId = Id.Create<SeasonPart>();
 
         // Act + Assert
 
-        var exception = await Assert.ThrowsAsync<PeriodNotFoundException>(() => seriesService.RemoveSeasonPoster(
-            this.data.ListId, series.Id, dummyPeriodId, TestContext.Current.CancellationToken));
+        var exception = await Assert.ThrowsAsync<SeasonPartNotFoundException>(() => seriesService.RemoveSeasonPoster(
+            this.data.ListId, series.Id, dummyPartId, TestContext.Current.CancellationToken));
 
-        Assert.Equal(dummyPeriodId, exception.PeriodId);
+        Assert.Equal(dummyPartId, exception.PartId);
     }
 
     [Fact(DisplayName = "RemoveSpecialEpisodePoster should remove the special episode poster")]
@@ -1064,7 +1064,7 @@ public sealed class SeriesServicePosterTests(DbFixture dbFixture, ITestOutputHel
     }
 
     [Fact(DisplayName = "RemoveSpecialEpisodePoster should throw if the special episode isn't found")]
-    public async Task RemoveSpecialEpisodePosterPeriodNotFound()
+    public async Task RemoveSpecialEpisodePosterEpisodeNotFound()
     {
         // Arrange
 

@@ -11,8 +11,8 @@ public class SeasonRequestValidatorTests
 
     private readonly SeasonRequestValidator validator = new();
 
-    public static Arbitrary<PeriodRequest> ValidPeriodRequest =>
-        new ArbitraryValidPeriodRequest();
+    public static Arbitrary<SeasonPartRequest> ValidSeasonPartRequest =>
+        new ArbitraryValidSeasonPartRequest();
 
     [Fact(DisplayName = "Validator should validate that titles aren't empty")]
     public void ValidatorShouldValidateTitlesNotEmpty()
@@ -158,43 +158,43 @@ public class SeasonRequestValidatorTests
         }
     }
 
-    [Fact(DisplayName = "Validator should validate that periods aren't empty")]
-    public void ValidatorShouldValidatePeriodssNotEmpty()
+    [Fact(DisplayName = "Validator should validate that parts aren't empty")]
+    public void ValidatorShouldValidatePartsNotEmpty()
     {
-        var result = validator.TestValidate(this.Request(periods: []));
+        var result = validator.TestValidate(this.Request(parts: []));
 
-        result.ShouldHaveValidationErrorFor(req => req.Periods)
-            .WithErrorCode("Season.Periods.Empty");
+        result.ShouldHaveValidationErrorFor(req => req.Parts)
+            .WithErrorCode("Season.Parts.Empty");
     }
 
     [Property(
-        DisplayName = "Validator should validate that periods don't overlap",
+        DisplayName = "Validator should validate that parts don't overlap",
         Arbitrary = new[] { typeof(SeasonRequestValidatorTests) })]
-    public void ValidatorShouldValidateThatPeriodsDoNotOverlap(PeriodRequest period1, PeriodRequest period2)
+    public void ValidatorShouldValidateThatPartsDoNotOverlap(SeasonPartRequest part1, SeasonPartRequest part2)
     {
-        var result = validator.TestValidate(this.Request(periods: [period1, period2]));
+        var result = validator.TestValidate(this.Request(parts: [part1, part2]));
 
-        if (period1.EndYear < period2.StartYear ||
-            period1.EndYear == period2.StartYear && period1.EndMonth <= period2.StartMonth ||
-            period2.EndYear < period1.StartYear ||
-            period2.EndYear == period1.StartYear && period2.EndMonth <= period1.StartMonth)
+        if (part1.Period.EndYear < part2.Period.StartYear ||
+            part1.Period.EndYear == part2.Period.StartYear && part1.Period.EndMonth <= part2.Period.StartMonth ||
+            part2.Period.EndYear < part1.Period.StartYear ||
+            part2.Period.EndYear == part1.Period.StartYear && part2.Period.EndMonth <= part1.Period.StartMonth)
         {
-            result.ShouldNotHaveValidationErrorFor(req => req.Periods);
+            result.ShouldNotHaveValidationErrorFor(req => req.Parts);
         } else
         {
-            result.ShouldHaveValidationErrorFor(req => req.Periods)
-                .WithErrorCode("Season.Periods.Overlap");
+            result.ShouldHaveValidationErrorFor(req => req.Parts)
+                .WithErrorCode("Season.Parts.Overlap");
         }
     }
 
-    [Fact(DisplayName = "Validator should validate periods")]
-    public void ValidatorShouldValidatePeriods()
+    [Fact(DisplayName = "Validator should validate season parts")]
+    public void ValidatorShouldValidateParts()
     {
         var result = validator.TestValidate(this.Request(
-            periods: [new PeriodRequest(null, 1, 2000, 2, 1999, 5, false, null)]));
+            parts: [new SeasonPartRequest(null, new(1, 2000, 2, 1999, 5, false), null)]));
 
         result.ShouldHaveValidationErrors()
-            .WithErrorCode("Period.Invalid");
+            .WithErrorCode("ReleasePeriod.Invalid");
     }
 
     private SeasonRequest Request(
@@ -206,7 +206,7 @@ public class SeasonRequestValidatorTests
         SeasonWatchStatus watchStatus = SeasonWatchStatus.NotWatched,
         SeasonReleaseStatus releaseStatus = SeasonReleaseStatus.Finished,
         string channel = "Test",
-        IEnumerable<PeriodRequest>? periods = null
+        IEnumerable<SeasonPartRequest>? parts = null
         ) =>
         new(
             null,
@@ -216,8 +216,8 @@ public class SeasonRequestValidatorTests
             watchStatus,
             releaseStatus,
             channel,
-            periods?.ToImmutableList().AsValue() ?? this.DefaultPeriods());
+            parts?.ToImmutableList().AsValue() ?? this.DefaultParts());
 
-    private ImmutableValueList<PeriodRequest> DefaultPeriods() =>
-        ImmutableList.Create(new PeriodRequest(null, 1, 2000, 2, 2000, 5, false, null)).AsValue();
+    private ImmutableValueList<SeasonPartRequest> DefaultParts() =>
+        ImmutableList.Create(new SeasonPartRequest(null, new(1, 2000, 2, 2000, 5, false), null)).AsValue();
 }

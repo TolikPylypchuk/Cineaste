@@ -27,7 +27,7 @@ public static class ListMappingExtensions
     extension(ListItem item)
     {
         public ListItemModel ToListItemModel() =>
-            item.Select(item.ToListItemModel, item.ToListItemModel, item.ToListItemModel);
+            item.Select(item.ToListItemModel, item.ToListItemModel, item.ToListItemModel, item.ToListItemModel);
 
         public ListItemModel ToListItemModel(Movie movie) =>
             new(
@@ -52,6 +52,18 @@ public static class ListMappingExtensions
                 item.ActiveColor?.HexValue ?? String.Empty,
                 item.SequenceNumber,
                 series.FranchiseItem.ToFranchiseItemModel());
+
+        public ListItemModel ToListItemModel(LimitedSeries limitedSeries) =>
+            new(
+                limitedSeries.Id.Value,
+                ListItemType.Series,
+                limitedSeries.Title.Name,
+                limitedSeries.OriginalTitle.Name,
+                item.StartYear,
+                item.EndYear,
+                item.ActiveColor?.HexValue ?? String.Empty,
+                item.SequenceNumber,
+                limitedSeries.FranchiseItem.ToFranchiseItemModel());
 
         public ListItemModel ToListItemModel(Franchise franchise) =>
             new(

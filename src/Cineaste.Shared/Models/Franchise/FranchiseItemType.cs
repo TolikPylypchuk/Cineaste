@@ -1,3 +1,3 @@
 namespace Cineaste.Shared.Models.Franchise;
 
-public enum FranchiseItemType { Movie, Series, Franchise }
+public enum FranchiseItemType { Movie, Series, LimitedSeries, Franchise }

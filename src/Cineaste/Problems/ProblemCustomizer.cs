@@ -158,17 +158,17 @@ internal class ProblemCustomizer(IHostEnvironment env)
                 problemDetails.Status = Status404NotFound;
                 problemDetails.Extensions[Props.SeriesId] = ex.SeriesId;
                 break;
-            case PeriodNotFoundException ex:
+            case SeasonPartNotFoundException ex:
                 problemDetails.Type = this.CreateProblemType(Types.NotFound, Types.Series, Types.Period);
                 problemDetails.Title = "Series period not found";
                 problemDetails.Status = Status404NotFound;
-                problemDetails.Extensions[Props.Id] = ex.PeriodId;
+                problemDetails.Extensions[Props.Id] = ex.PartId;
                 break;
             case SeasonPosterNotFoundException ex:
                 problemDetails.Type = this.CreateProblemType(Types.NotFound, Types.Poster, Types.Season);
                 problemDetails.Title = "Season poster not found";
                 problemDetails.Status = Status404NotFound;
-                problemDetails.Extensions[Props.PeriodId] = ex.PeriodId;
+                problemDetails.Extensions[Props.PartId] = ex.PartId;
                 break;
             case SpecialEpisodeNotFoundException ex:
                 problemDetails.Type = this.CreateProblemType(Types.NotFound, Types.Series, Types.SpecialEpisode);
@@ -228,7 +228,7 @@ internal class ProblemCustomizer(IHostEnvironment env)
         problemDetails.Title = "Unhandled problem";
     }
 
-    private string CreateProblemType(params Span<string> types) =>
+    private string CreateProblemType(params ReadOnlySpan<string> types) =>
         $"/problem/{String.Join('/', types)}";
 }
 
@@ -291,7 +291,7 @@ file static class Props
     public const string MovieId = "movieId";
     public const string MovieIds = "movieIds";
 
-    public const string PeriodId = "periodId";
+    public const string PartId = "partId";
     public const string Properties = "properties";
 
     public const string Resource = "resource";

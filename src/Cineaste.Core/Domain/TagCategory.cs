@@ -1,6 +1,6 @@
 namespace Cineaste.Core.Domain;
 
-public sealed record TagCategory
+public readonly record struct TagCategory
 {
     public string Name { get; }
 

@@ -61,7 +61,7 @@ public sealed class ImmutableValueList<T>(IImmutableList<T> list) : IImmutableLi
         obj is IImmutableList<T> list && this.Equals(list);
 
     public bool Equals(IImmutableList<T>? other) =>
-        this.SequenceEqual(other ?? ImmutableList<T>.Empty);
+        other is not null && this.SequenceEqual(other);
 
     public override int GetHashCode()
     {
@@ -77,6 +77,9 @@ public sealed class ImmutableValueList<T>(IImmutableList<T> list) : IImmutableLi
 
 public static class ImmutableValueList
 {
-    public static ImmutableValueList<T> AsValue<T>(this IImmutableList<T> list) =>
-        new(list);
+    extension<T>(IImmutableList<T> list)
+    {
+        public ImmutableValueList<T> AsValue() =>
+            new(list);
+    }
 }

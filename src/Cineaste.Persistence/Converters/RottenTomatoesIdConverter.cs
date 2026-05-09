@@ -5,6 +5,6 @@ namespace Cineaste.Persistence.Converters;
 internal sealed class RottenTomatoesIdConverter : ValueConverter<RottenTomatoesId, string>
 {
     public RottenTomatoesIdConverter()
-        : base(id => id.Value, id => new RottenTomatoesId(id), null)
+        : base(id => id.Value, id => new RottenTomatoesId(id))
     { }
 }

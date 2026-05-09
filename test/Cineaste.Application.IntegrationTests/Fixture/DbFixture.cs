@@ -26,7 +26,7 @@ public sealed class DbFixture : IAsyncLifetime
         dbContext.FranchiseItems.RemoveRange(dbContext.FranchiseItems);
         dbContext.Franchises.RemoveRange(dbContext.Franchises);
         dbContext.Movies.RemoveRange(dbContext.Movies);
-        dbContext.Periods.RemoveRange(dbContext.Periods);
+        dbContext.SeasonPeriods.RemoveRange(dbContext.SeasonPeriods);
         dbContext.Seasons.RemoveRange(dbContext.Seasons);
         dbContext.SpecialEpisodes.RemoveRange(dbContext.SpecialEpisodes);
         dbContext.Series.RemoveRange(dbContext.Series);

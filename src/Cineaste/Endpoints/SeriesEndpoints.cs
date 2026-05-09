@@ -246,7 +246,7 @@ public static class SeriesEndpoints
         CancellationToken token)
     {
         var poster = await seriesService.GetSeasonPoster(
-            principal.ListId, Id.For<Series>(seriesId), Id.For<Period>(periodId), token);
+            principal.ListId, Id.For<Series>(seriesId), Id.For<SeasonPart>(periodId), token);
 
         return TypedResults.File(poster.Data, poster.Type);
     }
@@ -261,7 +261,7 @@ public static class SeriesEndpoints
         CancellationToken token)
     {
         var typedSeriesId = Id.For<Series>(seriesId);
-        var typedPeriodId = Id.For<Period>(periodId);
+        var typedPeriodId = Id.For<SeasonPart>(periodId);
 
         var content = new StreamableContent(file.OpenReadStream, file.Length, file.ContentType);
 
@@ -281,7 +281,7 @@ public static class SeriesEndpoints
         CancellationToken token)
     {
         var typedSeriesId = Id.For<Series>(seriesId);
-        var typedPeriodId = Id.For<Period>(periodId);
+        var typedPeriodId = Id.For<SeasonPart>(periodId);
 
         var posterHash = request switch
         {
@@ -307,7 +307,7 @@ public static class SeriesEndpoints
         CancellationToken token)
     {
         await seriesService.RemoveSeasonPoster(
-            principal.ListId, Id.For<Series>(seriesId), Id.For<Period>(periodId), token);
+            principal.ListId, Id.For<Series>(seriesId), Id.For<SeasonPart>(periodId), token);
 
         return TypedResults.NoContent();
     }

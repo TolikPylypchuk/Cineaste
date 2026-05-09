@@ -6,7 +6,7 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
     {
         movie.HasKey(m => m.Id);
 
-        movie.HasTitles(m => m.AllTitles, "MovieTitles");
+        movie.HasTitles("MovieTitles");
 
         movie.ToTable(t => t.HasCheckConstraint("CH_Movies_YearPositive", "[Year] > 0"));
 
@@ -19,10 +19,5 @@ internal sealed class MovieTypeConfiguration : IEntityTypeConfiguration<Movie>
 
         movie.HasTags(m => m.Tags, "MovieTags");
         movie.HasFranchiseItem(m => m.FranchiseItem, fi => fi.Movie);
-
-        movie.Ignore(m => m.Titles);
-        movie.Ignore(m => m.OriginalTitles);
-        movie.Ignore(m => m.Title);
-        movie.Ignore(m => m.OriginalTitle);
     }
 }

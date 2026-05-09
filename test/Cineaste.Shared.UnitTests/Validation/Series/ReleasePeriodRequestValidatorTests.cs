@@ -3,9 +3,9 @@ using Cineaste.Shared.Validation.TestData;
 
 namespace Cineaste.Shared.Validation.Series;
 
-public class PeriodRequestValidatorTests
+public class ReleasePeriodRequestValidatorTests
 {
-    private readonly PeriodRequestValidator validator = new();
+    private readonly ReleasePeriodRequestValidator validator = new();
 
     public static Arbitrary<int> ValidYear =>
         new ArbitraryValidYear();
@@ -24,7 +24,7 @@ public class PeriodRequestValidatorTests
         } else
         {
             result.ShouldHaveValidationErrorFor(req => req.StartMonth)
-                .WithErrorCode("Period.StartMonth.Invalid");
+                .WithErrorCode("ReleasePeriod.StartMonth.Invalid");
         }
     }
 
@@ -39,7 +39,7 @@ public class PeriodRequestValidatorTests
         } else
         {
             result.ShouldHaveValidationErrorFor(req => req.StartYear)
-                .WithErrorCode("Period.StartYear.TooLow");
+                .WithErrorCode("ReleasePeriod.StartYear.TooLow");
         }
     }
 
@@ -54,7 +54,7 @@ public class PeriodRequestValidatorTests
         } else
         {
             result.ShouldHaveValidationErrorFor(req => req.EndMonth)
-                .WithErrorCode("Period.EndMonth.Invalid");
+                .WithErrorCode("ReleasePeriod.EndMonth.Invalid");
         }
     }
 
@@ -69,13 +69,13 @@ public class PeriodRequestValidatorTests
         } else
         {
             result.ShouldHaveValidationErrorFor(req => req.EndYear)
-                .WithErrorCode("Period.EndYear.TooLow");
+                .WithErrorCode("ReleasePeriod.EndYear.TooLow");
         }
     }
 
     [Property(
         DisplayName = "Validator should validate the period itself",
-        Arbitrary = new[] { typeof(PeriodRequestValidatorTests) })]
+        Arbitrary = new[] { typeof(SeasonPartRequestValidatorTests) })]
     public void ValidatorShouldValidatePeriod(int startYear, int endYear, byte startMonth, byte endMonth)
     {
         var result = validator.TestValidate(this.Request(
@@ -87,13 +87,13 @@ public class PeriodRequestValidatorTests
         } else
         {
             result.ShouldHaveValidationErrors()
-                .WithErrorCode("Period.Invalid");
+                .WithErrorCode("ReleasePeriod.Invalid");
         }
     }
 
     [Property(
         DisplayName = "Validator should validate the period itself",
-        Arbitrary = new[] { typeof(PeriodRequestValidatorTests) })]
+        Arbitrary = new[] { typeof(SeasonPartRequestValidatorTests) })]
     public void ValidatorShouldValidateSingleDayRelease(
         int year1,
         int year2,
@@ -117,7 +117,7 @@ public class PeriodRequestValidatorTests
         if (isSingleDayRelease && (startYear != endYear || startMonth != endMonth))
         {
             result.ShouldHaveValidationErrors()
-                .WithErrorCode("Period.IsSingleDayRelease.Invalid");
+                .WithErrorCode("ReleasePeriod.IsSingleDayRelease.Invalid");
         } else
         {
             result.ShouldNotHaveAnyValidationErrors();
@@ -135,7 +135,7 @@ public class PeriodRequestValidatorTests
         } else
         {
             result.ShouldHaveValidationErrorFor(req => req.EpisodeCount)
-                .WithErrorCode("Period.EpisodeCount.Invalid");
+                .WithErrorCode("ReleasePeriod.EpisodeCount.Invalid");
         }
     }
 
@@ -150,33 +150,16 @@ public class PeriodRequestValidatorTests
         } else
         {
             result.ShouldHaveValidationErrors()
-                .WithErrorCode("Period.IsSingleDayRelease.MustBeTrue");
+                .WithErrorCode("ReleasePeriod.IsSingleDayRelease.MustBeTrue");
         }
     }
 
-    [ClassData(typeof(RottenTomatoesIdTestData))]
-    [Theory(DisplayName = "Validator should validate Rotten Tomatoes ID")]
-    public void ValidatorShouldValidateRottenTomatoesId(string? rottenTomatoesId, bool isValid)
-    {
-        var result = validator.TestValidate(this.Request(rottenTomatoesId: rottenTomatoesId));
-
-        if (isValid)
-        {
-            result.ShouldNotHaveValidationErrorFor(req => req.RottenTomatoesId);
-        } else
-        {
-            result.ShouldHaveValidationErrorFor(req => req.RottenTomatoesId)
-                .WithErrorCode("Period.RottenTomatoesId.Invalid");
-        }
-    }
-
-    private PeriodRequest Request(
+    private ReleasePeriodRequest Request(
         int startMonth = 1,
         int startYear = 2000,
         int endMonth = 1,
         int endYear = 2001,
         int episodeCount = 20,
-        bool isSingleDayRelease = false,
-        string? rottenTomatoesId = null) =>
-        new(null, startMonth, startYear, endMonth, endYear, episodeCount, isSingleDayRelease, rottenTomatoesId);
+        bool isSingleDayRelease = false) =>
+        new(startMonth, startYear, endMonth, endYear, episodeCount, isSingleDayRelease);
 }

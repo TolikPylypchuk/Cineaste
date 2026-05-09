@@ -2,10 +2,10 @@ using static Cineaste.Common.Constants;
 
 namespace Cineaste.Shared.Validation.Series;
 
-public sealed class PeriodRequestValidator : CineasteValidator<PeriodRequest>
+public sealed class ReleasePeriodRequestValidator : CineasteValidator<ReleasePeriodRequest>
 {
-    public PeriodRequestValidator()
-        : base("Period")
+    public ReleasePeriodRequestValidator()
+        : base("ReleasePeriod")
     {
         this.RuleFor(req => req.StartMonth)
             .InclusiveBetween(1, 12)
@@ -38,9 +38,5 @@ public sealed class PeriodRequestValidator : CineasteValidator<PeriodRequest>
         this.RuleFor(req => req.EpisodeCount)
             .InclusiveBetween(1, 100)
             .WithErrorCode(this.ErrorCode(req => req.EpisodeCount, Invalid));
-
-        this.RuleFor(req => req.RottenTomatoesId)
-            .Matches(RottenTomatoesIdRegex)
-            .WithErrorCode(this.ErrorCode(req => req.RottenTomatoesId, Invalid));
     }
 }

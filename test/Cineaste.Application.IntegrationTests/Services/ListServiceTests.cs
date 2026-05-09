@@ -198,12 +198,14 @@ file static class Extensions
             item.Select(
                 movie => movie.Id.Value,
                 series => series.Id.Value,
+                limitedSeries => limitedSeries.Id.Value,
                 franchise => franchise.Id.Value);
 
         public string Title =>
             item.Select(
                 movie => movie.Title.Name,
                 series => series.Title.Name,
+                limitedSeries => limitedSeries.Title.Name,
                 franchise => franchise.ShowTitles && franchise.Title is not null
                     ? $"{franchise.Title.Name}:"
                     : String.Empty);
@@ -212,6 +214,7 @@ file static class Extensions
             item.Select(
                 movie => movie.OriginalTitle.Name,
                 series => series.OriginalTitle.Name,
+                limitedSeries => limitedSeries.OriginalTitle.Name,
                 franchise => franchise.ShowTitles && franchise.OriginalTitle is not null
                     ? $"{franchise.OriginalTitle.Name}:"
                     : String.Empty);
@@ -220,24 +223,28 @@ file static class Extensions
             item.Select(
                 movie => movie.FranchiseItem?.ParentFranchise,
                 series => series.FranchiseItem?.ParentFranchise,
+                limitedSeries => limitedSeries.FranchiseItem?.ParentFranchise,
                 franchise => franchise.FranchiseItem?.ParentFranchise);
 
         public int? FranchiseSequenceNumber =>
             item.Select(
                 movie => movie.FranchiseItem?.SequenceNumber,
                 series => series.FranchiseItem?.SequenceNumber,
+                limitedSeries => limitedSeries.FranchiseItem?.SequenceNumber,
                 franchise => franchise.FranchiseItem?.SequenceNumber);
 
         public int? FranchiseDisplayNumber =>
             item.Select(
                 movie => movie.FranchiseItem?.DisplayNumber,
                 series => series.FranchiseItem?.DisplayNumber,
+                limitedSeries => limitedSeries.FranchiseItem?.DisplayNumber,
                 franchise => franchise.FranchiseItem?.DisplayNumber);
 
         public Color? Color =>
             item.Select(
                 movie => movie.ActiveColor,
                 series => series.ActiveColor,
+                limitedSeries => limitedSeries.ActiveColor,
                 franchise => franchise.ActiveColor);
     }
 }

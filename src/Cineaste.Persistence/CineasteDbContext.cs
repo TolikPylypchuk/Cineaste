@@ -25,6 +25,12 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
     public DbSet<FranchisePoster> FranchisePosters =>
         this.Set<FranchisePoster>();
 
+    public DbSet<LimitedSeries> LimitedSeries =>
+        this.Set<LimitedSeries>();
+
+    public DbSet<LimitedSeriesPoster> LimitedSeriesPosters =>
+        this.Set<LimitedSeriesPoster>();
+
     public DbSet<CineasteList> Lists =>
         this.Set<CineasteList>();
 
@@ -43,8 +49,8 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
     public DbSet<MoviePoster> MoviePosters =>
         this.Set<MoviePoster>();
 
-    public DbSet<Period> Periods =>
-        this.Set<Period>();
+    public DbSet<SeasonPart> SeasonPeriods =>
+        this.Set<SeasonPart>();
 
     public DbSet<Season> Seasons =>
         this.Set<Season>();
@@ -88,7 +94,7 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
         builder.ApplyConfiguration(new MovieTypeConfiguration());
         builder.ApplyConfiguration(new PosterTypeConfiguration<MoviePoster>(nameof(this.MoviePosters)));
 
-        builder.ApplyConfiguration(new PeriodTypeConfiguration());
+        builder.ApplyConfiguration(new SeasonPartTypeConfiguration());
         builder.ApplyConfiguration(new SeasonTypeConfiguration());
         builder.ApplyConfiguration(new PosterTypeConfiguration<SeasonPoster>(nameof(this.SeasonPosters)));
 
@@ -98,6 +104,9 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
 
         builder.ApplyConfiguration(new SeriesTypeConfiguration());
         builder.ApplyConfiguration(new PosterTypeConfiguration<SeriesPoster>(nameof(this.SeriesPosters)));
+
+        builder.ApplyConfiguration(new LimitedSeriesTypeConfiguration());
+        builder.ApplyConfiguration(new PosterTypeConfiguration<LimitedSeriesPoster>(nameof(this.LimitedSeriesPosters)));
 
         builder.ApplyConfiguration(new ListConfigurationTypeConfiguration());
         builder.ApplyConfiguration(new CineasteListTypeConfiguration());
@@ -128,6 +137,9 @@ public class CineasteDbContext(DbContextOptions<CineasteDbContext> options)
 
         builder.Properties<ImdbId>()
             .HaveConversion<ImdbIdConverter>();
+
+        builder.Properties<Month>()
+            .HaveConversion<MonthConverter>();
 
         builder.Properties<PosterHash>()
             .HaveConversion<PosterHashConverter>();

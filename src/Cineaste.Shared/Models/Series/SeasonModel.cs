@@ -8,4 +8,4 @@ public sealed record SeasonModel(
     SeasonWatchStatus WatchStatus,
     SeasonReleaseStatus ReleaseStatus,
     string Channel,
-    ImmutableList<PeriodModel> Periods) : ISeriesComponentModel;
+    ImmutableList<SeasonPartModel> Parts) : ISeriesComponentModel;

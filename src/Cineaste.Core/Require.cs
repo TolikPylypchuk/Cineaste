@@ -30,9 +30,6 @@ public static partial class Require
     public static int? Positive(int? value, [CallerArgumentExpression(nameof(value))] string? paramName = null) =>
         value is null || value > 0 ? value : throw new ArgumentOutOfRangeException(paramName);
 
-    public static int Month(int value, [CallerArgumentExpression(nameof(value))] string? paramName = null) =>
-        value >= 1 && value <= 12 ? value : throw new ArgumentOutOfRangeException(paramName);
-
     public static TEnum ValidEnum<TEnum>(
         this TEnum value,
         [CallerArgumentExpression(nameof(value))] string? paramName = null)

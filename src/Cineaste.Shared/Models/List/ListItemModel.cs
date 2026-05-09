@@ -15,7 +15,7 @@ public sealed record ListItemModel(
         other is not null ? this.ListSequenceNumber.CompareTo(other.ListSequenceNumber) : 1;
 }
 
-public enum ListItemType { Movie, Series, Franchise }
+public enum ListItemType { Movie, Series, LimitedSeries, Franchise }
 
 public sealed record ListFranchiseItemModel(
     Guid FranchiseId,

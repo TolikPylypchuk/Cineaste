@@ -46,17 +46,26 @@ public sealed class FranchiseServiceTests(DbFixture dbFixture, ITestOutputHelper
             Assert.Equal(item.Title.Name, itemModel.Title);
 
             Assert.Equal(
-                item.Select(movie => movie.Year, series => series.StartYear, franchise => franchise.StartYear ?? 0),
+                item.Select(
+                    movie => movie.Year,
+                    series => series.StartYear,
+                    limitedSeries => limitedSeries.Period.StartYear,
+                    franchise => franchise.StartYear ?? 0),
                 itemModel.StartYear);
 
             Assert.Equal(
-                item.Select(movie => movie.Year, series => series.EndYear, franchise => franchise.EndYear ?? 0),
+                item.Select(
+                    movie => movie.Year,
+                    series => series.EndYear,
+                    limitedSeries => limitedSeries.Period.EndYear,
+                    franchise => franchise.EndYear ?? 0),
                 itemModel.EndYear);
 
             Assert.Equal(
                 item.Select(
                     movie => FranchiseItemType.Movie,
                     series => FranchiseItemType.Series,
+                    limitedSeries => FranchiseItemType.LimitedSeries,
                     franchise => FranchiseItemType.Franchise),
                 itemModel.Type);
         }
@@ -123,6 +132,7 @@ public sealed class FranchiseServiceTests(DbFixture dbFixture, ITestOutputHelper
             item.Do(
                 movie => Assert.Equal(FranchiseItemType.Movie, itemRequest.Type),
                 series => Assert.Equal(FranchiseItemType.Series, itemRequest.Type),
+                limitedSeries => Assert.Equal(FranchiseItemType.LimitedSeries, itemRequest.Type),
                 franchise => Assert.Equal(FranchiseItemType.Franchise, itemRequest.Type));
         }
     }
@@ -247,9 +257,12 @@ public sealed class FranchiseServiceTests(DbFixture dbFixture, ITestOutputHelper
             var itemType = item.Select(
                 m => FranchiseItemType.Movie,
                 s => FranchiseItemType.Series,
+                ls => FranchiseItemType.LimitedSeries,
                 f => FranchiseItemType.Franchise);
 
-            Assert.Equal(itemRequest.Id, item.Select(m => m.Id.Value, s => s.Id.Value, f => f.Id.Value));
+            Assert.Equal(
+                itemRequest.Id, item.Select(m => m.Id.Value, s => s.Id.Value, ls => ls.Id.Value, f => f.Id.Value));
+
             Assert.Equal(itemRequest.Type, itemType);
             Assert.Equal(itemRequest.SequenceNumber, item.SequenceNumber);
             Assert.Equal(itemRequest.ShouldDisplayNumber, item.DisplayNumber is not null);

@@ -136,10 +136,10 @@ public sealed class DataFixture : IAsyncLifetime
             SeasonReleaseStatus.Finished,
             "Test",
             num,
-            [new(Id.Create<Period>(), 1, 2000 + num, 2, 2000 + num, false, 10)]);
+            [new(Id.Create<SeasonPart>(), new(Month.January, 2000 + num, Month.February, 2000 + num, false, 10))]);
 
     public SpecialEpisode CreateSpecialEpisode(int num) =>
-        new(Id.Create<SpecialEpisode>(), this.CreateTitles(), 1, 2000 + num, false, true, "Test", num);
+        new(Id.Create<SpecialEpisode>(), this.CreateTitles(), Month.January, 2000 + num, false, true, "Test", num);
 
     public async Task<Franchise> CreateFranchise(CineasteDbContext dbContext)
     {
@@ -207,9 +207,9 @@ public sealed class DataFixture : IAsyncLifetime
         return poster;
     }
 
-    public async Task<SeasonPoster> CreateSeasonPoster(Period period, CineasteDbContext dbContext)
+    public async Task<SeasonPoster> CreateSeasonPoster(SeasonPart part, CineasteDbContext dbContext)
     {
-        var poster = new SeasonPoster(Id.Create<SeasonPoster>(), period, PosterData, PosterType);
+        var poster = new SeasonPoster(Id.Create<SeasonPoster>(), part, PosterData, PosterType);
 
         dbContext.SeasonPosters.Add(poster);
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);

@@ -3,8 +3,7 @@ namespace Cineaste.Core.Domain;
 public sealed class Season : TitledEntity<Season>
 {
     private string channel;
-    private int sequenceNumber;
-    private readonly List<Period> periods;
+    private readonly List<SeasonPart> parts;
 
     public SeasonWatchStatus WatchStatus { get; set; }
     public SeasonReleaseStatus ReleaseStatus { get; set; }
@@ -19,22 +18,24 @@ public sealed class Season : TitledEntity<Season>
 
     public int SequenceNumber
     {
-        get => this.sequenceNumber;
-        set => this.sequenceNumber = Require.Positive(value);
+        get;
+        set => field = Require.Positive(value);
     }
 
-    public IReadOnlyCollection<Period> Periods =>
-        this.periods.AsReadOnly();
+    public IReadOnlyCollection<SeasonPart> Parts =>
+        this.parts.AsReadOnly();
 
     public int StartYear =>
-        this.Periods
+        this.Parts
+            .Select(part => part.Period)
             .OrderBy(period => period.StartYear)
             .ThenBy(period => period.StartMonth)
             .First()
             .StartYear;
 
     public int EndYear =>
-        this.Periods
+        this.Parts
+            .Select(part => part.Period)
             .OrderByDescending(period => period.EndYear)
             .ThenByDescending(period => period.EndMonth)
             .First()
@@ -47,7 +48,7 @@ public sealed class Season : TitledEntity<Season>
         SeasonReleaseStatus releaseStatus,
         string channel,
         int sequenceNumber,
-        IEnumerable<Period> periods)
+        IEnumerable<SeasonPart> parts)
         : base(id, titles)
     {
         this.WatchStatus = watchStatus;
@@ -55,7 +56,7 @@ public sealed class Season : TitledEntity<Season>
         this.Channel = channel;
         this.SequenceNumber = sequenceNumber;
 
-        this.periods = [.. periods];
+        this.parts = [.. parts];
     }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core")]
@@ -63,12 +64,12 @@ public sealed class Season : TitledEntity<Season>
         : base(id)
     {
         this.channel = null!;
-        this.periods = [];
+        this.parts = [];
     }
 
-    public void AddPeriod(Period period) =>
-        this.periods.Add(period);
+    public void AddPart(SeasonPart period) =>
+        this.parts.Add(period);
 
-    public void RemovePeriod(Period period) =>
-        this.periods.Remove(period);
+    public void RemovePart(SeasonPart period) =>
+        this.parts.Remove(period);
 }

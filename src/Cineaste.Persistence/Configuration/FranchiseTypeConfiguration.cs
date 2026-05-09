@@ -5,7 +5,7 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
     public void Configure(EntityTypeBuilder<Franchise> franchise)
     {
         franchise.HasKey(f => f.Id);
-        franchise.HasTitles(f => f.AllTitles, "FranchiseTitles");
+        franchise.HasTitles("FranchiseTitles");
 
         franchise.HasMany(f => f.Children)
             .WithOne(item => item.ParentFranchise)
@@ -26,10 +26,5 @@ internal sealed class FranchiseTypeConfiguration : IEntityTypeConfiguration<Fran
 
         franchise.Property(f => f.PosterHash)
             .IsFixedLength();
-
-        franchise.Ignore(f => f.Titles);
-        franchise.Ignore(f => f.OriginalTitles);
-        franchise.Ignore(f => f.Title);
-        franchise.Ignore(f => f.OriginalTitle);
     }
 }

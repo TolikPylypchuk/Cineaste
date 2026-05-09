@@ -4,7 +4,6 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
 {
     private MovieKind movieKind;
     private SeriesKind seriesKind;
-    private FranchiseKindSource kindSource;
     private readonly List<FranchiseItem> children;
 
     public bool ShowTitles { get; set; }
@@ -21,16 +20,16 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
 
     public SeriesKind SeriesKind
     {
-        get => seriesKind;
+        get => this.seriesKind;
 
         [MemberNotNull(nameof(seriesKind))]
-        set => seriesKind = Require.NotNull(value);
+        set => this.seriesKind = Require.NotNull(value);
     }
 
     public FranchiseKindSource KindSource
     {
-        get => kindSource;
-        set => kindSource = Require.ValidEnum(value);
+        get;
+        set => field = Require.ValidEnum(value);
     }
 
     public PosterHash? PosterHash { get; set; }
@@ -40,11 +39,17 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
 
     public int? StartYear =>
         this.Children.Min(item => item.Select(
-            movie => movie.Year, series => series.StartYear, franchise => franchise.StartYear));
+            movie => movie.Year,
+            series => series.StartYear,
+            limitedSeries => limitedSeries.Period.StartYear,
+            franchise => franchise.StartYear));
 
     public int? EndYear =>
         this.Children.Max(item => item.Select(
-            movie => movie.Year, series => series.EndYear, franchise => franchise.EndYear));
+            movie => movie.Year,
+            series => series.EndYear,
+            limitedSeries => limitedSeries.Period.EndYear,
+            franchise => franchise.EndYear));
 
     public Franchise(
         Id<Franchise> id,
@@ -82,6 +87,9 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
     public FranchiseItem? FindSeries(Series series) =>
         this.Children.FirstOrDefault(item => item.Series == series);
 
+    public FranchiseItem? FindLimitedSeries(LimitedSeries limitedSeries) =>
+        this.Children.FirstOrDefault(item => item.LimitedSeries == limitedSeries);
+
     public FranchiseItem? FindFranchise(Franchise franchise) =>
         this.Children.FirstOrDefault(item => item.Franchise == franchise);
 
@@ -111,6 +119,21 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
 
         this.children.Add(item);
         series.FranchiseItem = item;
+
+        return item;
+    }
+
+    public FranchiseItem AttachLimitedSeries(LimitedSeries limitedSeries, bool addDisplayNumber)
+    {
+        var item = new FranchiseItem(
+            Domain.Id.Create<FranchiseItem>(),
+            limitedSeries,
+            this,
+            this.Children.Count + 1,
+            addDisplayNumber ? this.GetMaxDisplayNumber() + 1 : null);
+
+        this.children.Add(item);
+        limitedSeries.FranchiseItem = item;
 
         return item;
     }
@@ -152,6 +175,17 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
         }
     }
 
+    public void DetachLimitedSeries(LimitedSeries limitedSeries)
+    {
+        if (limitedSeries.FranchiseItem is not null && this.children.Contains(limitedSeries.FranchiseItem))
+        {
+            this.children.Remove(limitedSeries.FranchiseItem);
+            limitedSeries.FranchiseItem = null;
+
+            this.SetSequenceNumbersForChildren();
+        }
+    }
+
     public void DetachFranchise(Franchise franchise)
     {
         if (franchise.FranchiseItem is not null && this.children.Contains(franchise.FranchiseItem))
@@ -177,6 +211,11 @@ public sealed class Franchise : FranchiseItemEntity<Franchise>
                 {
                     series.FranchiseItem = null;
                     series.ListItem!.SetProperties(series);
+                },
+                limitedSeries =>
+                {
+                    limitedSeries.FranchiseItem = null;
+                    limitedSeries.ListItem!.SetProperties(limitedSeries);
                 },
                 franchise =>
                 {

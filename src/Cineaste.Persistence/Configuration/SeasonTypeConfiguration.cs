@@ -6,23 +6,19 @@ internal sealed class SeasonTypeConfiguration : IEntityTypeConfiguration<Season>
     {
         season.HasKey(s => s.Id);
 
-        season.HasTitles(s => s.AllTitles, "SeasonTitles");
+        season.HasTitles("SeasonTitles");
 
         season.ToTable(t => t.HasCheckConstraint("CH_Seasons_ChannelNotEmpty", "[Channel] <> ''"));
         season.ToTable(t => t.HasCheckConstraint("CH_Seasons_SequenceNumberPositive", "[SequenceNumber] > 0"));
 
-        season.HasMany(s => s.Periods)
+        season.HasMany(s => s.Parts)
             .WithOne()
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        season.Navigation(s => s.Periods)
+        season.Navigation(s => s.Parts)
             .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-        season.Ignore(s => s.Titles);
-        season.Ignore(s => s.OriginalTitles);
-        season.Ignore(s => s.Title);
-        season.Ignore(s => s.OriginalTitle);
         season.Ignore(s => s.StartYear);
         season.Ignore(s => s.EndYear);
     }

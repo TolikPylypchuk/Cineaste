@@ -4,7 +4,11 @@ public static class DomainExtensions
 {
     extension(ListItem item)
     {
-        public T Select<T>(Func<Movie, T> movieFunc, Func<Series, T> seriesFunc, Func<Franchise, T> franchiseFunc)
+        public T Select<T>(
+            Func<Movie, T> movieFunc,
+            Func<Series, T> seriesFunc,
+            Func<LimitedSeries, T> limitedSeriesFunc,
+            Func<Franchise, T> franchiseFunc)
         {
             if (item.Movie is not null)
             {
@@ -12,6 +16,9 @@ public static class DomainExtensions
             } else if (item.Series is not null)
             {
                 return seriesFunc(item.Series);
+            } else if (item.LimitedSeries is not null)
+            {
+                return limitedSeriesFunc(item.LimitedSeries);
             } else if (item.Franchise is not null)
             {
                 return franchiseFunc(item.Franchise);
@@ -21,7 +28,11 @@ public static class DomainExtensions
             }
         }
 
-        public void Do(Action<Movie> movieAction, Action<Series> seriesAction, Action<Franchise> franchiseAction)
+        public void Do(
+            Action<Movie> movieAction,
+            Action<Series> seriesAction,
+            Action<LimitedSeries> limitedSeriesAction,
+            Action<Franchise> franchiseAction)
         {
             if (item.Movie is not null)
             {
@@ -29,6 +40,9 @@ public static class DomainExtensions
             } else if (item.Series is not null)
             {
                 seriesAction(item.Series);
+            } else if (item.LimitedSeries is not null)
+            {
+                limitedSeriesAction(item.LimitedSeries);
             } else if (item.Franchise is not null)
             {
                 franchiseAction(item.Franchise);
@@ -45,15 +59,21 @@ public static class DomainExtensions
             item.Select(
                 movie => movie.Year,
                 series => series.StartYear,
+                series => series.Period.StartYear,
                 franchise => franchise.FirstChild?.StartYear ?? 0);
 
         public int EndYear =>
             item.Select(
                 movie => movie.Year,
                 series => series.EndYear,
+                series => series.Period.EndYear,
                 franchise => franchise.LastChild?.EndYear ?? 0);
 
-        public T Select<T>(Func<Movie, T> movieFunc, Func<Series, T> seriesFunc, Func<Franchise, T> franchiseFunc)
+        public T Select<T>(
+            Func<Movie, T> movieFunc,
+            Func<Series, T> seriesFunc,
+            Func<LimitedSeries, T> limitedSeriesFunc,
+            Func<Franchise, T> franchiseFunc)
         {
             if (item.Movie is not null)
             {
@@ -61,6 +81,9 @@ public static class DomainExtensions
             } else if (item.Series is not null)
             {
                 return seriesFunc(item.Series);
+            } else if (item.LimitedSeries is not null)
+            {
+                return limitedSeriesFunc(item.LimitedSeries);
             } else if (item.Franchise is not null)
             {
                 return franchiseFunc(item.Franchise);
@@ -70,7 +93,11 @@ public static class DomainExtensions
             }
         }
 
-        public void Do(Action<Movie> movieAction, Action<Series> seriesAction, Action<Franchise> franchiseAction)
+        public void Do(
+            Action<Movie> movieAction,
+            Action<Series> seriesAction,
+            Action<LimitedSeries> limitedSeriesAction,
+            Action<Franchise> franchiseAction)
         {
             if (item.Movie is not null)
             {
@@ -78,6 +105,9 @@ public static class DomainExtensions
             } else if (item.Series is not null)
             {
                 seriesAction(item.Series);
+            } else if (item.LimitedSeries is not null)
+            {
+                limitedSeriesAction(item.LimitedSeries);
             } else if (item.Franchise is not null)
             {
                 franchiseAction(item.Franchise);
@@ -91,6 +121,7 @@ public static class DomainExtensions
             item.Do(
                 movie => movie.ListItem?.SetProperties(movie),
                 series => series.ListItem?.SetProperties(series),
+                limitedSeries => limitedSeries.ListItem?.SetProperties(limitedSeries),
                 franchise => franchise.SetListItemProperties());
     }
 
@@ -121,6 +152,16 @@ public static class DomainExtensions
                     : series.Kind.NotReleasedColor;
     }
 
+    extension(LimitedSeries limitedSeries)
+    {
+        public Color ActiveColor =>
+            limitedSeries.WatchStatus != SeriesWatchStatus.NotWatched
+                ? limitedSeries.Kind.WatchedColor
+                : limitedSeries.ReleaseStatus != SeriesReleaseStatus.NotStarted
+                    ? limitedSeries.Kind.NotWatchedColor
+                    : limitedSeries.Kind.NotReleasedColor;
+    }
+
     extension(Franchise franchise)
     {
         public Color ActiveColor
@@ -146,6 +187,7 @@ public static class DomainExtensions
             franchise.FirstChild?.Select(
                 movie => movie.IsWatched,
                 series => series.WatchStatus != SeriesWatchStatus.NotWatched,
+                limitedSeries => limitedSeries.WatchStatus != SeriesWatchStatus.NotWatched,
                 franchise => franchise.IsWatched)
                 ?? true;
 
@@ -153,6 +195,7 @@ public static class DomainExtensions
             franchise.FirstChild?.Select(
                 movie => movie.IsReleased,
                 series => series.ReleaseStatus != SeriesReleaseStatus.NotStarted,
+                limitedSeries => limitedSeries.ReleaseStatus != SeriesReleaseStatus.NotStarted,
                 franchise => franchise.IsReleased)
                 ?? true;
 

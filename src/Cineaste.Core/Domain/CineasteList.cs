@@ -68,6 +68,12 @@ public sealed class CineasteList : Entity<CineasteList>
     public void RemoveSeries(Series series) =>
         this.items.RemoveAll(item => item is { Series.Id: var id } && id == series.Id);
 
+    public void AddLimitedSeries(LimitedSeries limitedSeries) =>
+        this.items.Add(new ListItem(Domain.Id.Create<ListItem>(), this, limitedSeries));
+
+    public void RemoveLimitedSeries(LimitedSeries limitedSeries) =>
+        this.items.RemoveAll(item => item is { LimitedSeries.Id: var id } && id == limitedSeries.Id);
+
     public void AddFranchise(Franchise franchise) =>
         this.items.Add(new ListItem(Domain.Id.Create<ListItem>(), this, franchise));
 
@@ -117,6 +123,9 @@ public sealed class CineasteList : Entity<CineasteList>
 
     public bool ContainsSeries(Series series) =>
         this.items.Any(item => item is { Series.Id: var id } && id == series.Id);
+
+    public bool ContainsLimitedSeries(LimitedSeries limitedSeries) =>
+        this.items.Any(item => item is { LimitedSeries.Id: var id } && id == limitedSeries.Id);
 
     public bool ContainsFranchise(Franchise franchise) =>
         this.items.Any(item => item is { Franchise.Id: var id } && id == franchise.Id);

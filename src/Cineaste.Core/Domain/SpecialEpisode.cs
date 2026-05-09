@@ -2,21 +2,14 @@ namespace Cineaste.Core.Domain;
 
 public sealed class SpecialEpisode : TitledEntity<SpecialEpisode>
 {
-    private int month;
-    private int year;
     private string channel;
-    private int sequenceNumber;
 
-    public int Month
-    {
-        get => this.month;
-        set => this.month = Require.Month(value);
-    }
+    public Month Month { get; set; }
 
     public int Year
     {
-        get => this.year;
-        set => this.year = Require.Positive(value);
+        get;
+        set => field = Require.Positive(value);
     }
 
     public bool IsWatched { get; set; }
@@ -32,8 +25,8 @@ public sealed class SpecialEpisode : TitledEntity<SpecialEpisode>
 
     public int SequenceNumber
     {
-        get => this.sequenceNumber;
-        set => this.sequenceNumber = Require.Positive(value);
+        get;
+        set => field = Require.Positive(value);
     }
 
     public RottenTomatoesId? RottenTomatoesId { get; set; }
@@ -43,7 +36,7 @@ public sealed class SpecialEpisode : TitledEntity<SpecialEpisode>
     public SpecialEpisode(
         Id<SpecialEpisode> id,
         IEnumerable<Title> titles,
-        int month,
+        Month month,
         int year,
         bool isWatched,
         bool isReleased,
