@@ -1,4 +1,5 @@
 using Cineaste.Client.Store.Forms.FranchiseForm;
+using Cineaste.Client.Store.Forms.LimitedSeriesForm;
 using Cineaste.Client.Store.Forms.MovieForm;
 using Cineaste.Client.Store.Forms.SeriesForm;
 
@@ -30,6 +31,22 @@ public static class ItemUpdatedReducers
                 {
                     SelectedItem = item,
                     SelectionMode = ListPageSelectionMode.Series
+                };
+            },
+            onFailure: _ => state);
+
+    [ReducerMethod]
+    public static ListPageState ReduceUpdateLimitedSeriesResultAction(
+        ListPageState state,
+        UpdateLimitedSeriesResultAction action) =>
+        action.Handle(
+            onSuccess: limitedSeries =>
+            {
+                var item = limitedSeries.ToListItemModel();
+                return state with
+                {
+                    SelectedItem = item,
+                    SelectionMode = ListPageSelectionMode.LimitedSeries
                 };
             },
             onFailure: _ => state);

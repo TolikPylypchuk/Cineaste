@@ -171,16 +171,11 @@
   align-items: center;
 }
 
-.add-movie-series-container {
+.add-item-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   justify-content: stretch;
   gap: var(--s2);
-}
-
-.add-franchise-container {
-  display: flex;
-  justify-content: center;
 }
 
 .add-existing-item-subtext {

@@ -1,4 +1,4 @@
-@inherits CineasteForm<PeriodFormModel, SeasonPartRequest, SeasonPartModel, SeriesFormState>
+@inherits CineasteForm<ReleasePeriodFormModel, ReleasePeriodRequest, ReleasePeriodModel>
 
 <FormParamsProvider For="this">
     <div>
@@ -6,8 +6,8 @@
             Date="this.FormModel.StartDate"
             DateChanged="@(date => this.OnStartDateChanged(date))"
             Label="@(this.Loc[
-                $"PeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonthYear" : "ReleaseMonthYear")}"])"
-            DateFormat="@this.Loc["PeriodForm.MonthYearFormat"]"
+                $"ReleasePeriodForm.{(!this.FormModel.IsSingleDayRelease ? "StartMonthYear" : "ReleaseMonthYear")}"])"
+            DateFormat="@this.Loc["ReleasePeriodForm.MonthYearFormat"]"
             MinDate="@(new DateTime(Constants.MinYear, 1, 1))"
             ShowToolbar="false"
             OpenTo="OpenTo.Month"
@@ -23,8 +23,8 @@
             <MudDatePicker
                 Date="this.FormModel.EndDate"
                 DateChanged="@(date => this.OnEndDateChanged(date))"
-                Label="@this.Loc["PeriodForm.EndMonthYear"]"
-                DateFormat="@this.Loc["PeriodForm.MonthYearFormat"]"
+                Label="@this.Loc["ReleasePeriodForm.EndMonthYear"]"
+                DateFormat="@this.Loc["ReleasePeriodForm.MonthYearFormat"]"
                 MinDate="@(new DateTime(Constants.MinYear, 1, 1))"
                 ShowToolbar="false"
                 OpenTo="OpenTo.Month"
@@ -36,18 +36,18 @@
     }
 
     <div>
-        <ErrorPresenter ErrorCode="Period.Invalid" Trigger="@this.InvalidPeriodTrigger" />
+        <ErrorPresenter ErrorCode="ReleasePeriod.Invalid" Trigger="@this.InvalidPeriodTrigger" />
     </div>
 
     <div class="episode-count-container">
         <div>
             <MudNumericField
                 @bind-Value="this.FormModel.EpisodeCount"
-                Label="@this.Loc["PeriodForm.EpisodeCount"]"
+                Label="@this.Loc["ReleasePeriodForm.EpisodeCount"]"
                 Class="form-field"
             />
 
-            <ErrorPresenter ErrorCode="Period.EpisodeCount.*" Trigger="@this.FormModel.EpisodeCount" />
+            <ErrorPresenter ErrorCode="ReleasePeriod.EpisodeCount.*" Trigger="@this.FormModel.EpisodeCount" />
         </div>
 
         <div>
@@ -59,56 +59,24 @@
                     Size="Size.Small"
                     Dense="true"
                 >
-                    @this.Loc["PeriodForm.IsSingleDayRelease"]
+                    @this.Loc["ReleasePeriodForm.IsSingleDayRelease"]
                 </MudCheckBox>
 
                 <ErrorPresenter
-                    ErrorCode="Period.IsSingleDayRelease.*"
+                    ErrorCode="ReleasePeriod.IsSingleDayRelease.*"
                     Trigger="@(new { this.FormModel.IsSingleDayRelease, this.FormModel.EpisodeCount })"
                 />
             </div>
         </div>
     </div>
-
-    <div class="rotten-tomatoes-container">
-        <div class="rotten-tomatoes">
-            <MudTextField
-                @bind-Value="@this.FormModel.RottenTomatoesId"
-                Label="@this.Loc["PeriodForm.RottenTomatoesId"]"
-                Sizing="InputSizing.Auto"
-                Class="form-field"
-            />
-
-            <ErrorPresenter
-                ErrorCode="Period.RottenTomatoesId.*"
-                Trigger="@this.FormModel.RottenTomatoesId"
-            />
-        </div>
-
-        @if (this.CanRemove)
-        {
-            <MudIconButton
-                Icon="@Icons.Material.Filled.Close"
-                Size="Size.Small"
-                @onclick="this.Removed"
-                aria-label="@this.Loc["AriaLabel.Remove"]"
-            />
-        }
-    </div>
 </FormParamsProvider>
 
 @code {
     [Parameter]
-    public override PeriodFormModel FormModel { get; set; } = null!;
-
-    [Parameter]
-    public bool CanRemove { get; set; }
+    public override ReleasePeriodFormModel FormModel { get; set; } = null!;
 
     [Parameter]
     public EventCallback Changed { get; set; }
-
-    [Parameter]
-    public EventCallback Removed { get; set; }
 
     private bool CanChangeIsSingleDayRelease { get; set; }
 

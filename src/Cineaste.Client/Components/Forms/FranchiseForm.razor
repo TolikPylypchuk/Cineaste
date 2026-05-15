@@ -255,7 +255,7 @@
 
                     @if (!(this.FormModel.IsNew || this.FormModel.HasChanges))
                     {
-                        <div class="add-movie-series-container">
+                        <div class="add-item-container">
                             <MudButton
                                 Variant="Variant.Text"
                                 Size="Size.Small"
@@ -267,19 +267,25 @@
                             <MudButton
                                 Variant="Variant.Text"
                                 Size="Size.Small"
+                                @onclick="@this.StartAddingFranchise"
+                            >
+                                @this.Loc["FranchiseForm.AddFranchise"]
+                            </MudButton>
+
+                            <MudButton
+                                Variant="Variant.Text"
+                                Size="Size.Small"
                                 @onclick="@this.StartAddingSeries"
                             >
                                 @this.Loc["FranchiseForm.AddSeries"]
                             </MudButton>
-                        </div>
 
-                        <div class="add-franchise-container">
                             <MudButton
                                 Variant="Variant.Text"
                                 Size="Size.Small"
-                                @onclick="@this.StartAddingFranchise"
+                                @onclick="@this.StartAddingLimitedSeries"
                             >
-                                @this.Loc["FranchiseForm.AddFranchise"]
+                                @this.Loc["FranchiseForm.AddLimitedSeries"]
                             </MudButton>
                         </div>
                     }

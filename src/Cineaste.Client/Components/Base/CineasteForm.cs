@@ -2,14 +2,10 @@ using Cineaste.Client.Store;
 
 namespace Cineaste.Client.Components.Base;
 
-public abstract class CineasteForm<TFormModel, TRequest, TModel, TState> : ValidatableComponent
+public abstract class CineasteForm<TFormModel, TRequest, TModel> : ValidatableComponent
     where TFormModel : FormModelBase<TRequest, TModel>
     where TRequest : IValidatable<TRequest>
-    where TModel : IIdentifyableModel
 {
-    [Inject]
-    public required IState<TState> State { get; init; }
-
     public virtual TFormModel FormModel { get; set; } = null!;
 
     public override IReadOnlySet<string> ValidationErrors =>

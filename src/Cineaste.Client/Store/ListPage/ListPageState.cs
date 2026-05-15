@@ -1,6 +1,6 @@
 namespace Cineaste.Client.Store.ListPage;
 
-public enum ListPageSelectionMode { None, Movie, Series, Franchise }
+public enum ListPageSelectionMode { None, Movie, Series, LimitedSeries, Franchise }
 
 [FeatureState]
 public sealed record ListPageState
@@ -42,6 +42,7 @@ public static class Extensions
             {
                 ListItemType.Movie => ListPageSelectionMode.Movie,
                 ListItemType.Series => ListPageSelectionMode.Series,
+                ListItemType.LimitedSeries => ListPageSelectionMode.LimitedSeries,
                 ListItemType.Franchise => ListPageSelectionMode.Franchise,
                 _ => ListPageSelectionMode.None
             };

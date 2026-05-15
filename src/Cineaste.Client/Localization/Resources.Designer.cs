@@ -358,6 +358,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new limited series.
+        /// </summary>
+        public static string FranchiseForm_AddLimitedSeries {
+            get {
+                return ResourceManager.GetString("FranchiseForm.AddLimitedSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new movie.
         /// </summary>
         public static string FranchiseForm_AddMovie {
@@ -673,6 +682,348 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Channel.
+        /// </summary>
+        public static string LimitedSeriesForm_Channel {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to franchise.
+        /// </summary>
+        public static string LimitedSeriesForm_GoToFranchise {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.GoToFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IMDb ID.
+        /// </summary>
+        public static string LimitedSeriesForm_ImdbId {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.ImdbId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string LimitedSeriesForm_Kind {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Kind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Limited Series.
+        /// </summary>
+        public static string LimitedSeriesForm_NewLimitedSeries {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.NewLimitedSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original title.
+        /// </summary>
+        public static string LimitedSeriesForm_OriginalTitle {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.OriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adding the limited series has failed.
+        /// </summary>
+        public static string LimitedSeriesForm_Problem_AddingFailed {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Problem.AddingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading the limited series has failed.
+        /// </summary>
+        public static string LimitedSeriesForm_Problem_LoadingFailed {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Problem.LoadingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing the limited series has failed.
+        /// </summary>
+        public static string LimitedSeriesForm_Problem_RemovingFailed {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Problem.RemovingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing the limited series has failed.
+        /// </summary>
+        public static string LimitedSeriesForm_Problem_RemovingPosterFailed {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Problem.RemovingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting the poster has failed.
+        /// </summary>
+        public static string LimitedSeriesForm_Problem_SettingPosterFailed {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Problem.SettingPosterFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating the limited series has failed.
+        /// </summary>
+        public static string LimitedSeriesForm_Problem_UpdatingFailed {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Problem.UpdatingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release status.
+        /// </summary>
+        public static string LimitedSeriesForm_ReleaseStatus {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.ReleaseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancelled.
+        /// </summary>
+        public static string LimitedSeriesForm_ReleaseStatus_Cancelled {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.ReleaseStatus.Cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        public static string LimitedSeriesForm_ReleaseStatus_Finished {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.ReleaseStatus.Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiatus.
+        /// </summary>
+        public static string LimitedSeriesForm_ReleaseStatus_Hiatus {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.ReleaseStatus.Hiatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not started.
+        /// </summary>
+        public static string LimitedSeriesForm_ReleaseStatus_NotStarted {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.ReleaseStatus.NotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running.
+        /// </summary>
+        public static string LimitedSeriesForm_ReleaseStatus_Running {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.ReleaseStatus.Running", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t care.
+        /// </summary>
+        public static string LimitedSeriesForm_ReleaseStatus_Unknown {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.ReleaseStatus.Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this limited series?.
+        /// </summary>
+        public static string LimitedSeriesForm_RemoveDialog_Body {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.RemoveDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Limited Series.
+        /// </summary>
+        public static string LimitedSeriesForm_RemoveDialog_Title {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.RemoveDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove original title.
+        /// </summary>
+        public static string LimitedSeriesForm_RemoveOriginalTitle {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.RemoveOriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove poster.
+        /// </summary>
+        public static string LimitedSeriesForm_RemovePoster {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.RemovePoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this limited series&apos; poster?.
+        /// </summary>
+        public static string LimitedSeriesForm_RemovePosterDialog_Body {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.RemovePosterDialog.Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Limited Series Poster.
+        /// </summary>
+        public static string LimitedSeriesForm_RemovePosterDialog_Title {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.RemovePosterDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove title.
+        /// </summary>
+        public static string LimitedSeriesForm_RemoveTitle {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.RemoveTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes ID.
+        /// </summary>
+        public static string LimitedSeriesForm_RottenTomatoesId {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.RottenTomatoesId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes sub-ID.
+        /// </summary>
+        public static string LimitedSeriesForm_RottenTomatoesSubId {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.RottenTomatoesSubId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set poster.
+        /// </summary>
+        public static string LimitedSeriesForm_SetPoster {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.SetPoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start franchise.
+        /// </summary>
+        public static string LimitedSeriesForm_StartFranchise {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.StartFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string LimitedSeriesForm_Title {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload poster.
+        /// </summary>
+        public static string LimitedSeriesForm_UploadPoster {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.UploadPoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch status.
+        /// </summary>
+        public static string LimitedSeriesForm_WatchStatus {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.WatchStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiatus.
+        /// </summary>
+        public static string LimitedSeriesForm_WatchStatus_Hiatus {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.WatchStatus.Hiatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not watched.
+        /// </summary>
+        public static string LimitedSeriesForm_WatchStatus_NotWatched {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.WatchStatus.NotWatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopped watching.
+        /// </summary>
+        public static string LimitedSeriesForm_WatchStatus_StoppedWatching {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.WatchStatus.StoppedWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watched.
+        /// </summary>
+        public static string LimitedSeriesForm_WatchStatus_Watched {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.WatchStatus.Watched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watching.
+        /// </summary>
+        public static string LimitedSeriesForm_WatchStatus_Watching {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.WatchStatus.Watching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IMDb.
         /// </summary>
         public static string Link_Imdb {
@@ -714,6 +1065,15 @@ namespace Cineaste.Client.Localization {
         public static string Link_RottenTomatoesWithPartFormat {
             get {
                 return ResourceManager.GetString("Link.RottenTomatoesWithPartFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new limited series.
+        /// </summary>
+        public static string ListActionsPanel_AddLimitedSeries {
+            get {
+                return ResourceManager.GetString("ListActionsPanel.AddLimitedSeries", resourceCulture);
             }
         }
         
@@ -786,6 +1146,15 @@ namespace Cineaste.Client.Localization {
         public static string ListItemType_Franchise {
             get {
                 return ResourceManager.GetString("ListItemType.Franchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limited series.
+        /// </summary>
+        public static string ListItemType_LimitedSeries {
+            get {
+                return ResourceManager.GetString("ListItemType.LimitedSeries", resourceCulture);
             }
         }
         
@@ -1330,69 +1699,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End month and year.
-        /// </summary>
-        public static string PeriodForm_EndMonthYear {
-            get {
-                return ResourceManager.GetString("PeriodForm.EndMonthYear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # of episodes.
-        /// </summary>
-        public static string PeriodForm_EpisodeCount {
-            get {
-                return ResourceManager.GetString("PeriodForm.EpisodeCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Single-day release.
-        /// </summary>
-        public static string PeriodForm_IsSingleDayRelease {
-            get {
-                return ResourceManager.GetString("PeriodForm.IsSingleDayRelease", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MMMM yyyy.
-        /// </summary>
-        public static string PeriodForm_MonthYearFormat {
-            get {
-                return ResourceManager.GetString("PeriodForm.MonthYearFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Release month and year.
-        /// </summary>
-        public static string PeriodForm_ReleaseMonthYear {
-            get {
-                return ResourceManager.GetString("PeriodForm.ReleaseMonthYear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Rotten Tomatoes ID.
-        /// </summary>
-        public static string PeriodForm_RottenTomatoesId {
-            get {
-                return ResourceManager.GetString("PeriodForm.RottenTomatoesId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Start month and year.
-        /// </summary>
-        public static string PeriodForm_StartMonthYear {
-            get {
-                return ResourceManager.GetString("PeriodForm.StartMonthYear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Set Poster for {0}.
         /// </summary>
         public static string PosterDialog_HeaderFormat {
@@ -1618,6 +1924,60 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End month and year.
+        /// </summary>
+        public static string ReleasePeriodForm_EndMonthYear {
+            get {
+                return ResourceManager.GetString("ReleasePeriodForm.EndMonthYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # of episodes.
+        /// </summary>
+        public static string ReleasePeriodForm_EpisodeCount {
+            get {
+                return ResourceManager.GetString("ReleasePeriodForm.EpisodeCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single-day release.
+        /// </summary>
+        public static string ReleasePeriodForm_IsSingleDayRelease {
+            get {
+                return ResourceManager.GetString("ReleasePeriodForm.IsSingleDayRelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MMMM yyyy.
+        /// </summary>
+        public static string ReleasePeriodForm_MonthYearFormat {
+            get {
+                return ResourceManager.GetString("ReleasePeriodForm.MonthYearFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release month and year.
+        /// </summary>
+        public static string ReleasePeriodForm_ReleaseMonthYear {
+            get {
+                return ResourceManager.GetString("ReleasePeriodForm.ReleaseMonthYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start month and year.
+        /// </summary>
+        public static string ReleasePeriodForm_StartMonthYear {
+            get {
+                return ResourceManager.GetString("ReleasePeriodForm.StartMonthYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add period.
         /// </summary>
         public static string SeasonForm_AddPeriod {
@@ -1821,6 +2181,15 @@ namespace Cineaste.Client.Localization {
         public static string SeasonForm_WatchStatus_Watching {
             get {
                 return ResourceManager.GetString("SeasonForm.WatchStatus.Watching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotten Tomatoes ID.
+        /// </summary>
+        public static string SeasonPartForm_RottenTomatoesId {
+            get {
+                return ResourceManager.GetString("SeasonPartForm.RottenTomatoesId", resourceCulture);
             }
         }
         
@@ -2446,87 +2815,6 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The end month is invalid.
-        /// </summary>
-        public static string Validation_Period_EndMonth_Invalid {
-            get {
-                return ResourceManager.GetString("Validation.Period.EndMonth.Invalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The end year must be after 1900.
-        /// </summary>
-        public static string Validation_Period_EndYear_TooLow {
-            get {
-                return ResourceManager.GetString("Validation.Period.EndYear.TooLow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The episode count is invalid.
-        /// </summary>
-        public static string Validation_Period_EpisodeCount_Invalid {
-            get {
-                return ResourceManager.GetString("Validation.Period.EpisodeCount.Invalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The period is invalid.
-        /// </summary>
-        public static string Validation_Period_Invalid {
-            get {
-                return ResourceManager.GetString("Validation.Period.Invalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The start and end dates must be the same.
-        /// </summary>
-        public static string Validation_Period_IsSingleDayRelease_Invalid {
-            get {
-                return ResourceManager.GetString("Validation.Period.IsSingleDayRelease.Invalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The period must be a single-day release.
-        /// </summary>
-        public static string Validation_Period_IsSingleDayRelease_MustBeTrue {
-            get {
-                return ResourceManager.GetString("Validation.Period.IsSingleDayRelease.MustBeTrue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Rotten Tomatoes ID must start with &apos;m/&apos; or &apos;tv/&apos;.
-        /// </summary>
-        public static string Validation_Period_RottenTomatoesId_Invalid {
-            get {
-                return ResourceManager.GetString("Validation.Period.RottenTomatoesId.Invalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The start month is invalid.
-        /// </summary>
-        public static string Validation_Period_StartMonth_Invalid {
-            get {
-                return ResourceManager.GetString("Validation.Period.StartMonth.Invalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The start year must be after 1900.
-        /// </summary>
-        public static string Validation_Period_StartYear_TooLow {
-            get {
-                return ResourceManager.GetString("Validation.Period.StartYear.TooLow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The file is too large (max. 10 MB).
         /// </summary>
         public static string Validation_Poster_File_TooLarge {
@@ -2577,6 +2865,78 @@ namespace Cineaste.Client.Localization {
         public static string Validation_Poster_Url_Invalid {
             get {
                 return ResourceManager.GetString("Validation.Poster.Url.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The end month is invalid.
+        /// </summary>
+        public static string Validation_ReleasePeriod_EndMonth_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.ReleasePeriod.EndMonth.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The end year must be after 1900.
+        /// </summary>
+        public static string Validation_ReleasePeriod_EndYear_TooLow {
+            get {
+                return ResourceManager.GetString("Validation.ReleasePeriod.EndYear.TooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The episode count is invalid.
+        /// </summary>
+        public static string Validation_ReleasePeriod_EpisodeCount_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.ReleasePeriod.EpisodeCount.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period is invalid.
+        /// </summary>
+        public static string Validation_ReleasePeriod_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.ReleasePeriod.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The start and end dates must be the same.
+        /// </summary>
+        public static string Validation_ReleasePeriod_IsSingleDayRelease_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.ReleasePeriod.IsSingleDayRelease.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period must be a single-day release.
+        /// </summary>
+        public static string Validation_ReleasePeriod_IsSingleDayRelease_MustBeTrue {
+            get {
+                return ResourceManager.GetString("Validation.ReleasePeriod.IsSingleDayRelease.MustBeTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The start month is invalid.
+        /// </summary>
+        public static string Validation_ReleasePeriod_StartMonth_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.ReleasePeriod.StartMonth.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The start year must be after 1900.
+        /// </summary>
+        public static string Validation_ReleasePeriod_StartYear_TooLow {
+            get {
+                return ResourceManager.GetString("Validation.ReleasePeriod.StartYear.TooLow", resourceCulture);
             }
         }
         
@@ -2649,6 +3009,15 @@ namespace Cineaste.Client.Localization {
         public static string Validation_Season_WatchStatus_Invalid {
             get {
                 return ResourceManager.GetString("Validation.Season.WatchStatus.Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Rotten Tomatoes ID must start with &apos;m/&apos; or &apos;tv/&apos;.
+        /// </summary>
+        public static string Validation_SeasonPart_RottenTomatoesId_Invalid {
+            get {
+                return ResourceManager.GetString("Validation.SeasonPart.RottenTomatoesId.Invalid", resourceCulture);
             }
         }
         

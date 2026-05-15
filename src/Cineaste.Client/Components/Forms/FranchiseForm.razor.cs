@@ -279,6 +279,9 @@ public partial class FranchiseForm
     private void StartAddingSeries() =>
         this.StartAddingComponent(id => new StartAddingSeriesAction(id));
 
+    private void StartAddingLimitedSeries() =>
+        this.StartAddingComponent(id => new StartAddingLimitedSeriesAction(id));
+
     private void StartAddingFranchise() =>
         this.StartAddingComponent(id => new StartAddingFranchiseAction(id));
 

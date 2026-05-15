@@ -4,6 +4,8 @@ public sealed record StartAddingMovieAction(Guid? ParentFranchiseId = null);
 
 public sealed record StartAddingSeriesAction(Guid? ParentFranchiseId = null);
 
+public sealed record StartAddingLimitedSeriesAction(Guid? ParentFranchiseId = null);
+
 public sealed record StartAddingFranchiseAction(Guid? ParentFranchiseId = null);
 
 public sealed record StartAddingParentFranchiseAction(

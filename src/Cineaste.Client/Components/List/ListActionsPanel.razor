@@ -20,6 +20,16 @@
     >
         @this.Loc["ListActionsPanel.AddSeries"]
     </MudButton>
+
+    <MudButton
+        Color="Color.Primary"
+        Variant="Variant.Filled"
+        Size="Size.Large"
+        Class="add"
+        @onclick="@this.AddLimitedSeries"
+    >
+        @this.Loc["ListActionsPanel.AddLimitedSeries"]
+    </MudButton>
 </div>
 
 @code {
@@ -28,4 +38,7 @@
 
     private void AddSeries() =>
         this.Dispatcher.Dispatch(new StartAddingSeriesAction());
+
+    private void AddLimitedSeries() =>
+        this.Dispatcher.Dispatch(new StartAddingLimitedSeriesAction());
 }

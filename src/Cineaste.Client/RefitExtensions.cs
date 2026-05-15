@@ -12,6 +12,7 @@ public static class RefitExtensions
             services.AddCineasteRefitClient<IListApi>();
             services.AddCineasteRefitClient<IMovieApi>();
             services.AddCineasteRefitClient<ISeriesApi>();
+            services.AddCineasteRefitClient<ILimitedSeriesApi>();
             services.AddCineasteRefitClient<IFranchiseApi>();
 
             return services;

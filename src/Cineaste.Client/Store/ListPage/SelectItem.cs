@@ -20,6 +20,10 @@ public static class SelectItemReducers
     public static ListPageState ReduceStartAddingSeriesAction(ListPageState state) =>
         state with { SelectedItem = null, SelectionMode = ListPageSelectionMode.Series };
 
+    [ReducerMethod(typeof(StartAddingLimitedSeriesAction))]
+    public static ListPageState ReduceStartAddingLimitedSeriesAction(ListPageState state) =>
+        state with { SelectedItem = null, SelectionMode = ListPageSelectionMode.LimitedSeries };
+
     [ReducerMethod(typeof(StartAddingFranchiseAction))]
     public static ListPageState ReduceStartAddingFranchiseAction(ListPageState state) =>
         state with { SelectedItem = null, SelectionMode = ListPageSelectionMode.Franchise };

@@ -3,7 +3,7 @@ using Cineaste.Client.Components.Forms;
 namespace Cineaste.Client.Components.Base;
 
 public abstract class PosterCineasteForm<TFormModel, TRequest, TModel, TState>
-    : CineasteForm<TFormModel, TRequest, TModel, TState>
+    : StatefulCineasteForm<TFormModel, TRequest, TModel, TState>
     where TFormModel : FormModelBase<TRequest, TModel>
     where TRequest : IValidatable<TRequest>
     where TModel : IIdentifyableModel

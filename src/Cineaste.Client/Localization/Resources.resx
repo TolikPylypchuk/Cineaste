@@ -306,6 +306,9 @@
   <data name="ListItemType.Series" xml:space="preserve">
     <value>Series</value>
   </data>
+  <data name="ListItemType.LimitedSeries" xml:space="preserve">
+    <value>Limited series</value>
+  </data>
   <data name="ListNavMenu.List" xml:space="preserve">
     <value>List</value>
   </data>
@@ -351,8 +354,14 @@
   <data name="MovieForm.RemoveDialog.Body" xml:space="preserve">
     <value>Are you sure you want to remove this movie?</value>
   </data>
+  <data name="LimitedSeriesForm.RemoveDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to remove this limited series?</value>
+  </data>
   <data name="MovieForm.RemovePosterDialog.Body" xml:space="preserve">
     <value>Are you sure you want to remove this movie's poster?</value>
+  </data>
+  <data name="LimitedSeriesForm.RemovePosterDialog.Body" xml:space="preserve">
+    <value>Are you sure you want to remove this limited series' poster?</value>
   </data>
   <data name="SpecialEpisodeForm.RemovePosterDialog.Body" xml:space="preserve">
     <value>Are you sure you want to remove this episode's poster?</value>
@@ -369,8 +378,14 @@
   <data name="MovieForm.RemoveDialog.Title" xml:space="preserve">
     <value>Remove Movie</value>
   </data>
+  <data name="LimitedSeriesForm.RemoveDialog.Title" xml:space="preserve">
+    <value>Remove Limited Series</value>
+  </data>
   <data name="MovieForm.RemovePosterDialog.Title" xml:space="preserve">
     <value>Remove Movie Poster</value>
+  </data>
+  <data name="LimitedSeriesForm.RemovePosterDialog.Title" xml:space="preserve">
+    <value>Remove Limited Series Poster</value>
   </data>
   <data name="SpecialEpisodeForm.RemovePosterDialog.Title" xml:space="preserve">
     <value>Remove Special Episode Poster</value>
@@ -387,7 +402,13 @@
   <data name="MovieForm.ImdbId" xml:space="preserve">
     <value>IMDb ID</value>
   </data>
+  <data name="LimitedSeriesForm.ImdbId" xml:space="preserve">
+    <value>IMDb ID</value>
+  </data>
   <data name="MovieForm.StartFranchise" xml:space="preserve">
+    <value>Start franchise</value>
+  </data>
+  <data name="LimitedSeriesForm.StartFranchise" xml:space="preserve">
     <value>Start franchise</value>
   </data>
   <data name="FranchiseForm.StartFranchise" xml:space="preserve">
@@ -408,6 +429,9 @@
   <data name="MovieForm.GoToFranchise" xml:space="preserve">
     <value>Go to franchise</value>
   </data>
+  <data name="LimitedSeriesForm.GoToFranchise" xml:space="preserve">
+    <value>Go to franchise</value>
+  </data>
   <data name="FranchiseForm.GoToFranchise" xml:space="preserve">
     <value>Go to franchise</value>
   </data>
@@ -423,20 +447,38 @@
   <data name="MovieForm.Kind" xml:space="preserve">
     <value>Kind</value>
   </data>
+  <data name="LimitedSeriesForm.Kind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
   <data name="MovieForm.NewMovie" xml:space="preserve">
     <value>New Movie</value>
   </data>
+  <data name="LimitedSeriesForm.NewLimitedSeries" xml:space="preserve">
+    <value>New Limited Series</value>
+  </data>
   <data name="MovieForm.OriginalTitle" xml:space="preserve">
+    <value>Original title</value>
+  </data>
+  <data name="LimitedSeriesForm.OriginalTitle" xml:space="preserve">
     <value>Original title</value>
   </data>
   <data name="MovieForm.Problem.AddingFailed" xml:space="preserve">
     <value>Adding the movie has failed</value>
   </data>
+  <data name="LimitedSeriesForm.Problem.AddingFailed" xml:space="preserve">
+    <value>Adding the limited series has failed</value>
+  </data>
   <data name="MovieForm.Problem.RemovingFailed" xml:space="preserve">
     <value>Removing the movie has failed</value>
   </data>
+  <data name="LimitedSeriesForm.Problem.RemovingFailed" xml:space="preserve">
+    <value>Removing the limited series has failed</value>
+  </data>
   <data name="MovieForm.Problem.RemovingPosterFailed" xml:space="preserve">
     <value>Removing the poster has failed</value>
+  </data>
+  <data name="LimitedSeriesForm.Problem.RemovingPosterFailed" xml:space="preserve">
+    <value>Removing the limited series has failed</value>
   </data>
   <data name="SpecialEpisodeForm.Problem.RemovingPosterFailed" xml:space="preserve">
     <value>Removing the poster has failed</value>
@@ -451,6 +493,9 @@
     <value>Removing the poster has failed</value>
   </data>
   <data name="MovieForm.Problem.SettingPosterFailed" xml:space="preserve">
+    <value>Setting the poster has failed</value>
+  </data>
+  <data name="LimitedSeriesForm.Problem.SettingPosterFailed" xml:space="preserve">
     <value>Setting the poster has failed</value>
   </data>
   <data name="SpecialEpisodeForm.Problem.SettingPosterFailed" xml:space="preserve">
@@ -468,25 +513,52 @@
   <data name="MovieForm.Problem.LoadingFailed" xml:space="preserve">
     <value>Loading the movie has failed</value>
   </data>
+  <data name="LimitedSeriesForm.Problem.LoadingFailed" xml:space="preserve">
+    <value>Loading the limited series has failed</value>
+  </data>
   <data name="MovieForm.Problem.UpdatingFailed" xml:space="preserve">
     <value>Updating the movie has failed</value>
   </data>
+  <data name="LimitedSeriesForm.Problem.UpdatingFailed" xml:space="preserve">
+    <value>Updating the limited series has failed</value>
+  </data>
   <data name="MovieForm.RemoveOriginalTitle" xml:space="preserve">
+    <value>Remove original title</value>
+  </data>
+  <data name="LimitedSeriesForm.RemoveOriginalTitle" xml:space="preserve">
     <value>Remove original title</value>
   </data>
   <data name="MovieForm.RemoveTitle" xml:space="preserve">
     <value>Remove title</value>
   </data>
+  <data name="LimitedSeriesForm.RemoveTitle" xml:space="preserve">
+    <value>Remove title</value>
+  </data>
   <data name="MovieForm.RottenTomatoesId" xml:space="preserve">
     <value>Rotten Tomatoes ID</value>
   </data>
+  <data name="LimitedSeriesForm.RottenTomatoesId" xml:space="preserve">
+    <value>Rotten Tomatoes ID</value>
+  </data>
+  <data name="LimitedSeriesForm.RottenTomatoesSubId" xml:space="preserve">
+    <value>Rotten Tomatoes sub-ID</value>
+  </data>
   <data name="MovieForm.Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="LimitedSeriesForm.Title" xml:space="preserve">
     <value>Title</value>
   </data>
   <data name="MovieForm.Year" xml:space="preserve">
     <value>Year</value>
   </data>
+  <data name="LimitedSeriesForm.Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
   <data name="MovieForm.UploadPoster" xml:space="preserve">
+    <value>Upload poster</value>
+  </data>
+  <data name="LimitedSeriesForm.UploadPoster" xml:space="preserve">
     <value>Upload poster</value>
   </data>
   <data name="PosterDialog.SelectFile" xml:space="preserve">
@@ -513,25 +585,25 @@
   <data name="PosterDialog.Url" xml:space="preserve">
     <value>URL</value>
   </data>
-  <data name="PeriodForm.EndMonthYear" xml:space="preserve">
+  <data name="ReleasePeriodForm.EndMonthYear" xml:space="preserve">
     <value>End month and year</value>
   </data>
-  <data name="PeriodForm.EpisodeCount" xml:space="preserve">
+  <data name="ReleasePeriodForm.EpisodeCount" xml:space="preserve">
     <value># of episodes</value>
   </data>
-  <data name="PeriodForm.IsSingleDayRelease" xml:space="preserve">
+  <data name="ReleasePeriodForm.IsSingleDayRelease" xml:space="preserve">
     <value>Single-day release</value>
   </data>
-  <data name="PeriodForm.MonthYearFormat" xml:space="preserve">
+  <data name="ReleasePeriodForm.MonthYearFormat" xml:space="preserve">
     <value>MMMM yyyy</value>
   </data>
-  <data name="PeriodForm.ReleaseMonthYear" xml:space="preserve">
+  <data name="ReleasePeriodForm.ReleaseMonthYear" xml:space="preserve">
     <value>Release month and year</value>
   </data>
-  <data name="PeriodForm.RottenTomatoesId" xml:space="preserve">
+  <data name="SeasonPartForm.RottenTomatoesId" xml:space="preserve">
     <value>Rotten Tomatoes ID</value>
   </data>
-  <data name="PeriodForm.StartMonthYear" xml:space="preserve">
+  <data name="ReleasePeriodForm.StartMonthYear" xml:space="preserve">
     <value>Start month and year</value>
   </data>
   <data name="SeasonForm.AddPeriod" xml:space="preserve">
@@ -639,22 +711,43 @@
   <data name="SeriesForm.ReleaseStatus" xml:space="preserve">
     <value>Release status</value>
   </data>
+  <data name="LimitedSeriesForm.ReleaseStatus" xml:space="preserve">
+    <value>Release status</value>
+  </data>
   <data name="SeriesForm.ReleaseStatus.Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="LimitedSeriesForm.ReleaseStatus.Cancelled" xml:space="preserve">
     <value>Cancelled</value>
   </data>
   <data name="SeriesForm.ReleaseStatus.Finished" xml:space="preserve">
     <value>Finished</value>
   </data>
+  <data name="LimitedSeriesForm.ReleaseStatus.Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
   <data name="SeriesForm.ReleaseStatus.Hiatus" xml:space="preserve">
+    <value>Hiatus</value>
+  </data>
+  <data name="LimitedSeriesForm.ReleaseStatus.Hiatus" xml:space="preserve">
     <value>Hiatus</value>
   </data>
   <data name="SeriesForm.ReleaseStatus.NotStarted" xml:space="preserve">
     <value>Not started</value>
   </data>
+  <data name="LimitedSeriesForm.ReleaseStatus.NotStarted" xml:space="preserve">
+    <value>Not started</value>
+  </data>
   <data name="SeriesForm.ReleaseStatus.Running" xml:space="preserve">
     <value>Running</value>
   </data>
+  <data name="LimitedSeriesForm.ReleaseStatus.Running" xml:space="preserve">
+    <value>Running</value>
+  </data>
   <data name="SeriesForm.ReleaseStatus.Unknown" xml:space="preserve">
+    <value>Don't care</value>
+  </data>
+  <data name="LimitedSeriesForm.ReleaseStatus.Unknown" xml:space="preserve">
     <value>Don't care</value>
   </data>
   <data name="SeriesForm.RottenTomatoesId" xml:space="preserve">
@@ -666,19 +759,37 @@
   <data name="SeriesForm.WatchStatus" xml:space="preserve">
     <value>Watch status</value>
   </data>
+  <data name="LimitedSeriesForm.WatchStatus" xml:space="preserve">
+    <value>Watch status</value>
+  </data>
   <data name="SeriesForm.WatchStatus.Hiatus" xml:space="preserve">
+    <value>Hiatus</value>
+  </data>
+  <data name="LimitedSeriesForm.WatchStatus.Hiatus" xml:space="preserve">
     <value>Hiatus</value>
   </data>
   <data name="SeriesForm.WatchStatus.NotWatched" xml:space="preserve">
     <value>Not watched</value>
   </data>
+  <data name="LimitedSeriesForm.WatchStatus.NotWatched" xml:space="preserve">
+    <value>Not watched</value>
+  </data>
   <data name="SeriesForm.WatchStatus.StoppedWatching" xml:space="preserve">
+    <value>Stopped watching</value>
+  </data>
+  <data name="LimitedSeriesForm.WatchStatus.StoppedWatching" xml:space="preserve">
     <value>Stopped watching</value>
   </data>
   <data name="SeriesForm.WatchStatus.Watched" xml:space="preserve">
     <value>Watched</value>
   </data>
+  <data name="LimitedSeriesForm.WatchStatus.Watched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
   <data name="SeriesForm.WatchStatus.Watching" xml:space="preserve">
+    <value>Watching</value>
+  </data>
+  <data name="LimitedSeriesForm.WatchStatus.Watching" xml:space="preserve">
     <value>Watching</value>
   </data>
   <data name="SpecialEpisodeForm.Channel" xml:space="preserve">
@@ -759,32 +870,29 @@
   <data name="Validation.OriginalTitles.Name.TooLong" xml:space="preserve">
     <value>The original titles are too long</value>
   </data>
-  <data name="Validation.Period.EndMonth.Invalid" xml:space="preserve">
+  <data name="Validation.ReleasePeriod.EndMonth.Invalid" xml:space="preserve">
     <value>The end month is invalid</value>
   </data>
-  <data name="Validation.Period.EndYear.TooLow" xml:space="preserve">
+  <data name="Validation.ReleasePeriod.EndYear.TooLow" xml:space="preserve">
     <value>The end year must be after 1900</value>
   </data>
-  <data name="Validation.Period.EpisodeCount.Invalid" xml:space="preserve">
+  <data name="Validation.ReleasePeriod.EpisodeCount.Invalid" xml:space="preserve">
     <value>The episode count is invalid</value>
   </data>
-  <data name="Validation.Period.Invalid" xml:space="preserve">
+  <data name="Validation.ReleasePeriod.Invalid" xml:space="preserve">
     <value>The period is invalid</value>
   </data>
-  <data name="Validation.Period.IsSingleDayRelease.Invalid" xml:space="preserve">
+  <data name="Validation.ReleasePeriod.IsSingleDayRelease.Invalid" xml:space="preserve">
     <value>The start and end dates must be the same</value>
   </data>
-  <data name="Validation.Period.IsSingleDayRelease.MustBeTrue" xml:space="preserve">
+  <data name="Validation.ReleasePeriod.IsSingleDayRelease.MustBeTrue" xml:space="preserve">
     <value>The period must be a single-day release</value>
   </data>
-  <data name="Validation.Period.RottenTomatoesId.Invalid" xml:space="preserve">
+  <data name="Validation.SeasonPart.RottenTomatoesId.Invalid" xml:space="preserve">
     <value>The Rotten Tomatoes ID must start with 'm/' or 'tv/'</value>
   </data>
-  <data name="Validation.Period.StartMonth.Invalid" xml:space="preserve">
+  <data name="Validation.ReleasePeriod.StartMonth.Invalid" xml:space="preserve">
     <value>The start month is invalid</value>
-  </data>
-  <data name="Validation.Period.StartYear.TooLow" xml:space="preserve">
-    <value>The start year must be after 1900</value>
   </data>
   <data name="Validation.Season.Channel.Empty" xml:space="preserve">
     <value>The channel is empty</value>
@@ -882,7 +990,13 @@
   <data name="FranchiseForm.AddSeries" xml:space="preserve">
     <value>Add new series</value>
   </data>
+  <data name="FranchiseForm.AddLimitedSeries" xml:space="preserve">
+    <value>Add new limited series</value>
+  </data>
   <data name="MovieForm.SetPoster" xml:space="preserve">
+    <value>Set poster</value>
+  </data>
+  <data name="LimitedSeriesForm.SetPoster" xml:space="preserve">
     <value>Set poster</value>
   </data>
   <data name="SpecialEpisodeForm.SetPoster" xml:space="preserve">
@@ -898,6 +1012,9 @@
     <value>Set poster</value>
   </data>
   <data name="MovieForm.RemovePoster" xml:space="preserve">
+    <value>Remove poster</value>
+  </data>
+  <data name="LimitedSeriesForm.RemovePoster" xml:space="preserve">
     <value>Remove poster</value>
   </data>
   <data name="SpecialEpisodeForm.RemovePoster" xml:space="preserve">
@@ -1037,5 +1154,11 @@
   </data>
   <data name="RegisterPage.LogIn" xml:space="preserve">
     <value>Log in</value>
+  </data>
+  <data name="Validation.ReleasePeriod.StartYear.TooLow" xml:space="preserve">
+    <value>The start year must be after 1900</value>
+  </data>
+  <data name="ListActionsPanel.AddLimitedSeries" xml:space="preserve">
+    <value>Add new limited series</value>
   </data>
 </root>

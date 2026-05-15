@@ -25,7 +25,7 @@ public partial class SeasonForm
     private object StatusErrorTrigger =>
         new { this.FormModel.WatchStatus, this.FormModel.ReleaseStatus };
 
-    private object PeriodValidationTrigger { get; set; } = new();
+    private object PartValidationTrigger { get; set; } = new();
 
     private ImmutableList<string> PosterUrls { get; set; } = [];
     private int CurrentPosterUrlIndex { get; set; } = 0;
@@ -51,7 +51,7 @@ public partial class SeasonForm
 
         this.UpdateFormTitle();
 
-        this.PosterUrls = [.. this.FormModel.Periods.Select(p => p.BackingModel?.PosterUrl).WhereNotNull()];
+        this.PosterUrls = [.. this.FormModel.Parts.Select(p => p.BackingModel?.PosterUrl).WhereNotNull()];
         this.CurrentPosterUrlIndex = 0;
     }
 
@@ -70,7 +70,7 @@ public partial class SeasonForm
         if (this.Season is not null && this.State.Value.Model is { Seasons: var seasons })
         {
             this.FormModel.CopyFrom(seasons.FirstOrDefault(e => e.Id == this.Season.Id));
-            this.PosterUrls = [.. this.FormModel.Periods.Select(p => p.BackingModel?.PosterUrl).WhereNotNull()];
+            this.PosterUrls = [.. this.FormModel.Parts.Select(p => p.BackingModel?.PosterUrl).WhereNotNull()];
         }
     }
 
@@ -85,15 +85,15 @@ public partial class SeasonForm
             ? String.Format(this.Loc["Link.RottenTomatoesWithPartFormat"], part)
             : this.Loc["Link.RottenTomatoes"];
 
-    private void AddPeriod() =>
-        this.FormModel.AddNewPeriod();
+    private void AddPart() =>
+        this.FormModel.AddNewPart();
 
-    private void OnPeriodRemoved(PeriodFormModel period) =>
-        this.FormModel.RemovePeriod(period);
+    private void OnPartRemoved(SeasonPartFormModel period) =>
+        this.FormModel.RemovePart(period);
 
-    private void OnPeriodChanged()
+    private void OnPartChanged()
     {
-        this.PeriodValidationTrigger = this.FormModel.Periods.Aggregate(
+        this.PartValidationTrigger = this.FormModel.Parts.Select(part => part.Period).Aggregate(
             String.Empty,
             (acc, period) => $"{acc}{period.StartMonth}{period.StartYear}{period.EndMonth}{period.EndYear}");
 

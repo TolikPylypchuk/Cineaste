@@ -1,7 +1,5 @@
 using System.ComponentModel;
 
-using static Cineaste.Common.Constants;
-
 namespace Cineaste.Client.FormModels;
 
 public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesModel>
@@ -236,7 +234,7 @@ public sealed class SeriesFormModel : TitledFormModelBase<SeriesRequest, SeriesM
         return this.components
             .Max(component => component switch
             {
-                SeasonFormModel season => season.Periods.Max<PeriodFormModel, int>(period => period.EndYear),
+                SeasonFormModel season => season.Parts.Max<SeasonPartFormModel, int>(part => part.Period.EndYear),
                 SpecialEpisodeFormModel episode => episode.Year,
                 _ => Match.ImpossibleType<int>(component)
             });

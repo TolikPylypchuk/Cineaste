@@ -1,0 +1,45 @@
+@inherits CineasteForm<SeasonPartFormModel, SeasonPartRequest, SeasonPartModel>
+
+<FormParamsProvider For="this">
+    <ReleasePeriodForm FormModel="this.FormModel.Period" Changed="this.Changed" />
+
+    <div class="rotten-tomatoes-container">
+        <div class="rotten-tomatoes">
+            <MudTextField
+                @bind-Value="@this.FormModel.RottenTomatoesId"
+                Label="@this.Loc["PeriodForm.RottenTomatoesId"]"
+                Sizing="InputSizing.Auto"
+                Class="form-field"
+            />
+
+            <ErrorPresenter
+                ErrorCode="Period.RottenTomatoesId.*"
+                Trigger="@this.FormModel.RottenTomatoesId"
+            />
+        </div>
+
+        @if (this.CanRemove)
+        {
+            <MudIconButton
+                Icon="@Icons.Material.Filled.Close"
+                Size="Size.Small"
+                @onclick="this.Removed"
+                aria-label="@this.Loc["AriaLabel.Remove"]"
+            />
+        }
+    </div>
+</FormParamsProvider>
+
+@code {
+    [Parameter]
+    public override SeasonPartFormModel FormModel { get; set; } = null!;
+
+    [Parameter]
+    public bool CanRemove { get; set; }
+
+    [Parameter]
+    public EventCallback Changed { get; set; }
+
+    [Parameter]
+    public EventCallback Removed { get; set; }
+}

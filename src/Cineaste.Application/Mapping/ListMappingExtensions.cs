@@ -56,7 +56,7 @@ public static class ListMappingExtensions
         public ListItemModel ToListItemModel(LimitedSeries limitedSeries) =>
             new(
                 limitedSeries.Id.Value,
-                ListItemType.Series,
+                ListItemType.LimitedSeries,
                 limitedSeries.Title.Name,
                 limitedSeries.OriginalTitle.Name,
                 item.StartYear,

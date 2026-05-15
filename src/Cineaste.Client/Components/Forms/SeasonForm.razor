@@ -88,7 +88,7 @@
                     @{
                         int part = 1;
 
-                        var periods = this.FormModel.Periods
+                        var periods = this.FormModel.Parts
                             .Where(p => !String.IsNullOrWhiteSpace(p.RottenTomatoesId))
                             .ToList();
 
@@ -166,13 +166,13 @@
                     <ErrorPresenter ErrorCode="Season.Channel.*" Trigger="@this.FormModel.Channel" />
                 </div>
 
-                @foreach (var period in this.FormModel.Periods)
+                @foreach (var period in this.FormModel.Parts)
                 {
-                    <PeriodForm
+                    <SeasonPartForm
                         FormModel="@period"
-                        Changed="@this.OnPeriodChanged"
-                        CanRemove="@(this.FormModel.Periods.Count > 1)"
-                        Removed="@(() => this.OnPeriodRemoved(period))"
+                        Changed="@this.OnPartChanged"
+                        CanRemove="@(this.FormModel.Parts.Count > 1)"
+                        Removed="@(() => this.OnPartRemoved(period))"
                     />
 
                     if (this.FormModel.CanSetPoster &&
@@ -191,14 +191,14 @@
                 }
 
                 <div>
-                    <ErrorPresenter ErrorCode="Season.Periods.*" Trigger="@this.PeriodValidationTrigger" />
+                    <ErrorPresenter ErrorCode="Season.Periods.*" Trigger="@this.PartValidationTrigger" />
                 </div>
 
                 <div class="button-container">
                     <MudButton
                         Color="Color.Surface"
                         Variant="Variant.Filled"
-                        @onclick="@this.AddPeriod"
+                        @onclick="@this.AddPart"
                     >
                         @this.Loc["SeasonForm.AddPeriod"]
                     </MudButton>

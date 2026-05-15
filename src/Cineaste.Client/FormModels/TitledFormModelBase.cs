@@ -1,6 +1,6 @@
 namespace Cineaste.Client.FormModels;
 
-public abstract class TitledFormModelBase<TRequest, TModel> : FormModelBase<TRequest, TModel>
+public abstract class TitledFormModelBase<TRequest, TModel> : IdentifyableFormModelBase<TRequest, TModel>
     where TRequest : IValidatable<TRequest>, ITitledRequest
     where TModel : IIdentifyableModel, ITitledModel
 {

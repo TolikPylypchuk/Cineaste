@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 
-using Cineaste.Client.Store;
 using Cineaste.Client.Store.Forms.FranchiseForm;
+using Cineaste.Client.Store.Forms.LimitedSeriesForm;
 using Cineaste.Client.Store.Forms.MovieForm;
 using Cineaste.Client.Store.Forms.SeriesForm;
 using Cineaste.Client.Store.ListPage;
@@ -36,14 +36,17 @@ public partial class ListComponent
 
         this.SubsribeToSuccessfulResult<AddMovieResultAction>(this.ReloadList);
         this.SubsribeToSuccessfulResult<AddSeriesResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<AddLimitedSeriesResultAction>(this.ReloadList);
         this.SubsribeToSuccessfulResult<AddFranchiseResultAction>(this.ReloadList);
 
         this.SubsribeToSuccessfulResult<UpdateMovieResultAction>(this.ReloadList);
         this.SubsribeToSuccessfulResult<UpdateSeriesResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<UpdateLimitedSeriesResultAction>(this.ReloadList);
         this.SubsribeToSuccessfulResult<UpdateFranchiseResultAction>(this.ReloadList);
 
         this.SubsribeToSuccessfulResult<RemoveMovieResultAction>(this.ReloadList);
         this.SubsribeToSuccessfulResult<RemoveSeriesResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<RemoveLimitedSeriesResultAction>(this.ReloadList);
         this.SubsribeToSuccessfulResult<RemoveFranchiseResultAction>(this.ReloadList);
 
         this.SubsribeToSuccessfulResult<GoToListItemResultAction>(this.ReloadList);

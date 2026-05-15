@@ -32,6 +32,12 @@
                         AvailableKinds="@this.State.Value.AvailableSeriesKinds"
                     />
                     break;
+                case ListPageSelectionMode.LimitedSeries:
+                    <LimitedSeriesForm
+                        ListItem="@this.State.Value.SelectedItem"
+                        AvailableKinds="@this.State.Value.AvailableSeriesKinds"
+                    />
+                    break;
                 case ListPageSelectionMode.Franchise:
                     <FranchiseForm
                         ListItem="@this.State.Value.SelectedItem"

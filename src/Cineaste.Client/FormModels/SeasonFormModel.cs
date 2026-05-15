@@ -4,7 +4,7 @@ namespace Cineaste.Client.FormModels;
 
 public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest, SeasonModel>
 {
-    private readonly ObservableCollection<PeriodFormModel> periods;
+    private readonly ObservableCollection<SeasonPartFormModel> parts;
 
     private readonly string defaultTitle;
     private readonly string defaultOriginalTitle;
@@ -14,14 +14,14 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
     public SeasonWatchStatus WatchStatus { get; set; }
     public SeasonReleaseStatus ReleaseStatus { get; set; }
 
-    public ReadOnlyObservableCollection<PeriodFormModel> Periods { get; }
+    public ReadOnlyObservableCollection<SeasonPartFormModel> Parts { get; }
 
     public override string Years
     {
         get
         {
-            int minYear = this.Periods.Min(p => p.StartYear);
-            int maxYear = this.Periods.Max(p => p.EndYear);
+            int minYear = this.Parts.Min(p => p.Period.StartYear);
+            int maxYear = this.Parts.Max(p => p.Period.EndYear);
             return minYear == maxYear ? minYear.ToString() : $"{minYear}-{maxYear}";
         }
     }
@@ -53,11 +53,11 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
         Func<bool> canSetPoster)
         : base(getSequenceNumber, lastSequenceNumber, canSetPoster)
     {
-        var period = new PeriodFormModel(date);
+        var period = new SeasonPartFormModel(date);
         period.PropertyChanged += this.OnPeriodUpdated;
 
-        this.periods = [period];
-        this.Periods = new(this.periods);
+        this.parts = [period];
+        this.Parts = new(this.parts);
 
         this.defaultTitle = title;
         this.Titles.Clear();
@@ -75,31 +75,31 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
         this.FinishInitialization();
     }
 
-    public void AddNewPeriod()
+    public void AddNewPart()
     {
-        var lastPeriod = this.periods
-            .OrderByDescending(period => period.EndYear)
-            .ThenByDescending(period => period.EndMonth)
+        var lastPart = this.parts
+            .OrderByDescending(part => part.Period.EndYear)
+            .ThenByDescending(part => part.Period.EndMonth)
             .First();
 
-        var period = new PeriodFormModel(new DateOnly(lastPeriod.EndYear + 1, lastPeriod.StartMonth, 1));
-        period.PropertyChanged += this.OnPeriodUpdated;
+        var part = new SeasonPartFormModel(new DateOnly(lastPart.Period.EndYear + 1, lastPart.Period.StartMonth, 1));
+        part.PropertyChanged += this.OnPeriodUpdated;
 
-        this.periods.Add(period);
+        this.parts.Add(part);
 
         this.UpdateRequest();
-        this.OnPropertyChanged(nameof(this.Periods));
+        this.OnPropertyChanged(nameof(this.Parts));
     }
 
-    public void RemovePeriod(PeriodFormModel period)
+    public void RemovePart(SeasonPartFormModel part)
     {
-        if (this.periods.Count > 1)
+        if (this.parts.Count > 1)
         {
-            this.periods.Remove(period);
-            period.PropertyChanged -= this.OnPeriodUpdated;
+            this.parts.Remove(part);
+            part.PropertyChanged -= this.OnPeriodUpdated;
 
             this.UpdateRequest();
-            this.OnPropertyChanged(nameof(this.Periods));
+            this.OnPropertyChanged(nameof(this.Parts));
         }
     }
 
@@ -107,9 +107,9 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
     {
         base.UpdateRequest();
 
-        foreach (var period in this.periods)
+        foreach (var part in this.parts)
         {
-            period.UpdateRequest();
+            part.UpdateRequest();
         }
     }
 
@@ -122,7 +122,7 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
             this.WatchStatus,
             this.ReleaseStatus,
             this.Channel,
-            this.Periods.Select(period => period.CreateRequest()).ToImmutableList().AsValue());
+            this.Parts.Select(period => period.CreateRequest()).ToImmutableList().AsValue());
 
     protected override void CopyFromModel()
     {
@@ -135,33 +135,33 @@ public sealed class SeasonFormModel : SeriesComponentFormModelBase<SeasonRequest
         this.Channel = season?.Channel ?? this.defaultChannel;
         this.SequenceNumber = season?.SequenceNumber ?? this.GetSequenceNumber();
 
-        foreach (var period in this.periods)
+        foreach (var part in this.parts)
         {
-            period.PropertyChanged -= this.OnPeriodUpdated;
+            part.PropertyChanged -= this.OnPeriodUpdated;
         }
 
-        this.periods.Clear();
+        this.parts.Clear();
 
         if (season is not null)
         {
             foreach (var period in season.Parts)
             {
-                var form = new PeriodFormModel();
+                var form = new SeasonPartFormModel();
                 form.CopyFrom(period);
                 form.PropertyChanged += this.OnPeriodUpdated;
-                this.periods.Add(form);
+                this.parts.Add(form);
             }
         } else
         {
-            var period = new PeriodFormModel(this.defaultDate);
+            var period = new SeasonPartFormModel(this.defaultDate);
             period.PropertyChanged += this.OnPeriodUpdated;
-            this.periods.Add(period);
+            this.parts.Add(period);
         }
     }
 
     private void OnPeriodUpdated(object? sender, PropertyChangedEventArgs e)
     {
         this.UpdateRequest();
-        this.OnPropertyChanged(nameof(this.Periods));
+        this.OnPropertyChanged(nameof(this.Parts));
     }
 }

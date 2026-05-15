@@ -1,0 +1,313 @@
+@inherits PosterCineasteForm<LimitedSeriesFormModel, LimitedSeriesRequest, LimitedSeriesModel, LimitedSeriesFormState>
+
+<FormParamsProvider For="this">
+    <div class="container list-sidebar">
+        <div class="form-header">
+            @if (!this.FormModel.IsNew && !this.FormModel.HasChanges && this.FormModel.ParentFranchiseId is not null)
+            {
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.KeyboardArrowUp"
+                    Size="Size.Small"
+                    @onclick="this.GoToParentFranchise"
+                    aria-label="@this.Loc["AriaLabel.Up"]"
+                />
+
+                <div class="go-to-other-components-container">
+                    <MudIconButton
+                        Icon="@Icons.Material.Filled.KeyboardArrowLeft"
+                        Size="Size.Small"
+                        Class="@(this.FormModel.IsFirst ? "invisible" : null)"
+                        @onclick="this.GoToPreviousComponent"
+                        aria-hidden="@this.FormModel.IsFirst"
+                        aria-label="@this.Loc["AriaLabel.Previous"]"
+                    />
+
+                    <MudIconButton
+                        Icon="@Icons.Material.Filled.KeyboardArrowRight"
+                        Size="Size.Small"
+                        Class="@(this.FormModel.IsLast ? "invisible" : null)"
+                        @onclick="this.GoToNextComponent"
+                        aria-hidden="@this.FormModel.IsLast"
+                        aria-label="@this.Loc["AriaLabel.Next"]"
+                    />
+                </div>
+            } else
+            {
+                <div></div>
+                <div></div>
+            }
+
+            <MudIconButton
+                Icon="@Icons.Material.Filled.Close"
+                Size="Size.Small"
+                @onclick="this.Close"
+                aria-label="@this.Loc["AriaLabel.Close"]"
+            />
+        </div>
+
+        @if (this.State.Value.Fetch.IsInProgress)
+        {
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary" Class="loading-circle" />
+        } else if (this.State.Value.Fetch.Problem is not null)
+        {
+            <ApiProblemAlert
+                Problem="@this.State.Value.Fetch.Problem"
+                Text="LimitedSeriesForm.Problem.LoadingFailed"
+                TryAgain="@this.FetchLimitedSeries"
+                Class="problem-alert main"
+            />
+        } else
+        {
+            <div class="form-container list-sidebar">
+                <h2 class="form-title">
+                    @(!String.IsNullOrEmpty(this.FormTitle) || this.ListItem is not null
+                        ? this.FormTitle
+                        : this.Loc["LimitedSeriesForm.NewLimitedSeries"])
+                </h2>
+
+                <div class="form">
+                    @if (this.FormModel.BackingModel is { PosterUrl: string posterUrl })
+                    {
+                        <img src="@posterUrl" alt="@this.FormTitle" title="@this.FormTitle" class="poster" />
+                    }
+
+                    <div class="form-links">
+                        @if (this.HasImdbId())
+                        {
+                            string href = String.Format(this.Loc["Link.ImdbUrlFormat"], this.FormModel.ImdbId);
+
+                            <MudLink Href="@href" Target="_blank">
+                                @this.Loc["Link.Imdb"]
+                            </MudLink>
+                        }
+
+                        @if (this.HasRottenTomatoesId())
+                        {
+                            string href = String.Format(
+                                this.Loc["Link.RottenTomatoesUrlFormat"],
+                                this.FormModel.RottenTomatoesId);
+
+                            <MudLink Href="@href" Target="_blank">
+                                @this.Loc["Link.RottenTomatoes"]
+                            </MudLink>
+                        }
+                    </div>
+                    
+                    <div class="form-statuses">
+                        <div>
+                            <MudSelect @bind-Value="this.FormModel.WatchStatus"
+                                       Label="@this.Loc["LimitedSeriesForm.WatchStatus"]"
+                                       Class="select form-field">
+                                @foreach (var status in this.AllWatchStatuses)
+                                {
+                                    <MudSelectItem Value="status">
+                                        @this.Loc[$"LimitedSeriesForm.WatchStatus.{status}"]
+                                    </MudSelectItem>
+                                }
+                            </MudSelect>
+
+                            <ErrorPresenter
+                                ErrorCode="LimitedSeries.WatchStatus.*"
+                                Trigger="@this.StatusErrorTrigger"
+                            />
+                        </div>
+
+                        <div>
+                            <MudSelect @bind-Value="this.FormModel.ReleaseStatus"
+                                       Label="@this.Loc["LimitedSeriesForm.ReleaseStatus"]"
+                                       Class="select form-field">
+                                @foreach (var status in this.AllReleaseStatuses)
+                                {
+                                    <MudSelectItem Value="status">
+                                        @this.Loc[$"LimitedSeriesForm.ReleaseStatus.{status}"]
+                                    </MudSelectItem>
+                                }
+                            </MudSelect>
+
+                            <ErrorPresenter
+                                ErrorCode="LimitedSeries.ReleaseStatus.*"
+                                Trigger="@this.StatusErrorTrigger"
+                            />
+                        </div>
+                    </div>
+
+                    <TitlesForm
+                        Titles="@this.FormModel.Titles"
+                        Label="LimitedSeriesForm.Title"
+                        PropertyName="@nameof(this.FormModel.Titles)"
+                    />
+
+                    <TitlesForm
+                        Titles="@this.FormModel.OriginalTitles"
+                        Label="LimitedSeriesForm.OriginalTitle"
+                        PropertyName="@nameof(this.FormModel.OriginalTitles)"
+                    />
+
+                    <div>
+                        <MudSelect
+                            @bind-Value="this.FormModel.Kind"
+                            Label="@this.Loc["LimitedSeriesForm.Kind"]"
+                            Class="form-field"
+                        >
+                            @foreach (var kind in this.AvailableKinds)
+                            {
+                                <MudSelectItem Value="kind">
+                                    @kind.Name
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </div>
+                    
+                    <div>
+                        <MudTextField
+                            @bind-Value="@this.FormModel.Channel"
+                            Label="@this.Loc["LimitedSeriesForm.Channel"]"
+                            Sizing="InputSizing.Auto"
+                            Class="form-field"
+                        />
+
+                        <ErrorPresenter ErrorCode="LimitedSeries.Channel.*" Trigger="@this.FormModel.Channel" />
+                    </div>
+
+                    <ReleasePeriodForm FormModel="this.FormModel.Period" Changed="this.OnPeriodChanged" />
+
+                    <div>
+                        <MudTextField
+                            @bind-Value="@this.FormModel.ImdbId"
+                            Label="@this.Loc["LimitedSeriesForm.ImdbId"]"
+                            Sizing="InputSizing.Auto"
+                            Class="form-field"
+                        />
+
+                        <ErrorPresenter ErrorCode="LimitedSeries.ImdbId.*" Trigger="@this.FormModel.ImdbId" />
+                    </div>
+
+                    <div>
+                        <MudTextField
+                            @bind-Value="@this.FormModel.RottenTomatoesId"
+                            Label="@this.Loc["LimitedSeriesForm.RottenTomatoesId"]"
+                            Sizing="InputSizing.Auto"
+                            Class="form-field"
+                        />
+
+                        <ErrorPresenter ErrorCode="LimitedSeries.RottenTomatoesId.*"
+                                        Trigger="@this.FormModel.RottenTomatoesId" />
+                    </div>
+                    
+                    <div>
+                        <MudTextField
+                            @bind-Value="@this.FormModel.RottenTomatoesSubId"
+                            Label="@this.Loc["LimitedSeriesForm.RottenTomatoesSubId"]"
+                            Sizing="InputSizing.Auto"
+                            Class="form-field"
+                        />
+
+                        <ErrorPresenter
+                            ErrorCode="LimitedSeries.RottenTomatoesSubId.*"
+                            Trigger="@this.FormModel.RottenTomatoesSubId"
+                        />
+                    </div>
+
+                    @if (!(this.FormModel.IsNew || this.FormModel.HasChanges))
+                    {
+                        <div class="go-to-franchise-container">
+                            @if (this.FormModel.ParentFranchiseId is not null)
+                            {
+                                <MudButton
+                                    Variant="Variant.Text"
+                                    Size="Size.Small"
+                                    @onclick="@this.GoToParentFranchise"
+                                >
+                                    @this.Loc["LimitedSeriesForm.GoToFranchise"]
+                                </MudButton>
+                            } else
+                            {
+                                <MudButton
+                                    Variant="Variant.Text"
+                                    Size="Size.Small"
+                                    @onclick="@this.StartAddingParentFranchise"
+                                >
+                                    @this.Loc["LimitedSeriesForm.StartFranchise"]
+                                </MudButton>
+                            }
+                        </div>
+
+                        <PosterActions
+                            State="this.State.Value"
+                            OpenPosterDialog="this.OpenPosterDialog"
+                            SetPoster="this.SetPoster"
+                            RemovePoster="this.RemovePoster"
+                            CanRemovePoster="this.FormModel.BackingModel?.PosterUrl is not null"
+                            SetPosterText="LimitedSeriesForm.SetPoster"
+                            RemovePosterText="LimitedSeriesForm.RemovePoster"
+                        />
+                    }
+
+                    @if (!this.FormModel.IsNew)
+                    {
+                        <div class="remove-container">
+                            <MudButton
+                                Variant="Variant.Filled"
+                                Color="Color.Secondary"
+                                Disabled="@this.State.Value.Remove.IsInProgress"
+                                @onclick="@this.Remove"
+                            >
+                                @this.Loc[this.State.Value.Remove.IsInProgress ? "Button.Remove.Busy" : "Button.Remove"]
+                            </MudButton>
+                        </div>
+                    }
+                </div>
+
+                @if (this.State.Value.Add.Problem is not null)
+                {
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Add.Problem"
+                        Text="LimitedSeriesForm.Problem.AddingFailed"
+                        TryAgain="@this.Save"
+                        Class="problem-alert"
+                    />
+                }
+
+                @if (this.State.Value.Update.Problem is not null)
+                {
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Update.Problem"
+                        Text="LimitedSeriesForm.Problem.UpdatingFailed"
+                        TryAgain="@this.Save"
+                        Class="problem-alert"
+                    />
+                }
+
+                @if (this.State.Value.Remove.Problem is not null)
+                {
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Remove.Problem"
+                        Text="LimitedSeriesForm.Problem.RemovingFailed"
+                        TryAgain="@this.Remove"
+                        Class="problem-alert"
+                    />
+                }
+
+                <div class="@($"form-actions{(this.FormModel.HasChanges ? "" : " hidden")}")">
+                    <MudButton
+                        Color="Color.Primary"
+                        Variant="Variant.Filled"
+                        Disabled="@this.IsSaving"
+                        @onclick="@this.Save"
+                    >
+                        @this.Loc[this.IsSaving ? "Button.Save.Busy" : "Button.Save"]
+                    </MudButton>
+
+                    <MudButton
+                        Color="Color.Surface"
+                        Variant="Variant.Filled"
+                        Disabled="@this.IsSaving"
+                        @onclick="@this.Cancel"
+                    >
+                        @this.Loc["Button.Cancel"]
+                    </MudButton>
+                </div>
+            </div>
+        }
+    </div>
+</FormParamsProvider>

@@ -32,6 +32,21 @@ public static class MappingExtensions
                 series.FranchiseItem.ToListFranchiseItem());
     }
 
+    extension(LimitedSeriesModel limitedSeries)
+    {
+        public ListItemModel ToListItemModel() =>
+            new(
+                limitedSeries.Id,
+                ListItemType.LimitedSeries,
+                limitedSeries.Titles.First().Name,
+                limitedSeries.OriginalTitles.First().Name,
+                limitedSeries.Period.StartYear,
+                limitedSeries.Period.EndYear,
+                limitedSeries.ListItemColor,
+                limitedSeries.ListSequenceNumber,
+                limitedSeries.FranchiseItem.ToListFranchiseItem());
+    }
+
     extension(FranchiseModel franchise)
     {
         public ListItemModel ToListItemModel() =>
