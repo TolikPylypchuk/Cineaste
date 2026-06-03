@@ -190,6 +190,36 @@ public sealed partial class ListItem : Entity<ListItem>
         this.IsShown = franchise.ShowTitles;
     }
 
+    public void ReplaceSeriesWithLimitedSeries(LimitedSeries limitedSeries)
+    {
+        ArgumentNullException.ThrowIfNull(limitedSeries);
+
+        if (this.Series is null)
+        {
+            throw new InvalidOperationException("List item is not related to a series");
+        }
+
+        this.Series = null;
+        this.LimitedSeries = limitedSeries;
+        this.SetProperties(limitedSeries);
+        limitedSeries.ListItem = this;
+    }
+
+    public void ReplaceLimitedSeriesWithSeries(Series series)
+    {
+        ArgumentNullException.ThrowIfNull(series);
+
+        if (this.LimitedSeries is null)
+        {
+            throw new InvalidOperationException("List item is not related to a limited series");
+        }
+
+        this.LimitedSeries = null;
+        this.Series = series;
+        this.SetProperties(series);
+        series.ListItem = this;
+    }
+
     [GeneratedRegex("([0-9]+)", RegexOptions.Compiled)]
     private static partial Regex CreateNumberRegex();
 

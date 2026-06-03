@@ -22,6 +22,15 @@ public static class AssertUtils
         AssertTitles(request.OriginalTitles, model.OriginalTitles);
     }
 
+    public static void AssertTitles(IEnumerable<Title> expectedTitles, IEnumerable<Title> actualTitles) =>
+        Assert.Equal(
+            from title in expectedTitles
+            orderby title.IsOriginal, title.SequenceNumber
+            select title.Name,
+            from title in actualTitles
+            orderby title.IsOriginal, title.SequenceNumber
+            select title.Name);
+
     private static void AssertTitles(
         IEnumerable<Title> expectedTitles,
         bool original,

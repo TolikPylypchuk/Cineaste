@@ -103,4 +103,32 @@ public sealed class FranchiseItem : Entity<FranchiseItem>
     private FranchiseItem(Id<FranchiseItem> id)
         : base(id) =>
         this.parentFranchise = null!;
+
+    public void ReplaceSeriesWithLimitedSeries(LimitedSeries limitedSeries)
+    {
+        ArgumentNullException.ThrowIfNull(limitedSeries);
+
+        if (this.Series is null)
+        {
+            throw new InvalidOperationException("Franchise item is not related to a series");
+        }
+
+        this.Series = null;
+        this.LimitedSeries = limitedSeries;
+        limitedSeries.FranchiseItem = this;
+    }
+
+    public void ReplaceLimitedSeriesWithSeries(Series series)
+    {
+        ArgumentNullException.ThrowIfNull(series);
+
+        if (this.LimitedSeries is null)
+        {
+            throw new InvalidOperationException("Franchise item is not related to a limited series");
+        }
+
+        this.LimitedSeries = null;
+        this.Series = series;
+        series.FranchiseItem = this;
+    }
 }

@@ -105,16 +105,28 @@ public sealed class DataFixture : IAsyncLifetime
         return movie;
     }
 
-    public async Task<Series> CreateSeries(CineasteDbContext dbContext)
+    public async Task<Series> CreateSeries(
+        CineasteDbContext dbContext,
+        int numSeasons = 2,
+        int numParts = 1,
+        int numSpecialEpisodes = 1)
     {
         var list = await this.GetList(dbContext);
         var kind = await this.GetSeriesKind(dbContext);
 
+        var seasons = Enumerable.Range(1, numSeasons)
+            .Select(num => this.CreateSeason(num * numParts, numParts))
+            .ToArray();
+
+        var specialEpisodes = Enumerable.Range(1, numSpecialEpisodes)
+            .Select(num => this.CreateSpecialEpisode(num + numSeasons * numParts))
+            .ToArray();
+
         var series = new Series(
             Id.Create<Series>(),
             this.CreateTitles(),
-            [this.CreateSeason(1), this.CreateSeason(2)],
-            [this.CreateSpecialEpisode(3)],
+            seasons,
+            specialEpisodes,
             SeriesWatchStatus.NotWatched,
             SeriesReleaseStatus.Finished,
             kind);
@@ -128,7 +140,7 @@ public sealed class DataFixture : IAsyncLifetime
         return series;
     }
 
-    public Season CreateSeason(int num) =>
+    public Season CreateSeason(int num, int numParts) =>
         new(
             Id.Create<Season>(),
             [new($"Season {num}", 1, false), new($"Season {num}", 1, true)],
@@ -136,7 +148,9 @@ public sealed class DataFixture : IAsyncLifetime
             SeasonReleaseStatus.Finished,
             "Test",
             num,
-            [new(Id.Create<SeasonPart>(), new(Month.January, 2000 + num, Month.February, 2000 + num, false, 10))]);
+            [.. Enumerable.Range(num, numParts).Select(year => new SeasonPart(
+                Id.Create<SeasonPart>(), new(Month.January, 2000 + year, Month.February, 2000 + year, false, 10))
+            )]);
 
     public SpecialEpisode CreateSpecialEpisode(int num) =>
         new(Id.Create<SpecialEpisode>(), this.CreateTitles(), Month.January, 2000 + num, false, true, "Test", num);

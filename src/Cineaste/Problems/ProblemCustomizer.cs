@@ -41,6 +41,12 @@ internal class ProblemCustomizer(IHostEnvironment env)
                 problemDetails.Title = "List id claim is invalid";
                 problemDetails.Status = Status400BadRequest;
                 break;
+            case CannotConvertToLimitedSeriesException ex:
+                problemDetails.Type = this.CreateProblemType(Types.Series, Types.Conversion, Types.LimitedSeries);
+                problemDetails.Title = "Cannot convert a series to a limited series";
+                problemDetails.Status = Status400BadRequest;
+                problemDetails.Extensions[Props.SeriesId] = ex.SeriesId;
+                break;
             default:
                 this.CustomizeDefaultProblemDetails(problemDetails);
                 break;
@@ -247,6 +253,7 @@ internal class ProblemCustomizer(IHostEnvironment env)
 file static class Types
 {
     public const string Claim = "claim";
+    public const string Conversion = "conversion";
 
     public const string ErrorResponse = "error-response";
 

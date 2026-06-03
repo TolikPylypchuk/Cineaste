@@ -91,6 +91,48 @@ public sealed partial class SeriesService(
         await this.dbContext.SaveChangesAsync(token);
     }
 
+    public async Task<LimitedSeriesModel> ConvertToLimitedSeries(
+        Id<CineasteList> listId,
+        Id<Series> id,
+        CancellationToken token)
+    {
+        this.LogConvertSeriesToLimitedSeries(id, listId);
+
+        var list = await this.FindList(listId, token);
+        var series = await this.FindSeries(list, id, token);
+
+        if (series.Seasons.Count != 1 || series.Seasons.First().Parts.Count != 1 || series.SpecialEpisodes.Count != 0)
+        {
+            throw new CannotConvertToLimitedSeriesException(id);
+        }
+
+        var season = series.Seasons.First();
+        var part = season.Parts.First();
+
+        var limitedSeries = new LimitedSeries(
+            Id.Create<LimitedSeries>(),
+            series.AllTitles,
+            part.Period,
+            series.WatchStatus,
+            series.ReleaseStatus,
+            season.Channel,
+            series.Kind)
+        {
+            ImdbId = series.ImdbId,
+            RottenTomatoesId = series.RottenTomatoesId,
+            RottenTomatoesSubId = part.RottenTomatoesId
+        };
+
+        series.FranchiseItem?.ReplaceSeriesWithLimitedSeries(limitedSeries);
+        series.ListItem?.ReplaceSeriesWithLimitedSeries(limitedSeries);
+
+        this.dbContext.LimitedSeries.Add(limitedSeries);
+        this.dbContext.Series.Remove(series);
+        await this.dbContext.SaveChangesAsync(token);
+
+        return limitedSeries.ToLimitedSeriesModel(this.posterUrlProvider);
+    }
+
     public async Task<BinaryContent> GetSeriesPoster(
         Id<CineasteList> listId,
         Id<Series> seriesId,
@@ -583,6 +625,10 @@ public sealed partial class SeriesService(
 
     [LoggerMessage(Level = LogLevel.Debug, Message = "Removing series {SeriesId} from list {ListId}")]
     private partial void LogRemoveSeries(Id<Series> seriesId, Id<CineasteList> listId);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug, Message = "Converting series {SeriesId} to a limited series in list {ListId}")]
+    private partial void LogConvertSeriesToLimitedSeries(Id<Series> seriesId, Id<CineasteList> listId);
 
     [LoggerMessage(Level = LogLevel.Debug, Message = "Getting the poster for series {SeriesId} in list {ListId}")]
     private partial void LogGetSeriesPoster(Id<Series> seriesId, Id<CineasteList> listId);

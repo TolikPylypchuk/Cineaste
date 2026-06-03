@@ -41,6 +41,13 @@ public static class SeriesEndpoints
                 .WithName(nameof(RemoveSeries))
                 .WithSummary("Remove a series from the list");
 
+            series.MapPost("/{id}/convert-to-limited-series", ConvertToLimitedSeries)
+                .ProducesSeriesNotFoundProblem()
+                .ProducesListNotFoundProblem()
+                .ProducesProblem(() => new CannotConvertToLimitedSeriesException(Id.Create<Series>()))
+                .WithName(nameof(ConvertToLimitedSeries))
+                .WithSummary("Convert a series to a limited series");
+
             series.MapGet("/{id}/poster", GetSeriesPoster)
                 .ProducesPosterContentTypes()
                 .ProducesSeriesNotFoundProblem()
@@ -177,6 +184,13 @@ public static class SeriesEndpoints
         await seriesService.RemoveSeries(principal.ListId, Id.For<Series>(id), token);
         return TypedResults.NoContent();
     }
+
+    public static async Task<Ok<LimitedSeriesModel>> ConvertToLimitedSeries(
+        Guid id,
+        SeriesService seriesService,
+        ClaimsPrincipal principal,
+        CancellationToken token) =>
+        TypedResults.Ok(await seriesService.ConvertToLimitedSeries(principal.ListId, Id.For<Series>(id), token));
 
     public static async Task<FileContentHttpResult> GetSeriesPoster(
         Guid id,

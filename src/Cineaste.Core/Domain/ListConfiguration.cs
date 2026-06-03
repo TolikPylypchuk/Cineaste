@@ -1,5 +1,7 @@
 using System.Globalization;
 
+using static Cineaste.Common.Constants;
+
 namespace Cineaste.Core.Domain;
 
 public sealed class ListConfiguration : Entity<ListConfiguration>
@@ -57,4 +59,16 @@ public sealed class ListConfiguration : Entity<ListConfiguration>
         this.defaultSeasonOriginalTitle = null!;
         this.SortingConfiguration = null!;
     }
+
+    public Title GetDefaultSeasonTitle(int seasonNumber) =>
+        new(
+            this.DefaultSeasonTitle.Replace(SeasonTitleNumberPlaceholder, seasonNumber.ToString()),
+            1,
+            isOriginal: false);
+
+    public Title GetDefaultSeasonOriginalTitle(int seasonNumber) =>
+        new(
+            this.DefaultSeasonOriginalTitle.Replace(SeasonTitleNumberPlaceholder,seasonNumber.ToString()),
+            1,
+            isOriginal: true);
 }

@@ -1,3 +1,5 @@
+using System.Security.Principal;
+
 using Cineaste.Application.Services.Poster;
 
 namespace Cineaste.Endpoints;
@@ -40,6 +42,12 @@ public static class LimitedSeriesEndpoints
                 .ProducesListNotFoundProblem()
                 .WithName(nameof(RemoveLimitedSeries))
                 .WithSummary("Remove a limited series from the list");
+
+            limitedSeries.MapPost("/{id}/convert-to-series", ConvertToSeries)
+                .ProducesLimitedSeriesNotFoundProblem()
+                .ProducesListNotFoundProblem()
+                .WithName(nameof(ConvertToSeries))
+                .WithSummary("Convert a limited series to a series");
 
             limitedSeries.MapGet("/{id}/poster", GetLimitedSeriesPoster)
                 .ProducesPosterContentTypes()
@@ -89,11 +97,11 @@ public static class LimitedSeriesEndpoints
         HttpContext httpContext,
         CancellationToken token)
     {
-        var limivedSeries = await limitedSeriesService.AddLimitedSeries(
+        var limitedSeries = await limitedSeriesService.AddLimitedSeries(
             httpContext.User.ListId, request.Validated(), token);
 
-        var uri = linkGenerator.GetUriByName(httpContext, nameof(GetLimitedSeries), new { id = limivedSeries.Id });
-        return TypedResults.Created(uri, limivedSeries);
+        var uri = linkGenerator.GetUriByName(httpContext, nameof(GetLimitedSeries), new { id = limitedSeries.Id });
+        return TypedResults.Created(uri, limitedSeries);
     }
 
     public static async Task<Ok<LimitedSeriesModel>> UpdateLimitedSeries(
@@ -114,6 +122,13 @@ public static class LimitedSeriesEndpoints
         await limitedSeriesService.RemoveLimitedSeries(principal.ListId, Id.For<LimitedSeries>(id), token);
         return TypedResults.NoContent();
     }
+
+    public static async Task<Ok<SeriesModel>> ConvertToSeries(
+        Guid id,
+        LimitedSeriesService limitedSeriesService,
+        ClaimsPrincipal principal,
+        CancellationToken token) =>
+        TypedResults.Ok(await limitedSeriesService.ConvertToSeries(principal.ListId, Id.For<LimitedSeries>(id), token));
 
     public static async Task<FileContentHttpResult> GetLimitedSeriesPoster(
         Guid id,

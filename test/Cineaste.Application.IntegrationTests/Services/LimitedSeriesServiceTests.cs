@@ -286,6 +286,106 @@ public class LimitedSeriesServiceTests(DbFixture dbFixture, ITestOutputHelper ou
         Assert.Equal(dummyId, exception.LimitedSeriesId);
     }
 
+    [Fact(DisplayName = "ConvertLimitedSeriesToSeries should make the necessary database changes")]
+    public async Task ConvertLimitedSeriesToSeriesShouldMakeDbChanges()
+    {
+        // Arrange
+
+        var dbContext = this.data.CreateDbContext();
+        var limitedSeriesService = this.CreateLimitedSeriesService(dbContext);
+
+        var limitedSeries = await this.data.CreateLimitedSeries(dbContext);
+
+        // Act
+
+        var model = await limitedSeriesService.ConvertToSeries(
+            this.data.ListId, limitedSeries.Id, TestContext.Current.CancellationToken);
+
+        // Assert
+
+        Assert.True(dbContext.LimitedSeries.All(m => m.Id != limitedSeries.Id));
+
+        var series = dbContext.Series.Find(Id.For<Series>(model.Id));
+
+        Assert.NotNull(series);
+
+        AssertTitles(limitedSeries.AllTitles, series.AllTitles);
+
+        Assert.Equal(limitedSeries.WatchStatus, series.WatchStatus);
+        Assert.Equal(limitedSeries.ReleaseStatus, series.ReleaseStatus);
+        Assert.Equal(limitedSeries.Kind.Id, series.Kind.Id);
+        Assert.Equal(limitedSeries.ImdbId, series.ImdbId);
+        Assert.Equal(limitedSeries.RottenTomatoesId, series.RottenTomatoesId);
+
+        var season = series.Seasons.First();
+        var part = season.Parts.First();
+
+        Assert.Equal(limitedSeries.Channel, season.Channel);
+        Assert.Equal(limitedSeries.Period.StartMonth, part.Period.StartMonth);
+        Assert.Equal(limitedSeries.Period.StartYear, part.Period.StartYear);
+        Assert.Equal(limitedSeries.Period.EndMonth, part.Period.EndMonth);
+        Assert.Equal(limitedSeries.Period.EndYear, part.Period.EndYear);
+        Assert.Equal(limitedSeries.Period.EpisodeCount, part.Period.EpisodeCount);
+        Assert.Equal(limitedSeries.Period.IsSingleDayRelease, part.Period.IsSingleDayRelease);
+        Assert.Equal(limitedSeries.RottenTomatoesSubId, part.RottenTomatoesId);
+    }
+
+    [Fact(DisplayName = "ConvertLimitedSeriesToSeries should return a correct model")]
+    public async Task ConvertLimitedSeriesToSeriesShouldReturnCorrectModel()
+    {
+        // Arrange
+
+        var dbContext = this.data.CreateDbContext();
+        var limitedSeriesService = this.CreateLimitedSeriesService(dbContext);
+
+        var limitedSeries = await this.data.CreateLimitedSeries(dbContext);
+
+        // Act
+
+        var model = await limitedSeriesService.ConvertToSeries(
+            this.data.ListId, limitedSeries.Id, TestContext.Current.CancellationToken);
+
+        // Assert
+
+        var series = dbContext.Series.Find(Id.For<Series>(model.Id));
+
+        Assert.NotNull(series);
+
+        AssertTitles(series, model);
+
+        Assert.Equal(series.WatchStatus, model.WatchStatus);
+        Assert.Equal(series.ReleaseStatus, model.ReleaseStatus);
+        Assert.Equal(series.Kind.Id.Value, model.Kind.Id);
+        Assert.Equal(series.ImdbId?.Value, model.ImdbId);
+        Assert.Equal(series.RottenTomatoesId?.Value, model.RottenTomatoesId);
+
+        Assert.Single(model.Seasons);
+        Assert.Empty(model.SpecialEpisodes);
+
+        var season = series.Seasons.First();
+        var seasonModel = model.Seasons.First();
+
+        AssertTitles(season, seasonModel);
+
+        Assert.Equal(season.SequenceNumber, seasonModel.SequenceNumber);
+        Assert.Equal(season.WatchStatus, seasonModel.WatchStatus);
+        Assert.Equal(season.ReleaseStatus, seasonModel.ReleaseStatus);
+        Assert.Equal(season.Channel, seasonModel.Channel);
+
+        Assert.Single(seasonModel.Parts);
+
+        var part = season.Parts.First();
+        var partModel = seasonModel.Parts.First();
+
+        Assert.Equal(part.Period.StartMonth.Value, partModel.Period.StartMonth);
+        Assert.Equal(part.Period.StartYear, partModel.Period.StartYear);
+        Assert.Equal(part.Period.EndMonth.Value, partModel.Period.EndMonth);
+        Assert.Equal(part.Period.EndYear, partModel.Period.EndYear);
+        Assert.Equal(part.Period.EpisodeCount, partModel.Period.EpisodeCount);
+        Assert.Equal(part.Period.IsSingleDayRelease, partModel.Period.IsSingleDayRelease);
+        Assert.Equal(part.RottenTomatoesId?.Value, partModel.RottenTomatoesId);
+    }
+
     private LimitedSeriesService CreateLimitedSeriesService(CineasteDbContext dbContext) =>
         new(dbContext, this.data.PosterProvider, this.data.PosterUrlProvider, this.logger);
 

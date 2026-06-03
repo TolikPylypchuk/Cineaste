@@ -440,6 +440,143 @@ public class SeriesServiceTests(DbFixture dbFixture, ITestOutputHelper output)
         Assert.Equal(dummyId, exception.SeriesId);
     }
 
+    [Fact(DisplayName = "ConvertSeriesToLimitedSeries should make the necessary database changes")]
+    public async Task ConvertSeriesToLimitedSeriesShouldMakeDbChanges()
+    {
+        // Arrange
+
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
+
+        var series = await this.data.CreateSeries(dbContext, numSeasons: 1, numParts: 1, numSpecialEpisodes: 0);
+
+        // Act
+
+        var model = await seriesService.ConvertToLimitedSeries(
+            this.data.ListId, series.Id, TestContext.Current.CancellationToken);
+
+        // Assert
+
+        Assert.True(dbContext.Series.All(m => m.Id != series.Id));
+
+        var limitedSeries = dbContext.LimitedSeries.Find(Id.For<LimitedSeries>(model.Id));
+
+        Assert.NotNull(limitedSeries);
+
+        AssertTitles(series.AllTitles, limitedSeries.AllTitles);
+
+        Assert.Equal(series.WatchStatus, limitedSeries.WatchStatus);
+        Assert.Equal(series.ReleaseStatus, limitedSeries.ReleaseStatus);
+        Assert.Equal(series.Kind.Id, limitedSeries.Kind.Id);
+        Assert.Equal(series.ImdbId, limitedSeries.ImdbId);
+        Assert.Equal(series.RottenTomatoesId, limitedSeries.RottenTomatoesId);
+
+        var season = series.Seasons.First();
+        var part = season.Parts.First();
+
+        Assert.Equal(season.Channel, limitedSeries.Channel);
+        Assert.Equal(part.Period.StartMonth, limitedSeries.Period.StartMonth);
+        Assert.Equal(part.Period.StartYear, limitedSeries.Period.StartYear);
+        Assert.Equal(part.Period.EndMonth, limitedSeries.Period.EndMonth);
+        Assert.Equal(part.Period.EndYear, limitedSeries.Period.EndYear);
+        Assert.Equal(part.Period.EpisodeCount, limitedSeries.Period.EpisodeCount);
+        Assert.Equal(part.Period.IsSingleDayRelease, limitedSeries.Period.IsSingleDayRelease);
+        Assert.Equal(part.RottenTomatoesId, limitedSeries.RottenTomatoesSubId);
+    }
+
+    [Fact(DisplayName = "ConvertSeriesToLimitedSeries should return a correct model")]
+    public async Task ConvertSeriesToLimitedSeriesShouldReturnCorrectModel()
+    {
+        // Arrange
+
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
+
+        var series = await this.data.CreateSeries(dbContext, numSeasons: 1, numParts: 1, numSpecialEpisodes: 0);
+
+        // Act
+
+        var model = await seriesService.ConvertToLimitedSeries(
+            this.data.ListId, series.Id, TestContext.Current.CancellationToken);
+
+        // Assert
+
+        var limitedSeries = dbContext.LimitedSeries.Find(Id.For<LimitedSeries>(model.Id));
+
+        Assert.NotNull(limitedSeries);
+
+        AssertTitles(limitedSeries, model);
+
+        Assert.Equal(limitedSeries.Id.Value, model.Id);
+        Assert.Equal(limitedSeries.Period.StartMonth.Value, model.Period.StartMonth);
+        Assert.Equal(limitedSeries.Period.StartYear, model.Period.StartYear);
+        Assert.Equal(limitedSeries.Period.EndMonth.Value, model.Period.EndMonth);
+        Assert.Equal(limitedSeries.Period.EndYear, model.Period.EndYear);
+        Assert.Equal(limitedSeries.Period.EpisodeCount, model.Period.EpisodeCount);
+        Assert.Equal(limitedSeries.Period.IsSingleDayRelease, model.Period.IsSingleDayRelease);
+        Assert.Equal(limitedSeries.WatchStatus, model.WatchStatus);
+        Assert.Equal(limitedSeries.ReleaseStatus, model.ReleaseStatus);
+        Assert.Equal(limitedSeries.Channel, model.Channel);
+        Assert.Equal(limitedSeries.Kind.Id.Value, model.Kind.Id);
+        Assert.Equal(limitedSeries.ImdbId?.Value, model.ImdbId);
+        Assert.Equal(limitedSeries.RottenTomatoesId?.Value, model.RottenTomatoesId);
+        Assert.Equal(limitedSeries.RottenTomatoesSubId?.Value, model.RottenTomatoesSubId);
+    }
+
+    [Fact(DisplayName = "ConvertSeriesToLimitedSeries should throw if series has multiple seasons")]
+    public async Task ConvertSeriesToLimitedSeriesShouldThrowIfMultipleSeasons()
+    {
+        // Arrange
+
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
+
+        var series = await this.data.CreateSeries(dbContext, numSeasons: 2, numParts: 1, numSpecialEpisodes: 0);
+
+        // Act + Assert
+
+        var exception = await Assert.ThrowsAsync<CannotConvertToLimitedSeriesException>(() =>
+            seriesService.ConvertToLimitedSeries( this.data.ListId, series.Id, TestContext.Current.CancellationToken));
+
+        Assert.Equal(series.Id, exception.SeriesId);
+    }
+
+    [Fact(DisplayName = "ConvertSeriesToLimitedSeries should throw if series has a season with multiple parts")]
+    public async Task ConvertSeriesToLimitedSeriesShouldThrowIfMultipleParts()
+    {
+        // Arrange
+
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
+
+        var series = await this.data.CreateSeries(dbContext, numSeasons: 1, numParts: 2, numSpecialEpisodes: 0);
+
+        // Act + Assert
+
+        var exception = await Assert.ThrowsAsync<CannotConvertToLimitedSeriesException>(() =>
+            seriesService.ConvertToLimitedSeries(this.data.ListId, series.Id, TestContext.Current.CancellationToken));
+
+        Assert.Equal(series.Id, exception.SeriesId);
+    }
+
+    [Fact(DisplayName = "ConvertSeriesToLimitedSeries should throw if series has special episodes")]
+    public async Task ConvertSeriesToLimitedSeriesShouldThrowIfHasSpecialEpisodes()
+    {
+        // Arrange
+
+        var dbContext = this.data.CreateDbContext();
+        var seriesService = this.CreateSeriesService(dbContext);
+
+        var series = await this.data.CreateSeries(dbContext, numSeasons: 1, numParts: 1, numSpecialEpisodes: 1);
+
+        // Act + Assert
+
+        var exception = await Assert.ThrowsAsync<CannotConvertToLimitedSeriesException>(() =>
+            seriesService.ConvertToLimitedSeries(this.data.ListId, series.Id, TestContext.Current.CancellationToken));
+
+        Assert.Equal(series.Id, exception.SeriesId);
+    }
+
     private SeriesService CreateSeriesService(CineasteDbContext dbContext) =>
         new(dbContext, this.data.PosterProvider, this.data.PosterUrlProvider, this.logger);
 
