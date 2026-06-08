@@ -23,8 +23,8 @@
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="3.0.71" />
     <PackageReference Include="MudBlazor" Version="9.5.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="all" />
-    <PackageReference Include="Refit" Version="10.2.0" />
-    <PackageReference Include="Refit.HttpClientFactory" Version="10.2.0" />
+    <PackageReference Include="Refit" Version="11.0.1" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="11.0.1" />
     <PackageReference Include="System.Interactive" Version="7.0.1" />
   </ItemGroup>
 
