@@ -682,6 +682,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert to series.
+        /// </summary>
+        public static string LimitedSeriesForm_Button_ConvertToSeries {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Button.ConvertToSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting to series.
+        /// </summary>
+        public static string LimitedSeriesForm_Button_ConvertToSeries_Busy {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Button.ConvertToSeries.Busy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Channel.
         /// </summary>
         public static string LimitedSeriesForm_Channel {
@@ -741,6 +759,15 @@ namespace Cineaste.Client.Localization {
         public static string LimitedSeriesForm_Problem_AddingFailed {
             get {
                 return ResourceManager.GetString("LimitedSeriesForm.Problem.AddingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting the limited series to series has failed.
+        /// </summary>
+        public static string LimitedSeriesForm_Problem_ConvertingFailed {
+            get {
+                return ResourceManager.GetString("LimitedSeriesForm.Problem.ConvertingFailed", resourceCulture);
             }
         }
         
@@ -2212,6 +2239,24 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert to limited series.
+        /// </summary>
+        public static string SeriesForm_Button_ConvertToLimitedSeries {
+            get {
+                return ResourceManager.GetString("SeriesForm.Button.ConvertToLimitedSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting to limited series.
+        /// </summary>
+        public static string SeriesForm_Button_ConvertToLimitedSeries_Busy {
+            get {
+                return ResourceManager.GetString("SeriesForm.Button.ConvertToLimitedSeries.Busy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move down.
         /// </summary>
         public static string SeriesForm_Component_Down {
@@ -2298,6 +2343,15 @@ namespace Cineaste.Client.Localization {
         public static string SeriesForm_Problem_AddingFailed {
             get {
                 return ResourceManager.GetString("SeriesForm.Problem.AddingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting the series to limited series has failed.
+        /// </summary>
+        public static string SeriesForm_Problem_ConvertingFailed {
+            get {
+                return ResourceManager.GetString("SeriesForm.Problem.ConvertingFailed", resourceCulture);
             }
         }
         

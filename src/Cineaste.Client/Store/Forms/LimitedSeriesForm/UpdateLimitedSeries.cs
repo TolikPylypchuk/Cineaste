@@ -2,7 +2,8 @@ namespace Cineaste.Client.Store.Forms.LimitedSeriesForm;
 
 public sealed record UpdateLimitedSeriesAction(Guid Id, LimitedSeriesRequest Request);
 
-public sealed record UpdateLimitedSeriesResultAction(ApiResult<LimitedSeriesModel> Result) : ResultAction<LimitedSeriesModel>(Result);
+public sealed record UpdateLimitedSeriesResultAction(ApiResult<LimitedSeriesModel> Result)
+    : ResultAction<LimitedSeriesModel>(Result);
 
 public static class UpdateLimitedSeriesReducers
 {
@@ -11,7 +12,9 @@ public static class UpdateLimitedSeriesReducers
         state with { Update = ApiCall.InProgress() };
 
     [ReducerMethod]
-    public static LimitedSeriesFormState ReduceUpdateLimitedSeriesResultAction(LimitedSeriesFormState state, UpdateLimitedSeriesResultAction action) =>
+    public static LimitedSeriesFormState ReduceUpdateLimitedSeriesResultAction(
+        LimitedSeriesFormState state,
+        UpdateLimitedSeriesResultAction action) =>
         action.Handle(
             onSuccess: LimitedSeries => state with { Update = ApiCall.Success(), Model = LimitedSeries },
             onFailure: problem => state with { Update = ApiCall.Failure(problem) });

@@ -14,6 +14,9 @@ public interface ILimitedSeriesApi
     [Delete("/limited-series/{id}")]
     public Task<IApiResponse> RemoveLimitedSeries(Guid id);
 
+    [Post("/limited-series/{id}/convert-to-series")]
+    public Task<IApiResponse<SeriesModel>> ConvertToSeries(Guid id);
+
     [Multipart]
     [Put("/limited-series/{id}/poster")]
     public Task<IApiResponse> SetLimitedSeriesPoster(Guid id, StreamPart file);

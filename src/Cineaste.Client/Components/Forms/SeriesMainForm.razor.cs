@@ -44,6 +44,9 @@ public partial class SeriesMainForm
     private object StatusErrorTrigger =>
         new { this.FormModel.WatchStatus, this.FormModel.ReleaseStatus };
 
+    private bool CanConvertToLimitedSeries =>
+        !this.FormModel.HasChanges && !this.FormModel.IsNew && this.FormModel.Components is [SeasonFormModel];
+
     protected override void OnInitialized()
     {
         this.SubscribeToAction<GoToSeriesAction>(async _ =>
@@ -211,6 +214,14 @@ public partial class SeriesMainForm
         if (this.FormModel.ParentFranchiseId is Guid franchiseId && this.FormModel.SequenceNumber is int num)
         {
             this.Dispatcher.Dispatch(new GoToFranchiseComponentAction(franchiseId, num - 1));
+        }
+    }
+
+    private void ConvertToLimitedSeries()
+    {
+        if (this.CanConvertToLimitedSeries)
+        {
+            this.Dispatcher.Dispatch(new ConvertToLimitedSeriesAction(this.FormModel.BackingModel!.Id));
         }
     }
 }

@@ -44,6 +44,9 @@ public partial class ListComponent
         this.SubsribeToSuccessfulResult<UpdateLimitedSeriesResultAction>(this.ReloadList);
         this.SubsribeToSuccessfulResult<UpdateFranchiseResultAction>(this.ReloadList);
 
+        this.SubsribeToSuccessfulResult<ConvertToLimitedSeriesResultAction>(this.ReloadList);
+        this.SubsribeToSuccessfulResult<ConvertToSeriesResultAction>(this.ReloadList);
+
         this.SubsribeToSuccessfulResult<RemoveMovieResultAction>(this.ReloadList);
         this.SubsribeToSuccessfulResult<RemoveSeriesResultAction>(this.ReloadList);
         this.SubsribeToSuccessfulResult<RemoveLimitedSeriesResultAction>(this.ReloadList);

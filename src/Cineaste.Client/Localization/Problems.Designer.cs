@@ -295,6 +295,15 @@ namespace Cineaste.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Series cannot be converted to limited series.
+        /// </summary>
+        public static string _problem_series_conversion_limited_series {
+            get {
+                return ResourceManager.GetString("/problem/series/conversion/limited-series", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An unhandled problem has occurred.
         /// </summary>
         public static string _problem_unhandled {

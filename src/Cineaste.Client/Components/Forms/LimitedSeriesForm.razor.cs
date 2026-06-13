@@ -26,6 +26,9 @@ public partial class LimitedSeriesForm
     private object StatusErrorTrigger =>
         new { this.FormModel.WatchStatus, this.FormModel.ReleaseStatus };
 
+    private bool CanConvertToSeries =>
+        !this.FormModel.HasChanges && !this.FormModel.IsNew;
+
     protected override void OnInitialized()
     {
         this.SubsribeToSuccessfulResult<FetchLimitedSeriesResultAction>(this.SetPropertyValues);
@@ -218,6 +221,14 @@ public partial class LimitedSeriesForm
         if (this.FormModel.ParentFranchiseId is Guid franchiseId && this.FormModel.SequenceNumber is int num)
         {
             this.Dispatcher.Dispatch(new GoToFranchiseComponentAction(franchiseId, num - 1));
+        }
+    }
+
+    private void ConvertToSeries()
+    {
+        if (this.CanConvertToSeries)
+        {
+            this.Dispatcher.Dispatch(new ConvertToSeriesAction(this.FormModel.BackingModel!.Id));
         }
     }
 }

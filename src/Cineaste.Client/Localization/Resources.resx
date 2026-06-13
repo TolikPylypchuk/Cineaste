@@ -462,11 +462,26 @@
   <data name="LimitedSeriesForm.OriginalTitle" xml:space="preserve">
     <value>Original title</value>
   </data>
+  <data name="LimitedSeriesForm.Button.ConvertToSeries" xml:space="preserve">
+    <value>Convert to series</value>
+  </data>
+  <data name="SeriesForm.Button.ConvertToLimitedSeries" xml:space="preserve">
+    <value>Convert to limited series</value>
+  </data>
+  <data name="LimitedSeriesForm.Button.ConvertToSeries.Busy" xml:space="preserve">
+    <value>Converting to series</value>
+  </data>
+  <data name="SeriesForm.Button.ConvertToLimitedSeries.Busy" xml:space="preserve">
+    <value>Converting to limited series</value>
+  </data>
   <data name="MovieForm.Problem.AddingFailed" xml:space="preserve">
     <value>Adding the movie has failed</value>
   </data>
   <data name="LimitedSeriesForm.Problem.AddingFailed" xml:space="preserve">
     <value>Adding the limited series has failed</value>
+  </data>
+  <data name="LimitedSeriesForm.Problem.ConvertingFailed" xml:space="preserve">
+    <value>Converting the limited series to series has failed</value>
   </data>
   <data name="MovieForm.Problem.RemovingFailed" xml:space="preserve">
     <value>Removing the movie has failed</value>
@@ -698,6 +713,9 @@
   </data>
   <data name="SeriesForm.Problem.AddingFailed" xml:space="preserve">
     <value>Adding the series has failed</value>
+  </data>
+  <data name="SeriesForm.Problem.ConvertingFailed" xml:space="preserve">
+    <value>Converting the series to limited series has failed</value>
   </data>
   <data name="SeriesForm.Problem.RemovingFailed" xml:space="preserve">
     <value>Removing the series has failed</value>

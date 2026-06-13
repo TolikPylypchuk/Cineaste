@@ -195,6 +195,9 @@
   <data name="/problem/poster/type/unsupported" xml:space="preserve">
     <value>Unsupported poster type</value>
   </data>
+  <data name="/problem/series/conversion/limited-series" xml:space="preserve">
+    <value>Series cannot be converted to limited series</value>
+  </data>
   <data name="/problem/unhandled" xml:space="preserve">
     <value>An unhandled problem has occurred</value>
   </data>

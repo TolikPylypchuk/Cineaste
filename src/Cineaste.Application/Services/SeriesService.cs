@@ -109,9 +109,12 @@ public sealed partial class SeriesService(
         var season = series.Seasons.First();
         var part = season.Parts.First();
 
+        var poster = await this.dbContext.SeasonPosters
+            .FirstOrDefaultAsync(poster => poster.SeasonPart.Id == part.Id, token);
+
         var limitedSeries = new LimitedSeries(
             Id.Create<LimitedSeries>(),
-            series.AllTitles,
+            series.AllTitles.Select(title => title with { }),
             part.Period,
             series.WatchStatus,
             series.ReleaseStatus,
@@ -120,7 +123,8 @@ public sealed partial class SeriesService(
         {
             ImdbId = series.ImdbId,
             RottenTomatoesId = series.RottenTomatoesId,
-            RottenTomatoesSubId = part.RottenTomatoesId
+            RottenTomatoesSubId = part.RottenTomatoesId,
+            PosterHash = part.PosterHash
         };
 
         series.FranchiseItem?.ReplaceSeriesWithLimitedSeries(limitedSeries);
@@ -128,6 +132,15 @@ public sealed partial class SeriesService(
 
         this.dbContext.LimitedSeries.Add(limitedSeries);
         this.dbContext.Series.Remove(series);
+
+        if (poster is not null)
+        {
+            var limitedSeriesPoster = new LimitedSeriesPoster(
+                Id.Create<LimitedSeriesPoster>(), limitedSeries, poster.Data, poster.ContentType);
+
+            this.dbContext.LimitedSeriesPosters.Add(limitedSeriesPoster);
+        }
+
         await this.dbContext.SaveChangesAsync(token);
 
         return limitedSeries.ToLimitedSeriesModel(this.posterUrlProvider);

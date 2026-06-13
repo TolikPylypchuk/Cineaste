@@ -63,4 +63,36 @@ public static class ItemUpdatedReducers
                     SelectionMode = ListPageSelectionMode.Franchise
                 },
             onFailure: _ => state);
+
+    [ReducerMethod]
+    public static ListPageState ReduceConvertToLimitedSeriesResultAction(
+        ListPageState state,
+        ConvertToLimitedSeriesResultAction action) =>
+        action.Handle(
+            onSuccess: limitedSeries =>
+            {
+                var item = limitedSeries.ToListItemModel();
+                return state with
+                {
+                    SelectedItem = item,
+                    SelectionMode = ListPageSelectionMode.LimitedSeries
+                };
+            },
+            onFailure: _ => state);
+
+    [ReducerMethod]
+    public static ListPageState ReduceConvertToSeriesResultAction(
+        ListPageState state,
+        ConvertToSeriesResultAction action) =>
+        action.Handle(
+            onSuccess: series =>
+            {
+                var item = series.ToListItemModel();
+                return state with
+                {
+                    SelectedItem = item,
+                    SelectionMode = ListPageSelectionMode.Series
+                };
+            },
+            onFailure: _ => state);
 }

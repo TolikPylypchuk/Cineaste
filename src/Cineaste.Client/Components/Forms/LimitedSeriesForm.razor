@@ -243,6 +243,23 @@
                         />
                     }
 
+                    @if (this.CanConvertToSeries)
+                    {
+                        <div class="convert-container">
+                            <MudButton
+                                Color="Color.Primary"
+                                Variant="Variant.Text"
+                                Size="Size.Small"
+                                Disabled="@this.State.Value.Convert.IsInProgress"
+                                @onclick="@this.ConvertToSeries"
+                            >
+                                @this.Loc[this.State.Value.Convert.IsInProgress
+                                    ? "LimitedSeriesForm.Button.ConvertToSeries.Busy"
+                                    : "LimitedSeriesForm.Button.ConvertToSeries"]
+                            </MudButton>
+                        </div>
+                    }
+
                     @if (!this.FormModel.IsNew)
                     {
                         <div class="remove-container">
@@ -274,6 +291,16 @@
                         Problem="@this.State.Value.Update.Problem"
                         Text="LimitedSeriesForm.Problem.UpdatingFailed"
                         TryAgain="@this.Save"
+                        Class="problem-alert"
+                    />
+                }
+                
+                @if (this.State.Value.Convert.Problem is not null)
+                {
+                    <ApiProblemAlert
+                        Problem="@this.State.Value.Convert.Problem"
+                        Text="LimitedSeriesForm.Problem.ConvertingFailed"
+                        TryAgain="@this.ConvertToSeries"
                         Class="problem-alert"
                     />
                 }

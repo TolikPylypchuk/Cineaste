@@ -103,10 +103,19 @@ public sealed partial class LimitedSeriesService(
         var list = await this.FindList(listId, token);
         var limitedSeries = await this.FindLimitedSeries(list, id, token);
 
+        var poster = await this.dbContext.LimitedSeriesPosters
+            .FirstOrDefaultAsync(poster => poster.LimitedSeries.Id == limitedSeries.Id, token);
+
         const int seasonNumber = 1;
 
         var seasonTitle = list.Configuration.GetDefaultSeasonTitle(seasonNumber);
         var seasonOriginalTitle = list.Configuration.GetDefaultSeasonOriginalTitle(seasonNumber);
+
+        var part = new SeasonPart(Id.Create<SeasonPart>(), limitedSeries.Period)
+        {
+            RottenTomatoesId = limitedSeries.RottenTomatoesSubId,
+            PosterHash = limitedSeries.PosterHash
+        };
 
         var season = new Season(
             Id.Create<Season>(),
@@ -115,22 +124,34 @@ public sealed partial class LimitedSeriesService(
             limitedSeries.ReleaseStatus.ToSeasonReleaseStatus(),
             limitedSeries.Channel,
             seasonNumber,
-            [new(Id.Create<SeasonPart>(), limitedSeries.Period)]);
+            [part]);
 
         var series = new Series(
             Id.Create<Series>(),
-            limitedSeries.AllTitles,
+            limitedSeries.AllTitles.Select(title => title with { }),
             [season],
             [],
             limitedSeries.WatchStatus,
             limitedSeries.ReleaseStatus,
-            limitedSeries.Kind);
+            limitedSeries.Kind)
+        {
+            ImdbId = limitedSeries.ImdbId,
+            RottenTomatoesId = limitedSeries.RottenTomatoesId
+        };
 
         limitedSeries.FranchiseItem?.ReplaceLimitedSeriesWithSeries(series);
         limitedSeries.ListItem?.ReplaceLimitedSeriesWithSeries(series);
 
         this.dbContext.Series.Add(series);
         this.dbContext.LimitedSeries.Remove(limitedSeries);
+
+        if (poster is not null)
+        {
+            var seasonPoster = new SeasonPoster(
+                Id.Create<SeasonPoster>(), part, poster.Data, poster.ContentType);
+
+            this.dbContext.SeasonPosters.Add(seasonPoster);
+        }
 
         await this.dbContext.SaveChangesAsync(token);
 
