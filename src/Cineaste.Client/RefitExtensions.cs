@@ -18,8 +18,9 @@ public static class RefitExtensions
             return services;
         }
 
-        private IHttpClientBuilder AddCineasteRefitClient<T>() =>
-            services.AddRefitClient(typeof(T), provider =>
+        private IHttpClientBuilder AddCineasteRefitClient<T>()
+            where T : class =>
+            services.AddRefitGeneratedClient<T>(provider =>
                 new RefitSettings()
                 {
                     ContentSerializer = new SystemTextJsonContentSerializer(
