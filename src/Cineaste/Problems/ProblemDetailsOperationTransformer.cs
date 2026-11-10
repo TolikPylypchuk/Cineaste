@@ -63,7 +63,7 @@ public sealed class ProblemDetailsOperationTransformer(IOptions<JsonOptions> opt
             Description = ReasonPhrases.GetReasonPhrase(status)
         };
 
-        response.Content ??= new Dictionary<string, OpenApiMediaType>();
+        response.Content ??= new Dictionary<string, IOpenApiMediaType>();
         response.Content["application/problem+json"] = new OpenApiMediaType
         {
             Schema = await context.GetOrCreateSchemaAsync(typeof(ProblemDetails), cancellationToken: cancellationToken),

@@ -68,11 +68,8 @@ public partial class SeriesForm
     private void OnOriginalTitlesUpdated(object? sender, EventArgs e) =>
         this.StateHasChanged();
 
-    private void UpdateFormTitle()
-    {
+    private void UpdateFormTitle() =>
         this.FormTitle = this.FormModel.Titles.FirstOrDefault() ?? String.Empty;
-        this.StateHasChanged();
-    }
 
     private void RemoveComponent(ISeriesComponentFormModel component)
     {

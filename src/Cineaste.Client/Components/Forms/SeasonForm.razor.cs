@@ -96,8 +96,6 @@ public partial class SeasonForm
         this.PartValidationTrigger = this.FormModel.Parts.Select(part => part.Period).Aggregate(
             String.Empty,
             (acc, period) => $"{acc}{period.StartMonth}{period.StartYear}{period.EndMonth}{period.EndYear}");
-
-        this.StateHasChanged();
     }
 
     private void UpdateFormTitle()

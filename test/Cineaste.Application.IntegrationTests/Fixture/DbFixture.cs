@@ -47,7 +47,7 @@ public sealed class DbFixture : IAsyncLifetime
     public CineasteDbContext CreateDbContext()
     {
         var options = new DbContextOptionsBuilder<CineasteDbContext>()
-            .UseSqlServer(this.container.GetConnectionString())
+            .UseSqlServer(this.container.GetConnectionString(), options => options.EnableRetryOnFailure())
             .Options;
 
         return new CineasteDbContext(options);

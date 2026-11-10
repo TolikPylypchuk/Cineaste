@@ -100,9 +100,6 @@ public partial class LimitedSeriesForm
         this.StateHasChanged();
     }
 
-    private void OnPeriodChanged() =>
-        this.StateHasChanged();
-
     private bool HasImdbId() =>
         !String.IsNullOrEmpty(this.FormModel.ImdbId);
 

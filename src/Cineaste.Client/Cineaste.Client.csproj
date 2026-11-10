@@ -19,7 +19,6 @@
     <PackageReference Include="Microsoft.Extensions.Localization" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" />
-    <PackageReference Include="Microsoft.Extensions.Options" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" />
     <PackageReference Include="MudBlazor" />
     <PackageReference Include="PropertyChanged.Fody" PrivateAssets="all" />
