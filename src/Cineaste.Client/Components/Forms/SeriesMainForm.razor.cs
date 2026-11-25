@@ -125,6 +125,9 @@ public partial class SeriesMainForm
         if (this.State.Value.InitialParentFranchiseId is Guid franchiseId)
         {
             this.Dispatcher.Dispatch(new GoToListItemAction(franchiseId));
+        } else if (this.FormModel.IsNew)
+        {
+            this.Close();
         }
     }
 

@@ -99,6 +99,7 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
 
         var movieId = Id.For<Movie>(id);
         var seriesId = Id.For<Series>(id);
+        var limitedSeriesId = Id.For<LimitedSeries>(id);
         var franchiseId = Id.For<Franchise>(id);
 
         var item = await this.dbContext.ListItems
@@ -106,6 +107,7 @@ public sealed partial class ListService(CineasteDbContext dbContext, ILogger<Lis
             .Where(item =>
                 item.Movie!.Id == movieId ||
                 item.Series!.Id == seriesId ||
+                item.LimitedSeries!.Id == limitedSeriesId ||
                 item.Franchise!.Id == franchiseId)
             .IncludeRelationships()
             .SingleOrDefaultAsync(token)
@@ -199,11 +201,11 @@ file static class Extensions
                 .Include(item => item.Series)
                     .ThenInclude(series => series!.FranchiseItem)
                         .ThenInclude(item => item!.ParentFranchise)
-                .Include(item => item.Franchise)
-                    .ThenInclude(franchise => franchise!.FranchiseItem)
-                        .ThenInclude(item => item!.ParentFranchise)
                 .Include(item => item.LimitedSeries)
                     .ThenInclude(limitedSeries => limitedSeries!.FranchiseItem)
+                        .ThenInclude(item => item!.ParentFranchise)
+                .Include(item => item.Franchise)
+                    .ThenInclude(franchise => franchise!.FranchiseItem)
                         .ThenInclude(item => item!.ParentFranchise);
     }
 }
