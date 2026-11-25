@@ -4,8 +4,8 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AngleSharp" Version="1.10.1" />
-    <PackageVersion Include="Extensions.MudBlazor.StaticInput" Version="4.1.0" />
+    <PackageVersion Include="AngleSharp" Version="1.11.0" />
+    <PackageVersion Include="Extensions.MudBlazor.StaticInput" Version="4.2.0" />
     <PackageVersion Include="FluentValidation" Version="12.2.0" />
     <PackageVersion Include="Fluxor" Version="6.11.0" />
     <PackageVersion Include="Fluxor.Blazor.Web" Version="6.11.0" />
@@ -31,11 +31,11 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Configuration" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="3.0.114" />
-    <PackageVersion Include="MudBlazor" Version="9.12.0" />
+    <PackageVersion Include="MudBlazor" Version="9.14.0" />
     <PackageVersion Include="PropertyChanged.Fody" Version="4.1.0" />
-    <PackageVersion Include="Refit" Version="16.4.0" />
-    <PackageVersion Include="Refit.HttpClientFactory" Version="16.4.0" />
-    <PackageVersion Include="Scalar.AspNetCore" Version="2.20.0" />
+    <PackageVersion Include="Refit" Version="17.0.0" />
+    <PackageVersion Include="Refit.HttpClientFactory" Version="17.0.0" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="3.2.1" />
     <PackageVersion Include="System.Interactive" Version="7.0.1" />
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0" />
     <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="11.0.0" />
@@ -44,12 +44,12 @@
     <PackageVersion Include="FsCheck" Version="3.6.0" />
     <PackageVersion Include="FsCheck.Xunit.v3" Version="3.6.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="11.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
     <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="RichardSzalay.MockHttp" Version="7.1.0" />
-    <PackageVersion Include="Testcontainers" Version="4.16.0" />
-    <PackageVersion Include="Testcontainers.MsSql" Version="4.16.0" />
+    <PackageVersion Include="Testcontainers" Version="4.17.0" />
+    <PackageVersion Include="Testcontainers.MsSql" Version="4.17.0" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.3" />
   </ItemGroup>
 </Project>

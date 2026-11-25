@@ -2,8 +2,7 @@ using System.Text.Json.Serialization;
 
 using Cineaste.Client.BaseUri;
 using Cineaste.Client.Problems;
-using Cineaste.Shared.Collections.Json;
-using Cineaste.Shared.Validation.Json;
+using Cineaste.Shared.Json;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -15,6 +14,7 @@ builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 
 builder.Services.Configure<JsonSerializerOptions>(options =>
 {
+    options.TypeInfoResolverChain.Add(CineasteJsonContext.Default);
     options.PropertyNameCaseInsensitive = true;
     options.Converters.Add(new JsonStringEnumConverter());
     options.Converters.Add(new ImmutableValueListConverterFactory());

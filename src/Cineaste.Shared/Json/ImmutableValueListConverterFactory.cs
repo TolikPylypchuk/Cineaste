@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Cineaste.Shared.Collections.Json;
+namespace Cineaste.Shared.Json;
 
 public class ImmutableValueListConverterFactory : JsonConverterFactory
 {

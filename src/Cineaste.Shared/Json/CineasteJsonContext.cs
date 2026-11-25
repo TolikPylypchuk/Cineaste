@@ -1,0 +1,58 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+using Cineaste.Shared.Models;
+
+namespace Cineaste.Shared.Json;
+
+[JsonSourceGenerationOptions(
+    JsonSerializerDefaults.Web,
+    Converters = [typeof(ImmutableValueListConverterFactory), typeof(ValidatedJsonConverterFactory)])]
+[JsonSerializable(typeof(FranchiseItemInfoModel))]
+[JsonSerializable(typeof(FranchiseItemModel))]
+[JsonSerializable(typeof(FranchiseItemRequest))]
+[JsonSerializable(typeof(FranchiseItemType))]
+[JsonSerializable(typeof(FranchiseKindSource))]
+[JsonSerializable(typeof(FranchiseModel))]
+[JsonSerializable(typeof(FranchiseRequest))]
+[JsonSerializable(typeof(ImmutableList<SeasonPartModel>))]
+[JsonSerializable(typeof(ImmutableList<SeasonRequest>))]
+[JsonSerializable(typeof(ImmutableList<SpecialEpisodeRequest>))]
+[JsonSerializable(typeof(ImmutableList<TitleModel>))]
+[JsonSerializable(typeof(ImmutableValueList<SeasonPartRequest>))]
+[JsonSerializable(typeof(ImmutableValueList<SeasonRequest>))]
+[JsonSerializable(typeof(ImmutableValueList<SpecialEpisodeRequest>))]
+[JsonSerializable(typeof(ImmutableValueList<TitleRequest>))]
+[JsonSerializable(typeof(LimitedSeriesModel))]
+[JsonSerializable(typeof(LimitedSeriesRequest))]
+[JsonSerializable(typeof(ListConfigurationModel))]
+[JsonSerializable(typeof(ListFranchiseItemModel))]
+[JsonSerializable(typeof(ListItemModel))]
+[JsonSerializable(typeof(ListItemType))]
+[JsonSerializable(typeof(ListKindModel))]
+[JsonSerializable(typeof(ListKindTarget))]
+[JsonSerializable(typeof(ListModel))]
+[JsonSerializable(typeof(ListSortOrder))]
+[JsonSerializable(typeof(MovieModel))]
+[JsonSerializable(typeof(MovieRequest))]
+[JsonSerializable(typeof(OffsettableData<ListItemModel>))]
+[JsonSerializable(typeof(OffsetMetadata))]
+[JsonSerializable(typeof(PosterRequestBase))]
+[JsonSerializable(typeof(ReleasePeriodModel))]
+[JsonSerializable(typeof(ReleasePeriodRequest))]
+[JsonSerializable(typeof(SeasonModel))]
+[JsonSerializable(typeof(SeasonPartModel))]
+[JsonSerializable(typeof(SeasonPartRequest))]
+[JsonSerializable(typeof(SeasonReleaseStatus))]
+[JsonSerializable(typeof(SeasonRequest))]
+[JsonSerializable(typeof(SeasonWatchStatus))]
+[JsonSerializable(typeof(SeriesModel))]
+[JsonSerializable(typeof(SeriesReleaseStatus))]
+[JsonSerializable(typeof(SeriesRequest))]
+[JsonSerializable(typeof(SeriesWatchStatus))]
+[JsonSerializable(typeof(SimpleCultureModel))]
+[JsonSerializable(typeof(SpecialEpisodeModel))]
+[JsonSerializable(typeof(SpecialEpisodeRequest))]
+[JsonSerializable(typeof(TitleModel))]
+[JsonSerializable(typeof(TitleRequest))]
+public sealed partial class CineasteJsonContext : JsonSerializerContext;

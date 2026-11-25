@@ -1,4 +1,5 @@
 using Cineaste.Client.BaseUri;
+using Cineaste.Shared.Json;
 
 namespace Cineaste.Client;
 
@@ -20,11 +21,11 @@ public static class RefitExtensions
 
         private IHttpClientBuilder AddCineasteRefitClient<T>()
             where T : class =>
-            services.AddRefitGeneratedClient<T>(provider =>
+            services.AddRefitGeneratedClient<T>(CineasteJsonContext.Default, provider =>
                 new RefitSettings()
                 {
                     ContentSerializer = new SystemTextJsonContentSerializer(
-                        provider.GetRequiredService<IOptions<JsonSerializerOptions>>().Value)
+                        provider.GetRequiredService<IOptions<JsonSerializerOptions>>().Value),
                 })
                 .ConfigureHttpClient((provider, client) =>
                     client.BaseAddress = new Uri(provider.GetRequiredService<IBaseUriProvider>().BaseUri, "/api"));

@@ -14,8 +14,7 @@ using Cineaste.OpenApi;
 using Cineaste.Problems;
 using Cineaste.Services.BaseUri;
 using Cineaste.Services.Poster;
-using Cineaste.Shared.Collections.Json;
-using Cineaste.Shared.Validation.Json;
+using Cineaste.Shared.Json;
 
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
@@ -40,6 +39,9 @@ builder.Services.AddRazorComponents()
 
 builder.Services.Configure<JsonOptions>(options =>
 {
+    options.SerializerOptions.TypeInfoResolverChain.Add(CineasteJsonContext.Default);
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
+
     var converters = options.SerializerOptions.Converters;
     converters.Add(new JsonStringEnumConverter());
     converters.Add(new ImmutableValueListConverterFactory());
