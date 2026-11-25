@@ -1,3 +1,3 @@
 namespace Cineaste.Common;
 
-public enum FranchiseKindSource { Movie, Series, LimitedSeries }
+public enum FranchiseKindSource { Movie, Series }

@@ -191,7 +191,7 @@ public partial class LimitedSeriesForm
                     listItemColor,
                     listSequenceNumber),
                 this.FormModel.Kind,
-                FranchiseKindSource.LimitedSeries);
+                FranchiseKindSource.Series);
 
             this.Dispatcher.Dispatch(action);
         }
