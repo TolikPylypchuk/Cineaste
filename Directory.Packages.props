@@ -35,7 +35,7 @@
     <PackageVersion Include="PropertyChanged.Fody" Version="4.1.0" />
     <PackageVersion Include="Refit" Version="17.0.0" />
     <PackageVersion Include="Refit.HttpClientFactory" Version="17.0.0" />
-    <PackageVersion Include="Scalar.AspNetCore" Version="3.2.1" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="3.3.0" />
     <PackageVersion Include="System.Interactive" Version="7.0.1" />
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0" />
     <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="11.0.0" />
@@ -50,6 +50,7 @@
     <PackageVersion Include="RichardSzalay.MockHttp" Version="7.1.0" />
     <PackageVersion Include="Testcontainers" Version="4.17.0" />
     <PackageVersion Include="Testcontainers.MsSql" Version="4.17.0" />
+    <PackageVersion Include="Testcontainers.XunitV3" Version="4.17.0" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.3" />
   </ItemGroup>
 </Project>

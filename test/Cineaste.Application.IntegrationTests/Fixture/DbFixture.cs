@@ -1,21 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 
 using Testcontainers.MsSql;
+using Testcontainers.Xunit;
+
+using Xunit.Sdk;
 
 [assembly: AssemblyFixture(typeof(DbFixture))]
 
 namespace Cineaste.Application.Fixture;
 
-public sealed class DbFixture : IAsyncLifetime
+public sealed class DbFixture(IMessageSink messageSink) : ContainerFixture<MsSqlBuilder, MsSqlContainer>(messageSink)
 {
-    private readonly MsSqlContainer container = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2025-latest")
-        .WithReuse(true)
-        .WithLabel("reuse-id", "DB")
-        .Build();
+    public DataFixture CreateDataFixture() =>
+        new(this);
 
-    public async ValueTask InitializeAsync()
+    public CineasteDbContext CreateDbContext()
     {
-        await this.container.StartAsync();
+        var options = new DbContextOptionsBuilder<CineasteDbContext>()
+            .UseSqlServer(this.Container.GetConnectionString(), options => options.EnableRetryOnFailure())
+            .Options;
+
+        return new CineasteDbContext(options);
+    }
+
+    protected override MsSqlBuilder Configure() =>
+        new MsSqlBuilder("mcr.microsoft.com/mssql/server:2025-latest")
+            .WithReuse(true)
+            .WithLabel("reuse-id", "DB");
+
+    protected override async ValueTask InitializeAsync()
+    {
+        await base.InitializeAsync();
 
         var dbContext = this.CreateDbContext();
         await dbContext.Database.MigrateAsync(TestContext.Current.CancellationToken);
@@ -36,20 +51,5 @@ public sealed class DbFixture : IAsyncLifetime
         dbContext.Lists.RemoveRange(dbContext.Lists);
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
-    }
-
-    public ValueTask DisposeAsync() =>
-        this.container.DisposeAsync();
-
-    public DataFixture CreateDataFixture() =>
-        new(this);
-
-    public CineasteDbContext CreateDbContext()
-    {
-        var options = new DbContextOptionsBuilder<CineasteDbContext>()
-            .UseSqlServer(this.container.GetConnectionString(), options => options.EnableRetryOnFailure())
-            .Options;
-
-        return new CineasteDbContext(options);
     }
 }
